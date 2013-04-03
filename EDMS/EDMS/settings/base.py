@@ -33,7 +33,7 @@ TEMPLATE_DEBUG = DEBUG
 ########## MANAGER CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
 ADMINS = (
-    ('Your Name', 'your_email@example.com'),
+    ('David Larlet', 'david@larlet.fr'),
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#managers
@@ -45,8 +45,8 @@ MANAGERS = ADMINS
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.',
-        'NAME': '',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'edms.db',
         'USER': '',
         'PASSWORD': '',
         'HOST': '',
@@ -205,6 +205,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 # the site admins on every HTTP 500 error when DEBUG=False.
 # See http://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.
+"""
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -228,6 +229,7 @@ LOGGING = {
         },
     }
 }
+"""
 ########## END LOGGING CONFIGURATION
 
 

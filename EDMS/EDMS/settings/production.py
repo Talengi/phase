@@ -18,11 +18,11 @@ def get_env_setting(setting):
         error_msg = "Set the %s env variable" % setting
         raise ImproperlyConfigured(error_msg)
 
-INSTALLED_APPS += ('gunicorn',)
+INSTALLED_APPS += ('raven.contrib.django.raven_compat',)
 
 ########## EMAIL CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#email-host
 EMAIL_HOST = environ.get('EMAIL_HOST', 'smtp.gmail.com')
@@ -48,7 +48,7 @@ SERVER_EMAIL = EMAIL_HOST_USER
 
 
 ########## DATABASE CONFIGURATION
-DATABASES = {}
+#DATABASES = {}
 ########## END DATABASE CONFIGURATION
 
 
@@ -66,3 +66,9 @@ CACHES = {
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = get_env_setting('SECRET_KEY')
 ########## END SECRET CONFIGURATION
+
+RAVEN_CONFIG = {
+    'dsn': get_env_setting('SENTRY_KEY'),
+}
+
+ALLOWED_HOSTS = ['talengi.scopyleft.fr',]
