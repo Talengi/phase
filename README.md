@@ -1,2 +1,2 @@
-EDMS
-====
+EDMS - Electronic Documents Management
+======================================
