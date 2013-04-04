@@ -1,17 +1,24 @@
-from fabric.api import run, env, local
+from fabric.api import run, env, local, cd, prefix
 
 USERNAME = 'scopyleft'
 env.hosts = ['%s@ssh.alwaysdata.com' % USERNAME]
+env.activate = 'source /home/%s/talengi/bin/activate' % USERNAME
+env.directory = '/home/%s/www/talengi/EDMS' % USERNAME
 
 
 def test():
     """Launching tests for the whole project."""
-    local('coverage run EDMS/manage.py test --settings=EDMS.settings.test')
+    runtests = 'coverage run EDMS/manage.py test'
+    local(runtests + ' --settings=EDMS.settings.test')
 
 
 def deploy():
     """Deploying the project against AlwaysData's staging."""
-    run('cd /home/%s/www/talengi/EDMS && git pull' % USERNAME)
+    with cd(env.directory):
+        run('git pull')
+        with prefix(env.activate):
+            collectstatic = 'python manage.py collectstatic --noinput'
+            run(collectstatic + ' --settings=EDMS.settings.production')
 
 
 def log(filename="admin/log/access.log", backlog='F'):
