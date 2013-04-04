@@ -109,7 +109,7 @@ STATICFILES_FINDERS = (
 ########## SECRET CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 # Note: This key only used for development and testing.
-SECRET_KEY = r"dt!n)_x5%df2+8_l7m+^o%y21#lsmlxzr(5qn$&$b3a8a-&7kx"
+SECRET_KEY = r"This is a dummy secret key!"
 ########## END SECRET CONFIGURATION
 
 
@@ -191,6 +191,7 @@ THIRD_PARTY_APPS = (
 
 # Apps specific for this project go here.
 LOCAL_APPS = (
+    'documents',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
