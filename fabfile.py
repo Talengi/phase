@@ -6,6 +6,12 @@ env.activate = 'source /home/%s/talengi/bin/activate' % USERNAME
 env.directory = '/home/%s/www/talengi/EDMS' % USERNAME
 
 
+def runserver():
+    """Launching tests for the whole project."""
+    runserver = 'python EDMS/manage.py runserver'
+    local(runserver + ' --settings=EDMS.settings.local')
+
+
 def test():
     """Launching tests for the whole project."""
     runtests = 'coverage run EDMS/manage.py test'
