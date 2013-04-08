@@ -24,7 +24,7 @@
     <!-- This file store project specific CSS -->
     <link href="{{ STATIC_URL }}css/project.css" rel="stylesheet">
 
-    <!-- Use this to quickly test CSS changes in a template, 
+    <!-- Use this to quickly test CSS changes in a template,
         then move to project.css -->
     {% block extra_css %}{% endblock extra_css %}
   </head>
@@ -42,9 +42,7 @@
           <a class="brand" href="#">EDMS</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
-              <li class="active"><a href="#">Home</a></li>
-              <li><a href="#about">About</a></li>
-              <li><a href="#contact">Contact</a></li>
+              <li{% if document_active %} class="active"{% endif %}><a href="{% url "document_list" %}">Documents</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
@@ -53,11 +51,7 @@
 
     <div class="container">
 
-      <h1>{% block page_title %}Example Base Template{% endblock page_title %}</h1>
-
-      {% block content %}
-        <p>Use this document as a way to quick start any new project.</p>
-      {% endblock content %}
+      {% block content %}{% endblock content %}
 
     </div> <!-- /container -->
 
