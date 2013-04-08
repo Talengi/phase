@@ -9,13 +9,15 @@ env.directory = '/home/%s/www/talengi/EDMS' % USERNAME
 def runserver():
     """Launching tests for the whole project."""
     runserver = 'python EDMS/manage.py runserver'
-    local(runserver + ' --settings=EDMS.settings.local')
+    with_local_settings = ' --settings=EDMS.settings.local'
+    local(runserver + with_local_settings)
 
 
 def test():
     """Launching tests for the whole project."""
     runtests = 'coverage run EDMS/manage.py test'
-    local(runtests + ' --settings=EDMS.settings.test')
+    with_test_settings = ' --settings=EDMS.settings.test'
+    local(runtests + with_test_settings)
 
 
 def deploy():
@@ -24,7 +26,10 @@ def deploy():
         run('git pull')
         with prefix(env.activate):
             collectstatic = 'python manage.py collectstatic --noinput'
-            run(collectstatic + ' --settings=EDMS.settings.production')
+            syncdb = 'python manage.py syncdb --noinput'
+            with_production_settings = ' --settings=EDMS.settings.production'
+            run(collectstatic + with_production_settings)
+            run(syncdb + with_production_settings)
 
 
 def log(filename="admin/log/access.log", backlog='F'):
