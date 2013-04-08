@@ -71,4 +71,16 @@ RAVEN_CONFIG = {
     'dsn': get_env_setting('SENTRY_KEY'),
 }
 
-ALLOWED_HOSTS = ['talengi.scopyleft.fr',]
+ALLOWED_HOSTS = ['talengi.scopyleft.fr']
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': '/home/scopyleft/www/talengi/EDMS/edms.db',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
+    }
+}
+
