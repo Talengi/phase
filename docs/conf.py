@@ -41,7 +41,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'EDMS'
-copyright = u'2013, Talengi'
+copyright = u'2013, Talengi & scopyleft'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

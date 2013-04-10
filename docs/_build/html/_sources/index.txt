@@ -14,7 +14,7 @@ Steps to initialize the project on a local machine::
 
     $ git clone https://github.com/Talengi/EDMS.git repository
     $ virtualenv venv
-    $ source venv/bin/activate
+    $ . venv/bin/activate
     $ pip install -r repository/requirements/local.txt
     $ cd repository
     $ python EDMS/manage.py syncdb --noinput --settings=EDMS.settings.local

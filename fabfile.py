@@ -7,21 +7,34 @@ env.directory = '/home/%s/www/talengi/EDMS' % USERNAME
 
 
 def runserver():
-    """Launching tests for the whole project."""
+    """Runs the local Django server."""
     runserver = 'python EDMS/manage.py runserver'
     with_local_settings = ' --settings=EDMS.settings.local'
     local(runserver + with_local_settings)
 
 
 def test():
-    """Launching tests for the whole project."""
+    """Launches tests for the whole project."""
     runtests = 'coverage run EDMS/manage.py test'
     with_test_settings = ' --settings=EDMS.settings.test'
     local(runtests + with_test_settings)
 
 
+def docs():
+    """Generates sphinx documentation for the project."""
+    local('cd docs && make clean && make html')
+    local('open docs/_build/html/index.html')
+
+
+def check():
+    """Checks that everything is fine, useful before deploying."""
+    test()
+    docs()
+    runserver()
+
+
 def deploy():
-    """Deploying the project against AlwaysData's staging."""
+    """Deploys the project against staging."""
     with cd(env.directory):
         run('git pull')
         with prefix(env.activate):
@@ -33,10 +46,10 @@ def deploy():
 
 
 def log(filename="admin/log/access.log", backlog='F'):
-    """Displays access.log file."""
+    """Displays access.log file from staging."""
     run("tail -%s '%s'" % (backlog, filename))
 
 
 def errors(backlog=200):
-    """Displays error.log file."""
+    """Displays error.log file from staging."""
     return log("admin/log/error.log", backlog)
