@@ -38,7 +38,7 @@ class DocumentTest(TestCase):
             revision=3
         )
         self.assertEqual(
-            u" | ".join(unicode(field) for field in document.display_fields()),
+            u" | ".join(unicode(field[2]) for field in document.display_fields()),
             (u'FAC09001-FWF-000-HSE-REP-0004 | HAZOP report | IFD | 3 '
              u'| 2012-04-20 | 000 | HSE | REP | 1')
         )

@@ -165,6 +165,15 @@ class Document(models.Model):
         verbose_name=u"Status ASB Actual Date",
         null=True, blank=True)
 
+    class Meta:
+        # Equivalent to document_number
+        ordering = ('contract_number',
+                    'originator',
+                    'unit',
+                    'discipline',
+                    'document_type',
+                    'sequencial_number',)
+
     def __unicode__(self):
         return self.document_number
 
@@ -184,13 +193,26 @@ class Document(models.Model):
     def display_fields(self):
         """The list of fields to display in a concise way."""
         return [
-            self.document_number,
-            self.title,
-            self.status,
-            self.revision,
-            self.revision_date,
-            self.unit,
-            self.discipline,
-            self.document_type,
-            self.klass
+            #(Name               Column Name         Value)
+            (u'Document Number', u'document_number', self.document_number),
+            (u'Title',           u'title',           self.title),
+            (u'Status',          u'status',          self.status),
+            (u'Revision',        u'revision',        self.revision),
+            (u'Revision Date',   u'revision_date',   self.revision_date),
+            (u'Unit',            u'unit',            self.unit),
+            (u'Discipline',      u'discipline',      self.discipline),
+            (u'Document Type',   u'document_type',   self.document_type),
+            (u'Classe',          u'klass',           self.klass),
         ]
+
+    def searchable_fields(self):
+        """The list of fields to search into:
+
+        `display_fields` and `document_number`'s ones.
+        """
+        return [field[1] for field in self.display_fields()[1:]]\
+            + [u'contract_number', u'originator', u'sequencial_number']
+
+    def jsonified(self):
+        """Returns a list of document values ready to be json-encoded."""
+        return [unicode(field[2]) for field in self.display_fields()]
