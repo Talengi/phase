@@ -14,7 +14,7 @@ class DocumentTest(TestCase):
             revision_date='2012-04-20',
             leader=u'Bernard Wallyn',
             approver=u'Pierre Rabeau',
-            sequencial_number=4,
+            sequencial_number="0004",
             discipline="HSE",
             document_type="REP"
         )
@@ -32,7 +32,7 @@ class DocumentTest(TestCase):
             revision_date='2012-04-20',
             leader=u'Bernard Wallyn',
             approver=u'Pierre Rabeau',
-            sequencial_number=4,
+            sequencial_number="0004",
             discipline="HSE",
             document_type="REP",
             revision=3

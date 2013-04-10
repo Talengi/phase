@@ -17,9 +17,10 @@ class Document(models.Model):
         default="IFD",
         max_length=3,
         choices=STATUSES)
-    revision = models.IntegerField(
+    revision = models.CharField(
         verbose_name=u"Revision",
-        default=0,
+        default=u"00",
+        max_length=2,
         choices=REVISIONS)
     revision_date = models.DateField(
         verbose_name=u"Revision Date")
@@ -48,9 +49,10 @@ class Document(models.Model):
         default="PID",
         max_length=3,
         choices=DOCUMENT_TYPES)
-    sequencial_number = models.IntegerField(
+    sequencial_number = models.CharField(
         verbose_name=u"Sequencial Number",
-        default=1,
+        default=u"0001",
+        max_length=4,
         choices=SEQUENCIAL_NUMBERS)
     contractor_document_number = models.CharField(
         verbose_name=u"Contractor Document Number",
@@ -180,8 +182,8 @@ class Document(models.Model):
     @property
     def document_number(self):
         """The document number is generated from multiple fields."""
-        return (u"{contract_number}-{originator}-{unit:0>3}-{discipline}-"
-                u"{document_type}-{sequencial_number:0>4}").format(
+        return (u"{contract_number}-{originator}-{unit}-{discipline}-"
+                u"{document_type}-{sequencial_number}").format(
                     contract_number=self.contract_number,
                     originator=self.originator,
                     unit=self.unit,

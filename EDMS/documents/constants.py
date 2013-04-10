@@ -16,7 +16,8 @@ STATUSES = (
 )
 
 REVISIONS = (
-    (revision, u"{0:0>2}".format(revision)) for revision in range(21)
+    (u"{0:0>2}".format(revision), u"{0:0>2}".format(revision))
+    for revision in range(21)
 )
 
 CONTRACT_NBS = (
@@ -186,7 +187,8 @@ DOCUMENT_TYPES = (
 )
 
 SEQUENCIAL_NUMBERS = (
-    (revision, u"{0:0>4}".format(revision)) for revision in range(1, 10000)
+    (u"{0:0>4}".format(number), u"{0:0>4}".format(number))
+    for number in range(1, 10000)
 )
 
 SYSTEMS = (
