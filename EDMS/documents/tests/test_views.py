@@ -365,7 +365,7 @@ class DocumenFilterTest(TestCase):
 
         # Searching 'ASB' status
         status = u'ASB'
-        get_parameters['sSearch_2'] = status
+        get_parameters['sSearch_1'] = status
         r = c.get(reverse("document_filter"), get_parameters)
         data = json.loads(r.content)
         self.assertEqual(len(data['aaData']), 10)
@@ -383,8 +383,8 @@ class DocumenFilterTest(TestCase):
         # Searching 'ASB' status + 'ANA' document_type
         status = u'ASB'
         document_type = u'ANA'
-        get_parameters['sSearch_2'] = status
-        get_parameters['sSearch_7'] = document_type
+        get_parameters['sSearch_1'] = status
+        get_parameters['sSearch_6'] = document_type
         r = c.get(reverse("document_filter"), get_parameters)
         data = json.loads(r.content)
         self.assertEqual(len(data['aaData']), 3)
@@ -542,7 +542,7 @@ class DocumenFilterTest(TestCase):
         status = u'IFR'
         get_parameters['sSearch'] = search_terms
         get_parameters['iSortCol_0'] = 1
-        get_parameters['sSearch_2'] = status
+        get_parameters['sSearch_1'] = status
         get_parameters['sSortDir_0'] = 'desc'
         r = c.get(reverse("document_filter"), get_parameters)
         data = json.loads(r.content)

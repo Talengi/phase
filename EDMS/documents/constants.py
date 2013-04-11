@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-STATUSES = (
+STATUSES = [
     ("STD", u"Started"),
     ("IDC", u"Inter Discipline Check"),
     ("IFR", u"Issued For Review"),
@@ -13,22 +13,22 @@ STATUSES = (
     ("ASB", u"As Built"),
     ("CLD", u"Cancelled"),
     ("SPD", u"Superseded"),
-)
+]
 
 REVISIONS = [
     (u"{0:0>2}".format(revision), u"{0:0>2}".format(revision))
     for revision in range(21)
 ]
 
-CONTRACT_NBS = (
+CONTRACT_NBS = [
     (contract, contract) for contract in (u"FAC09001", u"FAC10005")
-)
+]
 
-ORIGINATORS = (
+ORIGINATORS = [
     (originator, originator) for originator in (u"FWF", u"CTR")
-)
+]
 
-UNITS = (
+UNITS = [
     ("000", u"Overall"),
     ("001", u"Oued Zine Center Gathering Network"),
     ("002", u"Oued Zine East Gathering Network"),
@@ -104,9 +104,9 @@ UNITS = (
     ("ROA", u"Roads"),
     ("LAB", u"CPF Laboratory"),
     ("TMP", u"Temporary / Construction Facilities"),
-)
+]
 
-DISCIPLINES = (
+DISCIPLINES = [
     ("ARC", u"Architecture Building"),
     ("CIV", u"Civil Work"),
     ("COM", u"Commissioning"),
@@ -136,9 +136,9 @@ DISCIPLINES = (
     ("TEL", u"Telecom"),
     ("VES", u"Vessels"),
     ("WEL", u"Welding"),
-)
+]
 
-DOCUMENT_TYPES = (
+DOCUMENT_TYPES = [
     ("ANA", u"Analysis"),
     ("BAS", u"Design Basis"),
     ("CAL", u"Calculation Note"),
@@ -184,14 +184,14 @@ DOCUMENT_TYPES = (
     ("TSD", u"Trouble Shooting Diagram"),
     ("UFD", u"Utility Flow Diagram"),
     ("WIR", u"Wiring Diagram"),
-)
+]
 
-SEQUENCIAL_NUMBERS = (
+SEQUENCIAL_NUMBERS = [
     (u"{0:0>4}".format(number), u"{0:0>4}".format(number))
     for number in range(1, 10000)
-)
+]
 
-SYSTEMS = (
+SYSTEMS = [
     (1, u"Line from Oued Zine Manifold"),
     (2, u"Trunkline & Manifold from Oued Zine Center"),
     (3, u"Trunkline & Manifold from Hassi Ilatou"),
@@ -288,17 +288,17 @@ SYSTEMS = (
     (94, u"Demineralized Water (403-RA-005, 403-PA-006/007, 403-UZ004, 403-UZ-008 & distribution)"),
     (95, u"Sanitary Water treatment and disposal (Sanitary Sewer, 404-UZ-001 & disposal)"),
     (96, u"Waste Water. To be defined later"),
-)
+]
 
-ENGINEERING_PHASES = (
+ENGINEERING_PHASES = [
     (phase, phase) for phase in (u"EPC", u"FEED")
-)
+]
 
 CLASSES = [
     (classe, str(classe)) for classe in range(1, 5)
 ]
 
-UNDER_CONTRACTOR_REVIEW = ((True, u"Yes"), (False, u"No"))
-UNDER_CA_REVIEW = ((True, u"Yes"), (False, u"No"))
+UNDER_CONTRACTOR_REVIEW = [(True, u"Yes"), (False, u"No")]
+UNDER_CA_REVIEW = [(True, u"Yes"), (False, u"No")]
 
-WBS = ()
+WBS = []

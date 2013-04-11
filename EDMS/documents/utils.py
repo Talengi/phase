@@ -45,9 +45,9 @@ def filter_documents(queryset, data):
 
     # Filtering (per field)
     for i, field in enumerate(display_fields):
-        if data.get('sSearch_'+str(i), False):
+        if data.get('sSearch_'+str(i-1), False):
             queryset = queryset.filter(**{
-                '%s__icontains' % field[1]: data['sSearch_'+str(i)]
+                '%s__exact' % field[1]: data['sSearch_'+str(i-1)]
             })
 
     return queryset
