@@ -15,10 +15,10 @@ STATUSES = (
     ("SPD", u"Superseded"),
 )
 
-REVISIONS = (
+REVISIONS = [
     (u"{0:0>2}".format(revision), u"{0:0>2}".format(revision))
     for revision in range(21)
-)
+]
 
 CONTRACT_NBS = (
     (contract, contract) for contract in (u"FAC09001", u"FAC10005")
@@ -294,9 +294,9 @@ ENGINEERING_PHASES = (
     (phase, phase) for phase in (u"EPC", u"FEED")
 )
 
-CLASSES = (
+CLASSES = [
     (classe, str(classe)) for classe in range(1, 5)
-)
+]
 
 UNDER_CONTRACTOR_REVIEW = ((True, u"Yes"), (False, u"No"))
 UNDER_CA_REVIEW = ((True, u"Yes"), (False, u"No"))

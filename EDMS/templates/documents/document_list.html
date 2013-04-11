@@ -78,8 +78,6 @@
     }
 
 
-
-
     /*
      * TableTools styles
      */
@@ -199,20 +197,82 @@
     #documents #columndocument_number {
         width: 200px;
     }
+    #documents select {
+        width: auto;
+    }
+    #documents #filterByColumnLabel {
+        text-align: right;
+    }
     </style>
 {% endblock extra_css %}
 
 {% block content %}
     <table id="documents" class="table table-striped table-condensed table-bordered table-hover">
+        {% with document_list.0.display_fields as display_fields %}
         <thead>
             <tr>
-            {% for field in document_list.0.display_fields %}
+            {% for field in display_fields %}
                 <th id="column{{ field.1 }}">{{ field.0 }}</th>
             {% endfor %}
             </tr>
         </thead>
         <tbody>
         </tbody>
+        <tfoot>
+            <tr>
+                <th id="filterByColumnLabel" colspan="2">Filter by column:</th>
+                <th>
+                    <select>
+                        <option value=""></option>
+                        {% for choice in status_choices %}
+                            <option value="{{ choice }}">{{ choice }}</option>
+                        {% endfor %}
+                    </select>
+                </th>
+                <th>
+                    <select>
+                        <option value=""></option>
+                        {% for choice in revisions_choices %}
+                            <option value="{{ choice }}">{{ choice }}</option>
+                        {% endfor %}
+                    </select>
+                </th>
+                <th></th>
+                <th>
+                    <select>
+                        <option value=""></option>
+                        {% for choice in units_choices %}
+                            <option value="{{ choice }}">{{ choice }}</option>
+                        {% endfor %}
+                    </select>
+                </th>
+                <th>
+                    <select>
+                        <option value=""></option>
+                        {% for choice in disciplines_choices %}
+                            <option value="{{ choice }}">{{ choice }}</option>
+                        {% endfor %}
+                    </select>
+                </th>
+                <th>
+                    <select>
+                        <option value=""></option>
+                        {% for choice in document_types_choices %}
+                            <option value="{{ choice }}">{{ choice }}</option>
+                        {% endfor %}
+                    </select>
+                </th>
+                <th>
+                    <select>
+                        <option value=""></option>
+                        {% for choice in classes_choices %}
+                            <option value="{{ choice }}">{{ choice }}</option>
+                        {% endfor %}
+                    </select>
+                </th>
+            </tr>
+        </tfoot>
+        {% endwith %}
     </table>
 {% endblock %}
 {% block extra_js %}
@@ -223,10 +283,8 @@
         "sWrapper": "dataTables_wrapper form-inline"
     });
 
-
     /* API method to get paging information */
-    $.fn.dataTableExt.oApi.fnPagingInfo = function ( oSettings )
-    {
+    $.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings){
         return {
             "iStart":         oSettings._iDisplayStart,
             "iEnd":           oSettings.fnDisplayEnd(),
@@ -323,9 +381,9 @@
      * TableTools Bootstrap compatibility
      * Required TableTools 2.1+
      */
-    if ( $.fn.DataTable.TableTools ) {
+    if ($.fn.DataTable.TableTools) {
         // Set the classes that TableTools uses to something suitable for Bootstrap
-        $.extend( true, $.fn.DataTable.TableTools.classes, {
+        $.extend(true, $.fn.DataTable.TableTools.classes, {
             "container": "DTTT btn-group",
             "buttons": {
                 "normal": "btn",
@@ -347,7 +405,7 @@
         });
 
         // Have the collection use a bootstrap compatible dropdown
-        $.extend( true, $.fn.DataTable.TableTools.DEFAULTS.oTags, {
+        $.extend(true, $.fn.DataTable.TableTools.DEFAULTS.oTags, {
             "collection": {
                 "container": "ul",
                 "button": "li",
@@ -356,19 +414,26 @@
         });
     }
 
-
     /* Table initialisation */
     $(document).ready(function() {
-        $('#documents').dataTable( {
+        var documents = $('#documents').dataTable( {
             "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
             "sPaginationType": "bootstrap",
             "oLanguage": {
-                "sLengthMenu": "_MENU_ documents per page"
+                "sLengthMenu": "_MENU_ documents per page",
+                "sSearch": "Search all columns:"
             },
             "bProcessing": true,
             "bServerSide": true,
             "sAjaxSource": "{% url "document_filter" %}"
         });
+        /* Deal with faceting via footer's selects */
+        $("tfoot th").each(function(i){
+            $('select', this).change(function(){
+                documents.fnFilter($(this).val(), i);
+            });
+        });
     });
+
     </script>
 {% endblock extra_js %}

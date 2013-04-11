@@ -5,6 +5,9 @@ from django.utils import simplejson as json
 from documents.models import Document
 from documents.utils import filter_documents
 from documents.forms import DocumentFilterForm
+from documents.constants import (
+    STATUSES, REVISIONS, UNITS, DISCIPLINES, DOCUMENT_TYPES, CLASSES
+)
 
 
 class JSONResponseMixin(object):
@@ -41,6 +44,17 @@ class JSONResponseMixin(object):
 class DocumentList(ListView):
     # We just need one document to set table's header
     queryset = Document.objects.all()[:1]
+
+    def get_context_data(self, **kwargs):
+        context = super(DocumentList, self).get_context_data(**kwargs)
+        # Add choices to populate <select>s filters
+        context['status_choices'] = [item[0] for item in STATUSES]
+        context['revisions_choices'] = [item[0] for item in REVISIONS]
+        context['units_choices'] = [item[0] for item in UNITS]
+        context['disciplines_choices'] = [item[0] for item in DISCIPLINES]
+        context['document_types_choices'] = [item[0] for item in DOCUMENT_TYPES]
+        context['classes_choices'] = [item[0] for item in CLASSES]
+        return context
 
 
 class DocumentFilter(JSONResponseMixin, ListView):

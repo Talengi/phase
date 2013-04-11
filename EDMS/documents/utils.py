@@ -34,7 +34,7 @@ def filter_documents(queryset, data):
             column_name = (sort_direction+display_fields[sort_column][1],)
         queryset = queryset.order_by(*column_name)
 
-    # Filtering
+    # Filtering (global)
     if 'sSearch' in data:
         search_terms = data['sSearch']
         if search_terms:
@@ -42,5 +42,12 @@ def filter_documents(queryset, data):
             for field in searchable_fields:
                 q.add(Q(**{'%s__icontains' % field: search_terms}), Q.OR)
             queryset = queryset.filter(q)
+
+    # Filtering (per field)
+    for i, field in enumerate(display_fields):
+        if data.get('sSearch_'+str(i), False):
+            queryset = queryset.filter(**{
+                '%s__icontains' % field[1]: data['sSearch_'+str(i)]
+            })
 
     return queryset

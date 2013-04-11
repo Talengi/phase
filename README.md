@@ -7,11 +7,3 @@ Project
 * Demo: http://talengi.scopyleft.fr/
 * Documentation: http://talengi.scopyleft.fr/documentation/
 * Repository: https://github.com/Talengi/EDMS
-
-Colophon
---------
-
-* Django: https://www.djangoproject.com/
-* Bootstrap: http://twitter.github.io/bootstrap/
-* DataTables: http://www.datatables.net/
-* Two Scoops of Django template: https://django.2scoops.org/
