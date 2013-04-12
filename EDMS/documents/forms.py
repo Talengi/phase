@@ -1,6 +1,16 @@
 
 from django import forms
 
+from documents.models import Document
+
+
+class DocumentForm(forms.ModelForm):
+    class Meta:
+        model = Document
+        widgets = {
+            'title': forms.Textarea(attrs={'rows': '1', 'class': 'span9'}),
+        }
+
 
 class DocumentFilterForm(forms.Form):
     """A dummy form to check the validity of GET parameters from DataTables."""

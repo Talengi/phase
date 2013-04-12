@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<style type="text/css">
+    label {
+        text-align: right;
+    }
+</style>
+{% endblock extra_css %}
+
+{% block content %}
+    <form action="{% url "document_create" %}" method="post" class="">
+        {% csrf_token %}
+        {% include "documents/form_informations.html" %}
+        {% include "documents/form_dates.html" %}
+        <div class="form-actions">
+            <input id="submit-id-save" class="btn btn-primary" type="submit" value="Create document" name="save">
+        </div>
+    </form>
+{% endblock content %}

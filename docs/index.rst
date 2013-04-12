@@ -41,9 +41,9 @@ Check the list of available commands directly in your shell::
 User stories completed
 ----------------------
 
-1. As a user, I want to browse paginated documents so that I can consult many documents (6000+).
-2. As a user, I want to sort documents by column so that I can access to recent documents.
-3. As a user, I want to search for documents (globally and per column) so that I can access to a given document or type of document.
+1. As a Document Controler, I want to browse paginated documents so that I can consult many documents (6000+).
+2. As a Document Controler, I want to sort documents by column so that I can access to recent documents.
+3. As a Document Controler, I want to search for documents (globally and per column) so that I can access to a given document or type of document.
 
 The repository has been tagged for each completed US.
 

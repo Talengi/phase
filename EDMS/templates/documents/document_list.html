@@ -208,16 +208,14 @@
 
 {% block content %}
     <table id="documents" class="table table-striped table-condensed table-bordered table-hover">
-        {% with document_list.0.display_fields as display_fields %}
         <thead>
             <tr>
-            {% for field in display_fields %}
+            {% for field in document_list.0.display_fields %}
                 <th id="column{{ field.1 }}">{{ field.0 }}</th>
             {% endfor %}
             </tr>
         </thead>
-        <tbody>
-        </tbody>
+        <tbody></tbody>
         <tfoot>
             <tr>
                 <th id="filterByColumnLabel" colspan="2">Filter by column:</th>
@@ -272,7 +270,6 @@
                 </th>
             </tr>
         </tfoot>
-        {% endwith %}
     </table>
 {% endblock %}
 {% block extra_js %}

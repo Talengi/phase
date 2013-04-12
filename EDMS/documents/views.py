@@ -1,10 +1,12 @@
 from django import http
-from django.views.generic import ListView
+from django.views.generic import (
+    ListView, CreateView
+)
 from django.utils import simplejson as json
 
 from documents.models import Document
 from documents.utils import filter_documents
-from documents.forms import DocumentFilterForm
+from documents.forms import DocumentFilterForm, DocumentForm
 from documents.constants import (
     STATUSES, REVISIONS, UNITS, DISCIPLINES, DOCUMENT_TYPES, CLASSES
 )
@@ -69,3 +71,8 @@ class DocumentFilter(JSONResponseMixin, ListView):
                 queryset = filter_documents(queryset, form.cleaned_data)
 
         return queryset
+
+
+class DocumentCreate(CreateView):
+    model = Document
+    form_class = DocumentForm
