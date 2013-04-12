@@ -40,6 +40,9 @@
             <span class="icon-bar"></span>
           </a>
           <a class="brand" href="#">EDMS</a>
+          {% block createdocument %}
+            <a class="btn pull-right btn-primary" href="{% url "document_create" %}">Create a new document</a>
+          {% endblock createdocument %}
           <div class="nav-collapse collapse">
             <ul class="nav">
               <li{% if document_active %} class="active"{% endif %}><a href="{% url "document_list" %}">Documents</a></li>

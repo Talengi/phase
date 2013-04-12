@@ -56,3 +56,4 @@ Colophon
 * DataTables: http://www.datatables.net/
 * Two Scoops of Django template: https://django.2scoops.org/
 * Sphinx: http://sphinx-doc.org/
+* Datepicker for Bootstrap: http://www.eyecon.ro/bootstrap-datepicker/

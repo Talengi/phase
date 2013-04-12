@@ -43,6 +43,7 @@ def deploy():
             with_production_settings = ' --settings=EDMS.settings.production'
             run(collectstatic + with_production_settings)
             run(syncdb + with_production_settings)
+            run('pip install -r ../requirements/production.txt')
 
 
 def log(filename="admin/log/access.log", backlog='F'):

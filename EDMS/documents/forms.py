@@ -2,14 +2,59 @@
 from django import forms
 
 from documents.models import Document
+from documents.constants import DISCIPLINES, UNITS, DOCUMENT_TYPES
 
 
 class DocumentForm(forms.ModelForm):
     class Meta:
         model = Document
+        date_attrs = {'class': "datepicker", 'data-date-format': "yyyy-mm-dd"}
         widgets = {
-            'title': forms.Textarea(attrs={'rows': '1', 'class': 'span9'}),
+            'title': forms.Textarea(attrs={'rows': '1', 'class': 'span4'}),
+            'sequencial_number': forms.TextInput,
+            'status_std_planned_date': forms.DateInput(attrs=date_attrs),
+            'status_std_forecast_date': forms.DateInput(attrs=date_attrs),
+            'status_std_actual_date': forms.DateInput(attrs=date_attrs),
+            'status_idc_planned_date': forms.DateInput(attrs=date_attrs),
+            'status_idc_forecast_date': forms.DateInput(attrs=date_attrs),
+            'status_idc_actual_date': forms.DateInput(attrs=date_attrs),
+            'status_ifr_planned_date': forms.DateInput(attrs=date_attrs),
+            'status_ifr_forecast_date': forms.DateInput(attrs=date_attrs),
+            'status_ifr_actual_date': forms.DateInput(attrs=date_attrs),
+            'status_ifa_planned_date': forms.DateInput(attrs=date_attrs),
+            'status_ifa_forecast_date': forms.DateInput(attrs=date_attrs),
+            'status_ifa_actual_date': forms.DateInput(attrs=date_attrs),
+            'status_ifd_planned_date': forms.DateInput(attrs=date_attrs),
+            'status_ifd_forecast_date': forms.DateInput(attrs=date_attrs),
+            'status_ifd_actual_date': forms.DateInput(attrs=date_attrs),
+            'status_ifc_planned_date': forms.DateInput(attrs=date_attrs),
+            'status_ifc_forecast_date': forms.DateInput(attrs=date_attrs),
+            'status_ifc_actual_date': forms.DateInput(attrs=date_attrs),
+            'status_ifi_planned_date': forms.DateInput(attrs=date_attrs),
+            'status_ifi_forecast_date': forms.DateInput(attrs=date_attrs),
+            'status_ifi_actual_date': forms.DateInput(attrs=date_attrs),
+            'status_asb_planned_date': forms.DateInput(attrs=date_attrs),
+            'status_asb_forecast_date': forms.DateInput(attrs=date_attrs),
+            'status_asb_actual_date': forms.DateInput(attrs=date_attrs),
         }
+
+    def __init__(self, *args, **kwargs):
+        super(DocumentForm, self).__init__(*args, **kwargs)
+        discipline_choices = [
+            (discipline[0], u"{0} - {1}".format(discipline[0], discipline[1]))
+            for discipline in DISCIPLINES
+        ]
+        self.fields['discipline'].choices = discipline_choices
+        unit_choices = [
+            (unit[0], u"{0} - {1}".format(unit[0], unit[1]))
+            for unit in UNITS
+        ]
+        self.fields['unit'].choices = unit_choices
+        document_type_choices = [
+            (document_type[0], u"{0} - {1}".format(document_type[0], document_type[1]))
+            for document_type in DOCUMENT_TYPES
+        ]
+        self.fields['document_type'].choices = document_type_choices
 
 
 class DocumentFilterForm(forms.Form):

@@ -1,20 +1,42 @@
 {% extends "base.html" %}
 
 {% block extra_css %}
+<link href="{{ STATIC_URL }}css/datepicker.css" rel="stylesheet">
 <style type="text/css">
     label {
         text-align: right;
     }
+    .date-error {
+        color: #B94A48;
+    }
+    #save-create {
+        margin-right: 15px;
+    }
 </style>
 {% endblock extra_css %}
 
+{% block createdocument %}{% endblock createdocument %}
+
 {% block content %}
+    <h2>New document</h2>
     <form action="{% url "document_create" %}" method="post" class="">
         {% csrf_token %}
-        {% include "documents/form_informations.html" %}
-        {% include "documents/form_dates.html" %}
+        {{ form.non_field_errors }}
+        {% include "documents/form_general_information.html" %}
+        {% include "documents/form_review.html" %}
+        {% include "documents/form_schedule.html" %}
         <div class="form-actions">
-            <input id="submit-id-save" class="btn btn-primary" type="submit" value="Create document" name="save">
+            <a class="btn" href="{% url "document_list" %}">Cancel</a>
+            <input class="btn btn-primary pull-right btn-large" type="submit" value="Save and close" name="save-close">
+            <input class="btn btn-info pull-right btn-large" type="submit" value="Save and create another document" name="save-create" id="save-create">
         </div>
     </form>
 {% endblock content %}
+
+{% block extra_js %}
+    <script src="{{ STATIC_URL }}js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript">
+        $('.datepicker').datepicker()
+    </script>
+{% endblock extra_js %}
+
