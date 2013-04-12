@@ -31,7 +31,7 @@ class JSONResponseMixin(object):
 
         Using DataTables conventions for fields' names.
         """
-        documents = context['document_list']
+        documents = context['object_list']
         start = int(self.request.GET.get('iDisplayStart', 1))
         end = start + int(self.request.GET.get('iDisplayLength', 10))
         result = {
@@ -50,12 +50,14 @@ class DocumentList(ListView):
     def get_context_data(self, **kwargs):
         context = super(DocumentList, self).get_context_data(**kwargs)
         # Add choices to populate <select>s filters
-        context['status_choices'] = [item[0] for item in STATUSES]
-        context['revisions_choices'] = [item[0] for item in REVISIONS]
-        context['units_choices'] = [item[0] for item in UNITS]
-        context['disciplines_choices'] = [item[0] for item in DISCIPLINES]
-        context['document_types_choices'] = [item[0] for item in DOCUMENT_TYPES]
-        context['classes_choices'] = [item[0] for item in CLASSES]
+        context.update({
+            'status_choices': [item[0] for item in STATUSES],
+            'revisions_choices': [item[0] for item in REVISIONS],
+            'units_choices': [item[0] for item in UNITS],
+            'disciplines_choices': [item[0] for item in DISCIPLINES],
+            'document_types_choices': [item[0] for item in DOCUMENT_TYPES],
+            'classes_choices': [item[0] for item in CLASSES],
+        })
         return context
 
 
