@@ -21,15 +21,8 @@ def filter_documents(queryset, data):
     if 'iSortCol_0' in data:
         sort_column = data['iSortCol_0']
         sort_direction = data['sSortDir_0'] == u'desc' and u'-' or u''
-        if sort_column == 0:  # == document_number (not a model field)
-            column_name = (
-                sort_direction+'contract_number',
-                sort_direction+'originator',
-                sort_direction+'unit',
-                sort_direction+'discipline',
-                sort_direction+'document_type',
-                sort_direction+'sequencial_number',
-            )
+        if sort_column == 0:  # fallback on document_number
+            column_name = (sort_direction+'document_number',)
         else:
             column_name = (sort_direction+display_fields[sort_column][1],)
         queryset = queryset.order_by(*column_name)

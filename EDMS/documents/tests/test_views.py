@@ -370,7 +370,7 @@ class DocumenFilterTest(TestCase):
         data = json.loads(r.content)
         self.assertEqual(len(data['aaData']), 10)
         self.assertEqual(int(data['iTotalRecords']), 500)
-        self.assertEqual(int(data['iTotalDisplayRecords']), 40)
+        self.assertEqual(int(data['iTotalDisplayRecords']), 32)
         documents = Document.objects.all()
         documents = documents.filter(**{
             'status__icontains': status
@@ -387,9 +387,8 @@ class DocumenFilterTest(TestCase):
         get_parameters['sSearch_6'] = document_type
         r = c.get(reverse("document_filter"), get_parameters)
         data = json.loads(r.content)
-        self.assertEqual(len(data['aaData']), 1)
+        self.assertEqual(len(data['aaData']), 2)
         self.assertEqual(int(data['iTotalRecords']), 500)
-        self.assertEqual(int(data['iTotalDisplayRecords']), 1)
         documents = Document.objects.all()
         documents = documents.filter(**{
             'status__icontains': status,
@@ -494,9 +493,9 @@ class DocumenFilterTest(TestCase):
         get_parameters['iDisplayStart'] = 10
         r = c.get(reverse("document_filter"), get_parameters)
         data = json.loads(r.content)
-        self.assertEqual(len(data['aaData']), 8)
+        self.assertEqual(len(data['aaData']), 3)
         self.assertEqual(int(data['iTotalRecords']), 500)
-        self.assertEqual(int(data['iTotalDisplayRecords']), 18)
+        self.assertEqual(int(data['iTotalDisplayRecords']), 13)
         documents = Document.objects.all()
         q = Q()
         for field in documents[0].searchable_fields():
@@ -519,9 +518,9 @@ class DocumenFilterTest(TestCase):
         get_parameters['iSortCol_0'] = 1
         r = c.get(reverse("document_filter"), get_parameters)
         data = json.loads(r.content)
-        self.assertEqual(len(data['aaData']), 8)
+        self.assertEqual(len(data['aaData']), 3)
         self.assertEqual(int(data['iTotalRecords']), 500)
-        self.assertEqual(int(data['iTotalDisplayRecords']), 18)
+        self.assertEqual(int(data['iTotalDisplayRecords']), 13)
         documents = Document.objects.all()
         q = Q()
         for field in documents[0].searchable_fields():
@@ -546,9 +545,8 @@ class DocumenFilterTest(TestCase):
         get_parameters['sSortDir_0'] = 'desc'
         r = c.get(reverse("document_filter"), get_parameters)
         data = json.loads(r.content)
-        self.assertEqual(len(data['aaData']), 4)
+        self.assertEqual(len(data['aaData']), 3)
         self.assertEqual(int(data['iTotalRecords']), 500)
-        self.assertEqual(int(data['iTotalDisplayRecords']), 4)
         documents = Document.objects.all()
         q = Q()
         for field in documents[0].searchable_fields():

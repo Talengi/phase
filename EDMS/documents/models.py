@@ -11,6 +11,9 @@ from documents.constants import (
 
 
 class Document(models.Model):
+    document_number = models.CharField(
+        verbose_name=u"Document Number",
+        max_length=30)
     title = models.TextField(
         verbose_name=u"Title")
     status = models.CharField(
@@ -176,21 +179,19 @@ class Document(models.Model):
         null=True, blank=True)
 
     class Meta:
-        # Equivalent to document_number
-        ordering = ('contract_number',
-                    'originator',
-                    'unit',
-                    'discipline',
-                    'document_type',
-                    'sequencial_number',)
+        ordering = ('document_number',)
 
     def __unicode__(self):
         return self.document_number
 
-    @property
-    def document_number(self):
-        """The document number is generated from multiple fields."""
-        return (u"{contract_number}-{originator}-{unit}-{discipline}-"
+    def save(self, *args, **kwargs):
+        """The document number is generated from multiple fields
+
+        if not specified.
+        """
+        if not self.document_number:
+            self.document_number = (
+                u"{contract_number}-{originator}-{unit}-{discipline}-"
                 u"{document_type}-{sequencial_number}").format(
                     contract_number=self.contract_number,
                     originator=self.originator,
@@ -199,6 +200,7 @@ class Document(models.Model):
                     document_type=self.document_type,
                     sequencial_number=self.sequencial_number
                 )
+        super(Document, self).save(*args, **kwargs)
 
     def display_fields(self):
         """The list of fields to display in a concise way."""
@@ -220,7 +222,7 @@ class Document(models.Model):
 
         `display_fields` and `document_number`'s ones.
         """
-        return [field[1] for field in self.display_fields()[1:]]\
+        return [field[1] for field in self.display_fields()]\
             + [u'contract_number', u'originator', u'sequencial_number']
 
     def jsonified(self):

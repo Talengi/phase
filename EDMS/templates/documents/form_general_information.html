@@ -1,6 +1,15 @@
 <fieldset>
     <legend>General Information</legend>
     <div class="controls controls-row">
+        <div class="control-group {% if form.errors.document_number %}error{% endif %}">
+            <label class="control-label span4" for="{{ form.document_number.auto_id }}">{{ form.document_number.label }}</label>
+            <div class="controls span4">
+                {{ form.document_number }}
+            </div>
+            {% if form.errors.document_number %}<span class="help-inline">{{ form.errors.document_number.0 }}</span>{% endif %}
+        </div>
+    </div>
+    <div class="controls controls-row">
         <div class="control-group {% if form.errors.title %}error{% endif %}">
             <label class="control-label span4" for="{{ form.title.auto_id }}">{{ form.title.label }}</label>
             <div class="controls span4">

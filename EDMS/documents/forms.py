@@ -10,6 +10,10 @@ class DocumentForm(forms.ModelForm):
         model = Document
         date_attrs = {'class': "datepicker", 'data-date-format': "yyyy-mm-dd"}
         widgets = {
+            'document_number': forms.TextInput(attrs={
+                'placeholder': 'Automatically generated if not specified.',
+                'class': 'span4',
+            }),
             'title': forms.Textarea(attrs={'rows': '1', 'class': 'span4'}),
             'status': forms.HiddenInput,
             'revision': forms.HiddenInput,
@@ -42,6 +46,8 @@ class DocumentForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(DocumentForm, self).__init__(*args, **kwargs)
+        # Automatically generated if empty
+        self.fields['document_number'].required = False
         discipline_choices = [
             (discipline[0], u"{0} - {1}".format(discipline[0], discipline[1]))
             for discipline in DISCIPLINES
