@@ -11,6 +11,8 @@ class DocumentForm(forms.ModelForm):
         date_attrs = {'class': "datepicker", 'data-date-format': "yyyy-mm-dd"}
         widgets = {
             'title': forms.Textarea(attrs={'rows': '1', 'class': 'span4'}),
+            'status': forms.HiddenInput,
+            'revision': forms.HiddenInput,
             'sequencial_number': forms.TextInput,
             'status_std_planned_date': forms.DateInput(attrs=date_attrs),
             'status_std_forecast_date': forms.DateInput(attrs=date_attrs),

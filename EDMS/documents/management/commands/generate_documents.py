@@ -8,7 +8,7 @@ from django.core.management.base import BaseCommand
 from documents.constants import (DISCIPLINES, DOCUMENT_TYPES, UNITS,
                                  STATUSES, REVISIONS, CLASSES,
                                  SEQUENCIAL_NUMBERS, CONTRACT_NBS,
-                                 ORIGINATORS)
+                                 ORIGINATORS, PEOPLE)
 from documents.models import Document
 
 DISCIPLINES_CHOICES = [item[0] for item in DISCIPLINES]
@@ -20,6 +20,7 @@ CLASSES_CHOICES = [item[0] for item in CLASSES]
 SEQUENCIAL_NUMBERS_CHOICES = [item[0] for item in SEQUENCIAL_NUMBERS]
 CONTRACT_NBS_CHOICES = [item[0] for item in CONTRACT_NBS]
 ORIGINATORS_CHOICES = [item[0] for item in ORIGINATORS]
+PEOPLE_CHOICES = [item[0] for item in PEOPLE]
 
 
 class Command(BaseCommand):
@@ -42,8 +43,8 @@ class Command(BaseCommand):
                     month=choice(range(1, 13)),
                     day=choice(range(1, 29)),
                 ),
-                leader=choice(PEOPLE),
-                approver=choice(PEOPLE),
+                leader=choice(PEOPLE_CHOICES),
+                approver=choice(PEOPLE_CHOICES),
                 contract_number=choice(CONTRACT_NBS_CHOICES),
                 originator=choice(ORIGINATORS_CHOICES),
                 sequencial_number=choice(SEQUENCIAL_NUMBERS_CHOICES),
@@ -157,35 +158,4 @@ TITLES = (
     "Cause & Effect Chart - Process Fire Zone PFZ 9",
     "305-UF-001 HP Flare Package - Duty Specification",
     "Pump Process Data Sheet - HP Flare KO Drum Pumps 305-PA-017 A/B",
-)
-
-PEOPLE = (
-    u'Abdelhak Taibi',
-    u'Abdelhakim Messaoud',
-    u'Abir Haboubi',
-    u'Albert Russell',
-    u'Albert Russellu',
-    u'Bernard Wallyn',
-    u'Bruno Scalabrini',
-    u'Christian Finot',
-    u'David Atkin',
-    u'Dominique Coquelet',
-    u'Fabienne Salimi',
-    u'Hamish Reid',
-    u'Hichem Bouchireb',
-    u'Hugo De Baere',
-    u'Ian Neish',
-    u'Kim Zelazko',
-    u'Matthieu Lamy',
-    u'Pierre Rabeau',
-    u'Pierre-Yves Becher',
-    u'Pierre-Yves Becheru',
-    u'Rachid Nakaa',
-    u'Rachid Nakaau',
-    u'Rafik Bensalem',
-    u'Rafik Bensalemu',
-    u'Ravindra Singh',
-    u'Ravindra Singhu',
-    u'René Raux',
-    u'Rikki Zillesen'
 )

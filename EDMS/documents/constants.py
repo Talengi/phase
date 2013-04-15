@@ -298,7 +298,21 @@ CLASSES = [
     (classe, str(classe)) for classe in range(1, 5)
 ]
 
-UNDER_CONTRACTOR_REVIEW = [(True, u"Yes"), (False, u"No")]
-UNDER_CA_REVIEW = [(True, u"Yes"), (False, u"No")]
+BOOLEAN_CHOICES = [(True, u"Yes"), (False, u"No")]
+
+PEOPLE = [
+    (1, u"Pierre-Yves Becher"),
+    (2, u"Rafik Bensalem"),
+    (3, u"Christian Finot"),
+    (4, u"Said Kheloufi"),
+    (5, u"Matthieu Lamy"),
+    (6, u"Philip Matthews"),
+    (7, u"Abdelhakim Messaoud"),
+    (8, u"Ian Neish"),
+    (9, u"Pierre Rabeau"),
+    (10, u"Hamish Reid"),
+    (11, u"Ravindra Singh"),
+    (12, u"Mounir Slimani"),
+]
 
 WBS = []

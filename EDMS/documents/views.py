@@ -3,6 +3,7 @@ from django.views.generic import (
     ListView, CreateView
 )
 from django.utils import simplejson as json
+from django.core.urlresolvers import reverse
 
 from documents.models import Document
 from documents.utils import filter_documents
@@ -78,3 +79,11 @@ class DocumentFilter(JSONResponseMixin, ListView):
 class DocumentCreate(CreateView):
     model = Document
     form_class = DocumentForm
+
+    def get_success_url(self):
+        """Redirect to a different URL given the clicked button by the user."""
+        if "save-create" in self.request.POST:
+            url = reverse('document_create')
+        else:
+            url = reverse('document_list')
+        return url

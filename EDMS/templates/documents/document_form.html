@@ -22,13 +22,22 @@
     <form action="{% url "document_create" %}" method="post" class="">
         {% csrf_token %}
         {{ form.non_field_errors }}
+        {{ form.status }}
+        {{ form.revision }}
         {% include "documents/form_general_information.html" %}
         {% include "documents/form_review.html" %}
         {% include "documents/form_schedule.html" %}
         <div class="form-actions">
             <a class="btn" href="{% url "document_list" %}">Cancel</a>
-            <input class="btn btn-primary pull-right btn-large" type="submit" value="Save and close" name="save-close">
-            <input class="btn btn-info pull-right btn-large" type="submit" value="Save and create another document" name="save-create" id="save-create">
+            <input class="btn btn-primary pull-right"
+                   type="submit"
+                   value="Save and close"
+                   name="save-close">
+            <input class="btn btn-info pull-right"
+                   type="submit"
+                   value="Save and create another document"
+                   name="save-create"
+                   id="save-create">
         </div>
     </form>
 {% endblock content %}
@@ -36,7 +45,9 @@
 {% block extra_js %}
     <script src="{{ STATIC_URL }}js/bootstrap-datepicker.js"></script>
     <script type="text/javascript">
-        $('.datepicker').datepicker()
+        $('.datepicker').datepicker().on('changeDate', function(ev) {
+            $(this).datepicker('hide');
+        });
     </script>
 {% endblock extra_js %}
 

@@ -6,7 +6,7 @@ from django.db import models
 from documents.constants import (
     STATUSES, REVISIONS, CONTRACT_NBS, ORIGINATORS, UNITS, DISCIPLINES,
     DOCUMENT_TYPES, SEQUENCIAL_NUMBERS, SYSTEMS, ENGINEERING_PHASES,
-    CLASSES, UNDER_CONTRACTOR_REVIEW, UNDER_CA_REVIEW, WBS
+    CLASSES, BOOLEAN_CHOICES, PEOPLE, WBS
 )
 
 
@@ -15,15 +15,17 @@ class Document(models.Model):
         verbose_name=u"Title")
     status = models.CharField(
         verbose_name=u"Status",
-        default="IFD",
+        default="STD",
         max_length=3,
-        choices=STATUSES)
+        choices=STATUSES,
+        null=True, blank=True)
     revision = models.CharField(
         verbose_name=u"Revision",
         default=u"00",
         max_length=2,
         choices=REVISIONS)
     revision_date = models.DateField(
+        auto_now_add=True,
         verbose_name=u"Revision Date")
     contract_number = models.CharField(
         verbose_name=u"Contract Number",
@@ -68,25 +70,30 @@ class Document(models.Model):
         default=u"FEED",
         max_length=4,
         choices=ENGINEERING_PHASES)
-    feed_update = models.BooleanField(
+    feed_update = models.NullBooleanField(
+        choices=BOOLEAN_CHOICES,
         verbose_name=u"FEED Update")
-    leader = models.CharField(
+    leader = models.IntegerField(
         verbose_name=u"Leader",
-        max_length=50)
-    approver = models.CharField(
+        choices=PEOPLE,
+        null=True, blank=True)
+    approver = models.IntegerField(
         verbose_name=u"Approver",
-        max_length=50)
+        choices=PEOPLE,
+        null=True, blank=True)
     klass = models.IntegerField(
         verbose_name=u"Class",
         default=1,
         choices=CLASSES)
     under_contractor_review = models.NullBooleanField(
         verbose_name=u"Under Contractor Review",
-        choices=UNDER_CONTRACTOR_REVIEW)
+        choices=BOOLEAN_CHOICES,
+        null=True, blank=True)
     under_ca_review = models.NullBooleanField(
         verbose_name=u"Under CA Review",
         default=False,
-        choices=UNDER_CA_REVIEW)
+        choices=BOOLEAN_CHOICES,
+        null=True, blank=True)
     wbs = models.CharField(
         verbose_name=u"WBS",
         max_length=5,
