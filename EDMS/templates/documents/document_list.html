@@ -215,8 +215,7 @@
             {% endfor %}
             </tr>
         </thead>
-        <tbody></tbody>
-        <tfoot>
+        <thead id="filters">
             <tr>
                 <th id="filterByColumnLabel" colspan="2">Filter by column:</th>
                 <th>
@@ -269,7 +268,8 @@
                     </select>
                 </th>
             </tr>
-        </tfoot>
+        </thead>
+        <tbody></tbody>
     </table>
 {% endblock %}
 {% block extra_js %}
@@ -425,7 +425,7 @@
             "sAjaxSource": "{% url "document_filter" %}"
         });
         /* Deal with faceting via footer's selects */
-        $("tfoot th").each(function(i){
+        $("#filters th").each(function(i){
             $('select', this).change(function(){
                 documents.fnFilter($(this).val(), i);
             });
