@@ -81,7 +81,7 @@ class DocumentCreate(CreateView):
     form_class = DocumentForm
 
     def get_success_url(self):
-        """Redirect to a different URL given the clicked button by the user."""
+        """Redirect to a different URL given the button clicked by the user."""
         if "save-create" in self.request.POST:
             url = reverse('document_create')
         else:

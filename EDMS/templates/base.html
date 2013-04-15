@@ -41,7 +41,17 @@
           </a>
           <a class="brand" href="#">EDMS</a>
           {% block createdocument %}
-            <a class="btn pull-right btn-primary" href="{% url "document_create" %}">Create a new document</a>
+            <div class="btn-group pull-right">
+              <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
+                Create a new document <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="{% url "document_create" %}">Contractor deliverable</a></li>
+                <li><a href="#">Vendor deliverable</a></li>
+                <li><a href="#">Correspondence</a></li>
+                <li><a href="#">Minutes of meeting</a></li>
+              </ul>
+            </div>
           {% endblock createdocument %}
           <div class="nav-collapse collapse">
             <ul class="nav">
