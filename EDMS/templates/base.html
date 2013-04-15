@@ -81,6 +81,13 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script type="text/javascript">
+      // fallback to local files
+      if (typeof jQuery == 'undefined')
+      {
+        document.write(unescape("%3Cscript src='{{ STATIC_URL }}js/jquery.js' type='text/javascript'%3E%3C/script%3E"));
+      }
+    </script>
     <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
 
     <!-- place project specific Javascript in this file -->
