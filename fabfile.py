@@ -13,9 +13,11 @@ def runserver():
     local(runserver + with_local_settings)
 
 
-def test():
+def test(module=""):
     """Launches tests for the whole project."""
-    runtests = 'coverage run EDMS/manage.py test'
+    runtests = 'coverage run EDMS/manage.py test {module}'.format(
+        module=module
+    )
     with_test_settings = ' --settings=EDMS.settings.test'
     local(runtests + with_test_settings)
 

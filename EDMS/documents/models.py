@@ -10,6 +10,17 @@ from documents.constants import (
 )
 
 
+def upload_to_path(instance, filename):
+    """Rename documents on upload to match a custom filename
+
+    based on the document number and the revision."""
+    return "documents/{number}_{revision}.{extension}".format(
+        number=instance.document_number,
+        revision=instance.revision,
+        extension=filename.split('.')[-1]
+    )
+
+
 class Document(models.Model):
     document_number = models.CharField(
         verbose_name=u"Document Number",
@@ -176,6 +187,14 @@ class Document(models.Model):
         null=True, blank=True)
     status_asb_actual_date = models.DateField(
         verbose_name=u"Status ASB Actual Date",
+        null=True, blank=True)
+    native_file = models.FileField(
+        verbose_name=u"Native File",
+        upload_to=upload_to_path,
+        null=True, blank=True)
+    pdf_file = models.FileField(
+        verbose_name=u"PDF File",
+        upload_to=upload_to_path,
         null=True, blank=True)
 
     class Meta:

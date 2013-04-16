@@ -2,6 +2,7 @@
 
 {% block extra_css %}
 <link href="{{ STATIC_URL }}css/datepicker.css" rel="stylesheet">
+<link href="{{ STATIC_URL }}css/bootstrap-fileupload.css" rel="stylesheet">
 <style type="text/css">
     label {
         text-align: right;
@@ -19,7 +20,10 @@
 
 {% block content %}
     <h2>New document</h2>
-    <form action="{% url "document_create" %}" method="post" class="">
+    <form action="{% url "document_create" %}"
+          method="post"
+          class=""
+          enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.non_field_errors }}
         {{ form.status }}
@@ -27,6 +31,7 @@
         {% include "documents/form_general_information.html" %}
         {% include "documents/form_review.html" %}
         {% include "documents/form_schedule.html" %}
+        {% include "documents/form_files.html" %}
         <div class="form-actions">
             <a class="btn" href="{% url "document_list" %}">Cancel</a>
             <input class="btn btn-primary pull-right"
@@ -44,6 +49,7 @@
 
 {% block extra_js %}
     <script src="{{ STATIC_URL }}js/bootstrap-datepicker.js"></script>
+    <script src="{{ STATIC_URL }}js/bootstrap-fileupload.js"></script>
     <script type="text/javascript">
         $('.datepicker').datepicker().on('changeDate', function(ev) {
             $(this).datepicker('hide');

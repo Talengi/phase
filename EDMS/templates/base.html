@@ -47,9 +47,9 @@
               </a>
               <ul class="dropdown-menu">
                 <li><a href="{% url "document_create" %}">Contractor deliverable</a></li>
-                <li><a href="#">Vendor deliverable</a></li>
-                <li><a href="#">Correspondence</a></li>
-                <li><a href="#">Minutes of meeting</a></li>
+                <li><a href="{% url "document_create" %}">Vendor deliverable</a></li>
+                <li><a href="{% url "document_create" %}">Correspondence</a></li>
+                <li><a href="{% url "document_create" %}">Minutes of meeting</a></li>
               </ul>
             </div>
           {% endblock createdocument %}

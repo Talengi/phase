@@ -45,6 +45,7 @@ User stories completed
 2. As a Document Controler, I want to sort documents by column so that I can access to recent documents.
 3. As a Document Controler, I want to search for documents (globally and per column) so that I can access to a given document or type of document.
 4. As a Document Controler, I want to create new documents so that users can browse more documents.
+5. As a Document Controler, I want to upload files to documents so that users can download attached files.
 
 The repository has been tagged for each completed US.
 
@@ -58,3 +59,4 @@ Colophon
 * Two Scoops of Django template: https://django.2scoops.org/
 * Sphinx: http://sphinx-doc.org/
 * Datepicker for Bootstrap: http://www.eyecon.ro/bootstrap-datepicker/
+* File upload for Bootstrap: http://jasny.github.io/bootstrap/javascript.html#fileupload

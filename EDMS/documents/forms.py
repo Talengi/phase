@@ -64,6 +64,21 @@ class DocumentForm(forms.ModelForm):
         ]
         self.fields['document_type'].choices = document_type_choices
 
+    def clean_native_file(self):
+        """Do not allow a PDF file to be uploaded as a native file.
+
+        Checks both the content type and the filename.
+        """
+        native_file = self.cleaned_data['native_file']
+        if native_file is not None:
+            content_type = native_file.content_type
+            if content_type == 'application/pdf'\
+                    or native_file.name.endswith('.pdf'):
+                raise forms.ValidationError(
+                    'A PDF file is not allowed in this field.'
+                )
+        return native_file
+
 
 class DocumentFilterForm(forms.Form):
     """A dummy form to check the validity of GET parameters from DataTables."""

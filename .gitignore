@@ -19,3 +19,6 @@ build
 
 # Coverage tests
 .coverage
+
+# Django media
+EDMS/media/*
