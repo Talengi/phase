@@ -158,7 +158,7 @@ class DocumentCreateTest(TestCase):
             'sequencial_number': "0001",
             'engeenering_phase': "FEED",
             'klass': 1,
-            'document_type': "ANA",
+            'document_type': "BAS",
             'contract_number': "FAC09001",
             'unit': "000",
             'revision': "00",
@@ -166,6 +166,9 @@ class DocumentCreateTest(TestCase):
         self.assertEqual(
             r.redirect_chain,
             [('http://testserver{url}'.format(
-                url=reverse('document_list')
+                url=reverse(
+                    'document_detail',
+                    args=['FAC09001-FWF-000-ARC-BAS-0001']
+                )
             ), 302)]
         )

@@ -99,5 +99,5 @@ class DocumentCreate(CreateView):
         if "save-create" in self.request.POST:
             url = reverse('document_create')
         else:
-            url = reverse('document_list')
+            url = self.object.get_absolute_url()
         return url

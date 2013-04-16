@@ -46,7 +46,7 @@ def deploy():
             run(collectstatic + with_production_settings)
             run('rm edms.db')
             run(syncdb + with_production_settings)
-            run('rm media/documents/*')
+            run('rm media/*')
             run('pip install -r ../requirements/production.txt')
 
 

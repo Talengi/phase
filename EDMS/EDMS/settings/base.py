@@ -82,7 +82,7 @@ USE_TZ = True
 MEDIA_ROOT = normpath(join(SITE_ROOT, 'media'))
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#media-url
-MEDIA_URL = '/media/documents/'
+MEDIA_URL = '/media/'
 ########## END MEDIA CONFIGURATION
 
 
