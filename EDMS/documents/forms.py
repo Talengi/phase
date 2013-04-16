@@ -2,7 +2,7 @@
 from django import forms
 
 from documents.models import Document
-from documents.constants import DISCIPLINES, UNITS, DOCUMENT_TYPES
+from documents.constants import DISCIPLINES, UNITS, DOCUMENT_TYPES, WBS
 
 
 class DocumentForm(forms.ModelForm):
@@ -59,10 +59,15 @@ class DocumentForm(forms.ModelForm):
         ]
         self.fields['unit'].choices = unit_choices
         document_type_choices = [
-            (document_type[0], u"{0} - {1}".format(document_type[0], document_type[1]))
-            for document_type in DOCUMENT_TYPES
+            (doc_type[0], u"{0} - {1}".format(doc_type[0], doc_type[1]))
+            for doc_type in DOCUMENT_TYPES
         ]
         self.fields['document_type'].choices = document_type_choices
+        wbs_choices = [
+            (wbs[0], u"{0} - {1}".format(wbs[0], wbs[1]))
+            for wbs in WBS
+        ]
+        self.fields['wbs'].choices = wbs_choices
 
     def clean_native_file(self):
         """Do not allow a PDF file to be uploaded as a native file.

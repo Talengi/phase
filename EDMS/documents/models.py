@@ -110,7 +110,7 @@ class Document(models.Model):
         null=True, blank=True)
     wbs = models.CharField(
         verbose_name=u"WBS",
-        max_length=5,
+        max_length=20,
         choices=WBS,
         null=True, blank=True)
     weight = models.IntegerField(

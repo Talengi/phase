@@ -8,7 +8,7 @@ from django.core.management.base import BaseCommand
 from documents.constants import (DISCIPLINES, DOCUMENT_TYPES, UNITS,
                                  STATUSES, REVISIONS, CLASSES,
                                  SEQUENCIAL_NUMBERS, CONTRACT_NBS,
-                                 ORIGINATORS, PEOPLE)
+                                 ORIGINATORS, PEOPLE, WBS)
 from documents.models import Document
 
 DISCIPLINES_CHOICES = [item[0] for item in DISCIPLINES]
@@ -21,6 +21,7 @@ SEQUENCIAL_NUMBERS_CHOICES = [item[0] for item in SEQUENCIAL_NUMBERS]
 CONTRACT_NBS_CHOICES = [item[0] for item in CONTRACT_NBS]
 ORIGINATORS_CHOICES = [item[0] for item in ORIGINATORS]
 PEOPLE_CHOICES = [item[0] for item in PEOPLE]
+WBS_CHOICES = [item[0] for item in WBS]
 
 
 class Command(BaseCommand):
@@ -48,6 +49,7 @@ class Command(BaseCommand):
                 contract_number=choice(CONTRACT_NBS_CHOICES),
                 originator=choice(ORIGINATORS_CHOICES),
                 sequencial_number=choice(SEQUENCIAL_NUMBERS_CHOICES),
+                wbs=choice(WBS_CHOICES),
             )
 
         self.stdout.write(

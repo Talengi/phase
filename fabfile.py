@@ -44,7 +44,9 @@ def deploy():
             syncdb = 'python manage.py syncdb --noinput'
             with_production_settings = ' --settings=EDMS.settings.production'
             run(collectstatic + with_production_settings)
+            run('rm edms.db')
             run(syncdb + with_production_settings)
+            run('rm media/documents/*')
             run('pip install -r ../requirements/production.txt')
 
 
