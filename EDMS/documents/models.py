@@ -14,7 +14,7 @@ def upload_to_path(instance, filename):
     """Rename documents on upload to match a custom filename
 
     based on the document number and the revision."""
-    return "documents/{number}_{revision}.{extension}".format(
+    return "{number}_{revision}.{extension}".format(
         number=instance.document_number,
         revision=instance.revision,
         extension=filename.split('.')[-1]
@@ -203,6 +203,10 @@ class Document(models.Model):
     def __unicode__(self):
         return self.document_number
 
+    @models.permalink
+    def get_absolute_url(self):
+        return ('document_detail', [self.document_number])
+
     def save(self, *args, **kwargs):
         """The document number is generated from multiple fields
 
@@ -245,5 +249,13 @@ class Document(models.Model):
             + [u'contract_number', u'originator', u'sequencial_number']
 
     def jsonified(self):
-        """Returns a list of document values ready to be json-encoded."""
-        return [unicode(field[2]) for field in self.display_fields()]
+        """Returns a list of document values ready to be json-encoded.
+
+        The first element of the list is the linkified document number.
+        """
+        document_link = u'<a href="{url}">{number}</a>'.format(
+            url=self.get_absolute_url(),
+            number=self.document_number,
+        )
+        return [document_link] \
+            + [unicode(field[2]) for field in self.display_fields()[1:]]

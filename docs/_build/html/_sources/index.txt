@@ -41,11 +41,12 @@ Check the list of available commands directly in your shell::
 User stories completed
 ----------------------
 
-1. As a Document Controler, I want to browse paginated documents so that I can consult many documents (6000+).
-2. As a Document Controler, I want to sort documents by column so that I can access to recent documents.
-3. As a Document Controler, I want to search for documents (globally and per column) so that I can access to a given document or type of document.
-4. As a Document Controler, I want to create new documents so that users can browse more documents.
-5. As a Document Controler, I want to upload files to documents so that users can download attached files.
+* As a Document Controler, I want to browse paginated documents so that I can consult many documents (6000+).
+* As a Document Controler, I want to sort documents by column so that I can access to recent documents.
+* As a Document Controler, I want to search for documents (globally and per column) so that I can access to a given document or type of document.
+* As a Document Controler, I want to create new documents so that I can browse more documents.
+* As a Document Controler, I want to upload files to documents so that I can enrich documents.
+* As a Document Controler, I want to display document details so that I can check all metadata and download attached files.
 
 The repository has been tagged for each completed US.
 

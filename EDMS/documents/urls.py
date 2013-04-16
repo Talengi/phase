@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, url
 
 from documents.views import (
-    DocumentList, DocumentFilter, DocumentCreate
+    DocumentList, DocumentFilter, DocumentCreate, DocumentDetail
 )
 
 urlpatterns = patterns(
@@ -12,6 +12,9 @@ urlpatterns = patterns(
     url(r'^create/$',
         DocumentCreate.as_view(),
         name="document_create"),
+    url(r'^detail/(?P<document_number>.*)/$',
+        DocumentDetail.as_view(),
+        name="document_detail"),
     url(r'^$',
         DocumentList.as_view(),
         name="document_list"),

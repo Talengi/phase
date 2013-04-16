@@ -1,6 +1,6 @@
 from django import http
 from django.views.generic import (
-    ListView, CreateView
+    ListView, CreateView, DetailView
 )
 from django.utils import simplejson as json
 from django.core.urlresolvers import reverse
@@ -58,6 +58,20 @@ class DocumentList(ListView):
             'disciplines_choices': [item[0] for item in DISCIPLINES],
             'document_types_choices': [item[0] for item in DOCUMENT_TYPES],
             'classes_choices': [item[0] for item in CLASSES],
+        })
+        return context
+
+
+class DocumentDetail(DetailView):
+    model = Document
+    slug_url_kwarg = 'document_number'
+    slug_field = 'document_number'
+
+    def get_context_data(self, **kwargs):
+        context = super(DocumentDetail, self).get_context_data(**kwargs)
+        # Add the form to the context to be rendered in a disabled way
+        context.update({
+            'form': DocumentForm(instance=context['document']),
         })
         return context
 

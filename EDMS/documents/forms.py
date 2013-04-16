@@ -14,7 +14,7 @@ class DocumentForm(forms.ModelForm):
                 'placeholder': 'Automatically generated if not specified.',
                 'class': 'span4',
             }),
-            'title': forms.Textarea(attrs={'rows': '1', 'class': 'span4'}),
+            'title': forms.Textarea(attrs={'rows': '2', 'class': 'span4'}),
             'status': forms.HiddenInput,
             'revision': forms.HiddenInput,
             'sequencial_number': forms.TextInput,

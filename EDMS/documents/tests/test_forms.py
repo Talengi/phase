@@ -117,7 +117,7 @@ class DocumentCreateTest(TestCase):
                         Document.objects.all().count()
                     )
                     # Delete created files
-                    media_path = 'EDMS/media/documents/'
+                    media_path = 'EDMS/media/'
                     file_name = 'FAC09001-FWF-000-ARC-ANA-0001_00'
                     os.remove(media_path+file_name+'.docx')
                     os.remove(media_path+file_name+'.pdf')

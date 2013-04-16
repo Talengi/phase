@@ -20,6 +20,29 @@ class DocumentListTest(TestCase):
         self.assertEqual(len(r.context['document_list']), 1)
 
 
+class DocumentDetailTest(TestCase):
+
+    def test_document_number(self):
+        """
+        Tests that a document detail returns a document and his form.
+        """
+        document = Document.objects.create(
+            title=u'HAZOP report',
+            revision_date='2012-04-20',
+            sequencial_number="0004",
+            discipline="HSE",
+            document_type="REP",
+            revision=3
+        )
+        c = Client()
+        r = c.get(reverse("document_detail", args=[document.document_number]))
+        self.assertEqual(
+            repr(r.context['document']),
+            '<Document: FAC09001-FWF-000-HSE-REP-0004>'
+        )
+        self.assertEqual(len(r.context['form'].fields.keys()), 47)
+
+
 class DocumenFilterTest(TestCase):
     fixtures = ['initial_data.json']
 

@@ -1,0 +1,37 @@
+<fieldset>
+    <legend>Files</legend>
+    <div class="controls controls-row">
+        <div class="control-group {% if form.errors.native_file %}error{% endif %}">
+            <label class="control-label span4" for="{{ form.native_file.auto_id }}">{{ form.native_file.label }}</label>
+            <div class="fileupload fileupload-new controls span5" data-provides="fileupload">
+                <div class="input-append">
+                    <div class="uneditable-input span4">
+                        <i class="icon-file fileupload-exists"></i>
+                        <span class="fileupload-preview">
+                            {% if document.native_file %}
+                                <a href="{{ document.native_file.url }}">{{ document.native_file.name }}</a>
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="controls controls-row">
+        <div class="control-group {% if form.errors.pdf_file %}error{% endif %}">
+            <label class="control-label span4" for="{{ form.pdf_file.auto_id }}">{{ form.pdf_file.label }}</label>
+            <div class="fileupload fileupload-new controls span5" data-provides="fileupload">
+                <div class="input-append">
+                    <div class="uneditable-input span4">
+                        <i class="icon-file fileupload-exists"></i>
+                        <span class="fileupload-preview">
+                            {% if document.pdf_file %}
+                                <a href="{{ document.pdf_file.url }}">{{ document.pdf_file.name }}</a>
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</fieldset>

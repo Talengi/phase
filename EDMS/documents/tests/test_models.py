@@ -23,6 +23,32 @@ class DocumentTest(TestCase):
         self.assertEqual(unicode(document),
                          u'FAC09001-FWF-000-HSE-REP-0004')
 
+    def test_jsonification(self):
+        """
+        Tests that a jsonified document returns the appropriate values.
+        """
+        document = Document.objects.create(
+            title=u'HAZOP report',
+            revision_date='2012-04-20',
+            sequencial_number="0004",
+            discipline="HSE",
+            document_type="REP"
+        )
+        self.assertEqual(
+            document.jsonified(),
+            [
+                u'<a href="/detail/FAC09001-FWF-000-HSE-REP-0004/">FAC09001-FWF-000-HSE-REP-0004</a>',
+                u'HAZOP report',
+                u'STD',
+                u'00',
+                u'2013-04-16',
+                u'000',
+                u'HSE',
+                u'REP',
+                u'1'
+            ]
+        )
+
     def test_display_fields(self):
         """
         Tests that a document is displayed with a few fields only.
