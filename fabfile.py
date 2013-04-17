@@ -42,10 +42,12 @@ def deploy():
         with prefix(env.activate):
             collectstatic = 'python manage.py collectstatic --noinput'
             syncdb = 'python manage.py syncdb --noinput'
+            generate = 'python manage.py generate_documents 5500 --noinput'
             with_production_settings = ' --settings=EDMS.settings.production'
             run(collectstatic + with_production_settings)
             run('rm edms.db')
             run(syncdb + with_production_settings)
+            run(generate + with_production_settings)
             run('rm media/*')
             run('pip install -r ../requirements/production.txt')
 

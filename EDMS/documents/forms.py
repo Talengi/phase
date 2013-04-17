@@ -16,7 +16,7 @@ class DocumentForm(forms.ModelForm):
             }),
             'title': forms.Textarea(attrs={'rows': '2', 'class': 'span4'}),
             'status': forms.HiddenInput,
-            'revision': forms.HiddenInput,
+            'revision_date': forms.DateInput(attrs=date_attrs),
             'sequencial_number': forms.TextInput,
             'status_std_planned_date': forms.DateInput(attrs=date_attrs),
             'status_std_forecast_date': forms.DateInput(attrs=date_attrs),
@@ -75,7 +75,7 @@ class DocumentForm(forms.ModelForm):
         Checks both the content type and the filename.
         """
         native_file = self.cleaned_data['native_file']
-        if native_file is not None:
+        if native_file is not None and hasattr(native_file, 'content_type'):
             content_type = native_file.content_type
             if content_type == 'application/pdf'\
                     or native_file.name.endswith('.pdf'):

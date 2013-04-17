@@ -40,7 +40,7 @@ class DocumentDetailTest(TestCase):
             repr(r.context['document']),
             '<Document: FAC09001-FWF-000-HSE-REP-0004>'
         )
-        self.assertEqual(len(r.context['form'].fields.keys()), 47)
+        self.assertEqual(len(r.context['form'].fields.keys()), 48)
 
 
 class DocumenFilterTest(TestCase):

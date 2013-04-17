@@ -1,6 +1,6 @@
 from django import http
 from django.views.generic import (
-    ListView, CreateView, DetailView
+    ListView, CreateView, DetailView, UpdateView
 )
 from django.utils import simplejson as json
 from django.core.urlresolvers import reverse
@@ -93,6 +93,29 @@ class DocumentFilter(JSONResponseMixin, ListView):
 class DocumentCreate(CreateView):
     model = Document
     form_class = DocumentForm
+
+    def get_success_url(self):
+        """Redirect to a different URL given the button clicked by the user."""
+        if "save-create" in self.request.POST:
+            url = reverse('document_create')
+        else:
+            url = self.object.get_absolute_url()
+        return url
+
+
+class DocumentEdit(UpdateView):
+    model = Document
+    form_class = DocumentForm
+    slug_url_kwarg = 'document_number'
+    slug_field = 'document_number'
+
+    def get_context_data(self, **kwargs):
+        context = super(DocumentEdit, self).get_context_data(**kwargs)
+        # Add a context var to make the difference with creation view
+        context.update({
+            'is_edit': True,
+        })
+        return context
 
     def get_success_url(self):
         """Redirect to a different URL given the button clicked by the user."""

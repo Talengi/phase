@@ -18,9 +18,10 @@
         {% include "documents/form_review.html" %}
         {% include "documents/form_schedule.html" %}
         {% include "documents/form_files_disabled.html" %}
+        {% include "documents/form_revision.html" %}
         <div class="form-actions">
             <a class="btn" href="{% url "document_list" %}">Cancel</a>
-            <a class="btn btn-primary pull-right" href="#">Edit document</a>
+            <a class="btn btn-primary pull-right" href="{% url "document_edit" document.document_number %}">Edit document</a>
         </div>
     </form>
 

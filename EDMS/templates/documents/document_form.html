@@ -19,19 +19,23 @@
 {% block createdocument %}{% endblock createdocument %}
 
 {% block content %}
-    <h2>New document</h2>
-    <form action="{% url "document_create" %}"
+    <h2>{% if is_edit %}Edit{% else %}New{% endif %} document</h2>
+    <form action="."
           method="post"
-          class=""
           enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.non_field_errors }}
         {{ form.status }}
-        {{ form.revision }}
         {% include "documents/form_general_information.html" %}
         {% include "documents/form_review.html" %}
         {% include "documents/form_schedule.html" %}
         {% include "documents/form_files.html" %}
+        {% if is_edit %}
+            {% include "documents/form_revision.html" %}
+        {% else %}
+            <input id="id_revision" name="revision" type="hidden" value="00" />
+            <input id="id_revision_date" name="revision_date" type="hidden" value="{% now "Y-m-d" %}" />
+        {% endif %}
         <div class="form-actions">
             <a class="btn" href="{% url "document_list" %}">Cancel</a>
             <input class="btn btn-primary pull-right"

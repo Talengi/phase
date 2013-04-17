@@ -1,5 +1,3 @@
-from datetime import date
-
 from django.test import TestCase
 
 from documents.models import Document
@@ -41,7 +39,7 @@ class DocumentTest(TestCase):
                 u'HAZOP report',
                 u'STD',
                 u'00',
-                u'2013-04-16',
+                u'2012-04-20',
                 u'000',
                 u'HSE',
                 u'REP',
@@ -64,5 +62,5 @@ class DocumentTest(TestCase):
         self.assertEqual(
             u" | ".join(unicode(field[2]) for field in document.display_fields()),
             (u'FAC09001-FWF-000-HSE-REP-0004 | HAZOP report | STD | 3 '
-             u'| {date} | 000 | HSE | REP | 1').format(date=str(date.today()))
+             u'| 2012-04-20 | 000 | HSE | REP | 1')
         )

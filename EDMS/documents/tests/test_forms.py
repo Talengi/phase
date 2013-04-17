@@ -30,7 +30,8 @@ class DocumentCreateTest(TestCase):
             'document_type': [required_error],
             'contract_number': [required_error],
             'unit': [required_error],
-            'revision': [required_error]
+            'revision': [required_error],
+            'revision_date': [required_error],
         })
 
     def test_creation_errors_with_files(self):
@@ -53,6 +54,7 @@ class DocumentCreateTest(TestCase):
                     'contract_number': "FAC09001",
                     'unit': "000",
                     'revision': "00",
+                    'revision_date': "2013-04-20",
                     'native_file': pdf_file,
                     'pdf_file': native_file,
                 })
@@ -77,7 +79,8 @@ class DocumentCreateTest(TestCase):
             'document_type': "ANA",
             'contract_number': "FAC09001",
             'unit': "000",
-            'revision': "00"
+            'revision': "00",
+            'revision_date': "2013-04-20",
         })
         if r.status_code == 302:
             self.assertEqual(
@@ -108,6 +111,7 @@ class DocumentCreateTest(TestCase):
                     'contract_number': "FAC09001",
                     'unit': "000",
                     'revision': "00",
+                    'revision_date': "2013-04-20",
                     'native_file': native_file,
                     'pdf_file': pdf_file,
                 })
@@ -127,7 +131,7 @@ class DocumentCreateTest(TestCase):
 
     def test_creation_redirect(self):
         """
-        Tests that a document creation is redirected to the list
+        Tests that a document creation is redirected to the item
         or another creation form (django-admin like).
         """
         c = Client()
@@ -142,6 +146,7 @@ class DocumentCreateTest(TestCase):
             'contract_number': "FAC09001",
             'unit': "000",
             'revision': "00",
+            'revision_date': "2013-04-20",
             'save-create': None,
         }, follow=True)
         self.assertEqual(
@@ -162,6 +167,150 @@ class DocumentCreateTest(TestCase):
             'contract_number': "FAC09001",
             'unit': "000",
             'revision': "00",
+            'revision_date': "2013-04-20",
+        }, follow=True)
+        self.assertEqual(
+            r.redirect_chain,
+            [('http://testserver{url}'.format(
+                url=reverse(
+                    'document_detail',
+                    args=['FAC09001-FWF-000-ARC-BAS-0001']
+                )
+            ), 302)]
+        )
+
+
+class DocumentEditTest(TestCase):
+
+    def test_edition_errors(self):
+        """
+        Tests that a document can't be edited without required fields.
+        """
+        required_error = u'This field is required.'
+        Document.objects.create(
+            title=u'HAZOP report',
+            revision_date='2012-04-20',
+            sequencial_number="0004",
+            discipline="HSE",
+            document_type="REP"
+        )
+        c = Client()
+        edit_url = reverse(
+            "document_edit",
+            args=['FAC09001-FWF-000-HSE-REP-0004']
+        )
+        r = c.get(edit_url)
+        self.assertEqual(r.status_code, 200)
+
+        r = c.post(edit_url, {})
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.context['form'].errors, {
+            'originator': [required_error],
+            'discipline': [required_error],
+            'title': [required_error],
+            'sequencial_number': [required_error],
+            'engeenering_phase': [required_error],
+            'klass': [required_error],
+            'document_type': [required_error],
+            'contract_number': [required_error],
+            'unit': [required_error],
+            'revision': [required_error],
+            'revision_date': [required_error],
+        })
+
+    def test_edition_success(self):
+        """
+        Tests that a document can be created with required fields.
+        """
+        original_number_of_document = Document.objects.all().count()
+        Document.objects.create(
+            title=u'HAZOP report',
+            revision_date='2012-04-20',
+            sequencial_number="0004",
+            discipline="HSE",
+            document_type="REP"
+        )
+        c = Client()
+        edit_url = reverse(
+            "document_edit",
+            args=['FAC09001-FWF-000-HSE-REP-0004']
+        )
+        r = c.post(edit_url, {
+            'originator': "FWF",
+            'discipline': "ARC",
+            'title': u'a title',
+            'sequencial_number': "0001",
+            'engeenering_phase': "FEED",
+            'klass': 1,
+            'document_type': "ANA",
+            'contract_number': "FAC09001",
+            'unit': "000",
+            'revision': "00",
+            'revision_date': "2013-04-20",
+        })
+        if r.status_code == 302:
+            self.assertEqual(
+                original_number_of_document+1,
+                Document.objects.all().count()
+            )
+        else:
+            # Debug purpose
+            self.assertEqual(r.context['form'].errors, {})
+
+    def test_edition_redirect(self):
+        """
+        Tests that a document edition is redirected to the item
+        or another creation form (django-admin like).
+        """
+        Document.objects.create(
+            title=u'HAZOP report',
+            revision_date='2012-04-20',
+            sequencial_number="0004",
+            discipline="HSE",
+            document_type="REP"
+        )
+        c = Client()
+        edit_url = reverse(
+            "document_edit",
+            args=['FAC09001-FWF-000-HSE-REP-0004']
+        )
+        r = c.post(edit_url, {
+            'originator': "FWF",
+            'discipline': "ARC",
+            'title': u'a title',
+            'sequencial_number': "0001",
+            'engeenering_phase': "FEED",
+            'klass': 1,
+            'document_type': "ANA",
+            'contract_number': "FAC09001",
+            'unit': "000",
+            'revision': "01",
+            'revision_date': "2013-04-20",
+            'save-create': None,
+        }, follow=True)
+        self.assertEqual(
+            r.redirect_chain,
+            [('http://testserver{url}'.format(
+                url=reverse('document_create')
+            ), 302)]
+        )
+
+        edit_url = reverse(
+            "document_edit",
+            args=['FAC09001-FWF-000-ARC-ANA-0001']
+        )
+        r = c.post(edit_url, {
+            'originator': "FWF",
+            'discipline': "ARC",
+            'title': u'a title',
+            'sequencial_number': "0001",
+            'engeenering_phase': "FEED",
+            'klass': 1,
+            'document_type': "BAS",
+            'contract_number': "FAC09001",
+            'unit': "000",
+            'revision': "02",
+            'revision_date': "2013-04-20",
         }, follow=True)
         self.assertEqual(
             r.redirect_chain,

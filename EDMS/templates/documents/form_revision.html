@@ -1,0 +1,22 @@
+ <fieldset>
+    <legend>Revision</legend>
+    <div class="controls controls-row">
+        <div class="control-group {% if form.errors.revision %}error{% endif %}">
+            <label class="control-label span4" for="{{ form.revision.auto_id }}">{{ form.revision.label }}</label>
+            <div class="controls span4">
+                {{ form.revision }}
+            </div>
+            {% if form.errors.revision %}<span class="help-inline">{{ form.errors.revision.0 }}</span>{% endif %}
+        </div>
+    </div>
+    <div class="controls controls-row">
+        <div class="control-group {% if form.errors.revision_date %}error{% endif %}">
+            <label class="control-label span4" for="{{ form.revision_date.auto_id }}">{{ form.revision_date.label }}</label>
+            <div class="controls span4 input-append date {% if form.errors.status_std_planned_date %}error{% endif %}">
+                {{ form.revision_date }}
+                <span class="add-on"><i class="icon-calendar"></i></span>
+            </div>
+            {% if form.errors.revision_date %}<span class="date-error">{{ form.errors.revision_date.0 }}</span>{% endif %}
+        </div>
+    </div>
+</fieldset>

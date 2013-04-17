@@ -39,7 +39,6 @@ class Document(models.Model):
         max_length=2,
         choices=REVISIONS)
     revision_date = models.DateField(
-        auto_now_add=True,
         verbose_name=u"Revision Date")
     contract_number = models.CharField(
         verbose_name=u"Contract Number",
