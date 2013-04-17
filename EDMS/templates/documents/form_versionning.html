@@ -1,5 +1,5 @@
  <fieldset>
-    <legend>Revision</legend>
+    <legend>Versionning</legend>
     <div class="controls controls-row">
         <div class="control-group {% if form.errors.revision %}error{% endif %}">
             <label class="control-label span4" for="{{ form.revision.auto_id }}">{{ form.revision.label }}</label>
@@ -17,6 +17,15 @@
                 <span class="add-on"><i class="icon-calendar"></i></span>
             </div>
             {% if form.errors.revision_date %}<span class="date-error">{{ form.errors.revision_date.0 }}</span>{% endif %}
+        </div>
+    </div>
+    <div class="controls controls-row">
+        <div class="control-group {% if form.errors.status %}error{% endif %}">
+            <label class="control-label span4" for="{{ form.status.auto_id }}">{{ form.status.label }}</label>
+            <div class="controls span4">
+                {{ form.status }}
+            </div>
+            {% if form.errors.status %}<span class="help-inline">{{ form.errors.status.0 }}</span>{% endif %}
         </div>
     </div>
 </fieldset>

@@ -2,20 +2,21 @@
 from django import forms
 
 from documents.models import Document
-from documents.constants import DISCIPLINES, UNITS, DOCUMENT_TYPES, WBS
+from documents.constants import (
+    DISCIPLINES, UNITS, DOCUMENT_TYPES, WBS, STATUSES
+)
 
 
 class DocumentForm(forms.ModelForm):
     class Meta:
         model = Document
-        date_attrs = {'class': "datepicker", 'data-date-format': "yyyy-mm-dd"}
+        date_attrs = {'class': "datepicker span2", 'data-date-format': "yyyy-mm-dd"}
         widgets = {
             'document_number': forms.TextInput(attrs={
                 'placeholder': 'Automatically generated if not specified.',
                 'class': 'span4',
             }),
             'title': forms.Textarea(attrs={'rows': '2', 'class': 'span4'}),
-            'status': forms.HiddenInput,
             'revision_date': forms.DateInput(attrs=date_attrs),
             'sequencial_number': forms.TextInput,
             'status_std_planned_date': forms.DateInput(attrs=date_attrs),
@@ -48,6 +49,11 @@ class DocumentForm(forms.ModelForm):
         super(DocumentForm, self).__init__(*args, **kwargs)
         # Automatically generated if empty
         self.fields['document_number'].required = False
+        status_choices = [
+            (status[0], u"{0} - {1}".format(status[0], status[1]))
+            for status in STATUSES
+        ]
+        self.fields['status'].choices = status_choices
         discipline_choices = [
             (discipline[0], u"{0} - {1}".format(discipline[0], discipline[1]))
             for discipline in DISCIPLINES

@@ -298,7 +298,7 @@ CLASSES = [
     (classe, str(classe)) for classe in range(1, 5)
 ]
 
-BOOLEAN_CHOICES = [(True, u"Yes"), (False, u"No")]
+BOOLEANS = [(True, u"Yes"), (False, u"No")]
 
 PEOPLE = [
     (1, u"Pierre-Yves Becher"),

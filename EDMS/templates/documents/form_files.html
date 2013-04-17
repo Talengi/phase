@@ -3,7 +3,7 @@
     <div class="controls controls-row">
         <div class="control-group {% if form.errors.native_file %}error{% endif %}">
             <label class="control-label span4" for="{{ form.native_file.auto_id }}">{{ form.native_file.label }}</label>
-            <div class="fileupload fileupload-{% if is_edit %}exists{% else %}new{% endif %} controls span5" data-provides="fileupload">
+            <div class="fileupload fileupload-{% if is_edit and document.native_file %}exists{% else %}new{% endif %} controls span5" data-provides="fileupload">
                 <div class="input-append">
                     <div class="uneditable-input span3">
                         <i class="icon-file fileupload-exists"></i>
@@ -27,7 +27,7 @@
     <div class="controls controls-row">
         <div class="control-group {% if form.errors.pdf_file %}error{% endif %}">
             <label class="control-label span4" for="{{ form.pdf_file.auto_id }}">{{ form.pdf_file.label }}</label>
-            <div class="fileupload fileupload-{% if is_edit %}exists{% else %}new{% endif %} controls span5" data-provides="fileupload">
+            <div class="fileupload fileupload-{% if is_edit and document.pdf_file %}exists{% else %}new{% endif %} controls span5" data-provides="fileupload">
                 <div class="input-append">
                     <div class="uneditable-input span3">
                         <i class="icon-file fileupload-exists"></i>

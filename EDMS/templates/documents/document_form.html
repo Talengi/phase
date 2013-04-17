@@ -11,7 +11,23 @@
         color: #B94A48;
     }
     #save-create {
-        margin-right: 15px;
+        margin-right: 20px;
+    }
+    .form-horizontal .form-actions {
+        padding-left: 20px;
+    }
+    td.row-title, .table th {
+        text-align: center;
+    }
+    td.row-title {
+        font-weight: bold;
+        padding-top: 20px;
+    }
+    .form-horizontal table .control-group {
+        margin: 10px 15px;
+    }
+    .datepicker {
+        margin-top: 0;
     }
 </style>
 {% endblock extra_css %}
@@ -22,6 +38,7 @@
     <h2>{% if is_edit %}Edit{% else %}New{% endif %} document</h2>
     <form action="."
           method="post"
+          class="form-horizontal"
           enctype="multipart/form-data">
         {% csrf_token %}
         {% if form.non_field_errors %}
@@ -29,19 +46,13 @@
                 <p><strong>Please fix this error:</strong> {{ form.non_field_errors.0 }}</p>
             </div>
         {% endif %}
-        {{ form.status }}
         {% include "documents/form_general_information.html" %}
         {% include "documents/form_review.html" %}
         {% include "documents/form_schedule.html" %}
         {% include "documents/form_files.html" %}
-        {% if is_edit %}
-            {% include "documents/form_revision.html" %}
-        {% else %}
-            <input id="id_revision" name="revision" type="hidden" value="00" />
-            <input id="id_revision_date" name="revision_date" type="hidden" value="{% now "Y-m-d" %}" />
-        {% endif %}
+        {% include "documents/form_versionning.html" %}
         <div class="form-actions">
-            <a class="btn" href="{% url "document_list" %}">Cancel</a>
+            <a class="btn pull-left" href="{% url "document_list" %}">Cancel</a>
             <input class="btn btn-primary pull-right"
                    type="submit"
                    value="Save and close"

@@ -6,7 +6,7 @@ from django.db import models
 from documents.constants import (
     STATUSES, REVISIONS, CONTRACT_NBS, ORIGINATORS, UNITS, DISCIPLINES,
     DOCUMENT_TYPES, SEQUENCIAL_NUMBERS, SYSTEMS, ENGINEERING_PHASES,
-    CLASSES, BOOLEAN_CHOICES, PEOPLE, WBS
+    CLASSES, BOOLEANS, PEOPLE, WBS
 )
 
 
@@ -84,7 +84,7 @@ class Document(models.Model):
         max_length=4,
         choices=ENGINEERING_PHASES)
     feed_update = models.NullBooleanField(
-        choices=BOOLEAN_CHOICES,
+        choices=BOOLEANS,
         verbose_name=u"FEED Update")
     leader = models.IntegerField(
         verbose_name=u"Leader",
@@ -100,12 +100,12 @@ class Document(models.Model):
         choices=CLASSES)
     under_contractor_review = models.NullBooleanField(
         verbose_name=u"Under Contractor Review",
-        choices=BOOLEAN_CHOICES,
+        choices=BOOLEANS,
         null=True, blank=True)
     under_ca_review = models.NullBooleanField(
         verbose_name=u"Under CA Review",
         default=False,
-        choices=BOOLEAN_CHOICES,
+        choices=BOOLEANS,
         null=True, blank=True)
     wbs = models.CharField(
         verbose_name=u"WBS",
@@ -242,7 +242,7 @@ class Document(models.Model):
             (u'Unit',            u'unit',            self.unit),
             (u'Discipline',      u'discipline',      self.discipline),
             (u'Document Type',   u'document_type',   self.document_type),
-            (u'Classe',          u'klass',           self.klass),
+            (u'Class',          u'klass',           self.klass),
         ]
 
     def searchable_fields(self):
