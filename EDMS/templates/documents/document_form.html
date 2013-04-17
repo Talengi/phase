@@ -24,7 +24,11 @@
           method="post"
           enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.non_field_errors }}
+        {% if form.non_field_errors %}
+            <div class="alert alert-error">
+                <p><strong>Please fix this error:</strong> {{ form.non_field_errors.0 }}</p>
+            </div>
+        {% endif %}
         {{ form.status }}
         {% include "documents/form_general_information.html" %}
         {% include "documents/form_review.html" %}

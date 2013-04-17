@@ -198,6 +198,12 @@ class Document(models.Model):
 
     class Meta:
         ordering = ('document_number',)
+        unique_together = (
+            (
+                "contract_number", "originator", "unit", "discipline",
+                "document_type", "sequencial_number",
+            ),
+        )
 
     def __unicode__(self):
         return self.document_number
