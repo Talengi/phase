@@ -42,7 +42,7 @@ def deploy():
         with prefix(env.activate):
             collectstatic = 'python manage.py collectstatic --noinput'
             syncdb = 'python manage.py syncdb --noinput'
-            generate = 'python manage.py generate_documents 5500 --noinput'
+            generate = 'python manage.py generate_documents 5500'
             with_production_settings = ' --settings=EDMS.settings.production'
             run(collectstatic + with_production_settings)
             run('rm edms.db')

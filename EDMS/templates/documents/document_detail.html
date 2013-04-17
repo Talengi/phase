@@ -28,10 +28,10 @@
 {% block content %}
     <form class="disabled form-horizontal">
         {% include "documents/form_general_information.html" %}
+        {% include "documents/form_revision.html" %}
         {% include "documents/form_review.html" %}
         {% include "documents/form_schedule.html" %}
         {% include "documents/form_files_disabled.html" %}
-        {% include "documents/form_versionning.html" %}
         <div class="form-actions">
             <a class="btn" href="{% url "document_list" %}">Cancel</a>
             <a class="btn btn-primary pull-right" href="{% url "document_edit" document.document_number %}">Edit document</a>

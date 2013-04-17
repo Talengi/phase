@@ -39,12 +39,12 @@
         *cursor: hand;
     }
 
-    table.table thead .sorting { background: url('{{ STATIC_URL }}img/sort_both.png') no-repeat right 85%; }
-    table.table thead .sorting_asc { background: url('{{ STATIC_URL }}img/sort_asc.png') no-repeat right 85%; }
-    table.table thead .sorting_desc { background: url('{{ STATIC_URL }}img/sort_desc.png') no-repeat right 85%; }
+    table.table thead .sorting { background: url('{{ STATIC_URL }}img/sort_both.png') no-repeat right 55%; }
+    table.table thead .sorting_asc { background: url('{{ STATIC_URL }}img/sort_asc.png') no-repeat right 55%; }
+    table.table thead .sorting_desc { background: url('{{ STATIC_URL }}img/sort_desc.png') no-repeat right 55%; }
 
-    table.table thead .sorting_asc_disabled { background: url('{{ STATIC_URL }}img/sort_asc_disabled.png') no-repeat right 85%; }
-    table.table thead .sorting_desc_disabled { background: url('{{ STATIC_URL }}img/sort_desc_disabled.png') no-repeat right 85%; }
+    table.table thead .sorting_asc_disabled { background: url('{{ STATIC_URL }}img/sort_asc_disabled.png') no-repeat right 55%; }
+    table.table thead .sorting_desc_disabled { background: url('{{ STATIC_URL }}img/sort_desc_disabled.png') no-repeat right 55%; }
 
     table.dataTable th:active {
         outline: none;
@@ -202,6 +202,9 @@
     }
     #documents #filterByColumnLabel {
         text-align: right;
+    }
+    #documents th, #documents td {
+        vertical-align: middle;
     }
     </style>
 {% endblock extra_css %}
