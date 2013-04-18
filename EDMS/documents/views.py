@@ -71,6 +71,7 @@ class DocumentDetail(DetailView):
         context = super(DocumentDetail, self).get_context_data(**kwargs)
         # Add the form to the context to be rendered in a disabled way
         context.update({
+            'is_detail': True,
             'form': DocumentForm(instance=context['document']),
         })
         return context

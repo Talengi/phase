@@ -40,6 +40,9 @@ class Document(models.Model):
         choices=REVISIONS)
     revision_date = models.DateField(
         verbose_name=u"Revision Date")
+    created_on = models.DateField(
+        auto_now_add=True,
+        verbose_name=u"Created on")
     contract_number = models.CharField(
         verbose_name=u"Contract Number",
         default=u"FAC09001",
