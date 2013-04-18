@@ -1,15 +1,16 @@
 <fieldset>
+    {% with document.latest_revision as revision %}
     <legend>Files</legend>
     <div class="controls controls-row">
         <div class="control-group {% if form.errors.native_file %}error{% endif %}">
             <label class="control-label span4" for="{{ form.native_file.auto_id }}">{{ form.native_file.label }}</label>
-            <div class="fileupload fileupload-{% if is_edit and document.native_file %}exists{% else %}new{% endif %} controls span5" data-provides="fileupload">
+            <div class="fileupload fileupload-{% if is_edit and revision.native_file %}exists{% else %}new{% endif %} controls span5" data-provides="fileupload">
                 <div class="input-append">
                     <div class="uneditable-input span3">
                         <i class="icon-file fileupload-exists"></i>
                         <span class="fileupload-preview">
-                            {% if document.native_file %}
-                                {{ document.native_file.name }}
+                            {% if revision.native_file %}
+                                {{ revision.native_file.name }}
                             {% endif %}
                         </span>
                     </div>
@@ -27,13 +28,13 @@
     <div class="controls controls-row">
         <div class="control-group {% if form.errors.pdf_file %}error{% endif %}">
             <label class="control-label span4" for="{{ form.pdf_file.auto_id }}">{{ form.pdf_file.label }}</label>
-            <div class="fileupload fileupload-{% if is_edit and document.pdf_file %}exists{% else %}new{% endif %} controls span5" data-provides="fileupload">
+            <div class="fileupload fileupload-{% if is_edit and revision.pdf_file %}exists{% else %}new{% endif %} controls span5" data-provides="fileupload">
                 <div class="input-append">
                     <div class="uneditable-input span3">
                         <i class="icon-file fileupload-exists"></i>
                         <span class="fileupload-preview">
-                            {% if document.pdf_file %}
-                                {{ document.pdf_file.name }}
+                            {% if revision.pdf_file %}
+                                {{ revision.pdf_file.name }}
                             {% endif %}
                         </span>
                     </div>
@@ -48,4 +49,5 @@
             {% if form.errors.pdf_file %}<span class="help-inline">{{ form.errors.pdf_file.0 }}</span>{% endif %}
         </div>
     </div>
+    {% endwith %}
 </fieldset>

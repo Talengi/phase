@@ -4,7 +4,7 @@ from django.test.client import Client
 from django.utils import simplejson as json
 from django.core.urlresolvers import reverse
 
-from documents.models import Document
+from documents.models import Document, DocumentRevision
 
 
 class DocumentListTest(TestCase):
@@ -28,11 +28,16 @@ class DocumentDetailTest(TestCase):
         """
         document = Document.objects.create(
             title=u'HAZOP report',
-            revision_date='2012-04-20',
+            current_revision_date='2012-04-20',
             sequencial_number="0004",
             discipline="HSE",
             document_type="REP",
-            revision=3
+            current_revision=u"03",
+        )
+        DocumentRevision.objects.create(
+            document=document,
+            revision=u"03",
+            revision_date='2012-04-20',
         )
         c = Client()
         r = c.get(reverse("document_detail", args=[document.document_number]))
@@ -311,7 +316,7 @@ class DocumenFilterTest(TestCase):
         get_parameters['sSearch'] = search_terms
         r = c.get(reverse("document_filter"), get_parameters)
         data = json.loads(r.content)
-        self.assertEqual(len(data['aaData']), 5)
+        self.assertEqual(len(data['aaData']), 1)
         documents = Document.objects.all()
         q = Q()
         for field in documents[0].searchable_fields():
@@ -391,7 +396,7 @@ class DocumenFilterTest(TestCase):
         data = json.loads(r.content)
         self.assertEqual(len(data['aaData']), 10)
         self.assertEqual(int(data['iTotalRecords']), 500)
-        self.assertEqual(int(data['iTotalDisplayRecords']), 39)
+        self.assertEqual(int(data['iTotalDisplayRecords']), 44)
         documents = Document.objects.all()
         documents = documents.filter(**{
             'status__icontains': status
@@ -401,9 +406,9 @@ class DocumenFilterTest(TestCase):
             [doc.jsonified() for doc in documents[0:10]]
         )
 
-        # Searching 'ASB' status + 'ANA' document_type
+        # Searching 'ASB' status + 'PLA' document_type
         status = u'ASB'
-        document_type = u'ANA'
+        document_type = u'PLA'
         get_parameters['sSearch_1'] = status
         get_parameters['sSearch_6'] = document_type
         r = c.get(reverse("document_filter"), get_parameters)
@@ -489,7 +494,7 @@ class DocumenFilterTest(TestCase):
         get_parameters['sSortDir_0'] = 'desc'
         r = c.get(reverse("document_filter"), get_parameters)
         data = json.loads(r.content)
-        self.assertEqual(len(data['aaData']), 5)
+        self.assertEqual(len(data['aaData']), 1)
         documents = Document.objects.all()
         q = Q()
         for field in documents[0].searchable_fields():
@@ -511,8 +516,8 @@ class DocumenFilterTest(TestCase):
         get_parameters['iDisplayStart'] = 10
         r = c.get(reverse("document_filter"), get_parameters)
         data = json.loads(r.content)
-        self.assertEqual(len(data['aaData']), 2)
-        self.assertEqual(int(data['iTotalDisplayRecords']), 12)
+        self.assertEqual(len(data['aaData']), 7)
+        self.assertEqual(int(data['iTotalDisplayRecords']), 17)
         documents = Document.objects.all()
         q = Q()
         for field in documents[0].searchable_fields():
@@ -535,8 +540,8 @@ class DocumenFilterTest(TestCase):
         get_parameters['iSortCol_0'] = 1
         r = c.get(reverse("document_filter"), get_parameters)
         data = json.loads(r.content)
-        self.assertEqual(len(data['aaData']), 2)
-        self.assertEqual(int(data['iTotalDisplayRecords']), 12)
+        self.assertEqual(len(data['aaData']), 7)
+        self.assertEqual(int(data['iTotalDisplayRecords']), 17)
         documents = Document.objects.all()
         q = Q()
         for field in documents[0].searchable_fields():
@@ -561,7 +566,7 @@ class DocumenFilterTest(TestCase):
         get_parameters['sSortDir_0'] = 'desc'
         r = c.get(reverse("document_filter"), get_parameters)
         data = json.loads(r.content)
-        self.assertEqual(len(data['aaData']), 1)
+        self.assertEqual(len(data['aaData']), 4)
         documents = Document.objects.all()
         q = Q()
         for field in documents[0].searchable_fields():

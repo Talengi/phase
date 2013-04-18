@@ -10,17 +10,6 @@ from documents.constants import (
 )
 
 
-def upload_to_path(instance, filename):
-    """Rename documents on upload to match a custom filename
-
-    based on the document number and the revision."""
-    return "{number}_{revision}.{extension}".format(
-        number=instance.document_number,
-        revision=instance.revision,
-        extension=filename.split('.')[-1]
-    )
-
-
 class Document(models.Model):
     document_number = models.CharField(
         verbose_name=u"Document Number",
@@ -33,13 +22,6 @@ class Document(models.Model):
         max_length=3,
         choices=STATUSES,
         null=True, blank=True)
-    revision = models.CharField(
-        verbose_name=u"Revision",
-        default=u"00",
-        max_length=2,
-        choices=REVISIONS)
-    revision_date = models.DateField(
-        verbose_name=u"Revision Date")
     created_on = models.DateField(
         auto_now_add=True,
         verbose_name=u"Created on")
@@ -190,14 +172,13 @@ class Document(models.Model):
     status_asb_actual_date = models.DateField(
         verbose_name=u"Status ASB Actual Date",
         null=True, blank=True)
-    native_file = models.FileField(
-        verbose_name=u"Native File",
-        upload_to=upload_to_path,
-        null=True, blank=True)
-    pdf_file = models.FileField(
-        verbose_name=u"PDF File",
-        upload_to=upload_to_path,
-        null=True, blank=True)
+    current_revision = models.CharField(
+        verbose_name=u"Revision",
+        default=u"00",
+        max_length=2,
+        choices=REVISIONS)
+    current_revision_date = models.DateField(
+        verbose_name=u"Revision Date")
 
     class Meta:
         ordering = ('document_number',)
@@ -236,25 +217,32 @@ class Document(models.Model):
     def display_fields(self):
         """The list of fields to display in a concise way."""
         return [
-            #(Name               Column Name         Value)
-            (u'Document Number', u'document_number', self.document_number),
-            (u'Title',           u'title',           self.title),
-            (u'Status',          u'status',          self.status),
-            (u'Revision',        u'revision',        self.revision),
-            (u'Revision Date',   u'revision_date',   self.revision_date),
-            (u'Unit',            u'unit',            self.unit),
-            (u'Discipline',      u'discipline',      self.discipline),
-            (u'Document Type',   u'document_type',   self.document_type),
-            (u'Class',          u'klass',           self.klass),
+            #(Name               Column Name                Value)
+            (u'Document Number', u'document_number',        self.document_number),
+            (u'Title',           u'title',                  self.title),
+            (u'Status',          u'status',                 self.status),
+            (u'Revision',        u'current_revision',       self.current_revision),
+            (u'Revision Date',   u'current_revision_date',  self.current_revision_date),
+            (u'Unit',            u'unit',                   self.unit),
+            (u'Discipline',      u'discipline',             self.discipline),
+            (u'Document Type',   u'document_type',          self.document_type),
+            (u'Class',           u'klass',                  self.klass),
         ]
 
     def searchable_fields(self):
-        """The list of fields to search into:
-
-        `display_fields` and `document_number`'s ones.
-        """
-        return [field[1] for field in self.display_fields()]\
-            + [u'contract_number', u'originator', u'sequencial_number']
+        """The list of fields to search into."""
+        return [
+            u'document_number',
+            u'title',
+            u'status',
+            u'unit',
+            u'discipline',
+            u'document_type',
+            u'klass',
+            u'contract_number',
+            u'originator',
+            u'sequencial_number',
+        ]
 
     def jsonified(self):
         """Returns a list of document values ready to be json-encoded.
@@ -267,3 +255,41 @@ class Document(models.Model):
         )
         return [document_link] \
             + [unicode(field[2]) for field in self.display_fields()[1:]]
+
+    def latest_revision(self):
+        """Returns the latest revision related to this document."""
+        return self.documentrevision_set.all().latest()
+
+
+def upload_to_path(instance, filename):
+    """Rename document files on upload to match a custom filename
+
+    based on the document number and the revision."""
+    return "{number}_{revision}.{extension}".format(
+        number=instance.document.document_number,
+        revision=instance.revision,
+        extension=filename.split('.')[-1]
+    )
+
+
+class DocumentRevision(models.Model):
+    revision = models.CharField(
+        verbose_name=u"Revision",
+        default=u"00",
+        max_length=2,
+        choices=REVISIONS)
+    revision_date = models.DateField(
+        verbose_name=u"Revision Date")
+    native_file = models.FileField(
+        verbose_name=u"Native File",
+        upload_to=upload_to_path,
+        null=True, blank=True)
+    pdf_file = models.FileField(
+        verbose_name=u"PDF File",
+        upload_to=upload_to_path,
+        null=True, blank=True)
+    document = models.ForeignKey(Document)
+
+    class Meta:
+        ordering = ('-revision',)
+        get_latest_by = 'revision'

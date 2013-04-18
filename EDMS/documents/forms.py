@@ -8,6 +8,15 @@ from documents.constants import (
 
 
 class DocumentForm(forms.ModelForm):
+    native_file = forms.FileField(
+        label=u'Native file',
+        required=False,
+    )
+    pdf_file = forms.FileField(
+        label=u'PDF file',
+        required=False,
+    )
+
     class Meta:
         model = Document
         date_attrs = {'class': "datepicker span2", 'data-date-format': "yyyy-mm-dd"}
@@ -17,7 +26,7 @@ class DocumentForm(forms.ModelForm):
                 'class': 'span4',
             }),
             'title': forms.Textarea(attrs={'rows': '2', 'class': 'span4'}),
-            'revision_date': forms.DateInput(attrs=date_attrs),
+            'current_revision_date': forms.DateInput(attrs=date_attrs),
             'sequencial_number': forms.TextInput,
             'status_std_planned_date': forms.DateInput(attrs=date_attrs),
             'status_std_forecast_date': forms.DateInput(attrs=date_attrs),

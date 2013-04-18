@@ -5,7 +5,7 @@ from django.views.generic import (
 from django.utils import simplejson as json
 from django.core.urlresolvers import reverse
 
-from documents.models import Document
+from documents.models import Document, DocumentRevision
 from documents.utils import filter_documents
 from documents.forms import DocumentFilterForm, DocumentForm
 from documents.constants import (
@@ -91,9 +91,27 @@ class DocumentFilter(JSONResponseMixin, ListView):
         return queryset
 
 
-class DocumentCreate(CreateView):
-    model = Document
-    form_class = DocumentForm
+class DocumentRevisionMixin(object):
+    """
+    Deal with revisions' auto-creation on model creation/edition.
+    """
+    def form_valid(self, form):
+        self.object = form.save()
+        # Deal with the new revision if any
+        data = form.cleaned_data
+        current_revision = data['current_revision']
+        if not DocumentRevision.objects.filter(
+            revision=current_revision,
+            document=self.object
+        ).exists():
+            DocumentRevision.objects.create(
+                document=self.object,
+                revision=current_revision,
+                revision_date=data['current_revision_date'],
+                native_file=data['native_file'],
+                pdf_file=data['pdf_file'],
+            )
+        return http.HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
         """Redirect to a different URL given the button clicked by the user."""
@@ -104,7 +122,12 @@ class DocumentCreate(CreateView):
         return url
 
 
-class DocumentEdit(UpdateView):
+class DocumentCreate(DocumentRevisionMixin, CreateView):
+    model = Document
+    form_class = DocumentForm
+
+
+class DocumentEdit(DocumentRevisionMixin, UpdateView):
     model = Document
     form_class = DocumentForm
     slug_url_kwarg = 'document_number'
@@ -117,11 +140,3 @@ class DocumentEdit(UpdateView):
             'is_edit': True,
         })
         return context
-
-    def get_success_url(self):
-        """Redirect to a different URL given the button clicked by the user."""
-        if "save-create" in self.request.POST:
-            url = reverse('document_create')
-        else:
-            url = self.object.get_absolute_url()
-        return url

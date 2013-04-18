@@ -9,7 +9,7 @@ from documents.constants import (DISCIPLINES, DOCUMENT_TYPES, UNITS,
                                  STATUSES, REVISIONS, CLASSES,
                                  SEQUENCIAL_NUMBERS, CONTRACT_NBS,
                                  ORIGINATORS, PEOPLE, SYSTEMS, WBS)
-from documents.models import Document
+from documents.models import Document, DocumentRevision
 
 DISCIPLINES_CHOICES = [item[0] for item in DISCIPLINES]
 DOCUMENT_TYPES_CHOICES = [item[0] for item in DOCUMENT_TYPES]
@@ -32,20 +32,15 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         nb_of_docs = int(args[0])
         for i in range(nb_of_docs):
-            Document.objects.create(
+            max_revision = choice(range(1, 5))
+            document = Document.objects.create(
                 title=choice(TITLES),
                 status=choice(STATUSES_CHOICES),
-                revision=choice(REVISIONS_CHOICES),
                 unit=choice(UNITS_CHOICES),
                 discipline=choice(DISCIPLINES_CHOICES),
                 document_type=choice(DOCUMENT_TYPES_CHOICES),
                 system=choice(SYSTEM_CHOICES),
                 klass=choice(CLASSES_CHOICES),
-                revision_date='{year}-{month:0>2}-{day:0>2}'.format(
-                    year=choice([2010, 2011, 2012]),
-                    month=choice(range(1, 13)),
-                    day=choice(range(1, 29)),
-                ),
                 leader=choice(PEOPLE_CHOICES),
                 approver=choice(PEOPLE_CHOICES),
                 contract_number=choice(CONTRACT_NBS_CHOICES),
@@ -53,7 +48,23 @@ class Command(BaseCommand):
                 sequencial_number=choice(SEQUENCIAL_NUMBERS_CHOICES),
                 wbs=choice(WBS_CHOICES),
                 created_on=date.today(),
+                current_revision=u"{0:0>2}".format(max_revision),
+                current_revision_date='{year}-{month:0>2}-{day:0>2}'.format(
+                    year=2008+max_revision,
+                    month=choice(range(1, 13)),
+                    day=choice(range(1, 29)),
+                ),
             )
+            for revision_number in range(max_revision):
+                DocumentRevision.objects.create(
+                    revision=u"{0:0>2}".format(revision_number),
+                    revision_date='{year}-{month:0>2}-{day:0>2}'.format(
+                        year=2008+revision_number,
+                        month=choice(range(1, 13)),
+                        day=choice(range(1, 29)),
+                    ),
+                    document=document,
+                )
 
         self.stdout.write(
             'Successfully generated {nb_of_docs} documents'.format(

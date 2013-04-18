@@ -1,37 +1,54 @@
-<fieldset>
-    <legend>Files</legend>
-    <div class="controls controls-row">
-        <div class="control-group {% if form.errors.native_file %}error{% endif %}">
-            <label class="control-label span4" for="{{ form.native_file.auto_id }}">{{ form.native_file.label }}</label>
-            <div class="fileupload fileupload-new controls span5" data-provides="fileupload">
-                <div class="input-append">
-                    <div class="uneditable-input span4">
-                        <i class="icon-file fileupload-exists"></i>
-                        <span class="fileupload-preview">
-                            {% if document.native_file %}
-                                <a href="{{ document.native_file.url }}">{{ document.native_file.name }}</a>
-                            {% endif %}
-                        </span>
-                    </div>
+{% with document.documentrevision_set.all as revisions %}
+    {% if revisions %}
+        <fieldset>
+            <legend>Files</legend>
+            <div class="tabbable">
+                <ul class="nav nav-tabs">
+                    {% for revision in revisions %}
+                        <li{% if forloop.first %} class="active"{% endif %}><a href="#tab{{ forloop.counter }}" data-toggle="tab">Revision {{ revision.revision }}</a></li>
+                    {% endfor %}
+                </ul>
+                <div class="tab-content">
+                    {% for revision in revisions %}
+                        <div class="tab-pane{% if forloop.first %} active{% endif %}" id="tab{{ forloop.counter }}">
+                            <div class="controls controls-row">
+                                <div class="control-group">
+                                    <label class="control-label span4" for="{{ form.native_file.auto_id }}">{{ form.native_file.label }}</label>
+                                    <div class="fileupload fileupload-new controls span5" data-provides="fileupload">
+                                        <div class="input-append">
+                                            <div class="uneditable-input span4">
+                                                <i class="icon-file fileupload-exists"></i>
+                                                <span class="fileupload-preview">
+                                                    {% if revision.native_file %}
+                                                        <a href="{{ revision.native_file.url }}">{{ revision.native_file.name }}</a>
+                                                    {% endif %}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="controls controls-row">
+                                <div class="control-group">
+                                    <label class="control-label span4" for="{{ form.pdf_file.auto_id }}">{{ form.pdf_file.label }}</label>
+                                    <div class="fileupload fileupload-new controls span5" data-provides="fileupload">
+                                        <div class="input-append">
+                                            <div class="uneditable-input span4">
+                                                <i class="icon-file fileupload-exists"></i>
+                                                <span class="fileupload-preview">
+                                                    {% if revision.pdf_file %}
+                                                        <a href="{{ revision.pdf_file.url }}">{{ revision.pdf_file.name }}</a>
+                                                    {% endif %}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="controls controls-row">
-        <div class="control-group {% if form.errors.pdf_file %}error{% endif %}">
-            <label class="control-label span4" for="{{ form.pdf_file.auto_id }}">{{ form.pdf_file.label }}</label>
-            <div class="fileupload fileupload-new controls span5" data-provides="fileupload">
-                <div class="input-append">
-                    <div class="uneditable-input span4">
-                        <i class="icon-file fileupload-exists"></i>
-                        <span class="fileupload-preview">
-                            {% if document.pdf_file %}
-                                <a href="{{ document.pdf_file.url }}">{{ document.pdf_file.name }}</a>
-                            {% endif %}
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</fieldset>
+        </fieldset>
+    {% endif %}
+{% endwith %}

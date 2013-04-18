@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from documents.models import Document
+from documents.models import Document, DocumentRevision
 
 
 class DocumentTest(TestCase):
@@ -11,10 +11,10 @@ class DocumentTest(TestCase):
         """
         document = Document.objects.create(
             title=u'HAZOP report',
-            revision_date='2012-04-20',
             sequencial_number="0004",
             discipline="HSE",
-            document_type="REP"
+            document_type="REP",
+            current_revision_date=u"2013-04-20",
         )
         self.assertEqual(document.document_number,
                          u'FAC09001-FWF-000-HSE-REP-0004')
@@ -27,10 +27,16 @@ class DocumentTest(TestCase):
         """
         document = Document.objects.create(
             title=u'HAZOP report',
-            revision_date='2012-04-20',
             sequencial_number="0004",
             discipline="HSE",
-            document_type="REP"
+            document_type="REP",
+            current_revision_date=u"2013-04-20",
+            current_revision=u"01",
+        )
+        DocumentRevision.objects.create(
+            revision=u"01",
+            revision_date=u"2013-04-20",
+            document=document,
         )
         self.assertEqual(
             document.jsonified(),
@@ -38,8 +44,8 @@ class DocumentTest(TestCase):
                 u'<a href="/detail/FAC09001-FWF-000-HSE-REP-0004/">FAC09001-FWF-000-HSE-REP-0004</a>',
                 u'HAZOP report',
                 u'STD',
-                u'00',
-                u'2012-04-20',
+                u'01',
+                u'2013-04-20',
                 u'000',
                 u'HSE',
                 u'REP',
@@ -53,14 +59,19 @@ class DocumentTest(TestCase):
         """
         document = Document.objects.create(
             title=u'HAZOP report',
-            revision_date='2012-04-20',
             sequencial_number="0004",
             discipline="HSE",
             document_type="REP",
-            revision=3
+            current_revision_date=u"2013-04-20",
+            current_revision=u"03",
+        )
+        DocumentRevision.objects.create(
+            revision=u"03",
+            revision_date=u"2013-04-20",
+            document=document,
         )
         self.assertEqual(
             u" | ".join(unicode(field[2]) for field in document.display_fields()),
-            (u'FAC09001-FWF-000-HSE-REP-0004 | HAZOP report | STD | 3 '
-             u'| 2012-04-20 | 000 | HSE | REP | 1')
+            (u'FAC09001-FWF-000-HSE-REP-0004 | HAZOP report | STD | 03 '
+             u'| 2013-04-20 | 000 | HSE | REP | 1')
         )

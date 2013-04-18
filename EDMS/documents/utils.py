@@ -11,7 +11,7 @@ def filter_documents(queryset, data):
     """
     # Dummy document to retrieve displayed fields
     # TODO: find a better way to achieve this
-    document = Document(title=u'', revision_date='', leader=u'', approver=u'')
+    document = Document.objects.latest('document_number')
     display_fields = document.display_fields()
     searchable_fields = document.searchable_fields()
 
