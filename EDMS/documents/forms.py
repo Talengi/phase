@@ -3,7 +3,7 @@ from django import forms
 
 from documents.models import Document
 from documents.constants import (
-    DISCIPLINES, UNITS, DOCUMENT_TYPES, WBS, STATUSES
+    DISCIPLINES, UNITS, DOCUMENT_TYPES, WBS, STATUSES, SYSTEMS
 )
 
 
@@ -69,6 +69,11 @@ class DocumentForm(forms.ModelForm):
             for doc_type in DOCUMENT_TYPES
         ]
         self.fields['document_type'].choices = document_type_choices
+        system_choices = [
+            (system[0], u"{0} - {1}".format(system[0], system[1][:100]))
+            for system in SYSTEMS
+        ]
+        self.fields['system'].choices = system_choices
         wbs_choices = [
             (wbs[0], u"{0} - {1}".format(wbs[0], wbs[1]))
             for wbs in WBS

@@ -8,7 +8,7 @@ from django.core.management.base import BaseCommand
 from documents.constants import (DISCIPLINES, DOCUMENT_TYPES, UNITS,
                                  STATUSES, REVISIONS, CLASSES,
                                  SEQUENCIAL_NUMBERS, CONTRACT_NBS,
-                                 ORIGINATORS, PEOPLE, WBS)
+                                 ORIGINATORS, PEOPLE, SYSTEMS, WBS)
 from documents.models import Document
 
 DISCIPLINES_CHOICES = [item[0] for item in DISCIPLINES]
@@ -22,6 +22,7 @@ CONTRACT_NBS_CHOICES = [item[0] for item in CONTRACT_NBS]
 ORIGINATORS_CHOICES = [item[0] for item in ORIGINATORS]
 PEOPLE_CHOICES = [item[0] for item in PEOPLE]
 WBS_CHOICES = [item[0] for item in WBS]
+SYSTEM_CHOICES = [item[0] for item in SYSTEMS]
 
 
 class Command(BaseCommand):
@@ -38,6 +39,7 @@ class Command(BaseCommand):
                 unit=choice(UNITS_CHOICES),
                 discipline=choice(DISCIPLINES_CHOICES),
                 document_type=choice(DOCUMENT_TYPES_CHOICES),
+                system=choice(SYSTEM_CHOICES),
                 klass=choice(CLASSES_CHOICES),
                 revision_date='{year}-{month:0>2}-{day:0>2}'.format(
                     year=choice([2010, 2011, 2012]),

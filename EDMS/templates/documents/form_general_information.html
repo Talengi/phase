@@ -109,6 +109,15 @@
         </div>
     </div>
     <div class="controls controls-row">
+        <div class="control-group {% if form.errors.system %}error{% endif %}">
+            <label class="control-label span4" for="{{ form.system.auto_id }}">{{ form.system.label }}</label>
+            <div class="controls span3">
+                {{ form.system }}
+            </div>
+            {% if form.errors.system %}<span class="help-inline">{{ form.errors.system.0 }}</span>{% endif %}
+        </div>
+    </div>
+    <div class="controls controls-row">
         <div class="control-group {% if form.errors.wbs %}error{% endif %}">
             <label class="control-label span4" for="{{ form.wbs.auto_id }}">{{ form.wbs.label }}</label>
             <div class="controls span3">
