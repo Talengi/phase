@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
+from datetime import date
 from random import choice
 
 from django.core.management.base import BaseCommand
@@ -52,6 +52,7 @@ class Command(BaseCommand):
                 originator=choice(ORIGINATORS_CHOICES),
                 sequencial_number=choice(SEQUENCIAL_NUMBERS_CHOICES),
                 wbs=choice(WBS_CHOICES),
+                created_on=date.today(),
             )
 
         self.stdout.write(
