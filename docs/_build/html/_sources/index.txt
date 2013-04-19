@@ -47,6 +47,7 @@ User stories completed
 * As a Document Controler, I want to create new documents so that I can browse more documents.
 * As a Document Controler, I want to upload files to documents so that I can enrich documents.
 * As a Document Controler, I want to display document details so that I can check all metadata and download attached files.
+* As a Document Controler, I want to upload different revisions of a document's files so that I can track an history of modified files.
 
 The repository has been tagged for each completed US.
 

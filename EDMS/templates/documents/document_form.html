@@ -57,11 +57,13 @@
                    type="submit"
                    value="Save and close"
                    name="save-close">
-            <input class="btn btn-info pull-right"
-                   type="submit"
-                   value="Save and create another document"
-                   name="save-create"
-                   id="save-create">
+            {% if not is_edit %}
+                <input class="btn btn-info pull-right"
+                       type="submit"
+                       value="Save and create another document"
+                       name="save-create"
+                       id="save-create">
+            {% endif %}
         </div>
     </form>
 {% endblock content %}
