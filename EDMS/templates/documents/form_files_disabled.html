@@ -1,7 +1,6 @@
 {% with document.documentrevision_set.all as revisions %}
     {% if revisions %}
         <fieldset>
-            <legend>Files</legend>
             <div class="tabbable">
                 <ul class="nav nav-tabs">
                     {% for revision in revisions %}
