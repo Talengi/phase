@@ -35,7 +35,7 @@ def check():
     runserver()
 
 
-def deploy():
+def deploy(with_data=True):
     """Deploys the project against staging."""
     with cd(env.directory):
         run('git pull')
@@ -44,12 +44,13 @@ def deploy():
             syncdb = 'python manage.py syncdb --noinput'
             generate = 'python manage.py generate_documents 5500'
             with_production_settings = ' --settings=EDMS.settings.production'
-            run(collectstatic + with_production_settings)
-            run('rm edms.db')
-            run(syncdb + with_production_settings)
-            run(generate + with_production_settings)
-            run('rm media/*')
             run('pip install -r ../requirements/production.txt')
+            run(collectstatic + with_production_settings)
+            if with_data:
+                run('rm edms.db')
+                run(syncdb + with_production_settings)
+                run(generate + with_production_settings)
+                run('rm media/*')
 
 
 def log(filename="admin/log/access.log", backlog='F'):
