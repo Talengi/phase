@@ -92,12 +92,11 @@
         background-color: #0075b0 !important;
     }
     .table tbody tr.row_selected > td {
-        background-color: #666;
+        background-color: #999;
         color: #fff;
     }
     .table tbody tr.row_selected > td a {
-        background-color: #666;
-        color: #6cf;
+        color: #8df;
     }
 
     .table-striped tbody tr.active:nth-child(odd) td,
@@ -246,7 +245,7 @@
             <tr>
                 <th id="filterByColumnLabel" colspan="2">
                     <div id="checkAll">
-                        <button class="btn" id="select_all" href="#">Toggle rows selection</button>
+                        <button class="btn" id="select_all" href="#">Select/deselect all</button>
                     </div>
                     Filter by column:
                 </th>
@@ -490,7 +489,7 @@
                 }
             },
             remove: function(id) {
-                this.data.splice(this.data.indexOf(id)-1, 1);
+                this.data.splice(this.data.indexOf(id), 1);
             },
             clear: function() {
                 this.data = [];
@@ -518,7 +517,7 @@
                     .attr('selected', null);
                 DocumentSelection.remove(this.idFromRow(row));
                 if(this.data.indexOf(row) != -1) {
-                    this.data.splice(this.data.indexOf(row)-1, 1);
+                    this.data.splice(this.data.indexOf(row), 1);
                 }
             },
             toggle: function(row) {
@@ -544,6 +543,7 @@
         // select/deselect all rows
         $('#select_all').click(function(e) {
             var checked = TableSelection.data.length > 0;
+            console.log(TableSelection.data.length)
             $("#documents tbody tr").each(function(i, e) {
                 checked
                     ? TableSelection.remove(e)
