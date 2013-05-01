@@ -35,7 +35,7 @@ def check():
     runserver()
 
 
-def deploy(with_data=True):
+def deploy(without_data=False):
     """Deploys the project against staging."""
     with cd(env.directory):
         run('git pull')
@@ -46,7 +46,7 @@ def deploy(with_data=True):
             with_production_settings = ' --settings=EDMS.settings.production'
             run('pip install -r ../requirements/production.txt')
             run(collectstatic + with_production_settings)
-            if with_data:
+            if not without_data:
                 run('rm edms.db')
                 run(syncdb + with_production_settings)
                 run(generate + with_production_settings)
