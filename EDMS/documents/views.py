@@ -1,13 +1,17 @@
 from django import http
+from django.http import HttpResponse, Http404
+from django.core.servers.basehttp import FileWrapper
 from django.views.generic import (
-    ListView, CreateView, DetailView, UpdateView
+    View, ListView, CreateView, DetailView, UpdateView
 )
 from django.utils import simplejson as json
 from django.core.urlresolvers import reverse
 
 from documents.models import Document, DocumentRevision
-from documents.utils import filter_documents
-from documents.forms import DocumentFilterForm, DocumentForm
+from documents.utils import filter_documents, compress_documents
+from documents.forms import (
+    DocumentFilterForm, DocumentForm, DocumentDownloadForm
+)
 from documents.constants import (
     STATUSES, REVISIONS, UNITS, DISCIPLINES, DOCUMENT_TYPES, CLASSES
 )
@@ -140,3 +144,29 @@ class DocumentEdit(DocumentRevisionMixin, UpdateView):
             'is_edit': True,
         })
         return context
+
+
+class DocumentDownload(View):
+
+    def get(self, request, *args, **kwargs):
+        # Deals with GET parameters
+        form = DocumentDownloadForm(self.request.GET)
+        if form.is_valid():
+            data = form.cleaned_data
+        else:
+            raise Http404('Invalid parameters to download files.')
+
+        # Generates the temporary zip file
+        zip_filename = compress_documents(
+            data['document_numbers'],
+            data['format'] or 'both',
+            data['revisions'] or 'latest',
+        )
+        wrapper = FileWrapper(zip_filename)
+
+        # Returns the zip file for download
+        response = HttpResponse(wrapper, content_type='application/zip')
+        response['Content-Disposition'] = 'attachment; filename=download.zip'
+        response['Content-Length'] = zip_filename.tell()
+        zip_filename.seek(0)
+        return response

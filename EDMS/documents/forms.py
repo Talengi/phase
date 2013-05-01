@@ -162,3 +162,26 @@ class DocumentFilterForm(forms.Form):
     sSearch_7 = forms.CharField(required=False)
     sSearch_8 = forms.CharField(required=False)
     sSortDir_0 = forms.ChoiceField(choices=(('asc', 'asc'), ('desc', 'desc')))
+
+
+class DocumentDownloadForm(forms.Form):
+    """A dummy form to check the validity of GET parameters for downloads."""
+    document_numbers = forms.ModelMultipleChoiceField(
+        queryset=Document.objects.all(),
+        to_field_name='document_number'
+    )
+    format = forms.ChoiceField(
+        choices=(
+            ('native', 'native'),
+            ('pdf', 'pdf'),
+            ('all', 'all')
+        ),
+        required=False,
+    )
+    revisions = forms.ChoiceField(
+        choices=(
+            ('all', 'all'),
+            ('latest', 'latest')
+        ),
+        required=False,
+    )
