@@ -91,6 +91,14 @@
     .table tbody tr.active:hover th {
         background-color: #0075b0 !important;
     }
+    .table tbody tr.row_selected > td {
+        background-color: #666;
+        color: #fff;
+    }
+    .table tbody tr.row_selected > td a {
+        background-color: #666;
+        color: #6cf;
+    }
 
     .table-striped tbody tr.active:nth-child(odd) td,
     .table-striped tbody tr.active:nth-child(odd) th {
@@ -203,6 +211,14 @@
     #documents #filterByColumnLabel {
         text-align: right;
     }
+    #documents #checkAll {
+        float: left;
+        margin-left: 50px;
+        height: 20px;
+    }
+    #documents #select_all {
+        margin-top: 0;
+    }
     #documents th, #documents td {
         vertical-align: middle;
     }
@@ -220,7 +236,13 @@
         </thead>
         <thead id="filters">
             <tr>
-                <th id="filterByColumnLabel" colspan="2">Filter by column:</th>
+                <th id="filterByColumnLabel" colspan="2">
+                    <div id="checkAll">
+                        <input type="checkbox" id="select_all" title="select all rows" />
+                        <label for="select_all">Select all rows</label>
+                    </div>
+                    Filter by column:
+                </th>
                 <th>
                     <select>
                         <option value=""></option>
@@ -433,6 +455,23 @@
                 documents.fnFilter($(this).val(), i);
             });
         });
+
+        // select rows
+        $("#documents tbody").on('click', 'tr', function(e) {
+            if(!$(e.target.nodeName).is('a')) {
+                $(this).toggleClass('row_selected');
+            }
+        });
+
+        var $rows;
+        $('#select_all').change(function(e) {
+            $rows = $("#documents tbody tr");
+            $(this).is(':checked')
+                ? $rows.addClass('row_selected')
+                : $rows.removeClass('row_selected')
+                ;
+        });
+
     });
 
     </script>
