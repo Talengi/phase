@@ -8,16 +8,11 @@ from django.utils import simplejson as json
 from django.core.urlresolvers import reverse
 
 from documents.models import Document, DocumentRevision
-<<<<<<< HEAD
-from documents.utils import filter_documents
-from documents.forms import DocumentFilterForm, DocumentForm, DownloadForm
-=======
 from documents.utils import filter_documents, compress_documents
 from documents.forms import (
     DocumentFilterForm, DocumentForm, DocumentDownloadForm,
     DocumentRevisionForm
 )
->>>>>>> 9ee02ce2483746036084c95304982ee99ccc9e7f
 from documents.constants import (
     STATUSES, REVISIONS, UNITS, DISCIPLINES, DOCUMENT_TYPES, CLASSES
 )
@@ -68,7 +63,7 @@ class DocumentList(ListView):
             'disciplines_choices': [item[0] for item in DISCIPLINES],
             'document_types_choices': [item[0] for item in DOCUMENT_TYPES],
             'classes_choices': [item[0] for item in CLASSES],
-            'download_form': DownloadForm()
+            'download_form': DocumentDownloadForm()
         })
         return context
 
