@@ -179,6 +179,8 @@ class Document(models.Model):
         choices=REVISIONS)
     current_revision_date = models.DateField(
         verbose_name=u"Revision Date")
+    related_documents = models.ManyToManyField('Document',
+        null=True, blank=True)
 
     class Meta:
         ordering = ('document_number',)
