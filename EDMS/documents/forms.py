@@ -1,7 +1,7 @@
 
 from django import forms
 
-from documents.models import Document
+from documents.models import Document, DocumentRevision
 from documents.constants import (
     DISCIPLINES, UNITS, DOCUMENT_TYPES, WBS, STATUSES, SYSTEMS
 )
@@ -103,6 +103,24 @@ class DocumentForm(forms.ModelForm):
                     'A PDF file is not allowed in this field.'
                 )
         return native_file
+
+
+class DocumentRevisionForm(forms.ModelForm):
+    native_file = forms.FileField(
+        label=u'Native file',
+        required=False,
+    )
+    pdf_file = forms.FileField(
+        label=u'PDF file',
+        required=False,
+    )
+
+    class Meta:
+        model = DocumentRevision
+        date_attrs = {'class': "datepicker span2", 'data-date-format': "yyyy-mm-dd"}
+        widgets = {
+            'revision_date': forms.DateInput(attrs=date_attrs),
+        }
 
 
 class DocumentFilterForm(forms.Form):

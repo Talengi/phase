@@ -10,7 +10,8 @@ from django.core.urlresolvers import reverse
 from documents.models import Document, DocumentRevision
 from documents.utils import filter_documents, compress_documents
 from documents.forms import (
-    DocumentFilterForm, DocumentForm, DocumentDownloadForm
+    DocumentFilterForm, DocumentForm, DocumentDownloadForm,
+    DocumentRevisionForm
 )
 from documents.constants import (
     STATUSES, REVISIONS, UNITS, DISCIPLINES, DOCUMENT_TYPES, CLASSES
@@ -73,10 +74,16 @@ class DocumentDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(DocumentDetail, self).get_context_data(**kwargs)
+        document = context['document']
+        # Attach a form for each revision linked to the current document
+        revisions = document.documentrevision_set.all()
+        for revision in revisions:
+            revision.form = DocumentRevisionForm(instance=revision)
         # Add the form to the context to be rendered in a disabled way
         context.update({
             'is_detail': True,
-            'form': DocumentForm(instance=context['document']),
+            'form': DocumentForm(instance=document),
+            'revisions': revisions,
         })
         return context
 
