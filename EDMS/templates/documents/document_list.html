@@ -222,10 +222,6 @@
     #documents th, #documents td {
         vertical-align: middle;
     }
-    /* hide Document ID column */
-    #documents thead th:nth-child(2), #documents tbody td:nth-child(2) {
-        display: none;
-    }
 
     #list_actions ul {
         display: inline;
@@ -314,13 +310,13 @@
     </table>
 
     <div id="list_actions">
-        <form action="{#% url 'document_download' %#}">
+        <form action="{% url 'document_download' %}">
             <fieldset>
                 <legend>Download selected documents</legend>
                 <ul>
-                    <li>{{ download_form.documents }}</li>
+                    <li>{{ download_form.document_numbers }}</li>
                     <li>{{ download_form.format }}</li>
-                    <li>{{ download_form.revision }}</li>
+                    <li>{{ download_form.revisions }}</li>
                 </ul>
                 <input type="submit" value="Download" class="btn" />
             </fieldset>
@@ -510,7 +506,7 @@
         TableSelection = {
             data: [],
             idFromRow: function(row) {
-                return $(row).find('td:nth-child(2)').text();
+                return $(row).find('td:nth-child(1)').text();
             },
             add: function(row) {
                 if(this.data.indexOf(row) == -1) {
@@ -554,19 +550,16 @@
         });
 
         // hide export documents list
-        $('#id_documents').parent().hide();
+        $('#id_document_numbers').parent().hide();
         // hide document ID column
         if($('#documents thead th:nth-child(2)').text().substr(0,11) == "Document ID") {
             $('#documents thead th:nth-child(2), #documents tbody td:nth-child(2)').hide();
         }
 
         // export
-        var $option;
         $('#list_actions form').submit(function() {
             for(var i in DocumentSelection.data) {
-                $option = $('<option selected="selected">');
-                $option.val(DocumentSelection.data[i]);
-                $('#id_documents').append($option);
+                $(this).find('option[value="'+DocumentSelection.data[i]+'"]').attr('selected', "selected");
             }
         });
 

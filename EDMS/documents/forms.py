@@ -190,33 +190,16 @@ class DocumentDownloadForm(forms.Form):
     )
     format = forms.ChoiceField(
         choices=(
-            ('native', 'native'),
-            ('pdf', 'pdf'),
-            ('all', 'all')
+            ('pdf', "PDF format"),
+            ('native', "Native format"),
+            ('all', "Native + PDF formats"),
         ),
         required=False,
     )
     revisions = forms.ChoiceField(
         choices=(
-            ('all', 'all'),
-            ('latest', 'latest')
+            ('latest', "Latest revision"),
+            ('all', "All revisions"),
         ),
         required=False,
     )
-
-class DownloadForm(forms.Form):
-    documents = forms.MultipleChoiceField(
-        choices=tuple(tuple())
-    )
-    format = forms.ChoiceField(
-        choices=(
-            ('pdf', "PDF format"),
-            ('native', "Native format"),
-            ('all', "Native + PDF formats"),
-        )
-    )
-    revision = forms.ChoiceField(
-        choices=(
-            ('latest', "Latest revision"),
-            ('all', "All revisions"),
-        )
