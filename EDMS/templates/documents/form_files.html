@@ -1,6 +1,5 @@
 <fieldset>
     {% with document.latest_revision as revision %}
-    <legend>Files</legend>
     <div class="controls controls-row">
         <div class="control-group {% if form.errors.native_file %}error{% endif %}">
             <label class="control-label span4" for="{{ form.native_file.auto_id }}">{{ form.native_file.label }}</label>
