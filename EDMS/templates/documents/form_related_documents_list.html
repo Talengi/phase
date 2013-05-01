@@ -3,7 +3,7 @@
     <div class="controls controls-row">
         <div class="control-group {% if form.errors.related_documents %}error{% endif %}">
             <label class="control-label span4" for="{{ form.related_documents.auto_id }}">{{ form.related_documents.label }}</label>
-            <ul class="controls span4">
+            <ul class="controls span4" id="related_documents_list">
                 {% for document in form.instance.related_documents.all %}
                 <li><a href="{% url "document_detail" document.document_number %}">{{ document }}</a></li>
                 {% endfor %}
