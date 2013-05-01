@@ -145,6 +145,14 @@ class DocumentEdit(DocumentRevisionMixin, UpdateView):
         })
         return context
 
+    def get_success_url(self):
+        """Redirect to a different URL given the button clicked by the user."""
+        if "save-view" in self.request.POST:
+            url = self.object.get_absolute_url()
+        else:
+            url = reverse('document_list')
+        return url
+
 
 class DocumentDownload(View):
 

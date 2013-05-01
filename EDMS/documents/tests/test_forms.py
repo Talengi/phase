@@ -270,7 +270,7 @@ class DocumentEditTest(TestCase):
     def test_edition_redirect(self):
         """
         Tests that a document edition is redirected to the item
-        or another creation form (django-admin like).
+        or the list.
         """
         document = Document.objects.create(
             title=u'HAZOP report',
@@ -301,12 +301,11 @@ class DocumentEditTest(TestCase):
             'unit': "000",
             'current_revision': "01",
             'current_revision_date': "2013-04-20",
-            'save-create': None,
         }, follow=True)
         self.assertEqual(
             r.redirect_chain,
             [('http://testserver{url}'.format(
-                url=reverse('document_create')
+                url=reverse('document_list')
             ), 302)]
         )
 
@@ -326,6 +325,7 @@ class DocumentEditTest(TestCase):
             'unit': "000",
             'current_revision': "02",
             'current_revision_date': "2013-04-20",
+            'save-view': None,
         }, follow=True)
         self.assertEqual(
             r.redirect_chain,
