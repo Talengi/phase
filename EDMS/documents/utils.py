@@ -80,9 +80,10 @@ def compress_documents(documents, format='both', revisions='latest'):
                         files.append(rev.pdf_file)
 
         for file_ in files:
-            zip_file.write(
-                file_.path,
-                file_.name,
-                compress_type=compression
-            )
+            if file_.name:
+                zip_file.write(
+                    file_.path,
+                    file_.name,
+                    compress_type=compression
+                )
     return temp_file

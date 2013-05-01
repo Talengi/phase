@@ -192,7 +192,7 @@ class DocumentDownloadForm(forms.Form):
         choices=(
             ('pdf', "PDF format"),
             ('native', "Native format"),
-            ('all', "Native + PDF formats"),
+            ('both', "Native + PDF formats"),
         ),
         required=False,
     )

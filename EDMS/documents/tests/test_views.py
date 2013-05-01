@@ -627,6 +627,38 @@ class DocumentDownloadTest(TestCase):
         os.remove(media_path+file_name+'.docx')
         os.remove(media_path+file_name+'.pdf')
 
+    def test_empty_document_download(self):
+        """
+        Tests that a document download returns an empty zip file.
+        """
+        document = Document.objects.create(
+            title=u'HAZOP report',
+            current_revision_date='2012-04-20',
+            sequencial_number="0004",
+            discipline="HSE",
+            document_type="REP",
+            current_revision=u"00",
+        )
+
+        DocumentRevision.objects.create(
+            document=document,
+            revision=u"00",
+            revision_date='2012-04-20',
+        )
+        c = Client()
+        r = c.get(reverse("document_download"), {
+            'document_numbers': document.document_number,
+        })
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r._headers, {
+            'content-length': ('Content-Length', '22'),
+            'content-type': ('Content-Type', 'application/zip'),
+            'content-disposition': (
+                'Content-Disposition',
+                'attachment; filename=download.zip'
+            )
+        })
+
     def test_multiple_document_download(self):
         """
         Tests that download returns a zip file of the latest revision
