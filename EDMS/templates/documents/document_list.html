@@ -513,6 +513,8 @@
                     this.data.push(row);
                 }
                 $(row).addClass('row_selected');
+                $('#id_document_numbers option[value="'+this.idFromRow(row)+'"]')
+                    .attr('selected', "selected");
                 DocumentSelection.add(this.idFromRow(row));
             },
             remove: function(row) {
@@ -520,6 +522,8 @@
                     this.data.splice(this.data.indexOf(row));
                 }
                 $(row).removeClass('row_selected');
+                $('#id_document_numbers option[value="'+this.idFromRow(row)+'"]')
+                    .attr('selected', null);
                 DocumentSelection.remove(this.idFromRow(row));
             },
             toggle: function(row) {
@@ -551,18 +555,6 @@
 
         // hide export documents list
         $('#id_document_numbers').parent().hide();
-        // hide document ID column
-        if($('#documents thead th:nth-child(2)').text().substr(0,11) == "Document ID") {
-            $('#documents thead th:nth-child(2), #documents tbody td:nth-child(2)').hide();
-        }
-
-        // export
-        $('#list_actions form').submit(function() {
-            for(var i in DocumentSelection.data) {
-                $(this).find('option[value="'+DocumentSelection.data[i]+'"]').attr('selected', "selected");
-            }
-        });
-
     });
 
     </script>
