@@ -1,8 +1,11 @@
+import os
+
 from django.db.models import Q
 from django.test import TestCase
 from django.test.client import Client
 from django.utils import simplejson as json
 from django.core.urlresolvers import reverse
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 from documents.models import Document, DocumentRevision
 
@@ -579,3 +582,235 @@ class DocumenFilterTest(TestCase):
             data['aaData'],
             [doc.jsonified() for doc in documents.order_by('-title')[0:10]]
         )
+
+
+class DocumentDownloadTest(TestCase):
+
+    def test_unique_document_download(self):
+        """
+        Tests that a document download returns a zip file of the latest revision.
+        """
+        document = Document.objects.create(
+            title=u'HAZOP report',
+            current_revision_date='2012-04-20',
+            sequencial_number="0004",
+            discipline="HSE",
+            document_type="REP",
+            current_revision=u"00",
+        )
+        sample_path = 'documents/tests/'
+        native_doc = 'sample_doc_native.docx'
+        pdf_doc = 'sample_doc_pdf.pdf'
+
+        DocumentRevision.objects.create(
+            document=document,
+            revision=u"00",
+            revision_date='2012-04-20',
+            native_file=SimpleUploadedFile(native_doc, sample_path+native_doc),
+            pdf_file=SimpleUploadedFile(pdf_doc, sample_path+pdf_doc),
+        )
+        c = Client()
+        r = c.get(reverse("document_download"), {
+            'document_numbers': document.document_number,
+        })
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r._headers, {
+            'content-length': ('Content-Length', '390'),
+            'content-type': ('Content-Type', 'application/zip'),
+            'content-disposition': (
+                'Content-Disposition',
+                'attachment; filename=download.zip'
+            )
+        })
+        media_path = 'EDMS/media/'
+        file_name = 'FAC09001-FWF-000-HSE-REP-0004_00'
+        os.remove(media_path+file_name+'.docx')
+        os.remove(media_path+file_name+'.pdf')
+
+    def test_multiple_document_download(self):
+        """
+        Tests that download returns a zip file of the latest revision
+        of all documents.
+        """
+        document1 = Document.objects.create(
+            title=u'HAZOP report',
+            current_revision_date='2012-04-20',
+            sequencial_number="0004",
+            discipline="HSE",
+            document_type="REP",
+            current_revision=u"00",
+        )
+        sample_path = 'documents/tests/'
+        native_doc = 'sample_doc_native.docx'
+        pdf_doc = 'sample_doc_pdf.pdf'
+
+        DocumentRevision.objects.create(
+            document=document1,
+            revision=u"00",
+            revision_date='2012-04-20',
+            native_file=SimpleUploadedFile(native_doc, sample_path+native_doc),
+            pdf_file=SimpleUploadedFile(pdf_doc, sample_path+pdf_doc),
+        )
+        document2 = Document.objects.create(
+            title=u'HAZOP report',
+            current_revision_date='2012-04-20',
+            sequencial_number="0004",
+            discipline="ARC",
+            document_type="REP",
+            current_revision=u"00",
+        )
+        sample_path = 'documents/tests/'
+        native_doc = 'sample_doc_native.docx'
+        pdf_doc = 'sample_doc_pdf.pdf'
+
+        DocumentRevision.objects.create(
+            document=document2,
+            revision=u"00",
+            revision_date='2012-04-20',
+            native_file=SimpleUploadedFile(native_doc, sample_path+native_doc),
+            pdf_file=SimpleUploadedFile(pdf_doc, sample_path+pdf_doc),
+        )
+        c = Client()
+        r = c.get(reverse("document_download"), {
+            'document_numbers': [
+                document1.document_number,
+                document2.document_number,
+            ],
+        })
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r._headers, {
+            'content-length': ('Content-Length', '758'),
+            'content-type': ('Content-Type', 'application/zip'),
+            'content-disposition': (
+                'Content-Disposition',
+                'attachment; filename=download.zip'
+            )
+        })
+        media_path = 'EDMS/media/'
+        file_name = 'FAC09001-FWF-000-HSE-REP-0004_00'
+        os.remove(media_path+file_name+'.docx')
+        os.remove(media_path+file_name+'.pdf')
+        file_name = 'FAC09001-FWF-000-ARC-REP-0004_00'
+        os.remove(media_path+file_name+'.docx')
+        os.remove(media_path+file_name+'.pdf')
+
+    def test_multiple_pdf_document_download(self):
+        """
+        Tests that download returns a zip file of the latest revision
+        of pdf documents.
+        """
+        document1 = Document.objects.create(
+            title=u'HAZOP report',
+            current_revision_date='2012-04-20',
+            sequencial_number="0004",
+            discipline="HSE",
+            document_type="REP",
+            current_revision=u"00",
+        )
+        sample_path = 'documents/tests/'
+        native_doc = 'sample_doc_native.docx'
+        pdf_doc = 'sample_doc_pdf.pdf'
+
+        DocumentRevision.objects.create(
+            document=document1,
+            revision=u"00",
+            revision_date='2012-04-20',
+            native_file=SimpleUploadedFile(native_doc, sample_path+native_doc),
+            pdf_file=SimpleUploadedFile(pdf_doc, sample_path+pdf_doc),
+        )
+        document2 = Document.objects.create(
+            title=u'HAZOP report',
+            current_revision_date='2012-04-20',
+            sequencial_number="0004",
+            discipline="ARC",
+            document_type="REP",
+            current_revision=u"00",
+        )
+        sample_path = 'documents/tests/'
+        native_doc = 'sample_doc_native.docx'
+        pdf_doc = 'sample_doc_pdf.pdf'
+
+        DocumentRevision.objects.create(
+            document=document2,
+            revision=u"00",
+            revision_date='2012-04-20',
+            native_file=SimpleUploadedFile(native_doc, sample_path+native_doc),
+            pdf_file=SimpleUploadedFile(pdf_doc, sample_path+pdf_doc),
+        )
+        c = Client()
+        r = c.get(reverse("document_download"), {
+            'document_numbers': [
+                document1.document_number,
+                document2.document_number,
+            ],
+            'format': 'pdf',
+        })
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r._headers, {
+            'content-length': ('Content-Length', '384'),
+            'content-type': ('Content-Type', 'application/zip'),
+            'content-disposition': (
+                'Content-Disposition',
+                'attachment; filename=download.zip'
+            )
+        })
+        media_path = 'EDMS/media/'
+        file_name = 'FAC09001-FWF-000-HSE-REP-0004_00'
+        os.remove(media_path+file_name+'.docx')
+        os.remove(media_path+file_name+'.pdf')
+        file_name = 'FAC09001-FWF-000-ARC-REP-0004_00'
+        os.remove(media_path+file_name+'.docx')
+        os.remove(media_path+file_name+'.pdf')
+
+    def test_all_revisions_document_download(self):
+        """
+        Tests that download returns a zip file of all revisions
+        of a document.
+        """
+        document = Document.objects.create(
+            title=u'HAZOP report',
+            current_revision_date='2012-04-20',
+            sequencial_number="0004",
+            discipline="HSE",
+            document_type="REP",
+            current_revision=u"00",
+        )
+        sample_path = 'documents/tests/'
+        native_doc = 'sample_doc_native.docx'
+        pdf_doc = 'sample_doc_pdf.pdf'
+
+        DocumentRevision.objects.create(
+            document=document,
+            revision=u"00",
+            revision_date='2012-04-20',
+            native_file=SimpleUploadedFile(native_doc, sample_path+native_doc),
+            pdf_file=SimpleUploadedFile(pdf_doc, sample_path+pdf_doc),
+        )
+        DocumentRevision.objects.create(
+            document=document,
+            revision=u"01",
+            revision_date='2012-04-21',
+            native_file=SimpleUploadedFile(native_doc, sample_path+native_doc),
+            pdf_file=SimpleUploadedFile(pdf_doc, sample_path+pdf_doc),
+        )
+        c = Client()
+        r = c.get(reverse("document_download"), {
+            'document_numbers': document.document_number,
+            'revisions': 'all',
+        })
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r._headers, {
+            'content-length': ('Content-Length', '758'),
+            'content-type': ('Content-Type', 'application/zip'),
+            'content-disposition': (
+                'Content-Disposition',
+                'attachment; filename=download.zip'
+            )
+        })
+        media_path = 'EDMS/media/'
+        file_name = 'FAC09001-FWF-000-HSE-REP-0004_00'
+        os.remove(media_path+file_name+'.docx')
+        os.remove(media_path+file_name+'.pdf')
+        file_name = 'FAC09001-FWF-000-HSE-REP-0004_01'
+        os.remove(media_path+file_name+'.docx')
+        os.remove(media_path+file_name+'.pdf')

@@ -1,13 +1,23 @@
 from django import http
+from django.http import HttpResponse, Http404
+from django.core.servers.basehttp import FileWrapper
 from django.views.generic import (
-    ListView, CreateView, DetailView, UpdateView
+    View, ListView, CreateView, DetailView, UpdateView
 )
 from django.utils import simplejson as json
 from django.core.urlresolvers import reverse
 
 from documents.models import Document, DocumentRevision
+<<<<<<< HEAD
 from documents.utils import filter_documents
 from documents.forms import DocumentFilterForm, DocumentForm, DownloadForm
+=======
+from documents.utils import filter_documents, compress_documents
+from documents.forms import (
+    DocumentFilterForm, DocumentForm, DocumentDownloadForm,
+    DocumentRevisionForm
+)
+>>>>>>> 9ee02ce2483746036084c95304982ee99ccc9e7f
 from documents.constants import (
     STATUSES, REVISIONS, UNITS, DISCIPLINES, DOCUMENT_TYPES, CLASSES
 )
@@ -70,10 +80,16 @@ class DocumentDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(DocumentDetail, self).get_context_data(**kwargs)
+        document = context['document']
+        # Attach a form for each revision linked to the current document
+        revisions = document.documentrevision_set.all()
+        for revision in revisions:
+            revision.form = DocumentRevisionForm(instance=revision)
         # Add the form to the context to be rendered in a disabled way
         context.update({
             'is_detail': True,
-            'form': DocumentForm(instance=context['document']),
+            'form': DocumentForm(instance=document),
+            'revisions': revisions,
         })
         return context
 
@@ -141,3 +157,37 @@ class DocumentEdit(DocumentRevisionMixin, UpdateView):
             'is_edit': True,
         })
         return context
+
+    def get_success_url(self):
+        """Redirect to a different URL given the button clicked by the user."""
+        if "save-view" in self.request.POST:
+            url = self.object.get_absolute_url()
+        else:
+            url = reverse('document_list')
+        return url
+
+
+class DocumentDownload(View):
+
+    def get(self, request, *args, **kwargs):
+        # Deals with GET parameters
+        form = DocumentDownloadForm(self.request.GET)
+        if form.is_valid():
+            data = form.cleaned_data
+        else:
+            raise Http404('Invalid parameters to download files.')
+
+        # Generates the temporary zip file
+        zip_filename = compress_documents(
+            data['document_numbers'],
+            data['format'] or 'both',
+            data['revisions'] or 'latest',
+        )
+        wrapper = FileWrapper(zip_filename)
+
+        # Returns the zip file for download
+        response = HttpResponse(wrapper, content_type='application/zip')
+        response['Content-Disposition'] = 'attachment; filename=download.zip'
+        response['Content-Length'] = zip_filename.tell()
+        zip_filename.seek(0)
+        return response

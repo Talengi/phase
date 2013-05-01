@@ -1,3 +1,11 @@
+import zipfile
+import tempfile
+try:
+    import zlib
+    compression = zipfile.ZIP_DEFLATED
+except:
+    compression = zipfile.ZIP_STORED
+
 from django.db.models import Q
 
 from documents.models import Document
@@ -44,3 +52,37 @@ def filter_documents(queryset, data):
             })
 
     return queryset
+
+
+def compress_documents(documents, format='both', revisions='latest'):
+    """Compress the given files' documents (or queryset) in a zip file.
+
+    * format can be either 'both', 'native' or 'pdf'
+    * revisions can be either 'latest' or 'all'
+
+    Returns the name of the ziped file.
+    """
+    temp_file = tempfile.TemporaryFile()
+
+    with zipfile.ZipFile(temp_file, mode='w') as zip_file:
+        files = []
+        for document in documents:
+            if revisions == 'latest':
+                revs = [document.latest_revision()]
+            elif revisions == 'all':
+                revs = document.documentrevision_set.all()
+
+            for rev in revs:
+                if rev is not None:
+                    if format in ('native', 'both'):
+                        files.append(rev.native_file)
+                    if format in ('pdf', 'both'):
+                        files.append(rev.pdf_file)
+
+        for file_ in files:
+            zip_file.write(
+                file_.path,
+                file_.name,
+                compress_type=compression
+            )
+    return temp_file

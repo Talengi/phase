@@ -2,7 +2,7 @@ from django.conf.urls import patterns, url
 
 from documents.views import (
     DocumentList, DocumentFilter, DocumentCreate, DocumentDetail,
-    DocumentEdit
+    DocumentEdit, DocumentDownload,
 )
 
 urlpatterns = patterns(
@@ -19,6 +19,9 @@ urlpatterns = patterns(
     url(r'^edit/(?P<document_number>.*)/$',
         DocumentEdit.as_view(),
         name="document_edit"),
+    url(r'^download/$',
+        DocumentDownload.as_view(),
+        name="document_download"),
     url(r'^$',
         DocumentList.as_view(),
         name="document_list"),

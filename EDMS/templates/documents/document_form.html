@@ -10,7 +10,7 @@
     .date-error {
         color: #B94A48;
     }
-    #save-create {
+    #save-create, #save-view {
         margin-right: 20px;
     }
     .form-horizontal .form-actions {
@@ -48,7 +48,6 @@
         {% endif %}
         {% include "documents/form_general_information.html" %}
         {% include "documents/form_revision.html" %}
-        {% include "documents/form_files.html" %}
         {% include "documents/form_review.html" %}
         {% include "documents/form_schedule.html" %}
         <div class="form-actions">
@@ -57,7 +56,13 @@
                    type="submit"
                    value="Save and close"
                    name="save-close">
-            {% if not is_edit %}
+            {% if is_edit %}
+                <input class="btn btn-info pull-right"
+                       type="submit"
+                       value="Save and view document detail"
+                       name="save-view"
+                       id="save-view">
+            {% else %}
                 <input class="btn btn-info pull-right"
                        type="submit"
                        value="Save and create another document"
