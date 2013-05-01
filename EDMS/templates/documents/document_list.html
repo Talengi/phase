@@ -211,13 +211,9 @@
     #documents #filterByColumnLabel {
         text-align: right;
     }
-    #documents #checkAll {
-        float: left;
-        margin-left: 50px;
-        height: 20px;
-    }
     #documents #select_all {
-        margin-top: 0;
+        float: left;
+        margin:-left: 12px;
     }
     #documents th, #documents td {
         vertical-align: middle;
@@ -250,8 +246,7 @@
             <tr>
                 <th id="filterByColumnLabel" colspan="2">
                     <div id="checkAll">
-                        <input type="checkbox" id="select_all" title="select all rows" />
-                        <label for="select_all">Select all rows</label>
+                        <button class="btn" id="select_all" href="#">Toggle rows selection</button>
                     </div>
                     Filter by column:
                 </th>
@@ -474,7 +469,7 @@
             },
             "bProcessing": true,
             "bServerSide": true,
-            "sAjaxSource": "{% url "document_filter" %}",
+            "sAjaxSource": "{% url "document_filter" %}"
         });
         /* Deal with faceting via footer's selects */
         $("#filters th").each(function(i){
@@ -495,7 +490,7 @@
                 }
             },
             remove: function(id) {
-                this.data.splice(this.data.indexOf(id), 1);
+                this.data.splice(this.data.indexOf(id)-1, 1);
             },
             clear: function() {
                 this.data = [];
@@ -515,16 +510,16 @@
                 $(row).addClass('row_selected');
                 $('#id_document_numbers option[value="'+this.idFromRow(row)+'"]')
                     .attr('selected', "selected");
-                DocumentSelection.add(this.idFromRow(row));
+                return DocumentSelection.add(this.idFromRow(row));
             },
             remove: function(row) {
-                if(this.data.indexOf(row) > -1) {
-                    this.data.splice(this.data.indexOf(row));
-                }
                 $(row).removeClass('row_selected');
                 $('#id_document_numbers option[value="'+this.idFromRow(row)+'"]')
                     .attr('selected', null);
                 DocumentSelection.remove(this.idFromRow(row));
+                if(this.data.indexOf(row) != -1) {
+                    this.data.splice(this.data.indexOf(row)-1, 1);
+                }
             },
             toggle: function(row) {
                 this.data.indexOf(row) != -1
@@ -532,8 +527,10 @@
                     : this.add(row);
             },
             clear: function() {
-                this.data = [];
+                $(this.data[0]).parent().find('.row_selected').removeClass('row_selected');
+                $('#id_document_numbers option').attr('selected', null);
                 DocumentSelection.clear();
+                this.data = [];
             }
         };
 
@@ -544,13 +541,19 @@
             }
         });
 
-        $('#select_all').change(function(e) {
-            var checked = $(this).is(':checked');
+        // select/deselect all rows
+        $('#select_all').click(function(e) {
+            var checked = TableSelection.data.length > 0;
             $("#documents tbody tr").each(function(i, e) {
                 checked
-                    ? TableSelection.add(e)
-                    : TableSelection.remove(e);
+                    ? TableSelection.remove(e)
+                    : TableSelection.add(e)
             });
+        });
+
+        // paginating resets rows selection
+        $('.dataTables_paginate').click(function(e) {
+            TableSelection.clear();
         });
 
         // hide export documents list
