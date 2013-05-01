@@ -26390,7 +26390,8 @@
     "contract_number": "FAC09001", 
     "current_revision_date": "2009-12-05", 
     "klass": 2, 
-    "status_std_planned_date": null
+    "status_std_planned_date": null,
+    "related_documents": [399, 395, 394, 390]
   }
 },
 {
@@ -26443,7 +26444,8 @@
     "contract_number": "FAC09001", 
     "current_revision_date": "2012-02-17", 
     "klass": 1, 
-    "status_std_planned_date": null
+    "status_std_planned_date": null,
+    "related_documents": [399, 398, 397, 395, 394, 393, 392]
   }
 },
 {
@@ -26496,7 +26498,8 @@
     "contract_number": "FAC09001", 
     "current_revision_date": "2012-01-07", 
     "klass": 3, 
-    "status_std_planned_date": null
+    "status_std_planned_date": null,
+    "related_documents": [499, 498, 497, 495, 494, 493, 492]
   }
 },
 {

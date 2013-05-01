@@ -3,6 +3,9 @@
 {% block extra_css %}
 <link href="{{ STATIC_URL }}css/datepicker.css" rel="stylesheet">
 <link href="{{ STATIC_URL }}css/bootstrap-fileupload.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="http://www.erichynds.com/examples/jquery-ui-multiselect-widget/jquery.multiselect.css" />
+<link rel="stylesheet" type="text/css" href="http://www.erichynds.com/examples/jquery-ui-multiselect-widget/jquery.multiselect.filter.css" />
 <style type="text/css">
     label {
         text-align: right;
@@ -28,6 +31,19 @@
     }
     .datepicker {
         margin-top: 0;
+    }
+    #id_related_documents {
+        width: 500px;
+    }
+    button.ui-multiselect {
+        color: #000;
+        font-weight: normal;
+    }
+    .ui-multiselect-filter, .ui-multiselect-filter input {
+        font-size: 1em;
+    }
+    .ui-multiselect-checkboxes label {
+        text-align: left;
     }
 </style>
 {% endblock extra_css %}
@@ -81,6 +97,23 @@
         $('.datepicker').datepicker().on('changeDate', function(ev) {
             $(this).datepicker('hide');
         });
+        $.browser = "";
     </script>
+    <link rel="stylesheet" href="http://harvesthq.github.io/chosen/chosen/chosen.css" />
+    <script src="http://harvesthq.github.io/chosen/chosen/chosen.jquery.js" type="text/javascript"></script>
+        <script type="text/javascript">
+          $(".chzn-select").chosen();
+          $(".chzn-select-deselect").chosen({allow_single_deselect:true});
+        </script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="http://www.erichynds.com/examples/jquery-ui-multiselect-widget/src/jquery.multiselect.js"></script>
+    <script type="text/javascript" src="http://www.erichynds.com/examples/jquery-ui-multiselect-widget/src/jquery.multiselect.filter.js"></script>
+
+    <script type="text/javascript">
+        var labels = $.makeArray($("#id_related_documents option")
+                      .map(function(){ return $(this).text() }));
+        //http://www.erichynds.com/examples/jquery-ui-multiselect-widget/demos/#filter
+        $('#id_related_documents').multiselect().multiselectfilter();
+        </script>
 {% endblock extra_js %}
 
