@@ -162,3 +162,22 @@ class DocumentFilterForm(forms.Form):
     sSearch_7 = forms.CharField(required=False)
     sSearch_8 = forms.CharField(required=False)
     sSortDir_0 = forms.ChoiceField(choices=(('asc', 'asc'), ('desc', 'desc')))
+
+
+class DownloadForm(forms.Form):
+    documents = forms.MultipleChoiceField(
+        choices=tuple(tuple())
+    )
+    format = forms.ChoiceField(
+        choices=(
+            ('pdf', "PDF format"),
+            ('native', "Native format"),
+            ('all', "Native + PDF formats"),
+        )
+    )
+    revision = forms.ChoiceField(
+        choices=(
+            ('latest', "Latest revision"),
+            ('all', "All revisions"),
+        )
+    )

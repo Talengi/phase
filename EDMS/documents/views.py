@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 
 from documents.models import Document, DocumentRevision
 from documents.utils import filter_documents
-from documents.forms import DocumentFilterForm, DocumentForm
+from documents.forms import DocumentFilterForm, DocumentForm, DownloadForm
 from documents.constants import (
     STATUSES, REVISIONS, UNITS, DISCIPLINES, DOCUMENT_TYPES, CLASSES
 )
@@ -58,6 +58,7 @@ class DocumentList(ListView):
             'disciplines_choices': [item[0] for item in DISCIPLINES],
             'document_types_choices': [item[0] for item in DOCUMENT_TYPES],
             'classes_choices': [item[0] for item in CLASSES],
+            'download_form': DownloadForm()
         })
         return context
 

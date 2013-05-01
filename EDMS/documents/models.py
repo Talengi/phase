@@ -219,6 +219,7 @@ class Document(models.Model):
         return [
             #(Name               Column Name                Value)
             (u'Document Number', u'document_number',        self.document_number),
+            (u'Document ID',     u'id',                     self.id),
             (u'Title',           u'title',                  self.title),
             (u'Status',          u'status',                 self.status),
             (u'Revision',        u'current_revision',       self.current_revision),

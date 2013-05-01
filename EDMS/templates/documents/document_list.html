@@ -222,6 +222,22 @@
     #documents th, #documents td {
         vertical-align: middle;
     }
+    /* hide Document ID column */
+    #documents thead th:nth-child(2), #documents tbody td:nth-child(2) {
+        display: none;
+    }
+
+    #list_actions ul {
+        display: inline;
+        margin: 0;
+    }
+    #list_actions li {
+        list-style: none;
+        display: inline-block;
+    }
+    #list_actions input[type="submit"] {
+        vertical-align: top;
+    }
     </style>
 {% endblock extra_css %}
 
@@ -296,6 +312,20 @@
         </thead>
         <tbody></tbody>
     </table>
+
+    <div id="list_actions">
+        <form action="{#% url 'document_download' %#}">
+            <fieldset>
+                <legend>Download selected documents</legend>
+                <ul>
+                    <li>{{ download_form.documents }}</li>
+                    <li>{{ download_form.format }}</li>
+                    <li>{{ download_form.revision }}</li>
+                </ul>
+                <input type="submit" value="Download" class="btn" />
+            </fieldset>
+        </form>
+    </div>
 {% endblock %}
 {% block extra_js %}
     <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
@@ -441,13 +471,14 @@
         var documents = $('#documents').dataTable( {
             "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
             "sPaginationType": "bootstrap",
+            "bAutoWidth": false,
             "oLanguage": {
                 "sLengthMenu": "_MENU_ documents per page",
                 "sSearch": "Search all columns:"
             },
             "bProcessing": true,
             "bServerSide": true,
-            "sAjaxSource": "{% url "document_filter" %}"
+            "sAjaxSource": "{% url "document_filter" %}",
         });
         /* Deal with faceting via footer's selects */
         $("#filters th").each(function(i){
@@ -456,20 +487,87 @@
             });
         });
 
+
+        /* select documents */
+
+        // List object that contains ids of selected documents
+        DocumentSelection = {
+            data: [],
+            add: function(id) {
+                if(this.data.indexOf(id) == -1) {
+                    this.data.push(id);
+                }
+            },
+            remove: function(id) {
+                this.data.splice(this.data.indexOf(id), 1);
+            },
+            clear: function() {
+                this.data = [];
+            }
+        };
+
+        // List object that contains DOM rows of selected documents
+        TableSelection = {
+            data: [],
+            idFromRow: function(row) {
+                return $(row).find('td:nth-child(2)').text();
+            },
+            add: function(row) {
+                if(this.data.indexOf(row) == -1) {
+                    this.data.push(row);
+                }
+                $(row).addClass('row_selected');
+                DocumentSelection.add(this.idFromRow(row));
+            },
+            remove: function(row) {
+                if(this.data.indexOf(row) > -1) {
+                    this.data.splice(this.data.indexOf(row));
+                }
+                $(row).removeClass('row_selected');
+                DocumentSelection.remove(this.idFromRow(row));
+            },
+            toggle: function(row) {
+                this.data.indexOf(row) != -1
+                    ? this.remove(row)
+                    : this.add(row);
+            },
+            clear: function() {
+                this.data = [];
+                DocumentSelection.clear();
+            }
+        };
+
         // select rows
         $("#documents tbody").on('click', 'tr', function(e) {
             if(!$(e.target.nodeName).is('a')) {
-                $(this).toggleClass('row_selected');
+                TableSelection.toggle(this);
             }
         });
 
-        var $rows;
         $('#select_all').change(function(e) {
-            $rows = $("#documents tbody tr");
-            $(this).is(':checked')
-                ? $rows.addClass('row_selected')
-                : $rows.removeClass('row_selected')
-                ;
+            var checked = $(this).is(':checked');
+            $("#documents tbody tr").each(function(i, e) {
+                checked
+                    ? TableSelection.add(e)
+                    : TableSelection.remove(e);
+            });
+        });
+
+        // hide export documents list
+        $('#id_documents').parent().hide();
+        // hide document ID column
+        if($('#documents thead th:nth-child(2)').text().substr(0,11) == "Document ID") {
+            $('#documents thead th:nth-child(2), #documents tbody td:nth-child(2)').hide();
+        }
+
+        // export
+        var $option;
+        $('#list_actions form').submit(function() {
+            for(var i in DocumentSelection.data) {
+                $option = $('<option selected="selected">');
+                $option.val(DocumentSelection.data[i]);
+                $('#id_documents').append($option);
+            }
         });
 
     });
