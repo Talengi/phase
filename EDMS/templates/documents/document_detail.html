@@ -32,9 +32,9 @@
 {% block content %}
     <form class="disabled form-horizontal">
         {% include "documents/form_general_information.html" %}
-        {% include "documents/form_related_documents_list.html" %}
         {% include "documents/form_revision_disabled.html" %}
         {% include "documents/form_review.html" %}
+        {% include "documents/form_related_documents_list.html" %}
         {% include "documents/form_schedule.html" %}
         <div class="form-actions">
             <a class="btn" href="{% url "document_list" %}">Cancel</a>

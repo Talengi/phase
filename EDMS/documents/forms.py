@@ -90,6 +90,12 @@ class DocumentForm(forms.ModelForm):
         ]
         self.fields['wbs'].choices = wbs_choices
 
+        documents = Document.objects.all()
+        self.fields['related_documents'].choices = [
+            (doc.pk, u"{0} - {1}".format(doc.document_number, doc.title)) 
+            for doc in documents
+        ]
+
     def clean_native_file(self):
         """Do not allow a PDF file to be uploaded as a native file.
 

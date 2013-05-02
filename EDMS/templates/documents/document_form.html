@@ -45,6 +45,10 @@
     .ui-multiselect-checkboxes label {
         text-align: left;
     }
+    .ui-multiselect-checkboxes label input {
+        top: -3px;
+        margin-right: 5px;
+    }
 </style>
 {% endblock extra_css %}
 
@@ -63,9 +67,9 @@
             </div>
         {% endif %}
         {% include "documents/form_general_information.html" %}
-        {% include "documents/form_related_documents.html" %}
         {% include "documents/form_revision.html" %}
         {% include "documents/form_review.html" %}
+        {% include "documents/form_related_documents.html" %}
         {% include "documents/form_schedule.html" %}
         <div class="form-actions">
             <a class="btn pull-left" href="{% url "document_list" %}">Cancel</a>
