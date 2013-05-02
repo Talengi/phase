@@ -202,7 +202,10 @@
         width: 400px;
     }
     #documents #columndocument_number {
-        width: 250px;
+        width: 265px;
+    }
+    #documents .docnumber {
+        padding-left: 5px;
     }
     #documents select {
         width: auto;
@@ -574,7 +577,7 @@
 
         // select rows
         $("#documents tbody").on('click', 'tr', function(e) {
-            if(!$(e.target.nodeName).is('a') || !$(e.target.nodeName).is('i')) {
+            if(!$(e.target).is('a,i')) {
                 TableSelection.toggle(this);
             }
         });

@@ -263,7 +263,7 @@ class Document(models.Model):
         document_link = (
             '<i class="{icon}" data-document-id="{document_id}" '
             'data-favorite-id="{favorite_id}"></i> '
-            '<a href="{url}">{number}</a>'
+            '<a href="{url}" class="docnumber">{number}</a>'
         ).format(
             url=self.get_absolute_url(),
             number=self.document_number,
