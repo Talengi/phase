@@ -1,7 +1,7 @@
 
 from django import forms
 
-from documents.models import Document, DocumentRevision
+from documents.models import Document, DocumentRevision, Favorite
 from documents.constants import (
     DISCIPLINES, UNITS, DOCUMENT_TYPES, WBS, STATUSES, SYSTEMS
 )
@@ -20,6 +20,7 @@ class DocumentForm(forms.ModelForm):
     class Meta:
         model = Document
         date_attrs = {'class': "datepicker span2", 'data-date-format': "yyyy-mm-dd"}
+        exclude = ('favorited_by',)
         widgets = {
             'document_number': forms.TextInput(attrs={
                 'placeholder': 'Automatically generated if not specified.',
@@ -203,3 +204,9 @@ class DocumentDownloadForm(forms.Form):
         ),
         required=False,
     )
+
+
+class FavoriteForm(forms.ModelForm):
+
+    class Meta:
+        model = Favorite

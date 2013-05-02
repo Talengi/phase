@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Favorites</h2>
+    {% if favorite_list %}
+        <ul>
+        {% for favorite in favorite_list %}
+            <li><a href="{{ favorite.document.get_absolute_url }}"
+                >{{ favorite.document.document_number }} - {{ favorite.document.title }} - Revision: {{ favorite.document.current_revision }}</a>
+                {% if favorite.is_outdated %}
+                    <i class="icon-info-sign" title="This document has been updated."></i>
+                {% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>You do not have any favorite document.</p>
+    {% endif %}
+{% endblock content %}

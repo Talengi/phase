@@ -13,6 +13,9 @@
       body {
         padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
       }
+      #createbutton {
+        margin-left: 15px;
+      }
     </style>
     <link href="{{ STATIC_URL }}css/bootstrap-responsive.min.css" rel="stylesheet">
 
@@ -41,7 +44,7 @@
           </a>
           <a class="brand" href="#">EDMS</a>
           {% block createdocument %}
-            <div class="btn-group dropdown pull-right">
+            <div class="btn-group dropdown pull-right" id="createbutton">
               <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
                 Create a new document <span class="caret"></span>
               </a>
@@ -53,9 +56,24 @@
               </ul>
             </div>
           {% endblock createdocument %}
+          <div class="btn-group dropdown pull-right" id="userswitch">
+            <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="#">
+              Switch user (current: {{ request.user }}) <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              {% for user in switching_users %}
+                <li><a href="{% url "document_list" %}?userswitch={{ user.username}}">{{ user.get_full_name }}</a></li>
+              {% endfor %}
+              <li><a href="{% url "document_list" %}?userswitch=logout">Log out</a></li>
+
+            </ul>
+          </div>
           <div class="nav-collapse collapse">
             <ul class="nav">
-              <li{% if document_active %} class="active"{% endif %}><a href="{% url "document_list" %}">Documents</a></li>
+              <li{% if documents_active %} class="active"{% endif %}><a href="{% url "document_list" %}">Documents</a></li>
+              {% if user.is_authenticated %}
+                <li{% if favorites_active %} class="active"{% endif %}><a href="{% url "favorite_list" %}">Favorites</a></li>
+              {% endif %}
             </ul>
           </div><!--/.nav-collapse -->
         </div>

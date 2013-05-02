@@ -1,13 +1,16 @@
 import os
 
 from django.db.models import Q
+from django.contrib import auth
 from django.test import TestCase
 from django.test.client import Client
 from django.utils import simplejson as json
 from django.core.urlresolvers import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-from documents.models import Document, DocumentRevision
+from documents.models import Document, DocumentRevision, Favorite
+
+User = auth.get_user_model()
 
 
 class DocumentListTest(TestCase):
@@ -846,3 +849,124 @@ class DocumentDownloadTest(TestCase):
         file_name = 'FAC09001-FWF-000-HSE-REP-0004_01'
         os.remove(media_path+file_name+'.docx')
         os.remove(media_path+file_name+'.pdf')
+
+
+class FavoriteTest(TestCase):
+
+    def test_favorite_list(self):
+        """
+        Tests that a favorite list is accessible if logged in.
+        """
+        User.objects.create_user(
+            'david',
+            'foo@bar.fr',
+            'password',
+        )
+
+        # Anonymous user
+        c = Client()
+        r = c.get(reverse("favorite_list"), follow=True)
+        self.assertEqual(
+            r.redirect_chain,
+            [('http://testserver{url}?next=/favorites/'.format(
+                url=reverse('document_list')
+            ), 302)]
+        )
+
+        # Logged in user
+        c = Client()
+        r = c.login(username='david', password='password')
+        self.assertEqual(r, True)
+        r = c.get(reverse("favorite_list"))
+        self.assertTrue('You do not have any favorite document.' in r.content)
+
+    def test_favorite_privacy(self):
+        """
+        Tests that a favorite is not shared accross users.
+        """
+        david = User.objects.create_user(
+            'david',
+            'foo@bar.fr',
+            'password',
+        )
+        User.objects.create_user(
+            'matthieu',
+            'foo@bar.fr',
+            'password',
+        )
+        document = Document.objects.create(
+            title=u'HAZOP report',
+            current_revision_date='2012-04-20',
+            sequencial_number="0004",
+            discipline="HSE",
+            document_type="REP",
+            current_revision=u"03",
+        )
+        favorite = Favorite.objects.create(
+            document=document,
+            user=david
+        )
+
+        # Right user
+        c = Client()
+        r = c.login(username='david', password='password')
+        r = c.get(reverse("favorite_list"))
+        self.assertTrue(favorite.document.document_number in r.content)
+
+        # Wrong user
+        c = Client()
+        r = c.login(username='matthieu', password='password')
+        r = c.get(reverse("favorite_list"))
+        self.assertTrue('You do not have any favorite document.' in r.content)
+
+    def test_favorite_creation(self):
+        """
+        Tests that a favorite creation is possible.
+        """
+        user = User.objects.create_user(
+            'david',
+            'foo@bar.fr',
+            'password',
+        )
+        document = Document.objects.create(
+            title=u'HAZOP report',
+            current_revision_date='2012-04-20',
+            sequencial_number="0004",
+            discipline="HSE",
+            document_type="REP",
+            current_revision=u"03",
+        )
+        c = Client()
+        r = c.post(reverse("favorite_create"), {
+            'document': document.id,
+            'user': user.id,
+        })
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.content, '1')  # First favorite created
+        self.assertEqual(Favorite.objects.all().count(), 1)
+
+    def test_favorite_deletion(self):
+        """
+        Tests that a favorite deletion is possible.
+        """
+        user = User.objects.create_user(
+            'david',
+            'foo@bar.fr',
+            'password',
+        )
+        document = Document.objects.create(
+            title=u'HAZOP report',
+            current_revision_date='2012-04-20',
+            sequencial_number="0004",
+            discipline="HSE",
+            document_type="REP",
+            current_revision=u"03",
+        )
+        favorite = Favorite.objects.create(
+            document=document,
+            user=user
+        )
+        c = Client()
+        r = c.post(reverse("favorite_delete", args=[favorite.pk]))
+        self.assertEqual(r.status_code, 302)
+        self.assertEqual(Favorite.objects.all().count(), 0)

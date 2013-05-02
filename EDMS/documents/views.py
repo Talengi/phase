@@ -1,17 +1,22 @@
+from datetime import datetime
+
 from django import http
 from django.http import HttpResponse, Http404
 from django.core.servers.basehttp import FileWrapper
+from django.core.urlresolvers import reverse_lazy
 from django.views.generic import (
-    View, ListView, CreateView, DetailView, UpdateView
+    View, ListView, CreateView, DetailView, UpdateView, DeleteView
 )
 from django.utils import simplejson as json
 from django.core.urlresolvers import reverse
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 
-from documents.models import Document, DocumentRevision
+from documents.models import Document, DocumentRevision, Favorite
 from documents.utils import filter_documents, compress_documents
 from documents.forms import (
     DocumentFilterForm, DocumentForm, DocumentDownloadForm,
-    DocumentRevisionForm
+    DocumentRevisionForm, FavoriteForm
 )
 from documents.constants import (
     STATUSES, REVISIONS, UNITS, DISCIPLINES, DOCUMENT_TYPES, CLASSES
@@ -38,13 +43,23 @@ class JSONResponseMixin(object):
         Using DataTables conventions for fields' names.
         """
         documents = context['object_list']
+        user = self.request.user
+        if user.is_authenticated():
+            favorites = Favorite.objects.filter(user=self.request.user)\
+                                        .values_list('id', 'document')
+            document2favorite = dict((v, k) for k, v in favorites)
+            favorite_documents_ids = document2favorite.keys()
+        else:
+            document2favorite = {}
+            favorite_documents_ids = []
         start = int(self.request.GET.get('iDisplayStart', 1))
         end = start + int(self.request.GET.get('iDisplayLength', 10))
         result = {
             "sEcho": self.request.GET.get("sEcho"),
             "iTotalRecords": Document.objects.all().count(),
             "iTotalDisplayRecords": len(documents),
-            "aaData": [doc.jsonified() for doc in documents[start:end]]
+            "aaData": [doc.jsonified(document2favorite, favorite_documents_ids)
+                       for doc in documents[start:end]]
         }
         return json.dumps(result)
 
@@ -63,7 +78,8 @@ class DocumentList(ListView):
             'disciplines_choices': [item[0] for item in DISCIPLINES],
             'document_types_choices': [item[0] for item in DOCUMENT_TYPES],
             'classes_choices': [item[0] for item in CLASSES],
-            'download_form': DocumentDownloadForm()
+            'download_form': DocumentDownloadForm(),
+            'documents_active': True,
         })
         return context
 
@@ -72,6 +88,22 @@ class DocumentDetail(DetailView):
     model = Document
     slug_url_kwarg = 'document_number'
     slug_field = 'document_number'
+
+    def get_object(self):
+        """Update the favorite's timestamp for the current user if any."""
+        document = super(DocumentDetail, self).get_object()
+        if self.request.user.is_authenticated():
+            try:
+                favorite = Favorite.objects.get(
+                    document=document,
+                    user=self.request.user
+                )
+            except Favorite.DoesNotExist:
+                favorite = None
+            if favorite:
+                favorite.last_view_date = datetime.now()
+                favorite.save()
+        return document
 
     def get_context_data(self, **kwargs):
         context = super(DocumentDetail, self).get_context_data(**kwargs)
@@ -186,3 +218,41 @@ class DocumentDownload(View):
         response['Content-Length'] = zip_filename.tell()
         zip_filename.seek(0)
         return response
+
+
+class FavoriteList(ListView):
+    model = Favorite
+    template_name = 'documents/document_favorites.html'
+
+    @method_decorator(login_required(login_url=reverse_lazy("document_list")))
+    def dispatch(self, *args, **kwargs):
+        return super(FavoriteList, self).dispatch(*args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(FavoriteList, self).get_context_data(**kwargs)
+        context.update({
+            'favorites_active': True,
+        })
+        return context
+
+    def get_queryset(self):
+        """Filters favorites per authenticated user."""
+        return self.model.objects.filter(user=self.request.user)
+
+
+class FavoriteCreate(CreateView):
+    model = Favorite
+    form_class = FavoriteForm
+    success_url = reverse_lazy('favorite_list')
+
+    def form_valid(self, form):
+        """
+        If the form is valid, returns the id of the item created.
+        """
+        super(FavoriteCreate, self).form_valid(form)
+        return HttpResponse(self.object.id)
+
+
+class FavoriteDelete(DeleteView):
+    model = Favorite
+    success_url = reverse_lazy('document_list')

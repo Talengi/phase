@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
+from django.conf import settings
 
 from documents.constants import (
     STATUSES, REVISIONS, CONTRACT_NBS, ORIGINATORS, UNITS, DISCIPLINES,
@@ -25,6 +26,9 @@ class Document(models.Model):
     created_on = models.DateField(
         auto_now_add=True,
         verbose_name=u"Created on")
+    updated_on = models.DateTimeField(
+        auto_now=True,
+        verbose_name=u"Updated on")
     contract_number = models.CharField(
         verbose_name=u"Contract Number",
         default=u"FAC09001",
@@ -179,7 +183,12 @@ class Document(models.Model):
         choices=REVISIONS)
     current_revision_date = models.DateField(
         verbose_name=u"Revision Date")
-    related_documents = models.ManyToManyField('Document',
+    related_documents = models.ManyToManyField(
+        'Document',
+        null=True, blank=True)
+    favorited_by = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        through='Favorite',
         null=True, blank=True)
 
     class Meta:
@@ -246,14 +255,22 @@ class Document(models.Model):
             u'sequencial_number',
         ]
 
-    def jsonified(self):
+    def jsonified(self, document2favorite={}, favorite_documents_ids=[]):
         """Returns a list of document values ready to be json-encoded.
 
         The first element of the list is the linkified document number.
         """
-        document_link = u'<a href="{url}">{number}</a>'.format(
+        document_link = (
+            '<i class="{icon}" data-document-id="{document_id}" '
+            'data-favorite-id="{favorite_id}"></i> '
+            '<a href="{url}">{number}</a>'
+        ).format(
             url=self.get_absolute_url(),
             number=self.document_number,
+            document_id=self.pk,
+            favorite_id=document2favorite.get(self.pk, ''),
+            icon=self.pk in favorite_documents_ids
+            and 'icon-star' or 'icon-star-empty',
         )
         return [document_link] \
             + [unicode(field[2]) for field in self.display_fields()[1:]]
@@ -272,6 +289,16 @@ def upload_to_path(instance, filename):
         revision=instance.revision,
         extension=filename.split('.')[-1]
     )
+
+
+class Favorite(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    document = models.ForeignKey(Document)
+    last_view_date = models.DateTimeField(auto_now_add=True)
+
+    def is_outdated(self):
+        """Returns a boolean, True if the document has been updated."""
+        return self.last_view_date < self.document.updated_on
 
 
 class DocumentRevision(models.Model):

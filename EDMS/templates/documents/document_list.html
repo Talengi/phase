@@ -202,7 +202,7 @@
         width: 400px;
     }
     #documents #columndocument_number {
-        width: 230px;
+        width: 250px;
     }
     #documents select {
         width: auto;
@@ -216,6 +216,9 @@
     }
     #documents th, #documents td {
         vertical-align: middle;
+    }
+    #documents .sorting_1 {
+        text-align: left;
     }
 
     #list_actions ul {
@@ -477,6 +480,42 @@
             });
         });
 
+        /* favorite documents */
+
+        $('#documents').on('click', 'i', function(e) {
+            var userId = {{ request.user.id }};
+            var self = $(this);
+            var documentId = self.data('document-id');
+            var favoriteId = self.data('favorite-id');
+            var alreadyFav = self.hasClass('icon-star');
+            if (alreadyFav) {
+                $.ajax({
+                    type: "POST",
+                    url: '/favorites/delete/'+favoriteId+'/',
+                    data: {
+                        csrfmiddlewaretoken: "{{ csrf_token }}"
+                    }
+                }).done(function() {
+                    self.data('favorite-id', '');
+                    self.removeClass("icon-star")
+                        .addClass("icon-star-empty");
+                });
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: '{% url "favorite_create" %}',
+                    data: {
+                        user: userId,
+                        document: documentId,
+                        csrfmiddlewaretoken: "{{ csrf_token }}"
+                    }
+                }).done(function( favoriteId ) {
+                    self.data('favorite-id', favoriteId);
+                    self.removeClass("icon-star-empty")
+                        .addClass("icon-star");
+                });
+            };
+        });
 
         /* select documents */
 
@@ -535,7 +574,7 @@
 
         // select rows
         $("#documents tbody").on('click', 'tr', function(e) {
-            if(!$(e.target.nodeName).is('a')) {
+            if(!$(e.target.nodeName).is('a') || !$(e.target.nodeName).is('i')) {
                 TableSelection.toggle(this);
             }
         });

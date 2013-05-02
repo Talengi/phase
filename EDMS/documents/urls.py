@@ -3,6 +3,7 @@ from django.conf.urls import patterns, url
 from documents.views import (
     DocumentList, DocumentFilter, DocumentCreate, DocumentDetail,
     DocumentEdit, DocumentDownload,
+    FavoriteList, FavoriteCreate, FavoriteDelete,
 )
 
 urlpatterns = patterns(
@@ -22,6 +23,15 @@ urlpatterns = patterns(
     url(r'^download/$',
         DocumentDownload.as_view(),
         name="document_download"),
+    url(r'^favorites/delete/(?P<pk>\d+)/$',
+        FavoriteDelete.as_view(),
+        name="favorite_delete"),
+    url(r'^favorites/create/$',
+        FavoriteCreate.as_view(),
+        name="favorite_create"),
+    url(r'^favorites/$',
+        FavoriteList.as_view(),
+        name="favorite_list"),
     url(r'^$',
         DocumentList.as_view(),
         name="document_list"),
