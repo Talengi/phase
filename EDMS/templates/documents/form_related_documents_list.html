@@ -5,7 +5,7 @@
             {% if form.instance.related_documents.all.count > 0 %}
             <ul class="controls span4" id="related_documents_list">
                 {% for document in form.instance.related_documents.all %}
-                <li><a href="{% url "document_detail" document.document_number %}">{{ document }}</a></li>
+                <li><a href="{% url "document_detail" document.document_number %}">{{ document.document_number }} - {{ document.title }}</a></li>
                 {% endfor %}
             </ul>
             {% else %}

@@ -3,16 +3,27 @@
 {% block content %}
     <h2>Favorites</h2>
     {% if favorite_list %}
-        <ul>
+    <table border="1" cellpadding="5">
+        <tr>
+            <th>Document number</th>
+            <th>Title</th>
+            <th>Current revision</th>
+        </tr>
         {% for favorite in favorite_list %}
-            <li><a href="{{ favorite.document.get_absolute_url }}"
-                >{{ favorite.document.document_number }} - {{ favorite.document.title }} - Revision: {{ favorite.document.current_revision }}</a>
+        <tr>
+            <td><a href="{{ favorite.document.get_absolute_url }}"
+                >{{ favorite.document.document_number }}
+                </a>
+            </td>
+            <td>{{ favorite.document.title }}</td>
+            <td>{{ favorite.document.current_revision }}
                 {% if favorite.is_outdated %}
                     <i class="icon-exclamation-sign" title="This document has been updated."></i>
                 {% endif %}
-            </li>
+            </td>
+        </tr>
         {% endfor %}
-        </ul>
+    </table>
     {% else %}
         <p>You do not have any favorite document.</p>
     {% endif %}
