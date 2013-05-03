@@ -1,7 +1,7 @@
 PyDMS - Project Document Management System
 ============================================
 
-PyDMS is a document management system specifically designed for the needs of major engineering and construction projects from the oil & gas, water treatment, nuclear, solar and wind industries.
+PyDMS is a document management system specifically designed for the needs of engineering and construction projects to manage the documentation of oil & gas, water treatment, nuclear, solar and wind facilities.
 
 PyDMS offers the following characteristics:
 * Management of document and data lists containing thousands of items
@@ -12,7 +12,7 @@ PyDMS offers the following characteristics:
 
 PyDMS is intended to be used on projects where:
 * Thousands of documents are generated 
-* Documents have to be produced, exchanged, reviewed, revised and used during construction and operation phases by multiple parties (owner/operator, contractors, vendors, partners, authorities, etc.)
+* Documents have to be produced, exchanged, reviewed, revised and used all along the project phases by multiple parties (owner/operator, contractors, vendors, partners, authorities, etc.)
 
 
 Project
