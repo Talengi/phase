@@ -1,5 +1,5 @@
-EDMS - Electronic Documents Management
-======================================
+EDMS - Electronic Document Management System
+============================================
 
 Project
 -------
