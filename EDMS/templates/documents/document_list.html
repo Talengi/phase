@@ -270,7 +270,9 @@
                 {{ hidden }}
             {% endfor %}
             <h2>Advanced filtering</h2>
+            {% include "documents/form_general_information.html" %}
             {% include "documents/form_review.html" %}
+            {% include "documents/form_schedule.html" %}
             <div class="form-actions">
                 <a class="btn btn-primary pull-right" href="#documents">Filter</a>
             </div>

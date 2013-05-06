@@ -6,6 +6,8 @@ from documents.constants import (
     DISCIPLINES, UNITS, DOCUMENT_TYPES, WBS, STATUSES, SYSTEMS,
 )
 
+date_attrs = {'class': "datepicker span2", 'data-date-format': "yyyy-mm-dd"}
+
 
 class DocumentForm(forms.ModelForm):
     native_file = forms.FileField(
@@ -19,7 +21,6 @@ class DocumentForm(forms.ModelForm):
 
     class Meta:
         model = Document
-        date_attrs = {'class': "datepicker span2", 'data-date-format': "yyyy-mm-dd"}
         exclude = ('favorited_by',)
         widgets = {
             'document_number': forms.TextInput(attrs={
@@ -202,6 +203,9 @@ class DocumentFilterForm(forms.ModelForm):
         widget=forms.HiddenInput(),
         required=False
     )
+    created_on = forms.DateField(
+        widget=forms.DateInput(attrs=date_attrs),
+        required=False)
 
     class Meta:
         model = Document
@@ -212,6 +216,33 @@ class DocumentFilterForm(forms.ModelForm):
             'current_revision', 'current_revision_date',
             'updated_on', 'sequencial_number',
         )
+        widgets = {
+            'status_std_planned_date': forms.DateInput(attrs=date_attrs),
+            'status_std_forecast_date': forms.DateInput(attrs=date_attrs),
+            'status_std_actual_date': forms.DateInput(attrs=date_attrs),
+            'status_idc_planned_date': forms.DateInput(attrs=date_attrs),
+            'status_idc_forecast_date': forms.DateInput(attrs=date_attrs),
+            'status_idc_actual_date': forms.DateInput(attrs=date_attrs),
+            'status_ifr_planned_date': forms.DateInput(attrs=date_attrs),
+            'status_ifr_forecast_date': forms.DateInput(attrs=date_attrs),
+            'status_ifr_actual_date': forms.DateInput(attrs=date_attrs),
+            'status_ifa_planned_date': forms.DateInput(attrs=date_attrs),
+            'status_ifa_forecast_date': forms.DateInput(attrs=date_attrs),
+            'status_ifa_actual_date': forms.DateInput(attrs=date_attrs),
+            'status_ifd_planned_date': forms.DateInput(attrs=date_attrs),
+            'status_ifd_forecast_date': forms.DateInput(attrs=date_attrs),
+            'status_ifd_actual_date': forms.DateInput(attrs=date_attrs),
+            'status_ifc_planned_date': forms.DateInput(attrs=date_attrs),
+            'status_ifc_forecast_date': forms.DateInput(attrs=date_attrs),
+            'status_ifc_actual_date': forms.DateInput(attrs=date_attrs),
+            'status_ifi_planned_date': forms.DateInput(attrs=date_attrs),
+            'status_ifi_forecast_date': forms.DateInput(attrs=date_attrs),
+            'status_ifi_actual_date': forms.DateInput(attrs=date_attrs),
+            'status_asb_planned_date': forms.DateInput(attrs=date_attrs),
+            'status_asb_forecast_date': forms.DateInput(attrs=date_attrs),
+            'status_asb_actual_date': forms.DateInput(attrs=date_attrs),
+        }
+
 
     def __init__(self, *args, **kwargs):
         super(DocumentFilterForm, self).__init__(*args, **kwargs)
