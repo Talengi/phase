@@ -16,6 +16,16 @@
       #createbutton {
         margin-left: 15px;
       }
+      td.row-title, .table th {
+        text-align: center;
+      }
+      td.row-title {
+        font-weight: bold;
+        padding-top: 20px;
+      }
+      .form-horizontal table .control-group {
+        margin: 10px 35px;
+      }
     </style>
     <link href="{{ STATIC_URL }}css/bootstrap-responsive.min.css" rel="stylesheet">
 
@@ -30,6 +40,12 @@
     <!-- Use this to quickly test CSS changes in a template,
         then move to project.css -->
     {% block extra_css %}{% endblock extra_css %}
+    <link href="{{ STATIC_URL }}css/datepicker.css" rel="stylesheet">
+    <style type="text/css">
+      .datepicker {
+        margin-top: 0;
+      }
+    </style>
   </head>
 
   <body>
@@ -112,5 +128,13 @@
     <script src="{{ STATIC_URL }}js/project.js"></script>
 
     {% block extra_js %}{% endblock extra_js %}
+
+    <script src="{{ STATIC_URL }}js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript">
+        $('.datepicker').datepicker().on('changeDate', function(ev) {
+            $(this).datepicker('hide');
+        });
+        $.browser = "";
+    </script>
   </body>
 </html>

@@ -172,6 +172,13 @@ class DocumentCreate(DocumentRevisionMixin, CreateView):
     model = Document
     form_class = DocumentForm
 
+    def get_context_data(self, **kwargs):
+        context = super(DocumentCreate, self).get_context_data(**kwargs)
+        context.update({
+            'document_create': True,
+        })
+        return context
+
 
 class DocumentEdit(DocumentRevisionMixin, UpdateView):
     model = Document
