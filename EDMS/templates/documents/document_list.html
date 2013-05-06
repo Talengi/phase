@@ -272,7 +272,7 @@
             <h2>Advanced filtering</h2>
             {% include "documents/form_review.html" %}
             <div class="form-actions">
-                <a class="btn btn-primary pull-right" href="#documents">Filter</a>
+                <input type="submit" class="btn btn-primary pull-right" value="Filter" />
             </div>
         </form>
     </div>
@@ -564,7 +564,7 @@
         $("#table_filter").submit(function(evt) {
             table.update($(this).serializeArray());
             evt.preventDefault();
-            return false;
+            document.location.href= "#documents";
         });
 
         /* favorite documents */
