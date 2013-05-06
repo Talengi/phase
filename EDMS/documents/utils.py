@@ -51,9 +51,19 @@ def filter_documents(queryset, data):
             })
 
     # Filtering (advanced)
-    leader = data.get('leader', None)
-    if leader:
-        queryset = queryset.filter(leader=leader)
+    advanced_args = {}
+    parameter_names = (
+        'contract_number', 'originator', 'contract_document_number',
+        'engeenering_phase', 'feed_update', 'system', 'wbs',
+        'under_contractor_review', 'under_ca_review',
+        'leader', 'approver', 'created_on',
+    )
+    for parameter_name in parameter_names:
+        parameter = data.get(parameter_name, None)
+        if parameter:
+            advanced_args[parameter_name] = parameter
+
+    queryset = queryset.filter(**advanced_args)
 
     return queryset
 

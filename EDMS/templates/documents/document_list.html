@@ -240,6 +240,9 @@
     #list_actions input[type="submit"], #list_actions button {
         vertical-align: top;
     }
+    #advancedFiltering {
+        display: none;
+    }
     </style>
 {% endblock extra_css %}
 
@@ -257,7 +260,7 @@
         </form>
     </div>
 
-    <div>
+    <div id="advancedFiltering">
         <form action="{% url 'document_filter' %}"
               method="get"
               class="form-horizontal">
@@ -265,9 +268,10 @@
             {% for hidden in form.hidden_fields %}
                 {{ hidden }}
             {% endfor %}
+            <h2>Advanced filtering</h2>
             {% include "documents/form_review.html" %}
             <div class="form-actions">
-                <input type="submit" value="Filter" class="btn btn-primary pull-right" />
+                <a class="btn btn-primary pull-right" href="#documents">Filter</a>
             </div>
         </form>
     </div>
@@ -283,6 +287,9 @@
         <thead id="filters">
             <tr>
                 <th id="filterByColumnLabel" colspan="2">
+                    <span class="pull-left">
+                        <a href="#list_actions" class="btn btn-mini" id="toggleAdvanced">Advanced filtering</a>
+                    </span>
                     Filter by column:
                 </th>
                 <th>
@@ -621,6 +628,11 @@
 
         // hide export documents list
         $('#id_document_numbers').parent().hide();
+
+        // toggle advanced search form
+        $('#toggleAdvanced').click(function(e) {
+            $('#advancedFiltering').show();
+        });
     });
 
     </script>

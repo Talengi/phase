@@ -586,6 +586,105 @@ class DocumenFilterTest(TestCase):
             [doc.jsonified() for doc in documents.order_by('-title')[0:10]]
         )
 
+    def test_advanced_filtering(self):
+        """
+        Tests the AJAX advanced search.
+        """
+        get_parameters = {
+            'bRegex': False,
+            'bRegex_0': False,
+            'bRegex_1': False,
+            'bRegex_2': False,
+            'bRegex_3': False,
+            'bRegex_4': False,
+            'bRegex_5': False,
+            'bRegex_6': False,
+            'bRegex_7': False,
+            'bRegex_8': False,
+            'bSearchable_0': True,
+            'bSearchable_1': True,
+            'bSearchable_2': True,
+            'bSearchable_3': True,
+            'bSearchable_4': True,
+            'bSearchable_5': True,
+            'bSearchable_6': True,
+            'bSearchable_7': True,
+            'bSearchable_8': True,
+            'bSortable_0': True,
+            'bSortable_1': True,
+            'bSortable_2': True,
+            'bSortable_3': True,
+            'bSortable_4': True,
+            'bSortable_5': True,
+            'bSortable_6': True,
+            'bSortable_7': True,
+            'bSortable_8': True,
+            'iColumns': 9,
+            'iDisplayLength': 10,
+            'iDisplayStart': 0,
+            'iSortCol_0': 0,
+            'iSortingCols': 1,
+            'mDataProp_0': 0,
+            'mDataProp_1': 1,
+            'mDataProp_2': 2,
+            'mDataProp_3': 3,
+            'mDataProp_4': 4,
+            'mDataProp_5': 5,
+            'mDataProp_6': 6,
+            'mDataProp_7': 7,
+            'mDataProp_8': 8,
+            'sColumns': '',
+            'sEcho': 111,
+            'sSearch': '',
+            'sSearch_0': '',
+            'sSearch_1': '',
+            'sSearch_2': '',
+            'sSearch_3': '',
+            'sSearch_4': '',
+            'sSearch_5': '',
+            'sSearch_6': '',
+            'sSearch_7': '',
+            'sSearch_8': '',
+            'sSortDir_0': 'asc',
+        }
+        c = Client()
+
+        # Searching 'Matthieu Lamy' as a leader
+        leader = 5
+        get_parameters['leader'] = leader
+        r = c.get(reverse("document_filter"), get_parameters)
+        data = json.loads(r.content)
+        self.assertEqual(len(data['aaData']), 10)
+        self.assertEqual(int(data['iTotalRecords']), 500)
+        self.assertEqual(int(data['iTotalDisplayRecords']), 33)
+        documents = Document.objects.all()
+        documents = documents.filter(**{
+            'leader': leader
+        })
+        self.assertEqual(
+            data['aaData'],
+            [doc.jsonified() for doc in documents[0:10]]
+        )
+
+        # Searching 'Matthieu Lamy' as a leader
+        # + 'Pierre-Yves Boucher' as an approver
+        leader = 5
+        approver = 1
+        get_parameters['leader'] = leader
+        get_parameters['approver'] = approver
+        r = c.get(reverse("document_filter"), get_parameters)
+        data = json.loads(r.content)
+        self.assertEqual(len(data['aaData']), 4)
+        documents = Document.objects.all()
+        documents = documents.filter(**{
+            'leader': leader,
+            'approver': approver
+        })
+        self.assertEqual(
+            data['aaData'],
+            [doc.jsonified() for doc in documents[0:10]]
+        )
+
 
 class DocumentDownloadTest(TestCase):
 

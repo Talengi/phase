@@ -172,7 +172,7 @@ class DocumentFilterForm(forms.ModelForm):
     iDisplayStart = forms.IntegerField(
         widget=forms.HiddenInput(),
         required=False,
-        initial=1
+        initial=0
     )
     iSortCol_0 = forms.IntegerField(required=False)
     iSortingCols = forms.IntegerField(widget=forms.HiddenInput(), required=False)
@@ -210,7 +210,7 @@ class DocumentFilterForm(forms.ModelForm):
             'revision_date', 'unit', 'discipline', 'document_type',
             'klass', 'favorited_by', 'related_documents',
             'current_revision', 'current_revision_date',
-            'created_on', 'updated_on', 'sequencial_number',
+            'updated_on', 'sequencial_number',
         )
 
     def __init__(self, *args, **kwargs):

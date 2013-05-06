@@ -132,7 +132,8 @@ class DocumentFilter(JSONResponseMixin, ListView):
             form = DocumentFilterForm(self.request.GET)
             if form.is_valid():
                 queryset = filter_documents(queryset, form.cleaned_data)
-
+            else:
+                raise Exception(form.errors)
         return queryset
 
 
