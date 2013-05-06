@@ -26,8 +26,8 @@ def filter_documents(queryset, data):
     # Paging (done at the view level, the whole queryset is still required)
 
     # Ordering
-    if 'iSortCol_0' in data:
-        sort_column = data['iSortCol_0']
+    sort_column = data.get('iSortCol_0', None)
+    if sort_column:
         sort_direction = data['sSortDir_0'] == u'desc' and u'-' or u''
         if sort_column == 0:  # fallback on document_number
             column_name = (sort_direction+'document_number',)
@@ -36,13 +36,12 @@ def filter_documents(queryset, data):
         queryset = queryset.order_by(*column_name)
 
     # Filtering (global)
-    if 'sSearch' in data:
-        search_terms = data['sSearch']
-        if search_terms:
-            q = Q()
-            for field in searchable_fields:
-                q.add(Q(**{'%s__icontains' % field: search_terms}), Q.OR)
-            queryset = queryset.filter(q)
+    search_terms = data.get('sSearch', None)
+    if search_terms:
+        q = Q()
+        for field in searchable_fields:
+            q.add(Q(**{'%s__icontains' % field: search_terms}), Q.OR)
+        queryset = queryset.filter(q)
 
     # Filtering (per field)
     for i, field in enumerate(display_fields):
@@ -50,6 +49,11 @@ def filter_documents(queryset, data):
             queryset = queryset.filter(**{
                 '%s__exact' % field[1]: data['sSearch_'+str(i-1)]
             })
+
+    # Filtering (advanced)
+    leader = data.get('leader', None)
+    if leader:
+        queryset = queryset.filter(leader=leader)
 
     return queryset
 

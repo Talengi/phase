@@ -79,6 +79,7 @@ class DocumentList(ListView):
             'document_types_choices': [item[0] for item in DOCUMENT_TYPES],
             'classes_choices': [item[0] for item in CLASSES],
             'download_form': DocumentDownloadForm(),
+            'form': DocumentFilterForm(),
             'documents_active': True,
         })
         return context

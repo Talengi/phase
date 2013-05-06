@@ -3,7 +3,7 @@ from django import forms
 
 from documents.models import Document, DocumentRevision, Favorite
 from documents.constants import (
-    DISCIPLINES, UNITS, DOCUMENT_TYPES, WBS, STATUSES, SYSTEMS
+    DISCIPLINES, UNITS, DOCUMENT_TYPES, WBS, STATUSES, SYSTEMS,
 )
 
 
@@ -92,7 +92,7 @@ class DocumentForm(forms.ModelForm):
 
         documents = Document.objects.all()
         self.fields['related_documents'].choices = [
-            (doc.pk, u"{0} - {1}".format(doc.document_number, doc.title)) 
+            (doc.pk, u"{0} - {1}".format(doc.document_number, doc.title))
             for doc in documents
         ]
 
@@ -130,7 +130,7 @@ class DocumentRevisionForm(forms.ModelForm):
         }
 
 
-class DocumentFilterForm(forms.Form):
+class DocumentFilterForm(forms.ModelForm):
     """A dummy form to check the validity of GET parameters from DataTables."""
     bRegex = forms.BooleanField(required=False)
     bRegex_0 = forms.BooleanField(required=False)
@@ -142,40 +142,51 @@ class DocumentFilterForm(forms.Form):
     bRegex_6 = forms.BooleanField(required=False)
     bRegex_7 = forms.BooleanField(required=False)
     bRegex_8 = forms.BooleanField(required=False)
-    bSearchable_0 = forms.BooleanField()
-    bSearchable_1 = forms.BooleanField()
-    bSearchable_2 = forms.BooleanField()
-    bSearchable_3 = forms.BooleanField()
-    bSearchable_4 = forms.BooleanField()
-    bSearchable_5 = forms.BooleanField()
-    bSearchable_6 = forms.BooleanField()
-    bSearchable_7 = forms.BooleanField()
-    bSearchable_8 = forms.BooleanField()
-    bSortable_0 = forms.BooleanField()
-    bSortable_1 = forms.BooleanField()
-    bSortable_2 = forms.BooleanField()
-    bSortable_3 = forms.BooleanField()
-    bSortable_4 = forms.BooleanField()
-    bSortable_5 = forms.BooleanField()
-    bSortable_6 = forms.BooleanField()
-    bSortable_7 = forms.BooleanField()
-    bSortable_8 = forms.BooleanField()
-    iColumns = forms.IntegerField()
-    iDisplayLength = forms.IntegerField()
-    iDisplayStart = forms.IntegerField()
-    iSortCol_0 = forms.IntegerField()
-    iSortingCols = forms.IntegerField()
-    mDataProp_0 = forms.IntegerField()
-    mDataProp_1 = forms.IntegerField()
-    mDataProp_2 = forms.IntegerField()
-    mDataProp_3 = forms.IntegerField()
-    mDataProp_4 = forms.IntegerField()
-    mDataProp_5 = forms.IntegerField()
-    mDataProp_6 = forms.IntegerField()
-    mDataProp_7 = forms.IntegerField()
-    mDataProp_8 = forms.IntegerField()
+    bSearchable_0 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
+    bSearchable_1 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
+    bSearchable_2 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
+    bSearchable_3 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
+    bSearchable_4 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
+    bSearchable_5 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
+    bSearchable_6 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
+    bSearchable_7 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
+    bSearchable_8 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
+    bSortable_0 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
+    bSortable_1 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
+    bSortable_2 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
+    bSortable_3 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
+    bSortable_4 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
+    bSortable_5 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
+    bSortable_6 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
+    bSortable_7 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
+    bSortable_8 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
+    iColumns = forms.IntegerField(
+        widget=forms.HiddenInput(),
+        required=False
+    )
+    iDisplayLength = forms.IntegerField(
+        widget=forms.HiddenInput(),
+        required=False,
+        initial=10
+    )
+    iDisplayStart = forms.IntegerField(
+        widget=forms.HiddenInput(),
+        required=False,
+        initial=1
+    )
+    iSortCol_0 = forms.IntegerField(required=False)
+    iSortingCols = forms.IntegerField(widget=forms.HiddenInput(), required=False)
+    mDataProp_0 = forms.IntegerField(widget=forms.HiddenInput(), required=False)
+    mDataProp_1 = forms.IntegerField(widget=forms.HiddenInput(), required=False)
+    mDataProp_2 = forms.IntegerField(widget=forms.HiddenInput(), required=False)
+    mDataProp_3 = forms.IntegerField(widget=forms.HiddenInput(), required=False)
+    mDataProp_4 = forms.IntegerField(widget=forms.HiddenInput(), required=False)
+    mDataProp_5 = forms.IntegerField(widget=forms.HiddenInput(), required=False)
+    mDataProp_6 = forms.IntegerField(widget=forms.HiddenInput(), required=False)
+    mDataProp_7 = forms.IntegerField(widget=forms.HiddenInput(), required=False)
+    mDataProp_8 = forms.IntegerField(widget=forms.HiddenInput(), required=False)
     sColumns = forms.CharField(required=False)
-    sEcho = forms.IntegerField()
+    sEcho = forms.IntegerField(widget=forms.HiddenInput(), required=False)
     sSearch = forms.CharField(required=False)
     sSearch_0 = forms.CharField(required=False)
     sSearch_1 = forms.CharField(required=False)
@@ -186,7 +197,27 @@ class DocumentFilterForm(forms.Form):
     sSearch_6 = forms.CharField(required=False)
     sSearch_7 = forms.CharField(required=False)
     sSearch_8 = forms.CharField(required=False)
-    sSortDir_0 = forms.ChoiceField(choices=(('asc', 'asc'), ('desc', 'desc')))
+    sSortDir_0 = forms.ChoiceField(
+        choices=(('asc', 'asc'), ('desc', 'desc')),
+        widget=forms.HiddenInput(),
+        required=False
+    )
+
+    class Meta:
+        model = Document
+        exclude = (
+            'document_number', 'title', 'status', 'revision',
+            'revision_date', 'unit', 'discipline', 'document_type',
+            'klass', 'favorited_by', 'related_documents',
+            'current_revision', 'current_revision_date',
+            'created_on', 'updated_on', 'sequencial_number',
+        )
+
+    def __init__(self, *args, **kwargs):
+        super(DocumentFilterForm, self).__init__(*args, **kwargs)
+        self.fields['contract_number'].required = False
+        self.fields['originator'].required = False
+        self.fields['engeenering_phase'].required = False
 
 
 class DocumentDownloadForm(forms.Form):

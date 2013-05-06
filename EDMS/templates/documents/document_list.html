@@ -257,6 +257,21 @@
         </form>
     </div>
 
+    <div>
+        <form action="{% url 'document_filter' %}"
+              method="get"
+              class="form-horizontal">
+            {# Include the hidden fields #}
+            {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+            {% include "documents/form_review.html" %}
+            <div class="form-actions">
+                <input type="submit" value="Filter" class="btn btn-primary pull-right" />
+            </div>
+        </form>
+    </div>
+
     <table id="documents" class="table table-striped table-condensed table-bordered table-hover">
         <thead>
             <tr>

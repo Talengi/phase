@@ -41,7 +41,7 @@ class DocumentTest(TestCase):
         self.assertEqual(
             document.jsonified(),
             [
-                (u'<i class="icon-star-empty" data-document-id="1" data-favorite-id=""></i> '
+                (u'<i class="icon-star-empty" data-document-id="1" data-favorite-id="" title="Add to favorites"></i> '
                  '<a href="/detail/FAC09001-FWF-000-HSE-REP-0004/" class="docnumber">FAC09001-FWF-000-HSE-REP-0004</a>'),
                 u'HAZOP report',
                 u'STD',
