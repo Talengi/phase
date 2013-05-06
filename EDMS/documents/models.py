@@ -262,7 +262,7 @@ class Document(models.Model):
         """
         document_link = (
             '<i class="{icon}" data-document-id="{document_id}" '
-            'data-favorite-id="{favorite_id}"></i> '
+            'data-favorite-id="{favorite_id}" title="{icon_title}"></i> '
             '<a href="{url}" class="docnumber">{number}</a>'
         ).format(
             url=self.get_absolute_url(),
@@ -271,6 +271,8 @@ class Document(models.Model):
             favorite_id=document2favorite.get(self.pk, ''),
             icon=self.pk in favorite_documents_ids
             and 'icon-star' or 'icon-star-empty',
+            icon_title=self.pk in favorite_documents_ids
+            and 'Remove from favorites' or 'Add to favorites',
         )
         return [document_link] \
             + [unicode(field[2]) for field in self.display_fields()[1:]]

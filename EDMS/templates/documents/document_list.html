@@ -226,7 +226,7 @@
     #documents .sorting_1 {
         text-align: left;
     }
-    
+
     #list_actions {
         margin: 0 0 30px 0;
     }
@@ -504,7 +504,7 @@
                     self.data('favorite-id', '');
                     self.removeClass("icon-star")
                         .addClass("icon-star-empty")
-                        .attr('title', "remove this from favorites");
+                        .attr('title', "Add to favorites");
                 });
             } else {
                 $.ajax({
@@ -519,7 +519,7 @@
                     self.data('favorite-id', favoriteId);
                     self.removeClass("icon-star-empty")
                         .addClass("icon-star")
-                        .attr('title', "favorite this");
+                        .attr('title', "Remove from favorites");
                 });
             };
         });
