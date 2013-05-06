@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
 {% block extra_css %}
-<link href="{{ STATIC_URL }}css/datepicker.css" rel="stylesheet">
 <link href="{{ STATIC_URL }}css/bootstrap-fileupload.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css">
 <link rel="stylesheet" type="text/css" href="http://www.erichynds.com/examples/jquery-ui-multiselect-widget/jquery.multiselect.css" />
 <link rel="stylesheet" type="text/css" href="http://www.erichynds.com/examples/jquery-ui-multiselect-widget/jquery.multiselect.filter.css" />
+<link href="{{ STATIC_URL }}css/datepicker.css" rel="stylesheet">
 <style type="text/css">
     label {
         text-align: right;
@@ -95,14 +95,7 @@
 {% endblock content %}
 
 {% block extra_js %}
-    <script src="{{ STATIC_URL }}js/bootstrap-datepicker.js"></script>
     <script src="{{ STATIC_URL }}js/bootstrap-fileupload.js"></script>
-    <script type="text/javascript">
-        $('.datepicker').datepicker().on('changeDate', function(ev) {
-            $(this).datepicker('hide');
-        });
-        $.browser = "";
-    </script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
     <script type="text/javascript" src="http://www.erichynds.com/examples/jquery-ui-multiselect-widget/src/jquery.multiselect.js"></script>
     <script type="text/javascript" src="http://www.erichynds.com/examples/jquery-ui-multiselect-widget/src/jquery.multiselect.filter.js"></script>
@@ -110,10 +103,13 @@
         var labels = $.makeArray($("#id_related_documents option")
                       .map(function(){ return $(this).text() }));
         $('#id_related_documents').multiselect().multiselectfilter();
-        // Hack the calendar that won't auto close nomore after including jquery-ui
-        $('.datepicker-days tbody').click(function(e) {
-            $($(this).closest('.datepicker')).hide();
+    </script>
+    <script src="{{ STATIC_URL }}js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript">
+        $('.datepicker').datepicker().on('changeDate', function(ev) {
+            $(this).datepicker('hide');
         });
+        $.browser = "";
     </script>
 {% endblock extra_js %}
 
