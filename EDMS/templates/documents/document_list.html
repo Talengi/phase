@@ -190,23 +190,27 @@
         margin: 0;
     }
     #documents {
+        margin-left: 0;
         margin-bottom: 15px !important;
     }
-    #documents thead th {
+    #documents thead#titles th {
         padding-right: 15px;
     }
     #documents th, #documents td {
         text-align: center;
     }
     #documents tbody td {
-        font-size: 12px;
+        font-size: 11px;
         cursor: pointer;
     }
     #documents #columntitle {
-        width: 400px;
+        width: 300px;
     }
     #documents #columndocument_number {
-        width: 300px;
+        width: 270px;
+    }
+    #documents #columnstatus {
+        width: 30px;
     }
     #documents .docnumber {
         padding-left: 5px;
@@ -228,7 +232,7 @@
     }
 
     #list_actions {
-        margin: 0 0 30px 0;
+        margin: 20px 0 0 0;
     }
     #list_actions ul {
         display: inline;
@@ -240,8 +244,21 @@
     #list_actions input[type="submit"], #list_actions button {
         vertical-align: top;
     }
-    #advancedFiltering {
-        display: none;
+    #table_filter .control-group {
+        margin-bottom: 4px;
+    }
+    #table_filter label {
+        margin-bottom: 2px;
+    }
+    #table_filter select {
+        height: 25px;
+        line-height: 25px;
+        font-size: 12px;
+    }
+    #table_filter input[type="text"] {
+        font-size: 12px;
+        height: 15px;
+        line-height: 15px;
     }
     .dataTables_processing {
         background-color: white;
@@ -264,106 +281,101 @@
 
 {% block content %}
 
-    <div id="list_actions">
-        <form action="{% url 'document_download' %}">
-            <button class="btn" id="select_all">Select/deselect all</button>
-            <ul>
-                <li>{{ download_form.document_numbers }}</li>
-                <li>{{ download_form.format }}</li>
-                <li>{{ download_form.revisions }}</li>
-            </ul>
-            <input type="submit" value="Download" class="btn" />
-        </form>
-    </div>
 
-    <div id="advancedFiltering">
-        <form action="{% url 'document_filter' %}"
-              method="get"
-              class="form-horizontal"
-              id="table_filter">
-            {# Include the hidden fields #}
-            {% for hidden in form.hidden_fields %}
-                {{ hidden }}
-            {% endfor %}
-            <h2>Advanced filtering</h2>
-            {% include "documents/form_general_information.html" %}
-            {% include "documents/form_review.html" %}
-            {% include "documents/form_schedule.html" %}
-            <div class="form-actions">
-                <input type="submit" class="btn btn-primary pull-right" value="Filter" />
+    <div class="row">
+        <div class="span10">
+            <table id="documents" class="span10 table table-striped table-condensed table-bordered table-hover">
+                <thead id="titles">
+                    <tr>
+                    {% for field in document_list.0.display_fields %}
+                        <th id="column{{ field.1 }}">{{ field.0 }}</th>
+                    {% endfor %}
+                    </tr>
+                </thead>
+                <thead id="filters">
+                    <tr>
+                        <th id="filterByColumnLabel" colspan="2">
+                            Filter by column:
+                        </th>
+                        <th>
+                            <select>
+                                <option value=""></option>
+                                {% for choice in status_choices %}
+                                    <option value="{{ choice }}">{{ choice }}</option>
+                                {% endfor %}
+                            </select>
+                        </th>
+                        <th>
+                            <select>
+                                <option value=""></option>
+                                {% for choice in revisions_choices %}
+                                    <option value="{{ choice }}">{{ choice }}</option>
+                                {% endfor %}
+                            </select>
+                        </th>
+                        <th></th>
+                        <th>
+                            <select>
+                                <option value=""></option>
+                                {% for choice in units_choices %}
+                                    <option value="{{ choice }}">{{ choice }}</option>
+                                {% endfor %}
+                            </select>
+                        </th>
+                        <th>
+                            <select>
+                                <option value=""></option>
+                                {% for choice in disciplines_choices %}
+                                    <option value="{{ choice }}">{{ choice }}</option>
+                                {% endfor %}
+                            </select>
+                        </th>
+                        <th>
+                            <select>
+                                <option value=""></option>
+                                {% for choice in document_types_choices %}
+                                    <option value="{{ choice }}">{{ choice }}</option>
+                                {% endfor %}
+                            </select>
+                        </th>
+                        <th>
+                            <select>
+                                <option value=""></option>
+                                {% for choice in classes_choices %}
+                                    <option value="{{ choice }}">{{ choice }}</option>
+                                {% endfor %}
+                            </select>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <div id="list_actions">
+                <form action="{% url 'document_download' %}">
+                    <button class="btn" id="select_all">Select/deselect all</button>
+                    <ul>
+                        <li>{{ download_form.document_numbers }}</li>
+                        <li>{{ download_form.format }}</li>
+                        <li>{{ download_form.revisions }}</li>
+                    </ul>
+                    <input type="submit" value="Download" class="btn" />
+                </form>
             </div>
-        </form>
+        </div>
+        <div class="span2">
+            <div>
+                <form action="{% url 'document_filter' %}"
+                      method="get"
+                      id="table_filter">
+                    {# Include the hidden fields #}
+                    {% for hidden in form.hidden_fields %}
+                        {{ hidden }}
+                    {% endfor %}
+                    {% include "documents/form_filtering.html" %}
+                </form>
+            </div>
+        </div>
     </div>
-
-    <table id="documents" class="table table-striped table-condensed table-bordered table-hover">
-        <thead>
-            <tr>
-            {% for field in document_list.0.display_fields %}
-                <th id="column{{ field.1 }}">{{ field.0 }}</th>
-            {% endfor %}
-            </tr>
-        </thead>
-        <thead id="filters">
-            <tr>
-                <th id="filterByColumnLabel" colspan="2">
-                    <span class="pull-left">
-                        <a href="#list_actions" class="btn btn-mini" id="toggleAdvanced">Advanced filtering</a>
-                    </span>
-                    Filter by column:
-                </th>
-                <th>
-                    <select>
-                        <option value=""></option>
-                        {% for choice in status_choices %}
-                            <option value="{{ choice }}">{{ choice }}</option>
-                        {% endfor %}
-                    </select>
-                </th>
-                <th>
-                    <select>
-                        <option value=""></option>
-                        {% for choice in revisions_choices %}
-                            <option value="{{ choice }}">{{ choice }}</option>
-                        {% endfor %}
-                    </select>
-                </th>
-                <th></th>
-                <th>
-                    <select>
-                        <option value=""></option>
-                        {% for choice in units_choices %}
-                            <option value="{{ choice }}">{{ choice }}</option>
-                        {% endfor %}
-                    </select>
-                </th>
-                <th>
-                    <select>
-                        <option value=""></option>
-                        {% for choice in disciplines_choices %}
-                            <option value="{{ choice }}">{{ choice }}</option>
-                        {% endfor %}
-                    </select>
-                </th>
-                <th>
-                    <select>
-                        <option value=""></option>
-                        {% for choice in document_types_choices %}
-                            <option value="{{ choice }}">{{ choice }}</option>
-                        {% endfor %}
-                    </select>
-                </th>
-                <th>
-                    <select>
-                        <option value=""></option>
-                        {% for choice in classes_choices %}
-                            <option value="{{ choice }}">{{ choice }}</option>
-                        {% endfor %}
-                    </select>
-                </th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
 
 {% endblock %}
 {% block extra_js %}
@@ -511,7 +523,7 @@
         var self = this;
         this.serverData = [];
         this.config = {
-            "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+            "sDom": "<'row'<'span5'l><'span5'f>r>t<'row'<'span5'i><'span5'p>>",
             "sPaginationType": "bootstrap",
             "bAutoWidth": false,
             "oLanguage": {
@@ -579,10 +591,13 @@
         });
 
         // Filter table values
-        $("#table_filter").submit(function(evt) {
-            table.update($(this).serializeArray());
+        $("#table_filter select").on('change', function(evt) {
+            table.update($('#table_filter').serializeArray());
             evt.preventDefault();
-            document.location.href= "#documents";
+        });
+        $("#table_filter input").on('keyup', function(evt) {
+            table.update($('#table_filter').serializeArray());
+            evt.preventDefault();
         });
 
         /* favorite documents */
@@ -705,11 +720,6 @@
 
         // hide export documents list
         $('#id_document_numbers').parent().hide();
-
-        // toggle advanced search form
-        $('#toggleAdvanced').click(function(e) {
-            $('#advancedFiltering').show();
-        });
     });
     /* dataTable Plugin */
     $.fn.dataTableExt.oApi.fnReloadAjax = function(oSettings) {

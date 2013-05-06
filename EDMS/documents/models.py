@@ -232,11 +232,11 @@ class Document(models.Model):
             (u'Document Number', u'document_number',        self.document_number),
             (u'Title',           u'title',                  self.title),
             (u'Status',          u'status',                 self.status),
-            (u'Revision',        u'current_revision',       self.current_revision),
-            (u'Revision Date',   u'current_revision_date',  self.current_revision_date),
+            (u'Rev.',        u'current_revision',       self.current_revision),
+            (u'Rev. Date',   u'current_revision_date',  self.current_revision_date),
             (u'Unit',            u'unit',                   self.unit),
-            (u'Discipline',      u'discipline',             self.discipline),
-            (u'Document Type',   u'document_type',          self.document_type),
+            (u'Disc.',      u'discipline',             self.discipline),
+            (u'Doc. Type',   u'document_type',          self.document_type),
             (u'Class',           u'klass',                  self.klass),
         ]
 
