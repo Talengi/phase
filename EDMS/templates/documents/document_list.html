@@ -260,7 +260,8 @@
     <div>
         <form action="{% url 'document_filter' %}"
               method="get"
-              class="form-horizontal">
+              class="form-horizontal"
+              id="table_filter">
             {# Include the hidden fields #}
             {% for hidden in form.hidden_fields %}
                 {{ hidden }}
@@ -479,9 +480,12 @@
         });
     }
 
-    /* Table initialisation */
-    $(document).ready(function() {
-        var documents = $('#documents').dataTable( {
+    // DataTable object wrapper. Enhances the initial object (gives reresh() and others)
+    var Table = function(selector) {
+        // dataTable default config
+        var self = this;
+        this.serverData = [];
+        this.config = {
             "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
             "sPaginationType": "bootstrap",
             "bAutoWidth": false,
@@ -491,27 +495,80 @@
             },
             "bProcessing": true,
             "bServerSide": true,
-            "sAjaxSource": "{% url "document_filter" %}"
-        });
+            "sAjaxSource": "{% url "document_filter" %}",
+            "fnServerData": function ( sSource, aoData, fnCallback ) {
+                var keys = aoData.map(function(d) {return d.name});
+                self.serverData.forEach(function(data) {
+                    if(keys.indexOf(data.name) < 0) {
+                        aoData.push( data );
+                    }
+                });
+
+                $.getJSON( sSource, aoData, function (json) {
+                   fnCallback(json);
+                });
+            },
+        };
+        this.selector = selector;
+        this.datatable = null;
+
+        // Draw the dataTable
+        this.init = function() {
+            this.datatable = $(this.selector).dataTable(this.config);
+            return this.datatable;
+        }
+
+        // Destroy the dataTable
+        this.clear = function() {
+            this.datatable.fnDestroy();
+        }
+
+        // Recreate the dataTable
+        this.refresh = function() {
+            this.clear();
+            this.init();
+        }
+
+        // Change a config property
+        this.set = function(prop, value) {
+            this.config[prop] = value;
+        }
+        // Set a config property and display accordingly
+        // nameValues: [{name: 'prop1', value: "value1"}, {name: 'prop1', value: "value1"}]
+        this.update = function(nameValues) {
+            this.serverData = nameValues
+            this.refresh();
+        }
+    }
+
+    /* Table initialisation */
+    $(document).ready(function() {
+        var table = window.dt = new Table('#documents'),
+            documents = table.init();
+
         /* Deal with faceting via footer's selects */
-        $("#filters th").each(function(i){
+        $("#filters th").each(function(i) {
             $('select', this).change(function(){
                 documents.fnFilter($(this).val(), i);
             });
         });
 
-        window.testt = function() {
-            documents.aoData.push({'leader': 5});
-            documents.fnReloadAjax({}, "{% url "document_filter" %}");
-        }
+        // Filter table values
+        $("#table_filter").submit(function(evt) {
+            table.update($(this).serializeArray());
+            evt.preventDefault();
+            return false;
+        });
+
         /* favorite documents */
 
         $('#documents').on('click', 'i', function(e) {
-            var userId = {{ request.user.id }};
-            var self = $(this);
-            var documentId = self.data('document-id');
-            var favoriteId = self.data('favorite-id');
-            var alreadyFav = self.hasClass('icon-star');
+            var userId = {{ request.user.id }},
+                self = $(this),
+                documentId = self.data('document-id'),
+                favoriteId = self.data('favorite-id'),
+                alreadyFav = self.hasClass('icon-star');
+
             if (alreadyFav) {
                 $.ajax({
                     type: "POST",
@@ -574,7 +631,6 @@
                 $(row).addClass('row_selected');
                 $('#id_document_numbers option[value="'+this.idFromRow(row)+'"]')
                     .attr('selected', "selected");
-                    console.log('#id_document_numbers option[value="'+this.idFromRow(row)+'"]')
                 return DocumentSelection.add(this.idFromRow(row));
             },
             remove: function(row) {
@@ -609,7 +665,6 @@
         // select/deselect all rows
         $('#select_all').click(function(e) {
             var checked = TableSelection.data.length > 0;
-            console.log(TableSelection.data.length)
             $("#documents tbody tr").each(function(i, e) {
                 checked
                     ? TableSelection.remove(e)
@@ -627,52 +682,22 @@
         $('#id_document_numbers').parent().hide();
     });
     /* dataTable Plugin */
-    $.fn.dataTableExt.oApi.fnReloadAjax = function(oSettings, sNewSource, fnCallback, bStandingRedraw) {
-        if (sNewSource !== undefined && sNewSource !== null) {
-            oSettings.sAjaxSource = sNewSource;
-        }
-
-        // Server-side processing should just call fnDraw
-        if (oSettings.oFeatures.bServerSide) {
-            this.fnDraw();
-            return;
-        }
-
+    $.fn.dataTableExt.oApi.fnReloadAjax = function(oSettings) {
+        //oSettings.sAjaxSource = sNewSource;
+        this.fnClearTable(this);
         this.oApi._fnProcessingDisplay(oSettings, true);
         var that = this;
-        var iStart = oSettings._iDisplayStart;
-        var aData = [];
 
-        this.oApi._fnServerParams(oSettings, aData);
-
-        oSettings.fnServerData.call(oSettings.oInstance, oSettings.sAjaxSource, aData, function(json) {
-            /* Clear the old information from the table */
-            that.oApi._fnClearTable(oSettings);
-
+        $.getJSON(oSettings.sAjaxSource, null, function(json) {
             /* Got the data - add it to the table */
-            var aData = (oSettings.sAjaxDataProp !== "") ? that.oApi._fnGetObjectDataFn(oSettings.sAjaxDataProp)(json) : json;
-
-            for (var i = 0; i < aData.length; i++) {
-                that.oApi._fnAddData(oSettings, aData[i]);
+            for (var i = 0; i < json.aaData.length; i++) {
+                that.oApi._fnAddData(oSettings, json.aaData[i]);
             }
 
             oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
-
-            that.fnDraw();
-
-            if (bStandingRedraw === true) {
-                oSettings._iDisplayStart = iStart;
-                that.oApi._fnCalculateEnd(oSettings);
-                that.fnDraw(false);
-            }
-
+            that.fnDraw(that);
             that.oApi._fnProcessingDisplay(oSettings, false);
-
-            /* Callback user function - for event handlers etc */
-            if (typeof fnCallback == 'function' && fnCallback !== null) {
-                fnCallback(oSettings);
-            }
-        }, oSettings);
+        });
     }
 
     </script>
