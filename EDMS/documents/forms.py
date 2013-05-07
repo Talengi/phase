@@ -1,5 +1,6 @@
 
 from django import forms
+from django.db.models.fields import BLANK_CHOICE_DASH
 
 from documents.models import Document, DocumentRevision, Favorite
 from documents.constants import (
@@ -258,6 +259,14 @@ class DocumentFilterForm(forms.ModelForm):
             for wbs in WBS
         ]
         self.fields['wbs'].choices = wbs_choices
+        for field_name in ('contract_number', 'originator',
+                           'engineering_phase', 'system', 'wbs'):
+            self.fields[field_name].choices = (
+                BLANK_CHOICE_DASH +
+                self.fields[field_name].choices
+            )
+            self.fields[field_name].initial = u''
+        self.fields['under_ca_review'].initial = u''
 
 
 class DocumentDownloadForm(forms.Form):
