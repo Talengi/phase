@@ -247,7 +247,7 @@ class DocumentFilterForm(forms.ModelForm):
         super(DocumentFilterForm, self).__init__(*args, **kwargs)
         self.fields['contract_number'].required = False
         self.fields['originator'].required = False
-        self.fields['engeenering_phase'].required = False
+        self.fields['engineering_phase'].required = False
         system_choices = [
             (system[0], u"{0} - {1}".format(system[0], system[1][:100]))
             for system in SYSTEMS
