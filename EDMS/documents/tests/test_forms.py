@@ -180,7 +180,8 @@ class DocumentCreateTest(TestCase):
         )
 
     def test_document_related_documents(self):
-        documents = [Document.objects.create(
+        c = Client()
+        related = [Document.objects.create(
                 title=u'HAZOP related 1',
                 current_revision_date='2012-04-20',
                 sequencial_number="0004",
@@ -197,17 +198,24 @@ class DocumentCreateTest(TestCase):
                 current_revision=u"03",
             )
         ]
-        document = Document.objects.create(
-            title=u'HAZOP report',
-            current_revision_date='2012-04-20',
-            sequencial_number="0006",
-            discipline="HSE",
-            document_type="REP",
-            current_revision=u"03",
-        )
-        document.related_documents = documents
+        r = c.post(reverse("document_create"), {
+            'originator': "FWF",
+            'discipline': "HSE",
+            'title': u'HAZOP report',
+            'sequencial_number': "0006",
+            'engineering_phase': "FEED",
+            'klass': 1,
+            'document_type': "REP",
+            'contract_number': "FAC09001",
+            'unit': "000",
+            'current_revision': "03",
+            'current_revision_date': "2013-04-20",
+            'related_documents': [doc.pk for doc in related]
+        })
+        document = Document.objects.get(document_number='FAC09001-FWF-000-HSE-REP-0006')
         self.assertEqual(document.related_documents.count(), 2)
-
+        self.assertEqual(document.related_documents.all()[0].title, "HAZOP related 1")
+        self.assertEqual(document.related_documents.all()[1].title, "HAZOP related 2")
 
 class DocumentEditTest(TestCase):
 
