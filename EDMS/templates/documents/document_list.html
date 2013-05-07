@@ -263,6 +263,10 @@
         height: 15px;
         line-height: 15px;
     }
+    #table_filter i {
+        margin-top: -2px;
+        display: none;
+    }
     .dataTables_processing {
         background-color: white;
         border: 1px solid #DDDDDD;
@@ -609,16 +613,25 @@
         // Filter table values
         var serializeTable = function(evt) {
             table.update($('#table_filter').serializeArray());
+            $(this).siblings('i').css('display', 'inline-block');
             evt.preventDefault();
         }
         $("#table_filter select").on('change', serializeTable);
         $("#table_filter input").on('keyup', serializeTable);
+        $("#table_filter i").on('click', function(evt) {
+            $(this).siblings('select,input:text').val('');
+            serializeTable(evt);
+            $(this).hide();
+        });
 
         // reset form
         $('#resetForm').on('click', function(evt) {
             $('#table_filter').find('input:text, select').val('');
             $('#filters').find('select').val('');
             serializeTable(evt);
+            $("#table_filter i").each(function(evt) {
+                $(this).hide();
+            })
         })
 
         /* favorite documents */
