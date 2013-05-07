@@ -253,7 +253,7 @@
     #table_filter label {
         margin-bottom: 2px;
     }
-    #table_filter select {
+    #table_filter select, #filters select {
         height: 25px;
         line-height: 25px;
         font-size: 12px;
@@ -294,7 +294,7 @@
         width: 135px;
     }
     #resetForm {
-        margin: 0 0 5px 30px;
+        margin: 0 0 5px 35px;
     }
     </style>
 {% endblock extra_css %}
@@ -617,6 +617,7 @@
         // reset form
         $('#resetForm').on('click', function(evt) {
             $('#table_filter').find('input:text, select').val('');
+            $('#filters').find('select').val('');
             serializeTable(evt);
         })
 
