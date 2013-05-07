@@ -293,12 +293,13 @@
     #sidebar input {
         width: 135px;
     }
+    #resetForm {
+        margin: 0 0 5px 30px;
+    }
     </style>
 {% endblock extra_css %}
 
 {% block content %}
-
-
     <div class="row">
         <div class="span10">
             <div id="list_actions">
@@ -391,8 +392,8 @@
             </form>
         </div>
     </div>
-
 {% endblock %}
+
 {% block extra_js %}
     <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
     <script>
@@ -613,6 +614,12 @@
         $("#table_filter select").on('change', serializeTable);
         $("#table_filter input").on('keyup', serializeTable);
 
+        // reset form
+        $('#resetForm').on('click', function(evt) {
+            $('#table_filter').find('input:text, select').val('');
+            serializeTable(evt);
+        })
+
         /* favorite documents */
 
         $('#documents').on('click', 'i', function(e) {
@@ -733,6 +740,7 @@
 
         // hide export documents list
         $('#id_document_numbers').parent().hide();
+
     });
     /* dataTable Plugin */
     $.fn.dataTableExt.oApi.fnReloadAjax = function(oSettings) {
