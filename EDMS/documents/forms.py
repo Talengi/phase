@@ -243,12 +243,21 @@ class DocumentFilterForm(forms.ModelForm):
             'status_asb_actual_date': forms.DateInput(attrs=date_attrs),
         }
 
-
     def __init__(self, *args, **kwargs):
         super(DocumentFilterForm, self).__init__(*args, **kwargs)
         self.fields['contract_number'].required = False
         self.fields['originator'].required = False
-        self.fields['engineering_phase'].required = False
+        self.fields['engeenering_phase'].required = False
+        system_choices = [
+            (system[0], u"{0} - {1}".format(system[0], system[1][:100]))
+            for system in SYSTEMS
+        ]
+        self.fields['system'].choices = system_choices
+        wbs_choices = [
+            (wbs[0], u"{0} - {1}".format(wbs[0], wbs[1]))
+            for wbs in WBS
+        ]
+        self.fields['wbs'].choices = wbs_choices
 
 
 class DocumentDownloadForm(forms.Form):
