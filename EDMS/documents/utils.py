@@ -54,7 +54,7 @@ def filter_documents(queryset, data):
     advanced_args = {}
     parameter_names = (
         'contract_number', 'originator', 'contract_document_number',
-        'engeenering_phase', 'feed_update', 'system', 'wbs',
+        'engineering_phase', 'feed_update', 'system', 'wbs',
         'under_contractor_review', 'under_ca_review',
         'leader', 'approver', 'created_on',
     )

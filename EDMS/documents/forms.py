@@ -248,7 +248,7 @@ class DocumentFilterForm(forms.ModelForm):
         super(DocumentFilterForm, self).__init__(*args, **kwargs)
         self.fields['contract_number'].required = False
         self.fields['originator'].required = False
-        self.fields['engeenering_phase'].required = False
+        self.fields['engineering_phase'].required = False
 
 
 class DocumentDownloadForm(forms.Form):

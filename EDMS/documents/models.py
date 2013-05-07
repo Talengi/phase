@@ -67,8 +67,8 @@ class Document(models.Model):
         verbose_name=u"System",
         choices=SYSTEMS,
         null=True, blank=True)
-    engeenering_phase = models.CharField(
-        verbose_name=u"Engeenering Phase",
+    engineering_phase = models.CharField(
+        verbose_name=u"Engineering Phase",
         default=u"FEED",
         max_length=4,
         choices=ENGINEERING_PHASES)
