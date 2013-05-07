@@ -179,6 +179,35 @@ class DocumentCreateTest(TestCase):
             ), 302)]
         )
 
+    def test_document_related_documents(self):
+        documents = [Document.objects.create(
+                title=u'HAZOP related 1',
+                current_revision_date='2012-04-20',
+                sequencial_number="0004",
+                discipline="HSE",
+                document_type="REP",
+                current_revision=u"03",
+            ),
+            Document.objects.create(
+                title=u'HAZOP related 2',
+                current_revision_date='2012-04-20',
+                sequencial_number="0005",
+                discipline="HSE",
+                document_type="REP",
+                current_revision=u"03",
+            )
+        ]
+        document = Document.objects.create(
+            title=u'HAZOP report',
+            current_revision_date='2012-04-20',
+            sequencial_number="0006",
+            discipline="HSE",
+            document_type="REP",
+            current_revision=u"03",
+        )
+        document.related_documents = documents
+        self.assertEqual(document.related_documents.count(), 2)
+
 
 class DocumentEditTest(TestCase):
 

@@ -53,6 +53,42 @@ class DocumentDetailTest(TestCase):
         )
         self.assertEqual(len(r.context['form'].fields.keys()), 49)
 
+    def test_document_related_documents(self):
+        c = Client()
+        documents = [Document.objects.create(
+                title=u'HAZOP related 1',
+                current_revision_date='2012-04-20',
+                sequencial_number="0004",
+                discipline="HSE",
+                document_type="REP",
+                current_revision=u"03",
+            ),
+            Document.objects.create(
+                title=u'HAZOP related 2',
+                current_revision_date='2012-04-20',
+                sequencial_number="0005",
+                discipline="HSE",
+                document_type="REP",
+                current_revision=u"03",
+            )
+        ]
+        document = Document.objects.create(
+            title=u'HAZOP report',
+            current_revision_date='2012-04-20',
+            sequencial_number="0006",
+            discipline="HSE",
+            document_type="REP",
+            current_revision=u"03",
+        )
+        document.related_documents = documents
+        r = c.get(reverse("document_detail", args=[document.document_number]))
+        self.assertContains(r, '<li><a href="/detail/{0}/">{0} - HAZOP related 1</a></li>'
+            .format(documents[0].document_number)
+        )
+        self.assertContains(r, '<li><a href="/detail/{0}/">{0} - HAZOP related 2</a></li>'
+            .format(documents[1].document_number)
+        )
+
 
 class DocumenFilterTest(TestCase):
     fixtures = ['initial_data.json']
