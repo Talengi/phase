@@ -12,9 +12,6 @@
     .date-error {
         color: #B94A48;
     }
-    #save-create, #save-view {
-        margin-right: 20px;
-    }
     .form-horizontal .form-actions {
         padding-left: 20px;
     }
@@ -59,7 +56,7 @@
         {% include "documents/form_schedule.html" %}
         <div class="form-actions">
             <a class="btn pull-left" href="{% url "document_list" %}">Cancel</a>
-            <input class="btn btn-primary pull-right"
+            <input class="btn btn-primary pull-right last-button"
                    type="submit"
                    value="Save and close"
                    name="save-close">
@@ -67,14 +64,12 @@
                 <input class="btn btn-info pull-right"
                        type="submit"
                        value="Save"
-                       name="save-view"
-                       id="save-view">
+                       name="save-view">
             {% else %}
                 <input class="btn btn-info pull-right"
                        type="submit"
                        value="Save and create another document"
-                       name="save-create"
-                       id="save-create">
+                       name="save-create">
             {% endif %}
         </div>
     </form>

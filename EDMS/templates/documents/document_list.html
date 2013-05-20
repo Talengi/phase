@@ -286,7 +286,7 @@
     #sidebar {
         background: #F9F9F9;
         margin-left: 10px;
-        padding-left: 18px; /* deal with borders */
+        padding-left: 18px; /* deal with borders: 18=20-1px*2 */
         border: 1px solid #E5E5E5;
         border-top: none;
         border-radius: 4px 4px 4px 4px;
@@ -540,7 +540,8 @@
     // DataTable object wrapper. Enhances the initial object (gives reresh() and others)
     var Table = function(selector) {
         // dataTable default config
-        var self = this;
+        var self = this,
+            filterUrl = "{% url "document_filter" %}";
         this.serverData = [];
         this.config = {
             "sDom": "<'row'<'span5'l><'span5'f>r>t<'row'<'span5'i><'span5'p>>",
@@ -552,7 +553,7 @@
             },
             "bProcessing": true,
             "bServerSide": true,
-            "sAjaxSource": "{% url "document_filter" %}",
+            "sAjaxSource": filterUrl,
             "fnServerData": function ( sSource, aoData, fnCallback ) {
                 var keys = aoData.map(function(d) {return d.name});
                 self.serverData.forEach(function(data) {
@@ -603,14 +604,14 @@
         var table = window.dt = new Table('#documents'),
             documents = table.init();
 
-        /* Deal with faceting via footer's selects */
+        /* Deal with faceting via simple filters (within the table) */
         $("#filters th").each(function(i) {
             $('select', this).change(function(){
                 documents.fnFilter($(this).val(), i);
             });
         });
 
-        // Filter table values
+        /* Filtering table's results given selected form's filters */
         var serializeTable = function(evt) {
             table.update($('#table_filter').serializeArray());
             $(this).siblings('i').css('display', 'inline-block');
@@ -624,7 +625,7 @@
             $(this).hide();
         });
 
-        // reset form
+        /* Reseting the filtering form and thus the table's results */
         $('#resetForm').on('click', function(evt) {
             $('#table_filter').find('input:text, select').val('');
             $('#filters').find('select').val('');
@@ -634,21 +635,22 @@
             })
         })
 
-        /* favorite documents */
-
+        /* Dealing with addition/removal of favorites */
         $('#documents').on('click', 'i', function(e) {
             var userId = {{ request.user.id }},
+                csrfToken = "{{ csrf_token }}",
+                createUrl = '{% url "favorite_create" %}',
+                deleteUrl = '{% url "favorite_delete" "0" %}',
                 self = $(this),
                 documentId = self.data('document-id'),
-                favoriteId = self.data('favorite-id'),
-                alreadyFav = self.hasClass('icon-star');
+                favoriteId = self.data('favorite-id');
 
-            if (alreadyFav) {
+            if (self.hasClass('icon-star')) {
                 $.ajax({
                     type: "POST",
-                    url: '/favorites/delete/'+favoriteId+'/',
+                    url: deleteUrl.replace('0', favoriteId),
                     data: {
-                        csrfmiddlewaretoken: "{{ csrf_token }}"
+                        csrfmiddlewaretoken: csrfToken
                     }
                 }).done(function() {
                     self.data('favorite-id', '');
@@ -659,11 +661,11 @@
             } else {
                 $.ajax({
                     type: "POST",
-                    url: '{% url "favorite_create" %}',
+                    url: createUrl,
                     data: {
                         user: userId,
                         document: documentId,
-                        csrfmiddlewaretoken: "{{ csrf_token }}"
+                        csrfmiddlewaretoken: csrfToken
                     }
                 }).done(function( favoriteId ) {
                     self.data('favorite-id', favoriteId);

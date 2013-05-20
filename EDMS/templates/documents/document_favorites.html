@@ -1,18 +1,9 @@
 {% extends "base.html" %}
 
-{% block extra_css %}
-  <style>
-
-      #favorites th, #favorites td {
-        text-align: center;
-    }
-  </style>
-{% endblock extra_css %}
-
 {% block content %}
     <h2>Favorites</h2>
     {% if favorite_list %}
-    <table id="favorites" class="table table-striped table-condensed table-bordered table-hover">
+    <table class="table table-striped table-condensed table-bordered table-hover table-centered">
         <thead>
           <tr>
             <th>Document number</th>

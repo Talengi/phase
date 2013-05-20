@@ -1,1 +1,20 @@
-/*! project specific CSS goes here. */
+body {
+    padding-top: 40px; /* 40px to make the container touch the topbar */
+}
+.last-button {
+    margin-left: 15px;
+}
+td.row-title, .table th {
+    text-align: center;
+}
+td.row-title {
+    font-weight: bold;
+    padding-top: 20px;
+}
+.form-horizontal table .control-group {
+    margin: 10px 35px;
+}
+
+.table-centered th, .table-centered td {
+    text-align: center;
+}
