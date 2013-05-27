@@ -32,7 +32,6 @@
             $dataHolder.html('');
             $this.init();
         };
-        $this.init();
 
         return $this;
     };

@@ -23,7 +23,15 @@
                     {% endfor %}
                     </tr>
                 </thead>
-                <tbody></tbody>
+                <tbody>
+                    {% for document in data %}
+                        <tr>
+                            {% for field in document %}
+                                <td>{{ field|safe }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
             </table>
         </div>
         <div class="span2" id="sidebar">

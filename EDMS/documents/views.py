@@ -29,7 +29,7 @@ class JSONResponseMixin(object):
     """
     def render_to_response(self, context):
         """Returns a JSON response containing 'context' as payload"""
-        return self.get_json_response(self.convert_context_to_json(context))
+        return self.get_json_response(json.dumps(self.build_context(context)))
 
     def get_json_response(self, content, **httpresponse_kwargs):
         """Construct an `HttpResponse` object."""
@@ -37,50 +37,41 @@ class JSONResponseMixin(object):
                                  content_type='application/json',
                                  **httpresponse_kwargs)
 
-    def convert_context_to_json(self, context):
-        """Convert the `document_list` into a JSON object.
+    def build_context(self, context):
+        """
+        Builds a dict from a context ready to be displayed as a table
 
-        Using DataTables conventions for fields' names.
+        or JSON dumped.
         """
         documents = context['object_list']
         user = self.request.user
         if user.is_authenticated():
-            favorites = Favorite.objects.filter(user=self.request.user)\
+            favorites = Favorite.objects.filter(user=user)\
                                         .values_list('id', 'document')
             document2favorite = dict((v, k) for k, v in favorites)
-            favorite_documents_ids = document2favorite.keys()
         else:
             document2favorite = {}
-            favorite_documents_ids = []
         start = int(self.request.GET.get('start', 1))
         end = start + int(self.request.GET.get('length', 20))
-        result = {
+        return {
             "total": Document.objects.all().count(),
             "display": len(documents),
-            "data": [doc.jsonified(document2favorite, favorite_documents_ids)
-                       for doc in documents[start:end]]
+            "data": [doc.jsonified(document2favorite)
+                     for doc in documents[start:end]]
         }
-        return json.dumps(result)
 
 
-class DocumentList(ListView):
-    # We just need one document to set table's header
-    queryset = Document.objects.all()[:1]
+class DocumentList(ListView, JSONResponseMixin):
+    queryset = Document.objects.all()[:20]
 
     def get_context_data(self, **kwargs):
         context = super(DocumentList, self).get_context_data(**kwargs)
-        # Add choices to populate <select>s filters
         context.update({
-            'status_choices': [item[0] for item in STATUSES],
-            'revisions_choices': [item[0] for item in REVISIONS],
-            'units_choices': [item[0] for item in UNITS],
-            'disciplines_choices': [item[0] for item in DISCIPLINES],
-            'document_types_choices': [item[0] for item in DOCUMENT_TYPES],
-            'classes_choices': [item[0] for item in CLASSES],
             'download_form': DocumentDownloadForm(),
             'form': DocumentFilterForm(),
             'documents_active': True,
         })
+        context.update(self.build_context(context))
         return context
 
 

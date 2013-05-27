@@ -255,11 +255,14 @@ class Document(models.Model):
             u'sequencial_number',
         ]
 
-    def jsonified(self, document2favorite={}, favorite_documents_ids=[]):
+    def jsonified(self, document2favorite={}):
         """Returns a list of document values ready to be json-encoded.
 
         The first element of the list is the linkified document number.
         """
+        favorited = self.pk in document2favorite.keys()
+        remove_title = 'Remove from favorites'
+        add_title = 'Add to favorites'
         document_link = (
             '<i class="{icon}" data-document-id="{document_id}" '
             'data-favorite-id="{favorite_id}" title="{icon_title}"></i> '
@@ -269,10 +272,8 @@ class Document(models.Model):
             number=self.document_number,
             document_id=self.pk,
             favorite_id=document2favorite.get(self.pk, ''),
-            icon=self.pk in favorite_documents_ids
-            and 'icon-star' or 'icon-star-empty',
-            icon_title=self.pk in favorite_documents_ids
-            and 'Remove from favorites' or 'Add to favorites',
+            icon=favorited and 'icon-star' or 'icon-star-empty',
+            icon_title=favorited and remove_title or add_title,
         )
         return [document_link] \
             + [unicode(field[2]) for field in self.display_fields()[1:]]
