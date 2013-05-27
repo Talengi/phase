@@ -1,6 +1,60 @@
 <fieldset>
     <legend>Advanced filters</legend>
     <div class="controls controls-row">
+        <div class="control-group {% if form.errors.revision %}error{% endif %}">
+            <label class="control-label" for="{{ form.revision.auto_id }}">{{ form.revision.label }}</label>
+            <div class="controls">
+                {{ form.revision }} <i class="icon-remove"></i>
+            </div>
+            {% if form.errors.revision %}<span class="help-inline">{{ form.errors.revision.0 }}</span>{% endif %}
+        </div>
+    </div>
+    <div class="controls controls-row">
+        <div class="control-group {% if form.errors.status %}error{% endif %}">
+            <label class="control-label" for="{{ form.status.auto_id }}">{{ form.status.label }}</label>
+            <div class="controls">
+                {{ form.status }} <i class="icon-remove"></i>
+            </div>
+            {% if form.errors.status %}<span class="help-inline">{{ form.errors.status.0 }}</span>{% endif %}
+        </div>
+    </div>
+    <div class="controls controls-row">
+        <div class="control-group {% if form.errors.unit %}error{% endif %}">
+            <label class="control-label" for="{{ form.unit.auto_id }}">{{ form.unit.label }}</label>
+            <div class="controls">
+                {{ form.unit }} <i class="icon-remove"></i>
+            </div>
+            {% if form.errors.unit %}<span class="help-inline">{{ form.errors.unit.0 }}</span>{% endif %}
+        </div>
+    </div>
+    <div class="controls controls-row">
+        <div class="control-group {% if form.errors.document_type %}error{% endif %}">
+            <label class="control-label" for="{{ form.document_type.auto_id }}">{{ form.document_type.label }}</label>
+            <div class="controls">
+                {{ form.document_type }} <i class="icon-remove"></i>
+            </div>
+            {% if form.errors.document_type %}<span class="help-inline">{{ form.errors.document_type.0 }}</span>{% endif %}
+        </div>
+    </div>
+    <div class="controls controls-row">
+        <div class="control-group {% if form.errors.discipline %}error{% endif %}">
+            <label class="control-label" for="{{ form.discipline.auto_id }}">{{ form.discipline.label }}</label>
+            <div class="controls">
+                {{ form.discipline }} <i class="icon-remove"></i>
+            </div>
+            {% if form.errors.discipline %}<span class="help-inline">{{ form.errors.discipline.0 }}</span>{% endif %}
+        </div>
+    </div>
+    <div class="controls controls-row">
+        <div class="control-group {% if form.errors.klass %}error{% endif %}">
+            <label class="control-label" for="{{ form.klass.auto_id }}">{{ form.klass.label }}</label>
+            <div class="controls">
+                {{ form.klass }} <i class="icon-remove"></i>
+            </div>
+            {% if form.errors.klass %}<span class="help-inline">{{ form.errors.klass.0 }}</span>{% endif %}
+        </div>
+    </div>
+    <div class="controls controls-row">
         <div class="control-group {% if form.errors.contract_number %}error{% endif %}">
             <label class="control-label" for="{{ form.contract_number.auto_id }}">{{ form.contract_number.label }}</label>
             <div class="controls">

@@ -198,7 +198,7 @@ class DocumentCreateTest(TestCase):
                 current_revision=u"03",
             )
         ]
-        r = c.post(reverse("document_create"), {
+        c.post(reverse("document_create"), {
             'originator': "FWF",
             'discipline': "HSE",
             'title': u'HAZOP report',

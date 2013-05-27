@@ -52,13 +52,12 @@ class JSONResponseMixin(object):
         else:
             document2favorite = {}
             favorite_documents_ids = []
-        start = int(self.request.GET.get('iDisplayStart', 1))
-        end = start + int(self.request.GET.get('iDisplayLength', 10))
+        start = int(self.request.GET.get('start', 1))
+        end = start + int(self.request.GET.get('length', 20))
         result = {
-            "sEcho": self.request.GET.get("sEcho"),
-            "iTotalRecords": Document.objects.all().count(),
-            "iTotalDisplayRecords": len(documents),
-            "aaData": [doc.jsonified(document2favorite, favorite_documents_ids)
+            "total": Document.objects.all().count(),
+            "display": len(documents),
+            "data": [doc.jsonified(document2favorite, favorite_documents_ids)
                        for doc in documents[start:end]]
         }
         return json.dumps(result)

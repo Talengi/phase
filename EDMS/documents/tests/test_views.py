@@ -98,100 +98,46 @@ class DocumenFilterTest(TestCase):
         Tests the AJAX pagination.
         """
         get_parameters = {
-            'bRegex': False,
-            'bRegex_0': False,
-            'bRegex_1': False,
-            'bRegex_2': False,
-            'bRegex_3': False,
-            'bRegex_4': False,
-            'bRegex_5': False,
-            'bRegex_6': False,
-            'bRegex_7': False,
-            'bRegex_8': False,
-            'bSearchable_0': True,
-            'bSearchable_1': True,
-            'bSearchable_2': True,
-            'bSearchable_3': True,
-            'bSearchable_4': True,
-            'bSearchable_5': True,
-            'bSearchable_6': True,
-            'bSearchable_7': True,
-            'bSearchable_8': True,
-            'bSortable_0': True,
-            'bSortable_1': True,
-            'bSortable_2': True,
-            'bSortable_3': True,
-            'bSortable_4': True,
-            'bSortable_5': True,
-            'bSortable_6': True,
-            'bSortable_7': True,
-            'bSortable_8': True,
-            'iColumns': 9,
-            'iDisplayLength': 10,
-            'iDisplayStart': 0,
-            'iSortCol_0': 0,
-            'iSortingCols': 1,
-            'mDataProp_0': 0,
-            'mDataProp_1': 1,
-            'mDataProp_2': 2,
-            'mDataProp_3': 3,
-            'mDataProp_4': 4,
-            'mDataProp_5': 5,
-            'mDataProp_6': 6,
-            'mDataProp_7': 7,
-            'mDataProp_8': 8,
-            'sColumns': '',
-            'sEcho': 111,
-            'sSearch': '',
-            'sSearch_0': '',
-            'sSearch_1': '',
-            'sSearch_2': '',
-            'sSearch_3': '',
-            'sSearch_4': '',
-            'sSearch_5': '',
-            'sSearch_6': '',
-            'sSearch_7': '',
-            'sSearch_8': '',
-            'sSortDir_0': 'asc',
+            'length': 10,
+            'start': 0,
+            'sort_column': 0,
+            'sort_direction': 'asc',
         }
         c = Client()
 
         # Default: 10 items returned
         r = c.get(reverse("document_filter"), get_parameters)
         data = json.loads(r.content)
-        self.assertEqual(len(data['aaData']), 10)
-        self.assertEqual(int(data['sEcho']), 111)
-        self.assertEqual(int(data['iTotalRecords']), 500)
-        self.assertEqual(int(data['iTotalDisplayRecords']), 500)
+        self.assertEqual(len(data['data']), 10)
+        self.assertEqual(int(data['total']), 500)
+        self.assertEqual(int(data['display']), 500)
         self.assertEqual(
-            data['aaData'],
+            data['data'],
             [doc.jsonified() for doc in Document.objects.all()[0:10]]
         )
 
         # With 100 results
-        get_parameters['iDisplayLength'] = 100
+        get_parameters['length'] = 100
         r = c.get(reverse("document_filter"), get_parameters)
         data = json.loads(r.content)
-        self.assertEqual(len(data['aaData']), 100)
-        self.assertEqual(int(data['sEcho']), 111)
-        self.assertEqual(int(data['iTotalRecords']), 500)
-        self.assertEqual(int(data['iTotalDisplayRecords']), 500)
+        self.assertEqual(len(data['data']), 100)
+        self.assertEqual(int(data['total']), 500)
+        self.assertEqual(int(data['display']), 500)
         self.assertEqual(
-            data['aaData'],
+            data['data'],
             [doc.jsonified() for doc in Document.objects.all()[0:100]]
         )
 
         # With 25 results, starting at 10
-        get_parameters['iDisplayLength'] = 25
-        get_parameters['iDisplayStart'] = 10
+        get_parameters['length'] = 25
+        get_parameters['start'] = 10
         r = c.get(reverse("document_filter"), get_parameters)
         data = json.loads(r.content)
-        self.assertEqual(len(data['aaData']), 25)
-        self.assertEqual(int(data['sEcho']), 111)
-        self.assertEqual(int(data['iTotalRecords']), 500)
-        self.assertEqual(int(data['iTotalDisplayRecords']), 500)
+        self.assertEqual(len(data['data']), 25)
+        self.assertEqual(int(data['total']), 500)
+        self.assertEqual(int(data['display']), 500)
         self.assertEqual(
-            data['aaData'],
+            data['data'],
             [doc.jsonified() for doc in Document.objects.all()[10:35]]
         )
 
@@ -200,93 +146,42 @@ class DocumenFilterTest(TestCase):
         Tests the AJAX sorting.
         """
         get_parameters = {
-            'bRegex': False,
-            'bRegex_0': False,
-            'bRegex_1': False,
-            'bRegex_2': False,
-            'bRegex_3': False,
-            'bRegex_4': False,
-            'bRegex_5': False,
-            'bRegex_6': False,
-            'bRegex_7': False,
-            'bRegex_8': False,
-            'bSearchable_0': True,
-            'bSearchable_1': True,
-            'bSearchable_2': True,
-            'bSearchable_3': True,
-            'bSearchable_4': True,
-            'bSearchable_5': True,
-            'bSearchable_6': True,
-            'bSearchable_7': True,
-            'bSearchable_8': True,
-            'bSortable_0': True,
-            'bSortable_1': True,
-            'bSortable_2': True,
-            'bSortable_3': True,
-            'bSortable_4': True,
-            'bSortable_5': True,
-            'bSortable_6': True,
-            'bSortable_7': True,
-            'bSortable_8': True,
-            'iColumns': 9,
-            'iDisplayLength': 10,
-            'iDisplayStart': 0,
-            'iSortCol_0': 0,
-            'iSortingCols': 1,
-            'mDataProp_0': 0,
-            'mDataProp_1': 1,
-            'mDataProp_2': 2,
-            'mDataProp_3': 3,
-            'mDataProp_4': 4,
-            'mDataProp_5': 5,
-            'mDataProp_6': 6,
-            'mDataProp_7': 7,
-            'mDataProp_8': 8,
-            'sColumns': '',
-            'sEcho': 111,
-            'sSearch': '',
-            'sSearch_0': '',
-            'sSearch_1': '',
-            'sSearch_2': '',
-            'sSearch_3': '',
-            'sSearch_4': '',
-            'sSearch_5': '',
-            'sSearch_6': '',
-            'sSearch_7': '',
-            'sSearch_8': '',
-            'sSortDir_0': 'asc',
+            'length': 10,
+            'start': 0,
+            'sort_column': 0,
+            'sort_direction': 'asc',
         }
         c = Client()
 
         # Default: sorted by document_number
         r = c.get(reverse("document_filter"), get_parameters)
         data = json.loads(r.content)
-        self.assertEqual(len(data['aaData']), 10)
+        self.assertEqual(len(data['data']), 10)
         self.assertEqual(
-            data['aaData'],
+            data['data'],
             [doc.jsonified() for doc in Document.objects.all()[0:10]]
         )
 
         # Sorting by title
-        get_parameters['iSortCol_0'] = 1
+        get_parameters['sort_column'] = 1
         r = c.get(reverse("document_filter"), get_parameters)
         data = json.loads(r.content)
-        self.assertEqual(len(data['aaData']), 10)
+        self.assertEqual(len(data['data']), 10)
         documents = Document.objects.all()
         self.assertEqual(
-            data['aaData'],
+            data['data'],
             [doc.jsonified() for doc in documents.order_by('title')[0:10]]
         )
 
         # Sorting by title (reversed)
-        get_parameters['iSortCol_0'] = 1
-        get_parameters['sSortDir_0'] = 'desc'
+        get_parameters['sort_column'] = 1
+        get_parameters['sort_direction'] = 'desc'
         r = c.get(reverse("document_filter"), get_parameters)
         data = json.loads(r.content)
-        self.assertEqual(len(data['aaData']), 10)
+        self.assertEqual(len(data['data']), 10)
         documents = Document.objects.all()
         self.assertEqual(
-            data['aaData'],
+            data['data'],
             [doc.jsonified() for doc in documents.order_by('-title')[0:10]]
         )
 
@@ -295,76 +190,25 @@ class DocumenFilterTest(TestCase):
         Tests the AJAX global search.
         """
         get_parameters = {
-            'bRegex': False,
-            'bRegex_0': False,
-            'bRegex_1': False,
-            'bRegex_2': False,
-            'bRegex_3': False,
-            'bRegex_4': False,
-            'bRegex_5': False,
-            'bRegex_6': False,
-            'bRegex_7': False,
-            'bRegex_8': False,
-            'bSearchable_0': True,
-            'bSearchable_1': True,
-            'bSearchable_2': True,
-            'bSearchable_3': True,
-            'bSearchable_4': True,
-            'bSearchable_5': True,
-            'bSearchable_6': True,
-            'bSearchable_7': True,
-            'bSearchable_8': True,
-            'bSortable_0': True,
-            'bSortable_1': True,
-            'bSortable_2': True,
-            'bSortable_3': True,
-            'bSortable_4': True,
-            'bSortable_5': True,
-            'bSortable_6': True,
-            'bSortable_7': True,
-            'bSortable_8': True,
-            'iColumns': 9,
-            'iDisplayLength': 10,
-            'iDisplayStart': 0,
-            'iSortCol_0': 0,
-            'iSortingCols': 1,
-            'mDataProp_0': 0,
-            'mDataProp_1': 1,
-            'mDataProp_2': 2,
-            'mDataProp_3': 3,
-            'mDataProp_4': 4,
-            'mDataProp_5': 5,
-            'mDataProp_6': 6,
-            'mDataProp_7': 7,
-            'mDataProp_8': 8,
-            'sColumns': '',
-            'sEcho': 111,
-            'sSearch': '',
-            'sSearch_0': '',
-            'sSearch_1': '',
-            'sSearch_2': '',
-            'sSearch_3': '',
-            'sSearch_4': '',
-            'sSearch_5': '',
-            'sSearch_6': '',
-            'sSearch_7': '',
-            'sSearch_8': '',
-            'sSortDir_0': 'asc',
+            'length': 10,
+            'start': 0,
+            'sort_column': 0,
+            'sort_direction': 'asc',
         }
         c = Client()
 
         # Searching 'pipeline'
         search_terms = u'pipeline'
-        get_parameters['sSearch'] = search_terms
+        get_parameters['search_terms'] = search_terms
         r = c.get(reverse("document_filter"), get_parameters)
         data = json.loads(r.content)
-        self.assertEqual(len(data['aaData']), 1)
+        self.assertEqual(len(data['data']), 1)
         documents = Document.objects.all()
         q = Q()
         for field in documents[0].searchable_fields():
             q.add(Q(**{'%s__icontains' % field: search_terms}), Q.OR)
         self.assertEqual(
-            data['aaData'],
+            data['data'],
             [doc.jsonified() for doc in documents.filter(q)[0:10]]
         )
 
@@ -373,96 +217,45 @@ class DocumenFilterTest(TestCase):
         Tests the AJAX per field search.
         """
         get_parameters = {
-            'bRegex': False,
-            'bRegex_0': False,
-            'bRegex_1': False,
-            'bRegex_2': False,
-            'bRegex_3': False,
-            'bRegex_4': False,
-            'bRegex_5': False,
-            'bRegex_6': False,
-            'bRegex_7': False,
-            'bRegex_8': False,
-            'bSearchable_0': True,
-            'bSearchable_1': True,
-            'bSearchable_2': True,
-            'bSearchable_3': True,
-            'bSearchable_4': True,
-            'bSearchable_5': True,
-            'bSearchable_6': True,
-            'bSearchable_7': True,
-            'bSearchable_8': True,
-            'bSortable_0': True,
-            'bSortable_1': True,
-            'bSortable_2': True,
-            'bSortable_3': True,
-            'bSortable_4': True,
-            'bSortable_5': True,
-            'bSortable_6': True,
-            'bSortable_7': True,
-            'bSortable_8': True,
-            'iColumns': 9,
-            'iDisplayLength': 10,
-            'iDisplayStart': 0,
-            'iSortCol_0': 0,
-            'iSortingCols': 1,
-            'mDataProp_0': 0,
-            'mDataProp_1': 1,
-            'mDataProp_2': 2,
-            'mDataProp_3': 3,
-            'mDataProp_4': 4,
-            'mDataProp_5': 5,
-            'mDataProp_6': 6,
-            'mDataProp_7': 7,
-            'mDataProp_8': 8,
-            'sColumns': '',
-            'sEcho': 111,
-            'sSearch': '',
-            'sSearch_0': '',
-            'sSearch_1': '',
-            'sSearch_2': '',
-            'sSearch_3': '',
-            'sSearch_4': '',
-            'sSearch_5': '',
-            'sSearch_6': '',
-            'sSearch_7': '',
-            'sSearch_8': '',
-            'sSortDir_0': 'asc',
+            'length': 10,
+            'start': 0,
+            'sort_column': 0,
+            'sort_direction': 'asc',
         }
         c = Client()
 
         # Searching 'ASB' status
         status = u'ASB'
-        get_parameters['sSearch_1'] = status
+        get_parameters['status'] = status
         r = c.get(reverse("document_filter"), get_parameters)
         data = json.loads(r.content)
-        self.assertEqual(len(data['aaData']), 10)
-        self.assertEqual(int(data['iTotalRecords']), 500)
-        self.assertEqual(int(data['iTotalDisplayRecords']), 44)
+        self.assertEqual(len(data['data']), 10)
+        self.assertEqual(int(data['total']), 500)
+        self.assertEqual(int(data['display']), 44)
         documents = Document.objects.all()
         documents = documents.filter(**{
             'status__icontains': status
         })
         self.assertEqual(
-            data['aaData'],
+            data['data'],
             [doc.jsonified() for doc in documents[0:10]]
         )
 
         # Searching 'ASB' status + 'PLA' document_type
         status = u'ASB'
         document_type = u'PLA'
-        get_parameters['sSearch_1'] = status
-        get_parameters['sSearch_6'] = document_type
+        get_parameters['status'] = status
+        get_parameters['document_type'] = document_type
         r = c.get(reverse("document_filter"), get_parameters)
         data = json.loads(r.content)
-        self.assertEqual(len(data['aaData']), 1)
+        self.assertEqual(len(data['data']), 1)
         documents = Document.objects.all()
         documents = documents.filter(**{
             'status__icontains': status,
             'document_type__icontains': document_type
         })
         self.assertEqual(
-            data['aaData'],
+            data['data'],
             [doc.jsonified() for doc in documents[0:10]]
         )
 
@@ -471,144 +264,93 @@ class DocumenFilterTest(TestCase):
         Tests the AJAX complex request.
         """
         get_parameters = {
-            'bRegex': False,
-            'bRegex_0': False,
-            'bRegex_1': False,
-            'bRegex_2': False,
-            'bRegex_3': False,
-            'bRegex_4': False,
-            'bRegex_5': False,
-            'bRegex_6': False,
-            'bRegex_7': False,
-            'bRegex_8': False,
-            'bSearchable_0': True,
-            'bSearchable_1': True,
-            'bSearchable_2': True,
-            'bSearchable_3': True,
-            'bSearchable_4': True,
-            'bSearchable_5': True,
-            'bSearchable_6': True,
-            'bSearchable_7': True,
-            'bSearchable_8': True,
-            'bSortable_0': True,
-            'bSortable_1': True,
-            'bSortable_2': True,
-            'bSortable_3': True,
-            'bSortable_4': True,
-            'bSortable_5': True,
-            'bSortable_6': True,
-            'bSortable_7': True,
-            'bSortable_8': True,
-            'iColumns': 9,
-            'iDisplayLength': 10,
-            'iDisplayStart': 0,
-            'iSortCol_0': 0,
-            'iSortingCols': 1,
-            'mDataProp_0': 0,
-            'mDataProp_1': 1,
-            'mDataProp_2': 2,
-            'mDataProp_3': 3,
-            'mDataProp_4': 4,
-            'mDataProp_5': 5,
-            'mDataProp_6': 6,
-            'mDataProp_7': 7,
-            'mDataProp_8': 8,
-            'sColumns': '',
-            'sEcho': 111,
-            'sSearch': '',
-            'sSearch_0': '',
-            'sSearch_1': '',
-            'sSearch_2': '',
-            'sSearch_3': '',
-            'sSearch_4': '',
-            'sSearch_5': '',
-            'sSearch_6': '',
-            'sSearch_7': '',
-            'sSearch_8': '',
-            'sSortDir_0': 'asc',
+            'length': 10,
+            'start': 0,
+            'sort_column': 0,
+            'sort_direction': 'asc',
         }
         c = Client()
 
         # Searching 'pipeline', sorted by title (descending)
         search_terms = u'pipeline'
-        get_parameters['sSearch'] = search_terms
-        get_parameters['iSortCol_0'] = 1
-        get_parameters['sSortDir_0'] = 'desc'
+        get_parameters['search_terms'] = search_terms
+        get_parameters['sort_column'] = 1
+        get_parameters['sort_direction'] = 'desc'
         r = c.get(reverse("document_filter"), get_parameters)
         data = json.loads(r.content)
-        self.assertEqual(len(data['aaData']), 1)
+        self.assertEqual(len(data['data']), 1)
         documents = Document.objects.all()
         q = Q()
         for field in documents[0].searchable_fields():
             q.add(Q(**{'%s__icontains' % field: search_terms}), Q.OR)
         documents = documents.filter(q).order_by('-title')
         self.assertEqual(
-            data['aaData'],
+            data['data'],
             [doc.jsonified() for doc in documents[0:10]]
         )
         # Reseting
-        get_parameters['sSearch'] = ''
-        get_parameters['iSortCol_0'] = 0
-        get_parameters['sSortDir_0'] = 'asc'
+        get_parameters['search_terms'] = ''
+        get_parameters['sort_column'] = 0
+        get_parameters['sort_direction'] = 'asc'
 
         # Searching 'spec', retrieving 10 items from page 2
         search_terms = u'spec'
-        get_parameters['sSearch'] = search_terms
-        get_parameters['iDisplayLength'] = 10
-        get_parameters['iDisplayStart'] = 10
+        get_parameters['search_terms'] = search_terms
+        get_parameters['length'] = 10
+        get_parameters['start'] = 10
         r = c.get(reverse("document_filter"), get_parameters)
         data = json.loads(r.content)
-        self.assertEqual(len(data['aaData']), 7)
-        self.assertEqual(int(data['iTotalDisplayRecords']), 17)
+        self.assertEqual(len(data['data']), 7)
+        self.assertEqual(int(data['display']), 17)
         documents = Document.objects.all()
         q = Q()
         for field in documents[0].searchable_fields():
             q.add(Q(**{'%s__icontains' % field: search_terms}), Q.OR)
         documents = documents.filter(q)
         self.assertEqual(
-            data['aaData'],
+            data['data'],
             [doc.jsonified() for doc in documents[10:20]]
         )
         # Reseting
-        get_parameters['sSearch'] = ''
-        get_parameters['iDisplayLength'] = 10
-        get_parameters['iDisplayStart'] = 0
+        get_parameters['search_terms'] = ''
+        get_parameters['length'] = 10
+        get_parameters['start'] = 0
 
         # Searching 'spec', retrieving 10 items from page 2, sorted by title
         search_terms = u'spec'
-        get_parameters['sSearch'] = search_terms
-        get_parameters['iDisplayLength'] = 10
-        get_parameters['iDisplayStart'] = 10
-        get_parameters['iSortCol_0'] = 1
+        get_parameters['search_terms'] = search_terms
+        get_parameters['length'] = 10
+        get_parameters['start'] = 10
+        get_parameters['sort_column'] = 1
         r = c.get(reverse("document_filter"), get_parameters)
         data = json.loads(r.content)
-        self.assertEqual(len(data['aaData']), 7)
-        self.assertEqual(int(data['iTotalDisplayRecords']), 17)
+        self.assertEqual(len(data['data']), 7)
+        self.assertEqual(int(data['display']), 17)
         documents = Document.objects.all()
         q = Q()
         for field in documents[0].searchable_fields():
             q.add(Q(**{'%s__icontains' % field: search_terms}), Q.OR)
         documents = documents.filter(q).order_by('title')
         self.assertEqual(
-            data['aaData'],
+            data['data'],
             [doc.jsonified() for doc in documents[10:20]]
         )
         # Reseting
-        get_parameters['sSearch'] = ''
-        get_parameters['iDisplayLength'] = 10
-        get_parameters['iDisplayStart'] = 0
-        get_parameters['iSortCol_0'] = 0
+        get_parameters['search_terms'] = ''
+        get_parameters['length'] = 10
+        get_parameters['start'] = 0
+        get_parameters['sort_column'] = 0
 
         # Searching 'spec' + status = 'IFR', sorted by title
         search_terms = u'spec'
         status = u'IFR'
-        get_parameters['sSearch'] = search_terms
-        get_parameters['iSortCol_0'] = 1
-        get_parameters['sSearch_1'] = status
-        get_parameters['sSortDir_0'] = 'desc'
+        get_parameters['search_terms'] = search_terms
+        get_parameters['sort_column'] = 1
+        get_parameters['status'] = status
+        get_parameters['sort_direction'] = 'desc'
         r = c.get(reverse("document_filter"), get_parameters)
         data = json.loads(r.content)
-        self.assertEqual(len(data['aaData']), 4)
+        self.assertEqual(len(data['data']), 4)
         documents = Document.objects.all()
         q = Q()
         for field in documents[0].searchable_fields():
@@ -618,7 +360,7 @@ class DocumenFilterTest(TestCase):
             'status__icontains': status,
         })
         self.assertEqual(
-            data['aaData'],
+            data['data'],
             [doc.jsonified() for doc in documents.order_by('-title')[0:10]]
         )
 
@@ -627,61 +369,10 @@ class DocumenFilterTest(TestCase):
         Tests the AJAX advanced search.
         """
         get_parameters = {
-            'bRegex': False,
-            'bRegex_0': False,
-            'bRegex_1': False,
-            'bRegex_2': False,
-            'bRegex_3': False,
-            'bRegex_4': False,
-            'bRegex_5': False,
-            'bRegex_6': False,
-            'bRegex_7': False,
-            'bRegex_8': False,
-            'bSearchable_0': True,
-            'bSearchable_1': True,
-            'bSearchable_2': True,
-            'bSearchable_3': True,
-            'bSearchable_4': True,
-            'bSearchable_5': True,
-            'bSearchable_6': True,
-            'bSearchable_7': True,
-            'bSearchable_8': True,
-            'bSortable_0': True,
-            'bSortable_1': True,
-            'bSortable_2': True,
-            'bSortable_3': True,
-            'bSortable_4': True,
-            'bSortable_5': True,
-            'bSortable_6': True,
-            'bSortable_7': True,
-            'bSortable_8': True,
-            'iColumns': 9,
-            'iDisplayLength': 10,
-            'iDisplayStart': 0,
-            'iSortCol_0': 0,
-            'iSortingCols': 1,
-            'mDataProp_0': 0,
-            'mDataProp_1': 1,
-            'mDataProp_2': 2,
-            'mDataProp_3': 3,
-            'mDataProp_4': 4,
-            'mDataProp_5': 5,
-            'mDataProp_6': 6,
-            'mDataProp_7': 7,
-            'mDataProp_8': 8,
-            'sColumns': '',
-            'sEcho': 111,
-            'sSearch': '',
-            'sSearch_0': '',
-            'sSearch_1': '',
-            'sSearch_2': '',
-            'sSearch_3': '',
-            'sSearch_4': '',
-            'sSearch_5': '',
-            'sSearch_6': '',
-            'sSearch_7': '',
-            'sSearch_8': '',
-            'sSortDir_0': 'asc',
+            'length': 10,
+            'start': 0,
+            'sort_column': 0,
+            'sort_direction': 'asc',
         }
         c = Client()
 
@@ -690,15 +381,15 @@ class DocumenFilterTest(TestCase):
         get_parameters['leader'] = leader
         r = c.get(reverse("document_filter"), get_parameters)
         data = json.loads(r.content)
-        self.assertEqual(len(data['aaData']), 10)
-        self.assertEqual(int(data['iTotalRecords']), 500)
-        self.assertEqual(int(data['iTotalDisplayRecords']), 33)
+        self.assertEqual(len(data['data']), 10)
+        self.assertEqual(int(data['total']), 500)
+        self.assertEqual(int(data['display']), 33)
         documents = Document.objects.all()
         documents = documents.filter(**{
             'leader': leader
         })
         self.assertEqual(
-            data['aaData'],
+            data['data'],
             [doc.jsonified() for doc in documents[0:10]]
         )
 
@@ -710,14 +401,14 @@ class DocumenFilterTest(TestCase):
         get_parameters['approver'] = approver
         r = c.get(reverse("document_filter"), get_parameters)
         data = json.loads(r.content)
-        self.assertEqual(len(data['aaData']), 4)
+        self.assertEqual(len(data['data']), 4)
         documents = Document.objects.all()
         documents = documents.filter(**{
             'leader': leader,
             'approver': approver
         })
         self.assertEqual(
-            data['aaData'],
+            data['data'],
             [doc.jsonified() for doc in documents[0:10]]
         )
 
@@ -753,7 +444,8 @@ class DocumentDownloadTest(TestCase):
         })
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r._headers, {
-            'content-length': ('Content-Length', '390'),
+            'vary': ('Vary', 'Accept-Encoding'),
+            'content-length': ('Content-Length', '398'),
             'content-type': ('Content-Type', 'application/zip'),
             'content-disposition': (
                 'Content-Disposition',
@@ -849,6 +541,7 @@ class DocumentDownloadTest(TestCase):
         })
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r._headers, {
+            'vary': ('Vary', 'Accept-Encoding'),
             'content-length': ('Content-Length', '758'),
             'content-type': ('Content-Type', 'application/zip'),
             'content-disposition': (
@@ -917,6 +610,7 @@ class DocumentDownloadTest(TestCase):
         })
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r._headers, {
+            'vary': ('Vary', 'Accept-Encoding'),
             'content-length': ('Content-Length', '384'),
             'content-type': ('Content-Type', 'application/zip'),
             'content-disposition': (
@@ -970,6 +664,7 @@ class DocumentDownloadTest(TestCase):
         })
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r._headers, {
+            'vary': ('Vary', 'Accept-Encoding'),
             'content-length': ('Content-Length', '758'),
             'content-type': ('Content-Type', 'application/zip'),
             'content-disposition': (

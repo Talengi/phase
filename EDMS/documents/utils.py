@@ -26,9 +26,9 @@ def filter_documents(queryset, data):
     # Paging (done at the view level, the whole queryset is still required)
 
     # Ordering
-    sort_column = data.get('iSortCol_0', None)
+    sort_column = data.get('sort_column', None)
     if sort_column:
-        sort_direction = data['sSortDir_0'] == u'desc' and u'-' or u''
+        sort_direction = data['sort_direction'] == u'desc' and u'-' or u''
         if sort_column == 0:  # fallback on document_number
             column_name = (sort_direction+'document_number',)
         else:
@@ -36,23 +36,18 @@ def filter_documents(queryset, data):
         queryset = queryset.order_by(*column_name)
 
     # Filtering (global)
-    search_terms = data.get('sSearch', None)
+    search_terms = data.get('search_terms', None)
     if search_terms:
         q = Q()
         for field in searchable_fields:
             q.add(Q(**{'%s__icontains' % field: search_terms}), Q.OR)
         queryset = queryset.filter(q)
 
-    # Filtering (per field)
-    for i, field in enumerate(display_fields):
-        if data.get('sSearch_'+str(i-1), False):
-            queryset = queryset.filter(**{
-                '%s__exact' % field[1]: data['sSearch_'+str(i-1)]
-            })
-
     # Filtering (advanced)
     advanced_args = {}
     parameter_names = (
+        'status', 'revision', 'unit', 'discipline',
+        'document_type', 'klass',
         'contract_number', 'originator', 'leader', 'approver',
         'engineering_phase', 'feed_update', 'system', 'wbs',
         'under_contractor_review', 'under_ca_review', 'created_on',

@@ -133,73 +133,20 @@ class DocumentRevisionForm(forms.ModelForm):
 
 
 class DocumentFilterForm(forms.ModelForm):
-    """A dummy form to check the validity of GET parameters from DataTables."""
-    bRegex = forms.BooleanField(required=False)
-    bRegex_0 = forms.BooleanField(required=False)
-    bRegex_1 = forms.BooleanField(required=False)
-    bRegex_2 = forms.BooleanField(required=False)
-    bRegex_3 = forms.BooleanField(required=False)
-    bRegex_4 = forms.BooleanField(required=False)
-    bRegex_5 = forms.BooleanField(required=False)
-    bRegex_6 = forms.BooleanField(required=False)
-    bRegex_7 = forms.BooleanField(required=False)
-    bRegex_8 = forms.BooleanField(required=False)
-    bSearchable_0 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
-    bSearchable_1 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
-    bSearchable_2 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
-    bSearchable_3 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
-    bSearchable_4 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
-    bSearchable_5 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
-    bSearchable_6 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
-    bSearchable_7 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
-    bSearchable_8 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
-    bSortable_0 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
-    bSortable_1 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
-    bSortable_2 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
-    bSortable_3 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
-    bSortable_4 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
-    bSortable_5 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
-    bSortable_6 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
-    bSortable_7 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
-    bSortable_8 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
-    iColumns = forms.IntegerField(
-        widget=forms.HiddenInput(),
-        required=False
-    )
-    iDisplayLength = forms.IntegerField(
+    """A form to check the validity of GET parameters from datatable."""
+    length = forms.IntegerField(
         widget=forms.HiddenInput(),
         required=False,
-        initial=10
+        initial=20
     )
-    iDisplayStart = forms.IntegerField(
+    start = forms.IntegerField(
         widget=forms.HiddenInput(),
         required=False,
         initial=0
     )
-    iSortCol_0 = forms.IntegerField(required=False)
-    iSortingCols = forms.IntegerField(widget=forms.HiddenInput(), required=False)
-    mDataProp_0 = forms.IntegerField(widget=forms.HiddenInput(), required=False)
-    mDataProp_1 = forms.IntegerField(widget=forms.HiddenInput(), required=False)
-    mDataProp_2 = forms.IntegerField(widget=forms.HiddenInput(), required=False)
-    mDataProp_3 = forms.IntegerField(widget=forms.HiddenInput(), required=False)
-    mDataProp_4 = forms.IntegerField(widget=forms.HiddenInput(), required=False)
-    mDataProp_5 = forms.IntegerField(widget=forms.HiddenInput(), required=False)
-    mDataProp_6 = forms.IntegerField(widget=forms.HiddenInput(), required=False)
-    mDataProp_7 = forms.IntegerField(widget=forms.HiddenInput(), required=False)
-    mDataProp_8 = forms.IntegerField(widget=forms.HiddenInput(), required=False)
-    sColumns = forms.CharField(required=False)
-    sEcho = forms.IntegerField(widget=forms.HiddenInput(), required=False)
-    sSearch = forms.CharField(required=False)
-    sSearch_0 = forms.CharField(required=False)
-    sSearch_1 = forms.CharField(required=False)
-    sSearch_2 = forms.CharField(required=False)
-    sSearch_3 = forms.CharField(required=False)
-    sSearch_4 = forms.CharField(required=False)
-    sSearch_5 = forms.CharField(required=False)
-    sSearch_6 = forms.CharField(required=False)
-    sSearch_7 = forms.CharField(required=False)
-    sSearch_8 = forms.CharField(required=False)
-    sSortDir_0 = forms.ChoiceField(
+    search_terms = forms.CharField(required=False)
+    sort_column = forms.IntegerField(required=False)
+    sort_direction = forms.ChoiceField(
         choices=(('asc', 'asc'), ('desc', 'desc')),
         widget=forms.HiddenInput(),
         required=False
@@ -211,9 +158,8 @@ class DocumentFilterForm(forms.ModelForm):
     class Meta:
         model = Document
         exclude = (
-            'document_number', 'title', 'status', 'revision',
-            'revision_date', 'unit', 'discipline', 'document_type',
-            'klass', 'favorited_by', 'related_documents',
+            'document_number', 'title', 'revision_date',
+            'favorited_by', 'related_documents',
             'current_revision', 'current_revision_date',
             'updated_on', 'sequencial_number',
         )
@@ -246,6 +192,10 @@ class DocumentFilterForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(DocumentFilterForm, self).__init__(*args, **kwargs)
+        self.fields['discipline'].required = False
+        self.fields['document_type'].required = False
+        self.fields['klass'].required = False
+        self.fields['unit'].required = False
         self.fields['contract_number'].required = False
         self.fields['originator'].required = False
         self.fields['engineering_phase'].required = False
@@ -259,13 +209,15 @@ class DocumentFilterForm(forms.ModelForm):
             for wbs in WBS
         ]
         self.fields['wbs'].choices = wbs_choices
-        for field_name in ('contract_number', 'originator',
+        for field_name in ('contract_number', 'originator', 'unit',
+                           'document_type', 'discipline', 'klass',
                            'engineering_phase', 'system', 'wbs'):
             self.fields[field_name].choices = (
                 BLANK_CHOICE_DASH +
                 self.fields[field_name].choices
             )
             self.fields[field_name].initial = u''
+        self.fields['status'].initial = u''
         self.fields['under_ca_review'].initial = u''
 
 
