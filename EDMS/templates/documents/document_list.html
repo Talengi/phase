@@ -102,6 +102,7 @@
 {% block extra_js %}
     <script src="{{ STATIC_URL }}js/jquery.dataTables.min.js"></script>
     <script src="{{ STATIC_URL }}js/datatables-bootstrap.js"></script>
+    <script src="{{ STATIC_URL }}js/jquery.favbystar.js"></script>
     <script>
     // DataTable object wrapper. Enhances the initial object (gives reresh() and others)
     var Table = function(selector) {
@@ -165,8 +166,17 @@
         }
     }
 
-    /* Table initialisation */
     $(document).ready(function() {
+        /* Dealing with addition/removal of favorites */
+        $('#documents').on('click', 'i', function(e) {
+            $(this).favbystar({
+                userId: {{ request.user.id }},
+                csrfToken: "{{ csrf_token }}",
+                createUrl: '{% url "favorite_create" %}',
+                deleteUrl: '{% url "favorite_delete" "0" %}'
+            });
+        });
+
         var table = window.dt = new Table('#documents'),
             documents = table.init();
 
@@ -200,16 +210,6 @@
                 $(this).hide();
             })
         })
-
-        /* Dealing with addition/removal of favorites */
-        $('#documents').on('click', 'i', function(e) {
-            $(this).favorited({
-                userId: {{ request.user.id }},
-                csrfToken: "{{ csrf_token }}",
-                createUrl: '{% url "favorite_create" %}',
-                deleteUrl: '{% url "favorite_delete" "0" %}'
-            });
-        });
 
         /* select documents */
 
