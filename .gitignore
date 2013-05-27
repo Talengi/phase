@@ -22,3 +22,6 @@ build
 
 # Django media
 EDMS/media/*
+
+# Django assets
+EDMS/assets/*

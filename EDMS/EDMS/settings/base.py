@@ -150,6 +150,10 @@ TEMPLATE_DIRS = (
 ########## MIDDLEWARE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#middleware-classes
 MIDDLEWARE_CLASSES = (
+    # Performance middlewares
+    'django.middleware.gzip.GZipMiddleware',
+    'pipeline.middleware.MinifyHTMLMiddleware',
+
     # Default Django middleware.
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -190,6 +194,7 @@ DJANGO_APPS = (
 THIRD_PARTY_APPS = (
     # Database migration helpers:
     'south',
+    'pipeline',
 )
 
 # Apps specific for this project go here.
@@ -241,3 +246,48 @@ LOGGING = {
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#wsgi-application
 WSGI_APPLICATION = 'wsgi.application'
 ########## END WSGI CONFIGURATION
+
+########## PIPELINE CONFIGURATION
+STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+
+PIPELINE_CSS = {
+    'base': {
+        'source_filenames': (
+            'css/bootstrap.min.css',
+            'css/bootstrap-responsive.min.css',
+            'css/jquery-ui.css',
+            # must be loaded after jquery-ui js to avoid conflicts
+            'css/datepicker.css',
+            'css/project.css',
+        ),
+        'output_filename': 'css/base.css',
+    },
+    'datatables': {
+        'source_filenames': (
+            'css/datatables.css',
+        ),
+        'output_filename': 'css/datatables.css',
+    },
+}
+
+PIPELINE_JS = {
+    'base': {
+        'source_filenames': (
+            'js/jquery.js',
+            'js/bootstrap.min.js',
+            'js/jquery-ui.min.js',
+            # must be loaded after jquery-ui js to avoid conflicts
+            'js/bootstrap-datepicker.js',
+            'js/project.js',
+        ),
+        'output_filename': 'js/base.js',
+    },
+    'datatables': {
+        'source_filenames': (
+            'js/jquery.dataTables.min.js',
+            'js/datatables-bootstrap.js',
+        ),
+        'output_filename': 'js/datatables.js',
+    }
+}
+########## END PIPELINE CONFIGURATION
