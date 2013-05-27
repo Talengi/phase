@@ -1,38 +1,9 @@
 {% extends "base.html" %}
 
 {% block extra_css %}
-<link href="{{ STATIC_URL }}css/bootstrap-fileupload.css" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css">
-<link rel="stylesheet" type="text/css" href="http://www.erichynds.com/examples/jquery-ui-multiselect-widget/jquery.multiselect.css" />
-<link rel="stylesheet" type="text/css" href="http://www.erichynds.com/examples/jquery-ui-multiselect-widget/jquery.multiselect.filter.css" />
-<style type="text/css">
-    label {
-        text-align: right;
-    }
-    .date-error {
-        color: #B94A48;
-    }
-    .form-horizontal .form-actions {
-        padding-left: 20px;
-    }
-    #id_related_documents {
-        width: 500px;
-    }
-    button.ui-multiselect {
-        color: #000;
-        font-weight: normal;
-    }
-    .ui-multiselect-filter, .ui-multiselect-filter input {
-        font-size: 1em;
-    }
-    .ui-multiselect-checkboxes label {
-        text-align: left;
-    }
-    .ui-multiselect-checkboxes label input {
-        top: -3px;
-        margin-right: 5px;
-    }
-</style>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap-fileupload.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/jquery.multiselect.css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/jquery.multiselect.filter.css" />
 {% endblock extra_css %}
 
 {% block createdocument %}{% endblock createdocument %}
@@ -77,9 +48,8 @@
 
 {% block extra_js %}
     <script src="{{ STATIC_URL }}js/bootstrap-fileupload.js"></script>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="http://www.erichynds.com/examples/jquery-ui-multiselect-widget/src/jquery.multiselect.js"></script>
-    <script type="text/javascript" src="http://www.erichynds.com/examples/jquery-ui-multiselect-widget/src/jquery.multiselect.filter.js"></script>
+    <script src="{{ STATIC_URL }}js/jquery.multiselect.js"></script>
+    <script src="{{ STATIC_URL }}js/jquery.multiselect.filter.js"></script>
     <script type="text/javascript">
         var labels = $.makeArray($("#id_related_documents option")
                       .map(function(){ return $(this).text() }));
