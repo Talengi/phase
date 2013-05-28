@@ -9,8 +9,7 @@
             favoriteId = self.data('favorite-id');
 
         if (self.hasClass('icon-star')) {
-            $.ajax({
-                type: "POST",
+            $.post({
                 url: opts.deleteUrl.replace('0', favoriteId),
                 data: {
                     csrfmiddlewaretoken: opts.csrfToken
@@ -19,13 +18,13 @@
                     self.removeClass("icon-star")
                         .addClass("icon-star-empty")
                         .attr('title', "Add to favorites");
+                },
+                success: function( favoriteId ) {
+                    self.data('favorite-id', '');
                 }
-            }).done(function( favoriteId ) {
-                self.data('favorite-id', '');
             });
         } else {
-            $.ajax({
-                type: "POST",
+            $.post({
                 url: opts.createUrl,
                 data: {
                     user: opts.userId,
@@ -36,9 +35,10 @@
                     self.removeClass("icon-star-empty")
                         .addClass("icon-star")
                         .attr('title', "Remove from favorites");
+                },
+                success: function( favoriteId ) {
+                    self.data('favorite-id', favoriteId);
                 }
-            }).done(function( favoriteId ) {
-                self.data('favorite-id', favoriteId);
             });
         }
         return self;
