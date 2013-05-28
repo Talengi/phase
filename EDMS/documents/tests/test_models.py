@@ -40,19 +40,13 @@ class DocumentTest(TestCase):
         )
         self.assertEqual(
             document.jsonified(),
-            [
-                (u'<i class="icon-star-empty" data-document-id="1" data-favorite-id="" title="Add to favorites"></i> '
-                 '<a href="/detail/FAC09001-FWF-000-HSE-REP-0004/" class="docnumber">FAC09001-FWF-000-HSE-REP-0004</a>'),
-                u'HAZOP report',
-                u'STD',
-                u'01',
-                u'2013-04-20',
-                u'000',
-                u'HSE',
-                u'REP',
-                u'1'
-            ]
+            ['<i class="icon-star-empty" data-document-id="1" data-favorite-id="" title="Add to favorites"></i> <a href="/detail/FAC09001-FWF-000-HSE-REP-0004/" class="docnumber">FAC09001-FWF-000-HSE-REP-0004</a>',
+             u'HAZOP report',
+             u'2013-04-20',
+             u'01',
+             u'STD']
         )
+
 
     def test_display_fields(self):
         """
@@ -73,6 +67,5 @@ class DocumentTest(TestCase):
         )
         self.assertEqual(
             u" | ".join(unicode(field[2]) for field in document.display_fields()),
-            (u'FAC09001-FWF-000-HSE-REP-0004 | HAZOP report | STD | 03 '
-             u'| 2013-04-20 | 000 | HSE | REP | 1')
+            u'FAC09001-FWF-000-HSE-REP-0004 | HAZOP report | 2013-04-20 | 03 | STD'
         )
