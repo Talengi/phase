@@ -262,12 +262,6 @@ PIPELINE_CSS = {
         ),
         'output_filename': 'css/base.css',
     },
-    'datatables': {
-        'source_filenames': (
-            'css/datatables.css',
-        ),
-        'output_filename': 'css/datatables.css',
-    },
 }
 
 PIPELINE_JS = {
@@ -282,12 +276,5 @@ PIPELINE_JS = {
         ),
         'output_filename': 'js/base.js',
     },
-    'datatables': {
-        'source_filenames': (
-            'js/jquery.dataTables.min.js',
-            'js/datatables-bootstrap.js',
-        ),
-        'output_filename': 'js/datatables.js',
-    }
 }
 ########## END PIPELINE CONFIGURATION

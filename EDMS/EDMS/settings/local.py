@@ -64,7 +64,3 @@ DEBUG_TOOLBAR_CONFIG = {
     "INTERCEPT_REDIRECTS": False
 }
 ########## END TOOLBAR CONFIGURATION
-
-########## PIPELINE CONFIGURATION
-PIPELINE_YUGLIFY_BINARY = '/usr/local/share/npm/lib/node_modules/yuglify/bin/yuglify'
-########## END PIPELINE CONFIGURATION
