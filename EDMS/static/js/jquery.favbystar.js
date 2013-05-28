@@ -7,9 +7,9 @@
             self = $(this),
             documentId = self.data('document-id'),
             favoriteId = self.data('favorite-id');
-
         if (self.hasClass('icon-star')) {
-            $.post({
+            $.ajax({
+                method: "POST",
                 url: opts.deleteUrl.replace('0', favoriteId),
                 data: {
                     csrfmiddlewaretoken: opts.csrfToken
@@ -24,11 +24,12 @@
                 }
             });
         } else {
-            $.post({
+            $.ajax({
+                method: "POST",
                 url: opts.createUrl,
                 data: {
                     user: opts.userId,
-                    document: documentId,
+                    'document': documentId,
                     csrfmiddlewaretoken: opts.csrfToken
                 },
                 beforeSend: function( favoriteId ) {

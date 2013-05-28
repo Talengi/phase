@@ -2,7 +2,7 @@
 {% load compressed %}
 
 {% block content %}
-    <div class="row">
+    <div class="row-fluid">
         <div class="span10">
             <div id="list_actions">
                 <form action="{% url 'document_download' %}">
@@ -16,27 +16,9 @@
                     <input type="submit" value="Download" class="btn" />
                 </form>
             </div>
-            <table id="documents" class="span10 table table-condensed table-bordered table-hover">
-                <thead id="titles">
-                    <tr>
-                        <th>Select</th>
-                    {% for field in document_list.0.display_fields %}
-                        <th id="column{{ field.1 }}">{{ field.0 }}</th>
-                    {% endfor %}
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for document in data %}
-                        <tr>
-                            <td><input type="checkbox" id="select-row-{{ document.document_number }}" /></td>
-                            {% for field in document %}
-                                <td>{{ field|safe }}</td>
-                            {% endfor %}
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            {% include 'documents/custom/list_table.html' %}
         </div>
+        
         <div class="span2" id="sidebar">
             <form action="{% url 'document_filter' %}"
                   method="get"

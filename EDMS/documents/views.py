@@ -65,11 +65,21 @@ class DocumentList(ListView, JSONResponseMixin):
     queryset = Document.objects.all()[:20]
 
     def get_context_data(self, **kwargs):
+        user = self.request.user
+        if user.is_authenticated():
+            favorites = Favorite.objects.filter(user=user)\
+                                        .values_list('id', 'document')
+            document2favorite = dict((v, k) for k, v in favorites)
+        else:
+            document2favorite = {}
+
         context = super(DocumentList, self).get_context_data(**kwargs)
         context.update({
             'download_form': DocumentDownloadForm(),
             'form': DocumentFilterForm(),
             'documents_active': True,
+            'document2favorite': document2favorite
+
         })
         context.update(self.build_context(context))
         return context

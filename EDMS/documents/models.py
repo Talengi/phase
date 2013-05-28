@@ -231,13 +231,13 @@ class Document(models.Model):
             #(Name               Column Name                Value)
             (u'Document Number', u'document_number',        self.document_number),
             (u'Title',           u'title',                  self.title),
-            (u'Status',          u'status',                 self.status),
-            (u'Rev.',            u'current_revision',       self.current_revision),
             (u'Rev. Date',       u'current_revision_date',  self.current_revision_date),
-            (u'Unit',            u'unit',                   self.unit),
-            (u'Disc.',           u'discipline',             self.discipline),
-            (u'Doc. Type',       u'document_type',          self.document_type),
-            (u'Class',           u'klass',                  self.klass),
+            (u'Rev.',            u'current_revision',       self.current_revision),
+            (u'Status',          u'status',                 self.status),
+            #(u'Unit',            u'unit',                   self.unit),
+            #(u'Disc.',           u'discipline',             self.discipline),
+            #(u'Doc. Type',       u'document_type',          self.document_type),
+            #(u'Class',           u'klass',                  self.klass),
         ]
 
     def searchable_fields(self):

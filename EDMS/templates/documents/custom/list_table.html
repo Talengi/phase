@@ -1,0 +1,32 @@
+<table id="documents" class="table table-condensed table-bordered table-hover">
+    <thead id="titles">
+        <tr>
+            <th id="columnselect">Select</th>
+            <th id="columnfavorite">Favorite</th>
+            <th id="columndocument_number">Document Number</th>
+            <th id="columntitle">Title</th>
+            <th id="columncurrent_revision_date">Rev. Date</th>
+            <th id="columncurrent_revision">Rev.</th>
+            <th id="columnstatus">Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for document in document_list %}
+            <tr>
+                <td><input type="checkbox" id="select-row-{{ document.document_number }}" value="{{ document.document_number }}" /></td>
+                <td><i class="
+                    {% if document.pk in document2favorite %}
+                    icon-star
+                    {% else %}
+                    icon-star-empty
+                    {% endif %}
+                    " data-document-id="{{ document.pk }}" data-favorite-id="" title="Add to favorites"></i></td>
+                <td>{{ document.document_number }}</td>
+                <td>{{ document.title }}</td>
+                <td>{{ document.current_revision_date }}</td>
+                <td>{{ document.current_revision }}</td>
+                <td>{{ document.status }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
