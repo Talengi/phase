@@ -12,15 +12,17 @@
         // Draw the datatable
         $this.init = function() {
             $.getJSON(opts.filterUrl, $this.params).then(function (json) {
-                var data = '';
+                var tr, td, data = document.createDocumentFragment();
                 $.each(json['data'], function (key, value) {
-                    data += '<tr>';
+                    tr = document.createElement('tr');
                     $.each(value, function (k, v) {
-                        data += '<td>' + v + '</td>';
+                        td = document.createElement('td');
+                        td.innerHTML = v;
+                        tr.appendChild(td);
                     });
-                    data += '</tr>';
+                    data.appendChild(tr);
                 });
-                $dataHolder.html(data);
+                $dataHolder.get(0).appendChild(data);
             });
         };
 
