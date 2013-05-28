@@ -22,8 +22,9 @@ class DocumentListTest(TestCase):
         to populate table's header.
         """
         c = Client()
-        r = c.get(reverse("document_list"))
-        self.assertEqual(len(r.context['document_list']), 1)
+        with self.assertNumQueries(4):
+            r = c.get(reverse("document_list"))
+        self.assertEqual(len(r.context['document_list']), 20)
 
 
 class DocumentDetailTest(TestCase):
