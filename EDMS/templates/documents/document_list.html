@@ -6,18 +6,20 @@
         <div class="span10">
             <div id="list_actions">
                 <form action="{% url 'document_download' %}">
-                    <button class="btn" id="select_all">Select/deselect all</button>
+                    <input type="checkbox" id="select-all" />
+                    <label for="select-all">Select/deselect</label>
                     <ul>
-                        <li>{{ download_form.document_numbers }}</li>
+                        <li><select name="document_numbers" id="id_document_numbers" multiple="multiple"></select></li>
                         <li>{{ download_form.format }}</li>
                         <li>{{ download_form.revisions }}</li>
                     </ul>
                     <input type="submit" value="Download" class="btn" />
                 </form>
             </div>
-            <table id="documents" class="span10 table table-striped table-condensed table-bordered table-hover">
+            <table id="documents" class="span10 table table-condensed table-bordered table-hover">
                 <thead id="titles">
                     <tr>
+                        <th>Select</th>
                     {% for field in document_list.0.display_fields %}
                         <th id="column{{ field.1 }}">{{ field.0 }}</th>
                     {% endfor %}
@@ -26,6 +28,7 @@
                 <tbody>
                     {% for document in data %}
                         <tr>
+                            <td><input type="checkbox" id="select-row-{{ document.document_number }}" /></td>
                             {% for field in document %}
                                 <td>{{ field|safe }}</td>
                             {% endfor %}
@@ -95,80 +98,22 @@
 
         /* select documents */
 
-        // List object that contains ids of selected documents
-        DocumentSelection = {
-            data: [],
-            add: function(id) {
-                if(this.data.indexOf(id) == -1) {
-                    this.data.push(id);
-                }
-            },
-            remove: function(id) {
-                this.data.splice(this.data.indexOf(id), 1);
-            },
-            clear: function() {
-                this.data = [];
-            }
-        };
-
-        // List object that contains DOM rows of selected documents
-        TableSelection = {
-            data: [],
-            idFromRow: function(row) {
-                return $(row).find('td:nth-child(1)').text().trim();
-            },
-            add: function(row) {
-                if(this.data.indexOf(row) == -1) {
-                    this.data.push(row);
-                }
-                $(row).addClass('row_selected');
-                $('#id_document_numbers option[value="'+this.idFromRow(row)+'"]')
-                    .attr('selected', "selected");
-                return DocumentSelection.add(this.idFromRow(row));
-            },
-            remove: function(row) {
-                $(row).removeClass('row_selected');
-                $('#id_document_numbers option[value="'+this.idFromRow(row)+'"]')
-                    .attr('selected', null);
-                DocumentSelection.remove(this.idFromRow(row));
-                if(this.data.indexOf(row) != -1) {
-                    this.data.splice(this.data.indexOf(row), 1);
-                }
-            },
-            toggle: function(row) {
-                this.data.indexOf(row) != -1
-                    ? this.remove(row)
-                    : this.add(row);
-            },
-            clear: function() {
-                $(this.data[0]).parent().find('.row_selected').removeClass('row_selected');
-                $('#id_document_numbers option').attr('selected', null);
-                DocumentSelection.clear();
-                this.data = [];
-            }
-        };
-
         // select rows
-        $("#documents tbody").on('click', 'tr', function(e) {
-            if(!$(e.target).is('a,i')) {
-                TableSelection.toggle(this);
-            }
+        var $row;
+        $("#documents tbody td [id^=select-row-]").on('change', function(e) {
+            $row = $(this).closest('tr')
+            $(this).is(':checked')
+                ? $row.addClass('selected')
+                : $row.removeClass('selected');
         });
 
         // select/deselect all rows
-        $('#select_all').click(function(e) {
-            var checked = TableSelection.data.length > 0;
-            $("#documents tbody tr").each(function(i, e) {
-                checked
-                    ? TableSelection.remove(e)
-                    : TableSelection.add(e)
-            });
-            e.preventDefault();
-        });
-
-        // paginating resets rows selection
-        $('.dataTables_paginate').click(function(e) {
-            TableSelection.clear();
+        var isSelected, checkbox;
+        $('#select-all').on('change', function(e) {
+            selected = $(this).is(':checked');
+            checkbox = $("#documents tbody td [id^=select-row-]");
+            checkbox.prop('checked', selected);
+            checkbox.trigger('change');
         });
 
         // hide export documents list

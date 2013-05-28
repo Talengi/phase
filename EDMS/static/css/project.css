@@ -18,6 +18,9 @@ body {
 }
 
 /* Table rendering */
+tr.selected {
+    background-color: #f0f0f0;
+}
 td.row-title, .table th {
     text-align: center;
 }
