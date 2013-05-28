@@ -29,6 +29,7 @@ Steps to initialize the project on a local machine::
     $ virtualenv venv
     $ source venv/bin/activate
     $ pip install -r repository/requirements/local.txt
+    $ npm -g install yuglify
     $ cd repository
     $ python EDMS/manage.py syncdb --noinput --settings=EDMS.settings.local
     $ fab runserver
@@ -79,9 +80,9 @@ Colophon
 
 * Django: https://www.djangoproject.com/
 * Bootstrap: http://twitter.github.io/bootstrap/
-* DataTables: http://www.datatables.net/
 * Two Scoops of Django template: https://django.2scoops.org/
 * Sphinx: http://sphinx-doc.org/
 * Datepicker for Bootstrap: http://www.eyecon.ro/bootstrap-datepicker/
 * File upload for Bootstrap: http://jasny.github.io/bootstrap/javascript.html#fileupload
 * jQuery UI MultiSelect Widget: http://www.erichynds.com/blog/jquery-ui-multiselect-widget
+* yuglify: https://github.com/yui/yuglify/
