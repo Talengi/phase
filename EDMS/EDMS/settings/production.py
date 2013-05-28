@@ -84,3 +84,6 @@ DATABASES = {
     }
 }
 
+########## PIPELINE CONFIGURATION
+PIPELINE_YUGLIFY_BINARY = '/nfs/http10/scopyleft/tmp/node-v0.10.8-linux-x64/lib/node_modules/yuglify/bin/yuglify'
+########## END PIPELINE CONFIGURATION
