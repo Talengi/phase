@@ -13,21 +13,58 @@ from documents.models import Document, DocumentRevision, Favorite
 User = auth.get_user_model()
 
 
-class DocumentListTest(TestCase):
+class GenericViewTest(TestCase):
+
+    def setUp(self):
+        self.client = Client()
+
+    def assertGet(self, num_queries, parameters={}, auth=None, status_code=200):
+        if auth:
+            response = self.client.login(**auth)
+            self.assertEqual(response, True)
+        with self.assertNumQueries(num_queries):
+            response = self.client.get(self.url, parameters, follow=True)
+        self.assertEqual(response.status_code, status_code)
+        self.content = response.content
+        self.context = response.context
+
+    def assertPost(self, num_queries, parameters={}, auth=None, status_code=200):
+        if auth:
+            response = self.client.login(**auth)
+            self.assertEqual(response, True)
+        with self.assertNumQueries(num_queries):
+            response = self.client.post(self.url, parameters)
+        self.assertEqual(response.status_code, status_code)
+        self.content = response.content
+        self.context = response.context
+
+    def assertContext(self, key, value):
+        self.assertTrue(key in self.context)
+        self.assertEqual(self.context[key], value)
+
+    def assertContextLength(self, key, length):
+        self.assertTrue(key in self.context)
+        self.assertEqual(len(self.context[key]), length)
+
+    def assertRendering(self, needle):
+        self.assertInHTML(needle, self.content)
+
+    def assertRedirect(self, target):
+        response = self.client.get(self.url, follow=True)
+        self.assertEqual(response.redirect_chain, [(target, 302)])
+
+
+class DocumentListTest(GenericViewTest):
     fixtures = ['initial_data.json']
+    url = reverse("document_list")
 
     def test_document_number(self):
-        """
-        Tests that a document list view returns only one document
-        to populate table's header.
-        """
-        c = Client()
-        with self.assertNumQueries(4):
-            r = c.get(reverse("document_list"))
-        self.assertEqual(len(r.context['document_list']), 20)
+        self.assertGet(4)
+        self.assertContext('documents_active', True)
+        self.assertContextLength('document_list', 20)
 
 
-class DocumentDetailTest(TestCase):
+class DocumentDetailTest(GenericViewTest):
 
     def test_document_number(self):
         """
@@ -46,17 +83,18 @@ class DocumentDetailTest(TestCase):
             revision=u"03",
             revision_date='2012-04-20',
         )
-        c = Client()
-        r = c.get(reverse("document_detail", args=[document.document_number]))
+        self.url = reverse("document_detail", args=[document.document_number])
+        self.assertGet(6)
+        self.assertContext('document', document)
         self.assertEqual(
-            repr(r.context['document']),
-            '<Document: FAC09001-FWF-000-HSE-REP-0004>'
+            self.context['document'].document_number,
+            u'FAC09001-FWF-000-HSE-REP-0004'
         )
-        self.assertEqual(len(r.context['form'].fields.keys()), 49)
+        self.assertEqual(len(self.context['form'].fields.keys()), 49)
 
     def test_document_related_documents(self):
-        c = Client()
-        documents = [Document.objects.create(
+        documents = [
+            Document.objects.create(
                 title=u'HAZOP related 1',
                 current_revision_date='2012-04-20',
                 sequencial_number="0004",
@@ -82,11 +120,14 @@ class DocumentDetailTest(TestCase):
             current_revision=u"03",
         )
         document.related_documents = documents
-        r = c.get(reverse("document_detail", args=[document.document_number]))
-        self.assertContains(r, '<li><a href="/detail/{0}/">{0} - HAZOP related 1</a></li>'
+        self.url = reverse("document_detail", args=[document.document_number])
+        self.assertGet(7)
+        self.assertRendering(
+            '<li><a href="/detail/{0}/">{0} - HAZOP related 1</a></li>'
             .format(documents[0].document_number)
         )
-        self.assertContains(r, '<li><a href="/detail/{0}/">{0} - HAZOP related 2</a></li>'
+        self.assertRendering(
+            '<li><a href="/detail/{0}/">{0} - HAZOP related 2</a></li>'
             .format(documents[1].document_number)
         )
 
@@ -682,7 +723,8 @@ class DocumentDownloadTest(TestCase):
         os.remove(media_path+file_name+'.pdf')
 
 
-class FavoriteTest(TestCase):
+class FavoriteTest(GenericViewTest):
+    url = reverse("favorite_list")
 
     def test_favorite_list(self):
         """
@@ -695,21 +737,15 @@ class FavoriteTest(TestCase):
         )
 
         # Anonymous user
-        c = Client()
-        r = c.get(reverse("favorite_list"), follow=True)
-        self.assertEqual(
-            r.redirect_chain,
-            [('http://testserver{url}?next=/favorites/'.format(
-                url=reverse('document_list')
-            ), 302)]
+        self.assertRedirect(
+            'http://testserver{url}?next=/favorites/'.format(
+                url=reverse('document_list'))
         )
 
         # Logged in user
-        c = Client()
-        r = c.login(username='david', password='password')
-        self.assertEqual(r, True)
-        r = c.get(reverse("favorite_list"))
-        self.assertTrue('You do not have any favorite document.' in r.content)
+        auth = {'username': 'david', 'password': 'password'}
+        self.assertGet(4, auth=auth)
+        self.assertRendering('<p>You do not have any favorite document.</p>')
 
     def test_favorite_privacy(self):
         """
@@ -739,16 +775,14 @@ class FavoriteTest(TestCase):
         )
 
         # Right user
-        c = Client()
-        r = c.login(username='david', password='password')
-        r = c.get(reverse("favorite_list"))
-        self.assertTrue(favorite.document.document_number in r.content)
+        auth = {'username': 'david', 'password': 'password'}
+        self.assertGet(5, auth=auth)
+        self.assertRendering('<td>%s</td>' % favorite.document.title)
 
         # Wrong user
-        c = Client()
-        r = c.login(username='matthieu', password='password')
-        r = c.get(reverse("favorite_list"))
-        self.assertTrue('You do not have any favorite document.' in r.content)
+        auth = {'username': 'matthieu', 'password': 'password'}
+        self.assertGet(4, auth=auth)
+        self.assertRendering('<p>You do not have any favorite document.</p>')
 
     def test_favorite_creation(self):
         """
@@ -767,13 +801,13 @@ class FavoriteTest(TestCase):
             document_type="REP",
             current_revision=u"03",
         )
-        c = Client()
-        r = c.post(reverse("favorite_create"), {
+        self.url = reverse("favorite_create")
+        self.assertPost(5, {
             'document': document.id,
             'user': user.id,
         })
-        self.assertEqual(r.status_code, 200)
-        self.assertEqual(r.content, '1')  # First favorite created
+        # First favorite created
+        self.assertEqual(self.content, '1')
         self.assertEqual(Favorite.objects.all().count(), 1)
 
     def test_favorite_deletion(self):
@@ -797,7 +831,6 @@ class FavoriteTest(TestCase):
             document=document,
             user=user
         )
-        c = Client()
-        r = c.post(reverse("favorite_delete", args=[favorite.pk]))
-        self.assertEqual(r.status_code, 302)
+        self.url = reverse("favorite_delete", args=[favorite.pk])
+        self.assertPost(2, status_code=302)
         self.assertEqual(Favorite.objects.all().count(), 0)
