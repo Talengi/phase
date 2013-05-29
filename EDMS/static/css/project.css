@@ -127,7 +127,13 @@ button.ui-multiselect {
     text-align: right;
 }
 #select_all {
-    margin: 0 100px 0 0;
+    display: inline-block;
+    vertical-align: middle;
+}
+label[for="select-all"] {
+    vertical-align: middle;
+    display: inline-block;
+    margin: 5px 0 0;
 }
 #documents th, #documents td {
     vertical-align: middle;
