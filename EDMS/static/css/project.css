@@ -92,7 +92,7 @@ button.ui-multiselect {
 #documents th, #documents td {
     text-align: center;
 }
-#documents tbody td {
+#documents tbody td:not(.select):not(.favorite), #documents tbody td.favorite i {
     font-size: 11px;
     cursor: pointer;
 }

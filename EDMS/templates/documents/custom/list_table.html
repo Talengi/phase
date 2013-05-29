@@ -14,7 +14,7 @@
     </thead>
     <tbody>
         {% for document in document_list %}
-            <tr data-document-id="{{ document.document_id }}" data-document-number="{{ document.document_number }}">
+            <tr data-document-id="{{ document.pk }}" data-document-number="{{ document.document_number }}">
                 <td class="select"><input type="checkbox" /></td>
                 <td class="favorite">
                 {% if document.pk in document2favorite %}

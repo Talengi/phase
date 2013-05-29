@@ -61,16 +61,8 @@ jQuery(function($) {
             : $row.removeClass('selected');
     });
 
-    // expand row selection to the entire checkbox cell
-    var selected, checkbox;
-    $("#documents tbody").on('click', 'td.select', function(e) {
-        checkbox = $(this).children();
-        selected = checkbox.is(':checked');
-        checkbox.prop('checked', !selected);
-        checkbox.trigger('change');
-    });
-
     // select/deselect all rows
+    var selected, checkbox;
     $('#select-all').on('change', function(e) {
         selected = $(this).is(':checked');
         checkbox = $("#documents tbody input[type=checkbox]");
