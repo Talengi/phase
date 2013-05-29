@@ -6,6 +6,12 @@ body {
     margin-left: 15px;
 }
 
+/* Download actions */
+#list_actions #id_document_numbers {
+    display: none;
+}
+
+
 /* Form rendering */
 .form-horizontal label {
     text-align: right;

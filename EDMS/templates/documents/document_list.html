@@ -37,70 +37,12 @@
     <script src="{{ STATIC_URL }}js/jquery.datatable.js"></script>
     <script src="{{ STATIC_URL }}js/jquery.favbystar.js"></script>
     <script>
-    $(document).ready(function() {
-        /* Dealing with addition/removal of favorites */
-        $('#documents').on('click', 'i', function(e) {
-            $(this).favbystar({
-                userId: {{ request.user.id }},
-                csrfToken: "{{ csrf_token }}",
-                createUrl: '{% url "favorite_create" %}',
-                deleteUrl: '{% url "favorite_delete" "0" %}'
-            });
-        });
-
-        /* Initializing the datatable */
-        var datatable = $('#documents').datatable({
-            filterUrl: "{% url "document_filter" %}",
-        });
-
-        /* Filter datatable's results given selected form's filters */
-        var serializeTable = function(evt) {
-            datatable.update($('#table_filter').serializeArray());
-            $(this).siblings('i').css('display', 'inline-block');
-            evt.preventDefault();
-        };
-
-        $("#table_filter select").on('change', serializeTable);
-        $("#table_filter input").on('keyup', serializeTable);
-        $("#table_filter i").on('click', function(evt) {
-            $(this).siblings('select,input:text').val('');
-            serializeTable(evt);
-            $(this).hide();
-        });
-
-        /* Reseting the filtering form and thus the table's results */
-        $('#resetForm').on('click', function(evt) {
-            $('#table_filter').find('input:text, select').val('');
-            $('#filters').find('select').val('');
-            serializeTable(evt);
-            $("#table_filter i").each(function(evt) {
-                $(this).hide();
-            });
-        });
-
-        /* select documents */
-
-        // select rows
-        var $row;
-        $("#documents tbody td [id^=select-row-]").on('change', function(e) {
-            $row = $(this).closest('tr')
-            $(this).is(':checked')
-                ? $row.addClass('selected')
-                : $row.removeClass('selected');
-        });
-
-        // select/deselect all rows
-        var isSelected, checkbox;
-        $('#select-all').on('change', function(e) {
-            selected = $(this).is(':checked');
-            checkbox = $("#documents tbody td [id^=select-row-]");
-            checkbox.prop('checked', selected);
-            checkbox.trigger('change');
-        });
-
-        // hide export documents list
-        $('#id_document_numbers').parent().hide();
-
-    });
+    var config = {
+        userId: {{ request.user.id }},
+        csrfToken: "{{ csrf_token }}",
+        createUrl: "{% url "favorite_create" %}",
+        deleteUrl: "{% url "favorite_delete" "0" %}",
+        filterUrl: "{% url "document_filter" %}"
+    };
     </script>
 {% endblock extra_js %}
