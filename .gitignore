@@ -25,3 +25,4 @@ EDMS/media/*
 
 # Django assets
 EDMS/assets/*
+!EDMS/assets/.htaccess
