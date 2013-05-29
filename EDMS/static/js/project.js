@@ -11,7 +11,7 @@ jQuery(function($) {
     ///* document list *///
 
     /* Dealing with addition/removal of favorites */
-    $('#documents .favorite').on('click', function(e) {
+    $('#documents tbody').on('click', '.favorite', function(e) {
         $(this).children().favbystar({
             userId: config.userId,
             csrfToken: config.csrfToken,
@@ -54,7 +54,7 @@ jQuery(function($) {
 
     // select rows
     var $row;
-    $("#documents tbody input[type=checkbox]").on('change', function(e) {
+    $("#documents tbody").on('change', 'input[type=checkbox]', function(e) {
         $row = $(this).closest('tr');
         $(this).is(':checked')
             ? $row.addClass('selected')
@@ -63,7 +63,7 @@ jQuery(function($) {
 
     // expand row selection to the entire checkbox cell
     var selected, checkbox;
-    $("#documents td.select").on('click', function(e) {
+    $("#documents tbody").on('click', 'td.select', function(e) {
         checkbox = $(this).children();
         selected = checkbox.is(':checked');
         checkbox.prop('checked', !selected);
@@ -80,7 +80,7 @@ jQuery(function($) {
 
     /* browse documents if you click on table cells */
 
-    $("#documents tbody td:not(select):not(favorite)").on('click', function(e) {
+    $("#documents tbody").on('click', 'td:not(.select):not(.favorite)', function(e) {
         window.location = config.detailUrl.replace(
             'documentNumber',
             $(this).parent().data('document-number')
