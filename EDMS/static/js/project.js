@@ -11,8 +11,8 @@ jQuery(function($) {
     ///* document list *///
 
     /* Dealing with addition/removal of favorites */
-    $('#documents').on('click', 'i', function(e) {
-        $(this).favbystar({
+    $('#documents .favorite').on('click', function(e) {
+        $(this).children().favbystar({
             userId: config.userId,
             csrfToken: config.csrfToken,
             createUrl: config.createUrl,
@@ -22,7 +22,7 @@ jQuery(function($) {
 
     /* Initializing the datatable */
     var datatable = $('#documents').datatable({
-        filterUrl: config.filterUrl,
+        filterUrl: config.filterUrl
     });
 
     /* Filter datatable's results given selected form's filters */
@@ -54,19 +54,37 @@ jQuery(function($) {
 
     // select rows
     var $row;
-    $("#documents tbody td [id^=select-row-]").on('change', function(e) {
-        $row = $(this).closest('tr')
+    $("#documents tbody input[type=checkbox]").on('change', function(e) {
+        $row = $(this).closest('tr');
         $(this).is(':checked')
             ? $row.addClass('selected')
             : $row.removeClass('selected');
     });
 
+    // expand row selection to the entire checkbox cell
+    var selected, checkbox;
+    $("#documents td.select").on('click', function(e) {
+        checkbox = $(this).children();
+        selected = checkbox.is(':checked');
+        checkbox.prop('checked', !selected);
+        checkbox.trigger('change');
+    });
+
     // select/deselect all rows
-    var isSelected, checkbox;
     $('#select-all').on('change', function(e) {
         selected = $(this).is(':checked');
-        checkbox = $("#documents tbody td [id^=select-row-]");
+        checkbox = $("#documents tbody input[type=checkbox]");
         checkbox.prop('checked', selected);
         checkbox.trigger('change');
     });
+
+    /* browse documents if you click on table cells */
+
+    $("#documents tbody td:not(select):not(favorite)").on('click', function(e) {
+        window.location = config.detailUrl.replace(
+            'documentNumber',
+            $(this).parent().data('document-number')
+        );
+    });
+
 });

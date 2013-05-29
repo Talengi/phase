@@ -7,7 +7,7 @@ body {
 }
 
 /* Download actions */
-#list_actions #id_document_numbers {
+#list_actions #id_ids {
     display: none;
 }
 

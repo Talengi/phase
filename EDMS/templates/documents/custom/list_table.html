@@ -1,8 +1,10 @@
+{% load getattribute %}
+
 <table id="documents" class="table table-condensed table-bordered table-hover">
     <thead id="titles">
         <tr>
-            <th id="columnselect">Select</th>
-            <th id="columnfavorite">Favorite</th>
+            <th id="columnselect">Sel.</th>
+            <th id="columnfavorite">Fav.</th>
             <th id="columndocument_number">Document Number</th>
             <th id="columntitle">Title</th>
             <th id="columncurrent_revision_date">Rev. Date</th>
@@ -12,15 +14,15 @@
     </thead>
     <tbody>
         {% for document in document_list %}
-            <tr>
-                <td><input type="checkbox" id="select-row-{{ document.document_number }}" value="{{ document.document_number }}" /></td>
-                <td><i class="
-                    {% if document.pk in document2favorite %}
-                    icon-star
-                    {% else %}
-                    icon-star-empty
-                    {% endif %}
-                    " data-document-id="{{ document.pk }}" data-favorite-id="" title="Add to favorites"></i></td>
+            <tr data-document-id="{{ document.document_id }}" data-document-number="{{ document.document_number }}">
+                <td class="select"><input type="checkbox" /></td>
+                <td class="favorite">
+                {% if document.pk in document2favorite %}
+                    <i class="icon-star" data-favorite-id="{{ document2favorite|getattribute:document.pk }}" title="Remove from favorites"></i>
+                {% else %}
+                    <i class="icon-star-empty" data-favorite-id="" title="Add to favorites"></i>
+                {% endif %}
+                </td>
                 <td>{{ document.document_number }}</td>
                 <td>{{ document.title }}</td>
                 <td>{{ document.current_revision_date }}</td>

@@ -9,7 +9,7 @@
                     <input type="checkbox" id="select-all" />
                     <label for="select-all">Select/deselect</label>
                     <ul>
-                        <li><select name="document_numbers" id="id_document_numbers" multiple="multiple"></select></li>
+                        <li><select name="ids" id="id_ids" multiple="multiple"></select></li>
                         <li>{{ download_form.format }}</li>
                         <li>{{ download_form.revisions }}</li>
                     </ul>
@@ -42,7 +42,8 @@
         csrfToken: "{{ csrf_token }}",
         createUrl: "{% url "favorite_create" %}",
         deleteUrl: "{% url "favorite_delete" "0" %}",
-        filterUrl: "{% url "document_filter" %}"
+        filterUrl: "{% url "document_filter" %}",
+        detailUrl: "{% url "document_detail" "documentNumber" %}"
     };
     </script>
 {% endblock extra_js %}

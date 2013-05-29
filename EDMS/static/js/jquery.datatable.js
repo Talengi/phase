@@ -14,9 +14,9 @@
             $.getJSON(opts.filterUrl, $this.params).then(function (json) {
                 var template  = ["",
                     "{{#rows}}",
-                    "<tr>",
-                    '  <td><input type="checkbox" id="select-row-{{document_number}}" value="{{document_number}}" /></td>',
-                    '  <td><i class="{{../icon}}" data-document-id="{{document_id}}" data-favorite-id="{{favorite_id}}" title="{{../icon_title}}"></i></td>',
+                    '<tr data-document-id="{{document_id}}" data-document-number="{{document_number}}">',
+                    '  <td class="select"><input type="checkbox" /></td>',
+                    '  <td class="favorite"><i class="{{../icon}}" data-favorite-id="{{favorite_id}}" title="{{../icon_title}}"></i></td>',
                     "  <td>{{document_number}}</td>",
                     "  <td>{{title}}</td>",
                     "  <td>{{current_revision_date}}</td>",

@@ -62,7 +62,7 @@ class JSONResponseMixin(object):
 
 
 class DocumentList(ListView, JSONResponseMixin):
-    queryset = Document.objects.all()[:20]
+    queryset = Document.objects.all()[:50]
 
     def get_context_data(self, **kwargs):
         user = self.request.user

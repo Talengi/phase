@@ -225,7 +225,7 @@ class DocumentDownloadForm(forms.Form):
     """A dummy form to check the validity of GET parameters for downloads."""
     document_numbers = forms.ModelMultipleChoiceField(
         queryset=Document.objects.all(),
-        to_field_name='document_number'
+        to_field_name='id'
     )
     format = forms.ChoiceField(
         choices=(

@@ -5,7 +5,7 @@
 
         var opts = $.extend({}, options),
             self = $(this),
-            documentId = self.data('document-id'),
+            documentId = self.closest('tr').data('document-id'),
             favoriteId = self.data('favorite-id');
         if (self.hasClass('icon-star')) {
             $.ajax({
@@ -19,7 +19,7 @@
                         .addClass("icon-star-empty")
                         .attr('title', "Add to favorites");
                 },
-                success: function( favoriteId ) {
+                success: function() {
                     self.data('favorite-id', '');
                 }
             });
@@ -32,13 +32,13 @@
                     'document': documentId,
                     csrfmiddlewaretoken: opts.csrfToken
                 },
-                beforeSend: function( favoriteId ) {
+                beforeSend: function() {
                     self.removeClass("icon-star-empty")
                         .addClass("icon-star")
                         .attr('title', "Remove from favorites");
                 },
-                success: function( favoriteId ) {
-                    self.data('favorite-id', favoriteId);
+                success: function(data) {
+                    self.data('favorite-id', data);
                 }
             });
         }
