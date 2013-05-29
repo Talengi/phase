@@ -261,22 +261,16 @@ class Document(models.Model):
         The first element of the list is the linkified document number.
         """
         favorited = self.pk in document2favorite.keys()
-        remove_title = 'Remove from favorites'
-        add_title = 'Add to favorites'
-        document_link = (
-            '<i class="{icon}" data-document-id="{document_id}" '
-            'data-favorite-id="{favorite_id}" title="{icon_title}"></i> '
-            '<a href="{url}" class="docnumber">{number}</a>'
-        ).format(
-            url=self.get_absolute_url(),
-            number=self.document_number,
-            document_id=self.pk,
-            favorite_id=document2favorite.get(self.pk, ''),
-            icon=favorited and 'icon-star' or 'icon-star-empty',
-            icon_title=favorited and remove_title or add_title,
-        )
-        return [document_link] \
-            + [unicode(field[2]) for field in self.display_fields()[1:]]
+        fields_infos = dict((field[1], unicode(field[2]))
+                            for field in self.display_fields())
+        fields_infos.update({
+            'url': self.get_absolute_url(),
+            'number': self.document_number,
+            'document_id': self.pk,
+            'favorite_id': document2favorite.get(self.pk, ''),
+            'favorited': favorited,
+        })
+        return fields_infos
 
     def latest_revision(self):
         """Returns the latest revision related to this document."""

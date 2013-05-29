@@ -276,5 +276,14 @@ PIPELINE_JS = {
         ),
         'output_filename': 'js/base.js',
     },
+    'datatable': {
+        'source_filenames': (
+            'js/templayed.js',
+            # must be loaded after templayed js
+            'js/jquery.datatable.js',
+            'js/jquery.favbystar.js',
+        ),
+        'output_filename': 'js/datatable.js',
+    },
 }
 ########## END PIPELINE CONFIGURATION
