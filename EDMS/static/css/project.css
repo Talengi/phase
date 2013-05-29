@@ -46,17 +46,11 @@ td.row-title {
 /* Sidebar */
 #sidebar {
     background: #F9F9F9;
-    margin-left: 10px;
-    padding-left: 18px; /* deal with borders: 18=20-1px*2 */
+    margin-left: 1%;
+    padding: 0 .5%; /* deal with borders: 18=20-1px*2 */
     border: 1px solid #E5E5E5;
     border-top: none;
     border-radius: 4px 4px 4px 4px;
-}
-#sidebar select {
-    width: 150px;
-}
-#sidebar input {
-    width: 135px;
 }
 #resetForm {
     margin: 0 0 5px 35px;
@@ -155,8 +149,29 @@ button.ui-multiselect {
 #list_actions input[type="submit"], #list_actions button {
     vertical-align: top;
 }
+
+#sidebar legend {
+    width: auto;
+}
+
 #table_filter .control-group {
-    margin-bottom: 4px;
+    margin-bottom: 10px;
+}
+#table_filter .controls {
+    vertical-align: middle;
+}
+#table_filter .control-group .controls > select,
+#table_filter .control-group .controls > input {
+    display: table-cell;
+    width: 90%;
+    margin-bottom: 0;
+}
+#table_filter .control-group .controls > input {
+    width: 80%; /* bottstrap enlarges input with margin and padding */
+}
+#table_filter .control-group .controls > i {
+    display: table-cell;
+    width: 10%;
 }
 #table_filter label {
     margin-bottom: 2px;
