@@ -206,3 +206,14 @@ button.ui-multiselect {
     top: 60%;
     width: 300px;
 }
+
+
+/* document details */
+#document-edit input[type="text"],
+#document-edit select,
+#document-edit textarea,
+#document-detail input[type="text"],
+#document-detail select,
+#document-detail textarea {
+    width: 80%;
+}

@@ -3,7 +3,7 @@
     <div class="controls controls-row">
         <div class="control-group {% if form.errors.current_revision %}error{% endif %}">
             <label class="control-label span4" for="{{ form.current_revision.auto_id }}">{{ form.current_revision.label }}</label>
-            <div class="controls span4">
+            <div class="controls span6">
                 {{ form.current_revision }}
             </div>
             {% if form.errors.current_revision %}<span class="help-inline">{{ form.errors.current_revision.0 }}</span>{% endif %}
@@ -12,7 +12,7 @@
     <div class="controls controls-row">
         <div class="control-group {% if form.errors.current_revision_date %}error{% endif %}">
             <label class="control-label span4" for="{{ form.current_revision_date.auto_id }}">{{ form.current_revision_date.label }}</label>
-            <div class="controls span4 input-append date {% if form.errors.current_revision_date %}error{% endif %}">
+            <div class="controls span6 input-append date {% if form.errors.current_revision_date %}error{% endif %}">
                 {{ form.current_revision_date }}
                 <span class="add-on"><i class="icon-calendar"></i></span>
             </div>
@@ -22,7 +22,7 @@
     <div class="controls controls-row">
         <div class="control-group {% if form.errors.status %}error{% endif %}">
             <label class="control-label span4" for="{{ form.status.auto_id }}">{{ form.status.label }}</label>
-            <div class="controls span4">
+            <div class="controls span6">
                 {{ form.status }}
             </div>
             {% if form.errors.status %}<span class="help-inline">{{ form.errors.status.0 }}</span>{% endif %}
@@ -32,7 +32,7 @@
         <div class="controls controls-row">
             <div class="control-group">
                 <label class="control-label span4">Created on</label>
-                <div class="controls span4 input-append date">
+                <div class="controls span6 input-append date">
                     <input class="datepicker span2" data-date-format="yyyy-mm-dd" id="id_created_on" name="created_on" type="text" value="{{ document.created_on|date:"Y-m-d" }}" />
                     <span class="add-on"><i class="icon-calendar"></i></span>
                 </div>
