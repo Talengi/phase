@@ -25,7 +25,7 @@
                 </td>
                 <td>{{ document.document_number }}</td>
                 <td>{{ document.title }}</td>
-                <td>{{ document.current_revision_date }}</td>
+                <td>{{ document.current_revision_date|date:"Y-m-d" }}</td>
                 <td>{{ document.current_revision }}</td>
                 <td>{{ document.status }}</td>
             </tr>
