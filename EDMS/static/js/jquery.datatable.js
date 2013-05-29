@@ -10,19 +10,31 @@
         $this.params = {};
 
         // Draw the datatable
-        $this.init = function() {
+        $this.draw = function() {
             $.getJSON(opts.filterUrl, $this.params).then(function (json) {
-                var tr, td, data = document.createDocumentFragment();
-                $.each(json['data'], function (key, value) {
-                    tr = document.createElement('tr');
-                    $.each(value, function (k, v) {
-                        td = document.createElement('td');
-                        td.innerHTML = v;
-                        tr.appendChild(td);
-                    });
-                    data.appendChild(tr);
-                });
-                $dataHolder.get(0).appendChild(data);
+                var template  = ["",
+                    "{{#rows}}",
+                    "<tr>",
+                    '  <td><input type="checkbox" id="select-row-{{document_number}}" value="{{document_number}}" /></td>',
+                    '  <td><i class="{{../icon}}" data-document-id="{{document_id}}" data-favorite-id="{{favorite_id}}" title="{{../icon_title}}"></i></td>',
+                    "  <td>{{document_number}}</td>",
+                    "  <td>{{title}}</td>",
+                    "  <td>{{current_revision_date}}</td>",
+                    "  <td>{{current_revision}}</td>",
+                    "  <td>{{status}}</td>",
+                    "</tr>",
+                    "{{/rows}}"
+                ].join("");
+                var variables = {
+                    rows: json['data'],
+                    icon: function() {
+                        return this.favorited ? 'icon-star': 'icon-star-empty';
+                    },
+                    icon_title: function() {
+                        return this.favorited ? 'Remove from favorites': 'Add to favorites';
+                    }
+                };
+                $dataHolder.get(0).innerHTML = templayed(template)(variables);
             });
         };
 
@@ -32,7 +44,7 @@
         $this.update = function(nameValues) {
             $this.params = nameValues;
             $dataHolder.html('');
-            $this.init();
+            $this.draw();
         };
 
         return $this;

@@ -16,9 +16,9 @@
                     <input type="submit" value="Download" class="btn" />
                 </form>
             </div>
-            {% include 'documents/custom/list_table.html' %}
+            {% include "documents/custom/list_table.html" %}
         </div>
-        
+
         <div class="span2" id="sidebar">
             <form action="{% url 'document_filter' %}"
                   method="get"
@@ -34,8 +34,8 @@
 {% endblock %}
 
 {% block extra_js %}
-    <script src="{{ STATIC_URL }}js/jquery.datatable.js"></script>
-    <script src="{{ STATIC_URL }}js/jquery.favbystar.js"></script>
+    {% compressed_js "datatable" %}
+
     <script>
     var config = {
         userId: {{ request.user.id }},
