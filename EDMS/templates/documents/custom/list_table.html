@@ -3,8 +3,8 @@
 <table id="documents" class="table table-condensed table-bordered table-hover">
     <thead id="titles">
         <tr>
-            <th id="columnselect">Sel.</th>
-            <th id="columnfavorite">Fav.</th>
+            <th id="columnselect"></th>
+            <th id="columnfavorite"></th>
             <th id="columndocument_number">Document Number</th>
             <th id="columntitle">Title</th>
             <th id="columncurrent_revision_date">Rev. Date</th>
@@ -15,8 +15,8 @@
     <tbody>
         {% for document in document_list %}
             <tr data-document-id="{{ document.pk }}" data-document-number="{{ document.document_number }}">
-                <td class="select"><input type="checkbox" /></td>
-                <td class="favorite">
+                <td class="columnselect"><input type="checkbox" /></td>
+                <td class="columnfavorite">
                 {% if document.pk in document2favorite %}
                     <i class="icon-star" data-favorite-id="{{ document2favorite|getattribute:document.pk }}" title="Remove from favorites"></i>
                 {% else %}
@@ -24,7 +24,7 @@
                 {% endif %}
                 </td>
                 <td>{{ document.document_number }}</td>
-                <td>{{ document.title }}</td>
+                <td class="columntitle">{{ document.title }}</td>
                 <td>{{ document.current_revision_date|date:"Y-m-d" }}</td>
                 <td>{{ document.current_revision }}</td>
                 <td>{{ document.status }}</td>

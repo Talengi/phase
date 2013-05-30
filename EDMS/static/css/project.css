@@ -92,29 +92,36 @@ button.ui-multiselect {
 #documents th, #documents td {
     text-align: center;
 }
-#documents tbody td:not(.select):not(.favorite), #documents tbody td.favorite i {
+#documents td.columntitle {
+    text-align: left;
+}
+#documents tbody td:not(.columnselect):not(.columnfavorite),
+#documents tbody td.favorite i {
     font-size: 11px;
     cursor: pointer;
 }
 
 /* columns width */
 #columnselect {
-    width: 5%;
+    width: 15px;
+}
+#columnfavorite {
+    width: 15px;
 }
 #columndocument_number {
-    width: 25%;
-}
-#columntitle {
-    width: 50%;
+    width: 200px;
 }
 #columncurrent_revision {
-    width: 5%;
+    width: 15px;
 }
 #columncurrent_revision_date {
-    width: 9%;
+    width: 80px;
 }
 #columnstatus {
-    width: 6%;
+    width: 20px;
+}
+#documents .columnselect input[type="checkbox"] {
+    vertical-align: top;
 }
 
 #documents .docnumber {
@@ -195,22 +202,6 @@ label[for="select-all"] {
 #table_filter i {
     margin-top: -2px;
     display: none;
-}
-.dataTables_processing {
-    background-color: white;
-    border: 1px solid #DDDDDD;
-    color: #999999;
-    font-size: 16px;
-    font-weight: bold
-    height: 50px;
-    left: 50%;
-    margin-left: -150px;
-    margin-top: -25px;
-    padding: 25px 0;
-    position: absolute;
-    text-align: center;
-    top: 60%;
-    width: 300px;
 }
 
 

@@ -12,7 +12,7 @@ jQuery(function($) {
 
     /* Dealing with addition/removal of favorites */
     var favoriteDocument = function() {
-        $('#documents tbody').on('click', '.favorite', function(e) {
+        $('#documents tbody').on('click', '.columnfavorite', function(e) {
             $(this).children().favbystar({
                 userId: config.userId,
                 csrfToken: config.csrfToken,
@@ -87,7 +87,7 @@ jQuery(function($) {
     /* browse documents if you click on table cells */
 
     var clickableRow = function () {
-        $("#documents tbody").on('click', 'td:not(.select):not(.favorite)', function(e) {
+        $("#documents tbody").on('click', 'td:not(.columnselect):not(.columnfavorite)', function(e) {
             window.location = config.detailUrl.replace(
                 'documentNumber',
                 $(this).parent().data('document-number')
