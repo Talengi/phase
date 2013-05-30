@@ -19,8 +19,8 @@
                     '  <td class="columnfavorite"><i class="{{../icon}}" data-favorite-id="{{favorite_id}}" title="{{../icon_title}}"></i></td>',
                     "  <td>{{document_number}}</td>",
                     '  <td class="columntitle">{{title}}</td>',
-                    "  <td>{{current_revision_date}}</td>",
                     "  <td>{{current_revision}}</td>",
+                    "  <td>{{current_revision_date}}</td>",
                     "  <td>{{status}}</td>",
                     "</tr>",
                     "{{/rows}}"

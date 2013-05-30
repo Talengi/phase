@@ -7,8 +7,8 @@
             <th id="columnfavorite"></th>
             <th id="columndocument_number">Document Number</th>
             <th id="columntitle">Title</th>
-            <th id="columncurrent_revision_date">Rev. Date</th>
             <th id="columncurrent_revision">Rev.</th>
+            <th id="columncurrent_revision_date">Rev. Date</th>
             <th id="columnstatus">Status</th>
         </tr>
     </thead>
@@ -25,8 +25,8 @@
                 </td>
                 <td>{{ document.document_number }}</td>
                 <td class="columntitle">{{ document.title }}</td>
-                <td>{{ document.current_revision_date|date:"Y-m-d" }}</td>
                 <td>{{ document.current_revision }}</td>
+                <td>{{ document.current_revision_date|date:"Y-m-d" }}</td>
                 <td>{{ document.status }}</td>
             </tr>
         {% endfor %}

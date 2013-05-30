@@ -4,8 +4,8 @@
 {% block content %}
     <div class="row-fluid">
         <div class="span10">
-            <div id="list_actions">
-                <form action="{% url 'document_download' %}">
+            <div id="table-controls">
+                <form action="{% url "document_download" %}">
                     <input type="checkbox" id="select-all" />
                     <label for="select-all">Select/deselect</label>
                     <ul>
@@ -22,7 +22,7 @@
         <div class="span2" id="sidebar">
             <form action="{% url 'document_filter' %}"
                   method="get"
-                  id="table_filter">
+                  id="table-filters">
                 {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
                 {% include "documents/form_filtering.html" %}
             </form>

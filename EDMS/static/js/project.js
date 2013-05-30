@@ -29,12 +29,12 @@ jQuery(function($) {
 
     /* Filter datatable's results given selected form's filters */
     var serializeTable = function(evt) {
-        var parameters = $('#table_filter').serializeArray();
+        var parameters = $('#table-filters').serializeArray();
         datatable.update(parameters);
         /* Update the pagination link */
         // IN PROGRESS
         /*
-        var parametersEncoded = $('#table_filter').serialize();
+        var parametersEncoded = $('#table-filters').serialize();
         var $nextPageLink = $('.pagination a:first');
         console.log($nextPageLink.attr('href'));
         console.log(parametersEncoded);
@@ -44,9 +44,9 @@ jQuery(function($) {
         evt.preventDefault();
     };
 
-    $("#table_filter select").on('change', serializeTable);
-    $("#table_filter input").on('keyup', serializeTable);
-    $("#table_filter i").on('click', function(evt) {
+    $("#table-filters select").on('change', serializeTable);
+    $("#table-filters input").on('keyup', serializeTable);
+    $("#table-filters i").on('click', function(evt) {
         $(this).siblings('select,input:text').val('');
         serializeTable(evt);
         $(this).hide();
@@ -54,10 +54,10 @@ jQuery(function($) {
 
     /* Reseting the filtering form and thus the table's results */
     $('#resetForm').on('click', function(evt) {
-        $('#table_filter').find('input:text, select').val('');
+        $('#table-filters').find('input:text, select').val('');
         $('#filters').find('select').val('');
         serializeTable(evt);
-        $("#table_filter i").each(function(evt) {
+        $("#table-filters i").each(function(evt) {
             $(this).hide();
         });
     });

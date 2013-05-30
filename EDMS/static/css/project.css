@@ -6,11 +6,6 @@ body {
     margin-left: 15px;
 }
 
-/* Download actions */
-#list_actions #id_ids {
-    display: none;
-}
-
 
 /* Form rendering */
 .form-horizontal label {
@@ -84,6 +79,7 @@ button.ui-multiselect {
 /* Datatables custom */
 #documents {
     margin-left: 0;
+    margin-top: 80px;
     margin-bottom: 15px !important;
 }
 #documents thead#titles th {
@@ -149,58 +145,85 @@ label[for="select-all"] {
     text-align: left;
 }
 
-#list_actions {
+/* Table controls */
+#table-controls {
     margin: 10px 0 15px 0;
+    border: 1px solid #E5E5E5;
+    position: fixed;
+    background: #fff;
+    width: 97.7%;
+    border-radius: 4px 4px 4px 4px;
 }
-#list_actions ul {
+#table-controls #id_ids {
+    display: none;
+}
+#table-controls ul {
     display: inline;
 }
-#list_actions li {
+#table-controls li {
     list-style: none;
     display: inline-block;
 }
-#list_actions input[type="submit"], #list_actions button {
+#table-controls input[type="submit"], #table-controls button {
     vertical-align: top;
 }
 
-#sidebar legend {
-    width: auto;
+/* Sidebar */
+#sidebar {
+    background: #F9F9F9;
+    margin-right: 0.5%;
+    margin-top: 80px;
+    right: 0;
+    padding: 0 .5%; /* deal with borders: 18=20-1px*2 */
+    border: 1px solid #E5E5E5;
+    border-radius: 4px 4px 4px 4px;
+    position: fixed;
+    overflow-y: auto;
+    height: 85%;
+    width: 16%;
+}
+#resetForm {
+    margin: 0 0 5px 35px;
 }
 
-#table_filter .control-group {
+/* Table filters */
+#table-filters legend {
+    width: auto;
+}
+#table-filters .control-group {
     margin-bottom: 10px;
 }
-#table_filter .controls {
+#table-filters .controls {
     vertical-align: middle;
 }
-#table_filter .control-group .controls > select,
-#table_filter .control-group .controls > input {
+#table-filters .control-group .controls > select,
+#table-filters .control-group .controls > input {
     display: table-cell;
     width: 90%;
     margin-bottom: 0;
 }
-#table_filter .control-group .controls > input {
+#table-filters .control-group .controls > input {
     width: 80%; /* bottstrap enlarges input with margin and padding */
 }
-#table_filter .control-group .controls > i {
+#table-filters .control-group .controls > i {
     display: table-cell;
     width: 10%;
 }
-#table_filter label {
+#table-filters label {
     margin-bottom: 2px;
 }
-#table_filter select, #filters select {
+#table-filters select, #filters select {
     height: 25px;
     line-height: 25px;
     font-size: 12px;
 }
-#table_filter input[type="text"] {
+#table-filters input[type="text"] {
     font-size: 12px;
     height: 15px;
     line-height: 15px;
 }
-#table_filter i {
-    margin-top: -2px;
+#table-filters i {
+    margin-top: 2px;
     display: none;
 }
 
