@@ -199,15 +199,17 @@ label[for="select-all"] {
 #table-filters .control-group .controls > select,
 #table-filters .control-group .controls > input {
     display: table-cell;
-    width: 90%;
+    width: 85%;
     margin-bottom: 0;
 }
 #table-filters .control-group .controls > input {
-    width: 80%; /* bottstrap enlarges input with margin and padding */
+    width: 77%; /* bottstrap enlarges input with margin and padding */
 }
 #table-filters .control-group .controls > i {
     display: table-cell;
     width: 10%;
+    margin-top: 2px;
+    display: none;
 }
 #table-filters label {
     margin-bottom: 2px;
@@ -221,10 +223,6 @@ label[for="select-all"] {
     font-size: 12px;
     height: 15px;
     line-height: 15px;
-}
-#table-filters i {
-    margin-top: 2px;
-    display: none;
 }
 
 
