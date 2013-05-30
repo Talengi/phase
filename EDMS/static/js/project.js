@@ -11,14 +11,16 @@ jQuery(function($) {
     ///* document list *///
 
     /* Dealing with addition/removal of favorites */
-    $('#documents tbody').on('click', '.favorite', function(e) {
-        $(this).children().favbystar({
-            userId: config.userId,
-            csrfToken: config.csrfToken,
-            createUrl: config.createUrl,
-            deleteUrl: config.deleteUrl
+    var favoriteDocument = function() {
+        $('#documents tbody').on('click', '.favorite', function(e) {
+            $(this).children().favbystar({
+                userId: config.userId,
+                csrfToken: config.csrfToken,
+                createUrl: config.createUrl,
+                deleteUrl: config.deleteUrl
+            });
         });
-    });
+    };
 
     /* Initializing the datatable */
     var datatable = $('#documents').datatable({
@@ -63,13 +65,15 @@ jQuery(function($) {
     /* select documents */
 
     // select rows
-    var $row;
-    $("#documents tbody").on('change', 'input[type=checkbox]', function(e) {
-        $row = $(this).closest('tr');
-        $(this).is(':checked')
-            ? $row.addClass('selected')
-            : $row.removeClass('selected');
-    });
+    var selectableRow = function() {
+        var $row;
+        $("#documents tbody").on('change', 'input[type=checkbox]', function(e) {
+            $row = $(this).closest('tr');
+            $(this).is(':checked')
+                ? $row.addClass('selected')
+                : $row.removeClass('selected');
+        });
+    };
 
     // select/deselect all rows
     var selected, checkbox;
@@ -82,12 +86,36 @@ jQuery(function($) {
 
     /* browse documents if you click on table cells */
 
-    $("#documents tbody").on('click', 'td:not(.select):not(.favorite)', function(e) {
-        window.location = config.detailUrl.replace(
-            'documentNumber',
-            $(this).parent().data('document-number')
-        );
+    var clickableRow = function () {
+        $("#documents tbody").on('click', 'td:not(.select):not(.favorite)', function(e) {
+            window.location = config.detailUrl.replace(
+                'documentNumber',
+                $(this).parent().data('document-number')
+            );
+        });
+    };
+
+    /* Shortcut to refresh all row's behavior when content is appened */
+    var rowBehavior = function() {
+        clickableRow();
+        selectableRow();
+        favoriteDocument();
+    };
+    rowBehavior();
+
+    /* Infinite scrolling */
+    $('#documents').infinitescroll({
+        navSelector: "div.pagination",
+        nextSelector: "div.pagination a:first",
+        itemSelector: "#documents tbody",
+        debug: true,
+        maxPage: config.numPages,
+        bufferPx: 100,
+        loading: {
+            finishedMsg: "",
+            msg: $('<tr id="infscr-loading" class="text-center"><td colspan="7"><strong>Loading the next set of documents...</strong></td></tr>'),
+        }
+    }, function (ev) {
+        rowBehavior();
     });
-
-
 });
