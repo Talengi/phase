@@ -90,6 +90,9 @@ button.ui-multiselect {
 }
 #documents td.columntitle {
     text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 #documents tbody td:not(.columnselect):not(.columnfavorite),
 #documents tbody td.favorite i {
