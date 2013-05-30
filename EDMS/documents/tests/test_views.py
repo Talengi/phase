@@ -59,9 +59,9 @@ class DocumentListTest(GenericViewTest):
     url = reverse("document_list")
 
     def test_document_number(self):
-        self.assertGet(4)
+        self.assertGet(3)
         self.assertContext('documents_active', True)
-        self.assertContextLength('document_list', 20)
+        self.assertContextLength('document_list', 30)
 
 
 class DocumentDetailTest(GenericViewTest):
@@ -482,7 +482,7 @@ class DocumentDownloadTest(TestCase):
         )
         c = Client()
         r = c.get(reverse("document_download"), {
-            'document_numbers': document.document_number,
+            'document_ids': document.id,
         })
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r._headers, {
@@ -519,7 +519,7 @@ class DocumentDownloadTest(TestCase):
         )
         c = Client()
         r = c.get(reverse("document_download"), {
-            'document_numbers': document.document_number,
+            'document_ids': document.id,
         })
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r._headers, {
@@ -576,9 +576,9 @@ class DocumentDownloadTest(TestCase):
         )
         c = Client()
         r = c.get(reverse("document_download"), {
-            'document_numbers': [
-                document1.document_number,
-                document2.document_number,
+            'document_ids': [
+                document1.id,
+                document2.id,
             ],
         })
         self.assertEqual(r.status_code, 200)
@@ -644,9 +644,9 @@ class DocumentDownloadTest(TestCase):
         )
         c = Client()
         r = c.get(reverse("document_download"), {
-            'document_numbers': [
-                document1.document_number,
-                document2.document_number,
+            'document_ids': [
+                document1.id,
+                document2.id,
             ],
             'format': 'pdf',
         })
@@ -701,7 +701,7 @@ class DocumentDownloadTest(TestCase):
         )
         c = Client()
         r = c.get(reverse("document_download"), {
-            'document_numbers': document.document_number,
+            'document_ids': document.id,
             'revisions': 'all',
         })
         self.assertEqual(r.status_code, 200)

@@ -264,11 +264,11 @@ class Document(models.Model):
         fields_infos = dict((field[1], unicode(field[2]))
                             for field in self.display_fields())
         fields_infos.update({
-            'url': self.get_absolute_url(),
-            'number': self.document_number,
-            'document_id': self.pk,
-            'favorite_id': document2favorite.get(self.pk, ''),
-            'favorited': favorited,
+            u'url': self.get_absolute_url(),
+            u'number': self.document_number,
+            u'document_id': self.pk,
+            u'favorite_id': document2favorite.get(self.pk, u''),
+            u'favorited': favorited,
         })
         return fields_infos
 

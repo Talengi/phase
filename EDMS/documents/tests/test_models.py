@@ -40,11 +40,18 @@ class DocumentTest(TestCase):
         )
         self.assertEqual(
             document.jsonified(),
-            ['<i class="icon-star-empty" data-document-id="1" data-favorite-id="" title="Add to favorites"></i> <a href="/detail/FAC09001-FWF-000-HSE-REP-0004/" class="docnumber">FAC09001-FWF-000-HSE-REP-0004</a>',
-             u'HAZOP report',
-             u'2013-04-20',
-             u'01',
-             u'STD']
+            {
+                u'status': u'STD',
+                u'favorited': False,
+                u'title': u'HAZOP report',
+                u'url': '/detail/FAC09001-FWF-000-HSE-REP-0004/',
+                u'document_number': u'FAC09001-FWF-000-HSE-REP-0004',
+                u'current_revision': u'01',
+                u'number': u'FAC09001-FWF-000-HSE-REP-0004',
+                u'current_revision_date': u'2013-04-20',
+                u'document_id': 1,
+                u'favorite_id': u''
+            }
         )
 
 

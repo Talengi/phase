@@ -213,7 +213,7 @@ class DocumentDownload(View):
 
         # Generates the temporary zip file
         zip_filename = compress_documents(
-            data['document_numbers'],
+            data['document_ids'],
             data['format'] or 'both',
             data['revisions'] or 'latest',
         )
