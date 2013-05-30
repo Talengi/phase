@@ -282,8 +282,13 @@ PIPELINE_JS = {
             # must be loaded after templayed js
             'js/jquery.datatable.js',
             'js/jquery.favbystar.js',
+            'js/jquery.infinitescroll.js',
         ),
         'output_filename': 'js/datatable.js',
     },
 }
 ########## END PIPELINE CONFIGURATION
+
+########## CUSTOM CONFIGURATION
+PAGINATE_BY = 30  # Document list pagination
+########## END CUSTOM CONFIGURATION

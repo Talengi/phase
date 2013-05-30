@@ -27,7 +27,17 @@ jQuery(function($) {
 
     /* Filter datatable's results given selected form's filters */
     var serializeTable = function(evt) {
-        datatable.update($('#table_filter').serializeArray());
+        var parameters = $('#table_filter').serializeArray();
+        datatable.update(parameters);
+        /* Update the pagination link */
+        // IN PROGRESS
+        /*
+        var parametersEncoded = $('#table_filter').serialize();
+        var $nextPageLink = $('.pagination a:first');
+        console.log($nextPageLink.attr('href'));
+        console.log(parametersEncoded);
+        $nextPageLink.attr('href', '?'+parametersEncoded);
+        */
         $(this).siblings('i').css('display', 'inline-block');
         evt.preventDefault();
     };
@@ -78,5 +88,6 @@ jQuery(function($) {
             $(this).parent().data('document-number')
         );
     });
+
 
 });

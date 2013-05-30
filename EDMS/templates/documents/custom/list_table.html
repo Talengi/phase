@@ -32,3 +32,12 @@
         {% endfor %}
     </tbody>
 </table>
+{% if is_paginated %}
+<div class="pagination text-center">
+  <ul>
+    {% if page_obj.has_next %}
+        <li><a href="?page={{ page_obj.next_page_number }}">Next page</a></li>
+    {% endif %}
+  </ul>
+</div>
+{% endif %}

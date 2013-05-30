@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django import http
+from django.conf import settings
 from django.http import HttpResponse, Http404
 from django.core.servers.basehttp import FileWrapper
 from django.core.urlresolvers import reverse_lazy
@@ -17,9 +18,6 @@ from documents.utils import filter_documents, compress_documents
 from documents.forms import (
     DocumentFilterForm, DocumentForm, DocumentDownloadForm,
     DocumentRevisionForm, FavoriteForm
-)
-from documents.constants import (
-    STATUSES, REVISIONS, UNITS, DISCIPLINES, DOCUMENT_TYPES, CLASSES
 )
 
 
@@ -52,7 +50,7 @@ class JSONResponseMixin(object):
         else:
             document2favorite = {}
         start = int(self.request.GET.get('start', 1))
-        end = start + int(self.request.GET.get('length', 20))
+        end = start + int(self.request.GET.get('length', settings.PAGINATE_BY))
         return {
             "total": Document.objects.all().count(),
             "display": len(documents),
@@ -62,7 +60,8 @@ class JSONResponseMixin(object):
 
 
 class DocumentList(ListView, JSONResponseMixin):
-    queryset = Document.objects.all()[:50]
+    queryset = Document.objects.all()
+    paginate_by = settings.PAGINATE_BY
 
     def get_context_data(self, **kwargs):
         user = self.request.user
@@ -81,7 +80,6 @@ class DocumentList(ListView, JSONResponseMixin):
             'document2favorite': document2favorite
 
         })
-        context.update(self.build_context(context))
         return context
 
 

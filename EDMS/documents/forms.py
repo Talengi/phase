@@ -1,5 +1,5 @@
-
 from django import forms
+from django.conf import settings
 from django.db.models.fields import BLANK_CHOICE_DASH
 
 from documents.models import Document, DocumentRevision, Favorite
@@ -137,7 +137,7 @@ class DocumentFilterForm(forms.ModelForm):
     length = forms.IntegerField(
         widget=forms.HiddenInput(),
         required=False,
-        initial=20
+        initial=settings.PAGINATE_BY
     )
     start = forms.IntegerField(
         widget=forms.HiddenInput(),

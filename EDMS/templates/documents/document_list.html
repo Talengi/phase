@@ -23,10 +23,7 @@
             <form action="{% url 'document_filter' %}"
                   method="get"
                   id="table_filter">
-                {# Include the hidden fields #}
-                {% for hidden in form.hidden_fields %}
-                    {{ hidden }}
-                {% endfor %}
+                {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
                 {% include "documents/form_filtering.html" %}
             </form>
         </div>
@@ -45,5 +42,19 @@
         filterUrl: "{% url "document_filter" %}",
         detailUrl: "{% url "document_detail" "documentNumber" %}"
     };
+
+    /* Infinite scrolling */
+    $('#documents').infinitescroll({
+        navSelector: "div.pagination",
+        nextSelector: "div.pagination a:first",
+        itemSelector: "#documents tbody",
+        debug: true,
+        maxPage: {{ paginator.num_pages }},
+        bufferPx: 100,
+        loading: {
+            finishedMsg: "",
+            msg: $('<tr id="infscr-loading" class="text-center"><td colspan="7"><strong>Loading the next set of documents...</strong></td></tr>'),
+        },
+    });
     </script>
 {% endblock extra_js %}
