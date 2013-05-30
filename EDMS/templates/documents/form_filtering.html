@@ -1,6 +1,15 @@
 <fieldset>
     <legend>Search &amp; Filter</legend>
     <div class="controls controls-row">
+        <div class="control-group {% if form.errors.search_terms %}error{% endif %}">
+            <label class="control-label" for="{{ form.search_terms.auto_id }}">{{ form.search_terms.label }}</label>
+            <div class="controls">
+                {{ form.search_terms }} <i class="icon-remove"></i>
+            </div>
+            {% if form.errors.search_terms %}<span class="help-inline">{{ form.errors.search_terms.0 }}</span>{% endif %}
+        </div>
+    </div>
+    <div class="controls controls-row">
         <div class="control-group {% if form.errors.status %}error{% endif %}">
             <label class="control-label" for="{{ form.status.auto_id }}">{{ form.status.label }}</label>
             <div class="controls">

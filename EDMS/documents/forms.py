@@ -13,12 +13,10 @@ date_attrs = {'class': "datepicker span2", 'data-date-format': "yyyy-mm-dd"}
 class DocumentForm(forms.ModelForm):
     native_file = forms.FileField(
         label=u'Native file',
-        required=False,
-    )
+        required=False)
     pdf_file = forms.FileField(
         label=u'PDF file',
-        required=False,
-    )
+        required=False)
 
     class Meta:
         model = Document
@@ -117,12 +115,10 @@ class DocumentForm(forms.ModelForm):
 class DocumentRevisionForm(forms.ModelForm):
     native_file = forms.FileField(
         label=u'Native file',
-        required=False,
-    )
+        required=False)
     pdf_file = forms.FileField(
         label=u'PDF file',
-        required=False,
-    )
+        required=False)
 
     class Meta:
         model = DocumentRevision
@@ -137,20 +133,19 @@ class DocumentFilterForm(forms.ModelForm):
     length = forms.IntegerField(
         widget=forms.HiddenInput(),
         required=False,
-        initial=settings.PAGINATE_BY
-    )
+        initial=settings.PAGINATE_BY)
     start = forms.IntegerField(
         widget=forms.HiddenInput(),
         required=False,
-        initial=0
-    )
-    search_terms = forms.CharField(required=False)
+        initial=0)
+    search_terms = forms.CharField(
+        label=u'Global search',
+        required=False)
     sort_column = forms.IntegerField(required=False)
     sort_direction = forms.ChoiceField(
         choices=(('asc', 'asc'), ('desc', 'desc')),
         widget=forms.HiddenInput(),
-        required=False
-    )
+        required=False)
     created_on = forms.DateField(
         widget=forms.DateInput(attrs=date_attrs),
         required=False)
@@ -225,23 +220,20 @@ class DocumentDownloadForm(forms.Form):
     """A dummy form to check the validity of GET parameters for downloads."""
     document_numbers = forms.ModelMultipleChoiceField(
         queryset=Document.objects.all(),
-        to_field_name='id'
-    )
+        to_field_name='id')
     format = forms.ChoiceField(
         choices=(
             ('pdf', "PDF format"),
             ('native', "Native format"),
             ('both', "Native + PDF formats"),
         ),
-        required=False,
-    )
+        required=False)
     revisions = forms.ChoiceField(
         choices=(
             ('latest', "Latest revision"),
             ('all', "All revisions"),
         ),
-        required=False,
-    )
+        required=False)
 
 
 class FavoriteForm(forms.ModelForm):
