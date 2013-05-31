@@ -95,7 +95,7 @@ button.ui-multiselect {
     text-overflow: ellipsis;
 }
 #documents tbody td:not(.columnselect):not(.columnfavorite),
-#documents tbody td.favorite i {
+#documents tbody td.columnfavorite i {
     font-size: 11px;
     cursor: pointer;
 }
