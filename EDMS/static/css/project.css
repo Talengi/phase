@@ -79,7 +79,7 @@ button.ui-multiselect {
 /* Datatables custom */
 #documents {
     margin-left: 0;
-    margin-top: 80px;
+    margin-top: 60px;
     margin-bottom: 15px !important;
 }
 #documents thead#titles th {
@@ -129,28 +129,13 @@ button.ui-multiselect {
 #documents select {
     width: auto;
 }
-#documents #filterByColumnLabel {
-    text-align: right;
-}
-#select_all {
-    display: inline-block;
-    vertical-align: middle;
-}
-label[for="select-all"] {
-    vertical-align: middle;
-    display: inline-block;
-    margin: 5px 0 0;
-}
 #documents th, #documents td {
     vertical-align: middle;
-}
-#documents .sorting_1 {
-    text-align: left;
 }
 
 /* Table controls */
 #table-controls {
-    margin: 10px 0 15px 0;
+    margin: 5px 0;
     border: 1px solid #E5E5E5;
     position: fixed;
     background: #fff;
@@ -160,22 +145,39 @@ label[for="select-all"] {
 #table-controls #id_ids {
     display: none;
 }
-#table-controls ul {
+#table-controls form,
+#table-controls .dropdown {
+    margin: 8px;
+}
+#table-controls form ul {
     display: inline;
 }
-#table-controls li {
+#table-controls form li {
     list-style: none;
     display: inline-block;
 }
-#table-controls input[type="submit"], #table-controls button {
+#table-controls input,
+#table-controls label,
+#table-controls button {
     vertical-align: top;
+}
+#table-controls label {
+    margin-right: 20%;
+}
+
+#table-controls input#select-all {
+    display: inline-block;
+    margin: 4px;
+}
+#table-controls label[for="select-all"] {
+    display: inline-block;
 }
 
 /* Sidebar */
 #sidebar {
     background: #F9F9F9;
     margin-right: 0.5%;
-    margin-top: 80px;
+    margin-top: 60px;
     right: 0;
     padding: 0 .5%; /* deal with borders: 18=20-1px*2 */
     border: 1px solid #E5E5E5;
