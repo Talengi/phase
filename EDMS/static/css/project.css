@@ -5,6 +5,9 @@ body {
 .last-button {
     margin-left: 15px;
 }
+.date-error {
+    color: #B94A48;
+}
 
 
 /* Form rendering */
@@ -33,23 +36,6 @@ td.row-title {
     text-align: center;
 }
 
-/* Errors */
-.date-error {
-    color: #B94A48;
-}
-
-/* Sidebar */
-#sidebar {
-    background: #F9F9F9;
-    margin-left: 1%;
-    padding: 0 .5%; /* deal with borders: 18=20-1px*2 */
-    border: 1px solid #E5E5E5;
-    border-top: none;
-    border-radius: 4px 4px 4px 4px;
-}
-#resetForm {
-    margin: 0 0 5px 35px;
-}
 
 /* Related documents and multiselect */
 .document-list {
@@ -79,7 +65,7 @@ button.ui-multiselect {
 /* Datatables custom */
 #documents {
     margin-left: 0;
-    margin-top: 70px;
+    margin-top: 90px;
     margin-bottom: 15px !important;
 }
 #documents thead#titles th {
@@ -135,7 +121,7 @@ button.ui-multiselect {
 
 /* Table controls */
 #table-controls {
-    margin: 15px 0;
+    margin: 25px 0;
     border: 1px solid #E5E5E5;
     position: fixed;
     background: #fff;
@@ -178,9 +164,9 @@ button.ui-multiselect {
 #sidebar {
     background: #F9F9F9;
     margin-right: 0.5%;
-    margin-top: 70px;
+    margin-top: 90px;
     right: 0;
-    padding: 0 .5%; /* deal with borders: 18=20-1px*2 */
+    padding: 0 .5%;
     border: 1px solid #E5E5E5;
     border-radius: 4px 4px 4px 4px;
     position: fixed;
@@ -189,7 +175,7 @@ button.ui-multiselect {
     width: 16%;
 }
 #resetForm {
-    margin: 0 0 5px 35px;
+    margin: 0 30% 7%;
 }
 
 /* Table filters */
@@ -212,8 +198,6 @@ button.ui-multiselect {
     width: 77%; /* bottstrap enlarges input with margin and padding */
 }
 #table-filters .control-group .controls > i {
-    display: table-cell;
-    width: 10%;
     margin-top: 2px;
     display: none;
 }
