@@ -95,11 +95,17 @@ jQuery(function($) {
         });
     };
 
+    var updateDocumentNumber = function () {
+        $display = $("#display-results");
+        $display.text(parseInt($display.text(), 10) + config.numItemsPerPage);
+    };
+
     /* Shortcut to refresh all row's behavior when content is appened */
     var rowBehavior = function() {
         clickableRow();
         selectableRow();
         favoriteDocument();
+        updateDocumentNumber();
     };
     rowBehavior();
 
