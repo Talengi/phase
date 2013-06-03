@@ -16,6 +16,8 @@ body {
     z-index: 1030;
     margin-bottom: 0px;
     background: #fff;
+    line-height: 45px;
+    padding-top: 25px;
 }
 
 
@@ -161,7 +163,10 @@ button.ui-multiselect {
     margin: 11px 0 0 0
 }
 #table-controls .navbar-form {
-    margin-left: 35%;
+    margin-left: 350px;
+}
+#table-controls #document-create {
+    margin-right: 5%;
 }
 
 /* Sidebar */
