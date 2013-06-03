@@ -139,7 +139,7 @@ class DocumentFilterForm(forms.ModelForm):
         required=False,
         initial=0)
     search_terms = forms.CharField(
-        label=u'Global search',
+        label=u'Search all columns',
         required=False)
     sort_column = forms.IntegerField(required=False)
     sort_direction = forms.ChoiceField(
@@ -194,6 +194,26 @@ class DocumentFilterForm(forms.ModelForm):
         self.fields['contract_number'].required = False
         self.fields['originator'].required = False
         self.fields['engineering_phase'].required = False
+        status_choices = [
+            (status[0], u"{0} - {1}".format(status[0], status[1]))
+            for status in STATUSES
+        ]
+        self.fields['status'].choices = status_choices
+        discipline_choices = [
+            (discipline[0], u"{0} - {1}".format(discipline[0], discipline[1]))
+            for discipline in DISCIPLINES
+        ]
+        self.fields['discipline'].choices = discipline_choices
+        unit_choices = [
+            (unit[0], u"{0} - {1}".format(unit[0], unit[1]))
+            for unit in UNITS
+        ]
+        self.fields['unit'].choices = unit_choices
+        document_type_choices = [
+            (doc_type[0], u"{0} - {1}".format(doc_type[0], doc_type[1]))
+            for doc_type in DOCUMENT_TYPES
+        ]
+        self.fields['document_type'].choices = document_type_choices
         system_choices = [
             (system[0], u"{0} - {1}".format(system[0], system[1][:100]))
             for system in SYSTEMS
@@ -204,9 +224,9 @@ class DocumentFilterForm(forms.ModelForm):
             for wbs in WBS
         ]
         self.fields['wbs'].choices = wbs_choices
-        for field_name in ('contract_number', 'originator', 'unit',
-                           'document_type', 'discipline', 'klass',
-                           'engineering_phase', 'system', 'wbs'):
+        for field_name in ('contract_number', 'originator', 'system',
+                           'document_type', 'discipline', 'status',
+                           'engineering_phase', 'klass', 'unit', 'wbs'):
             self.fields[field_name].choices = (
                 BLANK_CHOICE_DASH +
                 self.fields[field_name].choices

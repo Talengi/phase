@@ -178,13 +178,22 @@ button.ui-multiselect {
     height: 85%;
     width: 16%;
 }
-#resetForm {
-    margin: 0 30% 7%;
-}
 
 /* Table filters */
 #table-filters legend {
-    width: auto;
+    width: 14%;
+    border: none;
+    padding:0;
+    text-align: center;
+    position: fixed;
+    background: #F9F9F9;
+}
+#table-filters .control-label,
+#table-filters .control-group {
+    text-align: center;
+}
+#table-filters #controls-rows {
+    padding-top: 80px;
 }
 #table-filters .control-group {
     margin-bottom: 10px;
