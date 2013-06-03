@@ -290,5 +290,5 @@ PIPELINE_JS = {
 ########## END PIPELINE CONFIGURATION
 
 ########## CUSTOM CONFIGURATION
-PAGINATE_BY = 30  # Document list pagination
+PAGINATE_BY = 50  # Document list pagination
 ########## END CUSTOM CONFIGURATION

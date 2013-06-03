@@ -8,6 +8,15 @@ body {
 .date-error {
     color: #B94A48;
 }
+.navbar-fixed-almost-top {
+    top: 41px;
+    position: fixed;
+    right: 0px;
+    left: 0px;
+    z-index: 1030;
+    margin-bottom: 0px;
+    background: #fff;
+}
 
 
 /* Form rendering */
@@ -121,20 +130,14 @@ button.ui-multiselect {
 
 /* Table controls */
 #table-controls {
-    margin: 25px 0;
-    border: 1px solid #E5E5E5;
-    position: fixed;
-    background: #fff;
-    width: 97.7%;
-    border-radius: 4px 4px 4px 4px;
-    z-index: 1;
+    border-bottom: 1px solid #E5E5E5;
 }
 #table-controls #id_ids {
     display: none;
 }
 #table-controls form,
 #table-controls .dropdown {
-    margin: 8px;
+    margin: 3px;
 }
 #table-controls form ul {
     display: inline;
@@ -148,16 +151,17 @@ button.ui-multiselect {
 #table-controls button {
     vertical-align: top;
 }
-#table-controls label {
-    margin-right: 20%;
-}
 
 #table-controls input#select-all {
     display: inline-block;
-    margin: 4px;
+    margin: 15px 5px 0 32px;
 }
 #table-controls label[for="select-all"] {
     display: inline-block;
+    margin: 11px 0 0 0
+}
+#table-controls .navbar-form {
+    margin-left: 35%;
 }
 
 /* Sidebar */

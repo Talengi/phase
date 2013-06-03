@@ -2,25 +2,18 @@
 {% load compressed %}
 
 {% block content %}
-    <div class="row-fluid">
-        <div class="span10">
-            <div id="table-controls">
-                {% block createdocument %}
-                  <div class="dropdown pull-right">
-                    <a class="btn btn-small btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
-                      <i class="icon-plus icon-white"></i> New document <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu" role="menu">
-                      <li><a href="{% url "document_create" %}">Contractor deliverable</a></li>
-                      <li><a href="{% url "document_create" %}">Vendor deliverable</a></li>
-                      <li><a href="{% url "document_create" %}">Correspondence</a></li>
-                      <li><a href="{% url "document_create" %}">Minutes of meeting</a></li>
-                    </ul>
-                  </div>
-                {% endblock createdocument %}
-                <form action="{% url "document_download" %}">
-                    <input type="checkbox" id="select-all" />
-                    <label for="select-all">Select/deselect all</label>
+    <div class="navbar navbar-fixed-almost-top" id="table-controls">
+        <ul class="nav">
+            <li>
+                <input type="checkbox" id="select-all" />
+                <label for="select-all">
+                    Select/deselect
+                    <span id="display-results">{{ document_list|length }}</span> documents from
+                    <span id="total-results">{{ paginator.count }}</span>
+                </label>
+            </li>
+            <li>
+                <form action="{% url "document_download" %}" class="navbar-form">
                     <div class="btn-group" data-toggle="buttons-radio">
                         <button type="button" class="btn btn-small">PDF</button>
                         <button type="button" class="btn btn-small">Native</button>
@@ -32,7 +25,28 @@
                     </div>
                     <button type="submit" class="btn btn-small"><i class="icon-download"></i> Download</button>
                 </form>
-            </div>
+            </li>
+        </ul>
+        {% block createdocument %}
+            <ul class="nav pull-right">
+                <li>
+                  <div class="dropdown">
+                    <a class="btn btn-small btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
+                      <i class="icon-plus icon-white"></i> New document <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="{% url "document_create" %}">Contractor deliverable</a></li>
+                      <li><a href="{% url "document_create" %}">Vendor deliverable</a></li>
+                      <li><a href="{% url "document_create" %}">Correspondence</a></li>
+                      <li><a href="{% url "document_create" %}">Minutes of meeting</a></li>
+                    </ul>
+                  </div>
+                </li>
+            </ul>
+        {% endblock createdocument %}
+    </div>
+    <div class="row-fluid">
+        <div class="span10">
             {% include "documents/custom/list_table.html" %}
         </div>
 

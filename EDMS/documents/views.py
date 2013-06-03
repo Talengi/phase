@@ -77,8 +77,7 @@ class DocumentList(ListView, JSONResponseMixin):
             'download_form': DocumentDownloadForm(),
             'form': DocumentFilterForm(),
             'documents_active': True,
-            'document2favorite': document2favorite
-
+            'document2favorite': document2favorite,
         })
         return context
 
