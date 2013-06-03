@@ -24,6 +24,8 @@
               {% if user.is_authenticated %}
                 <li{% if favorites_active %} class="active"{% endif %}><a href="{% url "favorite_list" %}">Favorites</a></li>
               {% endif %}
+            </ul>
+            <ul class="nav pull-right">
               <li class="dropdown" id="userswitch">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                   Switch user (current: {{ request.user }}) <span class="caret"></span>
@@ -53,7 +55,6 @@
         </ul>
       {% endif %}
       {% block content %}{% endblock content %}
-
     </div> <!-- /container -->
 
     <!-- Placed at the end of the document so the pages load faster -->

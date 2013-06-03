@@ -141,6 +141,7 @@ button.ui-multiselect {
     background: #fff;
     width: 97.7%;
     border-radius: 4px 4px 4px 4px;
+    z-index: 1;
 }
 #table-controls #id_ids {
     display: none;
