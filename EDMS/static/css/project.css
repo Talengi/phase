@@ -13,11 +13,11 @@ body {
     position: fixed;
     right: 0px;
     left: 0px;
-    z-index: 1030;
+    z-index: 1000;
     margin-bottom: 0px;
     background: #fff;
     line-height: 45px;
-    padding-top: 25px;
+    padding-top: 15px;
 }
 
 
@@ -156,28 +156,27 @@ button.ui-multiselect {
 
 #table-controls input#select-all {
     display: inline-block;
-    margin: 15px 5px 0 32px;
+    margin: 19px 5px 0 32px;
 }
 #table-controls label[for="select-all"] {
     display: inline-block;
-    margin: 11px 0 0 0
+    margin: 15px 0 0 0
 }
 #table-controls .navbar-form {
     margin-left: 350px;
 }
 #table-controls #document-create {
-    margin-right: 5%;
+    margin-left: 900px;
+    top: 15px;
+    position: absolute;
 }
 
 /* Sidebar */
 #sidebar {
-    background: #F9F9F9;
     margin-right: 0.5%;
     margin-top: 90px;
     right: 0;
     padding: 0 .5%;
-    border: 1px solid #E5E5E5;
-    border-radius: 4px 4px 4px 4px;
     position: fixed;
     overflow-y: auto;
     height: 85%;
@@ -188,17 +187,17 @@ button.ui-multiselect {
 #table-filters legend {
     width: 14%;
     border: none;
-    padding:0;
+    padding: 0 5px 7px;
     text-align: center;
     position: fixed;
-    background: #F9F9F9;
+    background: #fff;
 }
 #table-filters .control-label,
 #table-filters .control-group {
     text-align: center;
 }
 #table-filters #controls-rows {
-    padding-top: 80px;
+    padding-top: 50px;
 }
 #table-filters .control-group {
     margin-bottom: 10px;
@@ -216,7 +215,7 @@ button.ui-multiselect {
     width: 77%; /* bottstrap enlarges input with margin and padding */
 }
 #table-filters .control-group .controls > i {
-    margin-top: 2px;
+    margin: 2px 0 0 2px;
     display: none;
 }
 #table-filters label {
