@@ -45,6 +45,13 @@ jQuery(function($) {
         serializeTable(evt);
         $(this).hide();
     });
+    $("#documents th").on('click', function(evt) {
+        var sortBy = $(this).data("sortby");
+        var $sortBy = $('#id_sort_by');
+        var direction = (sortBy == $sortBy.val()) ? '-' : '';
+        $('#id_sort_by').val(direction + sortBy);
+        serializeTable(evt);
+    });
 
     /* Reseting the filtering form and thus the table's results */
     $('#resetForm').on('click', function(evt) {

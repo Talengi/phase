@@ -20,20 +20,12 @@ def filter_documents(queryset, data):
     # Dummy document to retrieve displayed fields
     # TODO: find a better way to achieve this
     document = Document.objects.latest('document_number')
-    display_fields = document.display_fields()
     searchable_fields = document.searchable_fields()
 
     # Paging (done at the view level, the whole queryset is still required)
 
     # Ordering
-    sort_column = data.get('sort_column', None)
-    if sort_column:
-        sort_direction = data['sort_direction'] == u'desc' and u'-' or u''
-        if sort_column == 0:  # fallback on document_number
-            column_name = (sort_direction+'document_number',)
-        else:
-            column_name = (sort_direction+display_fields[sort_column][1],)
-        queryset = queryset.order_by(*column_name)
+    queryset = queryset.order_by(data.get('sort_by', 'document_number'))
 
     # Filtering (global)
     search_terms = data.get('search_terms', None)

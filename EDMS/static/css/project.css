@@ -79,7 +79,7 @@ button.ui-multiselect {
     margin-top: 90px;
     margin-bottom: 15px !important;
 }
-#documents thead#titles th {
+#documents thead th {
     padding-right: 15px;
 }
 #documents th, #documents td {

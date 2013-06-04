@@ -141,11 +141,22 @@ class DocumentFilterForm(forms.ModelForm):
     search_terms = forms.CharField(
         label=u'Search all columns',
         required=False)
-    sort_column = forms.IntegerField(required=False)
-    sort_direction = forms.ChoiceField(
-        choices=(('asc', 'asc'), ('desc', 'desc')),
+    sort_by = forms.ChoiceField(
+        choices=(
+            ('document_number', 'document_number'),
+            ('-document_number', '-document_number'),
+            ('title', 'title'),
+            ('-title', '-title'),
+            ('current_revision', 'current_revision'),
+            ('-current_revision', '-current_revision'),
+            ('current_revision_date', 'current_revision_date'),
+            ('-current_revision_date', '-current_revision_date'),
+            ('status', 'status'),
+            ('-status', '-status'),
+        ),
         widget=forms.HiddenInput(),
-        required=False)
+        required=False,
+        initial='document_number')
     created_on = forms.DateField(
         widget=forms.DateInput(attrs=date_attrs),
         required=False)
