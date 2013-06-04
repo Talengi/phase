@@ -1,4 +1,5 @@
 jQuery(function($) {
+    var queryParameters = '';
     $('#document-detail input, #document-detail textarea, #document-detail select')
         .each(function(ev) {
             $(this).attr('disabled', true);
@@ -32,14 +33,7 @@ jQuery(function($) {
         var parameters = $('#table-filters').serializeArray();
         datatable.update(parameters);
         /* Update the pagination link */
-        // IN PROGRESS
-        /*
-        var parametersEncoded = $('#table-filters').serialize();
-        var $nextPageLink = $('.pagination a:first');
-        console.log($nextPageLink.attr('href'));
-        console.log(parametersEncoded);
-        $nextPageLink.attr('href', '?'+parametersEncoded);
-        */
+        queryParameters = $('#table-filters').serialize();
         $(this).siblings('i').css('display', 'inline-block');
         evt.preventDefault();
     };
@@ -120,7 +114,14 @@ jQuery(function($) {
         loading: {
             finishedMsg: "",
             msg: $('<tr id="infscr-loading" class="text-center"><td colspan="7"><strong>Loading the next set of documents...</strong></td></tr>'),
-        }
+        },
+        path: function(pageNumber) {
+            if (queryParameters === '') {
+                return config.filterUrl + '?page=' + pageNumber;
+            } else {
+                return config.filterUrl + '?page=' + pageNumber + '&' + queryParameters;
+            };
+        },
     }, function (ev) {
         rowBehavior();
     });
