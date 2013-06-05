@@ -72,6 +72,7 @@
         filterUrl: "{% url "document_filter" %}",
         detailUrl: "{% url "document_detail" "documentNumber" %}",
         numPages: {{ paginator.num_pages }},
+        totalItems: {{ paginator.count }},
         numItemsPerPage: {{ document_list|length }}
     };
     var tableData = (function(modelData) {

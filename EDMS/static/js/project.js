@@ -31,8 +31,11 @@ jQuery(function($) {
     /* Initializing the datatable */
     var datatable = $('#documents').datatable({
         filterUrl: config.filterUrl,
-        updated: function(rows) {
-
+        updated: function(rows, params) {
+            console.log(params);
+            params && params['total'] == rows.length
+                ? $('.pagination a').hide()
+                : $('.pagination a').show();
         }
     });
 
@@ -43,7 +46,7 @@ jQuery(function($) {
         var parameters = $('#table-filters').serializeArray();
         /* Update the pagination link */
         queryparams.fromString($('#table-filters').serialize());
-        datatable.update(queryparams.data);
+        datatable.update(queryparams.data, {total: config.totalItems});
         $(this).siblings('i').css('display', 'inline-block');
         evt.preventDefault();
     };
@@ -140,7 +143,7 @@ jQuery(function($) {
     // reaching "next" button simulate a click
     $('.pagination a').on('inview', function(event, isInView, visiblePartX, visiblePartY) {
         if(isInView) {
-
+            $(this).trigger('click');
         }
     });
 });

@@ -14,7 +14,7 @@
             rows = [];
 
         // Draw the datatable
-        $this.draw = function(data) {
+        $this.draw = function(data, extras) {
             rows = rows.concat(data);
             var template = "{{#rows}}"+$('#documents-template tbody').html()+"{{/rows}}",
                 variables = {
@@ -28,7 +28,7 @@
                 };
             $dataHolder.get(0).innerHTML += templayed(template)(variables);
             if(opts.updated) {
-                opts.updated(data, rows);
+                opts.updated(rows, extras);
             }
         };
 
@@ -39,16 +39,16 @@
 
         // clears the table and redraw the content
         // params: url parameters for ajax call
-        $this.update = function(params) {
+        $this.update = function(params, extras) {
             reset();
-            $this.append(params);
+            $this.append(params, extras);
         };
 
         // append content to the table
         // params: url parameters for ajax call
-        $this.append = function(params) {
+        $this.append = function(params, extras) {
             $.getJSON(opts.filterUrl, params).then(function (json) {
-                $this.draw(json['data']);
+                $this.draw(json['data'], $.extend(extras, json));
             });
         }
 
