@@ -45,7 +45,7 @@ jQuery(function($) {
         serializeTable(evt);
         $(this).hide();
     });
-    $("#documents th").on('click', function(evt) {
+    $("#documents th:not(#columnselect):not(#columnfavorite)").on('click', function(evt) {
         var $this = $(this);
         var sortBy = $this.data("sortby");
         var $sortBy = $('#id_sort_by');
