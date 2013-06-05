@@ -79,9 +79,6 @@ button.ui-multiselect {
     margin-top: 90px;
     margin-bottom: 15px !important;
 }
-#documents thead th {
-    padding-right: 15px;
-}
 #documents th, #documents td {
     text-align: center;
 }
@@ -108,13 +105,13 @@ button.ui-multiselect {
     width: 200px;
 }
 #columncurrent_revision {
-    width: 15px;
+    width: 50px;
 }
 #columncurrent_revision_date {
-    width: 80px;
+    width: 90px;
 }
 #columnstatus {
-    width: 20px;
+    width: 70px;
 }
 #documents .columnselect input[type="checkbox"] {
     vertical-align: top;
