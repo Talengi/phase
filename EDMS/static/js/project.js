@@ -1,5 +1,10 @@
 jQuery(function($) {
-    var queryParameters = '';
+    var queryparams = new QueryParams();
+
+    // initialize minimal query parameters
+    queryparams.fromString($('#table-filters').serialize());
+
+
     $('#document-detail input, #document-detail textarea, #document-detail select')
         .each(function(ev) {
             $(this).attr('disabled', true);
@@ -33,9 +38,9 @@ jQuery(function($) {
     /* Filter datatable's results given selected form's filters */
     var serializeTable = function(evt) {
         var parameters = $('#table-filters').serializeArray();
-        datatable.update(parameters);
         /* Update the pagination link */
-        queryParameters = $('#table-filters').serialize();
+        queryparams.fromString($('#table-filters').serialize());
+        datatable.update(queryparams.data);
         $(this).siblings('i').css('display', 'inline-block');
         evt.preventDefault();
     };
@@ -118,26 +123,13 @@ jQuery(function($) {
     };
     rowBehavior();
 
-    /* Infinite scrolling */
-    $('#documents').infinitescroll({
-        navSelector: "div.pagination",
-        nextSelector: "div.pagination a:first",
-        itemSelector: "#documents tbody",
-        debug: true,
-        maxPage: config.numPages,
-        bufferPx: 100,
-        loading: {
-            finishedMsg: "",
-            msg: $('<tr id="infscr-loading" class="text-center"><td colspan="7"><strong>Loading the next set of documents...</strong></td></tr>'),
-        },
-        path: function(pageNumber) {
-            if (queryParameters === '') {
-                return config.filterUrl + '?page=' + pageNumber;
-            } else {
-                return config.filterUrl + '?page=' + pageNumber + '&' + queryParameters;
-            };
-        },
-    }, function (ev) {
-        rowBehavior();
+    $('.pagination a').on('click', function(evt) {
+        var d = queryparams.data;
+        // increment 'start' parameter to get next page
+        d['start'] = parseInt(d['start'], 10) + parseInt(d['length'], 10);
+        queryparams.update(d);
+        // update the table rows
+        datatable.append(queryparams.data);
+        evt.preventDefault();
     });
 });
