@@ -52,22 +52,10 @@ jQuery(function($) {
         var direction = (sortBy == $sortBy.val()) ? '-' : '';
         $('#id_sort_by').val(direction + sortBy);
         $i = $this.children();
-        if ($i.hasClass("icon-chevron-up") ||
-            $i.hasClass("icon-chevron-down")) {
-            if ($i.hasClass("icon-chevron-up")) {
-                $i.removeClass("icon-chevron-up");
-                $i.addClass("icon-chevron-down");
-            } else {
-                $i.removeClass("icon-chevron-down");
-                $i.addClass("icon-chevron-up");
-            }
-        } else {
-            $("#documents th i").each(function() {
-                $(this).removeClass("icon-chevron-down")
-                       .removeClass("icon-chevron-up");
-            });
-            $i.addClass("icon-chevron-down");
-        }
+        $i.is('[class*=icon-chevron-]')
+            ? $i.toggleClass("icon-chevron-up").toggleClass("icon-chevron-down")
+            : $i.addClass('icon-chevron-down');
+        $("#documents th i").not($i).removeClass("icon-chevron-down icon-chevron-up");
         serializeTable(evt);
     });
 
