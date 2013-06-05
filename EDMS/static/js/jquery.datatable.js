@@ -10,23 +10,10 @@
         $this.params = {};
 
         // Draw the datatable
-        $this.draw = function() {
-            $.getJSON(opts.filterUrl, $this.params).then(function (json) {
-                var template  = ["",
-                    "{{#rows}}",
-                    '<tr data-document-id="{{document_id}}" data-document-number="{{document_number}}">',
-                    '  <td class="columnselect"><input type="checkbox" /></td>',
-                    '  <td class="columnfavorite"><i class="{{../icon}}" data-favorite-id="{{favorite_id}}" title="{{../icon_title}}"></i></td>',
-                    "  <td>{{document_number}}</td>",
-                    '  <td class="columntitle">{{title}}</td>',
-                    "  <td>{{current_revision}}</td>",
-                    "  <td>{{current_revision_date}}</td>",
-                    "  <td>{{status}}</td>",
-                    "</tr>",
-                    "{{/rows}}"
-                ].join("");
-                var variables = {
-                    rows: json['data'],
+        $this.draw = function(data) {
+            var template = "{{#rows}}"+$('#documents-template tbody').html()+"{{/rows}}",
+                variables = {
+                    rows: data,
                     icon: function() {
                         return this.favorited ? 'icon-star': 'icon-star-empty';
                     },
@@ -34,8 +21,8 @@
                         return this.favorited ? 'Remove from favorites': 'Add to favorites';
                     }
                 };
-                $dataHolder.get(0).innerHTML = templayed(template)(variables);
-            });
+                console.log(variables)
+            $dataHolder.get(0).innerHTML = templayed(template)(variables);
         };
 
         // Update the parameters and redraw the table
@@ -44,7 +31,17 @@
         $this.update = function(nameValues) {
             $this.params = nameValues;
             $dataHolder.html('');
-            $this.draw();
+            $.getJSON(opts.filterUrl, $this.params).then(function (json) {
+                $this.draw(json['data']);
+            });
+        };
+
+        // Update the parameters and redraw the table
+        // nameValues: [{name: 'prop1', value: "value1"},
+        //              {name: 'prop2', value: "value2"}]
+        $this.init = function(data) {
+            $dataHolder.html('');
+            $this.draw(data);
         };
 
         return $this;

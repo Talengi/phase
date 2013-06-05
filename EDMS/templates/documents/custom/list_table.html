@@ -13,25 +13,26 @@
         </tr>
     </thead>
     <tbody>
-        {% for document in document_list %}
-            <tr data-document-id="{{ document.pk }}" data-document-number="{{ document.document_number }}">
-                <td class="columnselect"><input type="checkbox" /></td>
-                <td class="columnfavorite">
-                {% if document.pk in document2favorite %}
-                    <i class="icon-star" data-favorite-id="{{ document2favorite|getattribute:document.pk }}" title="Remove from favorites"></i>
-                {% else %}
-                    <i class="icon-star-empty" data-favorite-id="" title="Add to favorites"></i>
-                {% endif %}
-                </td>
-                <td>{{ document.document_number }}</td>
-                <td class="columntitle">{{ document.title }}</td>
-                <td>{{ document.current_revision }}</td>
-                <td>{{ document.current_revision_date|date:"Y-m-d" }}</td>
-                <td>{{ document.status }}</td>
-            </tr>
-        {% endfor %}
     </tbody>
 </table>
+
+{% verbatim %}
+<table id="documents-template">
+    <tbody>
+        <tr data-document-id="{{document_id}}" data-document-number="{{document_number}}">
+            <td class="columnselect"><input type="checkbox" /></td>
+            <td class="columnfavorite"><i class="" data-favorite-id="{{favorite_id}}" title=""></i></td>
+            <td>{{document_number}}</td>
+            <td class="columntitle">{{title}}</td>
+            <td>{{current_revision}}</td>
+            <td>{{current_revision_date}}</td>
+            <td>{{status}}</td>
+        </tr>
+    </tbody>
+</table>
+{% endverbatim %}
+
+
 {% if is_paginated %}
 <div class="pagination text-center">
   <ul>

@@ -97,6 +97,10 @@ button.ui-multiselect {
     cursor: pointer;
 }
 
+#documents-template {
+    display: none;
+}
+
 /* columns width */
 #columnselect {
     width: 15px;

@@ -28,6 +28,8 @@ jQuery(function($) {
         filterUrl: config.filterUrl
     });
 
+    datatable.init(tableData);
+
     /* Filter datatable's results given selected form's filters */
     var serializeTable = function(evt) {
         var parameters = $('#table-filters').serializeArray();
