@@ -3,14 +3,19 @@
 
     $.fn.datatable = function(options){
 
-        var opts = $.extend({}, options),
-            $this = $(this),
-            $dataHolder = $this.children('tbody');
+        var defaults = {
+            // callback function when datatable is updated with a total rows parameter
+            updated: null
+        };
 
-        $this.params = {};
+        var opts = $.extend(defaults, options),
+            $this = $(this),
+            $dataHolder = $this.children('tbody'),
+            rows = [];
 
         // Draw the datatable
         $this.draw = function(data) {
+            rows = rows.concat(data);
             var template = "{{#rows}}"+$('#documents-template tbody').html()+"{{/rows}}",
                 variables = {
                     rows: data,
@@ -22,31 +27,30 @@
                     }
                 };
             $dataHolder.get(0).innerHTML += templayed(template)(variables);
+            if(opts.updated) {
+                opts.updated(data, rows);
+            }
         };
 
-        // Update the parameters and redraw the table
-        // nameValues: [{name: 'prop1', value: "value1"},
-        //              {name: 'prop2', value: "value2"}]
-        $this.update = function(params) {
+        var reset = function() {
             $dataHolder.html('');
-            $.getJSON(opts.filterUrl, params).then(function (json) {
-                $this.draw(json['data']);
-            });
+            rows = [];
+        }
+
+        // clears the table and redraw the content
+        // params: url parameters for ajax call
+        $this.update = function(params) {
+            reset();
+            $this.append(params);
         };
 
+        // append content to the table
+        // params: url parameters for ajax call
         $this.append = function(params) {
             $.getJSON(opts.filterUrl, params).then(function (json) {
                 $this.draw(json['data']);
             });
         }
-
-        // Update the parameters and redraw the table
-        // nameValues: [{name: 'prop1', value: "value1"},
-        //              {name: 'prop2', value: "value2"}]
-        $this.init = function(data) {
-            $dataHolder.html('');
-            $this.draw(data);
-        };
 
         return $this;
     };

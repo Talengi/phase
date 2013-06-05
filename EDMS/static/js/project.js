@@ -30,10 +30,13 @@ jQuery(function($) {
 
     /* Initializing the datatable */
     var datatable = $('#documents').datatable({
-        filterUrl: config.filterUrl
+        filterUrl: config.filterUrl,
+        updated: function(rows) {
+
+        }
     });
 
-    datatable.init(tableData);
+    datatable.draw(tableData);
 
     /* Filter datatable's results given selected form's filters */
     var serializeTable = function(evt) {
@@ -123,13 +126,21 @@ jQuery(function($) {
     };
     rowBehavior();
 
+    // click on next page appends rows to table
     $('.pagination a').on('click', function(evt) {
         var d = queryparams.data;
         // increment 'start' parameter to get next page
         d['start'] = parseInt(d['start'], 10) + parseInt(d['length'], 10);
         queryparams.update(d);
-        // update the table rows
+        // update the table
         datatable.append(queryparams.data);
         evt.preventDefault();
+    });
+
+    // reaching "next" button simulate a click
+    $('.pagination a').on('inview', function(event, isInView, visiblePartX, visiblePartY) {
+        if(isInView) {
+
+        }
     });
 });

@@ -284,6 +284,7 @@ PIPELINE_JS = {
             'js/jquery.favbystar.js',
             'js/jquery.infinitescroll.js',
             'js/queryparams.js',
+            'js/jquery.inview.js',
         ),
         'output_filename': 'js/datatable.js',
     },
