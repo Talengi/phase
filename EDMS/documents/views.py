@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django import http
 from django.conf import settings
+from django.core.cache import cache
 from django.http import HttpResponse, Http404
 from django.core.servers.basehttp import FileWrapper
 from django.core.urlresolvers import reverse_lazy
@@ -43,21 +44,34 @@ class JSONResponseMixin(object):
         """
         documents = context['object_list']
         user = self.request.user
+        start = int(self.request.GET.get('start', 0))
+        end = start + int(self.request.GET.get('length', settings.PAGINATE_BY))
+        if total is None:
+            total = documents.count()
+        display = min(end, total)
         if user.is_authenticated():
             favorites = Favorite.objects.filter(user=user)\
                                         .values_list('id', 'document')
             document2favorite = dict((v, k) for k, v in favorites)
         else:
             document2favorite = {}
-        start = int(self.request.GET.get('start', 0))
-        end = start + int(self.request.GET.get('length', settings.PAGINATE_BY))
-        if total is None:
-            total = documents.count()
+        data = [doc.jsonified(document2favorite)
+                for doc in documents[start:end]]
+        CACHE_DATA_KEY = '{document2favorite}_{get_parameters}'.format(
+            # We want to update the cache if favorites have changed
+            document2favorite=document2favorite,
+            # ...and if filtering GET parameters have changed
+            get_parameters=self.request.get_full_path(),
+        ).replace(' ', '_')[:249]  # memcached restrictions
+        data = cache.get(CACHE_DATA_KEY)
+        if data is None:
+            data = [doc.jsonified(document2favorite)
+                    for doc in documents[start:end]]
+            cache.set(CACHE_DATA_KEY, data, settings.CACHE_TIMEOUT_SECONDS)
         return {
             "total": total,
-            "display": min(end, total),
-            "data": [doc.jsonified(document2favorite)
-                     for doc in documents[start:end]]
+            "display": display,
+            "data": data,
         }
 
 
