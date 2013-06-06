@@ -4,16 +4,6 @@ jQuery(function($) {
     // initialize minimal query parameters
     queryparams.fromString($('#table-filters').serialize());
 
-
-    $('#document-detail input, #document-detail textarea, #document-detail select')
-        .each(function(ev) {
-        $(this).attr('disabled', true);
-    });
-
-    $('.datepicker').datepicker().on('changeDate', function(ev) {
-        $(this).datepicker('hide');
-    });
-
     ///* document list *///
 
     /* Dealing with addition/removal of favorites */

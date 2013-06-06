@@ -262,6 +262,14 @@ PIPELINE_CSS = {
         ),
         'output_filename': 'css/base.css',
     },
+    'detail': {
+        'source_filenames': (
+            'css/bootstrap-fileupload.css',
+            'css/jquery.multiselect.css',
+            'css/jquery.multiselect.filter.css',
+        ),
+        'output_filename': 'css/detail.css',
+    },
 }
 
 PIPELINE_JS = {
@@ -272,10 +280,24 @@ PIPELINE_JS = {
             'js/jquery-ui.min.js',
             # must be loaded after jquery-ui js to avoid conflicts
             'js/bootstrap-datepicker.js',
-            'js/jquery.afterkeyup.js',
-            'js/project.js',
         ),
         'output_filename': 'js/base.js',
+    },
+    'list': {
+        'source_filenames': (
+            'js/jquery.afterkeyup.js',
+            'js/document-list.js',
+        ),
+        'output_filename': 'js/list.js',
+    },
+    'detail': {
+        'source_filenames': (
+            'js/bootstrap-fileupload.js',
+            'js/jquery.multiselect.js',
+            'js/jquery.multiselect.filter.js',
+            'js/document-detail.js',
+        ),
+        'output_filename': 'js/detail.js',
     },
     'datatable': {
         'source_filenames': (
