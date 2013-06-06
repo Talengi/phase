@@ -35,7 +35,7 @@
         var reset = function() {
             $dataHolder.html('');
             rows = [];
-        }
+        };
 
         // clears the table and redraw the content
         // params: url parameters for ajax call
@@ -50,7 +50,7 @@
             $.getJSON(opts.filterUrl, params).then(function (json) {
                 $this.draw(json['data'], $.extend(extras, json));
             });
-        }
+        };
 
         return $this;
     };

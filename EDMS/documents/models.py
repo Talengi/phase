@@ -266,7 +266,7 @@ class Document(models.Model):
         fields_infos.update({
             u'url': self.get_absolute_url(),
             u'number': self.document_number,
-            u'document_id': self.pk,
+            u'pk': self.pk,
             u'favorite_id': document2favorite.get(self.pk, u''),
             u'favorited': favorited,
         })

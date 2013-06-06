@@ -1,5 +1,3 @@
-{% load getattribute %}
-
 <table id="documents" class="table table-condensed table-bordered table-hover">
     <thead>
         <tr>
@@ -19,7 +17,7 @@
 {% verbatim %}
 <table id="documents-template">
     <tbody>
-        <tr data-document-id="{{document_id}}" data-document-number="{{document_number}}">
+        <tr data-document-id="{{pk}}" data-document-number="{{document_number}}">
             <td class="columnselect"><input type="checkbox" /></td>
             <td class="columnfavorite"><i class="{{../icon}}" data-favorite-id="{{favorite_id}}" title="{{../icon_title}}"></i></td>
             <td>{{document_number}}</td>
