@@ -49,7 +49,7 @@ class DocumentTest(TestCase):
                 u'current_revision': u'01',
                 u'number': u'FAC09001-FWF-000-HSE-REP-0004',
                 u'current_revision_date': u'2013-04-20',
-                u'document_id': 1,
+                u'pk': 1,
                 u'favorite_id': u''
             }
         )

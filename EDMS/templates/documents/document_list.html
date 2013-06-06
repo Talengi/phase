@@ -72,7 +72,7 @@
         detailUrl: "{% url "document_detail" "documentNumber" %}",
         numPages: {{ paginator.num_pages }},
         totalItems: {{ paginator.count }},
-        numItemsPerPage: {{ document_list|length }}
+        numItemsPerPage: {{ items_per_page }}
     };
     var tableData = {{ initial_data|safe }};
 

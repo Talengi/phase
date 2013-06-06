@@ -35,7 +35,7 @@ class JSONResponseMixin(object):
                                  content_type='application/json',
                                  **httpresponse_kwargs)
 
-    def build_context(self, context):
+    def build_context(self, context, total=None):
         """
         Builds a dict from a context ready to be displayed as a table
 
@@ -49,9 +49,10 @@ class JSONResponseMixin(object):
             document2favorite = dict((v, k) for k, v in favorites)
         else:
             document2favorite = {}
-        start = int(self.request.GET.get('start', 1))
+        start = int(self.request.GET.get('start', 0))
         end = start + int(self.request.GET.get('length', settings.PAGINATE_BY))
-        total = documents.count()
+        if total is None:
+            total = documents.count()
         return {
             "total": total,
             "display": min(end, total),
@@ -66,11 +67,14 @@ class DocumentList(ListView, JSONResponseMixin):
 
     def get_context_data(self, **kwargs):
         context = super(DocumentList, self).get_context_data(**kwargs)
+        initial_data = self.build_context(context,
+                                          context["paginator"].count)
         context.update({
             'download_form': DocumentDownloadForm(),
             'form': DocumentFilterForm(),
             'documents_active': True,
-            'initial_data': json.dumps(self.build_context(context)),
+            'initial_data': json.dumps(initial_data),
+            'items_per_page': settings.PAGINATE_BY,
         })
         return context
 

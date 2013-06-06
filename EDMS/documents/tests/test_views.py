@@ -61,7 +61,7 @@ class DocumentListTest(GenericViewTest):
     def test_document_number(self):
         self.assertGet(3)
         self.assertContext('documents_active', True)
-        self.assertContextLength('document_list', 30)
+        self.assertContextLength('document_list', 50)
 
 
 class DocumentDetailTest(GenericViewTest):
@@ -142,8 +142,7 @@ class DocumenFilterTest(TestCase):
         get_parameters = {
             'length': 10,
             'start': 0,
-            'sort_column': 0,
-            'sort_direction': 'asc',
+            'sort_by': 'document_number',
         }
         c = Client()
 
@@ -152,7 +151,7 @@ class DocumenFilterTest(TestCase):
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 10)
         self.assertEqual(int(data['total']), 500)
-        self.assertEqual(int(data['display']), 500)
+        self.assertEqual(int(data['display']), 10)
         self.assertEqual(
             data['data'],
             [doc.jsonified() for doc in Document.objects.all()[0:10]]
@@ -164,7 +163,7 @@ class DocumenFilterTest(TestCase):
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 100)
         self.assertEqual(int(data['total']), 500)
-        self.assertEqual(int(data['display']), 500)
+        self.assertEqual(int(data['display']), 100)
         self.assertEqual(
             data['data'],
             [doc.jsonified() for doc in Document.objects.all()[0:100]]
@@ -177,7 +176,7 @@ class DocumenFilterTest(TestCase):
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 25)
         self.assertEqual(int(data['total']), 500)
-        self.assertEqual(int(data['display']), 500)
+        self.assertEqual(int(data['display']), 35)
         self.assertEqual(
             data['data'],
             [doc.jsonified() for doc in Document.objects.all()[10:35]]
@@ -190,8 +189,7 @@ class DocumenFilterTest(TestCase):
         get_parameters = {
             'length': 10,
             'start': 0,
-            'sort_column': 0,
-            'sort_direction': 'asc',
+            'sort_by': 'document_number',
         }
         c = Client()
 
@@ -205,7 +203,7 @@ class DocumenFilterTest(TestCase):
         )
 
         # Sorting by title
-        get_parameters['sort_column'] = 1
+        get_parameters['sort_by'] = 'title'
         r = c.get(reverse("document_filter"), get_parameters)
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 10)
@@ -216,8 +214,7 @@ class DocumenFilterTest(TestCase):
         )
 
         # Sorting by title (reversed)
-        get_parameters['sort_column'] = 1
-        get_parameters['sort_direction'] = 'desc'
+        get_parameters['sort_by'] = '-title'
         r = c.get(reverse("document_filter"), get_parameters)
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 10)
@@ -234,8 +231,7 @@ class DocumenFilterTest(TestCase):
         get_parameters = {
             'length': 10,
             'start': 0,
-            'sort_column': 0,
-            'sort_direction': 'asc',
+            'sort_by': 'document_number',
         }
         c = Client()
 
@@ -261,8 +257,7 @@ class DocumenFilterTest(TestCase):
         get_parameters = {
             'length': 10,
             'start': 0,
-            'sort_column': 0,
-            'sort_direction': 'asc',
+            'sort_by': 'document_number',
         }
         c = Client()
 
@@ -272,8 +267,8 @@ class DocumenFilterTest(TestCase):
         r = c.get(reverse("document_filter"), get_parameters)
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 10)
-        self.assertEqual(int(data['total']), 500)
-        self.assertEqual(int(data['display']), 44)
+        self.assertEqual(int(data['total']), 44)
+        self.assertEqual(int(data['display']), 10)
         documents = Document.objects.all()
         documents = documents.filter(**{
             'status__icontains': status
@@ -308,16 +303,14 @@ class DocumenFilterTest(TestCase):
         get_parameters = {
             'length': 10,
             'start': 0,
-            'sort_column': 0,
-            'sort_direction': 'asc',
+            'sort_by': 'document_number',
         }
         c = Client()
 
         # Searching 'pipeline', sorted by title (descending)
         search_terms = u'pipeline'
         get_parameters['search_terms'] = search_terms
-        get_parameters['sort_column'] = 1
-        get_parameters['sort_direction'] = 'desc'
+        get_parameters['sort_by'] = '-title'
         r = c.get(reverse("document_filter"), get_parameters)
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 1)
@@ -332,8 +325,7 @@ class DocumenFilterTest(TestCase):
         )
         # Reseting
         get_parameters['search_terms'] = ''
-        get_parameters['sort_column'] = 0
-        get_parameters['sort_direction'] = 'asc'
+        get_parameters['sort_by'] = 'document_number'
 
         # Searching 'spec', retrieving 10 items from page 2
         search_terms = u'spec'
@@ -363,7 +355,7 @@ class DocumenFilterTest(TestCase):
         get_parameters['search_terms'] = search_terms
         get_parameters['length'] = 10
         get_parameters['start'] = 10
-        get_parameters['sort_column'] = 1
+        get_parameters['sort_by'] = 'title'
         r = c.get(reverse("document_filter"), get_parameters)
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 7)
@@ -381,15 +373,14 @@ class DocumenFilterTest(TestCase):
         get_parameters['search_terms'] = ''
         get_parameters['length'] = 10
         get_parameters['start'] = 0
-        get_parameters['sort_column'] = 0
+        get_parameters['sort_by'] = 'document_number'
 
         # Searching 'spec' + status = 'IFR', sorted by title
         search_terms = u'spec'
         status = u'IFR'
         get_parameters['search_terms'] = search_terms
-        get_parameters['sort_column'] = 1
+        get_parameters['sort_by'] = '-title'
         get_parameters['status'] = status
-        get_parameters['sort_direction'] = 'desc'
         r = c.get(reverse("document_filter"), get_parameters)
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 4)
@@ -413,8 +404,7 @@ class DocumenFilterTest(TestCase):
         get_parameters = {
             'length': 10,
             'start': 0,
-            'sort_column': 0,
-            'sort_direction': 'asc',
+            'sort_by': 'document_number',
         }
         c = Client()
 
@@ -424,8 +414,8 @@ class DocumenFilterTest(TestCase):
         r = c.get(reverse("document_filter"), get_parameters)
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 10)
-        self.assertEqual(int(data['total']), 500)
-        self.assertEqual(int(data['display']), 33)
+        self.assertEqual(int(data['total']), 33)
+        self.assertEqual(int(data['display']), 10)
         documents = Document.objects.all()
         documents = documents.filter(**{
             'leader': leader
