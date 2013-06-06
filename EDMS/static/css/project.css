@@ -191,6 +191,9 @@ button.ui-multiselect {
 #table-controls .navbar-form {
     margin-left: 350px;
 }
+#table-controls .navbar-form button[type="submit"] {
+    margin-left: 5px;
+}
 #table-controls #document-create {
     margin-left: 900px;
     top: 15px;

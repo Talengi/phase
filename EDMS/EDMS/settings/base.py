@@ -276,9 +276,10 @@ PIPELINE_JS = {
     'base': {
         'source_filenames': (
             'js/jquery.js',
-            'js/bootstrap.min.js',
             'js/jquery-ui.min.js',
-            # must be loaded after jquery-ui js to avoid conflicts
+            # both bootstrap and bootstrap-datepicker must be loaded
+            # after jquery-ui js to avoid conflicts
+            'js/bootstrap.min.js',
             'js/bootstrap-datepicker.js',
         ),
         'output_filename': 'js/base.js',

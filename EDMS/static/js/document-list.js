@@ -4,6 +4,21 @@ jQuery(function($) {
     // initialize minimal query parameters
     queryparams.fromString($('#table-filters').serialize());
 
+    /* Deal with download buttons */
+    $('.navbar-form button[type=button]').click(function () {
+        var btn = $(this),
+            format = btn.data('format'),
+            revisions = btn.data('revisions');
+        if (format !== undefined) {
+            $('#id_format').val(format);
+        } else if (revisions !== undefined) {
+            $('#id_revisions').val(revisions);
+        }
+    });
+    // Doing it the bootstrap way with `data-toggle="button"` doesn't work
+    $('.navbar-form button[data-format=pdf]').button('toggle');
+    $('.navbar-form button[data-revisions=latest]').button('toggle');
+
     ///* document list *///
 
     /* Dealing with addition/removal of favorites */
@@ -85,9 +100,22 @@ jQuery(function($) {
     // select rows
     var selectableRow = function() {
         var $row;
+        var form = document.querySelector('.navbar-form');
         $("#documents tbody").on('change', 'input[type=checkbox]', function(e) {
             $row = $(this).closest('tr');
-            $(this).is(':checked') ? $row.addClass('selected') : $row.removeClass('selected');
+            var documentId = $row.data('document-id');
+            if ($(this).is(':checked')) {
+                $row.addClass('selected');
+                var input = document.createElement('input');
+                input.id = "document-id-"+documentId;
+                input.name = "document_ids";
+                input.type = "hidden";
+                input.value = documentId;
+                form.appendChild(input);
+            } else {
+                $row.removeClass('selected');
+                $(".navbar-form input#document-id-"+documentId).remove();
+            }
         });
     };
 

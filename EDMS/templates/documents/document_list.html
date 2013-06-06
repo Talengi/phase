@@ -15,15 +15,17 @@
         </ul>
         <form action="{% url "document_download" %}" class="navbar-form">
             <div class="btn-group" data-toggle="buttons-radio">
-                <button type="button" class="btn">PDF</button>
-                <button type="button" class="btn">Native</button>
-                <button type="button" class="btn">Both formats</button>
+                <button type="button" class="btn" data-format="pdf">PDF</button>
+                <button type="button" class="btn" data-format="native">Native</button>
+                <button type="button" class="btn" data-format="both">Both formats</button>
             </div>
             <div class="btn-group" data-toggle="buttons-radio">
-                <button type="button" class="btn">Latest</button>
-                <button type="button" class="btn">All revisions</button>
+                <button type="button" class="btn" data-revisions="latest">Latest</button>
+                <button type="button" class="btn" data-revisions="all">All revisions</button>
             </div>
-            <button type="submit" class="btn"><i class="icon-download"></i> Download</button>
+            <input id="id_format" name="format" type="hidden" value="pdf" />
+            <input id="id_revisions" name="revisions" type="hidden" value="latest" />
+            <button type="submit" class="btn btn-info"><i class="icon-download icon-white"></i> Download</button>
         </form>
         {% block createdocument %}
             <ul class="nav" id="document-create">
