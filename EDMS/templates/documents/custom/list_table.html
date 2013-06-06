@@ -21,7 +21,7 @@
     <tbody>
         <tr data-document-id="{{document_id}}" data-document-number="{{document_number}}">
             <td class="columnselect"><input type="checkbox" /></td>
-            <td class="columnfavorite"><i class="" data-favorite-id="{{favorite_id}}" title=""></i></td>
+            <td class="columnfavorite"><i class="{{../icon}}" data-favorite-id="{{favorite_id}}" title="{{../icon_title}}"></i></td>
             <td>{{document_number}}</td>
             <td class="columntitle">{{title}}</td>
             <td>{{current_revision}}</td>
@@ -37,7 +37,7 @@
 <div class="pagination text-center">
   <ul>
     {% if page_obj.has_next %}
-        <li><a href="?page={{ page_obj.next_page_number }}">Next page</a></li>
+        <li><a href="?page={{ page_obj.next_page_number }}">Loading more documents…</a></li>
     {% endif %}
   </ul>
 </div>

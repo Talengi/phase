@@ -80,7 +80,7 @@ button.ui-multiselect {
 #documents {
     margin-left: 0;
     margin-top: 90px;
-    margin-bottom: 15px !important;
+    margin-bottom: 0;
 }
 #documents th, #documents td {
     text-align: center;
@@ -99,6 +99,25 @@ button.ui-multiselect {
 
 #documents-template {
     display: none;
+}
+
+.pagination {
+    margin: 0;
+}
+.pagination ul {
+    width: 100%;
+    margin: 0;
+    display: block;
+}
+.pagination li {
+    display: block;
+    list-style: none;
+}
+.pagination ul > li > a {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 5px 0;
 }
 
 /* columns width */
