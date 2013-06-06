@@ -17,7 +17,12 @@ jQuery(function($) {
     ///* document list *///
 
     /* Dealing with addition/removal of favorites */
-    var favoriteDocument = function() {
+    var updateDocumentNumber = function (display, total) {
+        $("#display-results").text(display);
+        $("#total-results").text(total);
+    };
+
+   var favoriteDocument = function() {
         $('#documents tbody').on('click', '.columnfavorite', function(e) {
             $(this).children().favbystar({
                 userId: config.userId,
@@ -32,10 +37,15 @@ jQuery(function($) {
     var datatable = $('#documents').datatable({
         filterUrl: config.filterUrl,
         updated: function(rows, params) {
-            console.log(params);
             params && params['total'] == rows.length
                 ? $('.pagination a').hide()
                 : $('.pagination a').show();
+            // update headers information
+            if (params) {
+                updateDocumentNumber(params['display'], params['total']);
+            } else {
+                updateDocumentNumber(config.numItemsPerPage, config.totalItems);
+            };
         }
     });
 
@@ -115,17 +125,11 @@ jQuery(function($) {
         });
     };
 
-    var updateDocumentNumber = function () {
-        $display = $("#display-results");
-        $display.text(parseInt($display.text(), 10) + config.numItemsPerPage);
-    };
-
     /* Shortcut to refresh all row's behavior when content is appened */
     var rowBehavior = function() {
         clickableRow();
         selectableRow();
         favoriteDocument();
-        updateDocumentNumber();
     };
     rowBehavior();
 

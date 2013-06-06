@@ -51,9 +51,10 @@ class JSONResponseMixin(object):
             document2favorite = {}
         start = int(self.request.GET.get('start', 1))
         end = start + int(self.request.GET.get('length', settings.PAGINATE_BY))
+        total = documents.count()
         return {
-            "total": Document.objects.all().count(),
-            "display": len(documents),
+            "total": total,
+            "display": min(end, total),
             "data": [doc.jsonified(document2favorite)
                      for doc in documents[start:end]]
         }
