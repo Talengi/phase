@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load compressed %}
-{% load serializer %}
 
 {% block content %}
     <div class="navbar navbar-fixed-almost-top" id="table-controls">
@@ -75,13 +74,7 @@
         totalItems: {{ paginator.count }},
         numItemsPerPage: {{ document_list|length }}
     };
-    var tableData = (function(modelData) {
-        var data = [];
-        for(var i in modelData) {
-            data.push(modelData[i]['fields']);
-        }
-        return data;
-    }({{ document_list|jsonify }}));
+    var tableData = {{ initial_data|safe }};
 
     </script>
 {% endblock extra_js %}
