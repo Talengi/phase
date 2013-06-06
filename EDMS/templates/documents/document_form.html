@@ -8,10 +8,12 @@
 {% block createdocument %}{% endblock createdocument %}
 
 {% block content %}
+    {% comment %}
     <div class="span3">
         {% include "documents/document_menu.html" %}
     </div>
-    <div class="span9">
+    {% endcomment %}
+    <div class="span9 offset2">
       <h2>{% if is_edit %}Edit{% else %}New{% endif %} document</h2>
       <form action="."
             method="post"

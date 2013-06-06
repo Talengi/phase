@@ -7,10 +7,12 @@
 
 {% block content %}
 <div class="row">
+    {% comment %}
     <div class="span3">
         {% include "documents/document_menu.html" %}
     </div>
-    <div class="span9">
+    {% endcomment %}
+    <div class="span9 offset2">
         <form class="disabled form-horizontal" id="document-detail">
             {% include "documents/form_general_information.html" %}
             {% include "documents/form_revision_disabled.html" %}

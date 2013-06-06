@@ -13,7 +13,7 @@ jQuery(function($) {
 
     /* Related documents multiselect */
     var labels = $.makeArray($("#id_related_documents option")
-                  .map(function(){ return $(this).text() }));
+                  .map(function(){ return $(this).text(); }));
     $('#id_related_documents').multiselect().multiselectfilter();
 
 });
