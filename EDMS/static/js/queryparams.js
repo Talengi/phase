@@ -1,4 +1,16 @@
 (function(global) {
+    /**
+    Object to manipulate url parameters.
+    Allows to manage a string such as ?var1=value1&var2=value2 and convert it
+    to an dict object, update its value, convert it back to string, or merge it.
+    Usage :
+    q = QueryParams();
+    q.fromString("var1=value1&var2=value2")
+    q.update({var2: "next value", var3: "after next value"})
+    q.fromString("var4=value4")
+    q.toString() // -> var1=value1&var2=next+value&var3=after+next+value&var4=value4
+    q.data // -> {var1: "value1, "var2: "next value", var3: "after next value", var4: "value4"}
+    */
     QueryParams = function() {
         /**
         parameters holder

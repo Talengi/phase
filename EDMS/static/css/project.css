@@ -64,6 +64,7 @@ td.row-title {
 button.ui-multiselect {
     color: #000;
     font-weight: normal;
+    width: 50%;
 }
 .ui-multiselect-filter, .ui-multiselect-filter input {
     font-size: 1em;
