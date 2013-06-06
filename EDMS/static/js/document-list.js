@@ -18,6 +18,9 @@ jQuery(function($) {
     // Doing it the bootstrap way with `data-toggle="button"` doesn't work
     $('.navbar-form button[data-format=pdf]').button('toggle');
     $('.navbar-form button[data-revisions=latest]').button('toggle');
+    $('.navbar-form').on('click', '.disabled', function(evt) {
+        evt.preventDefault();
+    });
 
     ///* document list *///
 
@@ -104,6 +107,7 @@ jQuery(function($) {
         $("#documents tbody").on('change', 'input[type=checkbox]', function(e) {
             $row = $(this).closest('tr');
             var documentId = $row.data('document-id');
+            $('.navbar-form .disabled').removeClass('disabled');
             if ($(this).is(':checked')) {
                 $row.addClass('selected');
                 var input = document.createElement('input');
