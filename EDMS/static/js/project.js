@@ -45,7 +45,7 @@ jQuery(function($) {
                 updateDocumentNumber(params['display'], params['total']);
             } else {
                 updateDocumentNumber(config.numItemsPerPage, config.totalItems);
-            };
+            }
         }
     });
 
