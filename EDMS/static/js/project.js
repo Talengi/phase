@@ -7,8 +7,8 @@ jQuery(function($) {
 
     $('#document-detail input, #document-detail textarea, #document-detail select')
         .each(function(ev) {
-            $(this).attr('disabled', true);
-        });
+        $(this).attr('disabled', true);
+    });
 
     $('.datepicker').datepicker().on('changeDate', function(ev) {
         $(this).datepicker('hide');
@@ -17,12 +17,12 @@ jQuery(function($) {
     ///* document list *///
 
     /* Dealing with addition/removal of favorites */
-    var updateDocumentNumber = function (display, total) {
+    var updateDocumentNumber = function(display, total) {
         $("#display-results").text(display);
         $("#total-results").text(total);
     };
 
-   var favoriteDocument = function() {
+    var favoriteDocument = function() {
         $('#documents tbody').on('click', '.columnfavorite', function(e) {
             $(this).children().favbystar({
                 userId: config.userId,
@@ -37,9 +37,7 @@ jQuery(function($) {
     var datatable = $('#documents').datatable({
         filterUrl: config.filterUrl,
         updated: function(rows, params) {
-            params && params['total'] == rows.length
-                ? $('.pagination a').hide()
-                : $('.pagination a').show();
+            params && params['total'] == rows.length ? $('.pagination a').hide() : $('.pagination a').show();
             // update headers information
             if (params) {
                 updateDocumentNumber(params['display'], params['total']);
@@ -56,13 +54,15 @@ jQuery(function($) {
         var parameters = $('#table-filters').serializeArray();
         /* Update the pagination link */
         queryparams.fromString($('#table-filters').serialize());
-        datatable.update(queryparams.data, {total: config.totalItems});
+        datatable.update(queryparams.data, {
+            total: config.totalItems
+        });
         $(this).siblings('i').css('display', 'inline-block');
         evt.preventDefault();
     };
 
     $("#table-filters select").on('change', serializeTable);
-    $("#table-filters input").on('keyup', serializeTable);
+    $("#table-filters input").on('afterkeyup', serializeTable);
     $("#table-filters i").on('click', function(evt) {
         $(this).siblings('select,input:text').val('');
         serializeTable(evt);
@@ -75,9 +75,7 @@ jQuery(function($) {
         var direction = (sortBy == $sortBy.val()) ? '-' : '';
         $('#id_sort_by').val(direction + sortBy);
         $i = $this.children();
-        $i.is('[class*=icon-chevron-]')
-            ? $i.toggleClass("icon-chevron-up").toggleClass("icon-chevron-down")
-            : $i.addClass('icon-chevron-down');
+        $i.is('[class*=icon-chevron-]') ? $i.toggleClass("icon-chevron-up").toggleClass("icon-chevron-down") : $i.addClass('icon-chevron-down');
         $("#documents th i").not($i).removeClass("icon-chevron-down icon-chevron-up");
         serializeTable(evt);
     });
@@ -99,9 +97,7 @@ jQuery(function($) {
         var $row;
         $("#documents tbody").on('change', 'input[type=checkbox]', function(e) {
             $row = $(this).closest('tr');
-            $(this).is(':checked')
-                ? $row.addClass('selected')
-                : $row.removeClass('selected');
+            $(this).is(':checked') ? $row.addClass('selected') : $row.removeClass('selected');
         });
     };
 
@@ -116,12 +112,11 @@ jQuery(function($) {
 
     /* browse documents if you click on table cells */
 
-    var clickableRow = function () {
+    var clickableRow = function() {
         $("#documents tbody").on('click', 'td:not(.columnselect):not(.columnfavorite)', function(e) {
             window.location = config.detailUrl.replace(
                 'documentNumber',
-                $(this).parent().data('document-number')
-            );
+                $(this).parent().data('document-number'));
         });
     };
 
@@ -146,7 +141,7 @@ jQuery(function($) {
 
     // reaching "next" button simulate a click
     $('.pagination a').on('inview', function(event, isInView, visiblePartX, visiblePartY) {
-        if(isInView) {
+        if (isInView) {
             $(this).trigger('click');
         }
     });

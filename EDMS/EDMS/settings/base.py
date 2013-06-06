@@ -272,6 +272,7 @@ PIPELINE_JS = {
             'js/jquery-ui.min.js',
             # must be loaded after jquery-ui js to avoid conflicts
             'js/bootstrap-datepicker.js',
+            'js/jquery.afterkeyup.js',
             'js/project.js',
         ),
         'output_filename': 'js/base.js',
