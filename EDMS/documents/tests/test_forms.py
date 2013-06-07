@@ -172,10 +172,7 @@ class DocumentCreateTest(TestCase):
         self.assertEqual(
             r.redirect_chain,
             [('http://testserver{url}'.format(
-                url=reverse(
-                    'document_detail',
-                    args=['FAC09001-FWF-000-ARC-BAS-0001']
-                )
+                url=reverse('document_list')
             ), 302)]
         )
 

@@ -187,6 +187,14 @@ class DocumentCreate(DocumentRevisionMixin, CreateView):
         })
         return context
 
+    def get_success_url(self):
+        """Redirect to a different URL given the button clicked by the user."""
+        if "save-create" in self.request.POST:
+            url = reverse('document_create')
+        else:
+            url = reverse('document_list')
+        return url
+
 
 class DocumentEdit(DocumentRevisionMixin, UpdateView):
     model = Document
