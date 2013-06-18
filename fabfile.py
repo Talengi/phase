@@ -2,7 +2,7 @@ from fabric.api import run, env, local, cd, prefix
 
 USERNAME = 'scopyleft'
 env.hosts = ['%s@ssh.alwaysdata.com' % USERNAME]
-env.activate = 'source /home/%s/talengi/bin/activate' % USERNAME
+env.activate = 'source /home/%s/venvs/phase/bin/activate' % USERNAME
 env.directory = '/home/%s/www/talengi/EDMS' % USERNAME
 
 
