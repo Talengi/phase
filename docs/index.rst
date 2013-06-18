@@ -31,7 +31,7 @@ Steps to initialize the project on a local machine::
     $ pip install -r repository/requirements/local.txt
     $ npm -g install yuglify
     $ cd repository
-    $ python EDMS/manage.py syncdb --noinput --settings=EDMS.settings.local
+    $ python EDMS/manage.py syncdb --noinput --settings=core.settings.local
     $ fab runserver
 
 

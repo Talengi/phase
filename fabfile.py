@@ -9,7 +9,7 @@ env.directory = '/home/%s/www/talengi/EDMS' % USERNAME
 def runserver():
     """Runs the local Django server."""
     runserver = 'python EDMS/manage.py runserver'
-    with_local_settings = ' --settings=EDMS.settings.local'
+    with_local_settings = ' --settings=core.settings.local'
     local(runserver + with_local_settings)
 
 
@@ -18,7 +18,7 @@ def test(module=""):
     runtests = 'coverage run EDMS/manage.py test {module}'.format(
         module=module
     )
-    with_test_settings = ' --settings=EDMS.settings.test'
+    with_test_settings = ' --settings=core.settings.test'
     local(runtests + with_test_settings)
 
 
@@ -43,7 +43,7 @@ def deploy(without_data=False):
             collectstatic = 'python manage.py collectstatic --noinput'
             syncdb = 'python manage.py syncdb --noinput'
             generate = 'python manage.py generate_documents 5500'
-            with_production_settings = ' --settings=EDMS.settings.production'
+            with_production_settings = ' --settings=core.settings.production'
             run('pip install -r ../requirements/production.txt')
             run(collectstatic + with_production_settings)
             if not without_data:
