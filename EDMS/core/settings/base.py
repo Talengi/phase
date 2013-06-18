@@ -46,7 +46,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'edms.db',
+        'NAME': 'phase.db',
         'USER': '',
         'PASSWORD': '',
         'HOST': '',

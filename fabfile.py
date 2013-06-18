@@ -47,7 +47,7 @@ def deploy(without_data=False):
             run('pip install -r ../requirements/production.txt')
             run(collectstatic + with_production_settings)
             if not without_data:
-                run('rm edms.db')
+                run('rm phase.db')
                 run(syncdb + with_production_settings)
                 run(generate + with_production_settings)
                 run('rm media/*')

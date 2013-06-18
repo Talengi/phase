@@ -76,7 +76,7 @@ ALLOWED_HOSTS = ['talengi.scopyleft.fr']
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '/home/scopyleft/www/talengi/EDMS/edms.db',
+        'NAME': '/home/scopyleft/www/talengi/EDMS/phase.db',
         'USER': '',
         'PASSWORD': '',
         'HOST': '',

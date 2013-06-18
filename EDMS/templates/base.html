@@ -3,7 +3,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>{% block title %}PyDMS{% endblock title %}</title>
+    <title>{% block title %}Phase{% endblock title %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="{{ STATIC_URL }}/img/favicon.ico" rel="icon" type="image/x-icon" />
     {% compressed_css "base" %}
@@ -17,7 +17,7 @@
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container-fluid">
-          <a class="brand" href="#">EDMS</a>
+          <a class="brand" href="#">Phase</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
               <li{% if documents_active %} class="active"{% endif %}><a href="{% url "document_list" %}">Documents</a></li>
