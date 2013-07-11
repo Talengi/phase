@@ -71,7 +71,7 @@ RAVEN_CONFIG = {
     'dsn': get_env_setting('SENTRY_KEY'),
 }
 
-ALLOWED_HOSTS = ['talengi.scopyleft.fr']
+ALLOWED_HOSTS = ['phase.scopyleft.fr']
 
 DATABASES = {
     'default': {

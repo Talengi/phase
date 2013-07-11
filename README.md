@@ -18,6 +18,6 @@ Phase is intended to be used on projects where:
 Project
 -------
 
-* Demo: http://talengi.scopyleft.fr/
-* Documentation: http://talengi.scopyleft.fr/documentation/
+* Demo: http://phase.scopyleft.fr/
+* Documentation: http://phase.scopyleft.fr/documentation/
 * Repository: https://github.com/Talengi/phase
