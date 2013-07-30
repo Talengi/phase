@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Favorites</h2>
+    {% if favorite_list %}
+    <table class="table table-striped table-condensed table-bordered table-hover table-centered">
+        <thead>
+          <tr>
+            <th>Document number</th>
+            <th>Title</th>
+            <th>Current revision</th>
+            <th>Updated</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for favorite in favorite_list %}
+          <tr>
+            <td><a href="{{ favorite.document.get_absolute_url }}"
+                >{{ favorite.document.document_number }}
+                </a>
+            </td>
+            <td>{{ favorite.document.title }}</td>
+            <td>{{ favorite.document.current_revision }}</td>
+            <td>
+              {% if favorite.is_outdated %}
+                <i class="icon-exclamation-sign" title="This document has been updated."></i>
+              {% else %}
+                -
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>You do not have any favorite document.</p>
+    {% endif %}
+{% endblock content %}

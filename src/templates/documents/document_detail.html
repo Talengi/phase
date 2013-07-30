@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load compressed %}
+
+{% block extra_css %}
+    {% compressed_css "detail" %}
+{% endblock extra_css %}
+
+{% block content %}
+<div class="row">
+    {% comment %}
+    <div class="span3">
+        {% include "documents/document_menu.html" %}
+    </div>
+    {% endcomment %}
+    <div class="span9 offset2">
+        <form class="disabled form-horizontal" id="document-detail">
+            {% include "documents/form_general_information.html" %}
+            {% include "documents/form_revision_disabled.html" %}
+            {% include "documents/form_review.html" %}
+            {% include "documents/form_related_documents_list.html" %}
+            {% include "documents/form_schedule.html" %}
+            <div class="form-actions">
+                <a class="btn" href="{% url "document_list" %}">Cancel</a>
+                <a class="btn btn-primary pull-right last-button" href="{% url "document_edit" document.document_number %}">Edit document</a>
+            </div>
+        </form>
+    </div>
+{% endblock content %}
+
+{% block extra_js %}
+    {% compressed_js "detail" %}
+{% endblock extra_js %}

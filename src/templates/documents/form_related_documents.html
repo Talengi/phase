@@ -1,0 +1,12 @@
+<fieldset id="related-documents">
+    <legend>Related Documents</legend>
+    <div class="controls controls-row">
+        <div class="control-group {% if form.errors.related_documents %}error{% endif %}">
+            <label class="control-label span6" for="{{ form.related_documents.auto_id }}">{{ form.related_documents.label }}</label>
+            <div class="controls span6">
+                {{ form.related_documents }}
+            </div>
+            {% if form.errors.related_documents %}<span class="help-inline">{{ form.errors.related_documents.0 }}</span>{% endif %}
+        </div>
+    </div>
+</fieldset>

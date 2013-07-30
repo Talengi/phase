@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load compressed %}
+
+{% block extra_css %}
+    {% compressed_css "detail" %}
+{% endblock extra_css %}
+
+{% block createdocument %}{% endblock createdocument %}
+
+{% block content %}
+    {% comment %}
+    <div class="span3">
+        {% include "documents/document_menu.html" %}
+    </div>
+    {% endcomment %}
+    <div class="span9 offset2">
+      <h2>{% if is_edit %}Edit{% else %}New{% endif %} document</h2>
+      <form action="."
+            method="post"
+            class="form-horizontal"
+            enctype="multipart/form-data"
+            id="document-edit">
+          {% csrf_token %}
+          {% if form.non_field_errors %}
+              <div class="alert alert-error">
+                  <p><strong>Please fix this error:</strong> {{ form.non_field_errors.0 }}</p>
+              </div>
+          {% endif %}
+          {% include "documents/form_general_information.html" %}
+          {% include "documents/form_revision.html" %}
+          {% include "documents/form_review.html" %}
+          {% include "documents/form_related_documents.html" %}
+          {% include "documents/form_schedule.html" %}
+          <div class="form-actions">
+              <a class="btn pull-left" href="{% url "document_list" %}">Cancel</a>
+              <input class="btn btn-primary pull-right last-button"
+                     type="submit"
+                     value="Save and close"
+                     name="save-close">
+              {% if is_edit %}
+                  <input class="btn btn-info pull-right"
+                         type="submit"
+                         value="Save"
+                         name="save-view">
+              {% else %}
+                  <input class="btn btn-info pull-right"
+                         type="submit"
+                         value="Save and create another document"
+                         name="save-create">
+              {% endif %}
+          </div>
+      </form>
+  </div>
+{% endblock content %}
+
+{% block extra_js %}
+    {% compressed_js "detail" %}
+{% endblock extra_js %}
+

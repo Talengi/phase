@@ -1,0 +1,82 @@
+ <fieldset id="revision">
+    <legend>Revision</legend>
+    <div class="controls controls-row">
+        <div class="control-group {% if form.errors.status %}error{% endif %}">
+            <label class="control-label span4" for="{{ form.status.auto_id }}">{{ form.status.label }}</label>
+            <div class="controls span6">
+                {{ form.status }}
+            </div>
+            {% if form.errors.status %}<span class="help-inline">{{ form.errors.status.0 }}</span>{% endif %}
+        </div>
+    </div>
+    <div class="controls controls-row">
+        <div class="control-group">
+            <label class="control-label span4">Created on</label>
+            <div class="controls span6 input-append date">
+                <input class="datepicker span2" data-date-format="yyyy-mm-dd" id="id_created_on" name="created_on" type="text" value="{{ document.created_on|date:"Y-m-d" }}" />
+                <span class="add-on"><i class="icon-calendar"></i></span>
+            </div>
+            {% if form.errors.created_on %}<span class="help-inline">{{ form.errors.created_on.0 }}</span>{% endif %}
+        </div>
+    </div>
+</fieldset>
+{% if revisions %}
+    <fieldset>
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                {% for revision in revisions %}
+                    <li{% if forloop.first %} class="active"{% endif %}><a href="#tab{{ forloop.counter }}" data-toggle="tab">Revision {{ revision.revision }}</a></li>
+                {% endfor %}
+            </ul>
+            <div class="tab-content">
+                {% for revision in revisions %}
+                    <div class="tab-pane{% if forloop.first %} active{% endif %}" id="tab{{ forloop.counter }}">
+                        <div class="controls controls-row">
+                            <div class="control-group">
+                                <label class="control-label span4" for="{{ form.native_file.auto_id }}">{{ form.native_file.label }}</label>
+                                <div class="fileupload fileupload-new controls span5" data-provides="fileupload">
+                                    <div class="input-append">
+                                        <div class="uneditable-input span4">
+                                            <i class="icon-file fileupload-exists"></i>
+                                            <span class="fileupload-preview">
+                                                {% if revision.native_file %}
+                                                    <a href="{{ revision.native_file.url }}">{{ revision.native_file.name }}</a>
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="controls controls-row">
+                            <div class="control-group">
+                                <label class="control-label span4" for="{{ form.pdf_file.auto_id }}">{{ form.pdf_file.label }}</label>
+                                <div class="fileupload fileupload-new controls span5" data-provides="fileupload">
+                                    <div class="input-append">
+                                        <div class="uneditable-input span4">
+                                            <i class="icon-file fileupload-exists"></i>
+                                            <span class="fileupload-preview">
+                                                {% if revision.pdf_file %}
+                                                    <a href="{{ revision.pdf_file.url }}">{{ revision.pdf_file.name }}</a>
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="controls controls-row">
+                            <div class="control-group">
+                                <label class="control-label span4" for="{{ revision.form.revision_date.auto_id }}">{{ revision.form.revision_date.label }}</label>
+                                <div class="controls span6 input-append date">
+                                    {{ revision.form.revision_date }}
+                                    <span class="add-on"><i class="icon-calendar"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </fieldset>
+{% endif %}
