@@ -21,8 +21,8 @@ build
 .coverage
 
 # Django media
-EDMS/media/*
+src/media/*
 
 # Django assets
-EDMS/assets/*
-!EDMS/assets/.htaccess
+src/assets/*
+!src/assets/.htaccess

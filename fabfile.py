@@ -3,19 +3,19 @@ from fabric.api import run, env, local, cd, prefix
 USERNAME = 'scopyleft'
 env.hosts = ['%s@ssh.alwaysdata.com' % USERNAME]
 env.activate = 'source /home/%s/venvs/phase/bin/activate' % USERNAME
-env.directory = '/home/%s/www/talengi/EDMS' % USERNAME
+env.directory = '/home/%s/www/talengi/phase' % USERNAME
 
 
 def runserver():
     """Runs the local Django server."""
-    runserver = 'python EDMS/manage.py runserver'
+    runserver = 'python src/manage.py runserver'
     with_local_settings = ' --settings=core.settings.local'
     local(runserver + with_local_settings)
 
 
 def test(module=""):
     """Launches tests for the whole project."""
-    runtests = 'coverage run EDMS/manage.py test {module}'.format(
+    runtests = 'coverage run src/manage.py test {module}'.format(
         module=module
     )
     with_test_settings = ' --settings=core.settings.test'
@@ -47,7 +47,7 @@ def deploy(without_data=False):
             run('pip install -r ../requirements/production.txt')
             run(collectstatic + with_production_settings)
             if not without_data:
-                run('rm phase.db')
+                run('rm default.db')
                 run(syncdb + with_production_settings)
                 run(generate + with_production_settings)
                 run('rm media/*')
