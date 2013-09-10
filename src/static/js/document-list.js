@@ -15,12 +15,7 @@ jQuery(function($) {
             $('#id_revisions').val(revisions);
         }
     });
-    // Doing it the bootstrap way with `data-toggle="button"` doesn't work
-    $('.navbar-form button[data-format=pdf]').button('toggle');
-    $('.navbar-form button[data-revisions=latest]').button('toggle');
-    $('.navbar-form').on('click', '.disabled', function(evt) {
-        evt.preventDefault();
-    });
+
 
     ///* document list *///
 

@@ -16,7 +16,6 @@ body {
     z-index: 1000;
     margin-bottom: 0px;
     background: #fff;
-    line-height: 45px;
     padding-top: 15px;
 }
 
@@ -154,50 +153,6 @@ button.ui-multiselect {
 }
 #documents th, #documents td {
     vertical-align: middle;
-}
-
-/* Table controls */
-#table-controls {
-    border-bottom: 1px solid #E5E5E5;
-}
-#table-controls #id_ids {
-    display: none;
-}
-#table-controls form,
-#table-controls .dropdown {
-    margin: 3px;
-}
-#table-controls form ul {
-    display: inline;
-}
-#table-controls form li {
-    list-style: none;
-    display: inline-block;
-}
-#table-controls input,
-#table-controls label,
-#table-controls button {
-    vertical-align: top;
-}
-
-#table-controls input#select-all {
-    display: inline-block;
-    margin: 19px 5px 0 32px;
-}
-#table-controls label[for="select-all"] {
-    display: inline-block;
-    margin: 15px 0 0 0
-}
-#table-controls .navbar-form {
-    margin-left: 350px;
-}
-#table-controls .navbar-form button[type="submit"] {
-    margin-left: 5px;
-}
-#table-controls #document-create {
-    margin-left: 900px;
-    top: 15px;
-    position: absolute;
 }
 
 /* Sidebar */
