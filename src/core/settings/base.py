@@ -195,6 +195,7 @@ THIRD_PARTY_APPS = (
     # Database migration helpers:
     'south',
     'pipeline',
+    'widget_tweaks',
 )
 
 # Apps specific for this project go here.
