@@ -255,7 +255,6 @@ PIPELINE_CSS = {
     'base': {
         'source_filenames': (
             'css/phase-bootstrap.min.css',
-            'css/phase-bootstrap-theme.min.css',
             'css/jquery-ui.css',
             # must be loaded after jquery-ui js to avoid conflicts
             'css/datepicker.css',
@@ -281,7 +280,6 @@ PIPELINE_JS = {
             # both bootstrap and bootstrap-datepicker must be loaded
             # after jquery-ui js to avoid conflicts
             'js/phase-bootstrap.min.js',
-            'js/phase-bootstrap-theme.min.js',
             'js/bootstrap-datepicker.js',
         ),
         'output_filename': 'js/base.js',
