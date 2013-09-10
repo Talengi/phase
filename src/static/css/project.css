@@ -157,23 +157,14 @@ button.ui-multiselect {
 
 /* Sidebar */
 #sidebar {
-    margin-right: 0.5%;
     margin-top: 90px;
-    right: 0;
-    padding: 0 .5%;
-    position: fixed;
-    overflow-y: auto;
-    height: 85%;
-    width: 16%;
 }
 
 /* Table filters */
 #table-filters legend {
-    width: 13%;
     border: none;
     padding: 0 5px 7px;
     text-align: center;
-    position: fixed;
     background: #fff;
 }
 #table-filters .control-label,
@@ -181,7 +172,6 @@ button.ui-multiselect {
     text-align: center;
 }
 #table-filters #controls-rows {
-    padding-top: 50px;
 }
 #table-filters .control-group {
     margin-bottom: 10px;
@@ -194,9 +184,10 @@ button.ui-multiselect {
     display: table-cell;
     width: 85%;
     margin-bottom: 0;
+    padding: 2px 1px;
 }
 #table-filters .control-group .controls > input {
-    width: 77%; /* bottstrap enlarges input with margin and padding */
+    width: 85%; /* bottstrap enlarges input with margin and padding */
 }
 #table-filters .control-group .controls > i {
     margin: 2px 0 0 2px;
@@ -211,9 +202,12 @@ button.ui-multiselect {
     font-size: 12px;
 }
 #table-filters input[type="text"] {
+    height: 25px;
+    line-height: 25px;
     font-size: 12px;
-    height: 15px;
-    line-height: 15px;
+}
+#table-filters select,
+#table-filters input[type="text"] {
 }
 
 

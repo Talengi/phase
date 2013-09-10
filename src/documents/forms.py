@@ -157,17 +157,15 @@ class DocumentFilterForm(forms.ModelForm):
         widget=forms.HiddenInput(),
         required=False,
         initial='document_number')
-    created_on = forms.DateField(
-        widget=forms.DateInput(attrs=date_attrs),
-        required=False)
 
     class Meta:
         model = Document
-        exclude = (
-            'document_number', 'title', 'revision_date',
-            'favorited_by', 'related_documents',
-            'current_revision', 'current_revision_date',
-            'updated_on', 'sequencial_number',
+        fields = (
+            'search_terms', 'status', 'discipline', 'document_type',
+            'unit', 'klass', 'contract_number', 'originator',
+            'contractor_document_number', 'engineering_phase', 'feed_update',
+            'system', 'wbs', 'under_ca_review', 'under_contractor_review',
+            'leader', 'approver',
         )
         widgets = {
             'status_std_planned_date': forms.DateInput(attrs=date_attrs),
