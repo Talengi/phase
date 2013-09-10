@@ -200,6 +200,7 @@ THIRD_PARTY_APPS = (
 # Apps specific for this project go here.
 LOCAL_APPS = (
     'documents',
+    'bootstrap',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -253,8 +254,8 @@ STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 PIPELINE_CSS = {
     'base': {
         'source_filenames': (
-            'css/bootstrap.min.css',
-            'css/bootstrap-responsive.min.css',
+            'css/phase-bootstrap.min.css',
+            'css/phase-bootstrap-theme.min.css',
             'css/jquery-ui.css',
             # must be loaded after jquery-ui js to avoid conflicts
             'css/datepicker.css',
@@ -279,7 +280,8 @@ PIPELINE_JS = {
             'js/jquery-ui.min.js',
             # both bootstrap and bootstrap-datepicker must be loaded
             # after jquery-ui js to avoid conflicts
-            'js/bootstrap.min.js',
+            'js/phase-bootstrap.min.js',
+            'js/phase-bootstrap-theme.min.js',
             'js/bootstrap-datepicker.js',
         ),
         'output_filename': 'js/base.js',
