@@ -14,42 +14,16 @@
   </head>
 
   <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container-fluid">
-          <a class="brand" href="#">Phase</a>
-          <div class="nav-collapse collapse">
-            <ul class="nav">
-              <li{% if documents_active %} class="active"{% endif %}><a href="{% url "document_list" %}">Documents</a></li>
-              {% if user.is_authenticated %}
-                <li{% if favorites_active %} class="active"{% endif %}><a href="{% url "favorite_list" %}">Favorites</a></li>
-              {% endif %}
-            </ul>
-            <ul class="nav pull-right">
-              <li class="dropdown" id="userswitch">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                  Switch user (current: {{ request.user }}) <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu" role="menu">
-                  {% for user in switching_users %}
-                    <li><a href="{% url "document_list" %}?userswitch={{ user.username}}">{{ user.get_full_name }}</a></li>
-                  {% endfor %}
-                  <li><a href="{% url "document_list" %}?userswitch=logout">Log out</a></li>
-                </ul>
-              </li>
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
-    </div>
 
-    <div class="container-fluid">
+    {% include 'navbar.html' %}
+
+    <div class="container">
       {% if messages %}
         <ul class="messages">
           {% for message in messages %}
             <li id="message_{{ forloop.counter }}"
-                {% if message.tags %} class="{{ message.tags }}"{% endif %}>
-                    {{ message }}
+              {% if message.tags %} class="alert alert-{% if message.tags == "error" %}danger{% else %}{{ message.tags }}{% endif %}"{% endif %}>
+              {{ message }}
             </li>
           {% endfor %}
         </ul>
