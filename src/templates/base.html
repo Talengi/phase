@@ -1,38 +1,38 @@
 {% load compressed %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>{% block title %}Phase{% endblock title %}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="{{ STATIC_URL }}/img/favicon.ico" rel="icon" type="image/x-icon" />
-    {% compressed_css "base" %}
+    <head>
+        <meta charset="utf-8">
+        <title>{% block title %}Phase{% endblock title %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="{{ STATIC_URL }}/img/favicon.ico" rel="icon" type="image/x-icon" />
+        {% compressed_css "base" %}
 
-    <!-- Use this to quickly test CSS changes in a template,
-        then move to project.css -->
-    {% block extra_css %}{% endblock extra_css %}
-  </head>
+        <!-- Use this to quickly test CSS changes in a template,
+                then move to project.css -->
+        {% block extra_css %}{% endblock extra_css %}
+    </head>
 
-  <body>
+    <body>
 
-    {% include 'navbar.html' %}
+        {% include 'navbar.html' %}
 
-    <div class="container">
-      {% if messages %}
-        <ul class="messages">
-          {% for message in messages %}
-            <li id="message_{{ forloop.counter }}"
-              {% if message.tags %} class="alert alert-{% if message.tags == "error" %}danger{% else %}{{ message.tags }}{% endif %}"{% endif %}>
-              {{ message }}
-            </li>
-          {% endfor %}
-        </ul>
-      {% endif %}
-      {% block content %}{% endblock content %}
-    </div> <!-- /container -->
+        <div class="container">
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li id="message_{{ forloop.counter }}"
+                            {% if message.tags %} class="alert alert-{% if message.tags == "error" %}danger{% else %}{{ message.tags }}{% endif %}"{% endif %}>
+                            {{ message }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            {% block content %}{% endblock content %}
+        </div> <!-- /container -->
 
-    <!-- Placed at the end of the document so the pages load faster -->
-    {% compressed_js "base" %}
-    {% block extra_js %}{% endblock extra_js %}
-  </body>
+        <!-- Placed at the end of the document so the pages load faster -->
+        {% compressed_js "base" %}
+        {% block extra_js %}{% endblock extra_js %}
+    </body>
 </html>
