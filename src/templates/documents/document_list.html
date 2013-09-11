@@ -5,11 +5,13 @@
     {% include 'documents/document_action_form.html' %}
 
     <div class="row">
-        <div class="col-md-10">
-            {% include "documents/custom/list_table.html" %}
+        <div class="col-sm-9 col-md-10">
+            <div class="table-responsive">
+                {% include "documents/custom/list_table.html" %}
+            </div>
         </div>
 
-        <div class="col-md-2" id="sidebar">
+        <div class="col-sm-3 col-md-2" id="sidebar">
             <form action="{% url 'document_filter' %}"
                   method="get"
                   id="table-filters">
