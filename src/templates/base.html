@@ -17,17 +17,19 @@
 
         {% include 'navbar.html' %}
 
-        {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                    <li id="message_{{ forloop.counter }}"
-                        {% if message.tags %} class="alert alert-{% if message.tags == "error" %}danger{% else %}{{ message.tags }}{% endif %}"{% endif %}>
-                        {{ message }}
-                    </li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-        {% block content %}{% endblock content %}
+        <div class="container">
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li id="message_{{ forloop.counter }}"
+                            {% if message.tags %} class="alert alert-{% if message.tags == "error" %}danger{% else %}{{ message.tags }}{% endif %}"{% endif %}>
+                            {{ message }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            {% block content %}{% endblock content %}
+        </div> <!-- /container -->
 
         <!-- Placed at the end of the document so the pages load faster -->
         {% compressed_js "base" %}
