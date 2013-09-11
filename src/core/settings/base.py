@@ -265,7 +265,6 @@ PIPELINE_CSS = {
     },
     'detail': {
         'source_filenames': (
-            'css/bootstrap-fileupload.css',
             'css/jquery.multiselect.css',
             'css/jquery.multiselect.filter.css',
         ),
@@ -294,7 +293,6 @@ PIPELINE_JS = {
     },
     'detail': {
         'source_filenames': (
-            'js/bootstrap-fileupload.js',
             'js/jquery.multiselect.js',
             'js/jquery.multiselect.filter.js',
             'js/document-detail.js',

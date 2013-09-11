@@ -34,34 +34,28 @@
                         <div class="controls controls-row">
                             <div class="form-group">
                                 <label class="control-label col-sm-4" for="{{ form.native_file.auto_id }}">{{ form.native_file.label }}</label>
-                                <div class="fileupload fileupload-new controls col-sm-5" data-provides="fileupload">
-                                    <div class="input-append">
-                                        <div class="uneditable-input col-sm-4">
-                                            <i class="icon-file fileupload-exists"></i>
-                                            <span class="fileupload-preview">
-                                                {% if revision.native_file %}
-                                                    <a href="{{ revision.native_file.url }}">{{ revision.native_file.name }}</a>
-                                                {% endif %}
-                                            </span>
-                                        </div>
-                                    </div>
+                                <div class="controls input-group col-sm-8" data-provides="fileupload">
+                                    <input type="text" value="{{ revision.native_file.name|default_if_none:"" }}" />
+                                    {% if revision.native_file %}
+                                        <a class="input-group-addon" href="{{ revision.native_file.url }}">
+                                            <i class="glyphicon glyphicon-file fileupload-exists"></i>
+                                            Download
+                                        </a>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
                         <div class="controls controls-row">
                             <div class="form-group">
                                 <label class="control-label col-sm-4" for="{{ form.pdf_file.auto_id }}">{{ form.pdf_file.label }}</label>
-                                <div class="fileupload fileupload-new controls col-sm-5" data-provides="fileupload">
-                                    <div class="input-append">
-                                        <div class="uneditable-input col-sm-4">
-                                            <i class="icon-file fileupload-exists"></i>
-                                            <span class="fileupload-preview">
-                                                {% if revision.pdf_file %}
-                                                    <a href="{{ revision.pdf_file.url }}">{{ revision.pdf_file.name }}</a>
-                                                {% endif %}
-                                            </span>
-                                        </div>
-                                    </div>
+                                <div class="controls input-group col-sm-8" data-provides="fileupload">
+                                    <input type="text" value="{{ revision.pdf_file.name|default_if_none:"" }}" />
+                                    {% if revision.pdf_file %}
+                                        <a class="input-group-addon" href="{{ revision.pdf_file.url }}">
+                                            <i class="glyphicon glyphicon-file fileupload-exists"></i>
+                                            Download
+                                        </a>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
