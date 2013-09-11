@@ -40,17 +40,15 @@ body > .container {
 tr.selected {
     background-color: #f0f0f0;
 }
-td.row-title, .table th {
+.table th {
     text-align: center;
 }
-td.row-title {
-    font-weight: bold;
-    padding-top: 20px;
+.table tbody th {
+    vertical-align: middle !important;
 }
 .table-centered th, .table-centered td {
     text-align: center;
 }
-
 
 /* Related documents and multiselect */
 .document-list {
@@ -211,17 +209,6 @@ button.ui-multiselect {
 
 
 /* document details */
-#document-edit input[type="text"],
-#document-edit select,
-#document-edit textarea,
-#document-detail input[type="text"],
-#document-detail select,
-#document-detail textarea {
-    width: 80%;
-}
-#document-edit select#id_related_documents  {
-    width: 40%;
-}
 #document-edit legend,
 #document-detail legend {
     padding-top: 50px; /* anchors visible under topbar */
@@ -229,6 +216,11 @@ button.ui-multiselect {
 #document-edit,
 #document-detail {
     margin-top: -40px; /* first anchor high enough considering legend padding */
+}
+#form-schedule-table tbody td {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding: 10px 20px;
 }
 
 /* left nav */
