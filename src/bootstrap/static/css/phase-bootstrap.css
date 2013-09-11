@@ -6803,3 +6803,205 @@ td.visible-print {
     display: none !important;
   }
 }
+
+form.form-horizontal .controls select,
+form.form-horizontal .controls textarea,
+form.form-horizontal .controls input[type="text"],
+form.form-horizontal .controls input[type="password"],
+form.form-horizontal .controls input[type="datetime"],
+form.form-horizontal .controls input[type="datetime-local"],
+form.form-horizontal .controls input[type="date"],
+form.form-horizontal .controls input[type="month"],
+form.form-horizontal .controls input[type="time"],
+form.form-horizontal .controls input[type="week"],
+form.form-horizontal .controls input[type="number"],
+form.form-horizontal .controls input[type="email"],
+form.form-horizontal .controls input[type="url"],
+form.form-horizontal .controls input[type="search"],
+form.form-horizontal .controls input[type="tel"],
+form.form-horizontal .controls input[type="color"] {
+  display: block;
+  width: 100%;
+  height: 34px;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.428571429;
+  color: #555555;
+  vertical-align: middle;
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+          transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+}
+
+form.form-horizontal .controls select:-moz-placeholder,
+form.form-horizontal .controls textarea:-moz-placeholder,
+form.form-horizontal .controls input[type="text"]:-moz-placeholder,
+form.form-horizontal .controls input[type="password"]:-moz-placeholder,
+form.form-horizontal .controls input[type="datetime"]:-moz-placeholder,
+form.form-horizontal .controls input[type="datetime-local"]:-moz-placeholder,
+form.form-horizontal .controls input[type="date"]:-moz-placeholder,
+form.form-horizontal .controls input[type="month"]:-moz-placeholder,
+form.form-horizontal .controls input[type="time"]:-moz-placeholder,
+form.form-horizontal .controls input[type="week"]:-moz-placeholder,
+form.form-horizontal .controls input[type="number"]:-moz-placeholder,
+form.form-horizontal .controls input[type="email"]:-moz-placeholder,
+form.form-horizontal .controls input[type="url"]:-moz-placeholder,
+form.form-horizontal .controls input[type="search"]:-moz-placeholder,
+form.form-horizontal .controls input[type="tel"]:-moz-placeholder,
+form.form-horizontal .controls input[type="color"]:-moz-placeholder {
+  color: #999999;
+}
+
+form.form-horizontal .controls select::-moz-placeholder,
+form.form-horizontal .controls textarea::-moz-placeholder,
+form.form-horizontal .controls input[type="text"]::-moz-placeholder,
+form.form-horizontal .controls input[type="password"]::-moz-placeholder,
+form.form-horizontal .controls input[type="datetime"]::-moz-placeholder,
+form.form-horizontal .controls input[type="datetime-local"]::-moz-placeholder,
+form.form-horizontal .controls input[type="date"]::-moz-placeholder,
+form.form-horizontal .controls input[type="month"]::-moz-placeholder,
+form.form-horizontal .controls input[type="time"]::-moz-placeholder,
+form.form-horizontal .controls input[type="week"]::-moz-placeholder,
+form.form-horizontal .controls input[type="number"]::-moz-placeholder,
+form.form-horizontal .controls input[type="email"]::-moz-placeholder,
+form.form-horizontal .controls input[type="url"]::-moz-placeholder,
+form.form-horizontal .controls input[type="search"]::-moz-placeholder,
+form.form-horizontal .controls input[type="tel"]::-moz-placeholder,
+form.form-horizontal .controls input[type="color"]::-moz-placeholder {
+  color: #999999;
+}
+
+form.form-horizontal .controls select:-ms-input-placeholder,
+form.form-horizontal .controls textarea:-ms-input-placeholder,
+form.form-horizontal .controls input[type="text"]:-ms-input-placeholder,
+form.form-horizontal .controls input[type="password"]:-ms-input-placeholder,
+form.form-horizontal .controls input[type="datetime"]:-ms-input-placeholder,
+form.form-horizontal .controls input[type="datetime-local"]:-ms-input-placeholder,
+form.form-horizontal .controls input[type="date"]:-ms-input-placeholder,
+form.form-horizontal .controls input[type="month"]:-ms-input-placeholder,
+form.form-horizontal .controls input[type="time"]:-ms-input-placeholder,
+form.form-horizontal .controls input[type="week"]:-ms-input-placeholder,
+form.form-horizontal .controls input[type="number"]:-ms-input-placeholder,
+form.form-horizontal .controls input[type="email"]:-ms-input-placeholder,
+form.form-horizontal .controls input[type="url"]:-ms-input-placeholder,
+form.form-horizontal .controls input[type="search"]:-ms-input-placeholder,
+form.form-horizontal .controls input[type="tel"]:-ms-input-placeholder,
+form.form-horizontal .controls input[type="color"]:-ms-input-placeholder {
+  color: #999999;
+}
+
+form.form-horizontal .controls select::-webkit-input-placeholder,
+form.form-horizontal .controls textarea::-webkit-input-placeholder,
+form.form-horizontal .controls input[type="text"]::-webkit-input-placeholder,
+form.form-horizontal .controls input[type="password"]::-webkit-input-placeholder,
+form.form-horizontal .controls input[type="datetime"]::-webkit-input-placeholder,
+form.form-horizontal .controls input[type="datetime-local"]::-webkit-input-placeholder,
+form.form-horizontal .controls input[type="date"]::-webkit-input-placeholder,
+form.form-horizontal .controls input[type="month"]::-webkit-input-placeholder,
+form.form-horizontal .controls input[type="time"]::-webkit-input-placeholder,
+form.form-horizontal .controls input[type="week"]::-webkit-input-placeholder,
+form.form-horizontal .controls input[type="number"]::-webkit-input-placeholder,
+form.form-horizontal .controls input[type="email"]::-webkit-input-placeholder,
+form.form-horizontal .controls input[type="url"]::-webkit-input-placeholder,
+form.form-horizontal .controls input[type="search"]::-webkit-input-placeholder,
+form.form-horizontal .controls input[type="tel"]::-webkit-input-placeholder,
+form.form-horizontal .controls input[type="color"]::-webkit-input-placeholder {
+  color: #999999;
+}
+
+form.form-horizontal .controls select:focus,
+form.form-horizontal .controls textarea:focus,
+form.form-horizontal .controls input[type="text"]:focus,
+form.form-horizontal .controls input[type="password"]:focus,
+form.form-horizontal .controls input[type="datetime"]:focus,
+form.form-horizontal .controls input[type="datetime-local"]:focus,
+form.form-horizontal .controls input[type="date"]:focus,
+form.form-horizontal .controls input[type="month"]:focus,
+form.form-horizontal .controls input[type="time"]:focus,
+form.form-horizontal .controls input[type="week"]:focus,
+form.form-horizontal .controls input[type="number"]:focus,
+form.form-horizontal .controls input[type="email"]:focus,
+form.form-horizontal .controls input[type="url"]:focus,
+form.form-horizontal .controls input[type="search"]:focus,
+form.form-horizontal .controls input[type="tel"]:focus,
+form.form-horizontal .controls input[type="color"]:focus {
+  border-color: #66afe9;
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+
+form.form-horizontal .controls select[disabled],
+form.form-horizontal .controls textarea[disabled],
+form.form-horizontal .controls input[type="text"][disabled],
+form.form-horizontal .controls input[type="password"][disabled],
+form.form-horizontal .controls input[type="datetime"][disabled],
+form.form-horizontal .controls input[type="datetime-local"][disabled],
+form.form-horizontal .controls input[type="date"][disabled],
+form.form-horizontal .controls input[type="month"][disabled],
+form.form-horizontal .controls input[type="time"][disabled],
+form.form-horizontal .controls input[type="week"][disabled],
+form.form-horizontal .controls input[type="number"][disabled],
+form.form-horizontal .controls input[type="email"][disabled],
+form.form-horizontal .controls input[type="url"][disabled],
+form.form-horizontal .controls input[type="search"][disabled],
+form.form-horizontal .controls input[type="tel"][disabled],
+form.form-horizontal .controls input[type="color"][disabled],
+form.form-horizontal .controls select[readonly],
+form.form-horizontal .controls textarea[readonly],
+form.form-horizontal .controls input[type="text"][readonly],
+form.form-horizontal .controls input[type="password"][readonly],
+form.form-horizontal .controls input[type="datetime"][readonly],
+form.form-horizontal .controls input[type="datetime-local"][readonly],
+form.form-horizontal .controls input[type="date"][readonly],
+form.form-horizontal .controls input[type="month"][readonly],
+form.form-horizontal .controls input[type="time"][readonly],
+form.form-horizontal .controls input[type="week"][readonly],
+form.form-horizontal .controls input[type="number"][readonly],
+form.form-horizontal .controls input[type="email"][readonly],
+form.form-horizontal .controls input[type="url"][readonly],
+form.form-horizontal .controls input[type="search"][readonly],
+form.form-horizontal .controls input[type="tel"][readonly],
+form.form-horizontal .controls input[type="color"][readonly],
+fieldset[disabled] form.form-horizontal .controls select,
+fieldset[disabled] form.form-horizontal .controls textarea,
+fieldset[disabled] form.form-horizontal .controls input[type="text"],
+fieldset[disabled] form.form-horizontal .controls input[type="password"],
+fieldset[disabled] form.form-horizontal .controls input[type="datetime"],
+fieldset[disabled] form.form-horizontal .controls input[type="datetime-local"],
+fieldset[disabled] form.form-horizontal .controls input[type="date"],
+fieldset[disabled] form.form-horizontal .controls input[type="month"],
+fieldset[disabled] form.form-horizontal .controls input[type="time"],
+fieldset[disabled] form.form-horizontal .controls input[type="week"],
+fieldset[disabled] form.form-horizontal .controls input[type="number"],
+fieldset[disabled] form.form-horizontal .controls input[type="email"],
+fieldset[disabled] form.form-horizontal .controls input[type="url"],
+fieldset[disabled] form.form-horizontal .controls input[type="search"],
+fieldset[disabled] form.form-horizontal .controls input[type="tel"],
+fieldset[disabled] form.form-horizontal .controls input[type="color"] {
+  cursor: not-allowed;
+  background-color: #eeeeee;
+}
+
+textareaform.form-horizontal .controls select,
+textareaform.form-horizontal .controls textarea,
+textareaform.form-horizontal .controls input[type="text"],
+textareaform.form-horizontal .controls input[type="password"],
+textareaform.form-horizontal .controls input[type="datetime"],
+textareaform.form-horizontal .controls input[type="datetime-local"],
+textareaform.form-horizontal .controls input[type="date"],
+textareaform.form-horizontal .controls input[type="month"],
+textareaform.form-horizontal .controls input[type="time"],
+textareaform.form-horizontal .controls input[type="week"],
+textareaform.form-horizontal .controls input[type="number"],
+textareaform.form-horizontal .controls input[type="email"],
+textareaform.form-horizontal .controls input[type="url"],
+textareaform.form-horizontal .controls input[type="search"],
+textareaform.form-horizontal .controls input[type="tel"],
+textareaform.form-horizontal .controls input[type="color"] {
+  height: auto;
+}
