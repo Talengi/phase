@@ -17,6 +17,8 @@
 
         {% include 'navbar.html' %}
 
+        {% block additional_navbar %}{% endblock %}
+
         <div class="container">
             {% if messages %}
                 <ul class="messages">
