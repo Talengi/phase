@@ -1,6 +1,7 @@
 /* Main style */
 body {
     padding-top: 51px; /* Because of the fixed top navbar */
+    padding-bottom: 50px;
 }
 body > .container {
     max-width: 100%;
