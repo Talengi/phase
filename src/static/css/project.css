@@ -58,9 +58,6 @@ tr.selected {
     max-height: 125px;
     overflow-y: auto;
 }
-#id_related_documents {
-    width: 500px;
-}
 button.ui-multiselect {
     color: #000;
     font-weight: normal;
