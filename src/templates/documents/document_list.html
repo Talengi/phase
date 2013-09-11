@@ -1,17 +1,25 @@
 {% extends "base.html" %}
 {% load compressed %}
 
-{% block content %}
+{% block additional_navbar %}
     {% include 'documents/document_action_form.html' %}
+{% endblock %}
 
-    <div class="row">
-        <div class="col-sm-9 col-md-10">
+{% block content %}
+    <div id="document-list-row" class="row row-offcanvas row-offcanvas-right">
+        <div class="col-md-12 col-lg-10">
             <div class="table-responsive">
                 {% include "documents/custom/list_table.html" %}
             </div>
         </div>
 
-        <div class="col-sm-3 col-md-2" id="sidebar">
+        <div class="col-lg-2 sidebar-offcanvas" id="sidebar">
+            <button id="toggle-filters-button"
+                    type="button"
+                    class="btn btn-primary visible-xs visible-sm visible-md"
+                    data-toggle="offcanvas">
+                <span class="glyphicon glyphicon-arrow-left"></span> Filters
+            </button>
             <form action="{% url 'document_filter' %}"
                   method="get"
                   id="table-filters">
