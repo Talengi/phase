@@ -18,3 +18,11 @@ form.form-horizontal .controls {
         .form-control;
     }
 }
+
+// Port this class to BS3, used by bootstrap-fileupload
+.uneditable-input {
+  .form-control;
+  cursor: not-allowed;
+  background-color: @input-bg-disabled;
+  border-radius: 0;
+}
