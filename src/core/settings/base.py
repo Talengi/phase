@@ -255,7 +255,7 @@ STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 PIPELINE_CSS = {
     'base': {
         'source_filenames': (
-            'css/phase-bootstrap.min.css',
+            'css/phase-bootstrap.css',
             'css/jquery-ui.css',
             # must be loaded after jquery-ui js to avoid conflicts
             'css/datepicker.css',
@@ -279,7 +279,7 @@ PIPELINE_JS = {
             'js/jquery-ui.min.js',
             # both bootstrap and bootstrap-datepicker must be loaded
             # after jquery-ui js to avoid conflicts
-            'js/phase-bootstrap.min.js',
+            'js/phase-bootstrap.js',
             'js/bootstrap-datepicker.js',
         ),
         'output_filename': 'js/base.js',

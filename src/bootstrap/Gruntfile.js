@@ -64,24 +64,10 @@ module.exports = function(grunt) {
         src: ['less/bootstrap.less'],
         dest: '<%= dist %>/css/<%= pkg.name %>.css'
       },
-      min: {
-        options: {
-          compress: true
-        },
-        src: ['less/bootstrap.less'],
-        dest: '<%= dist %>/css/<%= pkg.name %>.min.css'
-      },
       theme: {
         src: ['less/theme.less'],
         dest: '<%= dist %>/css/<%= pkg.name %>-theme.css'
       },
-      theme_min: {
-        options: {
-          compress: true
-        },
-        src: ['less/theme.less'],
-        dest: '<%= dist %>/css/<%= pkg.name %>-theme.min.css'
-      }
     },
 
     copy: {
