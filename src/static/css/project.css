@@ -210,6 +210,9 @@ button.ui-multiselect {
 
 
 /* document details */
+.nav-tabs {
+    margin-bottom: 15px;
+}
 #document-edit legend,
 #document-detail legend {
     padding-top: 50px; /* anchors visible under topbar */

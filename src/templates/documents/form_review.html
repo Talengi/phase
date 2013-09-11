@@ -3,7 +3,7 @@
     <div class="controls controls-row">
         <div class="form-group {% if form.errors.under_ca_review %}error{% endif %}">
             <label class="control-label col-sm-4" for="{{ form.under_ca_review.auto_id }}">{{ form.under_ca_review.label }}</label>
-            <div class="controls col-sm-6">
+            <div class="controls col-sm-8">
                 {{ form.under_ca_review }}
             </div>
             {% if form.errors.under_ca_review %}<span class="help-inline">{{ form.errors.under_ca_review.0 }}</span>{% endif %}
@@ -12,7 +12,7 @@
     <div class="controls controls-row">
         <div class="form-group {% if form.errors.under_contractor_review %}error{% endif %}">
             <label class="control-label col-sm-4" for="{{ form.under_contractor_review.auto_id }}">{{ form.under_contractor_review.label }}</label>
-            <div class="controls col-sm-6">
+            <div class="controls col-sm-8">
                 {{ form.under_contractor_review }}
             </div>
             {% if form.errors.under_contractor_review %}<span class="help-inline">{{ form.errors.under_contractor_review.0 }}</span>{% endif %}
@@ -21,7 +21,7 @@
     <div class="controls controls-row">
         <div class="form-group {% if form.errors.leader %}error{% endif %}">
             <label class="control-label col-sm-4" for="{{ form.leader.auto_id }}">{{ form.leader.label }}</label>
-            <div class="controls col-sm-6">
+            <div class="controls col-sm-8">
                 {{ form.leader }}
             </div>
             {% if form.errors.leader %}<span class="help-inline">{{ form.errors.leader.0 }}</span>{% endif %}
@@ -30,7 +30,7 @@
     <div class="controls controls-row">
         <div class="form-group {% if form.errors.approver %}error{% endif %}">
             <label class="control-label col-sm-4" for="{{ form.approver.auto_id }}">{{ form.approver.label }}</label>
-            <div class="controls col-sm-6">
+            <div class="controls col-sm-8">
                 {{ form.approver }}
             </div>
             {% if form.errors.approver %}<span class="help-inline">{{ form.errors.approver.0 }}</span>{% endif %}
