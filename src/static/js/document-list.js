@@ -167,14 +167,5 @@ jQuery(function($) {
     $('[data-toggle=offcanvas]').click(function() {
         var row = $('.row-offcanvas');
         row.toggleClass('active');
-
-        var icon = $(this).find('span.glyphicon');
-        if (row.hasClass('active')) {
-            icon.removeClass('glyphicon-arrow-left');
-            icon.addClass('glyphicon-arrow-right');
-        } else {
-            icon.addClass('glyphicon-arrow-left');
-            icon.removeClass('glyphicon-arrow-right');
-        }
     });
 });

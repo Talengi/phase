@@ -159,9 +159,9 @@ button.ui-multiselect {
 /* Table filters */
 #table-filters legend {
     border: none;
-    padding: 0 5px 7px;
+    padding: 0;
     text-align: center;
-    background: #fff;
+    display: inline-block;
 }
 #table-filters .control-label,
 #table-filters .control-group {
@@ -265,35 +265,59 @@ button.ui-multiselect {
     opacity: 0.25;
 }
 
-/*
- * Off Canvas
- * --------------------------------------------------
- */
-@media screen and (max-width: 992px) {
-  #toggle-filters-button {
-      position: fixed;
-      right: 0;
-      bottom: 0;
-  }
+/* Off canvas sidebar */
+.row-offcanvas .sidebar-offcanvas {
+    position: fixed;
+    display: block;
+    right: 0;
+    top: 100px;
+    padding-top: 15px;
+    width: 16.67%;  /* 2 columns */
+    height: 100%;
+    background-color: white;
+    z-index: -9999;
+}
+.row-offcanvas #controls-rows {
+    position: fixed;
+    right: 0;
+    top: 170px;
+    width: 16.67%;
+    height: 85%;
+    max-height: 85%;
+    overflow-y: auto;
+}
 
-  .row-offcanvas-right.active #toggle-filters-button {
-      right: 33.33%;
-  }
-  .row-offcanvas {
-      position: relative;
-      -webkit-transition: all 0.25s ease-out;
-      -moz-transition: all 0.25s ease-out;
-      transition: all 0.25s ease-out;
-  }
-  .row-offcanvas-right .sidebar-offcanvas {
-      right: -33.333%;
-  }
-  .row-offcanvas-right.active {
-      right: 33.333%;
-  }
-  .sidebar-offcanvas {
-      position: absolute;
-      top: 0;
-      width: 33.3333%;
-  }
+@media screen and (min-width: 1200px) {
+    #sidebar-close-btn {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .row-offcanvas {
+        -webkit-transition: all 0.25s ease-out;
+        -moz-transition: all 0.25s ease-out;
+        transition: all 0.25s ease-out;
+    }
+    .row-offcanvas .sidebar-offcanvas {
+        display: none;
+        width: 33.33%; /* 4 columns */
+        z-index: 9999;
+    }
+    .row-offcanvas #controls-rows {
+        display: none;
+        width: 33.33%;
+    }
+    .row-offcanvas.active .sidebar-offcanvas {
+        display: block;
+        top: 0;
+        border-left: 1px solid #e7e7e7;
+        -moz-box-shadow: -8px 0 5px -1px #666;
+        -webkit-box-shadow: -8px 0 5px -1px #666;
+        box-shadow: -8px 0 5px -1px #666;
+    }
+    .row-offcanvas.active #controls-rows {
+        display: block;
+        top: 70px;
+    }
 }

@@ -23,7 +23,7 @@
     </form>
 
     {% block createdocument %}
-    <div class="btn-group hidden-xs navbar-right">
+    <div class="btn-group hidden-xs navbar-left">
         <button type="button" class="btn btn-primary navbar-btn dropdown-toggle" data-toggle="dropdown">
             <span class="glyphicon glyphicon-plus icon-white"></span> New document <span class="caret"></span>
         </button>
@@ -35,5 +35,12 @@
         </ul>
     </div>
     {% endblock createdocument %}
+
+    <button id="toggle-filters-button"
+            type="button"
+            class="btn btn-primary navbar-btn hidden-lg pull-right"
+            data-toggle="offcanvas">
+        <span class="glyphicon glyphicon-search"></span> Filters
+    </button>
 </div>
 </div>

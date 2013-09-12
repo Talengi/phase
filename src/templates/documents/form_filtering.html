@@ -1,9 +1,12 @@
 {% load widget_tweaks %}
 <fieldset>
     <legend>
-        <button type="button" id="resetForm" class="btn btn-default">Reset filters</button>
+        <button type="button" id="resetForm" class="btn btn-primary">Reset filters</button>
+        <button type="button"
+                id="sidebar-close-btn"
+                class="btn btn-default"
+                data-toggle="offcanvas">Close</button>
     </legend>
-
     <div id="controls-rows">
     {% for field in form.visible_fields %}
         <div class="form-group">
