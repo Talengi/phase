@@ -27,9 +27,12 @@
                 {% for user in switching_users %}
                     <li><a href="{% url "document_list" %}?userswitch={{ user.username}}">{{ user.get_full_name }}</a></li>
                 {% endfor %}
-                <li><a href="{% url "document_list" %}?userswitch=logout">Log out</a></li>
             </ul>
             </li>
+            {% if user.is_superuser %}
+                <li><a href="{% url "admin:index" %}">Admin</a></li>
+            {% endif %}
+            <li><a href="{% url "document_list" %}?userswitch=logout">Log out</a></li>
         </ul>
     </div><!--/.nav-collapse -->
 
