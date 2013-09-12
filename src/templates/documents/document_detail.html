@@ -7,12 +7,7 @@
 
 {% block content %}
 <div class="row">
-    {% comment %}
-    <div class="span3">
-        {% include "documents/document_menu.html" %}
-    </div>
-    {% endcomment %}
-    <div class="span9 offset2">
+    <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
         <form class="disabled form-horizontal" id="document-detail">
             {% include "documents/form_general_information.html" %}
             {% include "documents/form_revision_disabled.html" %}
@@ -20,7 +15,7 @@
             {% include "documents/form_related_documents_list.html" %}
             {% include "documents/form_schedule.html" %}
             <div class="form-actions">
-                <a class="btn" href="{% url "document_list" %}">Cancel</a>
+                <a class="btn btn-default" href="{% url "document_list" %}">Cancel</a>
                 <a class="btn btn-primary pull-right last-button" href="{% url "document_edit" document.document_number %}">Edit document</a>
             </div>
         </form>

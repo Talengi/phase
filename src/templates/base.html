@@ -1,64 +1,40 @@
 {% load compressed %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>{% block title %}Phase{% endblock title %}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="{{ STATIC_URL }}/img/favicon.ico" rel="icon" type="image/x-icon" />
-    {% compressed_css "base" %}
+    <head>
+        <meta charset="utf-8">
+        <title>{% block title %}Phase{% endblock title %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="{{ STATIC_URL }}/img/favicon.ico" rel="icon" type="image/x-icon" />
+        {% compressed_css "base" %}
 
-    <!-- Use this to quickly test CSS changes in a template,
-        then move to project.css -->
-    {% block extra_css %}{% endblock extra_css %}
-  </head>
+        <!-- Use this to quickly test CSS changes in a template,
+                then move to project.css -->
+        {% block extra_css %}{% endblock extra_css %}
+    </head>
 
-  <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container-fluid">
-          <a class="brand" href="#">Phase</a>
-          <div class="nav-collapse collapse">
-            <ul class="nav">
-              <li{% if documents_active %} class="active"{% endif %}><a href="{% url "document_list" %}">Documents</a></li>
-              {% if user.is_authenticated %}
-                <li{% if favorites_active %} class="active"{% endif %}><a href="{% url "favorite_list" %}">Favorites</a></li>
-              {% endif %}
-            </ul>
-            <ul class="nav pull-right">
-              <li class="dropdown" id="userswitch">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                  Switch user (current: {{ request.user }}) <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu" role="menu">
-                  {% for user in switching_users %}
-                    <li><a href="{% url "document_list" %}?userswitch={{ user.username}}">{{ user.get_full_name }}</a></li>
-                  {% endfor %}
-                  <li><a href="{% url "document_list" %}?userswitch=logout">Log out</a></li>
+    <body>
+
+        {% include 'navbar.html' %}
+
+        {% block additional_navbar %}{% endblock %}
+
+        <div class="container">
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li id="message_{{ forloop.counter }}"
+                            {% if message.tags %} class="alert alert-{% if message.tags == "error" %}danger{% else %}{{ message.tags }}{% endif %}"{% endif %}>
+                            {{ message }}
+                        </li>
+                    {% endfor %}
                 </ul>
-              </li>
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
-    </div>
+            {% endif %}
+            {% block content %}{% endblock content %}
+        </div> <!-- /container -->
 
-    <div class="container-fluid">
-      {% if messages %}
-        <ul class="messages">
-          {% for message in messages %}
-            <li id="message_{{ forloop.counter }}"
-                {% if message.tags %} class="{{ message.tags }}"{% endif %}>
-                    {{ message }}
-            </li>
-          {% endfor %}
-        </ul>
-      {% endif %}
-      {% block content %}{% endblock content %}
-    </div> <!-- /container -->
-
-    <!-- Placed at the end of the document so the pages load faster -->
-    {% compressed_js "base" %}
-    {% block extra_js %}{% endblock extra_js %}
-  </body>
+        <!-- Placed at the end of the document so the pages load faster -->
+        {% compressed_js "base" %}
+        {% block extra_js %}{% endblock extra_js %}
+    </body>
 </html>

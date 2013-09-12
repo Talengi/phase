@@ -20,7 +20,7 @@
                 variables = {
                     rows: data,
                     icon: function() {
-                        return this.favorited ? 'icon-star': 'icon-star-empty';
+                        return this.favorited ? 'glyphicon glyphicon-star': 'glyphicon glyphicon-star-empty';
                     },
                     icon_title: function() {
                         return this.favorited ? 'Remove from favorites': 'Add to favorites';

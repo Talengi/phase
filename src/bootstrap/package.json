@@ -1,0 +1,21 @@
+{
+    "name": "phase-bootstrap"
+  , "description": "Bootstrap customization files"
+  , "version": "1.0.0"
+  , "keywords": ["bootstrap", "css"]
+  , "homepage": "https://github.com/Talengi/phase"
+  , "author": "Talengi"
+  , "scripts": { "test": "grunt test" }
+  , "repository": {
+      "type": "git"
+    , "url": "https://github.com/Talengi/phase.git"
+  }
+  , "devDependencies": {
+      "grunt": "~0.4.1"
+    , "grunt-recess": "~0.3.3"
+    , "grunt-contrib-concat": "~0.3.0"
+    , "grunt-contrib-clean": "~0.5.0"
+    , "grunt-contrib-copy": "~0.4.0"
+    , "grunt-contrib-uglify": "~0.2.2"
+  }
+}

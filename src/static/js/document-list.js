@@ -15,12 +15,7 @@ jQuery(function($) {
             $('#id_revisions').val(revisions);
         }
     });
-    // Doing it the bootstrap way with `data-toggle="button"` doesn't work
-    $('.navbar-form button[data-format=pdf]').button('toggle');
-    $('.navbar-form button[data-revisions=latest]').button('toggle');
-    $('.navbar-form').on('click', '.disabled', function(evt) {
-        evt.preventDefault();
-    });
+
 
     ///* document list *///
 
@@ -83,8 +78,8 @@ jQuery(function($) {
         var direction = (sortBy == $sortBy.val()) ? '-' : '';
         $('#id_sort_by').val(direction + sortBy);
         $i = $this.children();
-        $i.is('[class*=icon-chevron-]') ? $i.toggleClass("icon-chevron-up").toggleClass("icon-chevron-down") : $i.addClass('icon-chevron-down');
-        $("#documents th i").not($i).removeClass("icon-chevron-down icon-chevron-up");
+        $i.is('[class*=glyphicon-chevron-]') ? $i.toggleClass("glyphicon-chevron-up").toggleClass("glyphicon-chevron-down") : $i.addClass('glyphicon-chevron-down');
+        $("#documents th i").not($i).removeClass("glyphicon-chevron-down glyphicon-chevron-up");
         serializeTable(evt);
     });
 
@@ -165,6 +160,21 @@ jQuery(function($) {
     $('.pagination a').on('inview', function(event, isInView, visiblePartX, visiblePartY) {
         if (isInView) {
             $(this).trigger('click');
+        }
+    });
+
+    // off canvas
+    $('[data-toggle=offcanvas]').click(function() {
+        var row = $('.row-offcanvas');
+        row.toggleClass('active');
+
+        var icon = $(this).find('span.glyphicon');
+        if (row.hasClass('active')) {
+            icon.removeClass('glyphicon-arrow-left');
+            icon.addClass('glyphicon-arrow-right');
+        } else {
+            icon.addClass('glyphicon-arrow-left');
+            icon.removeClass('glyphicon-arrow-right');
         }
     });
 });

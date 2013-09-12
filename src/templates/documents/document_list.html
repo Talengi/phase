@@ -1,56 +1,25 @@
 {% extends "base.html" %}
 {% load compressed %}
 
+{% block additional_navbar %}
+    {% include 'documents/document_action_form.html' %}
+{% endblock %}
+
 {% block content %}
-    <div class="navbar navbar-fixed-almost-top" id="table-controls">
-        <ul class="nav">
-            <li>
-                <input type="checkbox" id="select-all" />
-                <label for="select-all">
-                    Select/deselect
-                    <span id="display-results">0</span> documents from
-                    <span id="total-results">{{ paginator.count }}</span>
-                </label>
-            </li>
-        </ul>
-        <form action="{% url "document_download" %}" class="navbar-form">
-            <div class="btn-group" data-toggle="buttons-radio">
-                <button type="button" class="btn" data-format="pdf">PDF</button>
-                <button type="button" class="btn" data-format="native">Native</button>
-                <button type="button" class="btn" data-format="both">Both formats</button>
+    <div id="document-list-row" class="row row-offcanvas row-offcanvas-right">
+        <div class="col-md-12 col-lg-10">
+            <div class="table-responsive">
+                {% include "documents/custom/list_table.html" %}
             </div>
-            <div class="btn-group" data-toggle="buttons-radio">
-                <button type="button" class="btn" data-revisions="latest">Latest</button>
-                <button type="button" class="btn" data-revisions="all">All revisions</button>
-            </div>
-            <input id="id_format" name="format" type="hidden" value="pdf" />
-            <input id="id_revisions" name="revisions" type="hidden" value="latest" />
-            <button type="submit" class="btn btn-info disabled"><i class="icon-download icon-white"></i> Download</button>
-        </form>
-        {% block createdocument %}
-            <ul class="nav" id="document-create">
-                <li>
-                  <div class="dropdown">
-                    <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
-                      <i class="icon-plus icon-white"></i> New document <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu" role="menu">
-                      <li><a href="{% url "document_create" %}">Contractor deliverable</a></li>
-                      <li><a href="{% url "document_create" %}">Vendor deliverable</a></li>
-                      <li><a href="{% url "document_create" %}">Correspondence</a></li>
-                      <li><a href="{% url "document_create" %}">Minutes of meeting</a></li>
-                    </ul>
-                  </div>
-                </li>
-            </ul>
-        {% endblock createdocument %}
-    </div>
-    <div class="row-fluid">
-        <div class="span10">
-            {% include "documents/custom/list_table.html" %}
         </div>
 
-        <div class="span2" id="sidebar">
+        <div class="col-lg-2 sidebar-offcanvas" id="sidebar">
+            <button id="toggle-filters-button"
+                    type="button"
+                    class="btn btn-primary visible-xs visible-sm visible-md"
+                    data-toggle="offcanvas">
+                <span class="glyphicon glyphicon-arrow-left"></span> Filters
+            </button>
             <form action="{% url 'document_filter' %}"
                   method="get"
                   id="table-filters">

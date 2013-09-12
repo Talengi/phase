@@ -7,7 +7,7 @@
             self = $(this),
             documentId = self.closest('tr').data('document-id'),
             favoriteId = self.data('favorite-id');
-        if (self.hasClass('icon-star')) {
+        if (self.hasClass('glyphicon-star')) {
             $.ajax({
                 method: "POST",
                 url: opts.deleteUrl.replace('0', favoriteId),
@@ -15,8 +15,8 @@
                     csrfmiddlewaretoken: opts.csrfToken
                 },
                 beforeSend: function() {
-                    self.removeClass("icon-star")
-                        .addClass("icon-star-empty")
+                    self.removeClass("glyphicon-star")
+                        .addClass("glyphicon-star-empty")
                         .attr('title', "Add to favorites");
                 },
                 success: function() {
@@ -33,8 +33,8 @@
                     csrfmiddlewaretoken: opts.csrfToken
                 },
                 beforeSend: function() {
-                    self.removeClass("icon-star-empty")
-                        .addClass("icon-star")
+                    self.removeClass("glyphicon-star-empty")
+                        .addClass("glyphicon-star")
                         .attr('title', "Remove from favorites");
                 },
                 success: function(data) {
