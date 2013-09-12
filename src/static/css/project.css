@@ -288,6 +288,9 @@ button.ui-multiselect {
 }
 
 @media screen and (min-width: 1200px) {
+    #resetForm {
+        margin-right: 5px;
+    }
     #sidebar-close-btn {
         display: none;
     }
