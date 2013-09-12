@@ -270,20 +270,19 @@ button.ui-multiselect {
     position: fixed;
     display: block;
     right: 0;
-    top: 100px;
+    top: 102px;
+    bottom: 0;
     padding-top: 15px;
     width: 16.67%;  /* 2 columns */
-    height: 100%;
     background-color: white;
-    z-index: -9999;
+    z-index: 9999;
 }
 .row-offcanvas #controls-rows {
     position: fixed;
     right: 0;
     top: 170px;
     width: 16.67%;
-    height: 85%;
-    max-height: 85%;
+    bottom: 0;
     overflow-y: auto;
 }
 
@@ -302,7 +301,6 @@ button.ui-multiselect {
     .row-offcanvas .sidebar-offcanvas {
         display: none;
         width: 33.33%; /* 4 columns */
-        z-index: 9999;
     }
     .row-offcanvas #controls-rows {
         display: none;
