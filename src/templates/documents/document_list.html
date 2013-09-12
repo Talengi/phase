@@ -7,16 +7,16 @@
 
 {% block content %}
     <div id="document-list-row" class="row row-offcanvas row-offcanvas-right">
-        <div class="col-md-12 col-lg-10">
+        <div class="col-sm-12 col-md-10">
             <div class="table-responsive">
                 {% include "documents/custom/list_table.html" %}
             </div>
         </div>
 
-        <div class="col-lg-2 sidebar-offcanvas" id="sidebar">
+        <div class="col-md-2 sidebar-offcanvas" id="sidebar">
             <button id="toggle-filters-button"
                     type="button"
-                    class="btn btn-primary visible-xs visible-sm visible-md"
+                    class="btn btn-primary hidden-md hidden-lg"
                     data-toggle="offcanvas">
                 <span class="glyphicon glyphicon-arrow-left"></span> Filters
             </button>

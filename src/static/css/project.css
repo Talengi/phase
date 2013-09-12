@@ -269,7 +269,7 @@ button.ui-multiselect {
  * Off Canvas
  * --------------------------------------------------
  */
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 992px) {
   #toggle-filters-button {
       position: fixed;
       right: 0;
