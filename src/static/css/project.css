@@ -324,3 +324,12 @@ button.ui-multiselect {
         top: 70px;
     }
 }
+
+@media screen and (max-width: 768px) {
+    .row-offcanvas .sidebar-offcanvas {
+        width: 50%; /* 4 columns */
+    }
+    .row-offcanvas #controls-rows {
+        width: 50%; /* 4 columns */
+    }
+}
