@@ -294,9 +294,6 @@ button.ui-multiselect {
 }
 
 @media screen and (max-width: 1200px) {
-    #resetForm {
-        margin-right: 5px;
-    }
     .row-offcanvas {
         -webkit-transition: all 0.25s ease-out;
         -moz-transition: all 0.25s ease-out;
