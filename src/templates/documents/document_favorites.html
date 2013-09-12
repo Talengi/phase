@@ -3,6 +3,7 @@
 {% block content %}
 <h2>Favorites</h2>
 {% if favorite_list %}
+<div class="table-responsive">
     <table class="table table-striped table-condensed table-bordered table-hover table-centered">
         <thead>
             <tr>
@@ -23,7 +24,7 @@
                     <td>{{ favorite.document.current_revision }}</td>
                     <td>
                         {% if favorite.is_outdated %}
-                            <i class="icon-exclamation-sign" title="This document has been updated."></i>
+                            <i class="glyphicon glyphicon-exclamation-sign" title="This document has been updated."></i>
                         {% else %}
                             -
                         {% endif %}
@@ -32,6 +33,7 @@
             {% endfor %}
         </tbody>
     </table>
+</div>
 {% else %}
     <p>You do not have any favorite document.</p>
 {% endif %}
