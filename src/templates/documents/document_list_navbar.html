@@ -1,12 +1,8 @@
 <div class="navbar navbar-default navbar-fixed-top navbar-fixed-almost-top" id="table-controls">
-    <form action="#" class="navbar-form navbar-left hidden-xs hidden-sm">
-        <input type="checkbox" id="select-all" />
-        <label for="select-all">
-            Select/deselect
-            <span id="display-results">0</span> documents from
-            <span id="total-results">{{ paginator.count }}</span>
-        </label>
-    </form>
+    <p class="navbar-text hidden-xs hidden-sm">
+        <span id="display-results">0</span> documents on
+        <span id="total-results">{{ paginator.count }}</span>
+    </p>
 
     <form action="{% url "document_download" %}" class="navbar-form navbar-left">
         <div class="btn-toolbar">
@@ -26,7 +22,7 @@
     </form>
 
     {% block createdocument %}
-    <div class="btn-group hidden-xs navbar-left">
+    <div class="btn-group hidden-xs navbar-right">
         <button type="button" class="btn btn-primary navbar-btn dropdown-toggle" data-toggle="dropdown">
             <span class="glyphicon glyphicon-plus icon-white"></span> New document <span class="caret"></span>
         </button>
