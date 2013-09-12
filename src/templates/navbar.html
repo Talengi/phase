@@ -1,37 +1,37 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
 <div class="container">
 
-  <div class="navbar-header">
-    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-      <span class="sr-only">Toggle navigation</span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-    </button>
-    <a class="navbar-brand" href="{% url "document_list" %}">Phase</a>
-  </div>
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="{% url "document_list" %}">Phase</a>
+    </div>
 
-  <div class="navbar-collapse collapse">
-    <ul class="nav navbar-nav">
-      <li{% if documents_active %} class="active"{% endif %}><a href="{% url "document_list" %}">Documents</a></li>
-      {% if user.is_authenticated %}
-        <li{% if favorites_active %} class="active"{% endif %}><a href="{% url "favorite_list" %}">Favorites</a></li>
-      {% endif %}
-    </ul>
-    <ul class="nav navbar-nav pull-right">
-      <li class="dropdown" id="userswitch">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-          Switch user (current: {{ request.user }}) <span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu" role="menu">
-          {% for user in switching_users %}
-            <li><a href="{% url "document_list" %}?userswitch={{ user.username}}">{{ user.get_full_name }}</a></li>
-          {% endfor %}
-          <li><a href="{% url "document_list" %}?userswitch=logout">Log out</a></li>
+    <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+            <li{% if documents_active %} class="active"{% endif %}><a href="{% url "document_list" %}">Documents</a></li>
+            {% if user.is_authenticated %}
+                <li{% if favorites_active %} class="active"{% endif %}><a href="{% url "favorite_list" %}">Favorites</a></li>
+            {% endif %}
         </ul>
-      </li>
-    </ul>
-  </div><!--/.nav-collapse -->
+        <ul class="nav navbar-nav pull-right">
+            <li class="dropdown" id="userswitch">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                Switch user (current: {{ request.user }}) <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu" role="menu">
+                {% for user in switching_users %}
+                    <li><a href="{% url "document_list" %}?userswitch={{ user.username}}">{{ user.get_full_name }}</a></li>
+                {% endfor %}
+                <li><a href="{% url "document_list" %}?userswitch=logout">Log out</a></li>
+            </ul>
+            </li>
+        </ul>
+    </div><!--/.nav-collapse -->
 
 </div>
 </nav>
