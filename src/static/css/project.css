@@ -27,9 +27,6 @@ body > .container {
 .form-horizontal label {
     text-align: right;
 }
-.form-horizontal .form-actions {
-    padding-left: 20px;
-}
 .form-horizontal table .control-group {
     margin: 10px 35px;
 }
