@@ -1,11 +1,10 @@
 [
 {
   "pk": 1,
-  "model": "auth.user",
+  "model": "accounts.user",
   "fields": {
-    "username": "matthieu",
-    "first_name": "Matthieu",
-    "last_name": "Lamy",
+    "name": "Matthieu Lamy",
+    "email": "matthieu@phase.fr",
     "is_active": true,
     "is_superuser": false,
     "is_staff": false,
@@ -13,17 +12,15 @@
     "groups": [],
     "user_permissions": [],
     "password": "pbkdf2_sha256$10000$YIZK82iibZjx$8wYCNakdR0uCbC/XNy8Ae+8tO73kXkp9p4PF9YUmcHQ=",
-    "email": "foo@bar.fr",
     "date_joined": "2013-05-02T08:22:44.530Z"
   }
 },
 {
   "pk": 2,
-  "model": "auth.user",
+  "model": "accounts.user",
   "fields": {
-    "username": "david",
-    "first_name": "David",
-    "last_name": "Larlet",
+    "name": "David Larlet",
+    "email": "david@phase.fr",
     "is_active": true,
     "is_superuser": false,
     "is_staff": false,
@@ -31,17 +28,15 @@
     "groups": [],
     "user_permissions": [],
     "password": "pbkdf2_sha256$10000$dBANslEV3a7Y$3gRuQ925wGryy4yYNV3Mg/A6j9b6QPI3fLT8gBHbXo0=",
-    "email": "foo@bar.fr",
     "date_joined": "2013-05-02T08:25:00.035Z"
   }
 },
 {
   "pk": 3,
-  "model": "auth.user",
+  "model": "accounts.user",
   "fields": {
-    "username": "vincent",
-    "first_name": "Vincent",
-    "last_name": "Agnano",
+    "name": "Vincent Agnano",
+    "email": "vincent@phase.fr",
     "is_active": true,
     "is_superuser": false,
     "is_staff": false,
@@ -49,7 +44,6 @@
     "groups": [],
     "user_permissions": [],
     "password": "pbkdf2_sha256$10000$7gWwWoCk8ADq$xhGFcTlTXngOZaKNkm1HYy/m0V7EDgFegE4tALU1yF4=",
-    "email": "foo@bar.fr",
     "date_joined": "2013-05-02T08:25:22.734Z"
   }
 },
