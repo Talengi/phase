@@ -43,7 +43,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         max_length=64)
     position = models.CharField(
         _('Position'),
-        max_length=50)
+        max_length=50,
+        null=True, blank=True)
     is_staff = models.BooleanField(
         _('staff status'),
         default=False,
