@@ -330,3 +330,14 @@ button.ui-multiselect {
         width: 50%; /* 4 columns */
     }
 }
+
+/* Signin */
+.form-signin {
+    max-width: 350px;
+    padding: 15px;
+    margin: 0 auto;
+}
+.form-group .alert {
+    padding: 8px 15px;
+    margin-top: 8px;
+}

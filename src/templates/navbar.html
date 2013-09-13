@@ -18,6 +18,7 @@
                 <li{% if favorites_active %} class="active"{% endif %}><a href="{% url "favorite_list" %}">Favorites</a></li>
             {% endif %}
         </ul>
+
         <ul class="nav navbar-nav navbar-right">
             {% if user.is_superuser %}
                 <li><a href="{% url "admin:index" %}">Admin</a></li>
@@ -26,6 +27,12 @@
                 <li><a href="{% url "logout" %}">Log out</a></li>
             {% endif %}
         </ul>
+
+        {% if user.is_authenticated %}
+            <p class="navbar-text navbar-right">
+                Hello {{ user.get_full_name }}
+            </p>
+        {% endif %}
     </div><!--/.nav-collapse -->
 
 </div>
