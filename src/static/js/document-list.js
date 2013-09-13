@@ -78,7 +78,7 @@ jQuery(function($) {
         var direction = (sortBy == $sortBy.val()) ? '-' : '';
         $('#id_sort_by').val(direction + sortBy);
         $i = $this.children();
-        $i.is('[class*=glyphicon-chevron-]') ? $i.toggleClass("glyphicon-chevron-up").toggleClass("glyphicon-chevron-down") : $i.addClass('glyphicon-chevron-down');
+        $i.is('[class*=glyphicon-chevron-]') ? $i.toggleClass("glyphicon-chevron-up").toggleClass("glyphicon-chevron-down") : $i.addClass('glyphicon glyphicon-chevron-down');
         $("#documents th i").not($i).removeClass("glyphicon-chevron-down glyphicon-chevron-up");
         serializeTable(evt);
     });
