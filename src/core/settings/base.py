@@ -162,7 +162,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 
     # Custom middlewares
-    'documents.middlewares.UserSwitchMiddleware',
 )
 ########## END MIDDLEWARE CONFIGURATION
 
