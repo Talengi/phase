@@ -6,6 +6,7 @@ admin.autodiscover()
 urlpatterns = patterns(
     '',
     url(r'^', include('documents.urls')),
+    url(r'^accounts/', include('accounts.urls')),
     url(r'^robots\.txt$', lambda r: HttpResponse(
         "User-agent: *\nDisallow: /",
         mimetype="text/plain")),
