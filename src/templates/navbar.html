@@ -32,7 +32,7 @@
             {% if user.is_superuser %}
                 <li><a href="{% url "admin:index" %}">Admin</a></li>
             {% endif %}
-            <li><a href="{% url "document_list" %}?userswitch=logout">Log out</a></li>
+            <li><a href="{% url "logout" %}">Log out</a></li>
         </ul>
     </div><!--/.nav-collapse -->
 
