@@ -37,6 +37,9 @@ body > .container,
 .form-horizontal .controls {
     margin-left: 0;
 }
+.btn-block {
+    margin-bottom: 15px;
+}
 
 /* Table rendering */
 tr.selected {
