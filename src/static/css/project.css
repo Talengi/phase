@@ -347,7 +347,7 @@ button.ui-multiselect {
 }
 
 /* Signin */
-.form-signin {
+.central-form {
     max-width: 350px;
     padding: 15px;
     margin: 0 auto;
