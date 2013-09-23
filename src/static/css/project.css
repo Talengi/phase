@@ -25,6 +25,9 @@ body > .container,
 .navbar-fixed-almost-top .navbar-text {
     margin-left: 0;
 }
+body > .container > .messages {
+    margin-top: 15px;
+}
 
 
 /* Form rendering */
