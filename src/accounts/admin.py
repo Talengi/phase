@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as django_UserAdmin
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib import messages
 
 from .models import User
 from .forms import UserCreationForm, UserChangeForm
@@ -37,6 +39,20 @@ class UserAdmin(django_UserAdmin):
     search_fields = ('email', 'name', 'position')
     ordering = ('email',)
     filter_horizontal = ()
+
+    def save_model(self, request, obj, form, change):
+        """Send account activation mail after user creation.
+
+        We only send activation mail when the new user was created from
+        the admin. We could have used a post_save signal, but we would have
+        lost the ability to create a user without generating an email.
+
+        """
+        obj.save()
+        if not change:
+            token = default_token_generator.make_token(obj)
+            obj.send_account_activation_email(token)
+            messages.info(request, 'The account activation mail was sent')
 
 
 #admin.site.unregister(django_User, django_UserAdmin)
