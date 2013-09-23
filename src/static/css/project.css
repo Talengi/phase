@@ -331,6 +331,15 @@ button.ui-multiselect {
     }
 }
 
+@media screen and (max-width: 480px) {
+    .row-offcanvas .sidebar-offcanvas {
+        width: 75%;  /* 9 columns */
+    }
+    .row-offcanvas #controls-rows {
+        width: 75%;
+    }
+}
+
 /* Signin */
 .form-signin {
     max-width: 350px;
