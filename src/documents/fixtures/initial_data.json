@@ -5,6 +5,7 @@
   "fields": {
     "name": "Matthieu Lamy",
     "email": "matthieu@phase.fr",
+    "position": "dev",
     "is_active": true,
     "is_superuser": false,
     "is_staff": false,
@@ -21,6 +22,7 @@
   "fields": {
     "name": "David Larlet",
     "email": "david@phase.fr",
+    "position": "dev",
     "is_active": true,
     "is_superuser": false,
     "is_staff": false,
@@ -37,6 +39,7 @@
   "fields": {
     "name": "Vincent Agnano",
     "email": "vincent@phase.fr",
+    "position": "dev",
     "is_active": true,
     "is_superuser": false,
     "is_staff": false,
@@ -44,6 +47,23 @@
     "groups": [],
     "user_permissions": [],
     "password": "pbkdf2_sha256$10000$7gWwWoCk8ADq$xhGFcTlTXngOZaKNkm1HYy/m0V7EDgFegE4tALU1yF4=",
+    "date_joined": "2013-05-02T08:25:22.734Z"
+  }
+},
+{
+  "pk": 4,
+  "model": "accounts.user",
+  "fields": {
+    "name": "Admin",
+    "email": "admin@phase.fr",
+    "position": "Assis (haha)",
+    "is_active": true,
+    "is_superuser": true,
+    "is_staff": true,
+    "last_login": "2013-05-02T08:25:37.306Z",
+    "groups": [],
+    "user_permissions": [],
+    "password": "pbkdf2_sha256$10000$pG5Y1WyA1ySQ$gkAt2xCBdTh7wgn9whdTcgdVDyQ1aBkldXLwBQPMiFI=",
     "date_joined": "2013-05-02T08:25:22.734Z"
   }
 },
