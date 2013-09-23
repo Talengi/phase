@@ -19,7 +19,7 @@ from documents.forms import (
     DocumentRevisionForm, FavoriteForm
 )
 
-from accounts.views import LoginRequiredMixin
+from accounts.views import LoginRequiredMixin, PermissionRequiredMixin
 
 
 class JSONResponseMixin(object):
@@ -176,9 +176,10 @@ class DocumentRevisionMixin(object):
         return url
 
 
-class DocumentCreate(LoginRequiredMixin, DocumentRevisionMixin, CreateView):
+class DocumentCreate(PermissionRequiredMixin, LoginRequiredMixin, DocumentRevisionMixin, CreateView):
     model = Document
     form_class = DocumentForm
+    permission_required = 'document.can_add'
 
     def get_context_data(self, **kwargs):
         context = super(DocumentCreate, self).get_context_data(**kwargs)
@@ -196,11 +197,12 @@ class DocumentCreate(LoginRequiredMixin, DocumentRevisionMixin, CreateView):
         return url
 
 
-class DocumentEdit(LoginRequiredMixin, DocumentRevisionMixin, UpdateView):
+class DocumentEdit(PermissionRequiredMixin, DocumentRevisionMixin, UpdateView):
     model = Document
     form_class = DocumentForm
     slug_url_kwarg = 'document_number'
     slug_field = 'document_number'
+    permission_required = 'document.can_change'
 
     def get_context_data(self, **kwargs):
         context = super(DocumentEdit, self).get_context_data(**kwargs)
