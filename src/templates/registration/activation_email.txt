@@ -1,0 +1,6 @@
+A new account has been created in Phase for the user {{ username }}.
+
+Click on the following link to personalise your password:
+
+{% url 'password_reset_confirm' uidb36 token as the_url %}
+http://{{ site.domain }}{{ the_url }}

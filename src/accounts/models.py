@@ -1,9 +1,19 @@
+import logging
+
 from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser, PermissionsMixin, BaseUserManager
 )
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
+from django.utils.http import int_to_base36
+from django.template.loader import render_to_string
+from django.core.mail import send_mail
+from django.contrib.sites.models import Site
+from django.conf import settings
+
+
+logger = logging.getLogger(__name__)
 
 
 class UserManager(BaseUserManager):
@@ -71,3 +81,23 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_short_name(self):
         return self.name
+
+    def send_account_activation_email(self, token, site=None):
+        """Send an email with an activation link inside."""
+        if not site:
+            site = Site.objects.get_current()
+        ctx = {
+            'uidb36': int_to_base36(self.id),
+            'token': token,
+            'username': self.name,
+            'site': site,
+        }
+        subject = render_to_string('registration/activation_email_subject.txt',
+                                   ctx)
+        # Remove new lines
+        subject = ''.join(subject.splitlines())
+        message = render_to_string('registration/activation_email.txt',
+                                   ctx)
+
+        logger.info('Sending welcome email to %s' % self.email)
+        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [self.email])
