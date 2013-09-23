@@ -11,8 +11,6 @@ from django.views.generic import (
 )
 from django.utils import simplejson as json
 from django.core.urlresolvers import reverse
-from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import login_required
 
 from documents.models import Document, DocumentRevision, Favorite
 from documents.utils import filter_documents, compress_documents
@@ -20,6 +18,8 @@ from documents.forms import (
     DocumentFilterForm, DocumentForm, DocumentDownloadForm,
     DocumentRevisionForm, FavoriteForm
 )
+
+from accounts.views import LoginRequiredMixin
 
 
 class JSONResponseMixin(object):
@@ -75,7 +75,7 @@ class JSONResponseMixin(object):
         }
 
 
-class DocumentList(ListView, JSONResponseMixin):
+class DocumentList(LoginRequiredMixin, ListView, JSONResponseMixin):
     queryset = Document.objects.all()
     paginate_by = settings.PAGINATE_BY
 
@@ -93,7 +93,7 @@ class DocumentList(ListView, JSONResponseMixin):
         return context
 
 
-class DocumentDetail(DetailView):
+class DocumentDetail(LoginRequiredMixin, DetailView):
     model = Document
     slug_url_kwarg = 'document_number'
     slug_field = 'document_number'
@@ -130,7 +130,7 @@ class DocumentDetail(DetailView):
         return context
 
 
-class DocumentFilter(JSONResponseMixin, ListView):
+class DocumentFilter(LoginRequiredMixin, JSONResponseMixin, ListView):
     model = Document
 
     def get_queryset(self):
@@ -176,7 +176,7 @@ class DocumentRevisionMixin(object):
         return url
 
 
-class DocumentCreate(DocumentRevisionMixin, CreateView):
+class DocumentCreate(LoginRequiredMixin, DocumentRevisionMixin, CreateView):
     model = Document
     form_class = DocumentForm
 
@@ -196,7 +196,7 @@ class DocumentCreate(DocumentRevisionMixin, CreateView):
         return url
 
 
-class DocumentEdit(DocumentRevisionMixin, UpdateView):
+class DocumentEdit(LoginRequiredMixin, DocumentRevisionMixin, UpdateView):
     model = Document
     form_class = DocumentForm
     slug_url_kwarg = 'document_number'
@@ -219,7 +219,7 @@ class DocumentEdit(DocumentRevisionMixin, UpdateView):
         return url
 
 
-class DocumentDownload(View):
+class DocumentDownload(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         # Deals with GET parameters
@@ -245,13 +245,9 @@ class DocumentDownload(View):
         return response
 
 
-class FavoriteList(ListView):
+class FavoriteList(LoginRequiredMixin, ListView):
     model = Favorite
     template_name = 'documents/document_favorites.html'
-
-    @method_decorator(login_required(login_url=reverse_lazy("document_list")))
-    def dispatch(self, *args, **kwargs):
-        return super(FavoriteList, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(FavoriteList, self).get_context_data(**kwargs)
@@ -265,7 +261,7 @@ class FavoriteList(ListView):
         return self.model.objects.filter(user=self.request.user)
 
 
-class FavoriteCreate(CreateView):
+class FavoriteCreate(LoginRequiredMixin, CreateView):
     model = Favorite
     form_class = FavoriteForm
     success_url = reverse_lazy('favorite_list')
@@ -278,6 +274,6 @@ class FavoriteCreate(CreateView):
         return HttpResponse(self.object.id)
 
 
-class FavoriteDelete(DeleteView):
+class FavoriteDelete(LoginRequiredMixin, DeleteView):
     model = Favorite
     success_url = reverse_lazy('document_list')
