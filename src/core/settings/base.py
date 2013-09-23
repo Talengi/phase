@@ -316,6 +316,10 @@ PIPELINE_JS = {
 }
 ########## END PIPELINE CONFIGURATION
 
+########## EMAIL CONFIGURATION
+DEFAULT_FROM_EMAIL = 'admin@phase.fr'
+########## END EMAIL CONFIGURATION
+
 ########## CUSTOM CONFIGURATION
 PAGINATE_BY = 50  # Document list pagination
 CACHE_TIMEOUT_SECONDS = 300  # seconds == 5 minutes
