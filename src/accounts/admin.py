@@ -28,6 +28,7 @@ class UserAdmin(django_UserAdmin):
         ('Personal info', {'fields': ('name', 'position',)}),
         ('Permissions', {'fields': ('is_superuser',)}),
         ('Important dates', {'fields': ('date_joined', 'last_login',)}),
+        ('Permissions', {'fields': ('groups',)}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # overrides get_fieldsets to use this attribute when creating a user.
