@@ -12,28 +12,26 @@
     </div>
 
     <div class="navbar-collapse collapse">
-        <ul class="nav navbar-nav">
-            <li{% if documents_active %} class="active"{% endif %}><a href="{% url "document_list" %}">Documents</a></li>
-            {% if user.is_authenticated %}
-                <li{% if favorites_active %} class="active"{% endif %}><a href="{% url "favorite_list" %}">Favorites</a></li>
-            {% endif %}
-        </ul>
-
-        <ul class="nav navbar-nav navbar-right">
-            {% if user.is_superuser %}
-                <li><a href="{% url "admin:index" %}">Admin</a></li>
-            {% endif %}
-            {% if user.is_authenticated %}
-                <li><a href="{% url "logout" %}">Log out</a></li>
-            {% else %}
-                <li><a href="{% url "login" %}">Log in</a></li>
-            {% endif %}
-        </ul>
-
         {% if user.is_authenticated %}
+            <ul class="nav navbar-nav">
+                <li{% if documents_active %} class="active"{% endif %}><a href="{% url "document_list" %}">Documents</a></li>
+                <li{% if favorites_active %} class="active"{% endif %}><a href="{% url "favorite_list" %}">Favorites</a></li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                {% if user.is_superuser %}
+                    <li><a href="{% url "admin:index" %}">Admin</a></li>
+                {% endif %}
+                <li><a href="{% url "logout" %}">Log out</a></li>
+            </ul>
+
             <p class="navbar-text navbar-right">
                 Hello {{ user.get_full_name }}
             </p>
+        {% else %}
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="{% url "login" %}">Log in</a></li>
+            </ul>
         {% endif %}
     </div><!--/.nav-collapse -->
 
