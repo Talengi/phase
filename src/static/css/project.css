@@ -89,6 +89,9 @@ button.ui-multiselect {
     margin-left: 0;
     margin-bottom: 0;
 }
+#documents thead th {
+    white-space: nowrap;
+}
 #documents th, #documents td {
     text-align: center;
 }

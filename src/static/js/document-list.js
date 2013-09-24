@@ -60,13 +60,12 @@ jQuery(function($) {
         datatable.update(queryparams.data, {
             total: config.totalItems
         });
-        $(this).siblings('i').css('display', 'inline-block');
         evt.preventDefault();
     };
 
     $("#table-filters select").on('change', serializeTable);
     $("#table-filters input").on('afterkeyup', serializeTable);
-    $("#table-filters i").on('click', function(evt) {
+    $("#table-filters span").on('click', function(evt) {
         $(this).siblings('select,input:text').val('');
         serializeTable(evt);
         $(this).hide();
@@ -79,7 +78,7 @@ jQuery(function($) {
         $('#id_sort_by').val(direction + sortBy);
         $i = $this.children();
         $i.is('[class*=glyphicon-chevron-]') ? $i.toggleClass("glyphicon-chevron-up").toggleClass("glyphicon-chevron-down") : $i.addClass('glyphicon glyphicon-chevron-down');
-        $("#documents th i").not($i).removeClass("glyphicon-chevron-down glyphicon-chevron-up");
+        $("#documents th span").not($i).removeClass("glyphicon-chevron-down glyphicon-chevron-up");
         serializeTable(evt);
     });
 
@@ -88,7 +87,7 @@ jQuery(function($) {
         $('#table-filters').find('input:text, select').val('');
         $('#filters').find('select').val('');
         serializeTable(evt);
-        $("#table-filters i").each(function(evt) {
+        $("#table-filters span").each(function(evt) {
             $(this).hide();
         });
     });
