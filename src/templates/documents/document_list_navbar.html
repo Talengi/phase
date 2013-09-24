@@ -41,6 +41,7 @@
         </form>
 
         {% block createdocument %}
+        {% if perms.documents.can_create %}
         <div class="hidden-xs hidden-sm">
         <div class="btn-group ">
             <button type="button" class="btn btn-primary navbar-btn dropdown-toggle" data-toggle="dropdown">
@@ -54,6 +55,7 @@
             </ul>
         </div>
         </div>
+        {% endif %}
         {% endblock createdocument %}
 
     </div>
