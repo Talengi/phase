@@ -1,0 +1,64 @@
+[
+{
+  "pk": 1,
+  "model": "auth.group",
+  "fields": {
+    "name": "Document controllers",
+    "permissions": [
+    ]
+  }
+},
+{
+  "pk": 1,
+  "model": "accounts.user",
+  "fields": {
+    "name": "Admin",
+    "email": "admin@phase.fr",
+    "position": "Big boss",
+    "is_active": true,
+    "is_superuser": true,
+    "is_staff": true,
+    "last_login": "2013-05-02T08:25:37.306Z",
+    "groups": [],
+    "user_permissions": [],
+    "password": "pbkdf2_sha256$10000$bpK62IoQR0Dx$UFSPDs5Xah/WFkvEmuMgEEpYTaII+j1p1Qw5GEFZnaA=",
+    "date_joined": "2013-05-02T08:25:22.734Z"
+  }
+},
+{
+  "pk": 2,
+  "model": "accounts.user",
+  "fields": {
+    "name": "User",
+    "email": "user@phase.fr",
+    "position": "Simple user",
+    "is_active": true,
+    "is_superuser": false,
+    "is_staff": false,
+    "last_login": "2013-05-02T08:24:10.014Z",
+    "groups": [],
+    "user_permissions": [],
+    "password": "pbkdf2_sha256$10000$EsrhSQVopPm0$fJgRrnP0wckR4VPnN5Z/OmRCDhhmVZWzBNIr9i+nDOw=",
+    "date_joined": "2013-05-02T08:22:44.530Z"
+  }
+},
+{
+  "pk": 3,
+  "model": "accounts.user",
+  "fields": {
+    "name": "Document Controller",
+    "email": "dc@phase.fr",
+    "position": "Document controller",
+    "is_active": true,
+    "is_superuser": false,
+    "is_staff": false,
+    "last_login": "2013-05-02T08:28:19.782Z",
+    "groups": [
+      1
+    ],
+    "user_permissions": [],
+    "password": "pbkdf2_sha256$10000$r6NMY9DI6Cd7$rJjFQZAZqu9/+IQBdAP2iXUvHaAyIq1NlC0MPftjWAo=",
+    "date_joined": "2013-05-02T08:25:00.035Z"
+  }
+}
+]
