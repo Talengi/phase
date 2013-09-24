@@ -40,54 +40,43 @@
             </div>
         </div>
     {% endif %}
+
     {% with document.latest_revision as revision %}
     <div class="controls controls-row">
         <div class="form-group {% if form.errors.native_file %}error{% endif %}">
             <label class="control-label col-sm-4" for="{{ form.native_file.auto_id }}">{{ form.native_file.label }}</label>
-            <div class="fileupload fileupload-{% if is_edit and revision.native_file %}exists{% else %}new{% endif %} controls col-sm-8" data-provides="fileupload">
-                <div class="input-group">
-                    <div class="uneditable-input">
-                        <i class="glyphicon glyphicon-file fileupload-exists"></i>
-                        <span class="fileupload-preview">
-                            {% if revision.native_file %}
-                                {{ revision.native_file.name }}
-                            {% endif %}
-                        </span>
-                    </div>
-                    <span class="btn btn-default btn-file input-group-addon">
-                        <span class="fileupload-new">Select file</span>
-                        <span class="fileupload-exists">Change</span>
-                        <input id="id_native_file" name="native_file" type="file" />
+            <div class="controls col-sm-8">
+                {{ form.native_file }}
+                {% if revision.native_file %}
+                    <span class="fileupload-preview">
+                        <a href="{{ revision.native_file.url }}">
+                            {{ revision.native_file.name }}
+                        </a>
                     </span>
-                    <a href="#" class="btn btn-default fileupload-exists input-group-addon" data-dismiss="fileupload">Remove</a>
-                </div>
+                    <button class="btn btn-default" data-dismiss="{{ form.native_file.name }}">Delete</button>
+                {% endif %}
             </div>
             {% if form.errors.native_file %}<span class="help-inline">{{ form.errors.native_file.0 }}</span>{% endif %}
         </div>
     </div>
+
     <div class="controls controls-row">
         <div class="form-group {% if form.errors.pdf_file %}error{% endif %}">
             <label class="control-label col-sm-4" for="{{ form.pdf_file.auto_id }}">{{ form.pdf_file.label }}</label>
-            <div class="fileupload fileupload-{% if is_edit and revision.pdf_file %}exists{% else %}new{% endif %} controls col-sm-8" data-provides="fileupload">
-                <div class="input-group">
-                    <div class="uneditable-input">
-                        <i class="glyphicon glyphicon-file fileupload-exists"></i>
-                        <span class="fileupload-preview">
-                            {% if revision.pdf_file %}
-                                {{ revision.pdf_file.name }}
-                            {% endif %}
-                        </span>
-                    </div>
-                    <span class="btn btn-default btn-file input-group-addon">
-                        <span class="fileupload-new">Select file</span>
-                        <span class="fileupload-exists">Change</span>
-                        <input id="id_pdf_file" name="pdf_file" type="file" />
+            <div class="controls col-sm-8">
+                {{ form.pdf_file }}
+                {% if revision.pdf_file %}
+                    <span class="fileupload-preview">
+                        <a href="{{ revision.pdf_file.url }}">
+                            {{ revision.pdf_file.name }}
+                        </a>
                     </span>
-                    <a href="#" class="btn btn-default input-group-addon fileupload-exists" data-dismiss="fileupload">Remove</a>
-                </div>
+                    <button class="btn btn-default" data-dismiss="{{ form.pdf_file.name }}">Delete</button>
+                {% endif %}
             </div>
             {% if form.errors.pdf_file %}<span class="help-inline">{{ form.errors.pdf_file.0 }}</span>{% endif %}
         </div>
     </div>
+
     {% endwith %}
 </fieldset>
