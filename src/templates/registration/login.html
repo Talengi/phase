@@ -6,7 +6,9 @@
     <h2 class="central-form-heading">Please sign in</h2>
 
     {% include 'form_snippet.html' with form=form %}
-    <input type="hidden" name="next" value="{{ next }}" />
+
+    {% url 'document_list' as home_url %}
+    <input type="hidden" name="next" value="{{ next|default:home_url }}" />
 
     <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
 
