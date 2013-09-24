@@ -57,4 +57,37 @@ class NavbarTests(TestCase):
 
 
 class AclTests(TestCase):
-    pass
+
+    def setUp(self):
+        self.user = UserFactory(name='User', password='pass')
+        self.home_url = '/'
+        self.create_url = '/create/'
+        self.login_url = '/accounts/login/'
+        self.dc_perms = Permission.objects.filter(codename__endswith='_document')
+
+    def test_anonymous_access(self):
+        res = self.client.get(self.home_url)
+        self.assertRedirects(res, '%s?next=%s' % (self.login_url, self.home_url))
+
+        res = self.client.get(self.create_url)
+        self.assertRedirects(res, '%s?next=%s' % (self.login_url, self.create_url))
+
+    def test_authenticated_user_access(self):
+        self.client.login(username=self.user.email, password='pass')
+
+        res = self.client.get(self.home_url)
+        self.assertEqual(res.status_code, 200)
+
+        res = self.client.get(self.create_url)
+        self.assertRedirects(res, '%s?next=%s' % (self.login_url, self.create_url))
+
+    def test_document_controller_access(self):
+        self.user.user_permissions = self.dc_perms
+        self.user.save()
+        self.client.login(username=self.user.email, password='pass')
+
+        res = self.client.get(self.home_url)
+        self.assertEqual(res.status_code, 200)
+
+        res = self.client.get(self.create_url)
+        self.assertEqual(res.status_code, 200)

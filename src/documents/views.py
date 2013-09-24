@@ -179,7 +179,7 @@ class DocumentRevisionMixin(object):
 class DocumentCreate(PermissionRequiredMixin, LoginRequiredMixin, DocumentRevisionMixin, CreateView):
     model = Document
     form_class = DocumentForm
-    permission_required = 'document.can_add'
+    permission_required = 'documents.add_document'
 
     def get_context_data(self, **kwargs):
         context = super(DocumentCreate, self).get_context_data(**kwargs)
@@ -202,7 +202,7 @@ class DocumentEdit(PermissionRequiredMixin, DocumentRevisionMixin, UpdateView):
     form_class = DocumentForm
     slug_url_kwarg = 'document_number'
     slug_field = 'document_number'
-    permission_required = 'document.can_change'
+    permission_required = 'documents.change_document'
 
     def get_context_data(self, **kwargs):
         context = super(DocumentEdit, self).get_context_data(**kwargs)
