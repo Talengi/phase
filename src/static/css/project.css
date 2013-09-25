@@ -40,6 +40,9 @@ body > .container > .messages {
 .form-horizontal .controls {
     margin-left: 0;
 }
+form.form-horizontal textarea {
+    height: inherit !important;
+}
 .btn-block {
     margin-bottom: 15px;
 }

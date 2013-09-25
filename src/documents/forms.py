@@ -24,9 +24,8 @@ class DocumentForm(forms.ModelForm):
         widgets = {
             'document_number': forms.TextInput(attrs={
                 'placeholder': 'Automatically generated if not specified.',
-                'class': 'span4',
             }),
-            'title': forms.Textarea(attrs={'rows': '2', 'class': 'span4'}),
+            'title': forms.Textarea(attrs={'rows': '2'}),
             'current_revision_date': forms.DateInput(attrs=date_attrs),
             'sequencial_number': forms.TextInput,
             'status_std_planned_date': forms.DateInput(attrs=date_attrs),
