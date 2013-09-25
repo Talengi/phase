@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from django.contrib import admin
 admin.autodiscover()
 
+admin.site.login_template = 'registration/login.html'
+
 urlpatterns = patterns(
     '',
     url(r'^', include('documents.urls')),
