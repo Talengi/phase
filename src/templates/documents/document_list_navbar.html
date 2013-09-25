@@ -41,6 +41,8 @@
         </form>
 
         {% block createdocument %}
+        {% load cache %}
+        {% cache 500 custom_navbar_actions request.user.email %}
         {% if perms.documents.add_document %}
         <div class="hidden-xs hidden-sm">
         <div class="btn-group ">
@@ -56,6 +58,7 @@
         </div>
         </div>
         {% endif %}
+        {% endcache %}
         {% endblock createdocument %}
 
     </div>

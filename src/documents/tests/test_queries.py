@@ -63,6 +63,10 @@ class QueriesTest(TestCase):
 
     def test_document_list(self):
         url = reverse('document_list')
+
+        # First call to generate the cache
+        self.client.get(url)
+
         with self.assertMaxQueries(5):
             self.client.get(url)
 
@@ -70,6 +74,9 @@ class QueriesTest(TestCase):
         document = DocumentFactory()
         RevisionFactory(document=document)
         url = reverse('document_detail', args=[document.document_number])
+
+        # First call to generate the cache
+        self.client.get(url)
 
         with self.assertMaxQueries(5):
             self.client.get(url)
