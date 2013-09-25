@@ -16,3 +16,6 @@ DATABASES = {
         "PORT": "",
     },
 }
+
+# We need a different media root so we can wipe it securely in tests
+MEDIA_ROOT = '/tmp/phase_media/'
