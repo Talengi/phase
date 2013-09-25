@@ -58,6 +58,7 @@ class GenericViewTest(TestCase):
         response = self.client.get(self.url, follow=True)
         self.assertEqual(response.redirect_chain, [(target, 302)])
 
+
 class DocumentListTest(GenericViewTest):
     fixtures = ['initial_data.json']
     url = reverse("document_list")
