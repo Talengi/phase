@@ -1,20 +1,34 @@
 import os
 
 from django.test import TestCase
-from django.test.client import Client
 from django.core.urlresolvers import reverse
+from django.conf import settings
 
+from accounts.factories import UserFactory
 from documents.models import Document, DocumentRevision
 
 
 class DocumentCreateTest(TestCase):
+
+    def setUp(self):
+        user = UserFactory(email='testadmin@phase.fr', password='pass',
+                           is_superuser=True)
+        self.client.login(email=user.email, password='pass')
+
+    def tearDown(self):
+        """Wipe the media root directory after each test."""
+        media_root = settings.MEDIA_ROOT
+        for f in os.listdir(media_root):
+            file_path = os.path.join(media_root, f)
+            if os.path.isfile(file_path) and file_path.startswith('/tmp/'):
+                os.unlink(file_path)
 
     def test_creation_errors(self):
         """
         Tests that a document can't be created without required fields.
         """
         required_error = u'This field is required.'
-        c = Client()
+        c = self.client
         r = c.get(reverse("document_create"))
         self.assertEqual(r.status_code, 200)
 
@@ -40,9 +54,9 @@ class DocumentCreateTest(TestCase):
         """
         extension_error = u'A PDF file is not allowed in this field.'
         sample_path = 'src/documents/tests/'
-        c = Client()
-        with open(sample_path+'sample_doc_native.docx') as native_file:
-            with open(sample_path+'sample_doc_pdf.pdf') as pdf_file:
+        c = self.client
+        with open(sample_path + 'sample_doc_native.docx') as native_file:
+            with open(sample_path + 'sample_doc_pdf.pdf') as pdf_file:
                 r = c.post(reverse("document_create"), {
                     'originator': "FWF",
                     'discipline': "ARC",
@@ -68,7 +82,7 @@ class DocumentCreateTest(TestCase):
         Tests that a document can be created with required fields.
         """
         original_number_of_document = Document.objects.all().count()
-        c = Client()
+        c = self.client
         r = c.post(reverse("document_create"), {
             'originator': "FWF",
             'discipline': "ARC",
@@ -84,7 +98,7 @@ class DocumentCreateTest(TestCase):
         })
         if r.status_code == 302:
             self.assertEqual(
-                original_number_of_document+1,
+                original_number_of_document + 1,
                 Document.objects.all().count()
             )
         else:
@@ -97,9 +111,9 @@ class DocumentCreateTest(TestCase):
         """
         original_number_of_document = Document.objects.all().count()
         sample_path = 'src/documents/tests/'
-        c = Client()
-        with open(sample_path+'sample_doc_native.docx') as native_file:
-            with open(sample_path+'sample_doc_pdf.pdf') as pdf_file:
+        c = self.client
+        with open(sample_path + 'sample_doc_native.docx') as native_file:
+            with open(sample_path + 'sample_doc_pdf.pdf') as pdf_file:
                 r = c.post(reverse("document_create"), {
                     'originator': "FWF",
                     'discipline': "ARC",
@@ -117,14 +131,9 @@ class DocumentCreateTest(TestCase):
                 })
                 if r.status_code == 302:
                     self.assertEqual(
-                        original_number_of_document+1,
+                        original_number_of_document + 1,
                         Document.objects.all().count()
                     )
-                    # Delete created files
-                    media_path = 'src/media/'
-                    file_name = 'FAC09001-FWF-000-ARC-ANA-0001_00'
-                    os.remove(media_path+file_name+'.docx')
-                    os.remove(media_path+file_name+'.pdf')
                 else:
                     # Debug purpose
                     self.assertEqual(r.context['form'].errors, {})
@@ -134,7 +143,7 @@ class DocumentCreateTest(TestCase):
         Tests that a document creation is redirected to the item
         or another creation form (django-admin like).
         """
-        c = Client()
+        c = self.client
         r = c.post(reverse("document_create"), {
             'originator': "FWF",
             'discipline': "ARC",
@@ -177,8 +186,9 @@ class DocumentCreateTest(TestCase):
         )
 
     def test_document_related_documents(self):
-        c = Client()
-        related = [Document.objects.create(
+        c = self.client
+        related = [
+            Document.objects.create(
                 title=u'HAZOP related 1',
                 current_revision_date='2012-04-20',
                 sequencial_number="0004",
@@ -214,7 +224,13 @@ class DocumentCreateTest(TestCase):
         self.assertEqual(document.related_documents.all()[0].title, "HAZOP related 1")
         self.assertEqual(document.related_documents.all()[1].title, "HAZOP related 2")
 
+
 class DocumentEditTest(TestCase):
+
+    def setUp(self):
+        user = UserFactory(email='testadmin@phase.fr', password='pass',
+                           is_superuser=True)
+        self.client.login(email=user.email, password='pass')
 
     def test_edition_errors(self):
         """
@@ -233,7 +249,7 @@ class DocumentEditTest(TestCase):
             revision=u"00",
             revision_date='2012-04-20',
         )
-        c = Client()
+        c = self.client
         edit_url = reverse(
             "document_edit",
             args=['FAC09001-FWF-000-HSE-REP-0004']
@@ -274,7 +290,7 @@ class DocumentEditTest(TestCase):
             revision=u"00",
             revision_date='2012-04-20',
         )
-        c = Client()
+        c = self.client
         edit_url = reverse(
             "document_edit",
             args=['FAC09001-FWF-000-HSE-REP-0004']
@@ -318,7 +334,7 @@ class DocumentEditTest(TestCase):
             revision=u"00",
             revision_date='2012-04-20',
         )
-        c = Client()
+        c = self.client
         edit_url = reverse(
             "document_edit",
             args=['FAC09001-FWF-000-HSE-REP-0004']

@@ -7,7 +7,9 @@ from django.test.client import Client
 from django.utils import simplejson as json
 from django.core.urlresolvers import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.conf import settings
 
+from accounts.factories import UserFactory
 from documents.models import Document, DocumentRevision, Favorite
 
 User = auth.get_user_model()
@@ -18,22 +20,25 @@ class GenericViewTest(TestCase):
     def setUp(self):
         self.client = Client()
 
-    def assertGet(self, num_queries, parameters={}, auth=None, status_code=200):
+        # Login as admin by default so we won't be bothered by missing permissions
+        user = UserFactory(email='testadmin@phase.fr', password='pass',
+                           is_superuser=True)
+        self.client.login(email=user.email, password='pass')
+
+    def assertGet(self, parameters={}, auth=None, status_code=200):
         if auth:
             response = self.client.login(**auth)
             self.assertEqual(response, True)
-        with self.assertNumQueries(num_queries):
-            response = self.client.get(self.url, parameters, follow=True)
+        response = self.client.get(self.url, parameters, follow=True)
         self.assertEqual(response.status_code, status_code)
         self.content = response.content
         self.context = response.context
 
-    def assertPost(self, num_queries, parameters={}, auth=None, status_code=200):
+    def assertPost(self, parameters={}, auth=None, status_code=200):
         if auth:
             response = self.client.login(**auth)
             self.assertEqual(response, True)
-        with self.assertNumQueries(num_queries):
-            response = self.client.post(self.url, parameters)
+        response = self.client.post(self.url, parameters)
         self.assertEqual(response.status_code, status_code)
         self.content = response.content
         self.context = response.context
@@ -53,13 +58,12 @@ class GenericViewTest(TestCase):
         response = self.client.get(self.url, follow=True)
         self.assertEqual(response.redirect_chain, [(target, 302)])
 
-
 class DocumentListTest(GenericViewTest):
     fixtures = ['initial_data.json']
     url = reverse("document_list")
 
     def test_document_number(self):
-        self.assertGet(3)
+        self.assertGet()
         self.assertContext('documents_active', True)
         self.assertContextLength('document_list', 50)
 
@@ -84,7 +88,7 @@ class DocumentDetailTest(GenericViewTest):
             revision_date='2012-04-20',
         )
         self.url = reverse("document_detail", args=[document.document_number])
-        self.assertGet(6)
+        self.assertGet()
         self.assertContext('document', document)
         self.assertEqual(
             self.context['document'].document_number,
@@ -121,7 +125,7 @@ class DocumentDetailTest(GenericViewTest):
         )
         document.related_documents = documents
         self.url = reverse("document_detail", args=[document.document_number])
-        self.assertGet(7)
+        self.assertGet()
         self.assertRendering(
             '<li><a href="/detail/{0}/">{0} - HAZOP related 1</a></li>'
             .format(documents[0].document_number)
@@ -132,8 +136,14 @@ class DocumentDetailTest(GenericViewTest):
         )
 
 
-class DocumenFilterTest(TestCase):
+class DocumentFilterTest(TestCase):
     fixtures = ['initial_data.json']
+
+    def setUp(self):
+        # Login as admin so we won't be bothered by missing permissions
+        user = UserFactory(email='testadmin@phase.fr', password='pass',
+                           is_superuser=True)
+        self.client.login(email=user.email, password='pass')
 
     def test_paging(self):
         """
@@ -144,7 +154,7 @@ class DocumenFilterTest(TestCase):
             'start': 0,
             'sort_by': 'document_number',
         }
-        c = Client()
+        c = self.client
 
         # Default: 10 items returned
         r = c.get(reverse("document_filter"), get_parameters)
@@ -191,7 +201,7 @@ class DocumenFilterTest(TestCase):
             'start': 0,
             'sort_by': 'document_number',
         }
-        c = Client()
+        c = self.client
 
         # Default: sorted by document_number
         r = c.get(reverse("document_filter"), get_parameters)
@@ -233,7 +243,7 @@ class DocumenFilterTest(TestCase):
             'start': 0,
             'sort_by': 'document_number',
         }
-        c = Client()
+        c = self.client
 
         # Searching 'pipeline'
         search_terms = u'pipeline'
@@ -259,7 +269,7 @@ class DocumenFilterTest(TestCase):
             'start': 0,
             'sort_by': 'document_number',
         }
-        c = Client()
+        c = self.client
 
         # Searching 'ASB' status
         status = u'ASB'
@@ -305,7 +315,7 @@ class DocumenFilterTest(TestCase):
             'start': 0,
             'sort_by': 'document_number',
         }
-        c = Client()
+        c = self.client
 
         # Searching 'pipeline', sorted by title (descending)
         search_terms = u'pipeline'
@@ -406,7 +416,7 @@ class DocumenFilterTest(TestCase):
             'start': 0,
             'sort_by': 'document_number',
         }
-        c = Client()
+        c = self.client
 
         # Searching 'Matthieu Lamy' as a leader
         leader = 5
@@ -447,6 +457,20 @@ class DocumenFilterTest(TestCase):
 
 class DocumentDownloadTest(TestCase):
 
+    def setUp(self):
+        # Login as admin so we won't be bothered by missing permissions
+        user = UserFactory(email='testadmin@phase.fr', password='pass',
+                           is_superuser=True)
+        self.client.login(email=user.email, password='pass')
+
+    def tearDown(self):
+        """Wipe the media root directory after each test."""
+        media_root = settings.MEDIA_ROOT
+        for f in os.listdir(media_root):
+            file_path = os.path.join(media_root, f)
+            if os.path.isfile(file_path) and file_path.startswith('/tmp/'):
+                os.unlink(file_path)
+
     def test_unique_document_download(self):
         """
         Tests that a document download returns a zip file of the latest revision.
@@ -467,27 +491,23 @@ class DocumentDownloadTest(TestCase):
             document=document,
             revision=u"00",
             revision_date='2012-04-20',
-            native_file=SimpleUploadedFile(native_doc, sample_path+native_doc),
-            pdf_file=SimpleUploadedFile(pdf_doc, sample_path+pdf_doc),
+            native_file=SimpleUploadedFile(native_doc, sample_path + native_doc),
+            pdf_file=SimpleUploadedFile(pdf_doc, sample_path + pdf_doc),
         )
-        c = Client()
+        c = self.client
         r = c.get(reverse("document_download"), {
             'document_ids': document.id,
         })
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r._headers, {
-            'vary': ('Vary', 'Accept-Encoding'),
-            'content-length': ('Content-Length', '398'),
+            'vary': ('Vary', 'Cookie, Accept-Encoding'),
+            'content-length': ('Content-Length', '390'),
             'content-type': ('Content-Type', 'application/zip'),
             'content-disposition': (
                 'Content-Disposition',
                 'attachment; filename=download.zip'
             )
         })
-        media_path = 'src/media/'
-        file_name = 'FAC09001-FWF-000-HSE-REP-0004_00'
-        os.remove(media_path+file_name+'.docx')
-        os.remove(media_path+file_name+'.pdf')
 
     def test_empty_document_download(self):
         """
@@ -507,7 +527,7 @@ class DocumentDownloadTest(TestCase):
             revision=u"00",
             revision_date='2012-04-20',
         )
-        c = Client()
+        c = self.client
         r = c.get(reverse("document_download"), {
             'document_ids': document.id,
         })
@@ -515,6 +535,7 @@ class DocumentDownloadTest(TestCase):
         self.assertEqual(r._headers, {
             'content-length': ('Content-Length', '22'),
             'content-type': ('Content-Type', 'application/zip'),
+            'vary': ('Vary', 'Cookie'),
             'content-disposition': (
                 'Content-Disposition',
                 'attachment; filename=download.zip'
@@ -542,8 +563,8 @@ class DocumentDownloadTest(TestCase):
             document=document1,
             revision=u"00",
             revision_date='2012-04-20',
-            native_file=SimpleUploadedFile(native_doc, sample_path+native_doc),
-            pdf_file=SimpleUploadedFile(pdf_doc, sample_path+pdf_doc),
+            native_file=SimpleUploadedFile(native_doc, sample_path + native_doc),
+            pdf_file=SimpleUploadedFile(pdf_doc, sample_path + pdf_doc),
         )
         document2 = Document.objects.create(
             title=u'HAZOP report',
@@ -561,10 +582,10 @@ class DocumentDownloadTest(TestCase):
             document=document2,
             revision=u"00",
             revision_date='2012-04-20',
-            native_file=SimpleUploadedFile(native_doc, sample_path+native_doc),
-            pdf_file=SimpleUploadedFile(pdf_doc, sample_path+pdf_doc),
+            native_file=SimpleUploadedFile(native_doc, sample_path + native_doc),
+            pdf_file=SimpleUploadedFile(pdf_doc, sample_path + pdf_doc),
         )
-        c = Client()
+        c = self.client
         r = c.get(reverse("document_download"), {
             'document_ids': [
                 document1.id,
@@ -573,7 +594,7 @@ class DocumentDownloadTest(TestCase):
         })
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r._headers, {
-            'vary': ('Vary', 'Accept-Encoding'),
+            'vary': ('Vary', 'Cookie, Accept-Encoding'),
             'content-length': ('Content-Length', '758'),
             'content-type': ('Content-Type', 'application/zip'),
             'content-disposition': (
@@ -581,13 +602,6 @@ class DocumentDownloadTest(TestCase):
                 'attachment; filename=download.zip'
             )
         })
-        media_path = 'src/media/'
-        file_name = 'FAC09001-FWF-000-HSE-REP-0004_00'
-        os.remove(media_path+file_name+'.docx')
-        os.remove(media_path+file_name+'.pdf')
-        file_name = 'FAC09001-FWF-000-ARC-REP-0004_00'
-        os.remove(media_path+file_name+'.docx')
-        os.remove(media_path+file_name+'.pdf')
 
     def test_multiple_pdf_document_download(self):
         """
@@ -610,8 +624,8 @@ class DocumentDownloadTest(TestCase):
             document=document1,
             revision=u"00",
             revision_date='2012-04-20',
-            native_file=SimpleUploadedFile(native_doc, sample_path+native_doc),
-            pdf_file=SimpleUploadedFile(pdf_doc, sample_path+pdf_doc),
+            native_file=SimpleUploadedFile(native_doc, sample_path + native_doc),
+            pdf_file=SimpleUploadedFile(pdf_doc, sample_path + pdf_doc),
         )
         document2 = Document.objects.create(
             title=u'HAZOP report',
@@ -629,10 +643,10 @@ class DocumentDownloadTest(TestCase):
             document=document2,
             revision=u"00",
             revision_date='2012-04-20',
-            native_file=SimpleUploadedFile(native_doc, sample_path+native_doc),
-            pdf_file=SimpleUploadedFile(pdf_doc, sample_path+pdf_doc),
+            native_file=SimpleUploadedFile(native_doc, sample_path + native_doc),
+            pdf_file=SimpleUploadedFile(pdf_doc, sample_path + pdf_doc),
         )
-        c = Client()
+        c = self.client
         r = c.get(reverse("document_download"), {
             'document_ids': [
                 document1.id,
@@ -642,7 +656,7 @@ class DocumentDownloadTest(TestCase):
         })
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r._headers, {
-            'vary': ('Vary', 'Accept-Encoding'),
+            'vary': ('Vary', 'Cookie, Accept-Encoding'),
             'content-length': ('Content-Length', '384'),
             'content-type': ('Content-Type', 'application/zip'),
             'content-disposition': (
@@ -650,13 +664,6 @@ class DocumentDownloadTest(TestCase):
                 'attachment; filename=download.zip'
             )
         })
-        media_path = 'src/media/'
-        file_name = 'FAC09001-FWF-000-HSE-REP-0004_00'
-        os.remove(media_path+file_name+'.docx')
-        os.remove(media_path+file_name+'.pdf')
-        file_name = 'FAC09001-FWF-000-ARC-REP-0004_00'
-        os.remove(media_path+file_name+'.docx')
-        os.remove(media_path+file_name+'.pdf')
 
     def test_all_revisions_document_download(self):
         """
@@ -679,24 +686,24 @@ class DocumentDownloadTest(TestCase):
             document=document,
             revision=u"00",
             revision_date='2012-04-20',
-            native_file=SimpleUploadedFile(native_doc, sample_path+native_doc),
-            pdf_file=SimpleUploadedFile(pdf_doc, sample_path+pdf_doc),
+            native_file=SimpleUploadedFile(native_doc, sample_path + native_doc),
+            pdf_file=SimpleUploadedFile(pdf_doc, sample_path + pdf_doc),
         )
         DocumentRevision.objects.create(
             document=document,
             revision=u"01",
             revision_date='2012-04-21',
-            native_file=SimpleUploadedFile(native_doc, sample_path+native_doc),
-            pdf_file=SimpleUploadedFile(pdf_doc, sample_path+pdf_doc),
+            native_file=SimpleUploadedFile(native_doc, sample_path + native_doc),
+            pdf_file=SimpleUploadedFile(pdf_doc, sample_path + pdf_doc),
         )
-        c = Client()
+        c = self.client
         r = c.get(reverse("document_download"), {
             'document_ids': document.id,
             'revisions': 'all',
         })
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r._headers, {
-            'vary': ('Vary', 'Accept-Encoding'),
+            'vary': ('Vary', 'Cookie, Accept-Encoding'),
             'content-length': ('Content-Length', '758'),
             'content-type': ('Content-Type', 'application/zip'),
             'content-disposition': (
@@ -704,13 +711,6 @@ class DocumentDownloadTest(TestCase):
                 'attachment; filename=download.zip'
             )
         })
-        media_path = 'src/media/'
-        file_name = 'FAC09001-FWF-000-HSE-REP-0004_00'
-        os.remove(media_path+file_name+'.docx')
-        os.remove(media_path+file_name+'.pdf')
-        file_name = 'FAC09001-FWF-000-HSE-REP-0004_01'
-        os.remove(media_path+file_name+'.docx')
-        os.remove(media_path+file_name+'.pdf')
 
 
 class FavoriteTest(GenericViewTest):
@@ -726,15 +726,9 @@ class FavoriteTest(GenericViewTest):
             'password',
         )
 
-        # Anonymous user
-        self.assertRedirect(
-            'http://testserver{url}?next=/favorites/'.format(
-                url=reverse('document_list'))
-        )
-
         # Logged in user
         auth = {'username': 'david', 'password': 'password'}
-        self.assertGet(4, auth=auth)
+        self.assertGet(auth=auth)
         self.assertRendering('<p>You do not have any favorite document.</p>')
 
     def test_favorite_privacy(self):
@@ -766,12 +760,12 @@ class FavoriteTest(GenericViewTest):
 
         # Right user
         auth = {'username': 'david', 'password': 'password'}
-        self.assertGet(5, auth=auth)
+        self.assertGet(auth=auth)
         self.assertRendering('<td>%s</td>' % favorite.document.title)
 
         # Wrong user
         auth = {'username': 'matthieu', 'password': 'password'}
-        self.assertGet(4, auth=auth)
+        self.assertGet(auth=auth)
         self.assertRendering('<p>You do not have any favorite document.</p>')
 
     def test_favorite_creation(self):
@@ -792,7 +786,7 @@ class FavoriteTest(GenericViewTest):
             current_revision=u"03",
         )
         self.url = reverse("favorite_create")
-        self.assertPost(5, {
+        self.assertPost({
             'document': document.id,
             'user': user.id,
         })
@@ -822,5 +816,5 @@ class FavoriteTest(GenericViewTest):
             user=user
         )
         self.url = reverse("favorite_delete", args=[favorite.pk])
-        self.assertPost(2, status_code=302)
+        self.assertPost(status_code=302)
         self.assertEqual(Favorite.objects.all().count(), 0)
