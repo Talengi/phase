@@ -39,7 +39,7 @@ class UserAdmin(django_UserAdmin):
     )
     search_fields = ('email', 'name', 'position')
     ordering = ('email',)
-    filter_horizontal = ()
+    filter_horizontal = ('groups',)
 
     def save_model(self, request, obj, form, change):
         """Send account activation mail after user creation.
