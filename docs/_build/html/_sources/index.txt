@@ -52,6 +52,13 @@ Check the list of available commands directly in your shell::
         test       Launches tests for the whole project.
 
 
+Apache configuration
+--------------------
+
+Here is a sample Apache virtual host configuration file.
+
+.. literalinclude:: vhost_example
+
 Documentation
 -------------
 
