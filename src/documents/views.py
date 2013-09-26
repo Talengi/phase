@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 
 from django import http
@@ -11,6 +12,11 @@ from django.views.generic import (
 )
 from django.utils import simplejson as json
 from django.core.urlresolvers import reverse
+from django.views.static import serve
+try:
+    from urllib.parse import unquote
+except ImportError:
+    from urllib import unquote
 
 from documents.models import Document, DocumentRevision, Favorite
 from documents.utils import filter_documents, compress_documents
@@ -245,6 +251,43 @@ class DocumentDownload(LoginRequiredMixin, View):
         response['Content-Length'] = zip_filename.tell()
         zip_filename.seek(0)
         return response
+
+
+class ProtectedDownload(LoginRequiredMixin, View):
+    """Serve files with a web server after an ACL control.
+
+    One might consider some alternate way, like this one:
+    https://github.com/johnsensible/django-sendfile
+
+    """
+
+    def get(self, request, *args, **kwargs):
+        file_name = kwargs.get('file_name')
+
+        # Prevent nasty things to happen
+        clean_name = os.path.normpath(unquote(file_name))
+        if clean_name.startswith('/') or '..' in clean_name:
+            raise Http404('Nice try!')
+
+        full_path = os.path.join(
+            settings.REVISION_FILES_ROOT,
+            clean_name)
+
+        if not os.path.exists(full_path):
+            raise Http404('File not found. Check the name.')
+
+        # The X-sendfile Apache module makes it possible to serve file
+        # directly from apache, but keeping a control from Django.
+        # If we are in debug mode, and the module is unavailable, we fallback
+        # to the django internal method to serve static files
+        if settings.USE_X_SENDFILE:
+            response = HttpResponse(mimetype='application/force-download')
+            response['Content-Disposition'] = 'attachment; filename=%s' % file_name
+            response['Content-Type'] = ''  # Apache will guess this
+            response['X-Sendfile'] = full_path
+            return response
+        else:
+            return serve(request, clean_name, settings.REVISION_FILES_ROOT)
 
 
 class FavoriteList(LoginRequiredMixin, ListView):

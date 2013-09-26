@@ -4,6 +4,7 @@ from documents.views import (
     DocumentList, DocumentFilter, DocumentCreate, DocumentDetail,
     DocumentEdit, DocumentDownload,
     FavoriteList, FavoriteCreate, FavoriteDelete,
+    ProtectedDownload
 )
 
 urlpatterns = patterns(
@@ -38,8 +39,11 @@ urlpatterns = patterns(
         FavoriteDelete.as_view(),
         name="favorite_delete"),
 
-    # Other
+    # Downloads
     url(r'^download/$',
         DocumentDownload.as_view(),
         name="document_download"),
+    url(r'^documents/(?P<file_name>.*)$',
+        ProtectedDownload.as_view(),
+        name="protected_download"),
 )
