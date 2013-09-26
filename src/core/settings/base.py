@@ -1,19 +1,26 @@
 """Common settings and globals."""
 
 
-from os.path import abspath, basename, dirname, join, normpath
+from os.path import basename
 from sys import path
+from unipath import Path
 
 
 ########## PATH CONFIGURATION
 # Absolute filesystem path to the Django project directory:
-DJANGO_ROOT = dirname(dirname(abspath(__file__)))
+DJANGO_ROOT = Path(__file__).ancestor(3)
 
 # Absolute filesystem path to the top-level project folder:
-SITE_ROOT = dirname(DJANGO_ROOT)
+SITE_ROOT = DJANGO_ROOT.ancestor(1)
 
 # Site name:
-SITE_NAME = basename(DJANGO_ROOT)
+SITE_NAME = basename(SITE_ROOT)
+
+# Path to public files (served by the web server)
+PUBLIC_ROOT = SITE_ROOT.child('public')
+
+# Path to private files (must be served with X-SENDFILE)
+PRIVATE_ROOT = SITE_ROOT.child('private')
 
 # Add our project to our pythonpath, this way we don't need to type our project
 # name in our dotted import paths:
@@ -80,7 +87,7 @@ USE_TZ = True
 
 ########## MEDIA CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#media-root
-MEDIA_ROOT = normpath(join(SITE_ROOT, 'media'))
+MEDIA_ROOT = PUBLIC_ROOT.child('media')
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#media-url
 MEDIA_URL = '/media/'
@@ -89,14 +96,14 @@ MEDIA_URL = '/media/'
 
 ########## STATIC FILE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#static-root
-STATIC_ROOT = normpath(join(SITE_ROOT, 'assets'))
+STATIC_ROOT = PUBLIC_ROOT.child('static')
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#static-url
 STATIC_URL = '/static/'
 
 # See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
 STATICFILES_DIRS = (
-    normpath(join(SITE_ROOT, 'static')),
+    DJANGO_ROOT.child('static'),
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
@@ -117,7 +124,7 @@ SECRET_KEY = r"This is a dummy secret key!"
 ########## FIXTURE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-FIXTURE_DIRS
 FIXTURE_DIRS = (
-    normpath(join(SITE_ROOT, 'fixtures')),
+    DJANGO_ROOT.child('fixtures'),
 )
 ########## END FIXTURE CONFIGURATION
 
@@ -143,7 +150,7 @@ TEMPLATE_LOADERS = (
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-dirs
 TEMPLATE_DIRS = (
-    normpath(join(SITE_ROOT, 'templates')),
+    DJANGO_ROOT.child('templates'),
 )
 ########## END TEMPLATE CONFIGURATION
 
@@ -324,4 +331,7 @@ PAGINATE_BY = 50  # Document list pagination
 CACHE_TIMEOUT_SECONDS = 300  # seconds == 5 minutes
 AUTH_USER_MODEL = 'accounts.User'
 LOGIN_URL = 'login'
+
+# Where should be uploaded revisions' files
+REVISION_FILES_ROOT = PRIVATE_ROOT.child('documents')
 ########## END CUSTOM CONFIGURATION
