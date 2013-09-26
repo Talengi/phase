@@ -16,6 +16,9 @@ SITE_ROOT = DJANGO_ROOT.ancestor(1)
 # Site name:
 SITE_NAME = basename(SITE_ROOT)
 
+# Path to the project Configuration app
+CONFIGURATION_APP_ROOT = Path(__file__).ancestor(2)
+
 # Path to public files (served by the web server)
 PUBLIC_ROOT = SITE_ROOT.child('public')
 
@@ -25,6 +28,7 @@ PRIVATE_ROOT = SITE_ROOT.child('private')
 # Add our project to our pythonpath, this way we don't need to type our project
 # name in our dotted import paths:
 path.append(DJANGO_ROOT)
+path.append(CONFIGURATION_APP_ROOT)
 ########## END PATH CONFIGURATION
 
 
@@ -176,7 +180,7 @@ MIDDLEWARE_CLASSES = (
 
 ########## URL CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#root-urlconf
-ROOT_URLCONF = '%s.urls' % SITE_NAME
+ROOT_URLCONF = 'core.urls'
 ########## END URL CONFIGURATION
 
 
@@ -334,4 +338,5 @@ LOGIN_URL = 'login'
 
 # Where should be uploaded revisions' files
 REVISION_FILES_ROOT = PRIVATE_ROOT.child('documents')
+REVISION_FILES_URL = '/documents/'
 ########## END CUSTOM CONFIGURATION
