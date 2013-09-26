@@ -336,7 +336,8 @@ CACHE_TIMEOUT_SECONDS = 300  # seconds == 5 minutes
 AUTH_USER_MODEL = 'accounts.User'
 LOGIN_URL = 'login'
 
-# Where should be uploaded revisions' files
+# Where should revisions' files go
 REVISION_FILES_ROOT = PRIVATE_ROOT.child('documents')
 REVISION_FILES_URL = '/documents/'
+USE_X_SENDFILE = DEBUG
 ########## END CUSTOM CONFIGURATION
