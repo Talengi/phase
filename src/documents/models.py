@@ -3,6 +3,7 @@
 
 from django.db import models
 from django.conf import settings
+from django.core.files.storage import FileSystemStorage
 
 from documents.constants import (
     STATUSES, REVISIONS, CONTRACT_NBS, ORIGINATORS, UNITS, DISCIPLINES,
@@ -282,6 +283,10 @@ def upload_to_path(instance, filename):
         extension=filename.split('.')[-1]
     )
 
+# Revision documents
+private_storage = FileSystemStorage(location=settings.REVISION_FILES_ROOT,
+                                    base_url=settings.REVISION_FILES_URL)
+
 
 class Favorite(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
@@ -304,10 +309,12 @@ class DocumentRevision(models.Model):
     native_file = models.FileField(
         verbose_name=u"Native File",
         upload_to=upload_to_path,
+        storage=private_storage,
         null=True, blank=True)
     pdf_file = models.FileField(
         verbose_name=u"PDF File",
         upload_to=upload_to_path,
+        storage=private_storage,
         null=True, blank=True)
     document = models.ForeignKey(Document)
 
