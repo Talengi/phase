@@ -49,7 +49,7 @@
                 {{ form.native_file }}
                 {% if revision.native_file %}
                     <span class="fileupload-preview">
-                        <a href="{{ revision.native_file.url }}">
+                        <a href="{% url 'protected_download' revision.native_file.name %}">
                             {{ revision.native_file.name }}
                         </a>
                     </span>
@@ -67,7 +67,7 @@
                 {{ form.pdf_file }}
                 {% if revision.pdf_file %}
                     <span class="fileupload-preview">
-                        <a href="{{ revision.pdf_file.url }}">
+                        <a href="{% url 'protected_download' revision.pdf_file.name %}">
                             {{ revision.pdf_file.name }}
                         </a>
                     </span>
