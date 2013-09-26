@@ -228,16 +228,11 @@ class Document(models.Model):
     def display_fields(self):
         """The list of fields to display in a concise way."""
         return [
-            #(Name               Column Name                Value)
-            (u'Document Number', u'document_number',        self.document_number),
-            (u'Title',           u'title',                  self.title),
-            (u'Rev. Date',       u'current_revision_date',  self.current_revision_date),
-            (u'Rev.',            u'current_revision',       self.current_revision),
-            (u'Status',          u'status',                 self.status),
-            #(u'Unit',            u'unit',                   self.unit),
-            #(u'Disc.',           u'discipline',             self.discipline),
-            #(u'Doc. Type',       u'document_type',          self.document_type),
-            #(u'Class',           u'klass',                  self.klass),
+            (u'Document Number', u'document_number', self.document_number),
+            (u'Title', u'title', self.title),
+            (u'Rev. Date', u'current_revision_date', self.current_revision_date),
+            (u'Rev.', u'current_revision', self.current_revision),
+            (u'Status', u'status', self.status),
         ]
 
     def searchable_fields(self):
