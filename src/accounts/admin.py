@@ -13,10 +13,11 @@ from .forms import UserCreationForm, UserChangeForm
 
 class OrganisationAdmin(admin.ModelAdmin):
     list_display = ('name', 'description')
-    filter_horizontal = ('users', 'groups')
+    filter_horizontal = ('users', 'groups', 'categories',)
     fieldsets = (
         (None, {'fields': ('name', 'description')}),
-        ('Members', {'fields': ('users', 'groups')})
+        ('Categories', {'fields': ('categories',)}),
+        ('Members', {'fields': ('users', 'groups')}),
     )
 
 
