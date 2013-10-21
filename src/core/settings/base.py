@@ -234,13 +234,13 @@ LOGGING = {
     },
     'formatters': {
         'verbose': {
-            'format': '[contactor] %(levelname)s %(asctime)s %(message)s'
+            'format': '[phase] %(levelname)s %(asctime)s %(message)s'
         },
     },
     'handlers': {
         # Send all messages to console
         'console': {
-            'level': 'DEBUG',
+            'level': 'INFO',
             'class': 'logging.StreamHandler',
         },
         # Send info messages to syslog
