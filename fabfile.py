@@ -1,9 +1,14 @@
 from fabric.api import run, env, local, cd, prefix
 
-USERNAME = 'scopyleft'
-env.hosts = ['%s@ssh.alwaysdata.com' % USERNAME]
+# Create an ssh config in ~/.ssh/config
+# Host phase
+#     HostName phase.testing.com
+#     User username
+
+USERNAME = 'talengi'
+env.hosts = ['phase']
 env.activate = 'source /home/%s/venvs/phase/bin/activate' % USERNAME
-env.directory = '/home/%s/www/talengi/phase' % USERNAME
+env.directory = '/home/%s/phase' % USERNAME
 
 
 def runserver():
@@ -25,7 +30,7 @@ def test(module=""):
 def docs():
     """Generates sphinx documentation for the project."""
     local('cd docs && make clean && make html')
-    local('open docs/_build/html/index.html')
+    local('xdg-open docs/_build/html/index.html')
 
 
 def check():
@@ -35,7 +40,7 @@ def check():
     runserver()
 
 
-def deploy(without_data=False):
+def deploy(with_data=True):
     """Deploys the project against staging."""
     with cd(env.directory):
         run('git pull')
@@ -46,11 +51,11 @@ def deploy(without_data=False):
             with_production_settings = ' --settings=core.settings.production'
             run('pip install -r ../requirements/production.txt')
             run(collectstatic + with_production_settings)
-            if not without_data:
-                run('rm default.db')
+            if with_data:
+                run('rm phase.db')
                 run(syncdb + with_production_settings)
                 run(generate + with_production_settings)
-                run('rm media/*')
+                run('rm private/*')
 
 
 def log(filename="admin/log/access.log", backlog='F'):
