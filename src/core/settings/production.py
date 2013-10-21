@@ -2,8 +2,9 @@
 
 
 from os import environ
+from os.path import join, normpath
 
-from base import *
+from base import *  # noqa
 
 # Normally you should not import ANYTHING from Django directly
 # into your settings, but ImproperlyConfigured is an exception.
@@ -18,7 +19,7 @@ def get_env_setting(setting):
         error_msg = "Set the %s env variable" % setting
         raise ImproperlyConfigured(error_msg)
 
-INSTALLED_APPS += ('raven.contrib.django.raven_compat',)
+#INSTALLED_APPS += ('raven.contrib.django.raven_compat',)
 
 ########## EMAIL CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
@@ -71,12 +72,12 @@ RAVEN_CONFIG = {
     'dsn': get_env_setting('SENTRY_KEY'),
 }
 
-ALLOWED_HOSTS = ['phase.scopyleft.fr']
+ALLOWED_HOSTS = ['phase.scopyleft.fr', '.clients.jouannic.fr']
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '/home/scopyleft/www/talengi/phase/default.db',
+        'NAME': normpath(join(DJANGO_ROOT, 'phase.db')),
         'USER': '',
         'PASSWORD': '',
         'HOST': '',

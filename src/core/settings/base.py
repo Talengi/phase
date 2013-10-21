@@ -1,7 +1,7 @@
 """Common settings and globals."""
 
 
-from os.path import basename
+from os.path import basename, join, normpath
 from sys import path
 from unipath import Path
 from logging.handlers import SysLogHandler
@@ -59,7 +59,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'phase.db',
+        'NAME': normpath(join(DJANGO_ROOT, 'phase.db')),
         'USER': '',
         'PASSWORD': '',
         'HOST': '',
