@@ -22,6 +22,10 @@ class Category(models.Model):
         max_length=200,
         null=True, blank=True)
 
+    class Meta:
+        verbose_name = _('Category')
+        verbose_name_plural = _('Categories')
+
     def __unicode__(self):
         return self.name
 
