@@ -12,6 +12,8 @@ from django.core.mail import send_mail
 from django.contrib.sites.models import Site
 from django.conf import settings
 
+from documents.models import Category
+
 
 logger = logging.getLogger(__name__)
 
@@ -29,6 +31,10 @@ class Organisation(models.Model):
         null=True, blank=True)
     groups = models.ManyToManyField(
         'auth.Group',
+        null=True, blank=True)
+    categories = models.ManyToManyField(
+        Category,
+        verbose_name=_('Categories'),
         null=True, blank=True)
 
     def __unicode__(self):
