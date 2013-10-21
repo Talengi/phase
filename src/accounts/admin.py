@@ -7,8 +7,17 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib import messages
 
-from .models import User
+from .models import User, Organisation
 from .forms import UserCreationForm, UserChangeForm
+
+
+class OrganisationAdmin(admin.ModelAdmin):
+    list_display = ('name', 'description')
+    filter_horizontal = ('users', 'groups')
+    fieldsets = (
+        (None, {'fields': ('name', 'description')}),
+        ('Members', {'fields': ('users', 'groups')})
+    )
 
 
 class UserAdmin(django_UserAdmin):
@@ -103,5 +112,6 @@ class GroupAdmin(django_GroupAdmin):
 
 
 admin.site.register(User, UserAdmin)
+admin.site.register(Organisation, OrganisationAdmin)
 admin.site.unregister(Group)
 admin.site.register(Group, GroupAdmin)
