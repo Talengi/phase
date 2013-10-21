@@ -4,6 +4,7 @@
 from django.db import models
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
+from django.utils.translation import ugettext_lazy as _
 
 from documents.constants import (
     STATUSES, REVISIONS, CONTRACT_NBS, ORIGINATORS, UNITS, DISCIPLINES,
@@ -12,7 +13,23 @@ from documents.constants import (
 )
 
 
+class Category(models.Model):
+    name = models.CharField(
+        _('Name'),
+        max_length=50)
+    description = models.CharField(
+        _('Description'),
+        max_length=200,
+        null=True, blank=True)
+
+    def __unicode__(self):
+        return self.name
+
+
 class Document(models.Model):
+    category = models.ForeignKey(
+        Category,
+        verbose_name=u"Category")
     document_number = models.CharField(
         verbose_name=u"Document Number",
         max_length=30)
