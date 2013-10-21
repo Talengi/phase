@@ -31,6 +31,9 @@ class Organisation(models.Model):
         'auth.Group',
         null=True, blank=True)
 
+    def __unicode__(self):
+        return self.name
+
 
 class UserManager(BaseUserManager):
     def create_user(self, email, name, password=None, **extra_fields):
