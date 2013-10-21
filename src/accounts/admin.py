@@ -28,7 +28,7 @@ class UserAdmin(django_UserAdmin):
         ('Personal info', {'fields': ('name', 'position',)}),
         ('Permissions', {'fields': ('is_superuser',)}),
         ('Important dates', {'fields': ('date_joined', 'last_login',)}),
-        ('Permissions', {'fields': ('groups',)}),
+        ('Permissions', {'fields': ('groups', 'user_permissions',)}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # overrides get_fieldsets to use this attribute when creating a user.
@@ -39,7 +39,7 @@ class UserAdmin(django_UserAdmin):
     )
     search_fields = ('email', 'name', 'position')
     ordering = ('email',)
-    filter_horizontal = ('groups',)
+    filter_horizontal = ('user_permissions', 'groups',)
 
     def save_model(self, request, obj, form, change):
         """Send account activation mail after user creation.
