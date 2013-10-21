@@ -16,6 +16,22 @@ from django.conf import settings
 logger = logging.getLogger(__name__)
 
 
+class Organisation(models.Model):
+    name = models.CharField(
+        _('Name'),
+        max_length=50)
+    description = models.CharField(
+        _('Description'),
+        max_length=200,
+        null=True, blank=True)
+    users = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        null=True, blank=True)
+    groups = models.ManyToManyField(
+        'auth.Group',
+        null=True, blank=True)
+
+
 class UserManager(BaseUserManager):
     def create_user(self, email, name, password=None, **extra_fields):
         now = timezone.now()
