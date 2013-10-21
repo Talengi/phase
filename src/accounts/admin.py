@@ -1,6 +1,10 @@
+from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as django_UserAdmin
+from django.contrib.auth.admin import GroupAdmin as django_GroupAdmin
+from django.contrib.auth.models import Group
 from django.contrib.auth.tokens import default_token_generator
+from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib import messages
 
 from .models import User
@@ -56,5 +60,48 @@ class UserAdmin(django_UserAdmin):
             messages.info(request, 'The account activation mail was sent')
 
 
-#admin.site.unregister(django_User, django_UserAdmin)
+class GroupAdminForm(forms.ModelForm):
+    """Custom Group form for admin module.
+
+    We use a custom form so we can add a widget to set users directly
+    from the group admin module.
+
+    """
+    users = forms.ModelMultipleChoiceField(
+        queryset=User.objects.all(),
+        widget=FilteredSelectMultiple('Users', False),
+        required=False)
+
+    class Meta:
+        model = Group
+
+    def __init__(self, *args, **kwargs):
+        instance = kwargs.get('instance', None)
+        if instance is not None:
+            initial = kwargs.get('initial', {})
+            initial['users'] = instance.user_set.all()
+            kwargs['initial'] = initial
+        super(GroupAdminForm, self).__init__(*args, **kwargs)
+
+    def save(self, commit=True):
+        group = super(GroupAdminForm, self).save(commit=commit)
+
+        if commit:
+            group.user_set = self.cleaned_data['users']
+        else:
+            old_save_m2m = self.save_m2m
+
+            def new_save_m2m():
+                old_save_m2m()
+                group.user_set = self.cleaned_data['users']
+            self.save_m2m = new_save_m2m
+        return group
+
+
+class GroupAdmin(django_GroupAdmin):
+    form = GroupAdminForm
+
+
 admin.site.register(User, UserAdmin)
+admin.site.unregister(Group)
+admin.site.register(Group, GroupAdmin)
