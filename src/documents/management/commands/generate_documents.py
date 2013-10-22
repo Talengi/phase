@@ -34,6 +34,7 @@ class Command(BaseCommand):
         for i in range(nb_of_docs):
             max_revision = choice(range(1, 5))
             document = Document.objects.create(
+                category_id=1,
                 title=choice(TITLES),
                 status=choice(STATUSES_CHOICES),
                 unit=choice(UNITS_CHOICES),
@@ -50,7 +51,7 @@ class Command(BaseCommand):
                 created_on=date.today(),
                 current_revision=u"{0:0>2}".format(max_revision),
                 current_revision_date='{year}-{month:0>2}-{day:0>2}'.format(
-                    year=2008+max_revision,
+                    year=2008 + max_revision,
                     month=choice(range(1, 13)),
                     day=choice(range(1, 29)),
                 ),
@@ -59,7 +60,7 @@ class Command(BaseCommand):
                 DocumentRevision.objects.create(
                     revision=u"{0:0>2}".format(revision_number),
                     revision_date='{year}-{month:0>2}-{day:0>2}'.format(
-                        year=2008+revision_number,
+                        year=2008 + revision_number,
                         month=choice(range(1, 13)),
                         day=choice(range(1, 29)),
                     ),
