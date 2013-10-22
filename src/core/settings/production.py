@@ -1,8 +1,15 @@
-"""Production settings and globals."""
+"""Production settings and globals.
 
+We will no rely on environments variable for configuration,
+because it works poorly with mod_wsgi.
 
-from os import environ
-from os.path import join, normpath
+See:
+    * https://code.google.com/p/modwsgi/wiki/ApplicationIssues#Application_Environment_Variables
+    * https://github.com/twoscoops/django-twoscoops-project/issues/60#issuecomment-25935406
+
+Instead, we are using a private configuration file that MUST not be
+added to the git repository to protect private configuration data.
+"""
 
 from base import *  # noqa
 
@@ -10,85 +17,41 @@ from base import *  # noqa
 # into your settings, but ImproperlyConfigured is an exception.
 from django.core.exceptions import ImproperlyConfigured
 
+try:
+    import prod_private
+except ImportError:
+    raise ImproperlyConfigured("Create a prod_private.py file in settings")
 
-def get_env_setting(setting):
-    """ Get the environment setting or return exception """
+
+def get_prod_setting(setting):
+    """Get the setting or return exception """
     try:
-        return environ[setting]
-    except KeyError:
-        error_msg = "Set the %s env variable" % setting
+        return getattr(prod_private, setting)
+    except AttributeError:
+        error_msg = "The %s setting is missing from" % setting
         raise ImproperlyConfigured(error_msg)
 
-#INSTALLED_APPS += ('raven.contrib.django.raven_compat',)
 
 ########## EMAIL CONFIGURATION
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#email-host
-EMAIL_HOST = environ.get('EMAIL_HOST', 'smtp.gmail.com')
-
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#email-host-password
-EMAIL_HOST_PASSWORD = environ.get('EMAIL_HOST_PASSWORD', '')
-
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#email-host-user
-EMAIL_HOST_USER = environ.get('EMAIL_HOST_USER', 'your_email@example.com')
-
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#email-port
-EMAIL_PORT = environ.get('EMAIL_PORT', 587)
-
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#email-subject-prefix
 EMAIL_SUBJECT_PREFIX = '[%s] ' % SITE_NAME
-
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#email-use-tls
-EMAIL_USE_TLS = True
-
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#server-email
-SERVER_EMAIL = EMAIL_HOST_USER
-########## END EMAIL CONFIGURATION
-
+DEFAULT_FROM_EMAIL = get_prod_setting('DEFAULT_FROM_EMAIL')
+EMAIL_BACKEND = get_prod_setting('EMAIL_BACKEND')
+EMAIL_HOST = get_prod_setting('EMAIL_HOST')
+EMAIL_HOST_PASSWORD = get_prod_setting('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_USER = get_prod_setting('EMAIL_HOST_USER')
+EMAIL_PORT = get_prod_setting('EMAIL_PORT')
+EMAIL_USE_TLS = get_prod_setting('EMAIL_USE_TLS')
+SERVER_EMAIL = get_prod_setting('SERVER_EMAIL')
 
 ########## DATABASE CONFIGURATION
-#DATABASES = {}
-########## END DATABASE CONFIGURATION
-
+DATABASES = get_prod_setting('DATABASES')
 
 ########## CACHE CONFIGURATION
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#caches
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-    }
-}
-########## END CACHE CONFIGURATION
-
+CACHES = get_prod_setting('CACHES')
 
 ########## SECRET CONFIGURATION
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
-SECRET_KEY = get_env_setting('SECRET_KEY')
-########## END SECRET CONFIGURATION
-
-RAVEN_CONFIG = {
-    'dsn': get_env_setting('SENTRY_KEY'),
-}
-
-ALLOWED_HOSTS = ['phase.scopyleft.fr', '.clients.jouannic.fr']
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': normpath(join(DJANGO_ROOT, 'phase.db')),
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',
-        'PORT': '',
-    }
-}
-
-########## PIPELINE CONFIGURATION
-PIPELINE_YUGLIFY_BINARY = '/nfs/http10/scopyleft/tmp/node-v0.10.8-linux-x64/lib/node_modules/yuglify/bin/yuglify'
-########## END PIPELINE CONFIGURATION
+SECRET_KEY = get_prod_setting('SECRET_KEY')
 
 ########## CUSTOM CONFIGURATION
-USE_X_SENDFILE = True
-########## END CUSTOM CONFIGURATION
+ALLOWED_HOSTS = get_prod_setting('ALLOWED_HOSTS')
+USE_X_SENDFILE = False

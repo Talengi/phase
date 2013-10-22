@@ -1,3 +1,6 @@
+# private configuration file, local to each machine
+prod_private.py
+
 # Python bytecode:
 *.py[co]
 
