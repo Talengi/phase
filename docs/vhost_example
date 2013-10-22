@@ -18,7 +18,7 @@
     </Directory>
 
     WSGIScriptAlias / /home/talengi/phase/src/core/wsgi.py
-    WSGIDaemonProcess talengi python-path=/home/talengi/phase/src/:/home/talengi/.virtualenvs/phase/lib/python2.6/site-packages/
+    WSGIDaemonProcess talengi user=talengi python-path=/home/talengi/phase/src/:/home/talengi/.virtualenvs/phase/lib/python2.6/site-packages/
     WSGIProcessGroup talengi
 
     <Directory /home/tarengi/phase/src/core/>

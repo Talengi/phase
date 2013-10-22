@@ -4,11 +4,17 @@ from fabric.api import run, env, local, cd, prefix, sudo
 # Host phase
 #     HostName phase.testing.com
 #     User username
+#
+# Also add this line in /etc/sudoers on the server:
+# talengi ALL = NOPASSWD: /etc/init.d/apache2
 
 USERNAME = 'talengi'
+VENV_HOME = '/home/%s/.virtualenvs/' % USERNAME
+env.use_ssh_config = True
 env.hosts = ['phase']
-env.activate = 'source /home/%s/venvs/phase/bin/activate' % USERNAME
+env.activate = 'workon phase'
 env.directory = '/home/%s/phase' % USERNAME
+env.sudo_prefix = 'sudo '
 
 
 def runserver():
@@ -41,7 +47,7 @@ def check():
 
 
 def restart_webserver():
-    sudo('service apache2 restart')
+    sudo('/etc/init.d/apache2 restart', shell=False)
 
 
 def deploy(with_data=True):
@@ -49,17 +55,15 @@ def deploy(with_data=True):
     with cd(env.directory):
         run('git pull')
         with prefix(env.activate):
-            collectstatic = 'python manage.py collectstatic --noinput'
-            syncdb = 'python manage.py syncdb --noinput'
-            generate = 'python manage.py generate_documents 5500'
+            collectstatic = 'python src/manage.py collectstatic --noinput'
+            syncdb = 'python src/manage.py syncdb --noinput'
             with_production_settings = ' --settings=core.settings.production'
-            run('pip install -r ../requirements/production.txt')
+            run('pip install -r requirements/production.txt')
             run(collectstatic + with_production_settings)
             if with_data:
                 run('rm phase.db')
+                run('rm private/* -Rf')
                 run(syncdb + with_production_settings)
-                run(generate + with_production_settings)
-                run('rm private/*')
     restart_webserver()
 
 
