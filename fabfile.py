@@ -1,4 +1,4 @@
-from fabric.api import run, env, local, cd, prefix
+from fabric.api import run, env, local, cd, prefix, sudo
 
 # Create an ssh config in ~/.ssh/config
 # Host phase
@@ -40,6 +40,10 @@ def check():
     runserver()
 
 
+def restart_webserver():
+    sudo('service apache2 restart')
+
+
 def deploy(with_data=True):
     """Deploys the project against staging."""
     with cd(env.directory):
@@ -56,6 +60,7 @@ def deploy(with_data=True):
                 run(syncdb + with_production_settings)
                 run(generate + with_production_settings)
                 run('rm private/*')
+    restart_webserver()
 
 
 def log(filename="admin/log/access.log", backlog='F'):
