@@ -7,17 +7,21 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib import messages
 
-from .models import User, Organisation
+from .models import User, Organisation, CategoryMembership
 from .forms import UserCreationForm, UserChangeForm
+
+
+class CategoryInline(admin.StackedInline):
+    model = CategoryMembership
+    fields = ('category',)
+    extra = 0
 
 
 class OrganisationAdmin(admin.ModelAdmin):
     list_display = ('name', 'description')
-    filter_horizontal = ('users', 'groups', 'categories',)
+    inlines = [CategoryInline]
     fieldsets = (
         (None, {'fields': ('name', 'description')}),
-        ('Categories', {'fields': ('categories',)}),
-        ('Members', {'fields': ('users', 'groups')}),
     )
 
 
