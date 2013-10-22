@@ -126,6 +126,10 @@ class MembershipAdmin(admin.ModelAdmin):
     list_display = ('organisation', 'category')
     search_fields = ('organisation__name', 'category__name')
     filter_horizontal = ('users', 'groups')
+    fieldsets = (
+        (None, {'fields': ('organisation', 'category')}),
+        ('Members', {'fields': ('groups', 'users',)}),
+    )
 
 
 admin.site.register(User, UserAdmin)
