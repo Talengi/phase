@@ -3,8 +3,15 @@
   "pk": 1,
   "model": "accounts.organisation",
   "fields": {
-    "name": "ACME",
-    "categories": [1]
+    "name": "ACME"
+  }
+},
+{
+  "pk": 1,
+  "model": "accounts.categorymembership",
+  "fields": {
+    "organisation": 1,
+    "category": 1
   }
 },
 {
