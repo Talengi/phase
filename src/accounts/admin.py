@@ -112,11 +112,24 @@ class GroupAdminForm(forms.ModelForm):
         return group
 
 
+class GroupCategoryInline(admin.StackedInline):
+    model = CategoryMembership.groups.through
+    extra = 0
+
+
 class GroupAdmin(django_GroupAdmin):
     form = GroupAdminForm
+    inlines = [GroupCategoryInline]
+
+
+class MembershipAdmin(admin.ModelAdmin):
+    list_display = ('organisation', 'category')
+    search_fields = ('organisation__name', 'category__name')
+    filter_horizontal = ('users', 'groups')
 
 
 admin.site.register(User, UserAdmin)
 admin.site.register(Organisation, OrganisationAdmin)
 admin.site.unregister(Group)
 admin.site.register(Group, GroupAdmin)
+admin.site.register(CategoryMembership, MembershipAdmin)
