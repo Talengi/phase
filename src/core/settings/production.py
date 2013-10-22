@@ -28,7 +28,7 @@ def get_prod_setting(setting):
     try:
         return getattr(prod_private, setting)
     except AttributeError:
-        error_msg = "The %s setting is missing from" % setting
+        error_msg = "The %s setting is missing from prod settings" % setting
         raise ImproperlyConfigured(error_msg)
 
 
