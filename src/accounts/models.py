@@ -26,19 +26,38 @@ class Organisation(models.Model):
         _('Description'),
         max_length=200,
         null=True, blank=True)
-    users = models.ManyToManyField(
-        settings.AUTH_USER_MODEL,
-        null=True, blank=True)
-    groups = models.ManyToManyField(
-        'auth.Group',
-        null=True, blank=True)
     categories = models.ManyToManyField(
         Category,
+        through='CategoryMembership',
         verbose_name=_('Categories'),
         null=True, blank=True)
 
     def __unicode__(self):
         return self.name
+
+
+class CategoryMembership(models.Model):
+    """Link between organisation / category and users and groups."""
+    organisation = models.ForeignKey(
+        Organisation,
+        verbose_name=_('Organisation'))
+    category = models.ForeignKey(
+        Category,
+        verbose_name=_('Category'))
+    users = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name='categories',
+        null=True, blank=True)
+    groups = models.ManyToManyField(
+        'auth.Group',
+        null=True, blank=True)
+
+    class Meta:
+        unique_together = ('category', 'organisation')
+
+    def __unicode__(self):
+        return '%s > %s' % (self.organisation.name,
+                            self.category.name)
 
 
 class UserManager(BaseUserManager):
