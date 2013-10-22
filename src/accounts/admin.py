@@ -25,6 +25,11 @@ class OrganisationAdmin(admin.ModelAdmin):
     )
 
 
+class UserCategoryInline(admin.StackedInline):
+    model = CategoryMembership.users.through
+    extra = 0
+
+
 class UserAdmin(django_UserAdmin):
     """User admin module.
 
@@ -35,6 +40,7 @@ class UserAdmin(django_UserAdmin):
     # The forms to add and change user instances
     form = UserChangeForm
     add_form = UserCreationForm
+    inlines = [UserCategoryInline]
 
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin

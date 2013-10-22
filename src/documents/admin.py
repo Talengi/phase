@@ -15,5 +15,4 @@ class CategoryAdmin(admin.ModelAdmin):
     inlines = [OrganisationInline]
 
 
-
 admin.site.register(Category, CategoryAdmin)
