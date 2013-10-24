@@ -5,7 +5,7 @@ jQuery(function($) {
     queryparams.fromString($('#table-filters').serialize());
 
     /* Deal with download buttons */
-    $('.navbar-form button[type=button]').click(function () {
+    $('.download-button').click(function () {
         var btn = $(this),
             format = btn.data('format'),
             revisions = btn.data('revisions');
@@ -101,7 +101,7 @@ jQuery(function($) {
         $("#documents tbody").on('change', 'input[type=checkbox]', function(e) {
             $row = $(this).closest('tr');
             var documentId = $row.data('document-id');
-            $('.navbar-form .disabled').removeClass('disabled');
+            $('#download-button').removeClass('disabled');
             if ($(this).is(':checked')) {
                 $row.addClass('selected');
                 var input = document.createElement('input');
