@@ -22,6 +22,9 @@ class Organisation(models.Model):
     name = models.CharField(
         _('Name'),
         max_length=50)
+    slug = models.SlugField(
+        _('Slug'),
+        max_length=50)
     description = models.CharField(
         _('Description'),
         max_length=200,

@@ -3,7 +3,8 @@
   "pk": 1,
   "model": "documents.categorytemplate",
   "fields": {
-    "name": "Contractor deliverables"
+    "name": "Contractor deliverables",
+    "slug": "contractor-deliverables"
   }
 },
 {

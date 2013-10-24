@@ -23,6 +23,7 @@ class OrganisationAdmin(admin.ModelAdmin):
     list_display = ('name', 'description')
     prepopulated_fields = {'slug': ('name',)}
     inlines = [CategoryInline]
+    prepopulated_fields = {'slug': ('name',)}
     fieldsets = (
         (None, {'fields': ('name', 'slug', 'description')}),
     )
