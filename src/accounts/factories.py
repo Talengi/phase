@@ -1,6 +1,7 @@
 import factory
 
-from accounts.models import User
+from documents.factories import CategoryFactory
+from .models import User, Organisation, CategoryMembership
 
 
 class UserFactory(factory.DjangoModelFactory):
@@ -19,3 +20,16 @@ class UserFactory(factory.DjangoModelFactory):
             if create:
                 user.save()
         return user
+
+
+class OrganisationFactory(factory.DjangoModelFactory):
+    FACTORY_FOR = Organisation
+
+    name = factory.Sequence(lambda n: 'Category {0}'.format(n))
+
+
+class MembershipFactory(factory.DjangoModelFactory):
+    FACTORY_FOR = CategoryMembership
+
+    organisation = factory.SubFactory(OrganisationFactory)
+    category = factory.SubFactory(CategoryFactory)

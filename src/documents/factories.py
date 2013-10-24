@@ -2,7 +2,7 @@ import datetime
 import factory
 from factory.fuzzy import FuzzyDate
 
-from documents.models import Document, DocumentRevision
+from .models import Document, DocumentRevision, Category
 
 
 fuzzy_date = FuzzyDate(datetime.date(2012, 1, 1))
@@ -23,3 +23,10 @@ class RevisionFactory(factory.DjangoModelFactory):
     revision = factory.Sequence(lambda n: '{0}'.format(n))
     revision_date = fuzzy_date.fuzz()
     factory.SubFactory(DocumentFactory)
+
+
+class CategoryFactory(factory.DjangoModelFactory):
+    FACTORY_FOR = Category
+
+    name = factory.Sequence(lambda n: 'Category {0}'.format(n))
+    description = 'Test category'
