@@ -1,4 +1,5 @@
 from django import forms
+from django.forms.models import BaseInlineFormSet
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as django_UserAdmin
 from django.contrib.auth.admin import GroupAdmin as django_GroupAdmin
@@ -6,6 +7,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib import messages
+from django.utils.translation import ugettext_lazy as _
 
 from .models import User, Organisation, CategoryMembership
 from .forms import UserCreationForm, UserChangeForm
@@ -25,9 +27,20 @@ class OrganisationAdmin(admin.ModelAdmin):
     )
 
 
+class RequiredInlineFormSet(BaseInlineFormSet):
+    def clean(self):
+        super(RequiredInlineFormSet, self).clean()
+
+        existing_data = [data and not data.get('DELETE', False)
+                         for data in self.cleaned_data]
+        if not any(existing_data):
+            raise forms.ValidationError(_('Please select at least one category'))
+
+
 class UserCategoryInline(admin.StackedInline):
     model = CategoryMembership.users.through
     extra = 0
+    formset = RequiredInlineFormSet
 
 
 class UserAdmin(django_UserAdmin):
