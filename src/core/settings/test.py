@@ -1,5 +1,6 @@
 from base import *  # noqa
 
+
 ########## TEST SETTINGS
 TEST_RUNNER = 'discover_runner.DiscoverRunner'
 TEST_DISCOVER_TOP_LEVEL = DJANGO_ROOT
