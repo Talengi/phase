@@ -17,6 +17,15 @@
   }
 },
 {
+  "pk": 2,
+  "model": "accounts.category",
+  "fields": {
+    "organisation": 1,
+    "category_template": 2,
+    "users": [1, 2, 3]
+  }
+},
+{
   "pk": 1,
   "model": "auth.group",
   "fields": {

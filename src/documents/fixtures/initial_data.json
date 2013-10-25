@@ -6,5 +6,13 @@
     "name": "Contractor deliverables",
     "slug": "contractor-deliverables"
   }
+},
+{
+  "pk": 2,
+  "model": "documents.categorytemplate",
+  "fields": {
+    "name": "Correspondances",
+    "slug": "correspondances"
+  }
 }
 ]
