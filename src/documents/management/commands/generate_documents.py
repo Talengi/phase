@@ -10,6 +10,7 @@ from documents.constants import (DISCIPLINES, DOCUMENT_TYPES, UNITS,
                                  SEQUENCIAL_NUMBERS, CONTRACT_NBS,
                                  ORIGINATORS, PEOPLE, SYSTEMS, WBS)
 from documents.models import Document, DocumentRevision
+from accounts.models import Category
 
 DISCIPLINES_CHOICES = [item[0] for item in DISCIPLINES]
 DOCUMENT_TYPES_CHOICES = [item[0] for item in DOCUMENT_TYPES]
@@ -31,6 +32,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         nb_of_docs = int(args[0])
+        categories = list(Category.objects.all())
         for i in range(nb_of_docs):
             max_revision = choice(range(1, 5))
             document = Document.objects.create(
@@ -65,6 +67,10 @@ class Command(BaseCommand):
                     ),
                     document=document,
                 )
+
+            category = choice(categories)
+            category.documents.add(document)
+            category.save()
 
         self.stdout.write(
             'Successfully generated {nb_of_docs} documents'.format(
