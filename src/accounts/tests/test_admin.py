@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 
-from accounts.factories import UserFactory, MembershipFactory
+from accounts.factories import UserFactory, CategoryFactory
 
 
 class UserCreationTests(TestCase):
@@ -27,8 +27,8 @@ class UserCreationTests(TestCase):
             'name': 'Test',
             'password1': 'password',
             'password2': 'password',
-            'CategoryMembership_users-INITIAL_FORMS': 0,
-            'CategoryMembership_users-TOTAL_FORMS': 0,
+            'Category_users-INITIAL_FORMS': 0,
+            'Category_users-TOTAL_FORMS': 0,
         }
         res = self.client.post(self.url, data)
         self.assertContains(res, 'Please select at least one category')
@@ -47,8 +47,8 @@ class UserCreationTests(TestCase):
             'name': 'Test',
             'password1': 'password',
             'password2': 'password',
-            'CategoryMembership_users-INITIAL_FORMS': 0,
-            'CategoryMembership_users-TOTAL_FORMS': 0,
+            'Category_users-INITIAL_FORMS': 0,
+            'Category_users-TOTAL_FORMS': 0,
         }
         res = self.client.post(url, data)
         self.assertContains(res, 'Please select at least one category')
@@ -61,9 +61,9 @@ class UserCreationTests(TestCase):
 
         """
         user = UserFactory()
-        membership = MembershipFactory()
-        membership.users.add(user)
-        membership.save()
+        category = CategoryFactory()
+        category.users.add(user)
+        category.save()
 
         url = reverse('admin:accounts_user_change', args=[user.id])
         data = {
@@ -71,12 +71,12 @@ class UserCreationTests(TestCase):
             'name': 'Test',
             'password1': 'password',
             'password2': 'password',
-            'CategoryMembership_users-INITIAL_FORMS': 1,
-            'CategoryMembership_users-MAX_NUM_FORMS': 1000,
-            'CategoryMembership_users-TOTAL_FORMS': 1,
-            'CategoryMembership_users-0-DELETE': 1,
-            'CategoryMembership_users-0-id': membership.id,
-            'CategoryMembership_users-0-user': user.id,
+            'Category_users-INITIAL_FORMS': 1,
+            'Category_users-MAX_NUM_FORMS': 1000,
+            'Category_users-TOTAL_FORMS': 1,
+            'Category_users-0-DELETE': 1,
+            'Category_users-0-id': category.id,
+            'Category_users-0-user': user.id,
         }
         res = self.client.post(url, data)
         self.assertContains(res, 'Please select at least one category')

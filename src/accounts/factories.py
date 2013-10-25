@@ -1,7 +1,7 @@
 import factory
 
-from documents.factories import CategoryFactory
-from .models import User, Organisation, CategoryMembership
+from documents.factories import CategoryTemplateFactory
+from .models import User, Organisation, Category
 
 
 class UserFactory(factory.DjangoModelFactory):
@@ -28,8 +28,8 @@ class OrganisationFactory(factory.DjangoModelFactory):
     name = factory.Sequence(lambda n: 'Category {0}'.format(n))
 
 
-class MembershipFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = CategoryMembership
+class CategoryFactory(factory.DjangoModelFactory):
+    FACTORY_FOR = Category
 
     organisation = factory.SubFactory(OrganisationFactory)
-    category = factory.SubFactory(CategoryFactory)
+    category_template = factory.SubFactory(CategoryTemplateFactory)

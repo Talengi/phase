@@ -25,6 +25,7 @@ from documents.forms import (
     DocumentRevisionForm, FavoriteForm
 )
 
+from accounts.models import Category
 from accounts.views import LoginRequiredMixin, PermissionRequiredMixin
 
 
@@ -84,6 +85,15 @@ class JSONResponseMixin(object):
 class DocumentList(LoginRequiredMixin, ListView, JSONResponseMixin):
     queryset = Document.objects.all()
     paginate_by = settings.PAGINATE_BY
+
+    def get_queryset(self):
+        qs = Document.objects.all()
+
+        #if ('organisation' in self.kwargs and 'category' in self.kwargs):
+        #    category = get_object_or_404(Category.objects.filter(
+        #        organisation__slug=self.kwargs['organisation'],
+        #        category_template__slug=self.kwargs['category']))
+        return qs
 
     def get_context_data(self, **kwargs):
         context = super(DocumentList, self).get_context_data(**kwargs)

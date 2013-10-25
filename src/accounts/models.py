@@ -12,7 +12,7 @@ from django.core.mail import send_mail
 from django.contrib.sites.models import Site
 from django.conf import settings
 
-from documents.models import Category
+from documents.models import Document, CategoryTemplate
 
 
 logger = logging.getLogger(__name__)
@@ -26,24 +26,20 @@ class Organisation(models.Model):
         _('Description'),
         max_length=200,
         null=True, blank=True)
-    categories = models.ManyToManyField(
-        Category,
-        through='CategoryMembership',
-        verbose_name=_('Categories'),
-        null=True, blank=True)
 
     def __unicode__(self):
         return self.name
 
 
-class CategoryMembership(models.Model):
+class Category(models.Model):
     """Link between organisation / category and users and groups."""
     organisation = models.ForeignKey(
         Organisation,
+        related_name='categories',
         verbose_name=_('Organisation'))
-    category = models.ForeignKey(
-        Category,
-        verbose_name=_('Category'))
+    category_template = models.ForeignKey(
+        CategoryTemplate,
+        verbose_name=_('Category template'))
     users = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         related_name='categories',
@@ -51,13 +47,19 @@ class CategoryMembership(models.Model):
     groups = models.ManyToManyField(
         'auth.Group',
         null=True, blank=True)
+    documents = models.ManyToManyField(
+        Document,
+        related_name='categories',
+        null=True, blank=True)
 
     class Meta:
-        unique_together = ('category', 'organisation')
+        unique_together = ('category_template', 'organisation')
+        verbose_name = _('Category')
+        verbose_name_plural = _('Categories')
 
     def __unicode__(self):
         return '%s > %s' % (self.organisation.name,
-                            self.category.name)
+                            self.category_template.name)
 
 
 class UserManager(BaseUserManager):

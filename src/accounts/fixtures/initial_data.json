@@ -8,10 +8,10 @@
 },
 {
   "pk": 1,
-  "model": "accounts.categorymembership",
+  "model": "accounts.category",
   "fields": {
     "organisation": 1,
-    "category": 1
+    "category_template": 1
   }
 },
 {

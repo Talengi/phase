@@ -13,7 +13,7 @@ from documents.constants import (
 )
 
 
-class Category(models.Model):
+class CategoryTemplate(models.Model):
     name = models.CharField(
         _('Name'),
         max_length=50)
@@ -23,17 +23,14 @@ class Category(models.Model):
         null=True, blank=True)
 
     class Meta:
-        verbose_name = _('Category')
-        verbose_name_plural = _('Categories')
+        verbose_name = _('Category template')
+        verbose_name_plural = _('Category templates')
 
     def __unicode__(self):
         return self.name
 
 
 class Document(models.Model):
-    category = models.ForeignKey(
-        Category,
-        verbose_name=u"Category")
     document_number = models.CharField(
         verbose_name=u"Document Number",
         max_length=30)

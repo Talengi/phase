@@ -9,21 +9,22 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 
-from .models import User, Organisation, CategoryMembership
+from .models import User, Organisation, Category
 from .forms import UserCreationForm, UserChangeForm
 
 
 class CategoryInline(admin.StackedInline):
-    model = CategoryMembership
-    fields = ('category',)
+    model = Category
+    fields = ('category_template',)
     extra = 0
 
 
 class OrganisationAdmin(admin.ModelAdmin):
     list_display = ('name', 'description')
+    prepopulated_fields = {'slug': ('name',)}
     inlines = [CategoryInline]
     fieldsets = (
-        (None, {'fields': ('name', 'description')}),
+        (None, {'fields': ('name', 'slug', 'description')}),
     )
 
 
@@ -38,7 +39,7 @@ class RequiredInlineFormSet(BaseInlineFormSet):
 
 
 class UserCategoryInline(admin.StackedInline):
-    model = CategoryMembership.users.through
+    model = Category.users.through
     extra = 0
     formset = RequiredInlineFormSet
 
@@ -132,7 +133,7 @@ class GroupAdminForm(forms.ModelForm):
 
 
 class GroupCategoryInline(admin.StackedInline):
-    model = CategoryMembership.groups.through
+    model = Category.groups.through
     extra = 0
 
 
@@ -141,12 +142,12 @@ class GroupAdmin(django_GroupAdmin):
     inlines = [GroupCategoryInline]
 
 
-class MembershipAdmin(admin.ModelAdmin):
-    list_display = ('organisation', 'category')
-    search_fields = ('organisation__name', 'category__name')
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('organisation', 'category_template')
+    search_fields = ('organisation__name', 'category_template__name')
     filter_horizontal = ('users', 'groups')
     fieldsets = (
-        (None, {'fields': ('organisation', 'category')}),
+        (None, {'fields': ('organisation', 'category_template')}),
         ('Members', {'fields': ('groups', 'users',)}),
     )
 
@@ -155,4 +156,4 @@ admin.site.register(User, UserAdmin)
 admin.site.register(Organisation, OrganisationAdmin)
 admin.site.unregister(Group)
 admin.site.register(Group, GroupAdmin)
-admin.site.register(CategoryMembership, MembershipAdmin)
+admin.site.register(Category, CategoryAdmin)

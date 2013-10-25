@@ -18,10 +18,11 @@ class DocumentCreateTest(TestCase):
     def tearDown(self):
         """Wipe the media root directory after each test."""
         media_root = settings.MEDIA_ROOT
-        for f in os.listdir(media_root):
-            file_path = os.path.join(media_root, f)
-            if os.path.isfile(file_path) and file_path.startswith('/tmp/'):
-                os.unlink(file_path)
+        if os.path.exists(media_root):
+            for f in os.listdir(media_root):
+                file_path = os.path.join(media_root, f)
+                if os.path.isfile(file_path) and file_path.startswith('/tmp/'):
+                    os.unlink(file_path)
 
     def test_creation_errors(self):
         """
@@ -310,7 +311,7 @@ class DocumentEditTest(TestCase):
         })
         if r.status_code == 302:
             self.assertEqual(
-                original_number_of_document+1,
+                original_number_of_document + 1,
                 Document.objects.all().count()
             )
         else:

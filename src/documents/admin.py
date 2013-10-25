@@ -1,18 +1,11 @@
 from django.contrib import admin
 
-from accounts.models import CategoryMembership
-from .models import Category
+from documents.models import CategoryTemplate
 
 
-class OrganisationInline(admin.TabularInline):
-    model = CategoryMembership
-    fields = ('organisation',)
-    extra = 0
-
-
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryTemplateAdmin(admin.ModelAdmin):
     list_display = ('name', 'description')
-    inlines = [OrganisationInline]
+    prepopulated_fields = {'slug': ('name',)}
 
 
-admin.site.register(Category, CategoryAdmin)
+admin.site.register(CategoryTemplate, CategoryTemplateAdmin)
