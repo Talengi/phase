@@ -1,0 +1,23 @@
+{% regroup user_categories by organisation as organisation_list %}
+
+<div class="btn-group navbar-btn navbar-left">
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        Categories <span class="caret"></span>
+    </button>
+
+    <ul class="dropdown-menu">
+    {% for organisation in organisation_list %}
+        <li class="dropdown-header">{{ organisation.grouper }}</li>
+        {% for category in organisation.list %}
+            <li
+            {% if category.slug == category_slug and category.organisation.slug == organisation_slug %}
+                class="active"
+            {% endif %}>
+                <a href="{{ category.get_absolute_url }}">
+                    {{ category.name }}
+                </a>
+            </li>
+        {% endfor %}
+    {% endfor %}
+    </ul>
+</div>
