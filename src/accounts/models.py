@@ -11,6 +11,7 @@ from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.contrib.sites.models import Site
 from django.conf import settings
+from django.core.urlresolvers import reverse
 
 from documents.models import Document, CategoryTemplate
 
@@ -72,9 +73,11 @@ class Category(models.Model):
     def slug(self):
         return self.category_template.slug
 
-    @models.permalink
     def get_absolute_url(self):
-        return ('document_list', [self.organisation.slug, self.category_template.slug])
+        url = reverse('category_document_list', args=(
+            self.organisation.slug,
+            self.category_template.slug))
+        return url
 
 
 class UserManager(BaseUserManager):
