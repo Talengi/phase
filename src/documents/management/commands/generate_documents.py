@@ -34,7 +34,6 @@ class Command(BaseCommand):
         for i in range(nb_of_docs):
             max_revision = choice(range(1, 5))
             document = Document.objects.create(
-                category_id=1,
                 title=choice(TITLES),
                 status=choice(STATUSES_CHOICES),
                 unit=choice(UNITS_CHOICES),
