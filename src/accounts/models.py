@@ -53,6 +53,8 @@ class Category(models.Model):
 
     class Meta:
         unique_together = ('category_template', 'organisation')
+        verbose_name = _('Category')
+        verbose_name_plural = _('Categories')
 
     def __unicode__(self):
         return '%s > %s' % (self.organisation.name,
