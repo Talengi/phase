@@ -64,6 +64,18 @@ class Category(models.Model):
         return '%s > %s' % (self.organisation.name,
                             self.category_template.name)
 
+    @property
+    def name(self):
+        return self.category_template.name
+
+    @property
+    def slug(self):
+        return self.category_template.slug
+
+    @models.permalink
+    def get_absolute_url(self):
+        return ('document_list', [self.organisation.slug, self.category_template.slug])
+
 
 class UserManager(BaseUserManager):
     def create_user(self, email, name, password=None, **extra_fields):
