@@ -13,6 +13,7 @@ from django.views.generic import (
 from django.utils import simplejson as json
 from django.core.urlresolvers import reverse
 from django.views.static import serve
+from django.shortcuts import get_object_or_404
 try:
     from urllib.parse import unquote
 except ImportError:
@@ -83,7 +84,6 @@ class JSONResponseMixin(object):
 
 
 class DocumentList(LoginRequiredMixin, ListView, JSONResponseMixin):
-    queryset = Document.objects.all()
     paginate_by = settings.PAGINATE_BY
 
     def get_queryset(self):
