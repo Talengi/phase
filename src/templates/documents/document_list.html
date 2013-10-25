@@ -14,7 +14,7 @@
         </div>
 
         <div class="sidebar-offcanvas" id="sidebar">
-            <form action="{% url 'document_filter' %}"
+            <form action="{% url 'document_filter' organisation_slug category_slug %}"
                   method="get"
                   id="table-filters">
                 {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
@@ -34,7 +34,7 @@
         csrfToken: "{{ csrf_token }}",
         createUrl: "{% url "favorite_create" %}",
         deleteUrl: "{% url "favorite_delete" "0" %}",
-        filterUrl: "{% url "document_filter" %}",
+        filterUrl: "{% url "document_filter" organisation_slug category_slug %}",
         detailUrl: "{% url "document_detail" "documentNumber" %}",
         numPages: {{ paginator.num_pages }},
         totalItems: {{ paginator.count }},

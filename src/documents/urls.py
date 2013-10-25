@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, url
 
 from documents.views import (
+    DefaultCategoryRedirect,
     DocumentList, DocumentFilter, DocumentCreate, DocumentDetail,
     DocumentEdit, DocumentDownload,
     FavoriteList, FavoriteCreate, FavoriteDelete,
@@ -11,11 +12,11 @@ urlpatterns = patterns(
     '',
     # Documents
     url(r'^$',
-        DocumentList.as_view(),
+        DefaultCategoryRedirect.as_view(),
         name="document_list"),
-    url(r'^categories/(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/$',
+    url(r'^documents/(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/$',
         DocumentList.as_view(),
-        name="document_category_list"),
+        name="category_document_list"),
     url(r'^detail/(?P<document_number>.*)/$',
         DocumentDetail.as_view(),
         name="document_detail"),
@@ -27,7 +28,7 @@ urlpatterns = patterns(
         name="document_edit"),
 
     # Filters
-    url(r'^filter/$',
+    url(r'^filter/(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/$',
         DocumentFilter.as_view(),
         name="document_filter"),
 

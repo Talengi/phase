@@ -8,7 +8,8 @@ from django.http import HttpResponse, Http404
 from django.core.servers.basehttp import FileWrapper
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import (
-    View, ListView, CreateView, DetailView, UpdateView, DeleteView
+    View, ListView, CreateView, DetailView, UpdateView, DeleteView,
+    RedirectView
 )
 from django.utils import simplejson as json
 from django.core.urlresolvers import reverse
@@ -83,28 +84,56 @@ class JSONResponseMixin(object):
         }
 
 
-class DocumentList(LoginRequiredMixin, ListView, JSONResponseMixin):
-    paginate_by = settings.PAGINATE_BY
-
+class DocumentListMixin(object):
     def get_queryset(self):
-        qs = Document.objects.all()
+        organisation = self.kwargs['organisation']
+        category = self.kwargs['category']
 
-        #if ('organisation' in self.kwargs and 'category' in self.kwargs):
-        #    category = get_object_or_404(Category.objects.filter(
-        #        organisation__slug=self.kwargs['organisation'],
-        #        category_template__slug=self.kwargs['category']))
+        qs = Document.objects \
+            .filter(categories__users=self.request.user) \
+            .filter(categories__organisation__slug=organisation) \
+            .filter(categories__category_template__slug=category)
+
         return qs
+
+
+class DefaultCategoryRedirect(LoginRequiredMixin, RedirectView):
+    """Redirects to the document list for default (first) category."""
+    permanent = False
+    url = 'category_document_list'
+
+    def get_redirect_url(self, **kwargs):
+        category = Category.objects \
+            .select_related('category_template') \
+            .select_related('organisation') \
+            .filter(users=self.request.user)[0]
+
+        url = reverse(self.url, args=[category.organisation.slug, category.slug])
+        return url
+
+
+class DocumentList(LoginRequiredMixin, DocumentListMixin,
+                   ListView, JSONResponseMixin):
+    paginate_by = settings.PAGINATE_BY
 
     def get_context_data(self, **kwargs):
         context = super(DocumentList, self).get_context_data(**kwargs)
         initial_data = self.build_context(context,
                                           context["paginator"].count)
+        user_categories = Category.objects \
+            .filter(users=self.request.user) \
+            .select_related('category_template', 'organisation') \
+            .order_by('organisation__name')
+
         context.update({
             'download_form': DocumentDownloadForm(),
             'form': DocumentFilterForm(),
             'documents_active': True,
             'initial_data': json.dumps(initial_data),
             'items_per_page': settings.PAGINATE_BY,
+            'user_categories': user_categories,
+            'organisation_slug': self.kwargs['organisation'],
+            'category_slug': self.kwargs['category']
         })
         return context
 
@@ -146,12 +175,13 @@ class DocumentDetail(LoginRequiredMixin, DetailView):
         return context
 
 
-class DocumentFilter(LoginRequiredMixin, JSONResponseMixin, ListView):
+class DocumentFilter(LoginRequiredMixin, DocumentListMixin,
+                     JSONResponseMixin, ListView):
     model = Document
 
     def get_queryset(self):
         """Given DataTables' GET parameters, filter the initial queryset."""
-        queryset = Document.objects.all()
+        queryset = super(DocumentFilter, self).get_queryset()
         if self.request.method == "GET":
             form = DocumentFilterForm(self.request.GET)
             if form.is_valid():
