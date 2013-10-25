@@ -35,6 +35,7 @@ class Category(models.Model):
     """Link between organisation / category and users and groups."""
     organisation = models.ForeignKey(
         Organisation,
+        related_name='categories',
         verbose_name=_('Organisation'))
     category_template = models.ForeignKey(
         CategoryTemplate,

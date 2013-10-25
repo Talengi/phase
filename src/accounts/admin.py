@@ -13,16 +13,16 @@ from .models import User, Organisation, Category
 from .forms import UserCreationForm, UserChangeForm
 
 
-#class CategoryInline(admin.StackedInline):
-#    model = CategoryMembership
-#    fields = ('category',)
-#    extra = 0
+class CategoryInline(admin.StackedInline):
+    model = Category
+    fields = ('category_template',)
+    extra = 0
 
 
 class OrganisationAdmin(admin.ModelAdmin):
     list_display = ('name', 'description')
-    #inlines = [CategoryInline]
     prepopulated_fields = {'slug': ('name',)}
+    inlines = [CategoryInline]
     fieldsets = (
         (None, {'fields': ('name', 'slug', 'description')}),
     )
@@ -38,10 +38,10 @@ class RequiredInlineFormSet(BaseInlineFormSet):
             raise forms.ValidationError(_('Please select at least one category'))
 
 
-#class UserCategoryInline(admin.StackedInline):
-#    model = CategoryMembership.users.through
-#    extra = 0
-#    formset = RequiredInlineFormSet
+class UserCategoryInline(admin.StackedInline):
+    model = Category.users.through
+    extra = 0
+    formset = RequiredInlineFormSet
 
 
 class UserAdmin(django_UserAdmin):
@@ -54,7 +54,7 @@ class UserAdmin(django_UserAdmin):
     # The forms to add and change user instances
     form = UserChangeForm
     add_form = UserCreationForm
-    #inlines = [UserCategoryInline]
+    inlines = [UserCategoryInline]
 
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
@@ -132,14 +132,14 @@ class GroupAdminForm(forms.ModelForm):
         return group
 
 
-#class GroupCategoryInline(admin.StackedInline):
-#    model = CategoryMembership.groups.through
-#    extra = 0
+class GroupCategoryInline(admin.StackedInline):
+    model = Category.groups.through
+    extra = 0
 
 
 class GroupAdmin(django_GroupAdmin):
     form = GroupAdminForm
-    #inlines = [GroupCategoryInline]
+    inlines = [GroupCategoryInline]
 
 
 class CategoryAdmin(admin.ModelAdmin):
