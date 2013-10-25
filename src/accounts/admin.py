@@ -9,21 +9,22 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 
-from .models import User, Organisation, CategoryMembership
+from .models import User, Organisation, Category
 from .forms import UserCreationForm, UserChangeForm
 
 
-class CategoryInline(admin.StackedInline):
-    model = CategoryMembership
-    fields = ('category',)
-    extra = 0
+#class CategoryInline(admin.StackedInline):
+#    model = CategoryMembership
+#    fields = ('category',)
+#    extra = 0
 
 
 class OrganisationAdmin(admin.ModelAdmin):
     list_display = ('name', 'description')
-    inlines = [CategoryInline]
+    #inlines = [CategoryInline]
+    prepopulated_fields = {'slug': ('name',)}
     fieldsets = (
-        (None, {'fields': ('name', 'description')}),
+        (None, {'fields': ('name', 'slug', 'description')}),
     )
 
 
@@ -37,10 +38,10 @@ class RequiredInlineFormSet(BaseInlineFormSet):
             raise forms.ValidationError(_('Please select at least one category'))
 
 
-class UserCategoryInline(admin.StackedInline):
-    model = CategoryMembership.users.through
-    extra = 0
-    formset = RequiredInlineFormSet
+#class UserCategoryInline(admin.StackedInline):
+#    model = CategoryMembership.users.through
+#    extra = 0
+#    formset = RequiredInlineFormSet
 
 
 class UserAdmin(django_UserAdmin):
@@ -53,7 +54,7 @@ class UserAdmin(django_UserAdmin):
     # The forms to add and change user instances
     form = UserChangeForm
     add_form = UserCreationForm
-    inlines = [UserCategoryInline]
+    #inlines = [UserCategoryInline]
 
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
@@ -131,23 +132,24 @@ class GroupAdminForm(forms.ModelForm):
         return group
 
 
-class GroupCategoryInline(admin.StackedInline):
-    model = CategoryMembership.groups.through
-    extra = 0
+#class GroupCategoryInline(admin.StackedInline):
+#    model = CategoryMembership.groups.through
+#    extra = 0
 
 
 class GroupAdmin(django_GroupAdmin):
     form = GroupAdminForm
-    inlines = [GroupCategoryInline]
+    #inlines = [GroupCategoryInline]
 
 
-class MembershipAdmin(admin.ModelAdmin):
-    list_display = ('organisation', 'category')
-    search_fields = ('organisation__name', 'category__name')
-    filter_horizontal = ('users', 'groups')
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('organisation', 'category_template')
+    search_fields = ('organisation__name', 'category_template__name')
+    filter_horizontal = ('users', 'groups', 'documents')
     fieldsets = (
-        (None, {'fields': ('organisation', 'category')}),
+        (None, {'fields': ('organisation', 'category_template')}),
         ('Members', {'fields': ('groups', 'users',)}),
+        ('Documents', {'fields': ('documents',)}),
     )
 
 
@@ -155,4 +157,4 @@ admin.site.register(User, UserAdmin)
 admin.site.register(Organisation, OrganisationAdmin)
 admin.site.unregister(Group)
 admin.site.register(Group, GroupAdmin)
-admin.site.register(CategoryMembership, MembershipAdmin)
+admin.site.register(Category, CategoryAdmin)
