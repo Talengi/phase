@@ -145,11 +145,10 @@ class GroupAdmin(django_GroupAdmin):
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('organisation', 'category_template')
     search_fields = ('organisation__name', 'category_template__name')
-    filter_horizontal = ('users', 'groups', 'documents')
+    filter_horizontal = ('users', 'groups')
     fieldsets = (
         (None, {'fields': ('organisation', 'category_template')}),
         ('Members', {'fields': ('groups', 'users',)}),
-        ('Documents', {'fields': ('documents',)}),
     )
 
 
