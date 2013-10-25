@@ -12,7 +12,8 @@
   "model": "accounts.category",
   "fields": {
     "organisation": 1,
-    "category_template": 1
+    "category_template": 1,
+    "documents": [1, 2, 3, 4, 5]
   }
 },
 {
