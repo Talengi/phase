@@ -1,18 +1,18 @@
+{% load cache %}
+{% cache 500 category_menu request.user.email %}
+
 {% regroup user_categories by organisation as organisation_list %}
 
-<div class="btn-group navbar-btn navbar-left">
-    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-        Categories <span class="caret"></span>
-    </button>
+<li{% if documents_active %} class="active"{% endif %}>
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        Documents <b class="caret"></b>
+    </a>
 
     <ul class="dropdown-menu">
     {% for organisation in organisation_list %}
         <li class="dropdown-header">{{ organisation.grouper }}</li>
         {% for category in organisation.list %}
-            <li
-            {% if category.slug == category_slug and category.organisation.slug == organisation_slug %}
-                class="active"
-            {% endif %}>
+            <li>
                 <a href="{{ category.get_absolute_url }}">
                     {{ category.name }}
                 </a>
@@ -20,4 +20,6 @@
         {% endfor %}
     {% endfor %}
     </ul>
-</div>
+</li>
+
+{% endcache %}

@@ -120,18 +120,12 @@ class DocumentList(LoginRequiredMixin, DocumentListMixin,
         context = super(DocumentList, self).get_context_data(**kwargs)
         initial_data = self.build_context(context,
                                           context["paginator"].count)
-        user_categories = Category.objects \
-            .filter(users=self.request.user) \
-            .select_related('category_template', 'organisation') \
-            .order_by('organisation__name')
-
         context.update({
             'download_form': DocumentDownloadForm(),
             'form': DocumentFilterForm(),
             'documents_active': True,
             'initial_data': json.dumps(initial_data),
             'items_per_page': settings.PAGINATE_BY,
-            'user_categories': user_categories,
             'organisation_slug': self.kwargs['organisation'],
             'category_slug': self.kwargs['category']
         })
