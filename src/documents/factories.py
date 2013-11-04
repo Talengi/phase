@@ -29,4 +29,5 @@ class CategoryTemplateFactory(factory.DjangoModelFactory):
     FACTORY_FOR = CategoryTemplate
 
     name = factory.Sequence(lambda n: 'Category {0}'.format(n))
+    slug = factory.Sequence(lambda n: 'category_{0}'.format(n))
     description = 'Test category'

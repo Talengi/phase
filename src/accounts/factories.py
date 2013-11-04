@@ -32,7 +32,8 @@ class UserFactory(factory.DjangoModelFactory):
 class OrganisationFactory(factory.DjangoModelFactory):
     FACTORY_FOR = Organisation
 
-    name = factory.Sequence(lambda n: 'Category {0}'.format(n))
+    name = factory.Sequence(lambda n: 'Organisation {0}'.format(n))
+    slug = factory.Sequence(lambda n: 'organisation_{0}'.format(n))
 
 
 class CategoryFactory(factory.DjangoModelFactory):
