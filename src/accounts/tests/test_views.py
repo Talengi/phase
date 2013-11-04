@@ -1,7 +1,8 @@
 from django.test import TestCase
 from django.contrib.auth.models import Permission
+from django.core.urlresolvers import reverse
 
-from accounts.factories import UserFactory
+from accounts.factories import UserFactory, CategoryFactory
 
 
 class NavbarTests(TestCase):
@@ -59,8 +60,11 @@ class NavbarTests(TestCase):
 class AclTests(TestCase):
 
     def setUp(self):
-        self.user = UserFactory(name='User', password='pass')
-        self.home_url = '/'
+        category = CategoryFactory()
+        self.user = UserFactory(name='User', password='pass', category=category)
+        self.home_url = reverse('category_document_list', args=[
+            category.organisation.slug, category.slug
+        ])
         self.create_url = '/create/'
         self.login_url = '/accounts/login/'
         self.dc_perms = Permission.objects.filter(codename__endswith='_document')
