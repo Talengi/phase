@@ -7,7 +7,7 @@
 
     {% include 'form_snippet.html' with form=form %}
 
-    {% url 'document_list' as home_url %}
+    {% url 'category_list' as home_url %}
     <input type="hidden" name="next" value="{{ next|default:home_url }}" />
 
     <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>

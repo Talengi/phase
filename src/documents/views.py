@@ -230,7 +230,7 @@ class DocumentCreate(PermissionRequiredMixin, LoginRequiredMixin, DocumentRevisi
         if "save-create" in self.request.POST:
             url = reverse('document_create')
         else:
-            url = reverse('document_list')
+            url = reverse('category_list')
         return url
 
 
@@ -254,7 +254,7 @@ class DocumentEdit(PermissionRequiredMixin, DocumentRevisionMixin, UpdateView):
         if "save-view" in self.request.POST:
             url = self.object.get_absolute_url()
         else:
-            url = reverse('document_list')
+            url = reverse('category_list')
         return url
 
 
@@ -352,4 +352,4 @@ class FavoriteCreate(LoginRequiredMixin, CreateView):
 
 class FavoriteDelete(LoginRequiredMixin, DeleteView):
     model = Favorite
-    success_url = reverse_lazy('document_list')
+    success_url = reverse_lazy('category_list')
