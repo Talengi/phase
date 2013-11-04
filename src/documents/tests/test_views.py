@@ -9,8 +9,9 @@ from django.core.urlresolvers import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.conf import settings
 
-from accounts.factories import UserFactory
+from accounts.factories import UserFactory, CategoryFactory
 from documents.models import Document, DocumentRevision, Favorite
+from documents.tests.utils import generate_random_documents
 
 User = auth.get_user_model()
 
@@ -21,9 +22,15 @@ class GenericViewTest(TestCase):
         self.client = Client()
 
         # Login as admin by default so we won't be bothered by missing permissions
+        self.category = CategoryFactory()
         user = UserFactory(email='testadmin@phase.fr', password='pass',
-                           is_superuser=True)
+                           is_superuser=True,
+                           category=self.category)
         self.client.login(email=user.email, password='pass')
+        self.document_list_url = reverse('category_document_list', args=[
+            self.category.organisation.slug,
+            self.category.slug
+        ])
 
     def assertGet(self, parameters={}, auth=None, status_code=200):
         if auth:
@@ -61,7 +68,11 @@ class GenericViewTest(TestCase):
 
 class DocumentListTest(GenericViewTest):
     fixtures = ['initial_data.json']
-    url = reverse("document_list")
+
+    def setUp(self):
+        super(DocumentListTest, self).setUp()
+        self.url = self.document_list_url
+        generate_random_documents(150, [self.category])
 
     def test_document_number(self):
         self.assertGet()
@@ -138,13 +149,23 @@ class DocumentDetailTest(GenericViewTest):
 
 
 class DocumentFilterTest(TestCase):
-    fixtures = ['initial_data.json']
+    fixtures = ['initial_data', 'initial_documents']
 
     def setUp(self):
         # Login as admin so we won't be bothered by missing permissions
+        category = CategoryFactory()
         user = UserFactory(email='testadmin@phase.fr', password='pass',
-                           is_superuser=True)
+                           is_superuser=True, category=category)
         self.client.login(email=user.email, password='pass')
+        self.filter_url = reverse('document_filter', args=[
+            category.organisation.slug,
+            category.slug,
+        ])
+
+        # Add all initial documents to the created category
+        documents = Document.objects.all()
+        category.documents = documents
+        category.save()
 
     def test_paging(self):
         """
@@ -158,7 +179,7 @@ class DocumentFilterTest(TestCase):
         c = self.client
 
         # Default: 10 items returned
-        r = c.get(reverse("document_filter"), get_parameters)
+        r = c.get(self.filter_url, get_parameters)
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 10)
         self.assertEqual(int(data['total']), 500)
@@ -170,7 +191,7 @@ class DocumentFilterTest(TestCase):
 
         # With 100 results
         get_parameters['length'] = 100
-        r = c.get(reverse("document_filter"), get_parameters)
+        r = c.get(self.filter_url, get_parameters)
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 100)
         self.assertEqual(int(data['total']), 500)
@@ -183,7 +204,7 @@ class DocumentFilterTest(TestCase):
         # With 25 results, starting at 10
         get_parameters['length'] = 25
         get_parameters['start'] = 10
-        r = c.get(reverse("document_filter"), get_parameters)
+        r = c.get(self.filter_url, get_parameters)
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 25)
         self.assertEqual(int(data['total']), 500)
@@ -205,7 +226,7 @@ class DocumentFilterTest(TestCase):
         c = self.client
 
         # Default: sorted by document_number
-        r = c.get(reverse("document_filter"), get_parameters)
+        r = c.get(self.filter_url, get_parameters)
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 10)
         self.assertEqual(
@@ -215,7 +236,7 @@ class DocumentFilterTest(TestCase):
 
         # Sorting by title
         get_parameters['sort_by'] = 'title'
-        r = c.get(reverse("document_filter"), get_parameters)
+        r = c.get(self.filter_url, get_parameters)
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 10)
         documents = Document.objects.all()
@@ -226,7 +247,7 @@ class DocumentFilterTest(TestCase):
 
         # Sorting by title (reversed)
         get_parameters['sort_by'] = '-title'
-        r = c.get(reverse("document_filter"), get_parameters)
+        r = c.get(self.filter_url, get_parameters)
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 10)
         documents = Document.objects.all()
@@ -249,7 +270,7 @@ class DocumentFilterTest(TestCase):
         # Searching 'pipeline'
         search_terms = u'pipeline'
         get_parameters['search_terms'] = search_terms
-        r = c.get(reverse("document_filter"), get_parameters)
+        r = c.get(self.filter_url, get_parameters)
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 1)
         documents = Document.objects.all()
@@ -275,7 +296,7 @@ class DocumentFilterTest(TestCase):
         # Searching 'ASB' status
         status = u'ASB'
         get_parameters['status'] = status
-        r = c.get(reverse("document_filter"), get_parameters)
+        r = c.get(self.filter_url, get_parameters)
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 10)
         self.assertEqual(int(data['total']), 44)
@@ -294,7 +315,7 @@ class DocumentFilterTest(TestCase):
         document_type = u'PLA'
         get_parameters['status'] = status
         get_parameters['document_type'] = document_type
-        r = c.get(reverse("document_filter"), get_parameters)
+        r = c.get(self.filter_url, get_parameters)
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 1)
         documents = Document.objects.all()
@@ -322,7 +343,7 @@ class DocumentFilterTest(TestCase):
         search_terms = u'pipeline'
         get_parameters['search_terms'] = search_terms
         get_parameters['sort_by'] = '-title'
-        r = c.get(reverse("document_filter"), get_parameters)
+        r = c.get(self.filter_url, get_parameters)
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 1)
         documents = Document.objects.all()
@@ -343,7 +364,7 @@ class DocumentFilterTest(TestCase):
         get_parameters['search_terms'] = search_terms
         get_parameters['length'] = 10
         get_parameters['start'] = 10
-        r = c.get(reverse("document_filter"), get_parameters)
+        r = c.get(self.filter_url, get_parameters)
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 7)
         self.assertEqual(int(data['display']), 17)
@@ -367,7 +388,7 @@ class DocumentFilterTest(TestCase):
         get_parameters['length'] = 10
         get_parameters['start'] = 10
         get_parameters['sort_by'] = 'title'
-        r = c.get(reverse("document_filter"), get_parameters)
+        r = c.get(self.filter_url, get_parameters)
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 7)
         self.assertEqual(int(data['display']), 17)
@@ -392,7 +413,7 @@ class DocumentFilterTest(TestCase):
         get_parameters['search_terms'] = search_terms
         get_parameters['sort_by'] = '-title'
         get_parameters['status'] = status
-        r = c.get(reverse("document_filter"), get_parameters)
+        r = c.get(self.filter_url, get_parameters)
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 4)
         documents = Document.objects.all()
@@ -422,7 +443,7 @@ class DocumentFilterTest(TestCase):
         # Searching 'Matthieu Lamy' as a leader
         leader = 5
         get_parameters['leader'] = leader
-        r = c.get(reverse("document_filter"), get_parameters)
+        r = c.get(self.filter_url, get_parameters)
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 10)
         self.assertEqual(int(data['total']), 33)
@@ -442,7 +463,7 @@ class DocumentFilterTest(TestCase):
         approver = 1
         get_parameters['leader'] = leader
         get_parameters['approver'] = approver
-        r = c.get(reverse("document_filter"), get_parameters)
+        r = c.get(self.filter_url, get_parameters)
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 4)
         documents = Document.objects.all()

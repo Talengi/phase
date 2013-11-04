@@ -182,7 +182,7 @@ class DocumentCreateTest(TestCase):
         self.assertEqual(
             r.redirect_chain,
             [('http://testserver{url}'.format(
-                url=reverse('document_list')
+                url=reverse('category_list')
             ), 302)]
         )
 
@@ -356,7 +356,7 @@ class DocumentEditTest(TestCase):
         self.assertEqual(
             r.redirect_chain,
             [('http://testserver{url}'.format(
-                url=reverse('document_list')
+                url=reverse('category_list')
             ), 302)]
         )
 

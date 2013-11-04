@@ -61,8 +61,8 @@ class QueriesTest(TestCase):
                            is_superuser=True)
         self.client.login(email=user.email, password='pass')
 
-    def test_document_list(self):
-        url = reverse('document_list')
+    def test_category_list(self):
+        url = reverse('category_list')
 
         # First call to generate the cache
         self.client.get(url)

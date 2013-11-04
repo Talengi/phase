@@ -4,9 +4,13 @@ from django.test import TestCase
 
 from documents.models import Document
 from documents.management.commands import generate_documents
+from accounts.factories import CategoryFactory
 
 
 class CommandTest(TestCase):
+
+    def setUp(self):
+        CategoryFactory()
 
     def test_generate_data(self):
         """

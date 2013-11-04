@@ -9,14 +9,18 @@ class NavbarTests(TestCase):
     """Navbar shows different options depending on user's permissions."""
 
     def setUp(self):
-        self.user = UserFactory(name='User', password='pass')
-        self.url = '/'
+        category = CategoryFactory()
+        self.user = UserFactory(name='User', password='pass', category=category)
+        self.url = reverse('category_document_list', args=[
+            category.organisation.slug,
+            category.slug
+        ])
         self.dc_perms = Permission.objects.filter(codename__endswith='_document')
 
     def test_anonymous_navbar(self):
         res = self.client.get(self.url, follow=True)
         self.assertNotContains(res, 'href="/favorites/"')
-        self.assertNotContains(res, 'href="/">Documents')
+        self.assertNotContains(res, '<a href="#" class="dropdown-toggle" data-toggle="dropdown">Documents')
         self.assertNotContains(res, 'href="/create/"')
         self.assertNotContains(res, 'href="/admin/"')
 
@@ -26,7 +30,7 @@ class NavbarTests(TestCase):
 
         res = self.client.get(self.url, follow=True)
         self.assertContains(res, 'href="/favorites/"')
-        self.assertContains(res, 'href="/">Documents')
+        self.assertContains(res, '<a href="#" class="dropdown-toggle" data-toggle="dropdown">Documents')
         self.assertNotContains(res, 'href="/create/"')
         self.assertNotContains(res, 'href="/admin/"')
 
@@ -40,7 +44,7 @@ class NavbarTests(TestCase):
 
         res = self.client.get(self.url, follow=True)
         self.assertContains(res, 'href="/favorites/"')
-        self.assertContains(res, 'href="/">Documents')
+        self.assertContains(res, '<a href="#" class="dropdown-toggle" data-toggle="dropdown">Documents')
         self.assertContains(res, 'href="/create/"')
         self.assertNotContains(res, 'href="/admin/"')
 
@@ -52,7 +56,7 @@ class NavbarTests(TestCase):
 
         res = self.client.get(self.url, follow=True)
         self.assertContains(res, 'href="/favorites/"')
-        self.assertContains(res, 'href="/">Documents')
+        self.assertContains(res, '<a href="#" class="dropdown-toggle" data-toggle="dropdown">Documents')
         self.assertContains(res, 'href="/create/"')
         self.assertContains(res, 'href="/admin/"')
 
