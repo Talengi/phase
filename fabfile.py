@@ -57,6 +57,7 @@ def deploy(with_data=True):
         with prefix(env.activate):
             collectstatic = 'python src/manage.py collectstatic --noinput'
             syncdb = 'python src/manage.py syncdb --noinput'
+            generate = 'python src/manage.py generate_documents 1000'
             with_production_settings = ' --settings=core.settings.production'
             run('pip install -r requirements/production.txt')
             run(collectstatic + with_production_settings)
@@ -64,6 +65,7 @@ def deploy(with_data=True):
                 run('rm phase.db')
                 run('rm private/* -Rf')
                 run(syncdb + with_production_settings)
+                run(generate + with_production_settings)
     restart_webserver()
 
 
