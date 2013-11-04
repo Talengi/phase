@@ -97,19 +97,16 @@ class DocumentListMixin(object):
         return qs
 
 
-class DefaultCategoryRedirect(LoginRequiredMixin, RedirectView):
-    """Redirects to the document list for default (first) category."""
-    permanent = False
-    url = 'category_document_list'
+class CategoryList(LoginRequiredMixin, ListView):
+    """Display a list of user categories"""
 
-    def get_redirect_url(self, **kwargs):
-        category = Category.objects \
-            .select_related('category_template') \
-            .select_related('organisation') \
-            .filter(users=self.request.user)[0]
+    def get_queryset(self, **kwargs):
+        qs = Category.objects \
+            .filter(users=self.request.user) \
+            .select_related('category_template', 'organisation') \
+            .order_by('organisation__name')
 
-        url = reverse(self.url, args=[category.organisation.slug, category.slug])
-        return url
+        return qs
 
 
 class DocumentList(LoginRequiredMixin, DocumentListMixin,

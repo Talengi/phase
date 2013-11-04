@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% regroup user_categories by organisation as organisation_list %}
+
+<div class="central-form">
+<ul class="nav nav-pills nav-stacked">
+{% for organisation in organisation_list %}
+    <li>{{ organisation.grouper }}</li>
+    {% for category in organisation.list %}
+        <li>
+            <a href="{{ category.get_absolute_url }}">
+                {{ category.name }}
+            </a>
+        </li>
+    {% endfor %}
+{% endfor %}
+</ul>
+</div>
+
+{% endblock %}
