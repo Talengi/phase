@@ -216,6 +216,7 @@ LOCAL_APPS = (
     'documents',
     'bootstrap',
     'accounts',
+    'metadata',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
