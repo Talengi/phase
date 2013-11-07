@@ -3,7 +3,8 @@ from django.forms.models import BaseInlineFormSet
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
-from .models import Category, Organisation
+from .models import Organisation, CategoryTemplate, Category
+from .admin_forms import CategoryTemplateAdminForm
 
 
 class CategoryInline(admin.StackedInline):
@@ -25,6 +26,12 @@ class OrganisationAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('name', 'slug', 'description')}),
     )
+
+
+class CategoryTemplateAdmin(admin.ModelAdmin):
+    list_display = ('name', 'description')
+    prepopulated_fields = {'slug': ('name',)}
+    form = CategoryTemplateAdminForm
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -54,4 +61,5 @@ class UserCategoryInline(admin.StackedInline):
 
 
 admin.site.register(Organisation, OrganisationAdmin)
+admin.site.register(CategoryTemplate, CategoryTemplateAdmin)
 admin.site.register(Category, CategoryAdmin)
