@@ -5,6 +5,7 @@ from django.db import models
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.contenttypes.models import ContentType
 
 from documents.constants import (
     STATUSES, REVISIONS, CONTRACT_NBS, ORIGINATORS, UNITS, DISCIPLINES,
@@ -24,6 +25,11 @@ class CategoryTemplate(models.Model):
         _('Description'),
         max_length=200,
         null=True, blank=True)
+
+    # We use a generic foreign key to reference
+    # the type of document metadata this category
+    # will host.
+    metadata_model = models.ForeignKey(ContentType)
 
     class Meta:
         verbose_name = _('Category template')

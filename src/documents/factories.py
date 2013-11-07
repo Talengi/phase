@@ -22,7 +22,7 @@ class RevisionFactory(factory.DjangoModelFactory):
 
     revision = factory.Sequence(lambda n: '{0}'.format(n))
     revision_date = fuzzy_date.fuzz()
-    factory.SubFactory(DocumentFactory)
+    document = factory.SubFactory(DocumentFactory)
 
 
 class CategoryTemplateFactory(factory.DjangoModelFactory):
