@@ -1,5 +1,5 @@
 import factory
-from django.contrib.contenttype.models import ContentType
+from django.contrib.contenttypes.models import ContentType
 
 from .models import Organisation, CategoryTemplate, Category
 
