@@ -8,7 +8,7 @@ from documents.constants import (DISCIPLINES, DOCUMENT_TYPES, UNITS,
                                  SEQUENCIAL_NUMBERS, CONTRACT_NBS,
                                  ORIGINATORS, PEOPLE, SYSTEMS, WBS)
 from documents.models import Document, DocumentRevision
-from accounts.models import Category
+from categories.models import Category
 
 
 DISCIPLINES_CHOICES = [item[0] for item in DISCIPLINES]

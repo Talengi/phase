@@ -8,13 +8,10 @@ from django.http import HttpResponse, Http404
 from django.core.servers.basehttp import FileWrapper
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import (
-    View, ListView, CreateView, DetailView, UpdateView, DeleteView,
-    RedirectView
-)
+    View, ListView, CreateView, DetailView, UpdateView, DeleteView)
 from django.utils import simplejson as json
 from django.core.urlresolvers import reverse
 from django.views.static import serve
-from django.shortcuts import get_object_or_404
 try:
     from urllib.parse import unquote
 except ImportError:
@@ -27,7 +24,7 @@ from documents.forms import (
     DocumentRevisionForm, FavoriteForm
 )
 
-from accounts.models import Category
+from categories.models import Category
 from accounts.views import LoginRequiredMixin, PermissionRequiredMixin
 
 

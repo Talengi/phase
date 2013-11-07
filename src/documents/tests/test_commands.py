@@ -4,7 +4,7 @@ from django.test import TestCase
 
 from documents.models import Document
 from documents.management.commands import generate_documents
-from accounts.factories import CategoryFactory
+from categories.factories import CategoryFactory
 
 
 class CommandTest(TestCase):

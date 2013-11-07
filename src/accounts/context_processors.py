@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AnonymousUser
 
-from accounts.models import Category
+from categories.models import Category
 
 
 def navigation(request):
