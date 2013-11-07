@@ -4,39 +4,12 @@
 from django.db import models
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
-from django.utils.translation import ugettext_lazy as _
-from django.contrib.contenttypes.models import ContentType
 
 from documents.constants import (
     STATUSES, REVISIONS, CONTRACT_NBS, ORIGINATORS, UNITS, DISCIPLINES,
     DOCUMENT_TYPES, SEQUENCIAL_NUMBERS, SYSTEMS, ENGINEERING_PHASES,
     CLASSES, BOOLEANS, PEOPLE, WBS
 )
-
-
-class CategoryTemplate(models.Model):
-    name = models.CharField(
-        _('Name'),
-        max_length=50)
-    slug = models.SlugField(
-        _('Slug'),
-        max_length=50)
-    description = models.CharField(
-        _('Description'),
-        max_length=200,
-        null=True, blank=True)
-
-    # We use a generic foreign key to reference
-    # the type of document metadata this category
-    # will host.
-    metadata_model = models.ForeignKey(ContentType)
-
-    class Meta:
-        verbose_name = _('Category template')
-        verbose_name_plural = _('Category templates')
-
-    def __unicode__(self):
-        return self.name
 
 
 class Document(models.Model):

@@ -1,32 +1,6 @@
 [
 {
   "pk": 1,
-  "model": "accounts.organisation",
-  "fields": {
-    "name": "ACME",
-    "slug": "acme"
-  }
-},
-{
-  "pk": 1,
-  "model": "accounts.category",
-  "fields": {
-    "organisation": 1,
-    "category_template": 1,
-    "users": [1, 2, 3]
-  }
-},
-{
-  "pk": 2,
-  "model": "accounts.category",
-  "fields": {
-    "organisation": 1,
-    "category_template": 2,
-    "users": [1, 2, 3]
-  }
-},
-{
-  "pk": 1,
   "model": "auth.group",
   "fields": {
     "name": "Document controllers",

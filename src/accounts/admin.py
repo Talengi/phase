@@ -1,5 +1,4 @@
 from django import forms
-from django.forms.models import BaseInlineFormSet
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as django_UserAdmin
 from django.contrib.auth.admin import GroupAdmin as django_GroupAdmin
@@ -7,42 +6,10 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib import messages
-from django.utils.translation import ugettext_lazy as _
 
-from .models import User, Organisation, Category
+from categories.admin import UserCategoryInline, GroupCategoryInline
+from .models import User
 from .forms import UserCreationForm, UserChangeForm
-
-
-class CategoryInline(admin.StackedInline):
-    model = Category
-    fields = ('category_template',)
-    extra = 0
-
-
-class OrganisationAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description')
-    prepopulated_fields = {'slug': ('name',)}
-    inlines = [CategoryInline]
-    prepopulated_fields = {'slug': ('name',)}
-    fieldsets = (
-        (None, {'fields': ('name', 'slug', 'description')}),
-    )
-
-
-class RequiredInlineFormSet(BaseInlineFormSet):
-    def clean(self):
-        super(RequiredInlineFormSet, self).clean()
-
-        existing_data = [data and not data.get('DELETE', False)
-                         for data in self.cleaned_data]
-        if not any(existing_data):
-            raise forms.ValidationError(_('Please select at least one category'))
-
-
-class UserCategoryInline(admin.StackedInline):
-    model = Category.users.through
-    extra = 0
-    formset = RequiredInlineFormSet
 
 
 class UserAdmin(django_UserAdmin):
@@ -133,28 +100,11 @@ class GroupAdminForm(forms.ModelForm):
         return group
 
 
-class GroupCategoryInline(admin.StackedInline):
-    model = Category.groups.through
-    extra = 0
-
-
 class GroupAdmin(django_GroupAdmin):
     form = GroupAdminForm
     inlines = [GroupCategoryInline]
 
 
-class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('organisation', 'category_template')
-    search_fields = ('organisation__name', 'category_template__name')
-    filter_horizontal = ('users', 'groups')
-    fieldsets = (
-        (None, {'fields': ('organisation', 'category_template')}),
-        ('Members', {'fields': ('groups', 'users',)}),
-    )
-
-
 admin.site.register(User, UserAdmin)
-admin.site.register(Organisation, OrganisationAdmin)
 admin.site.unregister(Group)
 admin.site.register(Group, GroupAdmin)
-admin.site.register(Category, CategoryAdmin)
