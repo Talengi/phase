@@ -1,7 +1,8 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 
-from accounts.factories import UserFactory, CategoryFactory
+from categories.factories import CategoryFactory
+from accounts.factories import UserFactory
 
 
 class UserCreationTests(TestCase):
