@@ -124,17 +124,19 @@ class ContractorDeliverable(models.Model):
 #    updated_on = models.DateTimeField(
 #        auto_now=True,
 #        verbose_name=u"Updated on")
-#
-#    class Meta:
-#        ordering = ('document_number',)
-#        unique_together = (
-#            (
-#                "contract_number", "originator", "unit", "discipline",
-#                "document_type", "sequencial_number",
-#            ),
-#        )
-#
-#
+
+    class Meta:
+        verbose_name = _('Contractor deliverable')
+        verbose_name_plural = _('Contractor deliverables')
+        ordering = ('document_number',)
+        #unique_together = (
+        #    (
+        #        "contract_number", "originator", "unit", "discipline",
+        #        "document_type", "sequencial_number",
+        #    ),
+        #)
+
+
 #class ContractorDeliverableRevision(models.Model):
 #    # Revision
 #    revision = models.CharField(
