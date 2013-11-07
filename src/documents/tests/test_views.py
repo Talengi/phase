@@ -8,6 +8,7 @@ from django.utils import simplejson as json
 from django.core.urlresolvers import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.conf import settings
+from django.db import transaction
 
 from accounts.factories import UserFactory, CategoryFactory
 from documents.models import Document, DocumentRevision, Favorite
@@ -163,9 +164,10 @@ class DocumentFilterTest(TestCase):
         ])
 
         # Add all initial documents to the created category
-        documents = Document.objects.all()
-        category.documents = documents
-        category.save()
+        with transaction.commit_on_success():
+            documents = Document.objects.all()
+            category.documents = documents
+            category.save()
 
     def test_paging(self):
         """
