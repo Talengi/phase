@@ -4,7 +4,8 @@
   "model": "documents.categorytemplate",
   "fields": {
     "name": "Contractor deliverables",
-    "slug": "contractor-deliverables"
+    "slug": "contractor-deliverables",
+    "metadata_model": ["metadata", "contractordeliverable"]
   }
 },
 {
@@ -12,7 +13,8 @@
   "model": "documents.categorytemplate",
   "fields": {
     "name": "Correspondances",
-    "slug": "correspondances"
+    "slug": "correspondances",
+    "metadata_model": ["metadata", "contractordeliverable"]
   }
 }
 ]
