@@ -79,6 +79,12 @@ class MetadataRevision(models.Model):
     revision_date = models.DateField(
         auto_now_add=True,
         verbose_name=u"Revision Date")
+    created_on = models.DateField(
+        _('Created on'),
+        auto_now_add=True)
+    updated_on = models.DateTimeField(
+        _('Updated on'),
+        auto_now=True)
 
     class Meta:
         abstract = True
