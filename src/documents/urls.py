@@ -4,7 +4,6 @@ from documents.views import (
     CategoryList,
     DocumentList, DocumentFilter, DocumentCreate, DocumentDetail,
     DocumentEdit, DocumentDownload,
-    FavoriteList, FavoriteCreate, FavoriteDelete,
     ProtectedDownload
 )
 
@@ -31,17 +30,6 @@ urlpatterns = patterns(
     url(r'^filter/(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/$',
         DocumentFilter.as_view(),
         name="document_filter"),
-
-    # Favorites
-    url(r'^favorites/$',
-        FavoriteList.as_view(),
-        name="favorite_list"),
-    url(r'^favorites/create/$',
-        FavoriteCreate.as_view(),
-        name="favorite_create"),
-    url(r'^favorites/delete/(?P<pk>\d+)/$',
-        FavoriteDelete.as_view(),
-        name="favorite_delete"),
 
     # Downloads
     url(r'^download/$',

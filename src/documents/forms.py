@@ -2,7 +2,7 @@ from django import forms
 from django.conf import settings
 from django.db.models.fields import BLANK_CHOICE_DASH
 
-from documents.models import Document, DocumentRevision, Favorite
+from documents.models import Document, DocumentRevision
 from documents.constants import (
     DISCIPLINES, UNITS, DOCUMENT_TYPES, WBS, STATUSES, SYSTEMS,
 )
@@ -262,9 +262,3 @@ class DocumentDownloadForm(forms.Form):
             ('all', "All revisions"),
         ),
         required=False)
-
-
-class FavoriteForm(forms.ModelForm):
-
-    class Meta:
-        model = Favorite

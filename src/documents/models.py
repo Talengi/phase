@@ -189,7 +189,7 @@ class Document(models.Model):
         null=True, blank=True)
     favorited_by = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
-        through='Favorite',
+        through='favorites.Favorite',
         null=True, blank=True)
 
     class Meta:
@@ -286,16 +286,6 @@ def upload_to_path(instance, filename):
 # Revision documents
 private_storage = FileSystemStorage(location=settings.REVISION_FILES_ROOT,
                                     base_url=settings.REVISION_FILES_URL)
-
-
-class Favorite(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    document = models.ForeignKey(Document)
-    last_view_date = models.DateTimeField(auto_now_add=True)
-
-    def is_outdated(self):
-        """Returns a boolean, True if the document has been updated."""
-        return self.last_view_date < self.document.updated_on
 
 
 class DocumentRevision(models.Model):

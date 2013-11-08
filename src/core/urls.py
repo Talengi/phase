@@ -10,6 +10,7 @@ urlpatterns = patterns(
     url(r'^admin/', include(admin.site.urls)),
     url(r'^', include('documents.urls')),
     url(r'^accounts/', include('accounts.urls')),
+    url(r'^favorites', include('favorites.urls')),
     url(r'^robots\.txt$', lambda r: HttpResponse(
         "User-agent: *\nDisallow: /",
         mimetype="text/plain")),

@@ -6,9 +6,8 @@ from django.conf import settings
 from django.core.cache import cache
 from django.http import HttpResponse, Http404
 from django.core.servers.basehttp import FileWrapper
-from django.core.urlresolvers import reverse_lazy
 from django.views.generic import (
-    View, ListView, CreateView, DetailView, UpdateView, DeleteView)
+    View, ListView, CreateView, DetailView, UpdateView)
 from django.utils import simplejson as json
 from django.core.urlresolvers import reverse
 from django.views.static import serve
@@ -17,11 +16,12 @@ try:
 except ImportError:
     from urllib import unquote
 
-from documents.models import Document, DocumentRevision, Favorite
+from favorites.models import Favorite
+from documents.models import Document, DocumentRevision
 from documents.utils import filter_documents, compress_documents
 from documents.forms import (
     DocumentFilterForm, DocumentForm, DocumentDownloadForm,
-    DocumentRevisionForm, FavoriteForm
+    DocumentRevisionForm
 )
 
 from categories.models import Category
@@ -316,37 +316,3 @@ class ProtectedDownload(LoginRequiredMixin, View):
             return response
         else:
             return serve(request, clean_name, settings.REVISION_FILES_ROOT)
-
-
-class FavoriteList(LoginRequiredMixin, ListView):
-    model = Favorite
-    template_name = 'documents/document_favorites.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(FavoriteList, self).get_context_data(**kwargs)
-        context.update({
-            'favorites_active': True,
-        })
-        return context
-
-    def get_queryset(self):
-        """Filters favorites per authenticated user."""
-        return self.model.objects.filter(user=self.request.user)
-
-
-class FavoriteCreate(LoginRequiredMixin, CreateView):
-    model = Favorite
-    form_class = FavoriteForm
-    success_url = reverse_lazy('favorite_list')
-
-    def form_valid(self, form):
-        """
-        If the form is valid, returns the id of the item created.
-        """
-        super(FavoriteCreate, self).form_valid(form)
-        return HttpResponse(self.object.id)
-
-
-class FavoriteDelete(LoginRequiredMixin, DeleteView):
-    model = Favorite
-    success_url = reverse_lazy('category_list')

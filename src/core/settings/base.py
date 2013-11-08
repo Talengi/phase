@@ -217,6 +217,7 @@ LOCAL_APPS = (
     'accounts',
     'categories',
     'metadata',
+    'favorites',
     'bootstrap',
 )
 
