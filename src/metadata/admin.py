@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import ValuesList, ListEntry, ContractorDeliverable
+from .models import ValuesList, ListEntry
 
 
 class EntryInline(admin.TabularInline):
@@ -14,4 +14,3 @@ class ValuesListAdmin(admin.ModelAdmin):
 
 
 admin.site.register(ValuesList, ValuesListAdmin)
-admin.site.register(ContractorDeliverable)
