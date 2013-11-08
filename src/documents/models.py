@@ -356,18 +356,115 @@ class ContractorDeliverableRevision(MetadataRevision):
     leader = models.ForeignKey(
         User,
         verbose_name=_('Leader'),
+        related_name='leading_contractor_deliverables',
         null=True, blank=True)
-    leader_comments = models.FileField(
-        _('Leader comments'),
-        null=True, blank=True)
+    # TODO
+    #leader_comments = models.FileField(
+    #    _('Leader comments'),
+    #    null=True, blank=True)
     approver = models.ForeignKey(
         User,
         verbose_name=_('Approver'),
+        related_name='approving_contractor_deliverables',
         null=True, blank=True)
-    approver_comments = models.FileField(
-        _('Approver comments'),
-        null=True, blank=True)
+    # TODO
+    #approver_comments = models.FileField(
+    #    _('Approver comments'),
+    #    null=True, blank=True)
     under_gtg_review = models.NullBooleanField(
         _('Under GTG Review'),
         choices=BOOLEANS,
+        null=True, blank=True)
+
+
+class Transmittals(Metadata):
+
+    # General informations
+    reference = models.CharField(
+        _('Reference'),
+        max_length=30)
+    transmittal_date = models.DateField(
+        _('Transmittal date'))
+    ack_of_receipt_date = models.DateField(
+        _('Acknowledgment of receipt date'),
+        null=True, blank=True)
+    contract_number = ConfigurableChoiceField(
+        verbose_name=u"Contract Number",
+        max_length=8,
+        list_index='CONTRACT_NBS')
+    originator = ConfigurableChoiceField(
+        _('Originator'),
+        default=u"FWF",
+        max_length=3,
+        list_index='ORIGINATORS')
+    recipient = ConfigurableChoiceField(
+        _('Recipient'),
+        default=u"FWF",
+        max_length=3,
+        list_index='Recipients')
+    document_type = ConfigurableChoiceField(
+        _('Document Type'),
+        default="PID",
+        max_length=3,
+        list_index='DOCUMENT_TYPES')
+    sequencial_number = models.CharField(
+        _('Sequencial Number'),
+        default=u"0001",
+        max_length=4,
+        choices=SEQUENTIAL_NUMBERS)
+    project_phase = ConfigurableChoiceField(
+        _('Engineering Phase'),
+        default=u"FEED",
+        max_length=4,
+        list_index='ENGINEERING_PHASES')
+    frm = models.ForeignKey(
+        User,
+        verbose_name=_('From'),
+        related_name='sent_transmittals',
+        null=True, blank=True)
+    to = models.ForeignKey(
+        User,
+        verbose_name=_('To'),
+        related_name='received_transmittals',
+        null=True, blank=True)
+
+    # Revision
+    current_revision = ConfigurableChoiceField(
+        verbose_name=u"Revision",
+        default=u"00",
+        max_length=2,
+        list_index='REVISIONS')
+    current_revision_date = models.DateField(
+        verbose_name=u"Revision Date")
+
+    # Related documents
+    related_documents = models.ManyToManyField(
+        'Document',
+        null=True, blank=True)
+
+    class Meta:
+        verbose_name = _('Transmittals document')
+        verbose_name_plural = _('Transmittals documents')
+
+    def natural_key(self):
+        return self.reference
+
+
+class TransmittalsRevision(MetadataRevision):
+    # Revision
+    status = ConfigurableChoiceField(
+        verbose_name=u"Status",
+        default="STD",
+        max_length=3,
+        list_index='STATUSES',
+        null=True, blank=True)
+    native_file = models.FileField(
+        verbose_name=u"Native File",
+        upload_to=upload_to_path,
+        storage=private_storage,
+        null=True, blank=True)
+    pdf_file = models.FileField(
+        verbose_name=u"PDF File",
+        upload_to=upload_to_path,
+        storage=private_storage,
         null=True, blank=True)
