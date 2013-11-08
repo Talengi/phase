@@ -16,12 +16,11 @@ from .constants import (
 
 
 class Document(models.Model):
-    natural_key = models.CharField(
-        _('Natural key'),
-        max_length=250
-    )
+    document_key = models.CharField(
+        _('Document key'),
+        max_length=250)
     favorited_by = models.ManyToManyField(
-        settings.AUTH_USER_MODEL,
+        User,
         through='favorites.Favorite',
         null=True, blank=True)
 
@@ -34,11 +33,8 @@ class Document(models.Model):
         verbose_name_plural = _('Documents')
 
     def save(self, *args, **kwargs):
-        # TODO : get natural key from metadata object
+        # TODO : get document key from metadata object
         super(Document, self).save(*args, **kwargs)
-
-    def get_by_natural_key(self, key):
-        return self.natural_key
 
     @models.permalink
     def get_absolute_url(self):
@@ -55,6 +51,9 @@ class Metadata(models.Model):
 
     class Meta:
         abstract = True
+
+    def __unicode__(self):
+        return self.natural_key()
 
     def natural_key(self):
         raise NotImplementedError()
@@ -237,7 +236,7 @@ class ContractorDeliverable(Metadata):
             ),
         )
 
-    def __unicode__(self):
+    def natural_key(self):
         return self.document_number
 
     def save(self, *args, **kwargs):
