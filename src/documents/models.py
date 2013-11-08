@@ -3,108 +3,159 @@
 
 from django.db import models
 from django.conf import settings
-from django.core.files.storage import FileSystemStorage
+from django.core.translation import ugettext_lazy as _
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import generic
 
-from documents.constants import (
-    STATUSES, REVISIONS, CONTRACT_NBS, ORIGINATORS, UNITS, DISCIPLINES,
-    DOCUMENT_TYPES, SEQUENCIAL_NUMBERS, SYSTEMS, ENGINEERING_PHASES,
-    CLASSES, BOOLEANS, PEOPLE, WBS
+
+from metadata.fields import ConfigurableChoiceField
+from accounts.models import User
+from .fileutils import upload_to_path, private_storage
+from .constants import (
+    BOOLEANS, SEQUENCIAL_NUMBERS, CLASSES, REVISIONS
 )
 
 
 class Document(models.Model):
+    natural_key = models.CharField(
+        _('Natural key'),
+        max_length=250
+    )
+    favorited_by = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        through='favorites.Favorite',
+        null=True, blank=True)
+
+    metadata_type = models.ForeignKey(ContentType)
+    metadata_id = models.PositiveIntegerField()
+    metadata = generic.GenericForeignKey('metadata_type', 'metadata_id')
+
+    class Meta:
+        verbose_name = _('Document')
+        verbose_name_plural = _('Documents')
+
+    def save(self, *args, **kwargs):
+        # TODO : get natural key from metadata object
+        super(Document, self).save(*args, **kwargs)
+
+    def get_by_natural_key(self, key):
+        return self.natural_key
+
+    @models.permalink
+    def get_absolute_url(self):
+        return ('document_detail', [self.natural_key])
+
+
+class Metadata(models.Model):
+    created_on = models.DateField(
+        _('Created on'),
+        auto_now_add=True)
+    updated_on = models.DateTimeField(
+        _('Updated on'),
+        auto_now=True)
+
+    class Meta:
+        abstract = True
+
+    def natural_key(self):
+        raise NotImplementedError()
+
+    def get_column_fields(self):
+        raise NotImplementedError()
+
+
+class MetadataRevision(models.Model):
+    document = models.ForeignKey(Document)
+
+    revision = models.CharField(
+        verbose_name=u"Revision",
+        default=u"00",
+        max_length=2,
+        choices=REVISIONS)
+    revision_date = models.DateField(
+        auto_now_add=True,
+        verbose_name=u"Revision Date")
+
+    class Meta:
+        abstract = True
+        ordering = ('-revision',)
+        get_latest_by = 'revision'
+
+
+class ContractorDeliverable(Metadata):
+
+    # General information
     document_number = models.CharField(
         verbose_name=u"Document Number",
         max_length=30)
     title = models.TextField(
         verbose_name=u"Title")
-    status = models.CharField(
-        verbose_name=u"Status",
-        default="STD",
-        max_length=3,
-        choices=STATUSES,
-        null=True, blank=True)
-    created_on = models.DateField(
-        auto_now_add=True,
-        verbose_name=u"Created on")
-    updated_on = models.DateTimeField(
-        auto_now=True,
-        verbose_name=u"Updated on")
-    contract_number = models.CharField(
+    contract_number = ConfigurableChoiceField(
         verbose_name=u"Contract Number",
-        default=u"FAC09001",
         max_length=8,
-        choices=CONTRACT_NBS)
-    originator = models.CharField(
+        list_index='CONTRACT_NBS')
+    originator = ConfigurableChoiceField(
         verbose_name=u"Originator",
         default=u"FWF",
         max_length=3,
-        choices=ORIGINATORS)
-    unit = models.CharField(
+        list_index='ORIGINATORS')
+    unit = ConfigurableChoiceField(
         verbose_name=u"Unit",
         default="000",
         max_length=3,
-        choices=UNITS)
-    discipline = models.CharField(
+        list_index='UNITS')
+    discipline = ConfigurableChoiceField(
         verbose_name=u"Discipline",
         default="PCS",
         max_length=3,
-        choices=DISCIPLINES)
-    document_type = models.CharField(
+        list_index='DISCIPLINES')
+    document_type = ConfigurableChoiceField(
         verbose_name=u"Document Type",
         default="PID",
         max_length=3,
-        choices=DOCUMENT_TYPES)
+        list_index='DOCUMENT_TYPES')
     sequencial_number = models.CharField(
         verbose_name=u"Sequencial Number",
         default=u"0001",
         max_length=4,
         choices=SEQUENCIAL_NUMBERS)
-    contractor_document_number = models.CharField(
-        verbose_name=u"Contractor Document Number",
-        max_length=50,
-        null=True, blank=True)
-    system = models.IntegerField(
-        verbose_name=u"System",
-        choices=SYSTEMS,
-        null=True, blank=True)
-    engineering_phase = models.CharField(
+    project_phase = ConfigurableChoiceField(
         verbose_name=u"Engineering Phase",
         default=u"FEED",
         max_length=4,
-        choices=ENGINEERING_PHASES)
-    feed_update = models.NullBooleanField(
-        choices=BOOLEANS,
-        verbose_name=u"FEED Update")
-    leader = models.IntegerField(
-        verbose_name=u"Leader",
-        choices=PEOPLE,
-        null=True, blank=True)
-    approver = models.IntegerField(
-        verbose_name=u"Approver",
-        choices=PEOPLE,
-        null=True, blank=True)
+        list_index='ENGINEERING_PHASES')
     klass = models.IntegerField(
         verbose_name=u"Class",
         default=1,
         choices=CLASSES)
-    under_contractor_review = models.NullBooleanField(
-        verbose_name=u"Under Contractor Review",
-        choices=BOOLEANS,
+    system = ConfigurableChoiceField(
+        verbose_name=u"System",
+        list_index='SYSTEMS',
         null=True, blank=True)
-    under_ca_review = models.NullBooleanField(
-        verbose_name=u"Under CA Review",
-        default=False,
-        choices=BOOLEANS,
-        null=True, blank=True)
-    wbs = models.CharField(
+    wbs = ConfigurableChoiceField(
         verbose_name=u"WBS",
         max_length=20,
-        choices=WBS,
+        list_index='WBS',
         null=True, blank=True)
     weight = models.IntegerField(
         verbose_name=u"Weight",
         null=True, blank=True)
+
+    # Revision
+    current_revision = ConfigurableChoiceField(
+        verbose_name=u"Revision",
+        default=u"00",
+        max_length=2,
+        list_index='REVISIONS')
+    current_revision_date = models.DateField(
+        verbose_name=u"Revision Date")
+
+    # Related documents
+    related_documents = models.ManyToManyField(
+        'Document',
+        null=True, blank=True)
+
+    # Schedule
     status_std_planned_date = models.DateField(
         verbose_name=u"Status STD Planned Date",
         null=True, blank=True)
@@ -177,20 +228,6 @@ class Document(models.Model):
     status_asb_actual_date = models.DateField(
         verbose_name=u"Status ASB Actual Date",
         null=True, blank=True)
-    current_revision = models.CharField(
-        verbose_name=u"Revision",
-        default=u"00",
-        max_length=2,
-        choices=REVISIONS)
-    current_revision_date = models.DateField(
-        verbose_name=u"Revision Date")
-    related_documents = models.ManyToManyField(
-        'Document',
-        null=True, blank=True)
-    favorited_by = models.ManyToManyField(
-        settings.AUTH_USER_MODEL,
-        through='favorites.Favorite',
-        null=True, blank=True)
 
     class Meta:
         ordering = ('document_number',)
@@ -203,10 +240,6 @@ class Document(models.Model):
 
     def __unicode__(self):
         return self.document_number
-
-    @models.permalink
-    def get_absolute_url(self):
-        return ('document_detail', [self.document_number])
 
     def save(self, *args, **kwargs):
         """The document number is generated from multiple fields
@@ -273,29 +306,17 @@ class Document(models.Model):
         return self.documentrevision_set.all().latest()
 
 
-def upload_to_path(instance, filename):
-    """Rename document files on upload to match a custom filename
-
-    based on the document number and the revision."""
-    return "{number}_{revision}.{extension}".format(
-        number=instance.document.document_number,
-        revision=instance.revision,
-        extension=filename.split('.')[-1]
-    )
-
-# Revision documents
-private_storage = FileSystemStorage(location=settings.REVISION_FILES_ROOT,
-                                    base_url=settings.REVISION_FILES_URL)
-
-
-class DocumentRevision(models.Model):
-    revision = models.CharField(
-        verbose_name=u"Revision",
-        default=u"00",
-        max_length=2,
-        choices=REVISIONS)
-    revision_date = models.DateField(
-        verbose_name=u"Revision Date")
+class ContractorDeliverableRevision(MetadataRevision):
+    # Revision
+    status = ConfigurableChoiceField(
+        verbose_name=u"Status",
+        default="STD",
+        max_length=3,
+        list_index='STATUSES',
+        null=True, blank=True)
+    final_revision = models.BooleanField(
+        _('Is final revision?'),
+        default=False)
     native_file = models.FileField(
         verbose_name=u"Native File",
         upload_to=upload_to_path,
@@ -306,8 +327,48 @@ class DocumentRevision(models.Model):
         upload_to=upload_to_path,
         storage=private_storage,
         null=True, blank=True)
-    document = models.ForeignKey(Document)
 
-    class Meta:
-        ordering = ('-revision',)
-        get_latest_by = 'revision'
+    # Review
+    review_start_date = models.DateField(
+        _('Review start date'),
+        null=True, blank=True
+    )
+    review_due_date = models.DateField(
+        _('Review due date'),
+        null=True, blank=True
+    )
+    # review_countdown = due_date - now
+    under_review = models.NullBooleanField(
+        verbose_name=u"Under Review",
+        choices=BOOLEANS,
+        null=True, blank=True)
+    under_contractor_review = models.NullBooleanField(
+        verbose_name=u"Under Contractor Review",
+        choices=BOOLEANS,
+        null=True, blank=True)
+    overdue = models.NullBooleanField(
+        _('Overdue'),
+        choices=BOOLEANS,
+        null=True, blank=True)
+    reviewers = models.ManyToManyField(
+        User,
+        verbose_name=_('Reviewers'),
+        null=True, blank=True)
+    leader = models.ForeignKey(
+        User,
+        verbose_name=_('Leader'),
+        null=True, blank=True)
+    leader_comments = models.FileField(
+        _('Leader comments'),
+        null=True, blank=True)
+    approver = models.ForeignKey(
+        User,
+        verbose_name=_('Approver'),
+        null=True, blank=True)
+    approver_comments = models.FileField(
+        _('Approver comments'),
+        null=True, blank=True)
+    under_gtg_review = models.NullBooleanField(
+        _('Under GTG Review'),
+        choices=BOOLEANS,
+        null=True, blank=True)
