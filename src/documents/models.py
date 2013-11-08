@@ -11,7 +11,7 @@ from metadata.fields import ConfigurableChoiceField
 from accounts.models import User
 from .fileutils import upload_to_path, private_storage
 from .constants import (
-    BOOLEANS, SEQUENCIAL_NUMBERS, CLASSES, REVISIONS
+    BOOLEANS, SEQUENTIAL_NUMBERS, CLASSES, REVISIONS
 )
 
 
@@ -117,7 +117,7 @@ class ContractorDeliverable(Metadata):
         verbose_name=u"Sequencial Number",
         default=u"0001",
         max_length=4,
-        choices=SEQUENCIAL_NUMBERS)
+        choices=SEQUENTIAL_NUMBERS)
     project_phase = ConfigurableChoiceField(
         verbose_name=u"Engineering Phase",
         default=u"FEED",
