@@ -186,7 +186,7 @@ DOCUMENT_TYPES = [
     ("WIR", u"Wiring Diagram"),
 ]
 
-SEQUENCIAL_NUMBERS = [
+SEQUENTIAL_NUMBERS = [
     (u"{0:0>4}".format(number), u"{0:0>4}".format(number))
     for number in range(1, 10000)
 ]
