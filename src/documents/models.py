@@ -34,6 +34,12 @@ class Document(models.Model):
         Category,
         verbose_name=_('Category'),
         related_name='documents')
+    created_on = models.DateField(
+        _('Created on'),
+        auto_now_add=True)
+    updated_on = models.DateTimeField(
+        _('Updated on'),
+        auto_now=True)
     favorited_by = models.ManyToManyField(
         User,
         through='favorites.Favorite',
@@ -86,12 +92,6 @@ class Metadata(models.Model):
     document = models.ForeignKey(
         Document,
         unique=True)
-    created_on = models.DateField(
-        _('Created on'),
-        auto_now_add=True)
-    updated_on = models.DateTimeField(
-        _('Updated on'),
-        auto_now=True)
 
     class Meta:
         abstract = True
