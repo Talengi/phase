@@ -15,10 +15,19 @@ from .constants import (
 )
 
 
+class DocumentManager(models.Manager):
+    def get_by_natural_key(self, document_key):
+        return self.get(document_key=document_key)
+
+
 class Document(models.Model):
     """A single document base model."""
+    objects = DocumentManager()
+
     document_key = models.CharField(
         _('Document key'),
+        unique=True,
+        db_index=True,
         max_length=250)
     favorited_by = models.ManyToManyField(
         User,
@@ -56,7 +65,16 @@ class Document(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('document_detail', [self.natural_key])
+        return ('document_detail', [
+            self.category.organisation.slug,
+            self.category.slug,
+            self.document_key,
+        ])
+
+    def natural_key(self):
+        # You MUST return a tuple here to prevent this bug
+        # https://code.djangoproject.com/ticket/13834
+        return (self.document_key,)
 
 
 class Metadata(models.Model):
