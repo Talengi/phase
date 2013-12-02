@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ImproperlyConfigured
 
 
 def get_choices_from_list(list_index):
@@ -11,8 +12,10 @@ def get_choices_from_list(list_index):
 
 
 class ConfigurableChoiceField(models.CharField):
-    def __init__(self, list_index, *args, **kwargs):
-        self.list_index = list_index
+    def __init__(self, *args, **kwargs):
+        self.list_index = kwargs.pop('list_index', None)
+        if self.list_index is None:
+            raise ImproperlyConfigured('Missing field: list_index')
         defaults = {
             'max_length': 50,
             'choices': None,
