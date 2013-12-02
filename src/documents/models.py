@@ -16,6 +16,7 @@ from .constants import (
 
 
 class Document(models.Model):
+    """A single document base model."""
     document_key = models.CharField(
         _('Document key'),
         max_length=250)
@@ -39,7 +40,11 @@ class Document(models.Model):
         verbose_name_plural = _('Documents')
 
     def save(self, *args, **kwargs):
-        # TODO : get document key from metadata object
+        if self.pk is None:
+            # This is a document creation
+            # TODO get document key from metadata object
+            # TODO get fields required for favorites management
+            pass
         super(Document, self).save(*args, **kwargs)
 
     @models.permalink
@@ -62,9 +67,36 @@ class Metadata(models.Model):
         return self.natural_key()
 
     def natural_key(self):
+        """Returns the natural unique key of the document.
+
+        This must be useable in a url.
+        """
         raise NotImplementedError()
 
-    def get_column_fields(self):
+    def column_fields(self):
+        """List of columns for document list page.
+
+        Returns a tuple of the form:
+            (
+                ('Column name 1', 'field_name_1'),
+                ('Column name 2', 'field_name_2'),
+            )
+
+        """
+        raise NotImplementedError()
+
+    def searchable_fields(self):
+        """List of fields that can be searched / ordered."""
+        raise NotImplementedError()
+
+    def jsonified(self, document2favorite={}):
+        """Returns a list of document values ready to be json-encoded.
+
+        The first element of the list is the linkified document number.
+        """
+        raise NotImplementedError()
+
+    def latest_revision(self):
         raise NotImplementedError()
 
 
@@ -259,7 +291,8 @@ class ContractorDeliverable(Metadata):
         if not self.document_number:
             self.document_number = (
                 u"{contract_number}-{originator}-{unit}-{discipline}-"
-                u"{document_type}-{sequencial_number}").format(
+                u"{document_type}-{sequencial_number}") \
+                .format(
                     contract_number=self.contract_number,
                     originator=self.originator,
                     unit=self.unit,
