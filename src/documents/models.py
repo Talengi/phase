@@ -9,6 +9,7 @@ from django.contrib.contenttypes import generic
 
 from metadata.fields import ConfigurableChoiceField
 from accounts.models import User
+from categories.models import Category
 from .fileutils import upload_to_path, private_storage
 from .constants import (
     BOOLEANS, SEQUENTIAL_NUMBERS, CLASSES, REVISIONS
@@ -29,6 +30,10 @@ class Document(models.Model):
         unique=True,
         db_index=True,
         max_length=250)
+    category = models.ForeignKey(
+        Category,
+        verbose_name=_('Category'),
+        related_name='documents')
     favorited_by = models.ManyToManyField(
         User,
         through='favorites.Favorite',

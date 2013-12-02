@@ -4,8 +4,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
 from django.core.urlresolvers import reverse
 
-from documents.models import Document
-
 
 class Organisation(models.Model):
     name = models.CharField(
@@ -63,10 +61,6 @@ class Category(models.Model):
         null=True, blank=True)
     groups = models.ManyToManyField(
         'auth.Group',
-        null=True, blank=True)
-    documents = models.ManyToManyField(
-        Document,
-        related_name='categories',
         null=True, blank=True)
 
     class Meta:
