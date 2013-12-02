@@ -19,7 +19,7 @@ urlpatterns = patterns(
     url(r'^download/$',
         DocumentDownload.as_view(),
         name="document_download"),
-    url(r'^documents/(?P<file_name>.*)$',
+    url(r'^files/(?P<file_name>[\w-]+)/$',
         ProtectedDownload.as_view(),
         name="protected_download"),
 
@@ -33,10 +33,10 @@ urlpatterns = patterns(
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/create/$',
         DocumentCreate.as_view(),
         name="document_create"),
-    url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/(?<document_number>.*)/$',
+    url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/(?P<document_key>[\w-]+)/$',
         DocumentDetail.as_view(),
         name="document_detail"),
-    url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/(?<document_number>.*)/edit/$',
+    url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/(?P<document_key>[\w-]+)/edit/$',
         DocumentEdit.as_view(),
         name="document_edit"),
 )

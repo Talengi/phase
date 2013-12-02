@@ -6,7 +6,7 @@ urlpatterns = patterns(
     '',
 
     # Favorites
-    url(r'^/$',
+    url(r'^$',
         FavoriteList.as_view(),
         name="favorite_list"),
     url(r'^create/$',
