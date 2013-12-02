@@ -24,6 +24,13 @@ class Document(models.Model):
         User,
         through='favorites.Favorite',
         null=True, blank=True)
+    current_revision = ConfigurableChoiceField(
+        verbose_name=u"Revision",
+        default=u"00",
+        max_length=2,
+        list_index='REVISIONS')
+    current_revision_date = models.DateField(
+        verbose_name=u"Revision Date")
 
     metadata_type = models.ForeignKey(ContentType)
     metadata_id = models.PositiveIntegerField()
@@ -53,6 +60,9 @@ class Document(models.Model):
 
 
 class Metadata(models.Model):
+    document = models.ForeignKey(
+        Document,
+        unique=True)
     created_on = models.DateField(
         _('Created on'),
         auto_now_add=True)
@@ -183,18 +193,10 @@ class ContractorDeliverable(Metadata):
         verbose_name=u"Weight",
         null=True, blank=True)
 
-    # Revision
-    current_revision = ConfigurableChoiceField(
-        verbose_name=u"Revision",
-        default=u"00",
-        max_length=2,
-        list_index='REVISIONS')
-    current_revision_date = models.DateField(
-        verbose_name=u"Revision Date")
-
     # Related documents
     related_documents = models.ManyToManyField(
         'Document',
+        related_name='contractordeliverable_related_set',
         null=True, blank=True)
 
     # Schedule
@@ -484,6 +486,7 @@ class Transmittals(Metadata):
     # Related documents
     related_documents = models.ManyToManyField(
         'Document',
+        related_name='transmittals_related_set',
         null=True, blank=True)
 
     class Meta:
