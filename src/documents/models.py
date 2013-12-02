@@ -56,12 +56,6 @@ class Document(models.Model):
     metadata_id = models.PositiveIntegerField()
     metadata = generic.GenericForeignKey('metadata_type', 'metadata_id')
 
-    # Used by favorites
-    #title
-    #current_revision
-    # document_number / natural_key
-    # updated_on
-
     class Meta:
         verbose_name = _('Document')
         verbose_name_plural = _('Documents')
