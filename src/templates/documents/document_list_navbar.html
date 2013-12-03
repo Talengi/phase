@@ -41,10 +41,10 @@
                 <span class="glyphicon glyphicon-plus icon-white"></span> New document <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu">
-                <li><a href="{% url "document_create" %}">Contractor deliverable</a></li>
-                <li><a href="{% url "document_create" %}">Vendor deliverable</a></li>
-                <li><a href="{% url "document_create" %}">Correspondence</a></li>
-                <li><a href="{% url "document_create" %}">Minutes of meeting</a></li>
+                <li><a href="{% url "document_create" organisation_slug category_slug %}">Contractor deliverable</a></li>
+                <li><a href="{% url "document_create" organisation_slug category_slug %}">Vendor deliverable</a></li>
+                <li><a href="{% url "document_create" organisation_slug category_slug %}">Correspondence</a></li>
+                <li><a href="{% url "document_create" organisation_slug category_slug %}">Minutes of meeting</a></li>
             </ul>
         </div>
         </div>

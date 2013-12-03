@@ -35,7 +35,7 @@
         createUrl: "{% url "favorite_create" %}",
         deleteUrl: "{% url "favorite_delete" "0" %}",
         filterUrl: "{% url "document_filter" organisation_slug category_slug %}",
-        detailUrl: "{% url "document_detail" "documentNumber" %}",
+        detailUrl: "{% url "document_detail" organisation_slug category_slug "documentNumber" %}",
         numPages: {{ paginator.num_pages }},
         totalItems: {{ paginator.count }},
         numItemsPerPage: {{ items_per_page }}
