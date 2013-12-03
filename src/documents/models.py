@@ -153,6 +153,11 @@ class MetadataRevision(models.Model):
 
 class ContractorDeliverable(Metadata):
 
+    latest_revision = models.ForeignKey(
+        'ContractorDeliverableRevision',
+        verbose_name=_('Latest revision'),
+        null=True)
+
     # General information
     document_number = models.CharField(
         verbose_name=u"Document Number",
