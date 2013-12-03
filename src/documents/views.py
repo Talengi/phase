@@ -24,7 +24,6 @@ from documents.forms import (
     DocumentRevisionForm
 )
 
-from categories.models import Category
 from accounts.views import LoginRequiredMixin, PermissionRequiredMixin
 
 
@@ -87,21 +86,9 @@ class DocumentListMixin(object):
         category = self.kwargs['category']
 
         qs = Document.objects \
-            .filter(categories__users=self.request.user) \
-            .filter(categories__organisation__slug=organisation) \
-            .filter(categories__category_template__slug=category)
-
-        return qs
-
-
-class CategoryList(LoginRequiredMixin, ListView):
-    """Display a list of user categories"""
-
-    def get_queryset(self, **kwargs):
-        qs = Category.objects \
-            .filter(users=self.request.user) \
-            .select_related('category_template', 'organisation') \
-            .order_by('organisation__name')
+            .filter(category__users=self.request.user) \
+            .filter(category__organisation__slug=organisation) \
+            .filter(category__category_template__slug=category)
 
         return qs
 
