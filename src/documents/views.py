@@ -17,7 +17,8 @@ except ImportError:
     from urllib import unquote
 
 from favorites.models import Favorite
-from documents.models import Document, DocumentRevision
+from categories.models import Category
+from documents.models import Document, MetadataRevision
 from documents.utils import filter_documents, compress_documents
 from documents.forms import (
     DocumentFilterForm, DocumentForm, DocumentDownloadForm,
@@ -28,8 +29,11 @@ from accounts.views import LoginRequiredMixin, PermissionRequiredMixin
 
 
 class JSONResponseMixin(object):
-    """Source:
+    """Render the view as json.
+
+    See:
     https://docs.djangoproject.com/en/dev/topics/class-based-views/mixins/
+
     """
     def render_to_response(self, context):
         """Returns a JSON response containing 'context' as payload"""
@@ -46,6 +50,8 @@ class JSONResponseMixin(object):
         Builds a dict from a context ready to be displayed as a table
 
         or JSON dumped.
+
+        TODO Rewrite this cause it's a bit messy.
         """
         documents = context['object_list']
         user = self.request.user
@@ -60,8 +66,6 @@ class JSONResponseMixin(object):
             document2favorite = dict((v, k) for k, v in favorites)
         else:
             document2favorite = {}
-        data = [doc.jsonified(document2favorite)
-                for doc in documents[start:end]]
         CACHE_DATA_KEY = '{document2favorite}_{get_parameters}'.format(
             # We want to update the cache if favorites have changed
             document2favorite=document2favorite,
@@ -82,13 +86,32 @@ class JSONResponseMixin(object):
 
 class DocumentListMixin(object):
     def get_queryset(self):
-        organisation = self.kwargs['organisation']
-        category = self.kwargs['category']
+        """Get queryset for listing documents.
 
-        qs = Document.objects \
-            .filter(category__users=self.request.user) \
-            .filter(category__organisation__slug=organisation) \
-            .filter(category__category_template__slug=category)
+        We get all Metadata depending on the category.
+
+        """
+        organisation_slug = self.kwargs['organisation']
+        category_slug = self.kwargs['category']
+
+        try:
+            category = Category.objects \
+                .select_related('category_template__metadata_model') \
+                .get(users=self.request.user,
+                     organisation__slug=organisation_slug,
+                     category_template__slug=category_slug)
+        except Category.DoesNotExist:
+            raise Http404('Category not found')
+
+        DocumentClass = category.category_template.metadata_model.model_class()
+        qs = DocumentClass.objects \
+            .select_related(
+                'latest_revision',
+                'document',
+                'document__category',
+                'document__category__category_template',
+                'document__category__organisation') \
+            .filter(document__category=category)
 
         return qs
 
@@ -96,6 +119,7 @@ class DocumentListMixin(object):
 class DocumentList(LoginRequiredMixin, DocumentListMixin,
                    ListView, JSONResponseMixin):
     paginate_by = settings.PAGINATE_BY
+    template_name = 'documents/document_list.html'
 
     def get_context_data(self, **kwargs):
         context = super(DocumentList, self).get_context_data(**kwargs)
@@ -103,7 +127,7 @@ class DocumentList(LoginRequiredMixin, DocumentListMixin,
                                           context["paginator"].count)
         context.update({
             'download_form': DocumentDownloadForm(),
-            'form': DocumentFilterForm(),
+            #'form': DocumentFilterForm(),
             'documents_active': True,
             'initial_data': json.dumps(initial_data),
             'items_per_page': settings.PAGINATE_BY,
