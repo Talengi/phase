@@ -121,10 +121,17 @@ class Metadata(models.Model):
 
         The first element of the list is the linkified document number.
         """
-        raise NotImplementedError()
-
-    def latest_revision(self):
-        raise NotImplementedError()
+        favorited = self.pk in document2favorite.keys()
+        fields_infos = dict((field[1], unicode(field[2]))
+                            for field in self.display_fields())
+        fields_infos.update({
+            u'url': self.document.get_absolute_url(),
+            u'number': self.natural_key(),
+            u'pk': self.pk,
+            u'favorite_id': document2favorite.get(self.pk, u''),
+            u'favorited': favorited,
+        })
+        return fields_infos
 
 
 class MetadataRevision(models.Model):
@@ -350,27 +357,6 @@ class ContractorDeliverable(Metadata):
             u'originator',
             u'sequencial_number',
         ]
-
-    def jsonified(self, document2favorite={}):
-        """Returns a list of document values ready to be json-encoded.
-
-        The first element of the list is the linkified document number.
-        """
-        favorited = self.pk in document2favorite.keys()
-        fields_infos = dict((field[1], unicode(field[2]))
-                            for field in self.display_fields())
-        fields_infos.update({
-            u'url': self.get_absolute_url(),
-            u'number': self.document_number,
-            u'pk': self.pk,
-            u'favorite_id': document2favorite.get(self.pk, u''),
-            u'favorited': favorited,
-        })
-        return fields_infos
-
-    def latest_revision(self):
-        """Returns the latest revision related to this document."""
-        return self.documentrevision_set.all().latest()
 
 
 class ContractorDeliverableRevision(MetadataRevision):
