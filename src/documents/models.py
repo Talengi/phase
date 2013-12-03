@@ -331,7 +331,7 @@ class ContractorDeliverable(Metadata):
                     document_type=self.document_type,
                     sequencial_number=self.sequencial_number
                 )
-        super(Document, self).save(*args, **kwargs)
+        super(ContractorDeliverable, self).save(*args, **kwargs)
 
     def display_fields(self):
         """The list of fields to display in a concise way."""
