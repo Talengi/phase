@@ -338,9 +338,9 @@ class ContractorDeliverable(Metadata):
         return [
             (u'Document Number', u'document_number', self.document_number),
             (u'Title', u'title', self.title),
-            (u'Rev. Date', u'current_revision_date', self.current_revision_date),
-            (u'Rev.', u'current_revision', self.current_revision),
-            (u'Status', u'status', self.status),
+            (u'Rev. Date', u'current_revision_date', self.latest_revision.created_on),
+            (u'Rev.', u'current_revision', self.latest_revision.revision),
+            (u'Status', u'status', self.latest_revision.status),
         ]
 
     def searchable_fields(self):
