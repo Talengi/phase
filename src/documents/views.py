@@ -69,7 +69,12 @@ class DocumentListMixin(object):
         return qs
 
     def get_serializable_document_list(self, context, total=None):
-        """Returns document list data in a json serializable format."""
+        """Returns document list data in a json serializable format.
+
+        TODO The conceptual purity of this API is not really satisfaying.
+        Let's rewrite it some day.
+
+        """
         start = int(self.request.GET.get('start', 0))
         end = start + int(self.request.GET.get('length', self.paginate_by))
         documents = context['object_list']
