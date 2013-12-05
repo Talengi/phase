@@ -1,5 +1,10 @@
 import os
+import json
 from datetime import datetime
+try:
+    from urllib.parse import unquote
+except ImportError:
+    from urllib import unquote
 
 from django import http
 from django.conf import settings
@@ -7,14 +12,10 @@ from django.core.cache import cache
 from django.http import HttpResponse, Http404
 from django.core.servers.basehttp import FileWrapper
 from django.views.generic import (
-    View, ListView, CreateView, DetailView, UpdateView)
-from django.utils import simplejson as json
+    View, ListView, CreateView, DetailView, UpdateView, TemplateView)
 from django.core.urlresolvers import reverse
 from django.views.static import serve
-try:
-    from urllib.parse import unquote
-except ImportError:
-    from urllib import unquote
+from braces.views import JSONResponseMixin
 
 from favorites.models import Favorite
 from categories.models import Category
@@ -28,63 +29,15 @@ from documents.forms import (
 from accounts.views import LoginRequiredMixin, PermissionRequiredMixin
 
 
-class JSONResponseMixin(object):
-    """Render the view as json.
+class DocumentListMixin(object):
+    """Base class for listing documents.
 
-    See:
-    https://docs.djangoproject.com/en/dev/topics/class-based-views/mixins/
+    This is the base class to factorize code fetching documents
+    of the correct type.
 
     """
-    def render_to_response(self, context):
-        """Returns a JSON response containing 'context' as payload"""
-        return self.get_json_response(json.dumps(self.build_context(context)))
+    paginate_by = settings.PAGINATE_BY
 
-    def get_json_response(self, content, **httpresponse_kwargs):
-        """Construct an `HttpResponse` object."""
-        return http.HttpResponse(content,
-                                 content_type='application/json',
-                                 **httpresponse_kwargs)
-
-    def build_context(self, context, total=None):
-        """
-        Builds a dict from a context ready to be displayed as a table
-
-        or JSON dumped.
-
-        TODO Rewrite this cause it's a bit messy.
-        """
-        documents = context['object_list']
-        user = self.request.user
-        start = int(self.request.GET.get('start', 0))
-        end = start + int(self.request.GET.get('length', settings.PAGINATE_BY))
-        if total is None:
-            total = documents.count()
-        display = min(end, total)
-        if user.is_authenticated():
-            favorites = Favorite.objects.filter(user=user)\
-                                        .values_list('id', 'document')
-            document2favorite = dict((v, k) for k, v in favorites)
-        else:
-            document2favorite = {}
-        CACHE_DATA_KEY = '{document2favorite}_{get_parameters}'.format(
-            # We want to update the cache if favorites have changed
-            document2favorite=document2favorite,
-            # ...and if filtering GET parameters have changed
-            get_parameters=self.request.get_full_path(),
-        ).replace(' ', '_')[:249]  # memcached restrictions
-        data = cache.get(CACHE_DATA_KEY)
-        if data is None:
-            data = [doc.jsonified(document2favorite)
-                    for doc in documents[start:end]]
-            cache.set(CACHE_DATA_KEY, data, settings.CACHE_TIMEOUT_SECONDS)
-        return {
-            "total": total,
-            "display": display,
-            "data": data,
-        }
-
-
-class DocumentListMixin(object):
     def get_queryset(self):
         """Get queryset for listing documents.
 
@@ -115,26 +68,87 @@ class DocumentListMixin(object):
 
         return qs
 
+    def get_serializable_data(self, context, total=None):
+        """Returns document list data in a json serializable format."""
+        start = int(self.request.GET.get('start', 0))
+        end = start + int(self.request.GET.get('length', self.paginate_by))
+        documents = context['object_list']
+        total = total if total else documents.count()
+        display = min(end, total)
 
-class DocumentList(LoginRequiredMixin, DocumentListMixin,
-                   ListView, JSONResponseMixin):
-    paginate_by = settings.PAGINATE_BY
+        user = self.request.user
+        favorites = Favorite.objects \
+            .filter(user=user) \
+            .values_list('id', 'document')
+        document2favorite = dict((v, k) for k, v in favorites)
+
+        # TODO Use Django cache decorators?
+        # CACHE_DATA_KEY = '{document2favorite}_{get_parameters}'.format(
+        #     # We want to update the cache if favorites have changed
+        #     document2favorite=document2favorite,
+        #     # ...and if filtering GET parameters have changed
+        #     get_parameters=self.request.get_full_path(),
+        # ).replace(' ', '_')[:249]  # memcached restrictions
+        # data = cache.get(CACHE_DATA_KEY)
+        # if data is None:
+        #     data = [doc.jsonified(document2favorite)
+        #             for doc in documents[start:end]]
+        #     cache.set(CACHE_DATA_KEY, data, settings.CACHE_TIMEOUT_SECONDS)
+        data = [doc.jsonified(document2favorite)
+                for doc in documents[start:end]]
+
+        return {
+            'total': total,
+            'display': display,
+            'data': data,
+        }
+
+
+class BaseDocumentList(LoginRequiredMixin,
+                       DocumentListMixin,
+                       ListView):
+    pass
+
+
+class DocumentList(BaseDocumentList):
     template_name = 'documents/document_list.html'
 
     def get_context_data(self, **kwargs):
         context = super(DocumentList, self).get_context_data(**kwargs)
-        initial_data = self.build_context(context,
-                                          context["paginator"].count)
+        json_data = self.get_serializable_data(context,
+                                               context['paginator'].count)
         context.update({
             'download_form': DocumentDownloadForm(),
             #'form': DocumentFilterForm(),
             'documents_active': True,
-            'initial_data': json.dumps(initial_data),
-            'items_per_page': settings.PAGINATE_BY,
+            'initial_data': json.dumps(json_data),
+            'items_per_page': self.paginate_by,
             'organisation_slug': self.kwargs['organisation'],
             'category_slug': self.kwargs['category']
         })
         return context
+
+
+class DocumentFilter(JSONResponseMixin, BaseDocumentList):
+
+    def render_to_response(self, context, **response_kwargs):
+        return self.render_json_response(context, **response_kwargs)
+
+    def get_context_data(self, **kwargs):
+        full_context = super(DocumentFilter, self).get_context_data(**kwargs)
+        context = self.get_serializable_data(full_context)
+        return context
+
+    def get_queryset(self):
+        """Given DataTables' GET parameters, filter the initial queryset."""
+        queryset = super(DocumentFilter, self).get_queryset()
+        #if self.request.method == "GET":
+        #    form = DocumentFilterForm(self.request.GET)
+        #    if form.is_valid():
+        #        queryset = filter_documents(queryset, form.cleaned_data)
+        #    else:
+        #        raise Exception(form.errors)
+        return queryset
 
 
 class DocumentDetail(LoginRequiredMixin, DetailView):
@@ -172,22 +186,6 @@ class DocumentDetail(LoginRequiredMixin, DetailView):
             'revisions': revisions,
         })
         return context
-
-
-class DocumentFilter(LoginRequiredMixin, DocumentListMixin,
-                     JSONResponseMixin, ListView):
-    model = Document
-
-    def get_queryset(self):
-        """Given DataTables' GET parameters, filter the initial queryset."""
-        queryset = super(DocumentFilter, self).get_queryset()
-        if self.request.method == "GET":
-            form = DocumentFilterForm(self.request.GET)
-            if form.is_valid():
-                queryset = filter_documents(queryset, form.cleaned_data)
-            else:
-                raise Exception(form.errors)
-        return queryset
 
 
 class DocumentRevisionMixin(object):
