@@ -68,7 +68,7 @@ class DocumentListMixin(object):
 
         return qs
 
-    def get_serializable_data(self, context, total=None):
+    def get_serializable_document_list(self, context, total=None):
         """Returns document list data in a json serializable format."""
         start = int(self.request.GET.get('start', 0))
         end = start + int(self.request.GET.get('length', self.paginate_by))
@@ -82,20 +82,7 @@ class DocumentListMixin(object):
             .values_list('id', 'document')
         document2favorite = dict((v, k) for k, v in favorites)
 
-        # TODO Use Django cache decorators?
-        # CACHE_DATA_KEY = '{document2favorite}_{get_parameters}'.format(
-        #     # We want to update the cache if favorites have changed
-        #     document2favorite=document2favorite,
-        #     # ...and if filtering GET parameters have changed
-        #     get_parameters=self.request.get_full_path(),
-        # ).replace(' ', '_')[:249]  # memcached restrictions
-        # data = cache.get(CACHE_DATA_KEY)
-        # if data is None:
-        #     data = [doc.jsonified(document2favorite)
-        #             for doc in documents[start:end]]
-        #     cache.set(CACHE_DATA_KEY, data, settings.CACHE_TIMEOUT_SECONDS)
-        data = [doc.jsonified(document2favorite)
-                for doc in documents[start:end]]
+        data = self.get_cached_data(documents, document2favorite, start, end)
 
         return {
             'total': total,
@@ -103,10 +90,24 @@ class DocumentListMixin(object):
             'data': data,
         }
 
+    def get_cached_data(self, documents, document2favorite, start, end):
+        """Get existing cached data, or set it otherwise."""
+        CACHE_DATA_KEY = '{document2favorite}_{get_parameters}'.format(
+            # We want to update the cache if favorites have changed
+            document2favorite=document2favorite,
+            # ...and if filtering GET parameters have changed
+            get_parameters=self.request.get_full_path(),
+        ).replace(' ', '_')[:249]  # memcached restrictions
+        data = cache.get(CACHE_DATA_KEY)
+        if data is None:
+            data = [doc.jsonified(document2favorite)
+                    for doc in documents[start:end]]
+            cache.set(CACHE_DATA_KEY, data, settings.CACHE_TIMEOUT_SECONDS)
 
-class BaseDocumentList(LoginRequiredMixin,
-                       DocumentListMixin,
-                       ListView):
+        return data
+
+
+class BaseDocumentList(LoginRequiredMixin, DocumentListMixin, ListView):
     pass
 
 
@@ -115,8 +116,8 @@ class DocumentList(BaseDocumentList):
 
     def get_context_data(self, **kwargs):
         context = super(DocumentList, self).get_context_data(**kwargs)
-        json_data = self.get_serializable_data(context,
-                                               context['paginator'].count)
+        json_data = self.get_serializable_document_list(context,
+                                                        context['paginator'].count)
         context.update({
             'download_form': DocumentDownloadForm(),
             #'form': DocumentFilterForm(),
@@ -136,7 +137,7 @@ class DocumentFilter(JSONResponseMixin, BaseDocumentList):
 
     def get_context_data(self, **kwargs):
         full_context = super(DocumentFilter, self).get_context_data(**kwargs)
-        context = self.get_serializable_data(full_context)
+        context = self.get_serializable_list(full_context)
         return context
 
     def get_queryset(self):
