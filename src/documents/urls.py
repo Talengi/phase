@@ -29,10 +29,10 @@ urlpatterns = patterns(
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/create/$',
         DocumentCreate.as_view(),
         name="document_create"),
-    url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/(?P<document_key>[\w-]+)/$',
+    url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/(?P<document_key>.+)/$',
         DocumentDetail.as_view(),
         name="document_detail"),
-    url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/(?P<document_key>[\w-]+)/edit/$',
+    url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/(?P<document_key>.+)/edit/$',
         DocumentEdit.as_view(),
         name="document_edit"),
 )
