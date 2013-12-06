@@ -24,7 +24,7 @@ class ConfigurableChoiceField(models.CharField):
         super(ConfigurableChoiceField, self).__init__(*args, **defaults)
 
     def _get_choices(self):
-        if self._choices is None:
+        if self._choices == []:
             self._choices = get_choices_from_list(self.list_index)
-
         return self._choices
+    choices = property(_get_choices)
