@@ -21,10 +21,6 @@ class BaseDocumentFilterForm(forms.Form):
     search_terms = forms.CharField(
         label=u'Search all columns',
         required=False)
-    sort_by = forms.CharField(
-        widget=forms.HiddenInput(),
-        required=False,
-        initial='document_key')
 
 
 def filterform_factory(model):
@@ -56,9 +52,17 @@ def filterform_factory(model):
         # TODO Include indexes in choices
         field = f.formfield(**kwargs)
         field.required = False
+        field.empty_value = None
         field.initial = ''
         field.choices = f.get_choices(include_blank=True)
         field_list.append((f.name, field))
 
+    field_list = dict(field_list)
+    field_list.update({
+        'sort_by': forms.CharField(
+            widget=forms.HiddenInput(),
+            required=False,
+            initial=model._meta.ordering[0])
+    })
     class_name = model.__name__ + 'FilterForm'
     return type(class_name, (BaseDocumentFilterForm,), dict(field_list))
