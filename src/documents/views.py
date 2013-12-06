@@ -35,8 +35,6 @@ class DocumentListMixin(object):
     of the correct type.
 
     """
-    paginate_by = settings.PAGINATE_BY
-
     def get_queryset(self):
         """Get queryset for listing documents.
 
@@ -80,7 +78,7 @@ class DocumentListMixin(object):
 
         """
         start = int(self.request.GET.get('start', 0))
-        end = start + int(self.request.GET.get('length', self.paginate_by))
+        end = start + int(self.request.GET.get('length', settings.PAGINATE_BY))
         documents = context['object_list']
         total = total if total else documents.count()
         display = min(end, total)
@@ -122,6 +120,7 @@ class BaseDocumentList(LoginRequiredMixin, DocumentListMixin, ListView):
 
 class DocumentList(BaseDocumentList):
     template_name = 'documents/document_list.html'
+    paginate_by = settings.PAGINATE_BY
 
     def get_context_data(self, **kwargs):
         context = super(DocumentList, self).get_context_data(**kwargs)
