@@ -144,7 +144,7 @@ class DocumentFilter(JSONResponseMixin, BaseDocumentList):
 
     def get_context_data(self, **kwargs):
         full_context = super(DocumentFilter, self).get_context_data(**kwargs)
-        context = self.get_serializable_list(full_context)
+        context = self.get_serializable_document_list(full_context)
         return context
 
     def get_queryset(self):
