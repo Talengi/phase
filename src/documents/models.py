@@ -298,6 +298,7 @@ class ContractorDeliverable(Metadata):
         null=True, blank=True)
 
     class PhaseConfig:
+        # TODO Create metaclass to validate those fields
         filter_fields = (
             'status', 'discipline', 'document_type',
             'unit', 'klass', 'contract_number', 'originator',
