@@ -12,19 +12,18 @@ from django.core.cache import cache
 from django.http import HttpResponse, Http404
 from django.core.servers.basehttp import FileWrapper
 from django.views.generic import (
-    View, ListView, CreateView, DetailView, UpdateView, TemplateView)
+    View, ListView, CreateView, DetailView, UpdateView)
 from django.core.urlresolvers import reverse
 from django.views.static import serve
 from braces.views import JSONResponseMixin
 
 from favorites.models import Favorite
 from categories.models import Category
-from documents.models import Document, MetadataRevision
+from documents.models import Document
 from documents.utils import filter_documents, compress_documents
-from documents.forms import (
-    DocumentFilterForm, DocumentForm, DocumentDownloadForm,
-    DocumentRevisionForm
-)
+from documents.forms.models import DocumentForm, DocumentRevisionForm
+from documents.forms.utils import DocumentDownloadForm
+from documents.forms.filters import filterform_factory
 
 from accounts.views import LoginRequiredMixin, PermissionRequiredMixin
 
@@ -123,9 +122,12 @@ class DocumentList(BaseDocumentList):
         context = super(DocumentList, self).get_context_data(**kwargs)
         json_data = self.get_serializable_document_list(context,
                                                         context['paginator'].count)
+        model = context['object_list'].model
+        FilterForm = filterform_factory(model)
+
         context.update({
             'download_form': DocumentDownloadForm(),
-            #'form': DocumentFilterForm(),
+            'form': FilterForm(),
             'documents_active': True,
             'initial_data': json.dumps(json_data),
             'items_per_page': self.paginate_by,
@@ -148,12 +150,13 @@ class DocumentFilter(JSONResponseMixin, BaseDocumentList):
     def get_queryset(self):
         """Given DataTables' GET parameters, filter the initial queryset."""
         queryset = super(DocumentFilter, self).get_queryset()
-        #if self.request.method == "GET":
-        #    form = DocumentFilterForm(self.request.GET)
-        #    if form.is_valid():
-        #        queryset = filter_documents(queryset, form.cleaned_data)
-        #    else:
-        #        raise Exception(form.errors)
+        if self.request.method == "GET":
+            FilterForm = filterform_factory(queryset.model)
+            form = FilterForm(self.request.GET)
+            if form.is_valid():
+                queryset = filter_documents(queryset, form.cleaned_data)
+            else:
+                raise Exception(form.errors)
         return queryset
 
 

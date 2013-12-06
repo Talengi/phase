@@ -112,10 +112,6 @@ class Metadata(models.Model):
         """
         raise NotImplementedError()
 
-    def searchable_fields(self):
-        """List of fields that can be searched / ordered."""
-        raise NotImplementedError()
-
     def jsonified(self, document2favorite={}):
         """Returns a list of document values ready to be json-encoded.
 
@@ -159,7 +155,6 @@ class MetadataRevision(models.Model):
 
 
 class ContractorDeliverable(Metadata):
-
     latest_revision = models.ForeignKey(
         'ContractorDeliverableRevision',
         verbose_name=_('Latest revision'),
@@ -302,6 +297,27 @@ class ContractorDeliverable(Metadata):
         verbose_name=u"Status ASB Actual Date",
         null=True, blank=True)
 
+    class PhaseConfig:
+        filter_fields = (
+            'status', 'discipline', 'document_type',
+            'unit', 'klass', 'contract_number', 'originator',
+            'contractor_document_number', 'engineering_phase', 'feed_update',
+            'system', 'wbs', 'under_ca_review', 'under_contractor_review',
+            'leader', 'approver',
+        )
+        searchable_fields = (
+            'document_number', 'title', 'status', 'unit', 'discipline',
+            'document_type', 'klass', 'contract_number', 'originator',
+            'sequencial_number',
+        )
+        columns_fields = (
+            ('Document Number', u'document_number'),
+            ('Title', u'title'),
+            ('Rev. Date', u'current_revision_date'),
+            ('Rev.', u'current_revision'),
+            ('Status', u'status'),
+        )
+
     class Meta:
         ordering = ('document_number',)
         unique_together = (
@@ -341,21 +357,6 @@ class ContractorDeliverable(Metadata):
             (u'Rev. Date', u'current_revision_date', self.latest_revision.created_on),
             (u'Rev.', u'current_revision', self.latest_revision.revision),
             (u'Status', u'status', self.latest_revision.status),
-        ]
-
-    def searchable_fields(self):
-        """The list of fields to search into."""
-        return [
-            u'document_number',
-            u'title',
-            u'status',
-            u'unit',
-            u'discipline',
-            u'document_type',
-            u'klass',
-            u'contract_number',
-            u'originator',
-            u'sequencial_number',
         ]
 
 
