@@ -132,7 +132,7 @@ jQuery(function($) {
         $("#documents tbody").on('click', 'td:not(.columnselect):not(.columnfavorite)', function(e) {
             window.location = config.detailUrl.replace(
                 'documentNumber',
-                $(this).parent().data('document-number'));
+                $(this).parent().data('document-key'));
         });
     };
 
