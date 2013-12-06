@@ -8,8 +8,6 @@ except:
 
 from django.db.models import Q
 
-from documents.models import Document
-
 
 def filter_documents(queryset, data):
     """Filter documents from a queryset given data from DataTables.
@@ -17,17 +15,15 @@ def filter_documents(queryset, data):
     Documentation (lack of is more accurate though):
     http://www.datatables.net/examples/server_side/server_side.html
     """
-    # Dummy document to retrieve displayed fields
-    # TODO: find a better way to achieve this
-    document = Document.objects.latest('document_number')
-    searchable_fields = document.searchable_fields()
+    model = queryset.model
 
     # Paging (done at the view level, the whole queryset is still required)
 
     # Ordering
-    queryset = queryset.order_by(data.get('sort_by', 'document_number'))
+    queryset = queryset.order_by(data.get('sort_by', 'document_number') or 'document_number')
 
-    # Filtering (global)
+    # Filtering (search)
+    searchable_fields = model.PhaseConfig.searchable_fields
     search_terms = data.get('search_terms', None)
     if search_terms:
         q = Q()
@@ -35,16 +31,10 @@ def filter_documents(queryset, data):
             q.add(Q(**{'%s__icontains' % field: search_terms}), Q.OR)
         queryset = queryset.filter(q)
 
-    # Filtering (advanced)
+    # Filtering (custom fields)
+    filter_fields = model.PhaseConfig.filter_fields
     advanced_args = {}
-    parameter_names = (
-        'status', 'revision', 'unit', 'discipline',
-        'document_type', 'klass',
-        'contract_number', 'originator', 'leader', 'approver',
-        'engineering_phase', 'feed_update', 'system', 'wbs',
-        'under_contractor_review', 'under_ca_review', 'created_on',
-    )
-    for parameter_name in parameter_names:
+    for parameter_name in filter_fields:
         parameter = data.get(parameter_name, None)
         if parameter:
             advanced_args[parameter_name] = parameter
