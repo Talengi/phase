@@ -86,6 +86,11 @@ class Metadata(models.Model):
     document = models.ForeignKey(
         Document,
         unique=True)
+    document_key = models.CharField(
+        _('Document key'),
+        unique=True,
+        db_index=True,
+        max_length=250)
 
     class Meta:
         abstract = True
@@ -149,9 +154,6 @@ class ContractorDeliverable(Metadata):
         null=True)
 
     # General information
-    document_number = models.CharField(
-        verbose_name=u"Document Number",
-        max_length=30)
     title = models.TextField(
         verbose_name=u"Title")
     contract_number = ConfigurableChoiceField(
@@ -295,12 +297,12 @@ class ContractorDeliverable(Metadata):
             'leader', 'approver',
         )
         searchable_fields = (
-            'document_number', 'title', 'status', 'unit', 'discipline',
+            'document_key', 'title', 'status', 'unit', 'discipline',
             'document_type', 'klass', 'contract_number', 'originator',
             'sequencial_number',
         )
         column_fields = (
-            ('Document Number', 'document_number', 'document_number'),
+            ('Document Number', 'document_key', 'document_key'),
             ('Title', 'title', 'title'),
             ('Rev.', 'current_revision', 'latest_revision__revision'),
             ('Rev. Date', 'current_revision_date', 'latest_revision__created_on'),
@@ -308,7 +310,7 @@ class ContractorDeliverable(Metadata):
         )
 
     class Meta:
-        ordering = ('document_number',)
+        ordering = ('document_key',)
         unique_together = (
             (
                 "contract_number", "originator", "unit", "discipline",
@@ -317,15 +319,15 @@ class ContractorDeliverable(Metadata):
         )
 
     def natural_key(self):
-        return self.document_number
+        return self.document_key
 
     def save(self, *args, **kwargs):
         """The document number is generated from multiple fields
 
         if not specified.
         """
-        if not self.document_number:
-            self.document_number = (
+        if not self.document_key:
+            self.document_key = (
                 u"{contract_number}-{originator}-{unit}-{discipline}-"
                 u"{document_type}-{sequencial_number}") \
                 .format(
