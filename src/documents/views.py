@@ -67,6 +67,11 @@ class DocumentListMixin(object):
 
         return qs
 
+    def get_document_class(self):
+        """Returns the document class hosted by this category."""
+        qs = self.get_queryset()
+        return qs.model
+
     def get_serializable_document_list(self, context, total=None):
         """Returns document list data in a json serializable format.
 
@@ -132,7 +137,8 @@ class DocumentList(BaseDocumentList):
             'initial_data': json.dumps(json_data),
             'items_per_page': self.paginate_by,
             'organisation_slug': self.kwargs['organisation'],
-            'category_slug': self.kwargs['category']
+            'category_slug': self.kwargs['category'],
+            'document_class': self.get_document_class(),
         })
         return context
 

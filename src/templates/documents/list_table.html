@@ -1,3 +1,5 @@
+{% load documents %}
+
 <table id="documents" class="table table-condensed table-bordered table-hover table-responsive">
     <thead>
         <tr>
@@ -5,11 +7,7 @@
                 <input type="checkbox" id="select-all" />
             </th>
             <th id="columnfavorite"></th>
-            <th id="columndocument_number" data-sortby="document_number">Document Number <span class="glyphicon glyphicon-chevron-down"></span></th>
-            <th id="columntitle" data-sortby="title">Title <span class=""></span></th>
-            <th id="columncurrent_revision" data-sortby="current_revision">Rev. <span class=""></span></th>
-            <th id="columncurrent_revision_date" data-sortby="current_revision_date">Rev. Date <span class=""></span></th>
-            <th id="columnstatus" data-sortby="status">Status <span class=""></span></th>
+            {% generate_header_markup document_class %}
         </tr>
     </thead>
     <tbody>
@@ -22,11 +20,7 @@
         <tr data-document-id="{{pk}}" data-document-number="{{document_number}}">
             <td class="columnselect"><input type="checkbox" /></td>
             <td class="columnfavorite"><span class="{{../icon}}" data-favorite-id="{{favorite_id}}" title="{{../icon_title}}"></span></td>
-            <td class="document-number">{{document_number}}</td>
-            <td class="columntitle">{{title}}</td>
-            <td>{{current_revision}}</td>
-            <td>{{current_revision_date}}</td>
-            <td>{{status}}</td>
+            {% endverbatim %}{% generate_template_markup document_class %}{% verbatim %}
         </tr>
     </tbody>
 </table>

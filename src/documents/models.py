@@ -100,26 +100,14 @@ class Metadata(models.Model):
         """
         raise NotImplementedError()
 
-    def column_fields(self):
-        """List of columns for document list page.
-
-        Returns a tuple of the form:
-            (
-                ('Column name 1', 'field_name_1'),
-                ('Column name 2', 'field_name_2'),
-            )
-
-        """
-        raise NotImplementedError()
-
     def jsonified(self, document2favorite={}):
         """Returns a list of document values ready to be json-encoded.
 
         The first element of the list is the linkified document number.
         """
         favorited = self.pk in document2favorite.keys()
-        fields_infos = dict((field[1], unicode(field[2]))
-                            for field in self.display_fields())
+        fields_infos = dict((field[1], unicode(getattr(self, field[1])))
+                            for field in self.PhaseConfig.column_fields)
         fields_infos.update({
             u'url': self.document.get_absolute_url(),
             u'number': self.natural_key(),
@@ -311,12 +299,12 @@ class ContractorDeliverable(Metadata):
             'document_type', 'klass', 'contract_number', 'originator',
             'sequencial_number',
         )
-        columns_fields = (
-            ('Document Number', u'document_number'),
-            ('Title', u'title'),
-            ('Rev. Date', u'current_revision_date'),
-            ('Rev.', u'current_revision'),
-            ('Status', u'status'),
+        column_fields = (
+            ('Document Number', 'document_number', 'document_number'),
+            ('Title', 'title', 'title'),
+            ('Rev.', 'current_revision', 'latest_revision__revision'),
+            ('Rev. Date', 'current_revision_date', 'latest_revision__created_on'),
+            ('Status', 'status', 'latest_revision__status'),
         )
 
     class Meta:
@@ -350,15 +338,17 @@ class ContractorDeliverable(Metadata):
                 )
         super(ContractorDeliverable, self).save(*args, **kwargs)
 
-    def display_fields(self):
-        """The list of fields to display in a concise way."""
-        return [
-            (u'Document Number', u'document_number', self.document_number),
-            (u'Title', u'title', self.title),
-            (u'Rev. Date', u'current_revision_date', self.latest_revision.created_on),
-            (u'Rev.', u'current_revision', self.latest_revision.revision),
-            (u'Status', u'status', self.latest_revision.status),
-        ]
+    @property
+    def current_revision(self):
+        return self.latest_revision.revision
+
+    @property
+    def current_revision_date(self):
+        return self.latest_revision.created_on
+
+    @property
+    def status(self):
+        return self.latest_revision.status
 
 
 class ContractorDeliverableRevision(MetadataRevision):
