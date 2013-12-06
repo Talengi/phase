@@ -1,13 +1,24 @@
 from django.db import models
 from django.core.exceptions import ImproperlyConfigured
+from django.db.models.fields import BLANK_CHOICE_DASH
+from django.db.utils import DatabaseError
 
 
 def get_choices_from_list(list_index):
     """Creates a list of values from data in db."""
     from .models import ListEntry
-    values = ListEntry.objects \
-        .filter(values_list__index=list_index) \
-        .values_list('index', 'value')
+    try:
+        values = ListEntry.objects \
+            .filter(values_list__index=list_index) \
+            .values_list('index', 'value')
+
+        # Execute query now, so we can catch any database error
+        # For example if db does not exists, and we are trying to
+        # run manage.py syncdb
+        values = list(values)
+    except DatabaseError:
+        values = BLANK_CHOICE_DASH
+
     return values
 
 
