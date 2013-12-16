@@ -98,6 +98,9 @@ class Metadata(models.Model):
     def __unicode__(self):
         return self.natural_key()
 
+    def get_absolute_url(self):
+        return self.document.get_absolute_url()
+
     def natural_key(self):
         """Returns the natural unique key of the document.
 
