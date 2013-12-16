@@ -22,7 +22,7 @@ class Document(models.Model):
     """A single document base model."""
     objects = DocumentManager()
 
-    document_key = models.CharField(
+    document_key = models.SlugField(
         _('Document key'),
         unique=True,
         db_index=True,
