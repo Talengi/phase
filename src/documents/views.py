@@ -165,10 +165,10 @@ class DocumentFilter(JSONResponseMixin, BaseDocumentList):
         return queryset
 
 
-class DocumentDetail(LoginRequiredMixin, DetailView):
-    model = Document
-    slug_url_kwarg = 'document_number'
-    slug_field = 'document_number'
+class DocumentDetail(LoginRequiredMixin, DocumentListMixin, DetailView):
+    slug_url_kwarg = 'document_key'
+    slug_field = 'document_key'
+    context_object_name = 'document'
 
     def get_object(self):
         """Update the favorite's timestamp for the current user if any."""
