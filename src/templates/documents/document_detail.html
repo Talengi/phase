@@ -14,7 +14,7 @@
                 <a class="btn btn-default" href="{% url "category_document_list" organisation_slug category_slug %}">Cancel</a>
 
                 {% if perms.documents.change_document %}
-                    <a class="btn btn-primary pull-right last-button" href="{% url "document_edit" organisation_slug category_slug document.document_key %}">Edit document</a>
+                    <a class="btn btn-primary pull-right" href="{% url "document_edit" organisation_slug category_slug document.document_key %}">Edit document</a>
                 {% endif %}
             </div>
         </form>
