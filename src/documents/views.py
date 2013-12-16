@@ -199,7 +199,7 @@ class DocumentDetail(LoginRequiredMixin, DocumentFormMixin, DetailView):
         document = context['document']
 
         DocumentForm = self.get_form_class()
-        form = DocumentForm(instance=document)
+        form = DocumentForm(instance=document, read_only=True)
         #for revision in revisions:
         #    revision.form = DocumentRevisionForm(instance=revision)
         ## Add the form to the context to be rendered in a disabled way
