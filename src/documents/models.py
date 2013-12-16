@@ -86,7 +86,7 @@ class Metadata(models.Model):
     document = models.ForeignKey(
         Document,
         unique=True)
-    document_key = models.CharField(
+    document_key = models.SlugField(
         _('Document key'),
         unique=True,
         db_index=True,
