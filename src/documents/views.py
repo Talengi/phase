@@ -21,7 +21,7 @@ from favorites.models import Favorite
 from categories.models import Category
 from documents.models import Document
 from documents.utils import filter_documents, compress_documents
-from documents.forms.models import DocumentForm, DocumentRevisionForm
+from documents.forms.models import documentform_factory
 from documents.forms.utils import DocumentDownloadForm
 from documents.forms.filters import filterform_factory
 
@@ -35,6 +35,14 @@ class DocumentListMixin(object):
     of the correct type.
 
     """
+    def get_context_data(self, **kwargs):
+        context = super(DocumentListMixin, self).get_context_data(**kwargs)
+        context.update({
+            'organisation_slug': self.kwargs['organisation'],
+            'category_slug': self.kwargs['category'],
+        })
+        return context
+
     def get_queryset(self):
         """Get queryset for listing documents.
 
@@ -135,8 +143,6 @@ class DocumentList(BaseDocumentList):
             'documents_active': True,
             'initial_data': json.dumps(json_data),
             'items_per_page': self.paginate_by,
-            'organisation_slug': self.kwargs['organisation'],
-            'category_slug': self.kwargs['category'],
             'document_class': self.get_document_class(),
         })
         return context
@@ -165,10 +171,16 @@ class DocumentFilter(JSONResponseMixin, BaseDocumentList):
         return queryset
 
 
-class DocumentDetail(LoginRequiredMixin, DocumentListMixin, DetailView):
+class DocumentFormMixin(DocumentListMixin):
+    def get_form_class(self):
+        return documentform_factory(self.get_document_class())
+
+
+class DocumentDetail(LoginRequiredMixin, DocumentFormMixin, DetailView):
     slug_url_kwarg = 'document_key'
     slug_field = 'document_key'
     context_object_name = 'document'
+    template_name = 'documents/document_detail.html'
 
     def get_object(self):
         """Update the favorite's timestamp for the current user if any."""
@@ -185,12 +197,15 @@ class DocumentDetail(LoginRequiredMixin, DocumentListMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(DocumentDetail, self).get_context_data(**kwargs)
         document = context['document']
+
+        DocumentForm = self.get_form_class()
+        form = DocumentForm(instance=document)
         #for revision in revisions:
         #    revision.form = DocumentRevisionForm(instance=revision)
         ## Add the form to the context to be rendered in a disabled way
         context.update({
             'is_detail': True,
-            'form': DocumentForm(instance=document),
+            'form': form,
             #'revisions': revisions,
         })
         return context
@@ -227,9 +242,8 @@ class DocumentRevisionMixin(object):
         return url
 
 
-class DocumentCreate(PermissionRequiredMixin, LoginRequiredMixin, DocumentRevisionMixin, CreateView):
+class DocumentCreate(PermissionRequiredMixin, LoginRequiredMixin, DocumentFormMixin, DocumentRevisionMixin, CreateView):
     model = Document
-    form_class = DocumentForm
     permission_required = 'documents.add_document'
 
     def get_context_data(self, **kwargs):
@@ -248,9 +262,8 @@ class DocumentCreate(PermissionRequiredMixin, LoginRequiredMixin, DocumentRevisi
         return url
 
 
-class DocumentEdit(PermissionRequiredMixin, DocumentRevisionMixin, UpdateView):
+class DocumentEdit(PermissionRequiredMixin, DocumentFormMixin, DocumentRevisionMixin, UpdateView):
     model = Document
-    form_class = DocumentForm
     slug_url_kwarg = 'document_key'
     slug_field = 'document_key'
     permission_required = 'documents.change_document'
