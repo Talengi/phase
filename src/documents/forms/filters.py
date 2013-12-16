@@ -26,7 +26,7 @@ class BaseDocumentFilterForm(forms.Form):
 def filterform_factory(model):
     """Dynamicaly create a filter form for the given Metadata model.
 
-    Filter forms can be either located in the Metadata class, or in the
+    Filter fields can be either located in the Metadata class, or in the
     corresponding Revision class.
 
     """
