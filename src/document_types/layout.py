@@ -71,3 +71,20 @@ class ScheduleLayout(LayoutObject):
                 'fields': ' '.join(fields),
                 'form_style': form_style,
             }))
+
+
+class FlatRelatedDocumentsLayout(LayoutObject):
+    template = 'layout/related_documents_list.html'
+
+    def __init__(self, field):
+        self.field = field
+
+    def render(self, form, form_style, context, template_pack=None):
+        documents = form.instance.related_documents.all()
+
+        return render_to_string(
+            self.template,
+            Context({
+                'documents': documents,
+                'form_style': form_style,
+            }))

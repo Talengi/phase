@@ -1,0 +1,13 @@
+<div class="controls controls-row">
+    <div class="form-group {% if form.errors.related_documents %}error{% endif %}">
+        {% if documents.count > 0 %}
+        <ul class="document-list">
+            {% for document in documents %}
+            <li><a href="{{ document.get_absolute_url }}">{{ document }}</a></li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="col-sm-12">No related document</p>
+        {% endif %}
+    </div>
+</div>
