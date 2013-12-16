@@ -209,6 +209,7 @@ THIRD_PARTY_APPS = (
     'south',
     'pipeline',
     'widget_tweaks',
+    'crispy_forms',
 )
 
 # Apps specific for this project go here.
@@ -360,6 +361,8 @@ PAGINATE_BY = 50  # Document list pagination
 CACHE_TIMEOUT_SECONDS = 300  # seconds == 5 minutes
 AUTH_USER_MODEL = 'accounts.User'
 LOGIN_URL = 'login'
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
+CRISPY_FAIL_SILENTLY = False
 
 # Where should revisions' files go
 REVISION_FILES_ROOT = PRIVATE_ROOT.child('documents')
