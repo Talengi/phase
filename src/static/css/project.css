@@ -229,10 +229,6 @@ button.ui-multiselect {
 #document-detail legend {
     padding-top: 50px; /* anchors visible under topbar */
 }
-#document-edit,
-#document-detail {
-    margin-top: -40px; /* first anchor high enough considering legend padding */
-}
 #form-schedule-table tbody td {
     padding-left: 20px;
     padding-right: 20px;

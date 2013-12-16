@@ -1,0 +1,6 @@
+{% load crispy_forms_field %}
+{% if field.errors %}<span class="date-error">{{ field.errors.0 }}</span>{% endif %}
+<div class="controls input-group date {% if field.errors %}error{% endif %}">
+    {% crispy_field field %}
+    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+</div>

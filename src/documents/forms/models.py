@@ -1,7 +1,8 @@
 from django import forms
+from django.core.exceptions import ImproperlyConfigured
 
 from documents.models import Document, MetadataRevision
-from django.forms.models import modelform_factory
+from document_types import forms as document_forms
 from documents.constants import (
     DISCIPLINES, UNITS, DOCUMENT_TYPES, WBS, STATUSES, SYSTEMS,
 )
@@ -10,13 +11,15 @@ from documents.constants import (
 date_attrs = {'class': "datepicker span2", 'data-date-format': "yyyy-mm-dd"}
 
 
-class BaseDocumentForm(forms.Form):
-    pass
-
-
 def documentform_factory(model):
-    """Dynamically create a modelform for the given Metadata model."""
-    return modelform_factory(model)
+    """Gets the given model edition form. """
+    form_class_name = '%sForm' % model.__name__
+    try:
+        DocumentForm = getattr(document_forms, form_class_name)
+    except AttributeError:
+        raise ImproperlyConfigured('Cannot find class %s' % form_class_name)
+
+    return DocumentForm
 
 
 class DocumentForm(forms.ModelForm):
