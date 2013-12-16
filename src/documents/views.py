@@ -215,23 +215,23 @@ class DocumentRevisionMixin(object):
     """
     Deal with revisions' auto-creation on model creation/edition.
     """
-    def form_valid(self, form):
-        self.object = form.save()
-        # Deal with the new revision if any
-        data = form.cleaned_data
-        current_revision = data['current_revision']
-        if not DocumentRevision.objects.filter(
-            revision=current_revision,
-            document=self.object
-        ).exists():
-            DocumentRevision.objects.create(
-                document=self.object,
-                revision=current_revision,
-                revision_date=data['current_revision_date'],
-                native_file=data['native_file'],
-                pdf_file=data['pdf_file'],
-            )
-        return http.HttpResponseRedirect(self.get_success_url())
+    #def form_valid(self, form):
+    #    self.object = form.save()
+    #    # Deal with the new revision if any
+    #    data = form.cleaned_data
+    #    current_revision = data['current_revision']
+    #    if not DocumentRevision.objects.filter(
+    #        revision=current_revision,
+    #        document=self.object
+    #    ).exists():
+    #        DocumentRevision.objects.create(
+    #            document=self.object,
+    #            revision=current_revision,
+    #            revision_date=data['current_revision_date'],
+    #            native_file=data['native_file'],
+    #            pdf_file=data['pdf_file'],
+    #        )
+    #    return http.HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
         """Redirect to a different URL given the button clicked by the user."""
