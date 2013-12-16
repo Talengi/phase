@@ -9,40 +9,40 @@
 
 {% block content %}
     <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
-      <h2>{{ is_edit|yesno:"Edit,New" }} document</h2>
-      <form action="."
-            method="post"
-            class=""
-            enctype="multipart/form-data"
-            id="document-edit">
-          {% csrf_token %}
-          {% if form.non_field_errors %}
-              <div class="alert alert-danger">
-                  <p><strong>Please fix this error:</strong> {{ form.non_field_errors.0 }}</p>
-              </div>
-          {% endif %}
-          {% crispy form form.helper %}
+        <h2>{{ is_edit|yesno:"Edit,New" }} document</h2>
+        <form action="."
+              method="post"
+              class=""
+              enctype="multipart/form-data"
+              id="document-edit">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    <p><strong>Please fix this error:</strong> {{ form.non_field_errors.0 }}</p>
+                </div>
+            {% endif %}
+            {% crispy form form.helper %}
 
-          <div class="form-actions">
-              <a class="btn btn-default pull-left" href="{% url "category_list" %}">Cancel</a>
-              <input class="btn btn-primary pull-right last-button"
-                     type="submit"
-                     value="Save and close"
-                     name="save-close">
-              {% if is_edit %}
-                  <input class="btn btn-info pull-right"
-                         type="submit"
-                         value="Save"
-                         name="save-view">
-              {% else %}
-                  <input class="btn btn-info pull-right"
-                         type="submit"
-                         value="Save and create another document"
-                         name="save-create">
-              {% endif %}
-          </div>
-      </form>
-  </div>
+            <div class="form-actions">
+                <a class="btn btn-default pull-left" href="{% url "category_list" %}">Cancel</a>
+                <input class="btn btn-primary pull-right last-button"
+                       type="submit"
+                       value="Save and close"
+                       name="save-close">
+                {% if is_edit %}
+                    <input class="btn btn-info pull-right"
+                           type="submit"
+                           value="Save"
+                           name="save-view">
+                {% else %}
+                    <input class="btn btn-info pull-right"
+                           type="submit"
+                           value="Save and create another document"
+                           name="save-create">
+                {% endif %}
+            </div>
+        </form>
+    </div>
 {% endblock content %}
 
 {% block extra_js %}
