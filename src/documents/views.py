@@ -268,6 +268,7 @@ class DocumentEdit(PermissionRequiredMixin, DocumentFormMixin, DocumentRevisionM
     slug_field = 'document_key'
     permission_required = 'documents.change_document'
     template_name = 'documents/document_form.html'
+    context_object_name = 'document'
 
     def get_context_data(self, **kwargs):
         context = super(DocumentEdit, self).get_context_data(**kwargs)
