@@ -21,7 +21,7 @@ class ContractorDeliverableForm(forms.ModelForm):
             'unit',
             'discipline',
             'document_type',
-            #'sequential_number',  # TODO typo
+            'sequential_number',
             'project_phase',
             'klass',
             'system',

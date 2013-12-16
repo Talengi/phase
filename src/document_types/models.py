@@ -44,8 +44,8 @@ class ContractorDeliverable(Metadata):
         default="PID",
         max_length=3,
         list_index='DOCUMENT_TYPES')
-    sequencial_number = models.CharField(
-        verbose_name=u"Sequencial Number",
+    sequential_number = models.CharField(
+        verbose_name=u"sequential Number",
         default=u"0001",
         max_length=4,
         choices=SEQUENTIAL_NUMBERS)
@@ -163,7 +163,7 @@ class ContractorDeliverable(Metadata):
         searchable_fields = (
             'document_key', 'title', 'status', 'unit', 'discipline',
             'document_type', 'klass', 'contract_number', 'originator',
-            'sequencial_number',
+            'sequential_number',
         )
         column_fields = (
             ('Document Number', 'document_key', 'document_key'),
@@ -178,7 +178,7 @@ class ContractorDeliverable(Metadata):
         unique_together = (
             (
                 "contract_number", "originator", "unit", "discipline",
-                "document_type", "sequencial_number",
+                "document_type", "sequential_number",
             ),
         )
 
@@ -193,14 +193,14 @@ class ContractorDeliverable(Metadata):
         if not self.document_key:
             self.document_key = (
                 u"{contract_number}-{originator}-{unit}-{discipline}-"
-                u"{document_type}-{sequencial_number}") \
+                u"{document_type}-{sequential_number}") \
                 .format(
                     contract_number=self.contract_number,
                     originator=self.originator,
                     unit=self.unit,
                     discipline=self.discipline,
                     document_type=self.document_type,
-                    sequencial_number=self.sequencial_number
+                    sequential_number=self.sequential_number
                 )
         super(ContractorDeliverable, self).save(*args, **kwargs)
 
@@ -319,8 +319,8 @@ class Transmittals(Metadata):
         default="PID",
         max_length=3,
         list_index='DOCUMENT_TYPES')
-    sequencial_number = models.CharField(
-        _('Sequencial Number'),
+    sequential_number = models.CharField(
+        _('Sequential Number'),
         default=u"0001",
         max_length=4,
         choices=SEQUENTIAL_NUMBERS)
