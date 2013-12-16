@@ -1,12 +1,22 @@
 from django import forms
 
 from documents.models import Document, MetadataRevision
+from django.forms.models import modelform_factory
 from documents.constants import (
     DISCIPLINES, UNITS, DOCUMENT_TYPES, WBS, STATUSES, SYSTEMS,
 )
 
 
 date_attrs = {'class': "datepicker span2", 'data-date-format': "yyyy-mm-dd"}
+
+
+class BaseDocumentForm(forms.Form):
+    pass
+
+
+def documentform_factory(model):
+    """Dynamically create a modelform for the given Metadata model."""
+    return modelform_factory(model)
 
 
 class DocumentForm(forms.ModelForm):
