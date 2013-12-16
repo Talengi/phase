@@ -13,7 +13,7 @@
   "fields": {
     "name": "Contractor deliverables",
     "slug": "contractor-deliverables",
-    "metadata_model": ["documents", "contractordeliverable"]
+    "metadata_model": ["document_types", "contractordeliverable"]
   }
 },
 {
@@ -22,7 +22,7 @@
   "fields": {
     "name": "Correspondances",
     "slug": "correspondances",
-    "metadata_model": ["documents", "contractordeliverable"]
+    "metadata_model": ["document_types", "contractordeliverable"]
   }
 },
 {

@@ -185,15 +185,13 @@ class DocumentDetail(LoginRequiredMixin, DocumentListMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(DocumentDetail, self).get_context_data(**kwargs)
         document = context['document']
-        # Attach a form for each revision linked to the current document
-        revisions = document.documentrevision_set.all()
-        for revision in revisions:
-            revision.form = DocumentRevisionForm(instance=revision)
-        # Add the form to the context to be rendered in a disabled way
+        #for revision in revisions:
+        #    revision.form = DocumentRevisionForm(instance=revision)
+        ## Add the form to the context to be rendered in a disabled way
         context.update({
             'is_detail': True,
             'form': DocumentForm(instance=document),
-            'revisions': revisions,
+            #'revisions': revisions,
         })
         return context
 
@@ -253,8 +251,8 @@ class DocumentCreate(PermissionRequiredMixin, LoginRequiredMixin, DocumentRevisi
 class DocumentEdit(PermissionRequiredMixin, DocumentRevisionMixin, UpdateView):
     model = Document
     form_class = DocumentForm
-    slug_url_kwarg = 'document_number'
-    slug_field = 'document_number'
+    slug_url_kwarg = 'document_key'
+    slug_field = 'document_key'
     permission_required = 'documents.change_document'
 
     def get_context_data(self, **kwargs):
