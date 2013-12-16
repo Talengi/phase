@@ -73,7 +73,7 @@ class DocumentListMixin(object):
     def get_serializable_document_list(self, context, total=None):
         """Returns document list data in a json serializable format.
 
-        TODO The conceptual purity of this API is not really satisfaying.
+        TODO The conceptual purity of this API is not really satisfying.
         Let's rewrite it some day.
 
         """
