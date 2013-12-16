@@ -173,17 +173,13 @@ class DocumentDetail(LoginRequiredMixin, DocumentListMixin, DetailView):
     def get_object(self):
         """Update the favorite's timestamp for the current user if any."""
         document = super(DocumentDetail, self).get_object()
-        if self.request.user.is_authenticated():
-            try:
-                favorite = Favorite.objects.get(
-                    document=document,
-                    user=self.request.user
-                )
-            except Favorite.DoesNotExist:
-                favorite = None
-            if favorite:
-                favorite.last_view_date = datetime.now()
-                favorite.save()
+
+        # Upgrade last time the favorite was last seen
+        # If not favorited, the query does nothing and it's ok
+        Favorite.objects \
+            .filter(document=document.document) \
+            .filter(user=self.request.user) \
+            .update(last_view_date=datetime.now())
         return document
 
     def get_context_data(self, **kwargs):
