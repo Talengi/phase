@@ -57,6 +57,9 @@ class Document(models.Model):
         verbose_name = _('Document')
         verbose_name_plural = _('Documents')
 
+    def __unicode__(self):
+        return self.document_key
+
     def save(self, *args, **kwargs):
         if self.pk is None:
             # This is a document creation
