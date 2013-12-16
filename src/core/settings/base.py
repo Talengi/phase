@@ -214,6 +214,7 @@ THIRD_PARTY_APPS = (
 # Apps specific for this project go here.
 LOCAL_APPS = (
     'documents',
+    'document_types',
     'accounts',
     'categories',
     'metadata',
