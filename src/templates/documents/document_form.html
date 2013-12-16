@@ -24,7 +24,7 @@
             {% crispy form form.helper %}
 
             <div class="form-actions">
-                <a class="btn btn-default pull-left" href="{% url "category_list" %}">Cancel</a>
+                <a class="btn btn-default" href="{% url "document_detail" organisation_slug category_slug document.document_key %}">Cancel</a>
                 <input class="btn btn-primary pull-right last-button"
                        type="submit"
                        value="Save and close"
