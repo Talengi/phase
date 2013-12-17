@@ -216,6 +216,19 @@ class ContractorDeliverable(Metadata):
     def status(self):
         return self.latest_revision.status
 
+    def get_all_revisions(self):
+        """Return all revisions data of this document."""
+        Revision = self.get_revision_class()
+        revisions = Revision.objects \
+            .filter(document=self.document) \
+            .select_related(
+                'document',
+                'document__category__organisation',
+                'leader',
+                'approver',
+            )
+        return revisions
+
 
 class ContractorDeliverableRevision(MetadataRevision):
     # Revision

@@ -107,13 +107,7 @@ class Metadata(models.Model):
         Revision = self.get_revision_class()
         revisions = Revision.objects \
             .filter(document=self.document) \
-            .select_related(
-                'document',
-                'document__category__organisation',
-                'leader',
-                'approver',
-            ) \
-            .prefetch_related('reviewers')
+            .select_related('document')
         return revisions
 
     def natural_key(self):
