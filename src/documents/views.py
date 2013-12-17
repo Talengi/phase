@@ -194,7 +194,7 @@ class DocumentFormMixin(DocumentListMixin):
         return documentform_factory(self.get_document_class())
 
     def get_revisionform_class(self):
-        document = self.get_object()
+        document = self.object
         return documentform_factory(document.get_revision_class())
 
 
