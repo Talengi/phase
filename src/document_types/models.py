@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
+from django.template.defaultfilters import slugify
 
 from metadata.fields import ConfigurableChoiceField
 from accounts.models import User
@@ -191,7 +191,7 @@ class ContractorDeliverable(Metadata):
         if not specified.
         """
         if not self.document_key:
-            self.document_key = (
+            self.document_key = slugify(
                 u"{contract_number}-{originator}-{unit}-{discipline}-"
                 u"{document_type}-{sequential_number}") \
                 .format(

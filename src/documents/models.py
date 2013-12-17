@@ -5,6 +5,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
+from django.core.urlresolvers import reverse
 
 
 from metadata.fields import ConfigurableChoiceField
@@ -68,11 +69,9 @@ class Document(models.Model):
             pass
         super(Document, self).save(*args, **kwargs)
 
-    @models.permalink
     def get_absolute_url(self):
-        return ('document_short_url', [
-            self.document_key,
-        ])
+        # TODO Return short or long url depending on loaded foreign key
+        return reverse('document_short_url', args=[self.document_key])
 
     def natural_key(self):
         # You MUST return a tuple here to prevent this bug
