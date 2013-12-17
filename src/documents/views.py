@@ -6,15 +6,15 @@ try:
 except ImportError:
     from urllib import unquote
 
-from django import http
 from django.conf import settings
 from django.core.cache import cache
 from django.http import HttpResponse, Http404
 from django.core.servers.basehttp import FileWrapper
 from django.views.generic import (
-    View, ListView, CreateView, DetailView, UpdateView)
+    View, ListView, CreateView, DetailView, UpdateView, RedirectView)
 from django.core.urlresolvers import reverse
 from django.views.static import serve
+from django.shortcuts import get_object_or_404
 from braces.views import JSONResponseMixin
 
 from favorites.models import Favorite
@@ -169,6 +169,23 @@ class DocumentFilter(JSONResponseMixin, BaseDocumentList):
             else:
                 raise Exception(form.errors)
         return queryset
+
+
+class DocumentRedirect(RedirectView):
+    """Redirects from short document url to full url."""
+
+    permanent = False  # document location can change
+
+    def get_redirect_url(self, **kwargs):
+        key = kwargs.get('document_key')
+        qs = Document.objects.select_related(
+            'category__organisation',
+            'category__category_template')
+        document = get_object_or_404(qs, document_key=key)
+        return reverse('document_detail', args=[
+            document.category.organisation.slug,
+            document.category.slug,
+            document.document_key])
 
 
 class DocumentFormMixin(DocumentListMixin):
