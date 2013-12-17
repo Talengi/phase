@@ -99,6 +99,24 @@ class Metadata(models.Model):
     def get_absolute_url(self):
         return self.document.get_absolute_url()
 
+    def get_revision_class(self):
+        """Return the class of the associated revision model."""
+        return self._meta.get_field('latest_revision').rel.to
+
+    def get_all_revisions(self):
+        """Return all revisions data of this document."""
+        Revision = self.get_revision_class()
+        revisions = Revision.objects \
+            .filter(document=self.document) \
+            .select_related(
+                'document',
+                'document__category__organisation',
+                'leader',
+                'approver',
+            ) \
+            .prefetch_related('reviewers')
+        return revisions
+
     def natural_key(self):
         """Returns the natural unique key of the document.
 
