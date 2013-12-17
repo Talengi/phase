@@ -70,9 +70,7 @@ class Document(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('document_detail', [
-            self.category.organisation.slug,
-            self.category.slug,
+        return ('document_short_url', [
             self.document_key,
         ])
 
