@@ -193,6 +193,10 @@ class DocumentFormMixin(DocumentListMixin):
     def get_form_class(self):
         return documentform_factory(self.get_document_class())
 
+    def get_revisionform_class(self):
+        document = self.get_object()
+        return documentform_factory(document.get_revision_class())
+
 
 class DocumentDetail(LoginRequiredMixin, DocumentFormMixin, DetailView):
     slug_url_kwarg = 'document_key'
@@ -219,13 +223,15 @@ class DocumentDetail(LoginRequiredMixin, DocumentFormMixin, DetailView):
 
         DocumentForm = self.get_form_class()
         form = DocumentForm(instance=document, read_only=True)
-        #for revision in revisions:
-        #    revision.form = DocumentRevisionForm(instance=revision)
-        ## Add the form to the context to be rendered in a disabled way
+
+        revisions = document.get_all_revisions()
+        RevisionForm = self.get_revisionform_class()
+        for revision in revisions:
+            revision.form = RevisionForm(instance=revision)
         context.update({
             'is_detail': True,
             'form': form,
-            #'revisions': revisions,
+            'revisions': revisions,
         })
         return context
 

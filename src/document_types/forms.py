@@ -4,7 +4,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset
 
 from documents.forms.models import BaseDocumentForm
-from .models import ContractorDeliverable
+from .models import ContractorDeliverable, ContractorDeliverableRevision
 from .layout import (
     ScheduleLayout, ScheduleStatusLayout, FlatRelatedDocumentsLayout)
 
@@ -65,3 +65,40 @@ class ContractorDeliverableForm(BaseDocumentForm):
     class Meta:
         model = ContractorDeliverable
         exclude = ('document', 'latest_revision')
+
+
+class ContractorDeliverableRevisionForm(BaseDocumentForm):
+    def __init__(self, *args, **kwargs):
+        super(ContractorDeliverableRevisionForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.layout = self.build_layout()
+
+    def build_layout(self):
+        return Layout(
+            Fieldset(
+                _('Revision'),
+                'status',
+                #'revision_date',
+                #'created_on',
+                'final_revision',
+                'native_file',
+                'pdf_file',
+            ),
+            Fieldset(
+                _('Review'),
+                'review_start_date',
+                'review_due_date',
+                #'under_review',
+                #'under_contractor_review',
+                #'overdue',
+                #'reviewers',
+                #'leader',
+                #'approver',
+                #'under_gtg_review',
+            )
+        )
+
+    class Meta:
+        model = ContractorDeliverableRevision
+        exclude = ('revision', 'document')

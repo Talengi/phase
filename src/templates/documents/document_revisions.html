@@ -1,0 +1,21 @@
+{% load compressed crispy_forms_tags %}
+
+{% if revisions %}
+<ul class="nav nav-tabs">
+{% for revision in revisions %}
+    <li{% if forloop.first %} class="active"{% endif %}>
+        <a href="#tab{{ forloop.counter }}" data-toggle="tab">
+            Revision {{ revision.revision }}
+        </a>
+    </li>
+{% endfor %}
+</ul>
+
+<div class="tab-content">
+{% for revision in revisions %}
+    <div class="tab-pane{% if forloop.first %} active{% endif %}" id="tab{{ forloop.counter }}">
+        {% crispy revision.form revision.form.helper %}
+    </div>
+{% endfor %}
+</div>
+{% endif %}
