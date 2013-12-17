@@ -89,13 +89,13 @@ class ContractorDeliverableRevisionForm(BaseDocumentForm):
                 _('Review'),
                 'review_start_date',
                 'review_due_date',
-                #'under_review',
-                #'under_contractor_review',
-                #'overdue',
-                #'reviewers',
-                #'leader',
-                #'approver',
-                #'under_gtg_review',
+                'under_review',
+                'under_contractor_review',
+                'overdue',
+                'reviewers',
+                'leader',
+                'approver',
+                'under_gtg_review',
             )
         )
 
