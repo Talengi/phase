@@ -267,26 +267,6 @@ class DocumentRevisionMixin(object):
         return url
 
 
-class DocumentCreate(PermissionRequiredMixin, LoginRequiredMixin, DocumentFormMixin, DocumentRevisionMixin, CreateView):
-    model = Document
-    permission_required = 'documents.add_document'
-
-    def get_context_data(self, **kwargs):
-        context = super(DocumentCreate, self).get_context_data(**kwargs)
-        context.update({
-            'document_create': True,
-        })
-        return context
-
-    def get_success_url(self):
-        """Redirect to a different URL given the button clicked by the user."""
-        if "save-create" in self.request.POST:
-            url = reverse('document_create')
-        else:
-            url = reverse('category_list')
-        return url
-
-
 class DocumentEdit(PermissionRequiredMixin, DocumentFormMixin, DocumentRevisionMixin, UpdateView):
     model = Document
     slug_url_kwarg = 'document_key'
@@ -307,6 +287,26 @@ class DocumentEdit(PermissionRequiredMixin, DocumentFormMixin, DocumentRevisionM
         """Redirect to a different URL given the button clicked by the user."""
         if "save-view" in self.request.POST:
             url = self.object.get_absolute_url()
+        else:
+            url = reverse('category_list')
+        return url
+
+
+class DocumentCreate(PermissionRequiredMixin, LoginRequiredMixin, DocumentFormMixin, DocumentRevisionMixin, CreateView):
+    model = Document
+    permission_required = 'documents.add_document'
+
+    def get_context_data(self, **kwargs):
+        context = super(DocumentCreate, self).get_context_data(**kwargs)
+        context.update({
+            'document_create': True,
+        })
+        return context
+
+    def get_success_url(self):
+        """Redirect to a different URL given the button clicked by the user."""
+        if "save-create" in self.request.POST:
+            url = reverse('document_create')
         else:
             url = reverse('category_list')
         return url
