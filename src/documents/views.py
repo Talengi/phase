@@ -52,16 +52,17 @@ class DocumentListMixin(object):
         organisation_slug = self.kwargs['organisation']
         category_slug = self.kwargs['category']
 
-        try:
-            category = Category.objects \
-                .select_related('category_template__metadata_model') \
-                .get(users=self.request.user,
-                     organisation__slug=organisation_slug,
-                     category_template__slug=category_slug)
-        except Category.DoesNotExist:
-            raise Http404('Category not found')
+        if not hasattr(self, 'category'):
+            try:
+                self.category = Category.objects \
+                    .select_related('category_template__metadata_model') \
+                    .get(users=self.request.user,
+                         organisation__slug=organisation_slug,
+                         category_template__slug=category_slug)
+            except Category.DoesNotExist:
+                raise Http404('Category not found')
 
-        DocumentClass = category.category_template.metadata_model.model_class()
+        DocumentClass = self.category.category_template.metadata_model.model_class()
         qs = DocumentClass.objects \
             .select_related(
                 'latest_revision',
@@ -69,7 +70,7 @@ class DocumentListMixin(object):
                 'document__category',
                 'document__category__category_template',
                 'document__category__organisation') \
-            .filter(document__category=category)
+            .filter(document__category=self.category)
 
         return qs
 
