@@ -384,7 +384,7 @@ class DocumentCreate(PermissionRequiredMixin,
         self.object = document_form.save(commit=False)
 
         document = Document.objects.create(
-            document_key=self.object.document_key,
+            document_key=self.object.generate_document_key(),
             category=self.category,
             current_revision=self.revision.revision,
             current_revision_date=datetime.now(),

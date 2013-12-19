@@ -16,6 +16,9 @@ class ContractorDeliverableForm(BaseDocumentForm):
         self.helper.form_tag = False
         self.helper.layout = self.build_layout()
 
+        # Document key is automatically generated, this field should not be required
+        self.fields['document_key'].required = False
+
     def build_layout(self):
         if self.read_only:
             related_documents = Fieldset(
@@ -63,6 +66,7 @@ class ContractorDeliverableForm(BaseDocumentForm):
 
     class Meta:
         model = ContractorDeliverable
+        exclude = ('document', 'latest_revision')
 
 
 class ContractorDeliverableRevisionForm(BaseDocumentForm):
@@ -99,3 +103,5 @@ class ContractorDeliverableRevisionForm(BaseDocumentForm):
 
     class Meta:
         model = ContractorDeliverableRevision
+        exclude = ('document', 'revision', 'revision_date', 'created_on',
+                   'updated_on')
