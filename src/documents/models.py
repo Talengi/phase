@@ -98,6 +98,16 @@ class Metadata(models.Model):
     def get_absolute_url(self):
         return self.document.get_absolute_url()
 
+    def save(self, *args, **kwargs):
+        """Make sure the document as a document key."""
+        if not self.document_key:
+            self.document_key = self.generate_document_key()
+        super(Metadata, self).save(*args, **kwargs)
+
+    def generate_document_key(self):
+        """Returns a uniquely identifying key."""
+        raise NotImplementedError()
+
     def get_revision_class(self):
         """Return the class of the associated revision model."""
         return self._meta.get_field('latest_revision').rel.to

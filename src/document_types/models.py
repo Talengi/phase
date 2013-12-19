@@ -185,24 +185,18 @@ class ContractorDeliverable(Metadata):
     def natural_key(self):
         return self.document_key
 
-    def save(self, *args, **kwargs):
-        """The document number is generated from multiple fields
-
-        if not specified.
-        """
-        if not self.document_key:
-            self.document_key = slugify(
-                u"{contract_number}-{originator}-{unit}-{discipline}-"
-                u"{document_type}-{sequential_number}") \
-                .format(
-                    contract_number=self.contract_number,
-                    originator=self.originator,
-                    unit=self.unit,
-                    discipline=self.discipline,
-                    document_type=self.document_type,
-                    sequential_number=self.sequential_number
-                )
-        super(ContractorDeliverable, self).save(*args, **kwargs)
+    def generate_document_key(self):
+        return slugify(
+            u"{contract_number}-{originator}-{unit}-{discipline}-"
+            u"{document_type}-{sequential_number}"
+            .format(
+                contract_number=self.contract_number,
+                originator=self.originator,
+                unit=self.unit,
+                discipline=self.discipline,
+                document_type=self.document_type,
+                sequential_number=self.sequential_number
+            ))
 
     @property
     def current_revision(self):
