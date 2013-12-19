@@ -161,7 +161,7 @@ class ContractorDeliverable(Metadata):
             'leader', 'approver',
         )
         searchable_fields = (
-            'document_key', 'title', 'status', 'unit', 'discipline',
+            'document_key', 'title', 'unit', 'discipline',
             'document_type', 'klass', 'contract_number', 'originator',
             'sequential_number',
         )
