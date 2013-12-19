@@ -110,6 +110,15 @@ class Metadata(models.Model):
             .select_related('document')
         return revisions
 
+    def get_revision(self, revision):
+        """Returns the rivision with the specified number."""
+        Revision = self.get_revision_class()
+        revision = Revision.objects \
+            .filter(document=self.document) \
+            .select_related('document') \
+            .get(revision=revision)
+        return revision
+
     def natural_key(self):
         """Returns the natural unique key of the document.
 
