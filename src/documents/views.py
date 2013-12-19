@@ -19,6 +19,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.views.static import serve
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
+from django.db import transaction
 from braces.views import JSONResponseMixin
 
 from favorites.models import Favorite
@@ -202,6 +203,13 @@ class DocumentFormMixin(DocumentListMixin):
     def get_revisionform_class(self):
         """Get the correct revision form edition form class."""
         document = self.object
+
+        # If there is no document (e.g when creating a new document)
+        # we need to create a dummy object just to get the associated
+        # revision class. TODO find a better way to do this
+        if not document:
+            document = self.get_document_class()()
+
         return documentform_factory(document.get_revision_class())
 
     def get_forms(self):
@@ -230,20 +238,6 @@ class DocumentFormMixin(DocumentListMixin):
 
         return revision
 
-    def form_valid(self, document_form, revision_form):
-        """Saves both the document and it's revision."""
-        self.revision = revision_form.save()
-        self.object = document_form.save()
-
-        return HttpResponseRedirect(self.get_success_url())
-
-    def form_invalid(self, document_form, revision_form):
-        """Render the form with errors."""
-        return self.render_to_response(self.get_context_data(
-            document_form=document_form,
-            revision_form=revision_form
-        ))
-
 
 class BaseDocumentFormView(DocumentFormMixin,
                            SingleObjectTemplateResponseMixin,
@@ -264,6 +258,20 @@ class BaseDocumentFormView(DocumentFormMixin,
             return self.form_valid(document_form, revision_form)
         else:
             return self.form_invalid(document_form, revision_form)
+
+    def form_valid(self, document_form, revision_form):
+        """Saves both the document and it's revision."""
+        self.revision = revision_form.save()
+        self.object = document_form.save()
+
+        return HttpResponseRedirect(self.get_success_url())
+
+    def form_invalid(self, document_form, revision_form):
+        """Render the form with errors."""
+        return self.render_to_response(self.get_context_data(
+            document_form=document_form,
+            revision_form=revision_form
+        ))
 
 
 class DocumentDetail(LoginRequiredMixin, DocumentFormMixin, DetailView):
@@ -319,13 +327,11 @@ class DocumentEdit(PermissionRequiredMixin,
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         self.revision = self.get_revision()
-
         return super(DocumentEdit, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         self.revision = self.get_revision()
-
         return super(DocumentEdit, self).post(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -350,20 +356,19 @@ class DocumentEdit(PermissionRequiredMixin,
 
 class DocumentCreate(PermissionRequiredMixin,
                      BaseDocumentFormView):
-    model = Document
     permission_required = 'documents.add_document'
+    context_object_name = 'document'
+    template_name = 'documents/document_form.html'
 
     def get(self, request, *args, **kwargs):
         self.object = None
         self.revision = None
-
-        return super(DocumentEdit, self).get(request, *args, **kwargs)
+        return super(DocumentCreate, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         self.object = None
         self.revision = None
-
-        return super(DocumentEdit, self).post(request, *args, **kwargs)
+        return super(DocumentCreate, self).post(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(DocumentCreate, self).get_context_data(**kwargs)
@@ -372,12 +377,40 @@ class DocumentCreate(PermissionRequiredMixin,
         })
         return context
 
+    @transaction.atomic
+    def form_valid(self, document_form, revision_form):
+        """Saves both the document and it's revision."""
+        self.revision = revision_form.save(commit=False)
+        self.object = document_form.save(commit=False)
+
+        document = Document.objects.create(
+            document_key=self.object.document_key,
+            category=self.category,
+            current_revision=self.revision.revision,
+            current_revision_date=datetime.now(),
+            metadata=self.category.category_template.metadata_model)
+
+        self.revision.document = document
+        self.revision.save()
+
+        self.object.document = document
+        self.object.latest_revision = self.revision
+        self.object.save()
+
+        return HttpResponseRedirect(self.get_success_url())
+
     def get_success_url(self):
         """Redirect to a different URL given the button clicked by the user."""
         if "save-create" in self.request.POST:
-            url = reverse('document_create')
+            url = reverse('document_create', args=[
+                self.kwargs['organisation'],
+                self.kwargs['category']
+            ])
         else:
-            url = reverse('category_list')
+            url = reverse('category_document_list', args=[
+                self.kwargs['organisation'],
+                self.kwargs['category']
+            ])
         return url
 
 
