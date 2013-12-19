@@ -8,13 +8,15 @@ except ImportError:
 
 from django.conf import settings
 from django.core.cache import cache
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.core.servers.basehttp import FileWrapper
 from django.views.generic import (
-    View, ListView, CreateView, DetailView, UpdateView, RedirectView)
+    View, UpdateView, ListView, CreateView, DetailView, RedirectView,)
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ObjectDoesNotExist
 from django.views.static import serve
 from django.shortcuts import get_object_or_404
+from django.utils.translation import ugettext_lazy as _
 from braces.views import JSONResponseMixin
 
 from favorites.models import Favorite
@@ -198,6 +200,19 @@ class DocumentFormMixin(DocumentListMixin):
         document = self.object
         return documentform_factory(document.get_revision_class())
 
+    def get_forms(self):
+        """Returns both the document and revision forms."""
+        kwargs = self.get_form_kwargs()
+
+        document_form_class = self.get_form_class()
+        document_form = document_form_class(**kwargs)
+
+        kwargs.update({'instance': self.revision})
+        revision_form_class = self.get_revisionform_class()
+        revision_form = revision_form_class(**kwargs)
+
+        return document_form, revision_form
+
 
 class DocumentDetail(LoginRequiredMixin, DocumentFormMixin, DetailView):
     slug_url_kwarg = 'document_key'
@@ -268,13 +283,61 @@ class DocumentRevisionMixin(object):
         return url
 
 
-class DocumentEdit(PermissionRequiredMixin, DocumentFormMixin, DocumentRevisionMixin, UpdateView):
-    model = Document
+class DocumentEdit(PermissionRequiredMixin,
+                   DocumentFormMixin,
+                   UpdateView):
+    """Edit a document and a selected revision."""
+    permission_required = 'documents.change_document'
     slug_url_kwarg = 'document_key'
     slug_field = 'document_key'
-    permission_required = 'documents.change_document'
-    template_name = 'documents/document_form.html'
     context_object_name = 'document'
+    template_name = 'documents/document_form.html'
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.revision = self.get_revision()
+
+        document_form, revision_form = self.get_forms()
+        return self.render_to_response(self.get_context_data(
+            document_form=document_form,
+            revision_form=revision_form
+        ))
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.revision = self.get_revision()
+
+        document_form, revision_form = self.get_forms()
+        if document_form.is_valid() and revision_form.is_valid():
+            return self.form_valid(document_form, revision_form)
+        else:
+            return self.form_invalid(document_form, revision_form)
+
+    def get_revision(self):
+        """Get the edited revision."""
+        revision_number = self.kwargs.get('revision', None)
+        if revision_number:
+            try:
+                revision = self.object.get_revision(revision_number)
+            except ObjectDoesNotExist:
+                raise Http404(_('This revision does not exist'))
+        else:
+            revision = self.object.latest_revision
+
+        return revision
+
+    def form_valid(self, document_form, revision_form):
+        self.revision = revision_form.save()
+        self.object = document_form.save()
+
+        return HttpResponseRedirect(self.get_success_url())
+
+    def form_invalid(self, document_form, revision_form):
+        """Render the form with errors."""
+        return self.render_to_response(self.get_context_data(
+            document_form=document_form,
+            revision_form=revision_form
+        ))
 
     def get_context_data(self, **kwargs):
         context = super(DocumentEdit, self).get_context_data(**kwargs)
@@ -293,7 +356,7 @@ class DocumentEdit(PermissionRequiredMixin, DocumentFormMixin, DocumentRevisionM
         return url
 
 
-class DocumentCreate(PermissionRequiredMixin, LoginRequiredMixin, DocumentFormMixin, DocumentRevisionMixin, CreateView):
+class DocumentCreate(PermissionRequiredMixin, DocumentFormMixin, CreateView):
     model = Document
     permission_required = 'documents.add_document'
 

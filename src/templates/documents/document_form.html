@@ -21,8 +21,9 @@
                     <p><strong>Please fix this error:</strong> {{ form.non_field_errors.0 }}</p>
                 </div>
             {% endif %}
-            {% crispy form form.helper %}
-            {% include 'documents/document_revisions.html' with revisions=revisions %}
+            {% crispy document_form document_form.helper %}
+            <h2>{{ _('Revisable data') }}</h2>
+            {% crispy revision_form revision_form.helper %}
 
             <div class="form-actions">
                 <a class="btn btn-default" href="{% url "document_detail" organisation_slug category_slug document.document_key %}">Cancel</a>
