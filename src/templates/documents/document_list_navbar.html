@@ -31,28 +31,15 @@
             <span class="glyphicon glyphicon-download glyphicon-white"></span> Download
        </button>
 
-        {% block createdocument %}
-        {% load cache %}
-        {% cache 500 custom_navbar_actions request.user.email %}
         {% if perms.documents.add_document %}
         <div class="hidden-xs hidden-sm">
-        <div class="btn-group ">
-            <button type="button" class="btn btn-primary navbar-btn dropdown-toggle" data-toggle="dropdown">
-                <span class="glyphicon glyphicon-plus icon-white"></span> New document <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu">
-                <li><a href="{% url "document_create" organisation_slug category_slug %}">Contractor deliverable</a></li>
-                <li><a href="{% url "document_create" organisation_slug category_slug %}">Vendor deliverable</a></li>
-                <li><a href="{% url "document_create" organisation_slug category_slug %}">Correspondence</a></li>
-                <li><a href="{% url "document_create" organisation_slug category_slug %}">Minutes of meeting</a></li>
-            </ul>
-        </div>
+            <a class="btn btn-primary navbar-btn"
+                href="{% url "document_create" organisation_slug category_slug %}">
+                <span class="glyphicon glyphicon-plus icon-white"></span> New document
+            </a>
         </div>
         {% endif %}
-        {% endcache %}
-        {% endblock createdocument %}
 
     </div>
-
 </div>
 </div>
