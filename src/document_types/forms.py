@@ -44,7 +44,6 @@ class ContractorDeliverableForm(BaseDocumentForm):
                 'system',
                 'wbs',
                 'weight',
-
             ),
             related_documents,
             Fieldset(
@@ -64,7 +63,22 @@ class ContractorDeliverableForm(BaseDocumentForm):
 
     class Meta:
         model = ContractorDeliverable
-        exclude = ('document', 'latest_revision')
+        fields = ('document_key', 'title', 'contract_number', 'originator',
+                  'unit', 'discipline', 'document_type', 'sequential_number',
+                  'project_phase', 'klass', 'system', 'wbs', 'weight',
+                  'related_documents', 'status_std_planned_date',
+                  'status_idc_planned_date', 'status_ifr_planned_date',
+                  'status_ifa_planned_date', 'status_ifd_planned_date',
+                  'status_ifc_planned_date', 'status_ifi_planned_date',
+                  'status_asb_planned_date', 'status_std_forecast_date',
+                  'status_idc_forecast_date', 'status_ifr_forecast_date',
+                  'status_ifa_forecast_date', 'status_ifd_forecast_date',
+                  'status_ifc_forecast_date', 'status_ifi_forecast_date',
+                  'status_asb_forecast_date', 'status_std_actual_date',
+                  'status_idc_actual_date', 'status_ifr_actual_date',
+                  'status_ifa_actual_date', 'status_ifd_actual_date',
+                  'status_ifc_actual_date', 'status_ifi_actual_date',
+                  'status_asb_actual_date')
 
 
 class ContractorDeliverableRevisionForm(BaseDocumentForm):
@@ -101,4 +115,7 @@ class ContractorDeliverableRevisionForm(BaseDocumentForm):
 
     class Meta:
         model = ContractorDeliverableRevision
-        exclude = ('revision', 'document')
+        fields = ('status', 'final_revision', 'native_file', 'pdf_file',
+                  'review_start_date', 'review_due_date', 'under_review',
+                  'under_contractor_review', 'overdue', 'reviewers', 'leader',
+                  'approver', 'under_gtg_review')
