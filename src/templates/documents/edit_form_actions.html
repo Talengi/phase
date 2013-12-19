@@ -1,0 +1,11 @@
+<a class="btn btn-default" href="{% url "document_detail" organisation_slug category_slug document.document_key %}">Cancel</a>
+
+<input class="btn btn-primary pull-right last-button"
+       type="submit"
+       value="{{ _('Save and close') }}"
+       name="save-close">
+
+<input class="btn btn-info pull-right"
+       type="submit"
+       value="{{ _('Save') }}"
+       name="save-view">

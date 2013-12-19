@@ -26,21 +26,10 @@
             {% crispy revision_form revision_form.helper %}
 
             <div class="form-actions">
-                <a class="btn btn-default" href="{% url "document_detail" organisation_slug category_slug document.document_key %}">Cancel</a>
-                <input class="btn btn-primary pull-right last-button"
-                       type="submit"
-                       value="{{ _('Save and close') }}"
-                       name="save-close">
                 {% if is_edit %}
-                    <input class="btn btn-info pull-right"
-                           type="submit"
-                           value="{{ _('Save and show') }}"
-                           name="save-view">
+                    {% include 'documents/edit_form_actions.html' %}
                 {% else %}
-                    <input class="btn btn-info pull-right"
-                           type="submit"
-                           value="{{ _('Save and create another document') }}"
-                           name="save-create">
+                    {% include 'documents/create_form_actions.html' %}
                 {% endif %}
             </div>
         </form>
