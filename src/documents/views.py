@@ -352,7 +352,10 @@ class DocumentEdit(PermissionRequiredMixin,
         if "save-view" in self.request.POST:
             url = self.object.get_absolute_url()
         else:
-            url = reverse('category_list')
+            url = reverse('category_document_list', args=[
+                self.kwargs['organisation'],
+                self.kwargs['category'],
+            ])
         return url
 
 
