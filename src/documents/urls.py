@@ -40,4 +40,7 @@ urlpatterns = patterns(
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/(?P<document_key>[\w-]+)/edit/$',
         DocumentEdit.as_view(),
         name="document_edit"),
+    url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/(?P<document_key>[\w-]+)/edit/(?P<revision>\d+)/$',
+        DocumentEdit.as_view(),
+        name="document_edit"),
 )
