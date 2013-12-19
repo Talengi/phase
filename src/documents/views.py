@@ -175,7 +175,8 @@ class DocumentFilter(JSONResponseMixin, BaseDocumentList):
 class DocumentRedirect(RedirectView):
     """Redirects from short document url to full url."""
 
-    permanent = False  # document location can change
+    # Permanent redirections are cached and doc locution can change, so...
+    permanent = False
 
     def get_redirect_url(self, **kwargs):
         key = kwargs.get('document_key')
