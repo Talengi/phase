@@ -2,13 +2,13 @@ from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 
 
-def upload_to_path(instance, filename):
+def upload_to_path(revision, filename):
     """Rename document files on upload to match a custom filename
 
     based on the document number and the revision."""
-    return "{number}_{revision}.{extension}".format(
-        number=instance.document.document_number,
-        revision=instance.revision,
+    return "{key}_{revision}.{extension}".format(
+        key=revision.document.document_key,
+        revision=revision.revision,
         extension=filename.split('.')[-1]
     )
 
