@@ -42,6 +42,9 @@ class DocumentListMixin(object):
     of the correct type.
 
     """
+    slug_url_kwarg = 'document_key'
+    slug_field = 'document_key'
+
     def get_context_data(self, **kwargs):
         context = super(DocumentListMixin, self).get_context_data(**kwargs)
         context.update({
@@ -277,8 +280,6 @@ class BaseDocumentFormView(DocumentFormMixin,
 
 
 class DocumentDetail(LoginRequiredMixin, DocumentFormMixin, DetailView):
-    slug_url_kwarg = 'document_key'
-    slug_field = 'document_key'
     context_object_name = 'document'
     template_name = 'documents/document_detail.html'
 
@@ -318,8 +319,6 @@ class DocumentEdit(PermissionRequiredMixin,
                    BaseDocumentFormView):
     """Edit a document and a selected revision."""
     permission_required = 'documents.change_document'
-    slug_url_kwarg = 'document_key'
-    slug_field = 'document_key'
     context_object_name = 'document'
     template_name = 'documents/document_form.html'
 
@@ -419,8 +418,6 @@ class DocumentCreate(PermissionRequiredMixin,
 class DocumentRevise(DocumentListMixin, SingleObjectMixin, View):
     """Creates a new revision for the document."""
     http_method_names = ['post']
-    slug_url_kwarg = 'document_key'
-    slug_field = 'document_key'
 
     def post(self, request, *args, **kwargs):
         document = self.get_object()
