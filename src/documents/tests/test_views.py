@@ -1,10 +1,10 @@
 import os
+import json
 
 from django.db.models import Q
 from django.contrib import auth
 from django.test import TestCase
 from django.test.client import Client
-from django.utils import simplejson as json
 from django.core.urlresolvers import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.conf import settings
