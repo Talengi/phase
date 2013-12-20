@@ -23,7 +23,7 @@ urlpatterns = patterns(
     url(r'^download/$',
         DocumentDownload.as_view(),
         name="document_download"),
-    url(r'^files/(?P<file_name>[\w-]+)/$',
+    url(r'^files/(?P<file_name>[-\w.]+)/$',
         ProtectedDownload.as_view(),
         name="protected_download"),
 

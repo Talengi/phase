@@ -366,6 +366,6 @@ CRISPY_FAIL_SILENTLY = False
 
 # Where should revisions' files go
 REVISION_FILES_ROOT = PRIVATE_ROOT.child('documents')
-REVISION_FILES_URL = '/documents/'
+REVISION_FILES_URL = '/files/'
 USE_X_SENDFILE = DEBUG
 ########## END CUSTOM CONFIGURATION
