@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from datetime import datetime
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -7,8 +8,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.core.urlresolvers import reverse
 
-
-from metadata.fields import ConfigurableChoiceField
 from accounts.models import User
 from categories.models import Category
 
@@ -41,11 +40,8 @@ class Document(models.Model):
         User,
         through='favorites.Favorite',
         null=True, blank=True)
-    current_revision = ConfigurableChoiceField(
-        verbose_name=u"Revision",
-        default=u"00",
-        max_length=2,
-        list_index='REVISIONS')
+    current_revision = models.PositiveIntegerField(
+        verbose_name=u"Revision")
     current_revision_date = models.DateField(
         verbose_name=u"Revision Date")
 
@@ -102,6 +98,11 @@ class Metadata(models.Model):
         if not self.document_key:
             self.document_key = self.generate_document_key()
         super(Metadata, self).save(*args, **kwargs)
+
+        self.document.updated_on = datetime.now()
+        self.document.current_revision = self.latest_revision.revision
+        self.document.current_revision_date = self.latest_revision.updated_on
+        self.document.save()
 
     def generate_document_key(self):
         """Returns a uniquely identifying key."""

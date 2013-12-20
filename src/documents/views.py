@@ -425,13 +425,11 @@ class DocumentRevise(DocumentListMixin, SingleObjectMixin, View):
         document = self.get_object()
 
         # Cloning the latest revision to create a new one
-        # TODO Check how file fields are managed
         revision = document.latest_revision
         revision.pk = None
         revision.revision = revision.revision + 1
         revision.save()
 
-        # TODO update document.document too
         document.latest_revision = revision
         document.save()
 
