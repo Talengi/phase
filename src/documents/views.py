@@ -12,6 +12,7 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.core.servers.basehttp import FileWrapper
 from django.views.generic import (
     View, ListView, DetailView, RedirectView)
+from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import (
     ModelFormMixin, ProcessFormView, SingleObjectTemplateResponseMixin)
 from django.core.urlresolvers import reverse
@@ -20,6 +21,7 @@ from django.views.static import serve
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 from django.db import transaction
+from django.contrib import messages
 from braces.views import JSONResponseMixin
 
 from favorites.models import Favorite
@@ -414,8 +416,33 @@ class DocumentCreate(PermissionRequiredMixin,
         return url
 
 
-class DocumentRevise(View):
-    pass
+class DocumentRevise(DocumentListMixin, SingleObjectMixin, View):
+    """Creates a new revision for the document."""
+    http_method_names = ['post']
+    slug_url_kwarg = 'document_key'
+    slug_field = 'document_key'
+
+    def post(self, request, *args, **kwargs):
+        document = self.get_object()
+        revisions_count = document.get_all_revisions().count()
+
+        # Cloning the latest revision to create a new one
+        # TODO Check how file fields are managed
+        revision = document.latest_revision
+        revision.pk = None
+        revision.revision = "%02d" % (revisions_count + 1)
+        revision.save()
+
+        message = _('You just created revision %s') % revision.revision
+        messages.success(request, message)
+
+        edit_url = reverse('document_edit', args=[
+            kwargs['organisation'],
+            kwargs['category'],
+            kwargs['document_key'],
+            revision.revision
+        ])
+        return HttpResponseRedirect(edit_url)
 
 
 class DocumentDownload(LoginRequiredMixin, View):

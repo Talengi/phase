@@ -176,3 +176,4 @@ class MetadataRevision(models.Model):
         abstract = True
         ordering = ('-revision',)
         get_latest_by = 'revision'
+        unique_together = ('document', 'revision')
