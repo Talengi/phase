@@ -32,6 +32,14 @@ def get_prod_setting(setting):
         raise ImproperlyConfigured(error_msg)
 
 
+# Template configuration: enable compiled templates caching
+TEMPLATE_LOADERS = (
+    ('django.template.loaders.cached.Loader', (
+        'django.template.loaders.filesystem.Loader',
+        'django.template.loaders.app_directories.Loader',
+    )),
+)
+
 ########## EMAIL CONFIGURATION
 EMAIL_SUBJECT_PREFIX = '[%s] ' % SITE_NAME
 DEFAULT_FROM_EMAIL = get_prod_setting('DEFAULT_FROM_EMAIL')
