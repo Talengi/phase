@@ -5,7 +5,7 @@ from django.template.defaultfilters import slugify
 from metadata.fields import ConfigurableChoiceField
 from accounts.models import User
 from documents.models import Metadata, MetadataRevision
-from documents.fileutils import upload_to_path, private_storage
+from documents.fields import RevisionFileField
 from documents.constants import (
     BOOLEANS, SEQUENTIAL_NUMBERS, CLASSES
 )
@@ -235,15 +235,11 @@ class ContractorDeliverableRevision(MetadataRevision):
     final_revision = models.BooleanField(
         _('Is final revision?'),
         default=False)
-    native_file = models.FileField(
+    native_file = RevisionFileField(
         verbose_name=u"Native File",
-        upload_to=upload_to_path,
-        storage=private_storage,
         null=True, blank=True)
-    pdf_file = models.FileField(
+    pdf_file = RevisionFileField(
         verbose_name=u"PDF File",
-        upload_to=upload_to_path,
-        storage=private_storage,
         null=True, blank=True)
 
     # Review
@@ -378,13 +374,9 @@ class TransmittalsRevision(MetadataRevision):
         max_length=3,
         list_index='STATUSES',
         null=True, blank=True)
-    native_file = models.FileField(
+    native_file = RevisionFileField(
         verbose_name=u"Native File",
-        upload_to=upload_to_path,
-        storage=private_storage,
         null=True, blank=True)
-    pdf_file = models.FileField(
+    pdf_file = RevisionFileField(
         verbose_name=u"PDF File",
-        upload_to=upload_to_path,
-        storage=private_storage,
         null=True, blank=True)
