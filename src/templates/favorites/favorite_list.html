@@ -16,8 +16,8 @@
         <tbody>
             {% for favorite in favorite_list %}
                 <tr>
-                    <td><a href="{{ favorite.document.get_absolute_url }}"
-                            >{{ favorite.document.document_key }}
+                    <td><a href="{{ favorite.document.get_absolute_url }}">
+                            {{ favorite.document.document_key }}
                         </a>
                     </td>
                     <td>{{ favorite.document.title }}</td>
