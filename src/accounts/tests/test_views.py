@@ -17,12 +17,16 @@ class NavbarTests(TestCase):
             category.slug
         ])
         self.dc_perms = Permission.objects.filter(codename__endswith='_document')
+        self.create_url = reverse('document_create', args=[
+            category.organisation.slug,
+            category.slug
+        ])
 
     def test_anonymous_navbar(self):
         res = self.client.get(self.url, follow=True)
         self.assertNotContains(res, 'href="/favorites/"')
         self.assertNotContains(res, '<a href="#" class="dropdown-toggle" data-toggle="dropdown">Documents')
-        self.assertNotContains(res, 'href="/create/"')
+        self.assertNotContains(res, 'href="%s"' % self.create_url)
         self.assertNotContains(res, 'href="/admin/"')
 
     def test_authenticated_user_navbar(self):
@@ -32,7 +36,7 @@ class NavbarTests(TestCase):
         res = self.client.get(self.url, follow=True)
         self.assertContains(res, 'href="/favorites/"')
         self.assertContains(res, '<a href="#" class="dropdown-toggle" data-toggle="dropdown">Documents')
-        self.assertNotContains(res, 'href="/create/"')
+        self.assertNotContains(res, 'href="%s"' % self.create_url)
         self.assertNotContains(res, 'href="/admin/"')
 
     def test_document_controller_navbar(self):
@@ -46,7 +50,7 @@ class NavbarTests(TestCase):
         res = self.client.get(self.url, follow=True)
         self.assertContains(res, 'href="/favorites/"')
         self.assertContains(res, '<a href="#" class="dropdown-toggle" data-toggle="dropdown">Documents')
-        self.assertContains(res, 'href="/create/"')
+        self.assertContains(res, 'href="%s"' % self.create_url)
         self.assertNotContains(res, 'href="/admin/"')
 
     def test_admin_navbar(self):
@@ -58,7 +62,7 @@ class NavbarTests(TestCase):
         res = self.client.get(self.url, follow=True)
         self.assertContains(res, 'href="/favorites/"')
         self.assertContains(res, '<a href="#" class="dropdown-toggle" data-toggle="dropdown">Documents')
-        self.assertContains(res, 'href="/create/"')
+        self.assertContains(res, 'href="%s"' % self.create_url)
         self.assertContains(res, 'href="/admin/"')
 
 
