@@ -68,7 +68,8 @@ class AclTests(TestCase):
         category = CategoryFactory()
         self.user = UserFactory(name='User', password='pass', category=category)
         self.home_url = reverse('category_document_list', args=[
-            category.organisation.slug, category.slug
+            category.organisation.slug,
+            category.slug
         ])
         self.create_url = reverse('document_create', args=[
             category.organisation.slug,
