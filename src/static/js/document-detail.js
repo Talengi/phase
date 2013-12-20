@@ -7,7 +7,7 @@ jQuery(function($) {
     });
 
     /* Initialize datepickers and hide on select */
-    $('.datepicker').datepicker().on('changeDate', function(ev) {
+    $('.dateinput').datepicker().on('changeDate', function(ev) {
         $(this).datepicker('hide');
     });
 
