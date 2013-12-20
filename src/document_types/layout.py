@@ -19,15 +19,9 @@ class ScheduleStatusLayout(LayoutObject):
         self.name = name
 
     def render(self, form, form_style, context):
-        attrs = {'class': 'datepicker'}
         planned_field = form['status_%s_planned_date' % self.name]
-        planned_field.field.widget.attrs.update(attrs)
-
         forecast_field = form['status_%s_forecast_date' % self.name]
-        forecast_field.field.widget.attrs.update(attrs)
-
         actual_field = form['status_%s_actual_date' % self.name]
-        actual_field.field.widget.attrs.update(attrs)
 
         planned = render_to_string(
             self.field_template,
