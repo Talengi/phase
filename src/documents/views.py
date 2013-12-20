@@ -414,6 +414,10 @@ class DocumentCreate(PermissionRequiredMixin,
         return url
 
 
+class DocumentRevise(View):
+    pass
+
+
 class DocumentDownload(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
