@@ -431,6 +431,7 @@ class DocumentRevise(DocumentListMixin, SingleObjectMixin, View):
         revision.revision = revision.revision + 1
         revision.save()
 
+        # TODO update document.document too
         document.latest_revision = revision
         document.save()
 
