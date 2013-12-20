@@ -70,7 +70,10 @@ class AclTests(TestCase):
         self.home_url = reverse('category_document_list', args=[
             category.organisation.slug, category.slug
         ])
-        self.create_url = '/create/'
+        self.create_url = reverse('document_create', args=[
+            category.organisation.slug,
+            category.slug
+        ])
         self.login_url = '/accounts/login/'
         self.dc_perms = Permission.objects.filter(codename__endswith='_document')
 
