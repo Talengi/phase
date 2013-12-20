@@ -4,7 +4,10 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset
 
 from documents.forms.models import BaseDocumentForm
-from .models import ContractorDeliverable, ContractorDeliverableRevision
+from .models import (
+    ContractorDeliverable, ContractorDeliverableRevision, DummyMetadata,
+    DummyMetadataRevision
+)
 from .layout import (
     ScheduleLayout, ScheduleStatusLayout, FlatRelatedDocumentsLayout)
 
@@ -105,3 +108,19 @@ class ContractorDeliverableRevisionForm(BaseDocumentForm):
         model = ContractorDeliverableRevision
         exclude = ('document', 'revision', 'revision_date', 'created_on',
                    'updated_on')
+
+
+class DummyMetadataForm(BaseDocumentForm):
+    helper = FormHelper()
+    helper.form_tag = False
+
+    class Meta:
+        model = DummyMetadata
+
+
+class DummyMetadataRevisionForm(BaseDocumentForm):
+    helper = FormHelper()
+    helper.form_tag = False
+
+    class Meta:
+        model = DummyMetadataRevision

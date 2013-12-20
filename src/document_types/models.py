@@ -15,7 +15,7 @@ class ContractorDeliverable(Metadata):
     latest_revision = models.ForeignKey(
         'ContractorDeliverableRevision',
         verbose_name=_('Latest revision'),
-        null=True)
+        null=True)  # TODO No!
 
     # General information
     title = models.TextField(
@@ -380,3 +380,16 @@ class TransmittalsRevision(MetadataRevision):
     pdf_file = RevisionFileField(
         verbose_name=u"PDF File",
         null=True, blank=True)
+
+
+# Those two classes are dummy document classes with no additional classes
+# Useful for tests
+class DummyMetadata(Metadata):
+    latest_revision = models.ForeignKey(
+        'DummyMetadataRevision',
+        verbose_name=_('Latest revision'),
+        null=True)
+
+
+class DummyMetadataRevision(MetadataRevision):
+    pass

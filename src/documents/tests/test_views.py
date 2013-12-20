@@ -2,7 +2,6 @@ import os
 import json
 
 from django.db.models import Q
-from django.contrib import auth
 from django.test import TestCase
 from django.test.client import Client
 from django.core.urlresolvers import reverse
@@ -11,10 +10,9 @@ from django.conf import settings
 from django.db import transaction
 
 from accounts.factories import UserFactory, CategoryFactory
-from documents.models import Document, DocumentRevision
-from documents.tests.utils import generate_random_documents
-
-User = auth.get_user_model()
+from documents.models import Document
+from documents.factories import DocumentFactory
+#from documents.tests.utils import generate_random_documents
 
 
 class GenericViewTest(TestCase):
@@ -81,33 +79,31 @@ class DocumentListTest(GenericViewTest):
         self.assertContextLength('document_list', 50)
 
 
-class DocumentDetailTest(GenericViewTest):
+class DocumentDetailTest(TestCase):
+
+    def setUp(self):
+        self.category = CategoryFactory()
+        self.user = UserFactory(
+            name='User',
+            password='pass',
+            is_superuser=True,
+            category=self.category)
+        self.client.login(username=self.user.email, password='pass')
 
     def test_document_number(self):
-        """
-        Tests that a document detail returns a document and his form.
-        """
-        document = Document.objects.create(
-            title=u'HAZOP report',
-            current_revision_date='2012-04-20',
-            sequencial_number="0004",
-            discipline="HSE",
-            document_type="REP",
-            current_revision=u"03",
+        """Tests that a document detail returns a document and his form. """
+        document = DocumentFactory(
+            document_key='hazop-report',
+            category=self.category,
         )
-        DocumentRevision.objects.create(
-            document=document,
-            revision=u"03",
-            revision_date='2012-04-20',
-        )
-        self.url = reverse("document_detail", args=[document.document_number])
-        self.assertGet()
-        self.assertContext('document', document)
-        self.assertEqual(
-            self.context['document'].document_number,
-            u'FAC09001-FWF-000-HSE-REP-0004'
-        )
-        self.assertEqual(len(self.context['form'].fields.keys()), 49)
+
+        url = reverse("document_detail", args=[
+            self.category.organisation.slug,
+            self.category.slug,
+            document.document_key
+        ])
+        res = self.client.get(url)
+        self.assertContains(res, "hazop-report")
 
     def test_document_related_documents(self):
         documents = [

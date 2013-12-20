@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from documents.models import Document, DocumentRevision
+from documents.models import Document
 
 
 class DocumentTest(TestCase):
