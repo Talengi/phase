@@ -1,7 +1,8 @@
 from django.core.urlresolvers import reverse
 
-from accounts.models import User
-from documents.models import Document
+from categories.factories import CategoryFactory
+from accounts.factories import UserFactory
+from documents.factories import DocumentFactory
 from documents.tests.test_views import GenericViewTest
 from favorites.models import Favorite
 
@@ -9,79 +10,49 @@ from favorites.models import Favorite
 class FavoriteTest(GenericViewTest):
     url = reverse("favorite_list")
 
-    def test_favorite_list(self):
-        """
-        Tests that a favorite list is accessible if logged in.
-        """
-        User.objects.create_user(
-            'david',
-            'foo@bar.fr',
-            'password',
-        )
+    def setUp(self):
+        self.category = CategoryFactory()
+        self.user = UserFactory(email='test@phase.fr', password='pass',
+                                category=self.category)
+        self.client.login(email=self.user.email, password='pass')
 
-        # Logged in user
-        auth = {'username': 'david', 'password': 'password'}
-        self.assertGet(auth=auth)
-        self.assertRendering('<p>You do not have any favorite document.</p>')
+        self.user2 = UserFactory(email='test2@phase.fr', password='pass',
+                                 category=self.category)
+
+    def test_favorite_list(self):
+        """Tests that a favorite list is accessible if logged in. """
+        res = self.client.get(self.url)
+        self.assertContains(res, '<p>You do not have any favorite document.</p>')
 
     def test_favorite_privacy(self):
-        """
-        Tests that a favorite is not shared accross users.
-        """
-        david = User.objects.create_user(
-            'david',
-            'foo@bar.fr',
-            'password',
+        """Tests that a favorite is not shared accross users. """
+        document = DocumentFactory(
+            document_key='gloubigoulba',
+            category=self.category,
         )
-        User.objects.create_user(
-            'matthieu',
-            'foo@bar.fr',
-            'password',
-        )
-        document = Document.objects.create(
-            title=u'HAZOP report',
-            current_revision_date='2012-04-20',
-            sequencial_number="0004",
-            discipline="HSE",
-            document_type="REP",
-            current_revision=u"03",
-        )
-        favorite = Favorite.objects.create(
+        Favorite.objects.create(
             document=document,
-            user=david
+            user=self.user2
         )
 
-        # Right user
-        auth = {'username': 'david', 'password': 'password'}
-        self.assertGet(auth=auth)
-        self.assertRendering('<td>%s</td>' % favorite.document.title)
+        res = self.client.get(self.url)
+        self.assertContains(res, '<p>You do not have any favorite document.</p>')
+        self.assertNotContains(res, 'gloubigoulba')
 
-        # Wrong user
-        auth = {'username': 'matthieu', 'password': 'password'}
-        self.assertGet(auth=auth)
-        self.assertRendering('<p>You do not have any favorite document.</p>')
+        self.client.login(email=self.user2.email, password='pass')
+        res = self.client.get(self.url)
+        self.assertContains(res, 'gloubigoulba')
 
     def test_favorite_creation(self):
-        """
-        Tests that a favorite creation is possible.
-        """
-        user = User.objects.create_user(
-            'david',
-            'foo@bar.fr',
-            'password',
-        )
-        document = Document.objects.create(
-            title=u'HAZOP report',
-            current_revision_date='2012-04-20',
-            sequencial_number="0004",
-            discipline="HSE",
-            document_type="REP",
-            current_revision=u"03",
+        """Tests that a favorite creation is possible. """
+        document = DocumentFactory(
+            document_key='gloubigoulba',
+            category=self.category,
         )
         self.url = reverse("favorite_create")
         self.assertPost({
             'document': document.id,
-            'user': user.id,
+            'user': self.user.id,
         })
         # First favorite created
         self.assertEqual(self.content, '1')
@@ -91,22 +62,13 @@ class FavoriteTest(GenericViewTest):
         """
         Tests that a favorite deletion is possible.
         """
-        user = User.objects.create_user(
-            'david',
-            'foo@bar.fr',
-            'password',
-        )
-        document = Document.objects.create(
-            title=u'HAZOP report',
-            current_revision_date='2012-04-20',
-            sequencial_number="0004",
-            discipline="HSE",
-            document_type="REP",
-            current_revision=u"03",
+        document = DocumentFactory(
+            document_key='gloubigoulba',
+            category=self.category,
         )
         favorite = Favorite.objects.create(
             document=document,
-            user=user
+            user=self.user
         )
         self.url = reverse("favorite_delete", args=[favorite.pk])
         self.assertPost(status_code=302)
