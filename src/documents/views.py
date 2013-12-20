@@ -419,7 +419,9 @@ class DocumentRevise(DocumentListMixin, SingleObjectMixin, View):
     """Creates a new revision for the document."""
     http_method_names = ['post']
 
+    @transaction.atomic
     def post(self, request, *args, **kwargs):
+        """Creates revision then redirect to edition form."""
         document = self.get_object()
         revisions_count = document.get_all_revisions().count()
 
@@ -429,6 +431,9 @@ class DocumentRevise(DocumentListMixin, SingleObjectMixin, View):
         revision.pk = None
         revision.revision = "%02d" % (revisions_count + 1)
         revision.save()
+
+        document.latest_revision = revision
+        document.save()
 
         message = _('You just created revision %s') % revision.revision
         messages.success(request, message)
