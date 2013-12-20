@@ -11,7 +11,6 @@ from django.core.urlresolvers import reverse
 from metadata.fields import ConfigurableChoiceField
 from accounts.models import User
 from categories.models import Category
-from documents.constants import REVISIONS
 
 
 class DocumentManager(models.Manager):
@@ -157,11 +156,9 @@ class Metadata(models.Model):
 class MetadataRevision(models.Model):
     document = models.ForeignKey(Document)
 
-    revision = models.CharField(
+    revision = models.PositiveIntegerField(
         verbose_name=u"Revision",
-        default=u"00",
-        max_length=2,
-        choices=REVISIONS)
+        default=1)
     revision_date = models.DateField(
         auto_now_add=True,
         verbose_name=u"Revision Date")

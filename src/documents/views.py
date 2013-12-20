@@ -423,13 +423,12 @@ class DocumentRevise(DocumentListMixin, SingleObjectMixin, View):
     def post(self, request, *args, **kwargs):
         """Creates revision then redirect to edition form."""
         document = self.get_object()
-        revisions_count = document.get_all_revisions().count()
 
         # Cloning the latest revision to create a new one
         # TODO Check how file fields are managed
         revision = document.latest_revision
         revision.pk = None
-        revision.revision = "%02d" % (revisions_count + 1)
+        revision.revision = revision.revision + 1
         revision.save()
 
         document.latest_revision = revision
