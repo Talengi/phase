@@ -196,7 +196,7 @@ class ContractorDeliverable(Metadata):
                 discipline=self.discipline,
                 document_type=self.document_type,
                 sequential_number=self.sequential_number
-            ))
+            )).upper()
 
     @property
     def current_revision(self):
