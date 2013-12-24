@@ -107,42 +107,19 @@ class DocumentDetailTest(TestCase):
 
     def test_document_related_documents(self):
         documents = [
-            Document.objects.create(
-                title=u'HAZOP related 1',
-                current_revision_date='2012-04-20',
-                sequencial_number="0004",
-                discipline="HSE",
-                document_type="REP",
-                current_revision=u"03",
-            ),
-            Document.objects.create(
-                title=u'HAZOP related 2',
-                current_revision_date='2012-04-20',
-                sequencial_number="0005",
-                discipline="HSE",
-                document_type="REP",
-                current_revision=u"03",
-            )
+            DocumentFactory(document_key=u'HAZOP-related-1'),
+            DocumentFactory(document_key=u'HAZOP-related-2'),
         ]
-        document = Document.objects.create(
-            title=u'HAZOP report',
-            current_revision_date='2012-04-20',
-            sequencial_number="0006",
-            discipline="HSE",
-            document_type="REP",
-            current_revision=u"03",
-        )
-        document.related_documents = documents
-        self.url = reverse("document_detail", args=[document.document_number])
-        self.assertGet()
-        self.assertRendering(
-            '<li><a href="/detail/{0}/">{0} - HAZOP related 1</a></li>'
-            .format(documents[0].document_number)
-        )
-        self.assertRendering(
-            '<li><a href="/detail/{0}/">{0} - HAZOP related 2</a></li>'
-            .format(documents[1].document_number)
-        )
+        document = DocumentFactory(
+            document_key=u'HAZOP-report',
+            category=self.category)
+        document.metadata.related_documents = documents
+        document.metadata.save()
+
+        url = document.get_absolute_url()
+        res = self.client.get(url, follow=True)
+        self.assertContains(res, 'HAZOP-related-1')
+        self.assertContains(res, 'HAZOP-related-2')
 
 
 class DocumentFilterTest(TestCase):

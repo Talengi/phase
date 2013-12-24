@@ -8,6 +8,5 @@ class MetadataFactory(factory.DjangoModelFactory):
     title = factory.Sequence(lambda n: 'Title {0}'.format(n))
 
 
-
 class MetadataRevisionFactory(factory.DjangoModelFactory):
     FACTORY_FOR = DemoMetadataRevision

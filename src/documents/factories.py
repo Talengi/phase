@@ -4,9 +4,10 @@ from django.contrib.contenttypes.models import ContentType
 import factory
 from factory.fuzzy import FuzzyDate
 
-from .models import Document
 from document_types.models import DemoMetadata
 from document_types.factories import MetadataFactory, MetadataRevisionFactory
+from categories.factories import CategoryFactory
+from .models import Document
 
 
 fuzzy_date = FuzzyDate(datetime.date(2012, 1, 1))
@@ -18,6 +19,7 @@ class DocumentFactory(factory.DjangoModelFactory):
     document_key = factory.Sequence(lambda n: 'document-{0}'.format(n))
     current_revision = 1
     current_revision_date = fuzzy_date.fuzz()
+    category = factory.SubFactory(CategoryFactory)
 
     @classmethod
     def _prepare(cls, create, **kwargs):
