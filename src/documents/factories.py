@@ -5,7 +5,7 @@ import factory
 from factory.fuzzy import FuzzyDate
 
 from .models import Document
-from document_types.models import DummyMetadata
+from document_types.models import DemoMetadata
 from document_types.factories import MetadataFactory, MetadataRevisionFactory
 
 
@@ -23,7 +23,7 @@ class DocumentFactory(factory.DjangoModelFactory):
     def _prepare(cls, create, **kwargs):
         if not 'metadata' in kwargs:
             kwargs.update({
-                'metadata': ContentType.objects.get_for_model(DummyMetadata)
+                'metadata': ContentType.objects.get_for_model(DemoMetadata)
             })
         return super(DocumentFactory, cls)._prepare(create, **kwargs)
 

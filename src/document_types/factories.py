@@ -1,11 +1,13 @@
 import factory
 
-from .models import DummyMetadata, DummyMetadataRevision
+from .models import DemoMetadata, DemoMetadataRevision
 
 
 class MetadataFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = DummyMetadata
+    FACTORY_FOR = DemoMetadata
+    title = factory.Sequence(lambda n: 'Title {0}'.format(n))
+
 
 
 class MetadataRevisionFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = DummyMetadataRevision
+    FACTORY_FOR = DemoMetadataRevision
