@@ -289,6 +289,7 @@ class DocumentDetail(LoginRequiredMixin, DocumentFormMixin, DetailView):
 
         # Upgrade last time the favorite was last seen
         # If not favorited, the query does nothing and it's ok
+        # TODO Add timezone info in update
         Favorite.objects \
             .filter(document=self.object.document) \
             .filter(user=self.request.user) \
