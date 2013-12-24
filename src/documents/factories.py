@@ -36,7 +36,7 @@ class DocumentFactory(factory.DjangoModelFactory):
             revision=obj.current_revision,
             revision_date=obj.current_revision_date)
 
-        MetadataFactory(
+        obj.metadata = MetadataFactory(
             document=obj,
             document_key=obj.document_key,
             latest_revision=revision)
