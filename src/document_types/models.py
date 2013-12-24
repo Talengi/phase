@@ -199,14 +199,6 @@ class ContractorDeliverable(Metadata):
             )).upper()
 
     @property
-    def current_revision(self):
-        return self.latest_revision.revision
-
-    @property
-    def current_revision_date(self):
-        return self.latest_revision.created_on
-
-    @property
     def status(self):
         return self.latest_revision.status
 
@@ -421,6 +413,10 @@ class DemoMetadata(Metadata):
 
     def generate_document_key(self):
         return slugify(self.title)
+
+    @property
+    def status(self):
+        return self.latest_revision.status
 
 
 class DemoMetadataRevision(MetadataRevision):

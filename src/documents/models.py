@@ -153,6 +153,14 @@ class Metadata(models.Model):
         })
         return fields_infos
 
+    @property
+    def current_revision(self):
+        return self.latest_revision.revision
+
+    @property
+    def current_revision_date(self):
+        return self.latest_revision.created_on
+
 
 class MetadataRevision(models.Model):
     document = models.ForeignKey(Document)
