@@ -1,6 +1,7 @@
 """Development settings and globals."""
 
 
+import warnings
 from os.path import join, normpath
 
 from base import *  # noqa
@@ -64,3 +65,7 @@ DEBUG_TOOLBAR_CONFIG = {
     "INTERCEPT_REDIRECTS": False
 }
 ########## END TOOLBAR CONFIGURATION
+
+warnings.filterwarnings(
+    'error', r"DateTimeField .* received a naive datetime",
+    RuntimeWarning, r'django\.db\.models\.fields')
