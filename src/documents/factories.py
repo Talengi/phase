@@ -22,6 +22,13 @@ class DocumentFactory(factory.DjangoModelFactory):
     category = factory.SubFactory(CategoryFactory)
 
     @classmethod
+    def create(cls, **kwargs):
+        """Takes custom args to set metadata and revision fields."""
+        cls.metadata_kwargs = kwargs.pop('metadata', {})
+        cls.revision_kwargs = kwargs.pop('revision', {})
+        return super(DocumentFactory, cls).create(**kwargs)
+
+    @classmethod
     def _prepare(cls, create, **kwargs):
         if not 'metadata' in kwargs:
             kwargs.update({
@@ -31,15 +38,23 @@ class DocumentFactory(factory.DjangoModelFactory):
 
     @classmethod
     def _after_postgeneration(cls, obj, create, results=None):
-        revision = MetadataRevisionFactory(
-            document=obj,
-            revision=obj.current_revision,
-            revision_date=obj.current_revision_date)
+        revision_kwargs = {
+            'document': obj,
+            'revision': obj.current_revision,
+            'revision_date': obj.current_revision_date,
+            'created_on': obj.current_revision_date,
+            'updated_on': obj.current_revision_date,
+        }
+        revision_kwargs.update(cls.revision_kwargs)
+        revision = MetadataRevisionFactory(**revision_kwargs)
 
-        obj.metadata = MetadataFactory(
-            document=obj,
-            document_key=obj.document_key,
-            latest_revision=revision)
+        metadata_kwargs = {
+            'document': obj,
+            'document_key': obj.document_key,
+            'latest_revision': revision
+        }
+        metadata_kwargs.update(cls.metadata_kwargs)
+        obj.metadata = MetadataFactory(**metadata_kwargs)
 
         if create and results:
             obj.save()
