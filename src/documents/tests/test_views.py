@@ -10,9 +10,9 @@ from django.conf import settings
 from django.db import transaction
 
 from accounts.factories import UserFactory, CategoryFactory
+from document_types.factories import MetadataRevisionFactory
 from documents.models import Document
 from documents.factories import DocumentFactory
-#from documents.tests.utils import generate_random_documents
 
 
 class GenericViewTest(TestCase):
@@ -456,17 +456,20 @@ class DocumentDownloadTest(TestCase):
 
     def setUp(self):
         # Login as admin so we won't be bothered by missing permissions
+        self.category = CategoryFactory()
         user = UserFactory(email='testadmin@phase.fr', password='pass',
-                           is_superuser=True)
+                           is_superuser=True,
+                           category=self.category)
         self.client.login(email=user.email, password='pass')
 
     def tearDown(self):
         """Wipe the media root directory after each test."""
         media_root = settings.MEDIA_ROOT
-        for f in os.listdir(media_root):
-            file_path = os.path.join(media_root, f)
-            if os.path.isfile(file_path) and file_path.startswith('/tmp/'):
-                os.unlink(file_path)
+        if os.path.exists(media_root):
+            for f in os.listdir(media_root):
+                file_path = os.path.join(media_root, f)
+                if os.path.isfile(file_path) and file_path.startswith('/tmp/'):
+                    os.unlink(file_path)
 
     def test_unique_document_download(self):
         """
@@ -667,34 +670,26 @@ class DocumentDownloadTest(TestCase):
         Tests that download returns a zip file of all revisions
         of a document.
         """
-        document = Document.objects.create(
-            title=u'HAZOP report',
-            current_revision_date='2012-04-20',
-            sequencial_number="0004",
-            discipline="HSE",
-            document_type="REP",
-            current_revision=u"00",
+        document = DocumentFactory(
+            category=self.category,
         )
         sample_path = 'documents/tests/'
         native_doc = 'sample_doc_native.docx'
         pdf_doc = 'sample_doc_pdf.pdf'
 
-        DocumentRevision.objects.create(
+        MetadataRevisionFactory(
             document=document,
-            revision=u"00",
-            revision_date='2012-04-20',
+            revision=2,
             native_file=SimpleUploadedFile(native_doc, sample_path + native_doc),
             pdf_file=SimpleUploadedFile(pdf_doc, sample_path + pdf_doc),
         )
-        DocumentRevision.objects.create(
+        MetadataRevisionFactory(
             document=document,
-            revision=u"01",
-            revision_date='2012-04-21',
+            revision=3,
             native_file=SimpleUploadedFile(native_doc, sample_path + native_doc),
             pdf_file=SimpleUploadedFile(pdf_doc, sample_path + pdf_doc),
         )
-        c = self.client
-        r = c.get(reverse("document_download"), {
+        r = self.client.get(document.category.get_download_url(), {
             'document_ids': document.id,
             'revisions': 'all',
         })
