@@ -446,11 +446,12 @@ class DocumentRevise(DocumentListMixin, SingleObjectMixin, View):
         return HttpResponseRedirect(edit_url)
 
 
-class DocumentDownload(LoginRequiredMixin, View):
+class DocumentDownload(BaseDocumentList):
 
     def get(self, request, *args, **kwargs):
         # Deals with GET parameters
-        form = DocumentDownloadForm(self.request.GET)
+        qs = self.get_queryset()
+        form = DocumentDownloadForm(self.request.GET, queryset=qs)
         if form.is_valid():
             data = form.cleaned_data
         else:
