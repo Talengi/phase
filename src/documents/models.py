@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from datetime import datetime
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -100,7 +99,7 @@ class Metadata(models.Model):
             self.document_key = self.generate_document_key()
         super(Metadata, self).save(*args, **kwargs)
 
-        self.document.updated_on = datetime.now()
+        self.document.updated_on = timezone.now()
         self.document.current_revision = self.latest_revision.revision
         self.document.current_revision_date = self.latest_revision.updated_on
         self.document.save()
