@@ -393,12 +393,15 @@ class DemoMetadata(Metadata):
         related_name='leading_demo_metadata',
         null=True, blank=True)
 
+    class Meta:
+        ordering = ('title',)
+
     class PhaseConfig:
         filter_fields = (
-            'title', 'leader',
+            'leader',
         )
         searchable_fields = (
-            'document_key', 'title',
+            'title', 'document_key', 'title',
         )
         column_fields = (
             ('Document Number', 'document_key', 'document_key'),
