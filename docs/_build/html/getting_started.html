@@ -1,0 +1,231 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Getting started &mdash; Phase 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Phase 0.1 documentation" href="index.html" />
+    <link rel="next" title="Phase in production" href="production.html" />
+    <link rel="prev" title="Welcome to Phase’s documentation!" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="production.html" title="Phase in production"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Phase’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Phase 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="getting-started">
+<h1>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Phase is a document management system specifically designed for the needs of engineering and construction projects to manage the documentation of oil &amp; gas, water treatment, nuclear, solar and wind facilities.</p>
+<p>Phase offers the following characteristics:</p>
+<ul class="simple">
+<li>Management of document and data lists containing thousands of items</li>
+<li>Management of multiple metadata related to engineering, review, schedule, etc.</li>
+<li>Spreadsheet like filtering/search capabilities</li>
+<li>Document and data versioning</li>
+<li>Management of relationships between documents and data</li>
+</ul>
+<p>Phase is intended to be used on projects where:</p>
+<ul class="simple">
+<li>Thousands of documents are generated</li>
+<li>Documents have to be produced, exchanged, reviewed, revised and used all along the project phases by multiple parties (owner/operator, contractors, vendors, partners, authorities, etc.)</li>
+</ul>
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>Steps to initialize the project on a local machine:</p>
+<div class="highlight-python"><pre>$ git clone https://github.com/Talengi/phase.git repository
+$ virtualenv venv
+$ source venv/bin/activate
+$ pip install -r repository/requirements/local.txt
+$ npm -g install yuglify
+$ cd repository
+$ python phase/manage.py syncdb --noinput --settings=core.settings.local
+$ fab runserver</pre>
+</div>
+</div>
+<div class="section" id="available-fabric-commands">
+<h2>Available fabric commands<a class="headerlink" href="#available-fabric-commands" title="Permalink to this headline">¶</a></h2>
+<p>Check the list of available commands directly in your shell:</p>
+<div class="highlight-python"><pre>$ fab -l
+Available commands:
+
+    check      Checks that everything is fine, useful before deploying.
+    deploy     Deploys the project against staging.
+    docs       Generates sphinx documentation for the project.
+    errors     Displays error.log file from staging.
+    log        Displays access.log file from staging.
+    runserver  Runs the local Django server.
+    test       Launches tests for the whole project.</pre>
+</div>
+</div>
+<div class="section" id="apache-configuration">
+<h2>Apache configuration<a class="headerlink" href="#apache-configuration" title="Permalink to this headline">¶</a></h2>
+<p>Here is a sample Apache virtual host configuration file.</p>
+<div class="highlight-python"><pre>&lt;VirtualHost *:80&gt;
+    ServerName phase.clients.jouannic.fr
+
+    CustomLog /var/log/apache2/phase.access.log combined
+    ErrorLog /var/log/apache2/phase.error.log
+
+    Alias /media/ /home/talengi/phase/public/media/
+    Alias /static/ /home/talengi/phase/public/static/
+
+    &lt;Directory /home/talengi/phase/public/static&gt;
+        Order deny,allow
+        Allow from all
+    &lt;/Directory&gt;
+
+    &lt;Directory /home/talengi/phase/public/media&gt;
+        Order deny,allow
+        Allow from all
+    &lt;/Directory&gt;
+
+    WSGIScriptAlias / /home/talengi/phase/src/core/wsgi.py
+    WSGIDaemonProcess talengi user=talengi python-path=/home/talengi/phase/src/:/home/talengi/.virtualenvs/phase/lib/python2.6/site-packages/
+    WSGIProcessGroup talengi
+
+    &lt;Directory /home/tarengi/phase/src/core/&gt;
+        &lt;Files wsgi.py&gt;
+        Order deny,allow
+        Require all granted
+        &lt;/Files&gt;
+    &lt;/Directory&gt;
+
+    ExpiresActive On
+    ExpiresDefault "access plus 2 hours"
+    ExpiresByType text/html "access plus 2 hours"
+    ExpiresByType image/ico "access plus 1 month"
+    ExpiresByType image/icon "access plus 1 month"
+    ExpiresByType image/x-icon "access plus 1 month"
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType text/javascript "access plus 1 month"
+
+    &lt;FilesMatch "\\.(html|htm|xml)$"&gt;
+        Header set Cache-Control "max-age=7200, public"
+    &lt;/FilesMatch&gt;
+    &lt;FilesMatch "\\.(ico|jpe?g|png|gif|css)$"&gt;
+        Header set Cache-Control "max-age=2592000, public"
+    &lt;/FilesMatch&gt;
+    &lt;FilesMatch "\\.(js)$"&gt;
+        Header set Cache-Control "max-age=2592000, public"
+    &lt;/FilesMatch&gt;
+
+    Header unset ETag
+    FileETag none
+
+&lt;/VirtualHost&gt;
+</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Getting started</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#available-fabric-commands">Available fabric commands</a></li>
+<li><a class="reference internal" href="#apache-configuration">Apache configuration</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to Phase&#8217;s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="production.html"
+                        title="next chapter">Phase in production</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/getting_started.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="production.html" title="Phase in production"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Phase’s documentation!"
+             >previous</a> |</li>
+        <li><a href="index.html">Phase 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Talengi &amp; scopyleft.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
