@@ -4,6 +4,7 @@ from datetime import datetime
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.utils import timezone
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.core.urlresolvers import reverse
@@ -32,10 +33,10 @@ class Document(models.Model):
         related_name='documents')
     created_on = models.DateField(
         _('Created on'),
-        auto_now_add=True)
+        default=timezone.now)
     updated_on = models.DateTimeField(
         _('Updated on'),
-        auto_now=True)
+        default=timezone.now)
     favorited_by = models.ManyToManyField(
         User,
         through='favorites.Favorite',
@@ -169,11 +170,11 @@ class MetadataRevision(models.Model):
         verbose_name=u"Revision",
         default=1)
     revision_date = models.DateField(
-        auto_now_add=True,
+        default=timezone.now,
         verbose_name=u"Revision Date")
     created_on = models.DateField(
         _('Created on'),
-        auto_now_add=True)
+        default=timezone.now)
     updated_on = models.DateTimeField(
         _('Updated on'),
         auto_now=True)
