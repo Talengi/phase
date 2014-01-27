@@ -57,7 +57,7 @@ def deploy(with_data=True):
         with prefix(env.activate):
             collectstatic = 'python src/manage.py collectstatic --noinput'
             syncdb = 'python src/manage.py syncdb --noinput'
-            generate = 'python src/manage.py generate_documents 1000'
+            generate = 'python src/manage.py loaddata initial_documents'
             with_production_settings = ' --settings=core.settings.production'
             run('pip install -r requirements/production.txt')
             run(collectstatic + with_production_settings)
