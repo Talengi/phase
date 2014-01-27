@@ -45,6 +45,8 @@ class Document(models.Model):
     current_revision_date = models.DateField(
         verbose_name=u"Revision Date")
 
+    # TODO Get rid of this, since it's never used
+    # Factories and tests must be updated
     metadata_type = models.ForeignKey(ContentType)
     metadata_id = models.PositiveIntegerField()
     metadata = generic.GenericForeignKey('metadata_type', 'metadata_id')
