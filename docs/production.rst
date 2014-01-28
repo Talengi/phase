@@ -23,7 +23,27 @@ install the following packages::
 
     apt-get update
     apt-get upgrade
-    apt-get install build-essential postgresql postgresql-contrib nginx git
+    apt-get purge apache2
+    apt-get install build-essential libpq-dev python-dev
+    apt-get install postgresql postgresql-contrib nginx git supervisor
+
+NodeJS installation
+-------------------
+
+Some tools used in Phase require a node.js installation. Get the `latest
+version url on the Node.js site <http://nodejs.org/dist/v0.10.25/node-v0.10.25.tar.gz>`_.
+Let's install it::
+
+    cd /opt/
+    wget http://nodejs.org/dist/v0.10.25/node-v0.10.25.tar.gz
+    tar -zvxf node-v0.10.25.tar.gz
+    cd node-v0.10.25
+    ./configure
+    make
+    make install
+
+Python configuration
+--------------------
 
 Install pip and virtualenv::
 
@@ -47,13 +67,72 @@ Then::
 
     source ~.profile
 
+Database creation
+-----------------
+
+::
+
+    su - postgres
+    createuser -P
+
+        Enter name of role to add: phase
+        Enter password for new role: phase
+        Enter it again: phase
+        Shall the new role be a superuser? (y/n) n
+        Shall the new role be allowed to create databases? (y/n) n
+        Shall the new role be allowed to create more new roles? (y/n) n
+
+    createdb --owner phase phase
+
+
 Phase installation
 ------------------
 
-::
+As root::
+
+    npm install -g yuglify
+
+As phase user::
 
     cd
     mkvirtualenv phase
     git clone https://github.com/Talengi/phase.git
-    cd phase
-    pip install -r requirements/production.txt
+    cd phase/src
+    pip install -r ../requirements/production.txt
+    export DJANGO_SETTINGS_MODULE=src.core.production
+    python manage.py collectstatic
+    python manage.py syncdb
+
+Web server configuration
+------------------------
+
+Remove the default nginx site::
+
+    rm /etc/nginx/sites-enabled/default
+
+Create the Phase configuration file in ``/etc/nginx/sites-available/phase``.
+Here is a working sample.
+
+.. literalinclude:: nginx_example
+
+Then create a link to enable it::
+
+    ln -s /etc/nginx/sites-available/phase /etc/nginx/sites-enabled/
+
+Don't forget to restart nginx::
+
+    /etc/init.d/nginx restart
+
+Running the application
+-----------------------
+
+`Gunicorn <http://gunicorn.org/>`_ is the recommanded WSGI HTTP server to run Phase.
+`Supervisor <http://supervisord.org/>`_ will be used to monitor it.
+
+Create the ``/etc/supervisor/conf.d/phase.conf`` config file. here is a working sample.
+
+.. literalinclude:: supervisor_example
+
+Run this thing with::
+
+    supervisorctl start phase

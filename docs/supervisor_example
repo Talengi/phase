@@ -1,0 +1,9 @@
+[program:phase]
+environment=DJANGO_SETTINGS_MODULE='core.settings.production'
+directory=/home/phase/phase/src
+command=/home/phase/.virtualenvs/phase/bin/python manage.py run_gunicorn
+user=phase
+autostart=true
+autorestart=true
+stdout_logfile=/var/log/supervisor/phase.log
+redirect_stderr=true
