@@ -244,7 +244,6 @@ LOGGING = {
         },
     },
     'handlers': {
-        # Send all messages to console
         'console': {
             'level': 'INFO',
             'class': 'logging.StreamHandler',
@@ -257,7 +256,6 @@ LOGGING = {
             'address': '/dev/log',
             'formatter': 'verbose',
         },
-        # Warning messages are sent to admin emails
         'mail_admins': {
             'level': 'WARNING',
             'filters': ['require_debug_false'],
@@ -276,6 +274,11 @@ LOGGING = {
             'handlers': ['console', 'syslog', 'mail_admins'],
             'level': 'DEBUG',
             'propagate': False,
+        },
+        # We have to redefine this. See
+        # http://stackoverflow.com/questions/20282521/django-request-logger-not-propagated-to-root
+        'django.request': {
+            'propagate': True,
         },
     }
 }
