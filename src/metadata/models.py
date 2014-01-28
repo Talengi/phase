@@ -35,7 +35,7 @@ class ListEntry(models.Model):
         max_length=50)
     value = models.CharField(
         _('Value'),
-        max_length=255,
+        max_length=1024,
         blank=True)
 
     class Meta:
