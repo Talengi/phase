@@ -40,6 +40,10 @@ TEMPLATE_LOADERS = (
     )),
 )
 
+INSTALLED_APPS += (
+    'gunicorn',
+)
+
 ########## EMAIL CONFIGURATION
 EMAIL_SUBJECT_PREFIX = '[%s] ' % SITE_NAME
 DEFAULT_FROM_EMAIL = get_prod_setting('DEFAULT_FROM_EMAIL')
