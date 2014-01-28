@@ -20,7 +20,7 @@ urlpatterns = patterns(
         name="document_filter"),
 
     # Downloads
-    url(r'^download/$',
+    url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/download/$',
         DocumentDownload.as_view(),
         name="document_download"),
     url(r'^files/(?P<file_name>[-\w.]+)/$',

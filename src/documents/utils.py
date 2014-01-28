@@ -1,7 +1,7 @@
 import zipfile
 import tempfile
 try:
-    import zlib
+    import zlib  # noqa
     compression = zipfile.ZIP_DEFLATED
 except:
     compression = zipfile.ZIP_STORED
@@ -75,9 +75,9 @@ def compress_documents(documents, format='both', revisions='latest'):
         files = []
         for document in documents:
             if revisions == 'latest':
-                revs = [document.latest_revision()]
+                revs = [document.latest_revision]
             elif revisions == 'all':
-                revs = document.documentrevision_set.all()
+                revs = document.get_all_revisions()
 
             for rev in revs:
                 if rev is not None:

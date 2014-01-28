@@ -1,9 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from datetime import datetime
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.utils import timezone
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.core.urlresolvers import reverse
@@ -32,10 +32,10 @@ class Document(models.Model):
         related_name='documents')
     created_on = models.DateField(
         _('Created on'),
-        auto_now_add=True)
+        default=timezone.now)
     updated_on = models.DateTimeField(
         _('Updated on'),
-        auto_now=True)
+        default=timezone.now)
     favorited_by = models.ManyToManyField(
         User,
         through='favorites.Favorite',
@@ -45,6 +45,8 @@ class Document(models.Model):
     current_revision_date = models.DateField(
         verbose_name=u"Revision Date")
 
+    # TODO Get rid of this, since it's never used
+    # Factories and tests must be updated
     metadata_type = models.ForeignKey(ContentType)
     metadata_id = models.PositiveIntegerField()
     metadata = generic.GenericForeignKey('metadata_type', 'metadata_id')
@@ -99,7 +101,7 @@ class Metadata(models.Model):
             self.document_key = self.generate_document_key()
         super(Metadata, self).save(*args, **kwargs)
 
-        self.document.updated_on = datetime.now()
+        self.document.updated_on = timezone.now()
         self.document.current_revision = self.latest_revision.revision
         self.document.current_revision_date = self.latest_revision.updated_on
         self.document.save()
@@ -153,6 +155,14 @@ class Metadata(models.Model):
         })
         return fields_infos
 
+    @property
+    def current_revision(self):
+        return self.latest_revision.revision
+
+    @property
+    def current_revision_date(self):
+        return self.latest_revision.created_on
+
 
 class MetadataRevision(models.Model):
     document = models.ForeignKey(Document)
@@ -161,11 +171,11 @@ class MetadataRevision(models.Model):
         verbose_name=u"Revision",
         default=1)
     revision_date = models.DateField(
-        auto_now_add=True,
+        default=timezone.now,
         verbose_name=u"Revision Date")
     created_on = models.DateField(
         _('Created on'),
-        auto_now_add=True)
+        default=timezone.now)
     updated_on = models.DateTimeField(
         _('Updated on'),
         auto_now=True)

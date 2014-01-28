@@ -85,3 +85,10 @@ class Category(models.Model):
             self.organisation.slug,
             self.category_template.slug))
         return url
+
+    def get_download_url(self):
+        """Gets the url used to download a list of documents."""
+        url = reverse('document_download', args=(
+            self.organisation.slug,
+            self.category_template.slug))
+        return url

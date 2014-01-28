@@ -1,11 +1,11 @@
 import os
 import json
-from datetime import datetime
 try:
     from urllib.parse import unquote
 except ImportError:
     from urllib import unquote
 
+from django.utils import timezone
 from django.conf import settings
 from django.core.cache import cache
 from django.http import HttpResponse, Http404, HttpResponseRedirect
@@ -289,10 +289,11 @@ class DocumentDetail(LoginRequiredMixin, DocumentFormMixin, DetailView):
 
         # Upgrade last time the favorite was last seen
         # If not favorited, the query does nothing and it's ok
+        # TODO Add timezone info in update
         Favorite.objects \
             .filter(document=self.object.document) \
             .filter(user=self.request.user) \
-            .update(last_view_date=datetime.now())
+            .update(last_view_date=timezone.now())
 
         return response
 
@@ -388,8 +389,8 @@ class DocumentCreate(PermissionRequiredMixin,
             document_key=self.object.generate_document_key(),
             category=self.category,
             current_revision=self.revision.revision,
-            current_revision_date=datetime.now(),
-            metadata=self.category.category_template.metadata_model)
+            current_revision_date=timezone.now(),
+            metadata=self.object)
 
         self.revision.document = document
         self.revision.save()
@@ -445,11 +446,12 @@ class DocumentRevise(DocumentListMixin, SingleObjectMixin, View):
         return HttpResponseRedirect(edit_url)
 
 
-class DocumentDownload(LoginRequiredMixin, View):
+class DocumentDownload(BaseDocumentList):
 
     def get(self, request, *args, **kwargs):
         # Deals with GET parameters
-        form = DocumentDownloadForm(self.request.GET)
+        qs = self.get_queryset()
+        form = DocumentDownloadForm(self.request.GET, queryset=qs)
         if form.is_valid():
             data = form.cleaned_data
         else:

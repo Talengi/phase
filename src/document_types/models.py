@@ -196,15 +196,7 @@ class ContractorDeliverable(Metadata):
                 discipline=self.discipline,
                 document_type=self.document_type,
                 sequential_number=self.sequential_number
-            ))
-
-    @property
-    def current_revision(self):
-        return self.latest_revision.revision
-
-    @property
-    def current_revision_date(self):
-        return self.latest_revision.created_on
+            )).upper()
 
     @property
     def status(self):
@@ -382,14 +374,64 @@ class TransmittalsRevision(MetadataRevision):
         null=True, blank=True)
 
 
-# Those two classes are dummy document classes with no additional classes
-# Useful for tests
-class DummyMetadata(Metadata):
+# Those two classes are dummy document classes, used for demos and tests
+class DemoMetadata(Metadata):
     latest_revision = models.ForeignKey(
-        'DummyMetadataRevision',
+        'DemoMetadataRevision',
         verbose_name=_('Latest revision'),
         null=True)
+    title = models.CharField(
+        _('Title'),
+        max_length=50)
+    related_documents = models.ManyToManyField(
+        'documents.Document',
+        related_name='demometadata_related_set',
+        null=True, blank=True)
+    leader = models.ForeignKey(
+        User,
+        verbose_name=_('Leader'),
+        related_name='leading_demo_metadata',
+        null=True, blank=True)
+
+    class Meta:
+        ordering = ('title',)
+
+    class PhaseConfig:
+        filter_fields = (
+            'leader',
+        )
+        searchable_fields = (
+            'title', 'document_key', 'title',
+        )
+        column_fields = (
+            ('Document Number', 'document_key', 'document_key'),
+            ('Title', 'title', 'title'),
+            ('Rev.', 'current_revision', 'latest_revision__revision'),
+            ('Rev. Date', 'current_revision_date', 'latest_revision__created_on'),
+            ('Status', 'status', 'latest_revision__status'),
+        )
+
+    def natural_key(self):
+        return self.document_key
+
+    def generate_document_key(self):
+        return slugify(self.title)
+
+    @property
+    def status(self):
+        return self.latest_revision.status
 
 
-class DummyMetadataRevision(MetadataRevision):
-    pass
+class DemoMetadataRevision(MetadataRevision):
+    native_file = RevisionFileField(
+        _('Native File'),
+        null=True, blank=True)
+    pdf_file = RevisionFileField(
+        _('PDF File'),
+        null=True, blank=True)
+    status = ConfigurableChoiceField(
+        verbose_name=_('Status'),
+        default="STD",
+        max_length=3,
+        list_index='STATUSES',
+        null=True, blank=True)

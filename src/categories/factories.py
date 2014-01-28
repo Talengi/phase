@@ -1,7 +1,7 @@
 import factory
 from django.contrib.contenttypes.models import ContentType
 
-from document_types.models import DummyMetadata
+from document_types.models import DemoMetadata
 from .models import Organisation, CategoryTemplate, Category
 
 
@@ -23,7 +23,7 @@ class CategoryTemplateFactory(factory.DjangoModelFactory):
     def _prepare(cls, create, **kwargs):
         if not 'metadata_model' in kwargs:
             kwargs.update({
-                'metadata_model': ContentType.objects.get_for_model(DummyMetadata)
+                'metadata_model': ContentType.objects.get_for_model(DemoMetadata)
             })
         return super(CategoryTemplateFactory, cls)._prepare(create, **kwargs)
 

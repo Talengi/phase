@@ -5,8 +5,8 @@ from crispy_forms.layout import Layout, Fieldset
 
 from documents.forms.models import BaseDocumentForm
 from .models import (
-    ContractorDeliverable, ContractorDeliverableRevision, DummyMetadata,
-    DummyMetadataRevision
+    ContractorDeliverable, ContractorDeliverableRevision, DemoMetadata,
+    DemoMetadataRevision
 )
 from .layout import (
     ScheduleLayout, ScheduleStatusLayout, FlatRelatedDocumentsLayout)
@@ -110,17 +110,17 @@ class ContractorDeliverableRevisionForm(BaseDocumentForm):
                    'updated_on')
 
 
-class DummyMetadataForm(BaseDocumentForm):
+class DemoMetadataForm(BaseDocumentForm):
     helper = FormHelper()
     helper.form_tag = False
 
     class Meta:
-        model = DummyMetadata
+        model = DemoMetadata
 
 
-class DummyMetadataRevisionForm(BaseDocumentForm):
+class DemoMetadataRevisionForm(BaseDocumentForm):
     helper = FormHelper()
     helper.form_tag = False
 
     class Meta:
-        model = DummyMetadataRevision
+        model = DemoMetadataRevision
