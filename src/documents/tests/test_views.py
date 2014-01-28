@@ -457,6 +457,7 @@ class DocumentDownloadTest(TestCase):
     def setUp(self):
         # Login as admin so we won't be bothered by missing permissions
         self.category = CategoryFactory()
+        self.download_url = self.category.get_download_url()
         user = UserFactory(email='testadmin@phase.fr', password='pass',
                            is_superuser=True,
                            category=self.category)
@@ -513,24 +514,11 @@ class DocumentDownloadTest(TestCase):
         """
         Tests that a document download returns an empty zip file.
         """
-        document = Document.objects.create(
-            title=u'HAZOP report',
-            current_revision_date='2012-04-20',
-            sequencial_number="0004",
-            discipline="HSE",
-            document_type="REP",
-            current_revision=u"00",
+        document = DocumentFactory(
+            document_key=u'HAZOP-related',
+            category=self.category,
         )
-
-        DocumentRevision.objects.create(
-            document=document,
-            revision=u"00",
-            revision_date='2012-04-20',
-        )
-        c = self.client
-        r = c.get(reverse("document_download"), {
-            'document_ids': document.id,
-        })
+        r = self.client.get(self.download_url, {'document_ids': [document.id]})
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r._headers, {
             'content-length': ('Content-Length', '22'),
@@ -547,46 +535,28 @@ class DocumentDownloadTest(TestCase):
         Tests that download returns a zip file of the latest revision
         of all documents.
         """
-        document1 = Document.objects.create(
-            title=u'HAZOP report',
-            current_revision_date='2012-04-20',
-            sequencial_number="0004",
-            discipline="HSE",
-            document_type="REP",
-            current_revision=u"00",
-        )
         sample_path = 'documents/tests/'
         native_doc = 'sample_doc_native.docx'
         pdf_doc = 'sample_doc_pdf.pdf'
 
-        DocumentRevision.objects.create(
-            document=document1,
-            revision=u"00",
-            revision_date='2012-04-20',
-            native_file=SimpleUploadedFile(native_doc, sample_path + native_doc),
-            pdf_file=SimpleUploadedFile(pdf_doc, sample_path + pdf_doc),
+        document1 = DocumentFactory(
+            document_key=u'HAZOP-related',
+            category=self.category,
+            revision={
+                'native_file': SimpleUploadedFile(native_doc, sample_path + native_doc),
+                'pdf_file': SimpleUploadedFile(pdf_doc, sample_path + pdf_doc),
+            }
         )
-        document2 = Document.objects.create(
-            title=u'HAZOP report',
-            current_revision_date='2012-04-20',
-            sequencial_number="0004",
-            discipline="ARC",
-            document_type="REP",
-            current_revision=u"00",
-        )
-        sample_path = 'documents/tests/'
-        native_doc = 'sample_doc_native.docx'
-        pdf_doc = 'sample_doc_pdf.pdf'
 
-        DocumentRevision.objects.create(
-            document=document2,
-            revision=u"00",
-            revision_date='2012-04-20',
-            native_file=SimpleUploadedFile(native_doc, sample_path + native_doc),
-            pdf_file=SimpleUploadedFile(pdf_doc, sample_path + pdf_doc),
+        document2 = DocumentFactory(
+            document_key=u'HAZOP-related-2',
+            category=self.category,
+            revision={
+                'native_file': SimpleUploadedFile(native_doc, sample_path + native_doc),
+                'pdf_file': SimpleUploadedFile(pdf_doc, sample_path + pdf_doc),
+            }
         )
-        c = self.client
-        r = c.get(reverse("document_download"), {
+        r = self.client.get(self.download_url, {
             'document_ids': [
                 document1.id,
                 document2.id,
@@ -595,7 +565,7 @@ class DocumentDownloadTest(TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r._headers, {
             'vary': ('Vary', 'Cookie, Accept-Encoding'),
-            'content-length': ('Content-Length', '758'),
+            'content-length': ('Content-Length', '630'),
             'content-type': ('Content-Type', 'application/zip'),
             'content-disposition': (
                 'Content-Disposition',
