@@ -25,7 +25,7 @@ class DocumentDownloadForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         queryset = kwargs.pop('queryset', None)
-        if not queryset:
+        if queryset is None:
             raise ImproperlyConfigured('Please give me a "queryset" argument')
         super(DocumentDownloadForm, self).__init__(*args, **kwargs)
         self.fields['document_ids'].queryset = queryset
