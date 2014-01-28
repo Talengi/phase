@@ -15,3 +15,45 @@ If you choose to manage your own dedicated server, you can use
 
 Follow the `OpenVZ installation instructions <http://openvz.org/Installation_on_Debian>`_.
 
+Server installation
+-------------------
+
+If you created an OpenVZ container from the debian wheezy template, you need to
+install the following packages::
+
+    apt-get update
+    apt-get upgrade
+    apt-get install build-essential postgresql postgresql-contrib nginx git
+
+Install pip and virtualenv::
+
+    cd
+    wget https://raw.github.com/pypa/pip/master/contrib/get-pip.py
+    python get-pip.py
+    pip install virtualenv virtualenvwrapper
+
+Create user::
+
+    adduser phase --disabled-password
+    su - phase
+
+Add those lines in the ``~/.profile`` file::
+
+    export WORKON_HOME=~/.virtualenvs
+    mkdir -p $WORKON_HOME
+    source `which virtualenvwrapper.sh`
+
+Then::
+
+    source ~.profile
+
+Phase installation
+------------------
+
+::
+
+    cd
+    mkvirtualenv phase
+    git clone https://github.com/Talengi/phase.git
+    cd phase
+    pip install -r requirements/production.txt
