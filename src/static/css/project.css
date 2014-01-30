@@ -27,6 +27,9 @@ body > .container,
 .navbar-fixed-almost-top .navbar-text {
     margin-left: 0;
 }
+#download-button {
+    margin-right: 15px;
+}
 body > .container > .messages {
     margin-top: 15px;
 }
