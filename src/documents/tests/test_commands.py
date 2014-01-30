@@ -10,7 +10,7 @@ from categories.factories import CategoryFactory
 class CommandTest(TestCase):
 
     def setUp(self):
-        CategoryFactory()
+        self.category = CategoryFactory()
 
     def test_generate_data(self):
         """
@@ -19,5 +19,5 @@ class CommandTest(TestCase):
         self.assertEqual(Document.objects.all().count(), 0)
         command = generate_documents.Command()
         command.stdout = tempfile.TemporaryFile()  # hackish.
-        command.handle(2)
+        command.handle(2, self.category.id)
         self.assertEqual(Document.objects.all().count(), 2)
