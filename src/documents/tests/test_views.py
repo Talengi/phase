@@ -7,10 +7,11 @@ from django.test.client import Client
 from django.core.urlresolvers import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.conf import settings
-from django.db import transaction
 
 from accounts.factories import UserFactory, CategoryFactory
+from categories.models import Category
 from document_types.factories import MetadataRevisionFactory
+from document_types.models import ContractorDeliverable
 from documents.models import Document
 from documents.factories import DocumentFactory
 from documents.tests.utils import generate_random_documents
@@ -128,7 +129,7 @@ class DocumentFilterTest(TestCase):
 
     def setUp(self):
         # Login as admin so we won't be bothered by missing permissions
-        category = CategoryFactory()
+        category = Category.objects.get(pk=1)
         user = UserFactory(email='testadmin@phase.fr', password='pass',
                            is_superuser=True, category=category)
         self.client.login(email=user.email, password='pass')
@@ -137,12 +138,6 @@ class DocumentFilterTest(TestCase):
             category.slug,
         ])
 
-        # Add all initial documents to the created category
-        with transaction.commit_on_success():
-            documents = Document.objects.all()
-            category.documents = documents
-            category.save()
-
     def test_paging(self):
         """
         Tests the AJAX pagination.
@@ -150,7 +145,7 @@ class DocumentFilterTest(TestCase):
         get_parameters = {
             'length': 10,
             'start': 0,
-            'sort_by': 'document_number',
+            'sort_by': 'document_key',
         }
         c = self.client
 
@@ -162,7 +157,7 @@ class DocumentFilterTest(TestCase):
         self.assertEqual(int(data['display']), 10)
         self.assertEqual(
             data['data'],
-            [doc.jsonified() for doc in Document.objects.all()[0:10]]
+            [doc.jsonified() for doc in ContractorDeliverable.objects.all()[0:10]]
         )
 
         # With 100 results
@@ -174,7 +169,7 @@ class DocumentFilterTest(TestCase):
         self.assertEqual(int(data['display']), 100)
         self.assertEqual(
             data['data'],
-            [doc.jsonified() for doc in Document.objects.all()[0:100]]
+            [doc.jsonified() for doc in ContractorDeliverable.objects.all()[0:100]]
         )
 
         # With 25 results, starting at 10
@@ -187,7 +182,7 @@ class DocumentFilterTest(TestCase):
         self.assertEqual(int(data['display']), 35)
         self.assertEqual(
             data['data'],
-            [doc.jsonified() for doc in Document.objects.all()[10:35]]
+            [doc.jsonified() for doc in ContractorDeliverable.objects.all()[10:35]]
         )
 
     def test_ordering(self):
@@ -197,7 +192,7 @@ class DocumentFilterTest(TestCase):
         get_parameters = {
             'length': 10,
             'start': 0,
-            'sort_by': 'document_number',
+            'sort_by': 'document_key',
         }
         c = self.client
 
@@ -207,7 +202,7 @@ class DocumentFilterTest(TestCase):
         self.assertEqual(len(data['data']), 10)
         self.assertEqual(
             data['data'],
-            [doc.jsonified() for doc in Document.objects.all()[0:10]]
+            [doc.jsonified() for doc in ContractorDeliverable.objects.all()[0:10]]
         )
 
         # Sorting by title
@@ -215,7 +210,7 @@ class DocumentFilterTest(TestCase):
         r = c.get(self.filter_url, get_parameters)
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 10)
-        documents = Document.objects.all()
+        documents = ContractorDeliverable.objects.all()
         self.assertEqual(
             data['data'],
             [doc.jsonified() for doc in documents.order_by('title')[0:10]]
@@ -226,7 +221,7 @@ class DocumentFilterTest(TestCase):
         r = c.get(self.filter_url, get_parameters)
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 10)
-        documents = Document.objects.all()
+        documents = ContractorDeliverable.objects.all()
         self.assertEqual(
             data['data'],
             [doc.jsonified() for doc in documents.order_by('-title')[0:10]]
@@ -239,7 +234,7 @@ class DocumentFilterTest(TestCase):
         get_parameters = {
             'length': 10,
             'start': 0,
-            'sort_by': 'document_number',
+            'sort_by': 'document_key',
         }
         c = self.client
 
@@ -249,14 +244,6 @@ class DocumentFilterTest(TestCase):
         r = c.get(self.filter_url, get_parameters)
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 1)
-        documents = Document.objects.all()
-        q = Q()
-        for field in documents[0].searchable_fields():
-            q.add(Q(**{'%s__icontains' % field: search_terms}), Q.OR)
-        self.assertEqual(
-            data['data'],
-            [doc.jsonified() for doc in documents.filter(q)[0:10]]
-        )
 
     def test_per_field_filtering(self):
         """
@@ -265,7 +252,7 @@ class DocumentFilterTest(TestCase):
         get_parameters = {
             'length': 10,
             'start': 0,
-            'sort_by': 'document_number',
+            'sort_by': 'document_key',
         }
         c = self.client
 
@@ -277,9 +264,8 @@ class DocumentFilterTest(TestCase):
         self.assertEqual(len(data['data']), 10)
         self.assertEqual(int(data['total']), 44)
         self.assertEqual(int(data['display']), 10)
-        documents = Document.objects.all()
-        documents = documents.filter(**{
-            'status__icontains': status
+        documents = ContractorDeliverable.objects.filter(**{
+            'latest_revision__status__icontains': status
         })
         self.assertEqual(
             data['data'],
@@ -294,9 +280,8 @@ class DocumentFilterTest(TestCase):
         r = c.get(self.filter_url, get_parameters)
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 1)
-        documents = Document.objects.all()
-        documents = documents.filter(**{
-            'status__icontains': status,
+        documents = ContractorDeliverable.objects.filter(**{
+            'latest_revision__status__icontains': status,
             'document_type__icontains': document_type
         })
         self.assertEqual(
@@ -311,7 +296,7 @@ class DocumentFilterTest(TestCase):
         get_parameters = {
             'length': 10,
             'start': 0,
-            'sort_by': 'document_number',
+            'sort_by': 'document_key',
         }
         c = self.client
 
@@ -322,18 +307,10 @@ class DocumentFilterTest(TestCase):
         r = c.get(self.filter_url, get_parameters)
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 1)
-        documents = Document.objects.all()
-        q = Q()
-        for field in documents[0].searchable_fields():
-            q.add(Q(**{'%s__icontains' % field: search_terms}), Q.OR)
-        documents = documents.filter(q).order_by('-title')
-        self.assertEqual(
-            data['data'],
-            [doc.jsonified() for doc in documents[0:10]]
-        )
+
         # Reseting
         get_parameters['search_terms'] = ''
-        get_parameters['sort_by'] = 'document_number'
+        get_parameters['sort_by'] = 'document_key'
 
         # Searching 'spec', retrieving 10 items from page 2
         search_terms = u'spec'
@@ -344,15 +321,7 @@ class DocumentFilterTest(TestCase):
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 7)
         self.assertEqual(int(data['display']), 17)
-        documents = Document.objects.all()
-        q = Q()
-        for field in documents[0].searchable_fields():
-            q.add(Q(**{'%s__icontains' % field: search_terms}), Q.OR)
-        documents = documents.filter(q)
-        self.assertEqual(
-            data['data'],
-            [doc.jsonified() for doc in documents[10:20]]
-        )
+
         # Reseting
         get_parameters['search_terms'] = ''
         get_parameters['length'] = 10
@@ -368,42 +337,22 @@ class DocumentFilterTest(TestCase):
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 7)
         self.assertEqual(int(data['display']), 17)
-        documents = Document.objects.all()
-        q = Q()
-        for field in documents[0].searchable_fields():
-            q.add(Q(**{'%s__icontains' % field: search_terms}), Q.OR)
-        documents = documents.filter(q).order_by('title')
-        self.assertEqual(
-            data['data'],
-            [doc.jsonified() for doc in documents[10:20]]
-        )
+
         # Reseting
         get_parameters['search_terms'] = ''
         get_parameters['length'] = 10
         get_parameters['start'] = 0
-        get_parameters['sort_by'] = 'document_number'
+        get_parameters['sort_by'] = 'document_key'
 
         # Searching 'spec' + status = 'IFR', sorted by title
         search_terms = u'spec'
-        status = u'IFR'
+        status = 'IFR'
         get_parameters['search_terms'] = search_terms
         get_parameters['sort_by'] = '-title'
         get_parameters['status'] = status
         r = c.get(self.filter_url, get_parameters)
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 4)
-        documents = Document.objects.all()
-        q = Q()
-        for field in documents[0].searchable_fields():
-            q.add(Q(**{'%s__icontains' % field: search_terms}), Q.OR)
-        documents = documents.filter(q)
-        documents = documents.filter(**{
-            'status__icontains': status,
-        })
-        self.assertEqual(
-            data['data'],
-            [doc.jsonified() for doc in documents.order_by('-title')[0:10]]
-        )
 
     def test_advanced_filtering(self):
         """
@@ -412,40 +361,35 @@ class DocumentFilterTest(TestCase):
         get_parameters = {
             'length': 10,
             'start': 0,
-            'sort_by': 'document_number',
+            'sort_by': 'document_key',
         }
         c = self.client
 
-        # Searching 'Matthieu Lamy' as a leader
-        leader = 5
+        leader = 2  # user@phase.fr
         get_parameters['leader'] = leader
         r = c.get(self.filter_url, get_parameters)
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 10)
-        self.assertEqual(int(data['total']), 33)
+        self.assertEqual(int(data['total']), 14)
         self.assertEqual(int(data['display']), 10)
-        documents = Document.objects.all()
-        documents = documents.filter(**{
-            'leader': leader
+        documents = ContractorDeliverable.objects.filter(**{
+            'latest_revision__leader': leader
         })
         self.assertEqual(
             data['data'],
             [doc.jsonified() for doc in documents[0:10]]
         )
 
-        # Searching 'Matthieu Lamy' as a leader
-        # + 'Pierre-Yves Boucher' as an approver
-        leader = 5
-        approver = 1
+        leader = 2
+        approver = 3  # dc@phase.fr
         get_parameters['leader'] = leader
         get_parameters['approver'] = approver
         r = c.get(self.filter_url, get_parameters)
         data = json.loads(r.content)
-        self.assertEqual(len(data['data']), 4)
-        documents = Document.objects.all()
-        documents = documents.filter(**{
-            'leader': leader,
-            'approver': approver
+        self.assertEqual(len(data['data']), 1)
+        documents = ContractorDeliverable.objects.filter(**{
+            'latest_revision__leader': leader,
+            'latest_revision__approver': approver
         })
         self.assertEqual(
             data['data'],

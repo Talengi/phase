@@ -8487,7 +8487,7 @@
   "model": "documents.document",
   "fields": {
     "category": 1,
-    "current_revision": "5",
+    "current_revision": "4",
     "current_revision_date": "2012-01-07",
     "created_on": "2013-04-18",
     "metadata_type": [
@@ -68998,11 +68998,11 @@
     "under_contractor_review": null,
     "reviewers": [],
     "approver": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "under_gtg_review": null,
     "leader": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "review_start_date": null,
     "created_on": "2013-12-02",
@@ -69028,11 +69028,11 @@
     "under_contractor_review": null,
     "reviewers": [],
     "approver": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "under_gtg_review": null,
     "leader": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "review_start_date": null,
     "created_on": "2013-12-02",
@@ -69058,11 +69058,11 @@
     "under_contractor_review": null,
     "reviewers": [],
     "approver": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "under_gtg_review": null,
     "leader": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "review_start_date": null,
     "created_on": "2013-12-02",
@@ -69088,11 +69088,11 @@
     "under_contractor_review": null,
     "reviewers": [],
     "approver": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "under_gtg_review": null,
     "leader": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "review_start_date": null,
     "created_on": "2013-12-02",
@@ -69118,11 +69118,11 @@
     "under_contractor_review": null,
     "reviewers": [],
     "approver": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "under_gtg_review": null,
     "leader": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "review_start_date": null,
     "created_on": "2013-12-02",
@@ -69148,11 +69148,11 @@
     "under_contractor_review": null,
     "reviewers": [],
     "approver": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "under_gtg_review": null,
     "leader": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "review_start_date": null,
     "created_on": "2013-12-02",
@@ -69178,11 +69178,11 @@
     "under_contractor_review": null,
     "reviewers": [],
     "approver": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "under_gtg_review": null,
     "leader": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "review_start_date": null,
     "created_on": "2013-12-02",
@@ -69208,11 +69208,11 @@
     "under_contractor_review": null,
     "reviewers": [],
     "approver": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "under_gtg_review": null,
     "leader": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "review_start_date": null,
     "created_on": "2013-12-02",
@@ -69238,11 +69238,11 @@
     "under_contractor_review": null,
     "reviewers": [],
     "approver": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "under_gtg_review": null,
     "leader": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "review_start_date": null,
     "created_on": "2013-12-02",
@@ -69268,11 +69268,11 @@
     "under_contractor_review": null,
     "reviewers": [],
     "approver": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "under_gtg_review": null,
     "leader": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "review_start_date": null,
     "created_on": "2013-12-02",
@@ -69298,11 +69298,11 @@
     "under_contractor_review": null,
     "reviewers": [],
     "approver": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "under_gtg_review": null,
     "leader": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "review_start_date": null,
     "created_on": "2013-12-02",
@@ -69328,11 +69328,11 @@
     "under_contractor_review": null,
     "reviewers": [],
     "approver": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "under_gtg_review": null,
     "leader": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "review_start_date": null,
     "created_on": "2013-12-02",
@@ -69358,11 +69358,11 @@
     "under_contractor_review": null,
     "reviewers": [],
     "approver": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "under_gtg_review": null,
     "leader": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "review_start_date": null,
     "created_on": "2013-12-02",
@@ -69388,11 +69388,11 @@
     "under_contractor_review": null,
     "reviewers": [],
     "approver": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "under_gtg_review": null,
     "leader": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "review_start_date": null,
     "created_on": "2013-12-02",
@@ -69418,11 +69418,11 @@
     "under_contractor_review": null,
     "reviewers": [],
     "approver": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "under_gtg_review": null,
     "leader": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "review_start_date": null,
     "created_on": "2013-12-02",
@@ -69448,11 +69448,11 @@
     "under_contractor_review": null,
     "reviewers": [],
     "approver": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "under_gtg_review": null,
     "leader": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "review_start_date": null,
     "created_on": "2013-12-02",
@@ -69478,11 +69478,11 @@
     "under_contractor_review": null,
     "reviewers": [],
     "approver": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "under_gtg_review": null,
     "leader": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "review_start_date": null,
     "created_on": "2013-12-02",
@@ -69508,11 +69508,11 @@
     "under_contractor_review": null,
     "reviewers": [],
     "approver": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "under_gtg_review": null,
     "leader": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "review_start_date": null,
     "created_on": "2013-12-02",
@@ -69538,11 +69538,11 @@
     "under_contractor_review": null,
     "reviewers": [],
     "approver": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "under_gtg_review": null,
     "leader": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "review_start_date": null,
     "created_on": "2013-12-02",
@@ -69568,11 +69568,11 @@
     "under_contractor_review": null,
     "reviewers": [],
     "approver": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "under_gtg_review": null,
     "leader": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "review_start_date": null,
     "created_on": "2013-12-02",
@@ -69598,11 +69598,11 @@
     "under_contractor_review": null,
     "reviewers": [],
     "approver": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "under_gtg_review": null,
     "leader": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "review_start_date": null,
     "created_on": "2013-12-02",
@@ -69628,11 +69628,11 @@
     "under_contractor_review": null,
     "reviewers": [],
     "approver": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "under_gtg_review": null,
     "leader": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "review_start_date": null,
     "created_on": "2013-12-02",
@@ -69658,11 +69658,11 @@
     "under_contractor_review": null,
     "reviewers": [],
     "approver": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "under_gtg_review": null,
     "leader": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "review_start_date": null,
     "created_on": "2013-12-02",
@@ -69688,11 +69688,11 @@
     "under_contractor_review": null,
     "reviewers": [],
     "approver": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "under_gtg_review": null,
     "leader": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "review_start_date": null,
     "created_on": "2013-12-02",
@@ -69718,11 +69718,11 @@
     "under_contractor_review": null,
     "reviewers": [],
     "approver": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "under_gtg_review": null,
     "leader": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "review_start_date": null,
     "created_on": "2013-12-02",
@@ -69748,11 +69748,11 @@
     "under_contractor_review": null,
     "reviewers": [],
     "approver": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "under_gtg_review": null,
     "leader": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "review_start_date": null,
     "created_on": "2013-12-02",
@@ -69778,11 +69778,11 @@
     "under_contractor_review": null,
     "reviewers": [],
     "approver": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "under_gtg_review": null,
     "leader": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "review_start_date": null,
     "created_on": "2013-12-02",
@@ -69808,11 +69808,11 @@
     "under_contractor_review": null,
     "reviewers": [],
     "approver": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "under_gtg_review": null,
     "leader": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "review_start_date": null,
     "created_on": "2013-12-02",
@@ -69838,11 +69838,11 @@
     "under_contractor_review": null,
     "reviewers": [],
     "approver": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "under_gtg_review": null,
     "leader": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "review_start_date": null,
     "created_on": "2013-12-02",
@@ -69868,11 +69868,11 @@
     "under_contractor_review": null,
     "reviewers": [],
     "approver": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "under_gtg_review": null,
     "leader": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "review_start_date": null,
     "created_on": "2013-12-02",
@@ -69898,11 +69898,11 @@
     "under_contractor_review": null,
     "reviewers": [],
     "approver": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "under_gtg_review": null,
     "leader": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "review_start_date": null,
     "created_on": "2013-12-02",
@@ -69928,11 +69928,11 @@
     "under_contractor_review": null,
     "reviewers": [],
     "approver": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "under_gtg_review": null,
     "leader": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "review_start_date": null,
     "created_on": "2013-12-02",
@@ -69962,7 +69962,7 @@
     ],
     "under_gtg_review": null,
     "leader": [
-      "dc@phase.fr"
+      "user@phase.fr"
     ],
     "review_start_date": null,
     "created_on": "2013-12-02",

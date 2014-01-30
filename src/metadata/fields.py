@@ -17,7 +17,7 @@ def get_choices_from_list(list_index):
         # run manage.py syncdb
         values = list(values)
     except DatabaseError:
-        values = BLANK_CHOICE_DASH
+        values = None
 
     return values
 
@@ -36,6 +36,10 @@ class ConfigurableChoiceField(models.CharField):
 
     def _get_choices(self):
         if self._choices == []:
-            self._choices = get_choices_from_list(self.list_index)
+            choices = get_choices_from_list(self.list_index)
+            if choices is None:
+                return BLANK_CHOICE_DASH
+            else:
+                self._choices = choices
         return self._choices
     choices = property(_get_choices)

@@ -28,16 +28,28 @@ def filter_documents(queryset, data):
     if search_terms:
         q = Q()
         for field in searchable_fields:
-            q.add(Q(**{'%s__icontains' % field: search_terms}), Q.OR)
+
+            # does the field belong to the Metadata or the corresponding Revision?
+            prefix = ''
+            if not field in model._meta.get_all_field_names():
+                prefix = 'latest_revision__'
+
+            q.add(Q(**{prefix + '%s__icontains' % field: search_terms}), Q.OR)
         queryset = queryset.filter(q)
 
     # Filtering (custom fields)
     filter_fields = model.PhaseConfig.filter_fields
     advanced_args = {}
     for parameter_name in filter_fields:
+
+        # does the field belong to the Metadata or the corresponding Revision?
+        prefix = ''
+        if not parameter_name in model._meta.get_all_field_names():
+            prefix = 'latest_revision__'
+
         parameter = data.get(parameter_name, None)
         if parameter:
-            advanced_args[parameter_name] = parameter
+            advanced_args[prefix + parameter_name] = parameter
 
     queryset = queryset.filter(**advanced_args)
 
