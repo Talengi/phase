@@ -149,9 +149,10 @@ class DocumentList(BaseDocumentList):
         FilterForm = filterform_factory(model)
 
         qs = self.get_queryset()
+        download_form = DocumentDownloadForm(queryset=qs)
 
         context.update({
-            'download_form': DocumentDownloadForm(queryset=qs),
+            'download_form': download_form,
             'form': FilterForm(),
             'documents_active': True,
             'initial_data': json.dumps(json_data),

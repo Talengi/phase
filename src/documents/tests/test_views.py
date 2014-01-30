@@ -13,6 +13,7 @@ from accounts.factories import UserFactory, CategoryFactory
 from document_types.factories import MetadataRevisionFactory
 from documents.models import Document
 from documents.factories import DocumentFactory
+from documents.tests.utils import generate_random_documents
 
 
 class GenericViewTest(TestCase):
@@ -71,12 +72,12 @@ class DocumentListTest(GenericViewTest):
     def setUp(self):
         super(DocumentListTest, self).setUp()
         self.url = self.document_list_url
-        generate_random_documents(150, [self.category])
+        generate_random_documents(150, self.category)
 
     def test_document_number(self):
         self.assertGet()
         self.assertContext('documents_active', True)
-        self.assertContextLength('document_list', 50)
+        self.assertContextLength('object_list', 50)
 
 
 class DocumentDetailTest(TestCase):
