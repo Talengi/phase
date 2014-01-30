@@ -36,6 +36,12 @@ jQuery(function($) {
         });
     };
 
+    $('#documents').floatThead({
+        scrollContainer: function(table) {
+            return table.closest('#main-table');
+        }
+    });
+
     /* Initializing the datatable */
     var datatable = $('#documents').datatable({
         filterUrl: config.filterUrl,
@@ -49,8 +55,8 @@ jQuery(function($) {
             }
         }
     });
-
     datatable.draw(tableData['data']);
+
 
     /* Filter datatable's results given selected form's filters */
     var serializeTable = function(evt) {

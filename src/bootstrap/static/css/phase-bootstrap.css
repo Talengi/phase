@@ -7371,3 +7371,55 @@ fieldset[disabled] .uneditable-input {
 textarea.uneditable-input {
   height: auto;
 }
+
+#main-table {
+  width: 100%;
+  margin-bottom: 15px;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  border: 1px solid #dddddd;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+  -webkit-overflow-scrolling: touch;
+}
+
+#main-table > .table {
+  margin-bottom: 0;
+}
+
+#main-table > .table > thead > tr > th,
+#main-table > .table > tbody > tr > th,
+#main-table > .table > tfoot > tr > th,
+#main-table > .table > thead > tr > td,
+#main-table > .table > tbody > tr > td,
+#main-table > .table > tfoot > tr > td {
+  white-space: nowrap;
+}
+
+#main-table > .table-bordered {
+  border: 0;
+}
+
+#main-table > .table-bordered > thead > tr > th:first-child,
+#main-table > .table-bordered > tbody > tr > th:first-child,
+#main-table > .table-bordered > tfoot > tr > th:first-child,
+#main-table > .table-bordered > thead > tr > td:first-child,
+#main-table > .table-bordered > tbody > tr > td:first-child,
+#main-table > .table-bordered > tfoot > tr > td:first-child {
+  border-left: 0;
+}
+
+#main-table > .table-bordered > thead > tr > th:last-child,
+#main-table > .table-bordered > tbody > tr > th:last-child,
+#main-table > .table-bordered > tfoot > tr > th:last-child,
+#main-table > .table-bordered > thead > tr > td:last-child,
+#main-table > .table-bordered > tbody > tr > td:last-child,
+#main-table > .table-bordered > tfoot > tr > td:last-child {
+  border-right: 0;
+}
+
+#main-table > .table-bordered > tbody > tr:last-child > th,
+#main-table > .table-bordered > tfoot > tr:last-child > th,
+#main-table > .table-bordered > tbody > tr:last-child > td,
+#main-table > .table-bordered > tfoot > tr:last-child > td {
+  border-bottom: 0;
+}

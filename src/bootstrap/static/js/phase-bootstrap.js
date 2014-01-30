@@ -1,6 +1,6 @@
 /**
 * phase-bootstrap.js v1.0.0 by @fat and @mdo
-* Copyright 2013 Talengi
+* Copyright 2014 Talengi
 * 
 */
 if (!jQuery) { throw new Error("Bootstrap requires jQuery") }

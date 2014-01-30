@@ -53,6 +53,26 @@ form.form-horizontal textarea {
 }
 
 /* Table rendering */
+#main-table {
+    /* Configured in a bootstrap mixin */
+    max-height: 500px;
+    overflow: auto;
+    border-top: 0;
+}
+#main-table thead {
+    background-color: #eee;
+}
+#main-table thead th {
+}
+table.floatThead-table {
+    background-color: #eee;
+    border-bottom: none;
+}
+
+#main-table th,
+#main-table td {
+    white-space: nowrap;
+}
 tr.selected {
     background-color: #f0f0f0;
 }
