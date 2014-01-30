@@ -4,7 +4,7 @@ from django.db import connections, DEFAULT_DB_ALIAS, reset_queries
 from django.core.signals import request_started
 
 from accounts.factories import UserFactory
-from documents.factories import DocumentFactory, RevisionFactory
+from documents.factories import DocumentFactory
 
 
 class AssertMaxQueriesContext(object):
@@ -72,7 +72,6 @@ class QueriesTest(TestCase):
 
     def test_document_detail(self):
         document = DocumentFactory()
-        RevisionFactory(document=document)
         url = reverse('document_detail', args=[document.document_number])
 
         # First call to generate the cache
