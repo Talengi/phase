@@ -297,56 +297,29 @@ button.ui-multiselect {
     overflow-y: auto;
 }
 
-@media screen and (min-width: 1200px) {
-    #sidebar-close-btn {
-        display: none;
-    }
+.row-offcanvas {
+    -webkit-transition: all 0.25s ease-out;
+    -moz-transition: all 0.25s ease-out;
+    transition: all 0.25s ease-out;
 }
-
-@media screen and (max-width: 1200px) {
-    .row-offcanvas {
-        -webkit-transition: all 0.25s ease-out;
-        -moz-transition: all 0.25s ease-out;
-        transition: all 0.25s ease-out;
-    }
-    .row-offcanvas .sidebar-offcanvas {
-        display: none;
-        width: 33.33%; /* 4 columns */
-    }
-    .row-offcanvas #controls-rows {
-        display: none;
-        width: 33.33%;
-    }
-    .row-offcanvas.active .sidebar-offcanvas {
-        display: block;
-        top: 0;
-        border-left: 1px solid #e7e7e7;
-        -moz-box-shadow: -8px 0 5px -1px #666;
-        -webkit-box-shadow: -8px 0 5px -1px #666;
-        box-shadow: -8px 0 5px -1px #666;
-    }
-    .row-offcanvas.active #controls-rows {
-        display: block;
-        top: 70px;
-    }
+.row-offcanvas .sidebar-offcanvas {
+    display: none;
+    width: 350px;
 }
-
-@media screen and (max-width: 768px) {
-    .row-offcanvas .sidebar-offcanvas {
-        width: 50%; /* 4 columns */
-    }
-    .row-offcanvas #controls-rows {
-        width: 50%; /* 4 columns */
-    }
+.row-offcanvas #controls-rows {
+    width: 350px;
 }
-
-@media screen and (max-width: 480px) {
-    .row-offcanvas .sidebar-offcanvas {
-        width: 75%;  /* 9 columns */
-    }
-    .row-offcanvas #controls-rows {
-        width: 75%;
-    }
+.row-offcanvas.active .sidebar-offcanvas {
+    display: block;
+    top: 0;
+    border-left: 1px solid #e7e7e7;
+    -moz-box-shadow: -8px 0 5px -1px #666;
+    -webkit-box-shadow: -8px 0 5px -1px #666;
+    box-shadow: -8px 0 5px -1px #666;
+}
+.row-offcanvas.active #controls-rows {
+    display: block;
+    top: 70px;
 }
 
 /* Signin */
