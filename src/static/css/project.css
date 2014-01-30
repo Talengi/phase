@@ -91,7 +91,12 @@ button.ui-multiselect {
 
 /* Datatables custom */
 #document-list-row {
-    margin-top: 71px; /* Because of the second navbar */
+    margin-top: 66px; /* Because of the second navbar */
+}
+@media screen and (max-width: 768px) {
+    #document-list-row {
+        margin-top: 36px; /* Because of the second navbar */
+    }
 }
 #documents {
     margin-left: 0;
@@ -281,10 +286,8 @@ button.ui-multiselect {
     position: fixed;
     display: block;
     right: 0;
-    top: 102px;
     bottom: 0;
     padding-top: 15px;
-    width: 16.67%;  /* 2 columns */
     background-color: white;
     z-index: 9999;
 }
