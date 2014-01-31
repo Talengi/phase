@@ -198,6 +198,7 @@ button.ui-multiselect {
 #table-filters .control-group .controls > span {
     margin: 2px 0 0 2px;
     display: none;
+    cursor: pointer;
 }
 #table-filters label {
     margin-bottom: 2px;
