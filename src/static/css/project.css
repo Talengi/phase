@@ -100,10 +100,6 @@ button.ui-multiselect {
 #document-list-row {
     margin-top: 66px; /* Because of the second navbar */
 }
-#documents {
-    margin-left: 0;
-    margin-bottom: 0;
-}
 #documents thead th {
     white-space: nowrap;
 }
@@ -153,18 +149,6 @@ button.ui-multiselect {
 }
 #columnfavorite {
     width: 15px;
-}
-#columndocument_key {
-    width: 200px;
-}
-#columncurrent_revision {
-    width: 50px;
-}
-#columncurrent_revision_date {
-    width: 90px;
-}
-#columnstatus {
-    width: 70px;
 }
 #documents .columnselect input[type="checkbox"] {
     vertical-align: top;
