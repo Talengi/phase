@@ -60,6 +60,7 @@ jQuery(function($) {
         datatable.update(queryparams.data, {
             total: config.totalItems
         });
+        $(this).siblings('span').css('display', 'inline-block');
         evt.preventDefault();
     };
 

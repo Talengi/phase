@@ -195,7 +195,7 @@ button.ui-multiselect {
 #table-filters .control-group .controls > input {
     width: 85%; /* bottstrap enlarges input with margin and padding */
 }
-#table-filters .control-group .controls > i {
+#table-filters .control-group .controls > span {
     margin: 2px 0 0 2px;
     display: none;
 }
