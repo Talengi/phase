@@ -63,6 +63,9 @@ jQuery(function($) {
         evt.preventDefault();
     };
 
+    $("#table-filters").on('submit', function(event) {
+        return event.preventDefault();
+    });
     $("#table-filters select").on('change', serializeTable);
     $("#table-filters input").on('afterkeyup', serializeTable);
     $("#table-filters span").on('click', function(evt) {
