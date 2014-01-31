@@ -328,8 +328,6 @@ PIPELINE_JS = {
     'list': {
         'source_filenames': (
             'js/jquery.afterkeyup.js',
-            'js/underscore.js',
-            'js/jquery.floatThead.js',
             'js/document-list.js',
         ),
         'output_filename': 'js/list.js',

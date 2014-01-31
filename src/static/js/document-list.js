@@ -36,12 +36,6 @@ jQuery(function($) {
         });
     };
 
-    $('#documents').floatThead({
-        scrollContainer: function(table) {
-            return table.closest('#main-table');
-        }
-    });
-
     /* Initializing the datatable */
     var datatable = $('#documents').datatable({
         filterUrl: config.filterUrl,
