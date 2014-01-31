@@ -53,6 +53,12 @@ form.form-horizontal textarea {
 }
 
 /* Table rendering */
+html,
+body,
+body > .container,
+#document-list-row {
+    height: 100%;
+}
 #main-table {
     /* Configured in a bootstrap mixin */
     max-height: 500px;
