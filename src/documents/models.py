@@ -47,9 +47,9 @@ class Document(models.Model):
 
     # TODO Get rid of this, since it's never used
     # Factories and tests must be updated
-    metadata_type = models.ForeignKey(ContentType)
-    metadata_id = models.PositiveIntegerField()
-    metadata = generic.GenericForeignKey('metadata_type', 'metadata_id')
+    metadata_type = models.ForeignKey(ContentType, null=True)
+    metadata_id = models.PositiveIntegerField(null=True)
+    metadata = generic.GenericForeignKey('metadata_type', 'metadata_id', null=True)
 
     class Meta:
         verbose_name = _('Document')
