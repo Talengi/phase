@@ -232,8 +232,20 @@ button.ui-multiselect {
 }
 #document-sidebar ul {
     margin: 0;
-    padding: 0;
+    padding: 0 0 0 20px;
     list-style-type: none;
+    border-left: 1px solid #e5e5e5;
+}
+#document-sidebar ul li {
+    display: block;
+    padding: 3px 0;
+}
+#document-sidebar ul a {
+    color: #999;
+    text-decoration: none;
+}
+#document-sidebar ul a:hover {
+    color: inherit;
 }
 /* Off canvas sidebar */
 .row-offcanvas .sidebar-offcanvas {
