@@ -1,0 +1,10 @@
+{% load document_forms %}
+
+<div id="document-sidebar" class="hidden-xs col-sm-4 col-md-4 col-lg-3">
+    <ul id="document-navigation"
+        class="nav"
+        data-spy="affix">
+        {% crispy_menu form form.helper %}
+        {% crispy_menu revision_form revision_form.helper %}
+    </ul>
+</div>
