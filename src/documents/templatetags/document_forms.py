@@ -9,12 +9,11 @@ register = template.Library()
 def crispy_menu(form, helper):
     fields = [field for field in helper.layout.fields if isinstance(field, Fieldset)]
 
-    menu = ['<ul>']
+    menu = []
     for field in fields:
         menu.append('<li><a href="#%s">%s</a></li>' % (
             field.css_id,
             unicode(field.legend)
         ))
 
-    menu.append('</ul>')
     return ' '.join(menu)

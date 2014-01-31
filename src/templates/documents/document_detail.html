@@ -47,10 +47,12 @@
     </div>
 
     <div id="document-sidebar" class="hidden-xs col-sm-4 col-md-4 col-lg-3">
-        <div id="document-navigation" data-spy="affix">
+        <ul id="document-navigation"
+            class="nav"
+            data-spy="affix">
             {% crispy_menu form form.helper %}
             {% crispy_menu revisions.0.form revisions.0.form.helper %}
-        </div>
+        </ul>
     </div>
 {% endblock content %}
 

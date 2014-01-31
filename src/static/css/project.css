@@ -244,8 +244,12 @@ button.ui-multiselect {
     color: #999;
     text-decoration: none;
 }
+#document-sidebar ul li.active a,
 #document-sidebar ul a:hover {
     color: inherit;
+}
+#document-sidebar ul a:hover {
+    background-color: white;
 }
 /* Off canvas sidebar */
 .row-offcanvas .sidebar-offcanvas {

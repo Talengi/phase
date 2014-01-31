@@ -30,4 +30,5 @@ jQuery(function($) {
         $(this).closest('div').find('.fileupload-preview').html('');
     });
 
+    $('body').scrollspy({ target: '#document-sidebar' });
 });
