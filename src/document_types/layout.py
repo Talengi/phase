@@ -6,7 +6,8 @@ See https://django-crispy-forms.readthedocs.org/en/d-0/layouts.html
 
 from django.template.loader import render_to_string
 from django.template import Context
-from crispy_forms.layout import LayoutObject
+from django.utils.text import slugify
+from crispy_forms.layout import LayoutObject, Fieldset
 from crispy_forms.utils import render_field
 
 
@@ -88,3 +89,13 @@ class FlatRelatedDocumentsLayout(LayoutObject):
                 'documents': documents,
                 'form_style': form_style,
             }))
+
+
+class DocumentFieldset(Fieldset):
+    """We need to overload this class to always add a default id attribute."""
+
+    def __init__(self, *args, **kwargs):
+        super(DocumentFieldset, self).__init__(*args, **kwargs)
+        if self.css_id is None:
+            legend = unicode(self.legend)
+            self.css_id = 'fieldset-%s' % slugify(legend)

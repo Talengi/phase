@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load compressed crispy_forms_tags %}
+{% load compressed crispy_forms_tags document_forms %}
 
 {% block extra_css %}
     {% compressed_css "detail" %}
@@ -7,7 +7,9 @@
 
 {% block content %}
 <div class="row">
-    <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+
+    <!-- Sorry about that -->
+    <div class="col-sm-8 col-md-6 col-md-offset-1 col-lg-5 col-lg-offset-2">
         <h1>{{ document.document_key }}</h1>
         <form class="disabled " id="document-detail">
             {% crispy form form.helper %}
@@ -41,6 +43,12 @@
                 </form>
 
             {% endif %}
+        </div>
+    </div>
+
+    <div id="document-sidebar" class="hidden-xs col-sm-4 col-md-4 col-lg-3">
+        <div id="document-navigation" class="well" >
+            {% crispy_menu form form.helper %}
         </div>
     </div>
 {% endblock content %}

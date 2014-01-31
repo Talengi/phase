@@ -230,47 +230,11 @@ button.ui-multiselect {
     padding-right: 20px;
     padding: 10px 20px;
 }
-
-/* left nav */
-.leftnav {
-    top: 40px;
-    width: 258px;
-    margin: 30px 0px 0px;
-    padding: 0px;
-    background-color: rgb(255, 255, 255);
-    border-radius: 6px 6px 6px 6px;
-    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.067);
+#document-sidebar ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
 }
-.leftnav > li:first-child > a {
-    border-radius: 6px 6px 0px 0px;
-}
-.leftnav > li:last-child > a {
-    border-radius: 0px 0px 6px 6px;
-}
-.leftnav > .active > a {
-    position: relative;
-    z-index: 2;
-    padding: 9px 15px;
-    border: 0px none;
-    text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.15);
-    box-shadow: 1px 0px 0px rgba(0, 0, 0, 0.1) inset, -1px 0px 0px rgba(0, 0, 0, 0.1) inset;
-}
-.leftnav > li > a {
-    display: block;
-    margin: 0px 0px -1px;
-    padding: 8px 14px;
-    border: 1px solid rgb(229, 229, 229);
-}
-.leftnav .active .icon-chevron-right, .leftnav .active a:hover .icon-chevron-right {
-    opacity: 1;
-}
-.leftnav .icon-chevron-right {
-    float: right;
-    margin-top: 2px;
-    margin-right: -6px;
-    opacity: 0.25;
-}
-
 /* Off canvas sidebar */
 .row-offcanvas .sidebar-offcanvas {
     position: fixed;

@@ -1,7 +1,7 @@
 from django.utils.translation import ugettext_lazy as _
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Fieldset
+from crispy_forms.layout import Layout
 
 from documents.forms.models import BaseDocumentForm
 from .models import (
@@ -9,7 +9,8 @@ from .models import (
     DemoMetadataRevision
 )
 from .layout import (
-    ScheduleLayout, ScheduleStatusLayout, FlatRelatedDocumentsLayout)
+    DocumentFieldset, ScheduleLayout, ScheduleStatusLayout,
+    FlatRelatedDocumentsLayout)
 
 
 class ContractorDeliverableForm(BaseDocumentForm):
@@ -24,18 +25,18 @@ class ContractorDeliverableForm(BaseDocumentForm):
 
     def build_layout(self):
         if self.read_only:
-            related_documents = Fieldset(
+            related_documents = DocumentFieldset(
                 _('Related documents'),
                 FlatRelatedDocumentsLayout('related_documents'),
             )
         else:
-            related_documents = Fieldset(
+            related_documents = DocumentFieldset(
                 _('Related documents'),
                 'related_documents',
             )
 
         return Layout(
-            Fieldset(
+            DocumentFieldset(
                 _('General information'),
                 'document_key',
                 'title',
@@ -52,7 +53,7 @@ class ContractorDeliverableForm(BaseDocumentForm):
                 'weight',
             ),
             related_documents,
-            Fieldset(
+            DocumentFieldset(
                 _('Schedule'),
                 ScheduleLayout(
                     ScheduleStatusLayout('std'),
@@ -81,7 +82,7 @@ class ContractorDeliverableRevisionForm(BaseDocumentForm):
 
     def build_layout(self):
         return Layout(
-            Fieldset(
+            DocumentFieldset(
                 _('Revision'),
                 'status',
                 #'revision_date',
@@ -90,7 +91,7 @@ class ContractorDeliverableRevisionForm(BaseDocumentForm):
                 'native_file',
                 'pdf_file',
             ),
-            Fieldset(
+            DocumentFieldset(
                 _('Review'),
                 'review_start_date',
                 'review_due_date',
