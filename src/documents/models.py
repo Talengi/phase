@@ -49,7 +49,7 @@ class Document(models.Model):
     # Factories and tests must be updated
     metadata_type = models.ForeignKey(ContentType, null=True)
     metadata_id = models.PositiveIntegerField(null=True)
-    metadata = generic.GenericForeignKey('metadata_type', 'metadata_id', null=True)
+    metadata = generic.GenericForeignKey('metadata_type', 'metadata_id')
 
     class Meta:
         verbose_name = _('Document')
