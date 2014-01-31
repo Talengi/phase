@@ -1,7 +1,13 @@
 /* Main style */
 body {
-    padding-top: 51px; /* Because of the fixed top navbar */
+    padding-top: 71px; /* Because of the fixed top navbar */
     padding-bottom: 50px;
+}
+body.documentlist {
+    padding-top: 122px;
+}
+body > .container {
+    top: 71px;
 }
 body > .container,
 .navbar > .container {
@@ -97,9 +103,6 @@ button.ui-multiselect {
 }
 
 /* Datatables custom */
-#document-list-row {
-    margin-top: 66px; /* Because of the second navbar */
-}
 #documents thead th {
     white-space: nowrap;
 }
