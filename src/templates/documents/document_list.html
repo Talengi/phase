@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load compressed %}
 
+{% block custombodyclass %}documentlist{% endblock %}
+
 {% block additional_navbar %}
     {% include 'documents/document_list_navbar.html' %}
 {% endblock %}
