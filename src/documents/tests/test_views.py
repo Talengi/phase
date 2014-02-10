@@ -1,7 +1,6 @@
 import os
 import json
 
-from django.db.models import Q
 from django.test import TestCase
 from django.test.client import Client
 from django.core.urlresolvers import reverse
@@ -12,7 +11,6 @@ from accounts.factories import UserFactory, CategoryFactory
 from categories.models import Category
 from default_documents.factories import MetadataRevisionFactory
 from default_documents.models import ContractorDeliverable
-from documents.models import Document
 from documents.factories import DocumentFactory
 from documents.tests.utils import generate_random_documents
 
