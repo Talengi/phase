@@ -1,7 +1,7 @@
 import factory
 from django.contrib.contenttypes.models import ContentType
 
-from document_types.models import DemoMetadata
+from default_documents.models import DemoMetadata
 from .models import Organisation, CategoryTemplate, Category
 
 

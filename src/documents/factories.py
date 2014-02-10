@@ -3,7 +3,7 @@ import datetime
 import factory
 from factory.fuzzy import FuzzyDate
 
-from document_types.factories import MetadataFactory, MetadataRevisionFactory
+from default_documents.factories import MetadataFactory, MetadataRevisionFactory
 from categories.factories import CategoryFactory
 from .models import Document
 

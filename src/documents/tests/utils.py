@@ -3,8 +3,8 @@ from random import choice
 from django.db import transaction
 
 from documents.factories import DocumentFactory
-from document_types.factories import MetadataRevisionFactory
-from document_types.models import DemoMetadata
+from default_documents.factories import MetadataRevisionFactory
+from default_documents.models import DemoMetadata
 
 
 @transaction.atomic

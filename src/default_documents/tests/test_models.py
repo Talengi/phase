@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from document_types.models import (
+from default_documents.models import (
     ContractorDeliverable, ContractorDeliverableRevision)
 from documents.factories import DocumentFactory
 

@@ -10,8 +10,8 @@ from django.conf import settings
 
 from accounts.factories import UserFactory, CategoryFactory
 from categories.models import Category
-from document_types.factories import MetadataRevisionFactory
-from document_types.models import ContractorDeliverable
+from default_documents.factories import MetadataRevisionFactory
+from default_documents.models import ContractorDeliverable
 from documents.models import Document
 from documents.factories import DocumentFactory
 from documents.tests.utils import generate_random_documents

@@ -4,7 +4,7 @@ from django.core.exceptions import ImproperlyConfigured
 
 def documentform_factory(model):
     """Gets the given model edition form. """
-    from document_types import forms as document_forms
+    from default_documents import forms as document_forms
     form_class_name = '%sForm' % model.__name__
     try:
         DocumentForm = getattr(document_forms, form_class_name)
