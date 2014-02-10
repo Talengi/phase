@@ -20,7 +20,7 @@ class Document(models.Model):
     objects = DocumentManager()
 
     document_key = models.SlugField(
-        _('Document key'),
+        _('Document number'),
         unique=True,
         db_index=True,
         max_length=250)
