@@ -25,6 +25,7 @@
             <h2>{{ _('Revisable data') }}</h2>
             {% crispy revision_form revision_form.helper %}
 
+            <hr />
             <div class="form-actions">
                 {% if is_edit %}
                     {% include 'documents/edit_form_actions.html' %}

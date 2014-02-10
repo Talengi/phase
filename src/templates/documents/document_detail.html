@@ -10,42 +10,18 @@
 
     <!-- Sorry about that -->
     <div class="col-sm-8 col-md-6 col-md-offset-1 col-lg-5 col-lg-offset-2">
+        {% include 'documents/document_detail_actions.html' with dropdirection='dropdown' %}
+        <hr />
+
         <h1>{{ document.document_key }}</h1>
         <form class="disabled " id="document-detail">
             {% crispy form form.helper %}
             {% include 'documents/document_revisions.html' with revisions=revisions %}
         </form>
 
-        <div class="form-actions">
-            <a class="btn btn-default" href="{% url "category_document_list" organisation_slug category_slug %}">Cancel</a>
-
-            {% if perms.documents.change_document %}
-
-                <div class="btn-group dropup pull-right last-button">
-                    {% url "document_edit" organisation_slug category_slug document.document_key as edit_url %}
-                    <a class="btn btn-primary" href="{{ edit_url }}">{{ _('Edit latest revision') }}</a>
-                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                        <span class="caret"></span>
-                        <span class="sr-only">{{ _('Edit revisions')</span>
-                    </button>
-                    <ul class="dropdown-menu" role="menu">
-                        {% for revision in revisions reversed %}
-                            {% url "document_edit" organisation_slug category_slug document.document_key revision.revision as edit_url %}
-                            <li><a href="{{ edit_url }}">Edit revision {{ revision.revision }}</a></li>
-                        {% endfor %}
-                    </ul>
-                </div>
-
-                {% url "document_revise" organisation_slug category_slug document.document_key as revise_url %}
-                <form action="{{ revise_url }}" method="post" class="pull-right">
-                    {% csrf_token %}
-                    <input type="submit" class="btn btn-primary" value="{{ _('Create revision') }}">
-                </form>
-
-            {% endif %}
-        </div>
+        <hr />
+        {% include 'documents/document_detail_actions.html' with dropdirection='dropup' %}
     </div>
-
     {% include 'documents/document_detail_sidebar.html' with form=form revision_form=revisions.0.form %}
 {% endblock content %}
 
