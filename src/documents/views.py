@@ -391,8 +391,7 @@ class DocumentCreate(PermissionRequiredMixin,
             document_key=self.object.generate_document_key(),
             category=self.category,
             current_revision=self.revision.revision,
-            current_revision_date=timezone.now(),
-            metadata=self.object)
+            current_revision_date=timezone.now())
 
         self.revision.document = document
         self.revision.save()
