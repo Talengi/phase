@@ -1,13 +1,10 @@
 /* Main style */
 body {
-    padding-top: 71px; /* Because of the fixed top navbar */
     padding-bottom: 50px;
 }
-body.documentlist {
-    padding-top: 122px;
-}
-body > .container {
-    top: 71px;
+body.documentlist .main-navbar {
+    margin-bottom: 0;
+    z-index: 1000;
 }
 body > .container,
 .navbar > .container {
@@ -21,16 +18,11 @@ body > .container,
 .date-error {
     color: #B94A48;
 }
-.navbar-fixed-almost-top {
-    position: fixed;
-    top: 51px;
-    right: 0px;
-    left: 0px;
-    z-index: 1000;
-    margin-bottom: 0px;
+.additional-navbar {
+    z-index: 500;
     background: #fff;
 }
-.navbar-fixed-almost-top .navbar-text {
+.additional-navbar .navbar-text {
     margin-left: 0;
 }
 #download-button {
