@@ -31,7 +31,16 @@ body > .container,
 body > .container > .messages {
     margin-top: 15px;
 }
-
+#back-to-top {
+    position: fixed;
+    bottom: 8px;
+    right: 5px;
+}
+#back-to-top a {
+    padding: 3px;
+    border-bottom: 3px solid #666;
+    color: #666;
+}
 
 /* Form rendering */
 .form-horizontal label {
