@@ -13,7 +13,8 @@ class CategoryTemplateAdminForm(forms.ModelForm):
         # Define a custom queryset to limit the available
         # content types to actual Metadata models
         qs = ContentType.objects \
-            .filter(app_label__endswith='_documents')
+            .filter(app_label__endswith='_documents') \
+            .exclude(model__icontains='revision')
         self.fields['metadata_model'].queryset = qs
 
     class Meta:
