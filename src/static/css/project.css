@@ -38,7 +38,7 @@ body > .container > .messages {
 }
 #back-to-top a {
     padding: 3px;
-    border-bottom: 3px solid #666;
+    border-top: 3px solid #666;
     color: #666;
 }
 
