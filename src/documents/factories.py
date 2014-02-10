@@ -1,10 +1,8 @@
 import datetime
 
-from django.contrib.contenttypes.models import ContentType
 import factory
 from factory.fuzzy import FuzzyDate
 
-from document_types.models import DemoMetadata
 from document_types.factories import MetadataFactory, MetadataRevisionFactory
 from categories.factories import CategoryFactory
 from .models import Document
@@ -29,14 +27,6 @@ class DocumentFactory(factory.DjangoModelFactory):
         return super(DocumentFactory, cls).create(**kwargs)
 
     @classmethod
-    def _prepare(cls, create, **kwargs):
-        if not 'metadata' in kwargs:
-            kwargs.update({
-                'metadata': ContentType.objects.get_for_model(DemoMetadata)
-            })
-        return super(DocumentFactory, cls)._prepare(create, **kwargs)
-
-    @classmethod
     def _after_postgeneration(cls, obj, create, results=None):
         revision_kwargs = {
             'document': obj,
@@ -54,7 +44,7 @@ class DocumentFactory(factory.DjangoModelFactory):
             'latest_revision': revision
         }
         metadata_kwargs.update(cls.metadata_kwargs)
-        obj.metadata = MetadataFactory(**metadata_kwargs)
+        MetadataFactory(**metadata_kwargs)
 
         if create and results:
             obj.save()

@@ -67,6 +67,13 @@ class Document(models.Model):
         # https://code.djangoproject.com/ticket/13834
         return (self.document_key,)
 
+    @property
+    def metadata(self):
+        """Returns the metadata object."""
+        Model = self.category.category_template.metadata_model
+        metadata = Model.get_object_for_this_type(document=self)
+        return metadata
+
 
 class Metadata(models.Model):
     document = models.ForeignKey(
@@ -139,11 +146,11 @@ class Metadata(models.Model):
         fields_infos = dict((field[1], unicode(getattr(self, field[1])))
                             for field in self.PhaseConfig.column_fields)
         fields_infos.update({
-            u'url': self.document.get_absolute_url(),
-            u'number': self.natural_key(),
-            u'pk': self.pk,
-            u'favorite_id': document2favorite.get(self.pk, u''),
-            u'favorited': favorited,
+            'url': self.document.get_absolute_url(),
+            'number': self.natural_key(),
+            'pk': self.pk,
+            'favorite_id': document2favorite.get(self.pk, ''),
+            'favorited': favorited,
         })
         return fields_infos
 

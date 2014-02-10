@@ -72,7 +72,7 @@ class QueriesTest(TestCase):
 
     def test_document_detail(self):
         document = DocumentFactory()
-        url = reverse('document_detail', args=[document.document_number])
+        url = document.get_absolute_url()
 
         # First call to generate the cache
         self.client.get(url)
