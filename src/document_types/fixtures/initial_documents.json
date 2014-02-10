@@ -7,12 +7,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-08-23",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.988Z",
-    "metadata_id": 1,
     "document_key": "FAC09001-FWF-202-SAF-FAT-3538"
   }
 },
@@ -24,12 +19,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-12-24",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.269Z",
-    "metadata_id": 2,
     "document_key": "FAC09001-CTR-106-VES-SOR-2177"
   }
 },
@@ -41,12 +31,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-12-02",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.462Z",
-    "metadata_id": 3,
     "document_key": "FAC10005-CTR-107-COM-DTS-9294"
   }
 },
@@ -58,12 +43,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-10-07",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.588Z",
-    "metadata_id": 4,
     "document_key": "FAC09001-CTR-301-TEL-PRO-5751"
   }
 },
@@ -75,12 +55,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-07-25",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.907Z",
-    "metadata_id": 5,
     "document_key": "FAC09001-CTR-400-ISP-LAY-6438"
   }
 },
@@ -92,12 +67,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-08-09",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.669Z",
-    "metadata_id": 6,
     "document_key": "FAC10005-FWF-007-PMT-NCR-3614"
   }
 },
@@ -109,12 +79,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-08-05",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.095Z",
-    "metadata_id": 7,
     "document_key": "FAC09001-FWF-BMT-COM-PID-0388"
   }
 },
@@ -126,12 +91,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-10-05",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.629Z",
-    "metadata_id": 8,
     "document_key": "FAC10005-CTR-000-ROT-ESD-0555"
   }
 },
@@ -143,12 +103,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-02-04",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.927Z",
-    "metadata_id": 9,
     "document_key": "FAC10005-CTR-005-DRI-MSD-0345"
   }
 },
@@ -160,12 +115,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-02-27",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.579Z",
-    "metadata_id": 10,
     "document_key": "FAC10005-FWF-EXT-MUL-UFD-3044"
   }
 },
@@ -177,12 +127,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-10-08",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.812Z",
-    "metadata_id": 11,
     "document_key": "FAC10005-CTR-003-PCO-UFD-9039"
   }
 },
@@ -194,12 +139,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-06-28",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.108Z",
-    "metadata_id": 12,
     "document_key": "FAC10005-CTR-CO2-ARC-DWG-7257"
   }
 },
@@ -211,12 +151,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-04-11",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.899Z",
-    "metadata_id": 13,
     "document_key": "FAC09001-FWF-AST-ICS-MSD-3875"
   }
 },
@@ -228,12 +163,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-02-09",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.310Z",
-    "metadata_id": 14,
     "document_key": "FAC10005-FWF-000-HVA-WIR-4412"
   }
 },
@@ -245,12 +175,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-06-22",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.241Z",
-    "metadata_id": 15,
     "document_key": "FAC09001-FWF-004-MAI-PEP-9745"
   }
 },
@@ -262,12 +187,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-11-14",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.355Z",
-    "metadata_id": 16,
     "document_key": "FAC10005-FWF-CSA-PIP-MTO-4646"
   }
 },
@@ -279,12 +199,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-05-01",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.516Z",
-    "metadata_id": 17,
     "document_key": "FAC09001-FWF-406-PCS-UFD-3221"
   }
 },
@@ -296,12 +211,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-08-13",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.845Z",
-    "metadata_id": 18,
     "document_key": "FAC10005-CTR-AST-PCS-ITP-4703"
   }
 },
@@ -313,12 +223,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-09-18",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.606Z",
-    "metadata_id": 19,
     "document_key": "FAC10005-CTR-201-SAF-FG-1060"
   }
 },
@@ -330,12 +235,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-03-19",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.314Z",
-    "metadata_id": 20,
     "document_key": "FAC09001-FWF-CMP-TEL-DCN-7931"
   }
 },
@@ -347,12 +247,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-05-18",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.744Z",
-    "metadata_id": 21,
     "document_key": "FAC09001-CTR-CO1-ISP-CAL-0715"
   }
 },
@@ -364,12 +259,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-08-25",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.436Z",
-    "metadata_id": 22,
     "document_key": "FAC10005-FWF-CSC-ISP-UFD-8947"
   }
 },
@@ -381,12 +271,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-02-19",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.864Z",
-    "metadata_id": 23,
     "document_key": "FAC09001-CTR-309-ROT-PRM-9776"
   }
 },
@@ -398,12 +283,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-10-16",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.068Z",
-    "metadata_id": 24,
     "document_key": "FAC10005-CTR-010-CIV-DWG-1667"
   }
 },
@@ -415,12 +295,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-08-01",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.225Z",
-    "metadata_id": 25,
     "document_key": "FAC10005-CTR-013-SAF-REP-6216"
   }
 },
@@ -432,12 +307,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-01-13",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.141Z",
-    "metadata_id": 26,
     "document_key": "FAC10005-CTR-012-COM-PRO-6884"
   }
 },
@@ -449,12 +319,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-06-12",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.345Z",
-    "metadata_id": 27,
     "document_key": "FAC09001-CTR-110-ARC-PSD-9142"
   }
 },
@@ -466,12 +331,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-06-24",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.868Z",
-    "metadata_id": 28,
     "document_key": "FAC10005-CTR-004-DRI-NCR-7400"
   }
 },
@@ -483,12 +343,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-01-01",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.632Z",
-    "metadata_id": 29,
     "document_key": "FAC10005-FWF-006-VES-CHT-9779"
   }
 },
@@ -500,12 +355,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-02-17",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.212Z",
-    "metadata_id": 30,
     "document_key": "FAC10005-FWF-CMG-OPE-CER-2405"
   }
 },
@@ -517,12 +367,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-11-15",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.258Z",
-    "metadata_id": 31,
     "document_key": "FAC10005-FWF-110-ROT-SCH-7156"
   }
 },
@@ -534,12 +379,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-08-03",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.433Z",
-    "metadata_id": 32,
     "document_key": "FAC09001-FWF-012-ICS-STD-4653"
   }
 },
@@ -551,12 +391,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-10-09",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.903Z",
-    "metadata_id": 33,
     "document_key": "FAC09001-CTR-CWH-SAF-CER-4275"
   }
 },
@@ -568,12 +403,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-12-14",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.817Z",
-    "metadata_id": 34,
     "document_key": "FAC09001-FWF-700-MAI-LIS-0927"
   }
 },
@@ -585,12 +415,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-11-15",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.141Z",
-    "metadata_id": 35,
     "document_key": "FAC09001-CTR-502-OPE-BAS-2355"
   }
 },
@@ -602,12 +427,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-03-12",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.487Z",
-    "metadata_id": 36,
     "document_key": "FAC09001-CTR-CGC-PRT-DCN-4701"
   }
 },
@@ -619,12 +439,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-08-10",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.822Z",
-    "metadata_id": 37,
     "document_key": "FAC09001-CTR-CSC-CIV-BAS-9191"
   }
 },
@@ -636,12 +451,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-01-12",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.910Z",
-    "metadata_id": 38,
     "document_key": "FAC10005-CTR-004-OPE-ISO-7880"
   }
 },
@@ -653,12 +463,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-03-04",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.335Z",
-    "metadata_id": 39,
     "document_key": "FAC09001-FWF-308-DRI-REQ-9479"
   }
 },
@@ -670,12 +475,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-02-20",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.552Z",
-    "metadata_id": 40,
     "document_key": "FAC10005-FWF-005-QAC-PLA-6925"
   }
 },
@@ -687,12 +487,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-12-02",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.406Z",
-    "metadata_id": 41,
     "document_key": "FAC09001-CTR-110-ROT-FG-7394"
   }
 },
@@ -704,12 +499,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-07-02",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.035Z",
-    "metadata_id": 42,
     "document_key": "FAC09001-FWF-300-COR-STD-4778"
   }
 },
@@ -721,12 +511,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-11-14",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.125Z",
-    "metadata_id": 43,
     "document_key": "FAC10005-CTR-CSA-HVA-TSD-3869"
   }
 },
@@ -738,12 +523,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-05-09",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.895Z",
-    "metadata_id": 44,
     "document_key": "FAC10005-FWF-012-EXP-DCN-2840"
   }
 },
@@ -755,12 +535,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-07-12",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.538Z",
-    "metadata_id": 45,
     "document_key": "FAC09001-FWF-406-STR-TSD-2297"
   }
 },
@@ -772,12 +547,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-01-03",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.337Z",
-    "metadata_id": 46,
     "document_key": "FAC09001-FWF-008-ISP-PEP-7282"
   }
 },
@@ -789,12 +559,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-12-28",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.687Z",
-    "metadata_id": 47,
     "document_key": "FAC09001-CTR-304-CON-ESD-2585"
   }
 },
@@ -806,12 +571,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-03-02",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.875Z",
-    "metadata_id": 48,
     "document_key": "FAC09001-FWF-201-STR-NCR-4063"
   }
 },
@@ -823,12 +583,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-06-17",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.495Z",
-    "metadata_id": 49,
     "document_key": "FAC10005-FWF-CWO-OPE-PEP-7923"
   }
 },
@@ -840,12 +595,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-12-20",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.943Z",
-    "metadata_id": 50,
     "document_key": "FAC10005-CTR-306-VES-ESD-3659"
   }
 },
@@ -857,12 +607,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-03-08",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.826Z",
-    "metadata_id": 51,
     "document_key": "FAC09001-FWF-200-INS-UFD-5088"
   }
 },
@@ -874,12 +619,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-03-17",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.265Z",
-    "metadata_id": 52,
     "document_key": "FAC09001-CTR-ACC-STR-STD-5883"
   }
 },
@@ -891,12 +631,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-09-25",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.002Z",
-    "metadata_id": 53,
     "document_key": "FAC09001-CTR-EXT-PIP-SRV-3001"
   }
 },
@@ -908,12 +643,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-07-28",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.824Z",
-    "metadata_id": 54,
     "document_key": "FAC09001-CTR-307-SAF-SCH-8588"
   }
 },
@@ -925,12 +655,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-07-28",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.807Z",
-    "metadata_id": 55,
     "document_key": "FAC09001-CTR-307-PRT-CAL-4740"
   }
 },
@@ -942,12 +667,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-09-10",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.379Z",
-    "metadata_id": 56,
     "document_key": "FAC10005-CTR-406-ROT-MTO-0552"
   }
 },
@@ -959,12 +679,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-05-18",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.204Z",
-    "metadata_id": 57,
     "document_key": "FAC09001-CTR-600-DRI-CAL-2553"
   }
 },
@@ -976,12 +691,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-03-17",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.206Z",
-    "metadata_id": 58,
     "document_key": "FAC10005-CTR-400-DRI-WIR-3712"
   }
 },
@@ -993,12 +703,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-08-03",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.376Z",
-    "metadata_id": 59,
     "document_key": "FAC10005-FWF-CSA-VES-HAZ-0498"
   }
 },
@@ -1010,12 +715,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-12-26",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.503Z",
-    "metadata_id": 60,
     "document_key": "FAC10005-FWF-307-ELE-CHT-8838"
   }
 },
@@ -1027,12 +727,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-07-10",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.270Z",
-    "metadata_id": 61,
     "document_key": "FAC10005-CTR-EXT-INS-PRO-9513"
   }
 },
@@ -1044,12 +739,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-05-09",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.828Z",
-    "metadata_id": 62,
     "document_key": "FAC10005-CTR-003-ROT-PRO-3248"
   }
 },
@@ -1061,12 +751,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-10-27",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.675Z",
-    "metadata_id": 63,
     "document_key": "FAC10005-FWF-ROA-SAF-STU-5639"
   }
 },
@@ -1078,12 +763,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-07-26",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.661Z",
-    "metadata_id": 64,
     "document_key": "FAC09001-FWF-106-PCO-LIS-4765"
   }
 },
@@ -1095,12 +775,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-08-07",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.732Z",
-    "metadata_id": 65,
     "document_key": "FAC10005-FWF-009-HSE-ITP-2348"
   }
 },
@@ -1112,12 +787,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-02-13",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.293Z",
-    "metadata_id": 66,
     "document_key": "FAC10005-FWF-CMP-QAC-PHY-3622"
   }
 },
@@ -1129,12 +799,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-10-27",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.572Z",
-    "metadata_id": 67,
     "document_key": "FAC10005-FWF-005-STR-PHY-8029"
   }
 },
@@ -1146,12 +811,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-02-01",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.199Z",
-    "metadata_id": 68,
     "document_key": "FAC10005-FWF-110-CIV-PEP-3711"
   }
 },
@@ -1163,12 +823,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-01-20",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.314Z",
-    "metadata_id": 69,
     "document_key": "FAC10005-CTR-404-PMT-SPE-2724"
   }
 },
@@ -1180,12 +835,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-10-25",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.496Z",
-    "metadata_id": 70,
     "document_key": "FAC09001-FWF-405-PMT-REQ-5904"
   }
 },
@@ -1197,12 +847,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-09-22",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.254Z",
-    "metadata_id": 71,
     "document_key": "FAC10005-FWF-CMG-SAF-FAT-2310"
   }
 },
@@ -1214,12 +859,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-10-19",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.569Z",
-    "metadata_id": 72,
     "document_key": "FAC09001-FWF-LAB-MUL-REG-0738"
   }
 },
@@ -1231,12 +871,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-11-07",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.641Z",
-    "metadata_id": 73,
     "document_key": "FAC10005-FWF-404-ICS-REQ-0410"
   }
 },
@@ -1248,12 +883,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-05-17",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.424Z",
-    "metadata_id": 74,
     "document_key": "FAC10005-CTR-106-TEL-STU-2687"
   }
 },
@@ -1265,12 +895,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-06-12",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.667Z",
-    "metadata_id": 75,
     "document_key": "FAC10005-CTR-001-PRT-ESD-1979"
   }
 },
@@ -1282,12 +907,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-10-14",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.451Z",
-    "metadata_id": 76,
     "document_key": "FAC09001-FWF-012-INS-PHY-1863"
   }
 },
@@ -1299,12 +919,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-08-27",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.646Z",
-    "metadata_id": 77,
     "document_key": "FAC09001-CTR-CMG-ISP-FG-5156"
   }
 },
@@ -1316,12 +931,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-06-18",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.605Z",
-    "metadata_id": 78,
     "document_key": "FAC09001-CTR-CMG-HSE-CHT-7153"
   }
 },
@@ -1333,12 +943,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-03-22",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.155Z",
-    "metadata_id": 79,
     "document_key": "FAC09001-FWF-CAB-PIP-PID-4923"
   }
 },
@@ -1350,12 +955,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-08-13",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.577Z",
-    "metadata_id": 80,
     "document_key": "FAC09001-FWF-500-ROT-HMB-7999"
   }
 },
@@ -1367,12 +967,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-08-03",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.243Z",
-    "metadata_id": 81,
     "document_key": "FAC10005-CTR-100-INS-PRO-0531"
   }
 },
@@ -1384,12 +979,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-10-14",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.790Z",
-    "metadata_id": 82,
     "document_key": "FAC10005-CTR-003-INS-HAZ-5520"
   }
 },
@@ -1401,12 +991,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-07-27",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.753Z",
-    "metadata_id": 83,
     "document_key": "FAC10005-FWF-TMP-ELE-FG-8850"
   }
 },
@@ -1418,12 +1003,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-10-28",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.624Z",
-    "metadata_id": 84,
     "document_key": "FAC09001-FWF-105-COM-MTO-1412"
   }
 },
@@ -1435,12 +1015,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-10-06",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.332Z",
-    "metadata_id": 85,
     "document_key": "FAC10005-FWF-CO2-PCS-MAN-8556"
   }
 },
@@ -1452,12 +1027,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-07-28",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.479Z",
-    "metadata_id": 86,
     "document_key": "FAC10005-FWF-CWH-PIP-FG-4831"
   }
 },
@@ -1469,12 +1039,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-01-02",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.443Z",
-    "metadata_id": 87,
     "document_key": "FAC10005-CTR-502-DRI-MAN-0628"
   }
 },
@@ -1486,12 +1051,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-08-14",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.957Z",
-    "metadata_id": 88,
     "document_key": "FAC10005-FWF-013-HVA-ESD-2193"
   }
 },
@@ -1503,12 +1063,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-09-04",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.554Z",
-    "metadata_id": 89,
     "document_key": "FAC09001-FWF-500-CON-MAN-0651"
   }
 },
@@ -1520,12 +1075,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-06-01",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.982Z",
-    "metadata_id": 90,
     "document_key": "FAC09001-CTR-403-COM-PFD-5122"
   }
 },
@@ -1537,12 +1087,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-11-07",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.185Z",
-    "metadata_id": 91,
     "document_key": "FAC09001-CTR-105-MAI-BAS-3806"
   }
 },
@@ -1554,12 +1099,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-07-02",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.097Z",
-    "metadata_id": 92,
     "document_key": "FAC10005-FWF-105-EXP-OPM-3245"
   }
 },
@@ -1571,12 +1111,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-10-06",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.100Z",
-    "metadata_id": 93,
     "document_key": "FAC09001-FWF-000-ARC-HMB-7287"
   }
 },
@@ -1588,12 +1123,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-01-12",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.587Z",
-    "metadata_id": 94,
     "document_key": "FAC09001-CTR-CHC-MAI-FG-2706"
   }
 },
@@ -1605,12 +1135,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-06-26",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.411Z",
-    "metadata_id": 95,
     "document_key": "FAC10005-FWF-003-VES-UFD-1311"
   }
 },
@@ -1622,12 +1147,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-05-28",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.918Z",
-    "metadata_id": 96,
     "document_key": "FAC09001-FWF-AST-PCS-MST-0705"
   }
 },
@@ -1639,12 +1159,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-01-07",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.354Z",
-    "metadata_id": 97,
     "document_key": "FAC10005-CTR-406-ICS-WIR-7792"
   }
 },
@@ -1656,12 +1171,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-01-19",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.747Z",
-    "metadata_id": 98,
     "document_key": "FAC09001-CTR-305-PIP-REG-3701"
   }
 },
@@ -1673,12 +1183,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-01-03",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.126Z",
-    "metadata_id": 99,
     "document_key": "FAC09001-CTR-104-CON-LIS-3170"
   }
 },
@@ -1690,12 +1195,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-02-25",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.564Z",
-    "metadata_id": 100,
     "document_key": "FAC10005-FWF-401-PCO-REP-6336"
   }
 },
@@ -1707,12 +1207,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-04-10",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.086Z",
-    "metadata_id": 101,
     "document_key": "FAC10005-CTR-308-INS-PRM-1164"
   }
 },
@@ -1724,12 +1219,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-06-10",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.856Z",
-    "metadata_id": 102,
     "document_key": "FAC10005-FWF-012-ARC-ANA-4460"
   }
 },
@@ -1741,12 +1231,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-10-17",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.538Z",
-    "metadata_id": 103,
     "document_key": "FAC10005-FWF-EXT-ELE-PRO-8325"
   }
 },
@@ -1758,12 +1243,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-03-18",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.742Z",
-    "metadata_id": 104,
     "document_key": "FAC10005-CTR-700-WEL-CER-5495"
   }
 },
@@ -1775,12 +1255,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-05-04",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.801Z",
-    "metadata_id": 105,
     "document_key": "FAC09001-FWF-200-HVA-REG-8733"
   }
 },
@@ -1792,12 +1267,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-09-20",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.123Z",
-    "metadata_id": 106,
     "document_key": "FAC09001-FWF-000-HSE-SLD-1532"
   }
 },
@@ -1809,12 +1279,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-06-17",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.222Z",
-    "metadata_id": 107,
     "document_key": "FAC09001-FWF-002-OPE-SLD-9220"
   }
 },
@@ -1826,12 +1291,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-08-27",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:50.911Z",
-    "metadata_id": 108,
     "document_key": "FAC09001-CTR-010-PCO-MTO-3436"
   }
 },
@@ -1843,12 +1303,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-07-06",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.316Z",
-    "metadata_id": 109,
     "document_key": "FAC09001-FWF-008-ARC-PRM-9062"
   }
 },
@@ -1860,12 +1315,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-05-18",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.153Z",
-    "metadata_id": 110,
     "document_key": "FAC10005-FWF-CGC-ELE-REQ-5730"
   }
 },
@@ -1877,12 +1327,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-05-11",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:50.969Z",
-    "metadata_id": 111,
     "document_key": "FAC09001-CTR-011-PCO-PRM-9273"
   }
 },
@@ -1894,12 +1339,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-02-22",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.963Z",
-    "metadata_id": 112,
     "document_key": "FAC10005-CTR-CGC-PCO-PEP-2648"
   }
 },
@@ -1911,12 +1351,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-11-25",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.147Z",
-    "metadata_id": 113,
     "document_key": "FAC09001-FWF-303-PMT-SOR-3362"
   }
 },
@@ -1928,12 +1363,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-09-14",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.493Z",
-    "metadata_id": 114,
     "document_key": "FAC10005-FWF-005-ELE-PRM-3842"
   }
 },
@@ -1945,12 +1375,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-10-12",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.900Z",
-    "metadata_id": 115,
     "document_key": "FAC09001-FWF-201-STR-PRO-9274"
   }
 },
@@ -1962,12 +1387,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-02-10",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.742Z",
-    "metadata_id": 116,
     "document_key": "FAC10005-FWF-500-MAI-PLA-3882"
   }
 },
@@ -1979,12 +1399,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-04-16",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.700Z",
-    "metadata_id": 117,
     "document_key": "FAC09001-FWF-502-TEL-SAT-0871"
   }
 },
@@ -1996,12 +1411,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-05-22",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.308Z",
-    "metadata_id": 118,
     "document_key": "FAC09001-CTR-109-COR-OPM-8522"
   }
 },
@@ -2013,12 +1423,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-09-16",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.479Z",
-    "metadata_id": 119,
     "document_key": "FAC10005-FWF-306-PCS-SRV-7749"
   }
 },
@@ -2030,12 +1435,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-10-15",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.581Z",
-    "metadata_id": 120,
     "document_key": "FAC10005-FWF-402-CON-SRV-8699"
   }
 },
@@ -2047,12 +1447,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-01-10",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.085Z",
-    "metadata_id": 121,
     "document_key": "FAC10005-CTR-010-HSE-REP-6542"
   }
 },
@@ -2064,12 +1459,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-04-10",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.119Z",
-    "metadata_id": 122,
     "document_key": "FAC09001-FWF-BMT-ISP-PSD-3814"
   }
 },
@@ -2081,12 +1471,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-10-10",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.217Z",
-    "metadata_id": 123,
     "document_key": "FAC09001-FWF-CHC-COM-CAL-8244"
   }
 },
@@ -2098,12 +1483,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-03-23",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.883Z",
-    "metadata_id": 124,
     "document_key": "FAC10005-CTR-305-PMT-SRV-3701"
   }
 },
@@ -2115,12 +1495,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-01-05",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.838Z",
-    "metadata_id": 125,
     "document_key": "FAC09001-FWF-700-PCO-SLD-0975"
   }
 },
@@ -2132,12 +1507,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-07-15",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.743Z",
-    "metadata_id": 126,
     "document_key": "FAC10005-CTR-301-HSE-NCR-0952"
   }
 },
@@ -2149,12 +1519,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-01-23",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.925Z",
-    "metadata_id": 127,
     "document_key": "FAC10005-CTR-BMT-PIP-LIS-8787"
   }
 },
@@ -2166,12 +1531,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-12-07",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.178Z",
-    "metadata_id": 128,
     "document_key": "FAC09001-FWF-CCP-PCS-FG-1850"
   }
 },
@@ -2183,12 +1543,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-06-04",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.009Z",
-    "metadata_id": 129,
     "document_key": "FAC10005-FWF-AST-PCO-PFD-6189"
   }
 },
@@ -2200,12 +1555,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-06-28",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.782Z",
-    "metadata_id": 130,
     "document_key": "FAC10005-CTR-302-TEL-WIR-7449"
   }
 },
@@ -2217,12 +1567,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-09-28",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.721Z",
-    "metadata_id": 131,
     "document_key": "FAC09001-CTR-CO1-INS-PEP-0807"
   }
 },
@@ -2234,12 +1579,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-10-18",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:50.641Z",
-    "metadata_id": 132,
     "document_key": "FAC09001-CTR-001-ROT-BAS-8740"
   }
 },
@@ -2251,12 +1591,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-02-25",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.758Z",
-    "metadata_id": 133,
     "document_key": "FAC09001-FWF-600-HSE-SLD-2209"
   }
 },
@@ -2268,12 +1603,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-02-23",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.086Z",
-    "metadata_id": 134,
     "document_key": "FAC10005-CTR-CO1-TEL-PEP-3169"
   }
 },
@@ -2285,12 +1615,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-08-20",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.932Z",
-    "metadata_id": 135,
     "document_key": "FAC10005-FWF-ACC-MUL-PRO-9737"
   }
 },
@@ -2302,12 +1627,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-08-01",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.006Z",
-    "metadata_id": 136,
     "document_key": "FAC10005-CTR-CHC-COM-DCN-9059"
   }
 },
@@ -2319,12 +1639,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-07-25",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.198Z",
-    "metadata_id": 137,
     "document_key": "FAC09001-FWF-002-CON-MTO-2404"
   }
 },
@@ -2336,12 +1651,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-01-20",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.437Z",
-    "metadata_id": 138,
     "document_key": "FAC09001-FWF-402-TEL-SLD-5924"
   }
 },
@@ -2353,12 +1663,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-10-23",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.971Z",
-    "metadata_id": 139,
     "document_key": "FAC10005-FWF-AIR-DRI-SAT-7914"
   }
 },
@@ -2370,12 +1675,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-05-03",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.684Z",
-    "metadata_id": 140,
     "document_key": "FAC09001-CTR-CMP-ELE-ANA-5746"
   }
 },
@@ -2387,12 +1687,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-01-20",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.093Z",
-    "metadata_id": 141,
     "document_key": "FAC10005-FWF-CAB-EXP-PRM-1121"
   }
 },
@@ -2404,12 +1699,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-10-12",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.237Z",
-    "metadata_id": 142,
     "document_key": "FAC09001-FWF-CHC-HSE-SRV-7420"
   }
 },
@@ -2421,12 +1711,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-05-16",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.564Z",
-    "metadata_id": 143,
     "document_key": "FAC10005-CTR-200-COR-WIR-3183"
   }
 },
@@ -2438,12 +1723,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-05-06",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.426Z",
-    "metadata_id": 144,
     "document_key": "FAC09001-CTR-CAB-ARC-LAY-9319"
   }
 },
@@ -2455,12 +1735,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-10-06",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.842Z",
-    "metadata_id": 145,
     "document_key": "FAC10005-CTR-304-COM-SPE-3917"
   }
 },
@@ -2472,12 +1747,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-07-02",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.703Z",
-    "metadata_id": 146,
     "document_key": "FAC10005-FWF-405-SAF-DWG-5255"
   }
 },
@@ -2489,12 +1759,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-06-07",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.616Z",
-    "metadata_id": 147,
     "document_key": "FAC10005-FWF-LAB-ARC-CHT-5359"
   }
 },
@@ -2506,12 +1771,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-03-22",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.462Z",
-    "metadata_id": 148,
     "document_key": "FAC10005-CTR-502-MAI-SCH-5667"
   }
 },
@@ -2523,12 +1783,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-01-01",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:50.854Z",
-    "metadata_id": 149,
     "document_key": "FAC09001-CTR-008-WEL-FAT-9742"
   }
 },
@@ -2540,12 +1795,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-11-23",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.639Z",
-    "metadata_id": 150,
     "document_key": "FAC09001-FWF-501-PMT-PEP-2658"
   }
 },
@@ -2557,12 +1807,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-01-27",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.344Z",
-    "metadata_id": 151,
     "document_key": "FAC10005-CTR-104-PMT-PRM-2001"
   }
 },
@@ -2574,12 +1819,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-04-25",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.102Z",
-    "metadata_id": 152,
     "document_key": "FAC10005-CTR-308-MUL-MST-0807"
   }
 },
@@ -2591,12 +1831,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-10-08",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.111Z",
-    "metadata_id": 153,
     "document_key": "FAC10005-FWF-CAB-SAF-REQ-6019"
   }
 },
@@ -2608,12 +1843,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-06-02",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.815Z",
-    "metadata_id": 154,
     "document_key": "FAC10005-FWF-010-ICS-DTS-9606"
   }
 },
@@ -2625,12 +1855,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-06-15",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.160Z",
-    "metadata_id": 155,
     "document_key": "FAC10005-CTR-309-PPL-BAS-9468"
   }
 },
@@ -2642,12 +1867,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-12-09",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.286Z",
-    "metadata_id": 156,
     "document_key": "FAC10005-CTR-LAB-CON-MSD-3707"
   }
 },
@@ -2659,12 +1879,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-11-21",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.565Z",
-    "metadata_id": 157,
     "document_key": "FAC09001-FWF-102-VES-FG-9467"
   }
 },
@@ -2676,12 +1891,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-06-03",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.194Z",
-    "metadata_id": 158,
     "document_key": "FAC09001-FWF-CGC-EXP-TSD-2546"
   }
 },
@@ -2693,12 +1903,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-12-19",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.615Z",
-    "metadata_id": 159,
     "document_key": "FAC09001-FWF-501-EXP-MSD-0601"
   }
 },
@@ -2710,12 +1915,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-05-20",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.969Z",
-    "metadata_id": 160,
     "document_key": "FAC10005-CTR-006-PPL-SRV-1495"
   }
 },
@@ -2727,12 +1927,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-08-27",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.507Z",
-    "metadata_id": 161,
     "document_key": "FAC09001-FWF-100-PCS-HMB-7363"
   }
 },
@@ -2744,12 +1939,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-12-13",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.104Z",
-    "metadata_id": 162,
     "document_key": "FAC09001-CTR-501-PCO-PID-7370"
   }
 },
@@ -2761,12 +1951,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-01-06",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.241Z",
-    "metadata_id": 163,
     "document_key": "FAC10005-FWF-110-PIP-FG-4345"
   }
 },
@@ -2778,12 +1963,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-05-13",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.048Z",
-    "metadata_id": 164,
     "document_key": "FAC10005-CTR-CO1-ICS-DWG-6404"
   }
 },
@@ -2795,12 +1975,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-08-08",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.843Z",
-    "metadata_id": 165,
     "document_key": "FAC09001-CTR-CSC-ICS-HMB-9382"
   }
 },
@@ -2812,12 +1987,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-06-24",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.682Z",
-    "metadata_id": 166,
     "document_key": "FAC09001-FWF-109-ARC-FAT-0062"
   }
 },
@@ -2829,12 +1999,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-04-27",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.682Z",
-    "metadata_id": 167,
     "document_key": "FAC10005-CTR-300-STR-ITP-7169"
   }
 },
@@ -2846,12 +2011,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-10-25",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.959Z",
-    "metadata_id": 168,
     "document_key": "FAC09001-FWF-AST-QAC-FG-4798"
   }
 },
@@ -2863,12 +2023,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-01-24",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.369Z",
-    "metadata_id": 169,
     "document_key": "FAC09001-CTR-110-MAI-REQ-7434"
   }
 },
@@ -2880,12 +2035,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-01-20",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.542Z",
-    "metadata_id": 170,
     "document_key": "FAC10005-FWF-400-PPL-DTS-8312"
   }
 },
@@ -2897,12 +2047,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-03-04",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.148Z",
-    "metadata_id": 171,
     "document_key": "FAC10005-CTR-CSA-PIP-SCH-2762"
   }
 },
@@ -2914,12 +2059,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-12-16",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.964Z",
-    "metadata_id": 172,
     "document_key": "FAC09001-CTR-CWS-HVA-FAT-6373"
   }
 },
@@ -2931,12 +2071,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-11-02",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.277Z",
-    "metadata_id": 173,
     "document_key": "FAC09001-FWF-CMG-COM-FG-7283"
   }
 },
@@ -2948,12 +2083,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-01-03",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.755Z",
-    "metadata_id": 174,
     "document_key": "FAC10005-FWF-009-HVA-CAL-4307"
   }
 },
@@ -2965,12 +2095,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-06-14",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:50.871Z",
-    "metadata_id": 175,
     "document_key": "FAC09001-CTR-009-HSE-REG-0616"
   }
 },
@@ -2982,12 +2107,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-04-25",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.832Z",
-    "metadata_id": 176,
     "document_key": "FAC10005-FWF-010-MAI-REG-8092"
   }
 },
@@ -2999,12 +2119,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-07-23",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.123Z",
-    "metadata_id": 177,
     "document_key": "FAC09001-CTR-502-HSE-REG-8134"
   }
 },
@@ -3016,12 +2131,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-06-16",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.020Z",
-    "metadata_id": 178,
     "document_key": "FAC10005-FWF-102-PCO-ESD-9382"
   }
 },
@@ -3033,12 +2143,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-08-28",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.917Z",
-    "metadata_id": 179,
     "document_key": "FAC10005-FWF-012-PMT-PRM-6029"
   }
 },
@@ -3050,12 +2155,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-01-02",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.140Z",
-    "metadata_id": 180,
     "document_key": "FAC10005-FWF-106-TEL-UFD-4076"
   }
 },
@@ -3067,12 +2167,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-09-23",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.563Z",
-    "metadata_id": 181,
     "document_key": "FAC09001-CTR-CHC-ELE-STU-4792"
   }
 },
@@ -3084,12 +2179,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-01-06",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.105Z",
-    "metadata_id": 182,
     "document_key": "FAC10005-CTR-010-VES-PID-4829"
   }
 },
@@ -3101,12 +2191,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-03-10",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.463Z",
-    "metadata_id": 183,
     "document_key": "FAC09001-CTR-CAB-PCS-REP-7396"
   }
 },
@@ -3118,12 +2203,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-05-19",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.169Z",
-    "metadata_id": 184,
     "document_key": "FAC10005-FWF-CHC-DRI-MAN-5241"
   }
 },
@@ -3135,12 +2215,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-09-09",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.328Z",
-    "metadata_id": 185,
     "document_key": "FAC09001-CTR-109-EXP-FG-5153"
   }
 },
@@ -3152,12 +2227,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-11-03",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.081Z",
-    "metadata_id": 186,
     "document_key": "FAC09001-CTR-501-CON-SCH-2346"
   }
 },
@@ -3169,12 +2239,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-11-15",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.596Z",
-    "metadata_id": 187,
     "document_key": "FAC10005-FWF-EXT-QAC-REG-3445"
   }
 },
@@ -3186,12 +2251,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-03-09",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.530Z",
-    "metadata_id": 188,
     "document_key": "FAC09001-FWF-101-ELE-NCR-0222"
   }
 },
@@ -3203,12 +2263,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-02-07",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.604Z",
-    "metadata_id": 189,
     "document_key": "FAC09001-FWF-104-PRT-SLD-6232"
   }
 },
@@ -3220,12 +2275,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-02-17",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.051Z",
-    "metadata_id": 190,
     "document_key": "FAC10005-FWF-BCC-QAC-STU-0292"
   }
 },
@@ -3237,12 +2287,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-04-04",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.865Z",
-    "metadata_id": 191,
     "document_key": "FAC10005-FWF-700-PRT-PID-4522"
   }
 },
@@ -3254,12 +2299,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-12-27",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.763Z",
-    "metadata_id": 192,
     "document_key": "FAC10005-CTR-700-WEL-MST-8749"
   }
 },
@@ -3271,12 +2311,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-10-17",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.120Z",
-    "metadata_id": 193,
     "document_key": "FAC10005-FWF-106-STR-CAL-4440"
   }
 },
@@ -3288,12 +2323,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-04-20",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.069Z",
-    "metadata_id": 194,
     "document_key": "FAC10005-FWF-BMT-MAI-REP-9136"
   }
 },
@@ -3305,12 +2335,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-12-13",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.230Z",
-    "metadata_id": 195,
     "document_key": "FAC10005-FWF-CMG-PCO-WIR-0117"
   }
 },
@@ -3322,12 +2347,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-07-25",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.876Z",
-    "metadata_id": 196,
     "document_key": "FAC09001-FWF-AST-COR-SAT-5273"
   }
 },
@@ -3339,12 +2359,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-10-08",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.181Z",
-    "metadata_id": 197,
     "document_key": "FAC10005-FWF-109-COM-LAY-0769"
   }
 },
@@ -3356,12 +2371,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-05-05",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.765Z",
-    "metadata_id": 198,
     "document_key": "FAC10005-CTR-302-HVA-SCH-1566"
   }
 },
@@ -3373,12 +2383,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-12-28",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.209Z",
-    "metadata_id": 199,
     "document_key": "FAC10005-CTR-CWO-MUL-PSD-0776"
   }
 },
@@ -3390,12 +2395,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-05-09",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.302Z",
-    "metadata_id": 200,
     "document_key": "FAC09001-CTR-AST-ROT-HAZ-4289"
   }
 },
@@ -3407,12 +2407,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-03-18",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.078Z",
-    "metadata_id": 201,
     "document_key": "FAC09001-FWF-BMT-ARC-MAN-2793"
   }
 },
@@ -3424,12 +2419,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-11-04",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.226Z",
-    "metadata_id": 202,
     "document_key": "FAC10005-CTR-CWO-OPE-PHY-0595"
   }
 },
@@ -3441,12 +2431,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-10-17",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.190Z",
-    "metadata_id": 203,
     "document_key": "FAC09001-FWF-304-ICS-FAT-8828"
   }
 },
@@ -3458,12 +2443,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-08-02",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.943Z",
-    "metadata_id": 204,
     "document_key": "FAC09001-FWF-202-ISP-MSD-9356"
   }
 },
@@ -3475,12 +2455,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-02-02",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.844Z",
-    "metadata_id": 205,
     "document_key": "FAC10005-FWF-700-PCS-STD-3867"
   }
 },
@@ -3492,12 +2467,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-11-16",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.343Z",
-    "metadata_id": 206,
     "document_key": "FAC10005-FWF-301-PCS-MST-8066"
   }
 },
@@ -3509,12 +2479,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-05-20",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.769Z",
-    "metadata_id": 207,
     "document_key": "FAC10005-CTR-003-COR-FAT-9851"
   }
 },
@@ -3526,12 +2491,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-03-05",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.349Z",
-    "metadata_id": 208,
     "document_key": "FAC10005-FWF-000-VES-ITP-4558"
   }
 },
@@ -3543,12 +2503,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-04-28",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.451Z",
-    "metadata_id": 209,
     "document_key": "FAC09001-FWF-CSA-QAC-ITP-3203"
   }
 },
@@ -3560,12 +2515,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-11-05",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.704Z",
-    "metadata_id": 210,
     "document_key": "FAC09001-CTR-304-MAI-SOR-8652"
   }
 },
@@ -3577,12 +2527,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-03-11",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.639Z",
-    "metadata_id": 211,
     "document_key": "FAC10005-CTR-601-PIP-REQ-6033"
   }
 },
@@ -3594,12 +2539,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-05-08",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.525Z",
-    "metadata_id": 212,
     "document_key": "FAC09001-CTR-CHC-COM-DCN-4655"
   }
 },
@@ -3611,12 +2551,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-07-19",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.024Z",
-    "metadata_id": 213,
     "document_key": "FAC10005-CTR-CMP-SAF-SLD-0153"
   }
 },
@@ -3628,12 +2563,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-11-09",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.665Z",
-    "metadata_id": 214,
     "document_key": "FAC10005-FWF-404-MUL-PEP-6164"
   }
 },
@@ -3645,12 +2575,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-01-01",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.009Z",
-    "metadata_id": 215,
     "document_key": "FAC10005-CTR-007-PRT-PFD-5931"
   }
 },
@@ -3662,12 +2587,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-04-21",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.353Z",
-    "metadata_id": 216,
     "document_key": "FAC09001-FWF-009-PRT-DTS-2377"
   }
 },
@@ -3679,12 +2599,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-09-14",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.131Z",
-    "metadata_id": 217,
     "document_key": "FAC10005-FWF-CCP-SAF-LIS-2596"
   }
 },
@@ -3696,12 +2611,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-08-21",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.418Z",
-    "metadata_id": 218,
     "document_key": "FAC10005-FWF-304-PCS-PLA-9183"
   }
 },
@@ -3713,12 +2623,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-07-06",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:50.834Z",
-    "metadata_id": 219,
     "document_key": "FAC09001-CTR-008-PRT-UFD-7762"
   }
 },
@@ -3730,12 +2635,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-11-08",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.319Z",
-    "metadata_id": 220,
     "document_key": "FAC10005-FWF-301-CON-STD-8046"
   }
 },
@@ -3747,12 +2647,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-02-25",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.028Z",
-    "metadata_id": 221,
     "document_key": "FAC09001-CTR-101-SAF-ITP-7858"
   }
 },
@@ -3764,12 +2659,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-04-15",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.621Z",
-    "metadata_id": 222,
     "document_key": "FAC10005-CTR-601-ICS-OPM-7585"
   }
 },
@@ -3781,12 +2671,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-05-05",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.193Z",
-    "metadata_id": 223,
     "document_key": "FAC10005-FWF-CHC-INS-FG-6738"
   }
 },
@@ -3798,12 +2683,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-04-05",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.684Z",
-    "metadata_id": 224,
     "document_key": "FAC10005-CTR-700-ARC-PID-6225"
   }
 },
@@ -3815,12 +2695,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-12-05",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.227Z",
-    "metadata_id": 225,
     "document_key": "FAC09001-CTR-105-TEL-REG-0500"
   }
 },
@@ -3832,12 +2707,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-04-11",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.264Z",
-    "metadata_id": 226,
     "document_key": "FAC10005-CTR-101-ISP-PID-1304"
   }
 },
@@ -3849,12 +2719,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-12-19",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.082Z",
-    "metadata_id": 227,
     "document_key": "FAC09001-CTR-ROA-PIP-ISO-9961"
   }
 },
@@ -3866,12 +2731,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-10-22",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.584Z",
-    "metadata_id": 228,
     "document_key": "FAC10005-CTR-200-VES-REQ-3227"
   }
 },
@@ -3883,12 +2743,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-06-05",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.044Z",
-    "metadata_id": 229,
     "document_key": "FAC10005-CTR-307-WEL-PSD-5503"
   }
 },
@@ -3900,12 +2755,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-06-25",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.699Z",
-    "metadata_id": 230,
     "document_key": "FAC10005-FWF-ROA-STR-PFD-2846"
   }
 },
@@ -3917,12 +2767,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-04-23",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.706Z",
-    "metadata_id": 231,
     "document_key": "FAC09001-CTR-CMP-OPE-CHT-4360"
   }
 },
@@ -3934,12 +2779,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-03-16",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.778Z",
-    "metadata_id": 232,
     "document_key": "FAC09001-FWF-110-VES-REP-3650"
   }
 },
@@ -3951,12 +2791,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-11-12",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:50.657Z",
-    "metadata_id": 233,
     "document_key": "FAC09001-CTR-001-ROT-MAN-2139"
   }
 },
@@ -3968,12 +2803,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-10-09",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.479Z",
-    "metadata_id": 234,
     "document_key": "FAC09001-FWF-404-MUL-STU-7527"
   }
 },
@@ -3985,12 +2815,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-03-09",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.343Z",
-    "metadata_id": 235,
     "document_key": "FAC09001-CTR-BCC-SAF-ITP-9469"
   }
 },
@@ -4002,12 +2827,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-02-23",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.209Z",
-    "metadata_id": 236,
     "document_key": "FAC09001-CTR-105-STR-DTS-6173"
   }
 },
@@ -4019,12 +2839,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-02-27",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:50.812Z",
-    "metadata_id": 237,
     "document_key": "FAC09001-CTR-008-ISP-ITP-7393"
   }
 },
@@ -4036,12 +2851,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-08-02",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.966Z",
-    "metadata_id": 238,
     "document_key": "FAC10005-CTR-307-ISP-SPE-7014"
   }
 },
@@ -4053,12 +2863,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-06-10",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.904Z",
-    "metadata_id": 239,
     "document_key": "FAC10005-FWF-ACC-ELE-PRO-4832"
   }
 },
@@ -4070,12 +2875,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-01-26",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.935Z",
-    "metadata_id": 240,
     "document_key": "FAC09001-FWF-AST-PMT-PLA-9968"
   }
 },
@@ -4087,12 +2887,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-01-26",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.922Z",
-    "metadata_id": 241,
     "document_key": "FAC09001-FWF-201-VES-ANA-0372"
   }
 },
@@ -4104,12 +2899,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-10-02",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.272Z",
-    "metadata_id": 242,
     "document_key": "FAC10005-FWF-CMG-STR-SRV-4565"
   }
 },
@@ -4121,12 +2911,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-10-09",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.225Z",
-    "metadata_id": 243,
     "document_key": "FAC09001-CTR-601-COR-CAL-7997"
   }
 },
@@ -4138,12 +2923,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-11-12",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.318Z",
-    "metadata_id": 244,
     "document_key": "FAC09001-FWF-307-INS-PRM-1484"
   }
 },
@@ -4155,12 +2935,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-11-15",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.705Z",
-    "metadata_id": 245,
     "document_key": "FAC09001-FWF-109-PCO-DTS-4428"
   }
 },
@@ -4172,12 +2947,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-01-19",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.183Z",
-    "metadata_id": 246,
     "document_key": "FAC10005-CTR-012-MAI-MST-8576"
   }
 },
@@ -4189,12 +2959,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-03-18",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.781Z",
-    "metadata_id": 247,
     "document_key": "FAC09001-CTR-CSA-QAC-STD-5229"
   }
 },
@@ -4206,12 +2971,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-01-06",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:50.799Z",
-    "metadata_id": 248,
     "document_key": "FAC09001-CTR-007-PMT-ISO-7281"
   }
 },
@@ -4223,12 +2983,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-09-07",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.609Z",
-    "metadata_id": 249,
     "document_key": "FAC10005-FWF-006-HVA-LIS-2205"
   }
 },
@@ -4240,12 +2995,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-07-16",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.051Z",
-    "metadata_id": 250,
     "document_key": "FAC09001-CTR-102-COR-REG-6173"
   }
 },
@@ -4257,12 +3007,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-02-18",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.623Z",
-    "metadata_id": 251,
     "document_key": "FAC10005-FWF-403-WEL-OPM-8255"
   }
 },
@@ -4274,12 +3019,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-11-01",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.351Z",
-    "metadata_id": 252,
     "document_key": "FAC09001-FWF-CO1-MUL-PHY-9145"
   }
 },
@@ -4291,12 +3031,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-06-24",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.765Z",
-    "metadata_id": 253,
     "document_key": "FAC10005-FWF-500-TEL-SLD-5268"
   }
 },
@@ -4308,12 +3043,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-07-10",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.847Z",
-    "metadata_id": 254,
     "document_key": "FAC09001-CTR-309-PIP-MAN-1818"
   }
 },
@@ -4325,12 +3055,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-09-14",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.904Z",
-    "metadata_id": 255,
     "document_key": "FAC10005-CTR-BMT-MAI-SCH-2764"
   }
 },
@@ -4342,12 +3067,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-04-05",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.795Z",
-    "metadata_id": 256,
     "document_key": "FAC10005-FWF-010-CON-NCR-1197"
   }
 },
@@ -4359,12 +3079,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-03-27",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.280Z",
-    "metadata_id": 257,
     "document_key": "FAC09001-FWF-006-COM-REQ-9653"
   }
 },
@@ -4376,12 +3091,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-04-12",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.739Z",
-    "metadata_id": 258,
     "document_key": "FAC09001-FWF-600-CIV-STD-2756"
   }
 },
@@ -4393,12 +3103,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-11-22",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.374Z",
-    "metadata_id": 259,
     "document_key": "FAC09001-FWF-CO1-PCS-MSD-7616"
   }
 },
@@ -4410,12 +3115,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-10-07",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.549Z",
-    "metadata_id": 260,
     "document_key": "FAC09001-FWF-102-MAI-LAY-2852"
   }
 },
@@ -4427,12 +3127,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-03-18",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.725Z",
-    "metadata_id": 261,
     "document_key": "FAC10005-FWF-405-STR-PFD-7327"
   }
 },
@@ -4444,12 +3139,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-09-04",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.029Z",
-    "metadata_id": 262,
     "document_key": "FAC10005-CTR-008-ISP-HMB-2891"
   }
 },
@@ -4461,12 +3151,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-07-28",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.410Z",
-    "metadata_id": 263,
     "document_key": "FAC09001-FWF-012-COM-PSD-3803"
   }
 },
@@ -4478,12 +3163,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-05-14",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.109Z",
-    "metadata_id": 264,
     "document_key": "FAC09001-CTR-103-QAC-REQ-0841"
   }
 },
@@ -4495,12 +3175,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-04-23",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.523Z",
-    "metadata_id": 265,
     "document_key": "FAC10005-CTR-109-STR-FAT-2595"
   }
 },
@@ -4512,12 +3187,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-06-27",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:50.718Z",
-    "metadata_id": 266,
     "document_key": "FAC09001-CTR-003-PCO-SRV-9072"
   }
 },
@@ -4529,12 +3199,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-07-19",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:50.699Z",
-    "metadata_id": 267,
     "document_key": "FAC09001-CTR-003-CIV-MAN-6043"
   }
 },
@@ -4546,12 +3211,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-08-23",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.362Z",
-    "metadata_id": 268,
     "document_key": "FAC10005-CTR-104-PPL-PFD-5099"
   }
 },
@@ -4563,12 +3223,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-02-11",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.663Z",
-    "metadata_id": 269,
     "document_key": "FAC10005-CTR-601-STR-UFD-6897"
   }
 },
@@ -4580,12 +3235,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-01-11",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.651Z",
-    "metadata_id": 270,
     "document_key": "FAC10005-CTR-001-INS-PRM-8630"
   }
 },
@@ -4597,12 +3247,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-10-07",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.556Z",
-    "metadata_id": 271,
     "document_key": "FAC10005-CTR-600-MAI-PEP-1194"
   }
 },
@@ -4614,12 +3259,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-01-21",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.864Z",
-    "metadata_id": 272,
     "document_key": "FAC09001-CTR-CSC-SAF-WIR-5033"
   }
 },
@@ -4631,12 +3271,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-08-27",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.934Z",
-    "metadata_id": 273,
     "document_key": "FAC10005-FWF-013-HVA-ANA-6166"
   }
 },
@@ -4648,12 +3283,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-03-08",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.219Z",
-    "metadata_id": 274,
     "document_key": "FAC10005-FWF-110-MUL-MSD-5229"
   }
 },
@@ -4665,12 +3295,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-10-21",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.923Z",
-    "metadata_id": 275,
     "document_key": "FAC09001-CTR-400-ISP-LAY-9493"
   }
 },
@@ -4682,12 +3307,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-07-07",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.985Z",
-    "metadata_id": 276,
     "document_key": "FAC10005-CTR-307-MAI-SAT-2258"
   }
 },
@@ -4699,12 +3319,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-08-20",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.360Z",
-    "metadata_id": 277,
     "document_key": "FAC10005-FWF-301-SAF-CAL-9256"
   }
 },
@@ -4716,12 +3331,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-02-23",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.645Z",
-    "metadata_id": 278,
     "document_key": "FAC09001-FWF-105-WEL-ESD-0803"
   }
 },
@@ -4733,12 +3343,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-03-16",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.254Z",
-    "metadata_id": 279,
     "document_key": "FAC09001-FWF-CHC-OPE-SPE-6519"
   }
 },
@@ -4750,12 +3355,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-06-07",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.784Z",
-    "metadata_id": 280,
     "document_key": "FAC10005-FWF-501-PRT-SCH-4212"
   }
 },
@@ -4767,12 +3367,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-01-05",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.664Z",
-    "metadata_id": 281,
     "document_key": "FAC10005-CTR-300-PRT-LIS-1308"
   }
 },
@@ -4784,12 +3379,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-02-28",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.124Z",
-    "metadata_id": 282,
     "document_key": "FAC10005-CTR-309-ELE-DTS-6577"
   }
 },
@@ -4801,12 +3391,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-09-15",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.247Z",
-    "metadata_id": 283,
     "document_key": "FAC09001-CTR-106-PCO-LAY-0701"
   }
 },
@@ -4818,12 +3403,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-01-09",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.493Z",
-    "metadata_id": 284,
     "document_key": "FAC09001-FWF-CTP-HVA-MSD-8754"
   }
 },
@@ -4835,12 +3415,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-02-13",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.473Z",
-    "metadata_id": 285,
     "document_key": "FAC10005-FWF-004-VES-PID-7319"
   }
 },
@@ -4852,12 +3427,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-03-22",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.788Z",
-    "metadata_id": 286,
     "document_key": "FAC09001-CTR-307-PIP-HAZ-2527"
   }
 },
@@ -4869,12 +3439,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-10-05",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.504Z",
-    "metadata_id": 287,
     "document_key": "FAC09001-CTR-CGC-SAF-SAT-4572"
   }
 },
@@ -4886,12 +3451,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-05-06",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.157Z",
-    "metadata_id": 288,
     "document_key": "FAC10005-FWF-107-EXP-PLA-3728"
   }
 },
@@ -4903,12 +3463,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-05-01",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.598Z",
-    "metadata_id": 289,
     "document_key": "FAC10005-CTR-601-ELE-LIS-4435"
   }
 },
@@ -4920,12 +3475,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-01-23",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.064Z",
-    "metadata_id": 290,
     "document_key": "FAC10005-CTR-308-COR-SRV-0946"
   }
 },
@@ -4937,12 +3487,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-07-28",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.664Z",
-    "metadata_id": 291,
     "document_key": "FAC09001-CTR-303-MAI-OPM-4069"
   }
 },
@@ -4954,12 +3499,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-10-12",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.509Z",
-    "metadata_id": 292,
     "document_key": "FAC09001-FWF-CTP-ICS-OPM-2040"
   }
 },
@@ -4971,12 +3511,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-09-22",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.058Z",
-    "metadata_id": 293,
     "document_key": "FAC10005-FWF-103-PIP-WIR-3693"
   }
 },
@@ -4988,12 +3523,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-02-17",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.167Z",
-    "metadata_id": 294,
     "document_key": "FAC09001-FWF-304-EXP-MST-1517"
   }
 },
@@ -5005,12 +3535,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-01-07",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.592Z",
-    "metadata_id": 295,
     "document_key": "FAC09001-FWF-ROA-EXP-CHT-7267"
   }
 },
@@ -5022,12 +3547,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-11-13",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.140Z",
-    "metadata_id": 296,
     "document_key": "FAC09001-FWF-000-PMT-WIR-8745"
   }
 },
@@ -5039,12 +3559,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-09-05",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.802Z",
-    "metadata_id": 297,
     "document_key": "FAC10005-CTR-ACC-COR-REP-2286"
   }
 },
@@ -5056,12 +3571,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-02-17",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.968Z",
-    "metadata_id": 298,
     "document_key": "FAC09001-FWF-202-PCO-CER-8515"
   }
 },
@@ -5073,12 +3583,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-01-28",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.860Z",
-    "metadata_id": 299,
     "document_key": "FAC09001-FWF-700-WEL-PHY-4764"
   }
 },
@@ -5090,12 +3595,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-09-19",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.710Z",
-    "metadata_id": 300,
     "document_key": "FAC10005-FWF-008-WEL-ITP-4371"
   }
 },
@@ -5107,12 +3607,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-06-13",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.421Z",
-    "metadata_id": 301,
     "document_key": "FAC10005-CTR-501-ARC-HAZ-8902"
   }
 },
@@ -5124,12 +3619,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-09-26",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.455Z",
-    "metadata_id": 302,
     "document_key": "FAC09001-FWF-402-VES-TSD-9247"
   }
 },
@@ -5141,12 +3631,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-03-27",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.678Z",
-    "metadata_id": 303,
     "document_key": "FAC09001-FWF-502-PPL-FG-8052"
   }
 },
@@ -5158,12 +3643,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-08-02",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.653Z",
-    "metadata_id": 304,
     "document_key": "FAC10005-FWF-ROA-PPL-PEP-1090"
   }
 },
@@ -5175,12 +3655,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-09-06",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.657Z",
-    "metadata_id": 305,
     "document_key": "FAC09001-FWF-502-PIP-ITP-4334"
   }
 },
@@ -5192,12 +3667,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-10-25",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.805Z",
-    "metadata_id": 306,
     "document_key": "FAC10005-CTR-303-COM-HAZ-7118"
   }
 },
@@ -5209,12 +3679,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-05-13",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:50.620Z",
-    "metadata_id": 307,
     "document_key": "FAC09001-CTR-001-PRT-LAY-0186"
   }
 },
@@ -5226,12 +3691,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-03-26",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.010Z",
-    "metadata_id": 308,
     "document_key": "FAC09001-FWF-202-STR-ESD-7495"
   }
 },
@@ -5243,12 +3703,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-02-10",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.375Z",
-    "metadata_id": 309,
     "document_key": "FAC09001-FWF-010-OPE-LAY-9004"
   }
 },
@@ -5260,12 +3715,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-01-16",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.863Z",
-    "metadata_id": 310,
     "document_key": "FAC10005-CTR-BAT-ICS-MST-3763"
   }
 },
@@ -5277,12 +3727,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-04-23",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.003Z",
-    "metadata_id": 311,
     "document_key": "FAC10005-CTR-307-MUL-SOR-2313"
   }
 },
@@ -5294,12 +3739,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-11-02",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.088Z",
-    "metadata_id": 312,
     "document_key": "FAC09001-CTR-103-PIP-STU-4495"
   }
 },
@@ -5311,12 +3751,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-04-21",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.449Z",
-    "metadata_id": 313,
     "document_key": "FAC10005-FWF-004-INS-PSD-4431"
   }
 },
@@ -5328,12 +3763,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-04-08",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.588Z",
-    "metadata_id": 314,
     "document_key": "FAC09001-FWF-103-STR-FG-7497"
   }
 },
@@ -5345,12 +3775,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-08-04",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.510Z",
-    "metadata_id": 315,
     "document_key": "FAC10005-CTR-503-ISP-FG-6128"
   }
 },
@@ -5362,12 +3787,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-05-20",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.010Z",
-    "metadata_id": 316,
     "document_key": "FAC09001-CTR-013-PRT-PFD-8909"
   }
 },
@@ -5379,12 +3799,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-01-24",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.286Z",
-    "metadata_id": 317,
     "document_key": "FAC10005-CTR-101-PPL-CHT-1441"
   }
 },
@@ -5396,12 +3811,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-06-22",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.258Z",
-    "metadata_id": 318,
     "document_key": "FAC09001-FWF-005-HSE-MST-0568"
   }
 },
@@ -5413,12 +3823,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-01-11",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.663Z",
-    "metadata_id": 319,
     "document_key": "FAC09001-CTR-CMG-ISP-PHY-5467"
   }
 },
@@ -5430,12 +3835,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-10-19",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.977Z",
-    "metadata_id": 320,
     "document_key": "FAC09001-FWF-BAT-INS-TSD-1917"
   }
 },
@@ -5447,12 +3847,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-08-28",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.706Z",
-    "metadata_id": 321,
     "document_key": "FAC10005-CTR-300-VES-ITP-1548"
   }
 },
@@ -5464,12 +3859,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-04-03",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.725Z",
-    "metadata_id": 322,
     "document_key": "FAC10005-CTR-700-INS-SAT-0004"
   }
 },
@@ -5481,12 +3871,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-04-24",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.470Z",
-    "metadata_id": 323,
     "document_key": "FAC09001-FWF-013-OPE-ITP-5386"
   }
 },
@@ -5498,12 +3883,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-07-04",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.710Z",
-    "metadata_id": 324,
     "document_key": "FAC10005-CTR-002-HSE-REP-7736"
   }
 },
@@ -5515,12 +3895,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-01-20",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.471Z",
-    "metadata_id": 325,
     "document_key": "FAC09001-FWF-CSC-EXP-BAS-2704"
   }
 },
@@ -5532,12 +3907,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-06-02",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.144Z",
-    "metadata_id": 326,
     "document_key": "FAC10005-CTR-309-MUL-SOR-8049"
   }
 },
@@ -5549,12 +3919,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-11-27",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.418Z",
-    "metadata_id": 327,
     "document_key": "FAC09001-FWF-402-MAI-PRO-5745"
   }
 },
@@ -5566,12 +3931,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-02-20",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.380Z",
-    "metadata_id": 328,
     "document_key": "FAC10005-FWF-301-VES-PSD-9441"
   }
 },
@@ -5583,12 +3943,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-10-28",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.880Z",
-    "metadata_id": 329,
     "document_key": "FAC09001-CTR-CTP-VES-LIS-5505"
   }
 },
@@ -5600,12 +3955,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-02-19",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.734Z",
-    "metadata_id": 330,
     "document_key": "FAC09001-FWF-110-SAF-WIR-5977"
   }
 },
@@ -5617,12 +3967,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-02-03",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.556Z",
-    "metadata_id": 331,
     "document_key": "FAC10005-FWF-EXT-HVA-SAT-5733"
   }
 },
@@ -5634,12 +3979,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-11-11",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.395Z",
-    "metadata_id": 332,
     "document_key": "FAC10005-FWF-CSC-COM-REG-8873"
   }
 },
@@ -5651,12 +3991,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-06-19",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.185Z",
-    "metadata_id": 333,
     "document_key": "FAC10005-CTR-CWH-PPL-MST-9195"
   }
 },
@@ -5668,12 +4003,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-06-14",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.724Z",
-    "metadata_id": 334,
     "document_key": "FAC09001-CTR-304-PIP-STU-5010"
   }
 },
@@ -5685,12 +4015,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-09-15",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.461Z",
-    "metadata_id": 335,
     "document_key": "FAC10005-FWF-305-HVA-CER-3214"
   }
 },
@@ -5702,12 +4027,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-01-07",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.394Z",
-    "metadata_id": 336,
     "document_key": "FAC09001-FWF-400-TEL-CER-0626"
   }
 },
@@ -5719,12 +4039,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-10-19",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.301Z",
-    "metadata_id": 337,
     "document_key": "FAC10005-FWF-300-ICS-PRO-1387"
   }
 },
@@ -5736,12 +4051,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-06-03",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.336Z",
-    "metadata_id": 338,
     "document_key": "FAC09001-FWF-CO1-INS-SAT-1114"
   }
 },
@@ -5753,12 +4063,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-05-15",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:50.681Z",
-    "metadata_id": 339,
     "document_key": "FAC09001-CTR-001-TEL-BAS-5530"
   }
 },
@@ -5770,12 +4075,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-10-11",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.446Z",
-    "metadata_id": 340,
     "document_key": "FAC09001-CTR-CAB-ELE-LIS-5315"
   }
 },
@@ -5787,12 +4087,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-10-09",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.986Z",
-    "metadata_id": 341,
     "document_key": "FAC10005-CTR-CGC-TEL-ISO-4259"
   }
 },
@@ -5804,12 +4099,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-11-14",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:50.932Z",
-    "metadata_id": 342,
     "document_key": "FAC09001-CTR-010-STR-SRV-6256"
   }
 },
@@ -5821,12 +4111,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-06-07",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.167Z",
-    "metadata_id": 343,
     "document_key": "FAC09001-CTR-104-SAF-REP-9612"
   }
 },
@@ -5838,12 +4123,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-08-26",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.294Z",
-    "metadata_id": 344,
     "document_key": "FAC09001-FWF-CMP-MAI-FG-1895"
   }
 },
@@ -5855,12 +4135,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-05-19",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.364Z",
-    "metadata_id": 345,
     "document_key": "FAC09001-CTR-BCC-STR-MTO-6717"
   }
 },
@@ -5872,12 +4147,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-03-20",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.905Z",
-    "metadata_id": 346,
     "document_key": "FAC10005-CTR-306-PCO-SLD-6904"
   }
 },
@@ -5889,12 +4159,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-11-27",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.026Z",
-    "metadata_id": 347,
     "document_key": "FAC10005-CTR-307-PPL-REG-1504"
   }
 },
@@ -5906,12 +4171,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-07-08",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.547Z",
-    "metadata_id": 348,
     "document_key": "FAC10005-CTR-109-VES-HMB-6360"
   }
 },
@@ -5923,12 +4183,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-09-22",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.511Z",
-    "metadata_id": 349,
     "document_key": "FAC10005-FWF-005-EXP-HMB-0144"
   }
 },
@@ -5940,12 +4195,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-12-08",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.288Z",
-    "metadata_id": 350,
     "document_key": "FAC10005-CTR-401-WEL-MSD-4776"
   }
 },
@@ -5957,12 +4207,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-07-22",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.722Z",
-    "metadata_id": 351,
     "document_key": "FAC10005-CTR-301-CIV-HMB-2692"
   }
 },
@@ -5974,12 +4219,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-11-19",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:50.779Z",
-    "metadata_id": 352,
     "document_key": "FAC09001-CTR-006-SAF-MST-1446"
   }
 },
@@ -5991,12 +4231,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-10-22",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.418Z",
-    "metadata_id": 353,
     "document_key": "FAC10005-FWF-CSC-ISP-DCN-1363"
   }
 },
@@ -6008,12 +4243,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-11-03",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.824Z",
-    "metadata_id": 354,
     "document_key": "FAC10005-CTR-304-COM-NCR-0164"
   }
 },
@@ -6025,12 +4255,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-05-26",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.118Z",
-    "metadata_id": 355,
     "document_key": "FAC09001-FWF-302-PCO-FG-7866"
   }
 },
@@ -6042,12 +4267,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-06-03",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.940Z",
-    "metadata_id": 356,
     "document_key": "FAC09001-CTR-CWS-ARC-ESD-9862"
   }
 },
@@ -6059,12 +4279,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-12-07",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.728Z",
-    "metadata_id": 357,
     "document_key": "FAC10005-CTR-002-PMT-ITP-5017"
   }
 },
@@ -6076,12 +4291,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-12-11",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.487Z",
-    "metadata_id": 358,
     "document_key": "FAC09001-CTR-200-PRT-TSD-7916"
   }
 },
@@ -6093,12 +4303,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-02-16",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.887Z",
-    "metadata_id": 359,
     "document_key": "FAC10005-FWF-ACC-COM-DWG-9404"
   }
 },
@@ -6110,12 +4315,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-06-12",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.552Z",
-    "metadata_id": 360,
     "document_key": "FAC09001-FWF-LAB-CON-PLA-6869"
   }
 },
@@ -6127,12 +4327,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-10-25",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.645Z",
-    "metadata_id": 361,
     "document_key": "FAC10005-CTR-300-DRI-PLA-5914"
   }
 },
@@ -6144,12 +4339,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-12-24",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.799Z",
-    "metadata_id": 362,
     "document_key": "FAC09001-FWF-601-HVA-NCR-1157"
   }
 },
@@ -6161,12 +4351,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-04-15",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.646Z",
-    "metadata_id": 363,
     "document_key": "FAC09001-CTR-303-HSE-PRO-0911"
   }
 },
@@ -6178,12 +4363,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-01-13",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.945Z",
-    "metadata_id": 364,
     "document_key": "FAC09001-CTR-401-QAC-MSD-7694"
   }
 },
@@ -6195,12 +4375,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-08-04",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.853Z",
-    "metadata_id": 365,
     "document_key": "FAC09001-FWF-201-ICS-REG-8827"
   }
 },
@@ -6212,12 +4387,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-05-20",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.535Z",
-    "metadata_id": 366,
     "document_key": "FAC10005-FWF-005-HVA-PHY-9081"
   }
 },
@@ -6229,12 +4399,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-04-03",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.885Z",
-    "metadata_id": 367,
     "document_key": "FAC09001-CTR-309-STR-SLD-5750"
   }
 },
@@ -6246,12 +4411,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-08-01",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.693Z",
-    "metadata_id": 368,
     "document_key": "FAC10005-FWF-007-VES-TSD-0291"
   }
 },
@@ -6263,12 +4423,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-07-08",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.802Z",
-    "metadata_id": 369,
     "document_key": "FAC10005-FWF-700-ARC-BAS-7850"
   }
 },
@@ -6280,12 +4435,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-10-20",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.998Z",
-    "metadata_id": 370,
     "document_key": "FAC09001-FWF-BAT-PCO-ESD-5818"
   }
 },
@@ -6297,12 +4447,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-10-15",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.529Z",
-    "metadata_id": 371,
     "document_key": "FAC09001-CTR-201-VES-PEP-4506"
   }
 },
@@ -6314,12 +4459,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-01-16",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:50.757Z",
-    "metadata_id": 372,
     "document_key": "FAC09001-CTR-005-PPL-REG-4368"
   }
 },
@@ -6331,12 +4471,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-03-20",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.294Z",
-    "metadata_id": 373,
     "document_key": "FAC09001-FWF-306-SAF-HMB-3946"
   }
 },
@@ -6348,12 +4483,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-11-11",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.065Z",
-    "metadata_id": 374,
     "document_key": "FAC10005-CTR-CO1-PPL-NCR-5121"
   }
 },
@@ -6365,12 +4495,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-07-16",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.372Z",
-    "metadata_id": 375,
     "document_key": "FAC10005-FWF-001-PCO-PEP-0026"
   }
 },
@@ -6382,12 +4507,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-07-17",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.296Z",
-    "metadata_id": 376,
     "document_key": "FAC09001-FWF-007-PIP-SAT-7121"
   }
 },
@@ -6399,12 +4519,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-08-27",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.948Z",
-    "metadata_id": 377,
     "document_key": "FAC10005-CTR-006-CIV-PEP-7829"
   }
 },
@@ -6416,12 +4531,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-07-21",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.874Z",
-    "metadata_id": 378,
     "document_key": "FAC10005-FWF-012-EXP-ANA-4478"
   }
 },
@@ -6433,12 +4543,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-02-13",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.433Z",
-    "metadata_id": 379,
     "document_key": "FAC10005-FWF-004-EXP-REQ-0815"
   }
 },
@@ -6450,12 +4555,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-06-28",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.922Z",
-    "metadata_id": 380,
     "document_key": "FAC09001-CTR-CWO-STR-ESD-2393"
   }
 },
@@ -6467,12 +4567,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-11-17",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.126Z",
-    "metadata_id": 381,
     "document_key": "FAC10005-CTR-011-ARC-STU-2583"
   }
 },
@@ -6484,12 +4579,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-12-11",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.637Z",
-    "metadata_id": 382,
     "document_key": "FAC10005-FWF-ROA-EXP-SRV-7773"
   }
 },
@@ -6501,12 +4591,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-09-09",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.215Z",
-    "metadata_id": 383,
     "document_key": "FAC09001-FWF-304-ISP-MSD-4897"
   }
 },
@@ -6518,12 +4603,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-04-02",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.136Z",
-    "metadata_id": 384,
     "document_key": "FAC09001-FWF-BMT-PCO-FAT-2201"
   }
 },
@@ -6535,12 +4615,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-04-18",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.995Z",
-    "metadata_id": 385,
     "document_key": "FAC10005-FWF-102-DRI-CHT-5775"
   }
 },
@@ -6552,12 +4627,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-03-03",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.651Z",
-    "metadata_id": 386,
     "document_key": "FAC10005-FWF-007-CON-SRV-0445"
   }
 },
@@ -6569,12 +4639,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-04-18",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.594Z",
-    "metadata_id": 387,
     "document_key": "FAC10005-FWF-006-ARC-PSD-1432"
   }
 },
@@ -6586,12 +4651,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-05-15",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.403Z",
-    "metadata_id": 388,
     "document_key": "FAC09001-CTR-BMT-QAC-MST-5068"
   }
 },
@@ -6603,12 +4663,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-06-28",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.080Z",
-    "metadata_id": 389,
     "document_key": "FAC10005-FWF-103-WEL-DTS-5351"
   }
 },
@@ -6620,12 +4675,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-03-02",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.248Z",
-    "metadata_id": 390,
     "document_key": "FAC10005-CTR-CWO-PMT-MAN-6045"
   }
 },
@@ -6637,12 +4687,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-01-21",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.805Z",
-    "metadata_id": 391,
     "document_key": "FAC09001-CTR-CSA-WEL-FG-6893"
   }
 },
@@ -6654,12 +4699,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-03-20",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.062Z",
-    "metadata_id": 392,
     "document_key": "FAC09001-CTR-ROA-HSE-CHT-8247"
   }
 },
@@ -6671,12 +4711,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-04-28",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.182Z",
-    "metadata_id": 393,
     "document_key": "FAC09001-FWF-001-STR-PRM-2922"
   }
 },
@@ -6688,12 +4723,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-04-24",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.055Z",
-    "metadata_id": 394,
     "document_key": "FAC09001-FWF-301-CIV-PHY-1880"
   }
 },
@@ -6705,12 +4735,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-07-26",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.598Z",
-    "metadata_id": 395,
     "document_key": "FAC09001-FWF-501-CON-SLD-3646"
   }
 },
@@ -6722,12 +4747,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-05-13",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.031Z",
-    "metadata_id": 396,
     "document_key": "FAC10005-FWF-AST-TEL-BAS-7462"
   }
 },
@@ -6739,12 +4759,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-09-16",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.276Z",
-    "metadata_id": 397,
     "document_key": "FAC09001-FWF-306-PCS-PHY-3561"
   }
 },
@@ -6756,12 +4771,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-06-12",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.356Z",
-    "metadata_id": 398,
     "document_key": "FAC09001-FWF-309-PCS-SLD-6469"
   }
 },
@@ -6773,12 +4783,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-09-24",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.006Z",
-    "metadata_id": 399,
     "document_key": "FAC09001-CTR-403-PIP-SOR-2896"
   }
 },
@@ -6790,12 +4795,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-06-15",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.519Z",
-    "metadata_id": 400,
     "document_key": "FAC10005-FWF-CWS-HSE-DTS-3780"
   }
 },
@@ -6807,12 +4807,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-09-16",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.622Z",
-    "metadata_id": 401,
     "document_key": "FAC10005-CTR-202-MAI-CAL-7913"
   }
 },
@@ -6824,12 +4819,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-01-21",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.281Z",
-    "metadata_id": 402,
     "document_key": "FAC10005-FWF-201-HSE-UFD-4142"
   }
 },
@@ -6841,12 +4831,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-10-09",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.023Z",
-    "metadata_id": 403,
     "document_key": "FAC09001-CTR-404-PCS-SLD-5178"
   }
 },
@@ -6858,12 +4843,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-06-17",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:50.894Z",
-    "metadata_id": 404,
     "document_key": "FAC09001-CTR-009-MAI-DTS-7143"
   }
 },
@@ -6875,12 +4855,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-05-02",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.609Z",
-    "metadata_id": 405,
     "document_key": "FAC10005-CTR-000-EXP-LAY-4891"
   }
 },
@@ -6892,12 +4867,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-07-11",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.776Z",
-    "metadata_id": 406,
     "document_key": "FAC09001-FWF-600-PCS-MAN-0686"
   }
 },
@@ -6909,12 +4879,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-02-01",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.428Z",
-    "metadata_id": 407,
     "document_key": "FAC09001-CTR-110-SAF-SAT-7811"
   }
 },
@@ -6926,12 +4891,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-08-17",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.566Z",
-    "metadata_id": 408,
     "document_key": "FAC09001-CTR-202-WEL-MAN-7269"
   }
 },
@@ -6943,12 +4903,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-10-03",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.521Z",
-    "metadata_id": 409,
     "document_key": "FAC10005-FWF-308-ROT-ESD-1166"
   }
 },
@@ -6960,12 +4915,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-09-13",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.019Z",
-    "metadata_id": 410,
     "document_key": "FAC09001-FWF-BCC-MAI-CHT-2065"
   }
 },
@@ -6977,12 +4927,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-11-18",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.433Z",
-    "metadata_id": 411,
     "document_key": "FAC09001-FWF-CO2-ISP-DWG-3995"
   }
 },
@@ -6994,12 +4939,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-07-13",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.242Z",
-    "metadata_id": 412,
     "document_key": "FAC09001-CTR-601-TEL-REQ-7775"
   }
 },
@@ -7011,12 +4951,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-05-08",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.468Z",
-    "metadata_id": 413,
     "document_key": "FAC09001-CTR-200-PRT-STD-0809"
   }
 },
@@ -7028,12 +4963,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-11-09",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.326Z",
-    "metadata_id": 414,
     "document_key": "FAC09001-CTR-BCC-PRT-HMB-6363"
   }
 },
@@ -7045,12 +4975,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-03-27",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:50.991Z",
-    "metadata_id": 415,
     "document_key": "FAC09001-CTR-012-COR-ANA-9082"
   }
 },
@@ -7062,12 +4987,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-11-01",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.701Z",
-    "metadata_id": 416,
     "document_key": "FAC10005-CTR-700-ICS-SLD-7881"
   }
 },
@@ -7079,12 +4999,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-05-13",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.284Z",
-    "metadata_id": 417,
     "document_key": "FAC09001-CTR-AST-PMT-MSD-2790"
   }
 },
@@ -7096,12 +5011,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-09-18",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.201Z",
-    "metadata_id": 418,
     "document_key": "FAC10005-CTR-012-OPE-SAT-2263"
   }
 },
@@ -7113,12 +5023,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-12-16",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.257Z",
-    "metadata_id": 419,
     "document_key": "FAC09001-FWF-306-DRI-PRM-9898"
   }
 },
@@ -7130,12 +5035,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-01-28",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.546Z",
-    "metadata_id": 420,
     "document_key": "FAC09001-CTR-202-PRT-FAT-6718"
   }
 },
@@ -7147,12 +5047,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-02-19",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.576Z",
-    "metadata_id": 421,
     "document_key": "FAC10005-CTR-600-SAF-DTS-4415"
   }
 },
@@ -7164,12 +5059,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-01-20",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.270Z",
-    "metadata_id": 422,
     "document_key": "FAC10005-CTR-401-TEL-PLA-3343"
   }
 },
@@ -7181,12 +5071,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-03-27",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.386Z",
-    "metadata_id": 423,
     "document_key": "FAC09001-CTR-110-QAC-NCR-7214"
   }
 },
@@ -7198,12 +5083,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-09-24",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.399Z",
-    "metadata_id": 424,
     "document_key": "FAC10005-CTR-500-INS-FG-2300"
   }
 },
@@ -7215,12 +5095,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-08-23",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.404Z",
-    "metadata_id": 425,
     "document_key": "FAC10005-CTR-106-ELE-TSD-6741"
   }
 },
@@ -7232,12 +5107,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-02-26",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.315Z",
-    "metadata_id": 426,
     "document_key": "FAC10005-FWF-CO1-PRT-DCN-7638"
   }
 },
@@ -7249,12 +5119,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-03-15",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.622Z",
-    "metadata_id": 427,
     "document_key": "FAC09001-CTR-CMG-INS-REG-3378"
   }
 },
@@ -7266,12 +5131,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-11-21",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:50.741Z",
-    "metadata_id": 428,
     "document_key": "FAC09001-CTR-003-PCS-HMB-8495"
   }
 },
@@ -7283,12 +5143,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-01-26",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.866Z",
-    "metadata_id": 429,
     "document_key": "FAC10005-CTR-305-PIP-HMB-2004"
   }
 },
@@ -7300,12 +5155,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-06-27",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.149Z",
-    "metadata_id": 430,
     "document_key": "FAC09001-CTR-104-HVA-MAN-3063"
   }
 },
@@ -7317,12 +5167,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-01-03",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.993Z",
-    "metadata_id": 431,
     "document_key": "FAC10005-FWF-AST-INS-REQ-5222"
   }
 },
@@ -7334,12 +5179,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-08-27",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.234Z",
-    "metadata_id": 432,
     "document_key": "FAC09001-FWF-305-COR-MST-3288"
   }
 },
@@ -7351,12 +5191,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-10-07",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.825Z",
-    "metadata_id": 433,
     "document_key": "FAC10005-CTR-AIR-MAI-DTS-9128"
   }
 },
@@ -7368,12 +5203,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-06-02",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.331Z",
-    "metadata_id": 434,
     "document_key": "FAC10005-FWF-000-ROT-UFD-3977"
   }
 },
@@ -7385,12 +5215,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-04-05",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.491Z",
-    "metadata_id": 435,
     "document_key": "FAC09001-FWF-013-TEL-ITP-7323"
   }
 },
@@ -7402,12 +5227,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-06-10",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.532Z",
-    "metadata_id": 436,
     "document_key": "FAC09001-FWF-CWO-STR-ESD-3839"
   }
 },
@@ -7419,12 +5239,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-07-10",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.682Z",
-    "metadata_id": 437,
     "document_key": "FAC10005-FWF-404-STR-ISO-1071"
   }
 },
@@ -7436,12 +5251,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-07-20",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.927Z",
-    "metadata_id": 438,
     "document_key": "FAC10005-CTR-306-PMT-UFD-8181"
   }
 },
@@ -7453,12 +5263,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-01-08",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.067Z",
-    "metadata_id": 439,
     "document_key": "FAC09001-CTR-102-ICS-TSD-1779"
   }
 },
@@ -7470,12 +5275,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-05-25",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.410Z",
-    "metadata_id": 440,
     "document_key": "FAC09001-FWF-CO2-DRI-BAS-4979"
   }
 },
@@ -7487,12 +5287,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-02-17",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.531Z",
-    "metadata_id": 441,
     "document_key": "FAC10005-CTR-600-ELE-DTS-5674"
   }
 },
@@ -7504,12 +5299,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-11-08",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.886Z",
-    "metadata_id": 442,
     "document_key": "FAC10005-CTR-004-HSE-NCR-6530"
   }
 },
@@ -7521,12 +5311,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-05-03",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.505Z",
-    "metadata_id": 443,
     "document_key": "FAC09001-CTR-201-STR-DTS-5876"
   }
 },
@@ -7538,12 +5323,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-12-17",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:50.595Z",
-    "metadata_id": 444,
     "document_key": "FAC09001-CTR-000-MAI-SCH-6063"
   }
 },
@@ -7555,12 +5335,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-08-07",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.182Z",
-    "metadata_id": 445,
     "document_key": "FAC10005-CTR-309-PPL-SPE-4017"
   }
 },
@@ -7572,12 +5347,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-08-08",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.786Z",
-    "metadata_id": 446,
     "document_key": "FAC10005-CTR-ACC-COR-PRM-6209"
   }
 },
@@ -7589,12 +5359,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-09-06",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.691Z",
-    "metadata_id": 447,
     "document_key": "FAC10005-CTR-001-STR-SPE-0199"
   }
 },
@@ -7606,12 +5371,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-08-10",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.851Z",
-    "metadata_id": 448,
     "document_key": "FAC10005-CTR-004-DRI-MST-5439"
   }
 },
@@ -7623,12 +5383,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-05-16",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.950Z",
-    "metadata_id": 449,
     "document_key": "FAC10005-FWF-ACC-WEL-UFD-8557"
   }
 },
@@ -7640,12 +5395,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-04-09",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.505Z",
-    "metadata_id": 450,
     "document_key": "FAC10005-CTR-109-INS-SPE-0611"
   }
 },
@@ -7657,12 +5407,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-05-02",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.716Z",
-    "metadata_id": 451,
     "document_key": "FAC09001-FWF-503-PCO-HMB-5471"
   }
 },
@@ -7674,12 +5419,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-08-08",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.441Z",
-    "metadata_id": 452,
     "document_key": "FAC10005-FWF-305-COR-CER-7027"
   }
 },
@@ -7691,12 +5431,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-10-16",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.167Z",
-    "metadata_id": 453,
     "document_key": "FAC10005-CTR-CTP-CON-REG-1933"
   }
 },
@@ -7708,12 +5443,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-09-26",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.099Z",
-    "metadata_id": 454,
     "document_key": "FAC09001-FWF-301-PMT-BAS-0580"
   }
 },
@@ -7725,12 +5455,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-11-19",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.763Z",
-    "metadata_id": 455,
     "document_key": "FAC09001-CTR-CO2-HVA-SCH-7125"
   }
 },
@@ -7742,12 +5467,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-01-26",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.826Z",
-    "metadata_id": 456,
     "document_key": "FAC10005-FWF-700-ICS-ESD-4375"
   }
 },
@@ -7759,12 +5479,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-02-19",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.986Z",
-    "metadata_id": 457,
     "document_key": "FAC10005-CTR-007-PRT-BAS-2302"
   }
 },
@@ -7776,12 +5491,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-06-01",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.604Z",
-    "metadata_id": 458,
     "document_key": "FAC10005-FWF-403-PIP-PEP-0919"
   }
 },
@@ -7793,12 +5503,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-02-26",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.887Z",
-    "metadata_id": 459,
     "document_key": "FAC10005-CTR-BCC-CON-STD-5157"
   }
 },
@@ -7810,12 +5515,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-11-14",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.285Z",
-    "metadata_id": 460,
     "document_key": "FAC09001-CTR-107-PIP-REQ-7253"
   }
 },
@@ -7827,12 +5527,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-01-17",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.488Z",
-    "metadata_id": 461,
     "document_key": "FAC10005-CTR-503-ISP-ANA-6429"
   }
 },
@@ -7844,12 +5539,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-03-19",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.037Z",
-    "metadata_id": 462,
     "document_key": "FAC10005-FWF-103-PCS-DWG-3431"
   }
 },
@@ -7861,12 +5551,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-06-25",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.977Z",
-    "metadata_id": 463,
     "document_key": "FAC10005-FWF-101-PCO-ISO-3691"
   }
 },
@@ -7878,12 +5563,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-09-22",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:50.954Z",
-    "metadata_id": 464,
     "document_key": "FAC09001-CTR-010-WEL-FG-7380"
   }
 },
@@ -7895,12 +5575,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-10-08",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.079Z",
-    "metadata_id": 465,
     "document_key": "FAC09001-FWF-301-DRI-PLA-1757"
   }
 },
@@ -7912,12 +5587,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-12-01",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.386Z",
-    "metadata_id": 466,
     "document_key": "FAC10005-CTR-105-MUL-PFD-5401"
   }
 },
@@ -7929,12 +5599,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-09-27",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.627Z",
-    "metadata_id": 467,
     "document_key": "FAC09001-CTR-303-HSE-CHT-5955"
   }
 },
@@ -7946,12 +5611,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-01-26",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.964Z",
-    "metadata_id": 468,
     "document_key": "FAC09001-CTR-402-ICS-DTS-4698"
   }
 },
@@ -7963,12 +5623,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-06-20",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.393Z",
-    "metadata_id": 469,
     "document_key": "FAC09001-FWF-011-QAC-HAZ-0512"
   }
 },
@@ -7980,12 +5635,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-04-23",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:45:00.457Z",
-    "metadata_id": 470,
     "document_key": "FAC10005-FWF-CTP-CON-SOR-8686"
   }
 },
@@ -7997,12 +5647,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-02-10",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.981Z",
-    "metadata_id": 471,
     "document_key": "FAC09001-CTR-CWS-TEL-DCN-4483"
   }
 },
@@ -8014,12 +5659,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-10-22",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.183Z",
-    "metadata_id": 472,
     "document_key": "FAC09001-CTR-503-TEL-BAS-5019"
   }
 },
@@ -8031,12 +5671,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-09-02",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.752Z",
-    "metadata_id": 473,
     "document_key": "FAC10005-CTR-002-ROT-PRO-5516"
   }
 },
@@ -8048,12 +5683,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-12-22",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.046Z",
-    "metadata_id": 474,
     "document_key": "FAC10005-CTR-009-ROT-LIS-7874"
   }
 },
@@ -8065,12 +5695,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-09-21",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.160Z",
-    "metadata_id": 475,
     "document_key": "FAC09001-FWF-000-STR-MAN-2829"
   }
 },
@@ -8082,12 +5707,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-04-05",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.059Z",
-    "metadata_id": 476,
     "document_key": "FAC09001-FWF-BCC-SAF-ITP-0173"
   }
 },
@@ -8099,12 +5719,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-04-26",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.302Z",
-    "metadata_id": 477,
     "document_key": "FAC10005-CTR-103-VES-UFD-9875"
   }
 },
@@ -8116,12 +5731,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-07-17",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.335Z",
-    "metadata_id": 478,
     "document_key": "FAC10005-CTR-404-SAF-LAY-3335"
   }
 },
@@ -8133,12 +5743,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-09-25",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.039Z",
-    "metadata_id": 479,
     "document_key": "FAC09001-CTR-LAB-CON-MAN-6683"
   }
 },
@@ -8150,12 +5755,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-05-20",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:54.378Z",
-    "metadata_id": 480,
     "document_key": "FAC09001-FWF-400-PMT-FAT-3804"
   }
 },
@@ -8167,12 +5767,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-03-08",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.325Z",
-    "metadata_id": 481,
     "document_key": "FAC10005-CTR-104-COM-STD-1712"
   }
 },
@@ -8184,12 +5779,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-07-24",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.764Z",
-    "metadata_id": 482,
     "document_key": "FAC09001-CTR-306-ICS-MSD-9802"
   }
 },
@@ -8201,12 +5791,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-11-12",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.164Z",
-    "metadata_id": 483,
     "document_key": "FAC09001-CTR-503-INS-DTS-9068"
   }
 },
@@ -8218,12 +5803,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-03-04",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.164Z",
-    "metadata_id": 484,
     "document_key": "FAC10005-CTR-012-COR-LIS-5278"
   }
 },
@@ -8235,12 +5815,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-01-26",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.947Z",
-    "metadata_id": 485,
     "document_key": "FAC10005-CTR-CCP-INS-FAT-5698"
   }
 },
@@ -8252,12 +5827,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-07-27",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.547Z",
-    "metadata_id": 486,
     "document_key": "FAC09001-CTR-CHC-CON-OPM-4895"
   }
 },
@@ -8269,12 +5839,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-06-11",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.446Z",
-    "metadata_id": 487,
     "document_key": "FAC10005-CTR-107-CIV-STU-1270"
   }
 },
@@ -8286,12 +5851,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-12-17",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.444Z",
-    "metadata_id": 488,
     "document_key": "FAC09001-CTR-200-PRT-HMB-5367"
   }
 },
@@ -8303,12 +5863,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-08-16",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.771Z",
-    "metadata_id": 489,
     "document_key": "FAC10005-FWF-009-TEL-MSD-4163"
   }
 },
@@ -8320,12 +5875,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-05-21",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:53.023Z",
-    "metadata_id": 490,
     "document_key": "FAC09001-CTR-EXT-STR-CAL-8241"
   }
 },
@@ -8337,12 +5887,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-04-27",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.387Z",
-    "metadata_id": 491,
     "document_key": "FAC09001-CTR-BMT-HSE-CER-4690"
   }
 },
@@ -8354,12 +5899,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-11-06",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:57.239Z",
-    "metadata_id": 492,
     "document_key": "FAC10005-CTR-400-STR-REG-8888"
   }
 },
@@ -8371,12 +5911,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-12-13",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:58.390Z",
-    "metadata_id": 493,
     "document_key": "FAC10005-FWF-001-SAF-LAY-4825"
   }
 },
@@ -8388,12 +5923,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-04-24",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.035Z",
-    "metadata_id": 494,
     "document_key": "FAC09001-FWF-BCC-PCO-PFD-1056"
   }
 },
@@ -8405,12 +5935,7 @@
     "current_revision": "3",
     "current_revision_date": "2010-01-05",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:56.486Z",
-    "metadata_id": 495,
     "document_key": "FAC10005-CTR-107-CON-CHT-8520"
   }
 },
@@ -8422,12 +5947,7 @@
     "current_revision": "4",
     "current_revision_date": "2011-01-10",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:59.401Z",
-    "metadata_id": 496,
     "document_key": "FAC10005-FWF-303-VES-HMB-2788"
   }
 },
@@ -8439,12 +5959,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-01-25",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.065Z",
-    "metadata_id": 497,
     "document_key": "FAC09001-CTR-501-COM-SPE-3242"
   }
 },
@@ -8456,12 +5971,7 @@
     "current_revision": "2",
     "current_revision_date": "2009-12-05",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:51.604Z",
-    "metadata_id": 498,
     "document_key": "FAC09001-CTR-302-OPE-ESD-4035"
   }
 },
@@ -8473,12 +5983,7 @@
     "current_revision": "5",
     "current_revision_date": "2012-02-17",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:55.393Z",
-    "metadata_id": 499,
     "document_key": "FAC09001-FWF-CO1-TEL-HAZ-0788"
   }
 },
@@ -8490,12 +5995,7 @@
     "current_revision": "4",
     "current_revision_date": "2012-01-07",
     "created_on": "2013-04-18",
-    "metadata_type": [
-      "document_types",
-      "contractordeliverable"
-    ],
     "updated_on": "2013-12-02T15:44:52.044Z",
-    "metadata_id": 500,
     "document_key": "FAC09001-CTR-406-INS-REQ-1269"
   }
 },

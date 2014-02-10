@@ -4,8 +4,6 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
-from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes import generic
 from django.core.urlresolvers import reverse
 
 from accounts.models import User
@@ -44,12 +42,6 @@ class Document(models.Model):
         verbose_name=u"Revision")
     current_revision_date = models.DateField(
         verbose_name=u"Revision Date")
-
-    # TODO Get rid of this, since it's never used
-    # Factories and tests must be updated
-    metadata_type = models.ForeignKey(ContentType, null=True)
-    metadata_id = models.PositiveIntegerField(null=True)
-    metadata = generic.GenericForeignKey('metadata_type', 'metadata_id')
 
     class Meta:
         verbose_name = _('Document')
