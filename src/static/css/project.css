@@ -6,7 +6,7 @@ body.documentlist .main-navbar {
     margin-bottom: 0;
     z-index: 1000;
 }
-body > .container,
+body.fullwidth > .container,
 .navbar > .container {
     width: 100%;
     max-width: 100%;
