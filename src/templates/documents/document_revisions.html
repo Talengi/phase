@@ -1,7 +1,6 @@
 {% load compressed crispy_forms_tags %}
 
 {% if revisions %}
-<h2>{{ _('Revisable data') }}</h2>
 <ul class="nav nav-tabs">
 {% for revision in revisions %}
     <li{% if forloop.first %} class="active"{% endif %}>
