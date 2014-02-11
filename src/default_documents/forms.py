@@ -1,7 +1,7 @@
 from django.utils.translation import ugettext_lazy as _
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout
+from crispy_forms.layout import Layout, Field
 
 from documents.forms.models import BaseDocumentForm
 from .models import (
@@ -39,7 +39,7 @@ class ContractorDeliverableForm(BaseDocumentForm):
             DocumentFieldset(
                 _('General information'),
                 'document_key',
-                'title',
+                Field('title', rows=2),
                 'contract_number',
                 'originator',
                 'unit',
