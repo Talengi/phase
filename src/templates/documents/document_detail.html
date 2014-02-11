@@ -8,7 +8,6 @@
 {% block content %}
 <div class="row">
 
-    <!-- Sorry about that -->
     {% include 'documents/document_detail_sidebar.html' with form=form revision_form=revisions.0.form %}
     <div class="col-sm-8">
         {% include 'documents/document_detail_actions.html' with dropdirection='dropdown' %}
