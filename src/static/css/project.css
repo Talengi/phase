@@ -255,6 +255,24 @@ button.ui-multiselect {
 #document-sidebar ul a:hover {
     background-color: white;
 }
+form.disabled input[type="text"],
+form.disabled input[type="number"],
+form.disabled textarea,
+form.disabled select {
+    border: 0 !important;
+    background-color: transparent !important;
+    padding-left: 0 !important;
+    margin-left: 0;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    cursor: pointer;
+}
+form.disabled select {
+    margin-left: -3px;
+}
+form.disabled div.input-group.date .input-group-addon {
+    display: none;
+}
 /* Off canvas sidebar */
 .row-offcanvas .sidebar-offcanvas {
     position: fixed;
