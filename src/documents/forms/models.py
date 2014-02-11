@@ -1,14 +1,34 @@
 from django import forms
 from django.core.exceptions import ImproperlyConfigured
 
+from django.conf import settings
+
 
 def documentform_factory(model):
-    """Gets the given model edition form. """
-    from default_documents import forms as document_forms
+    """Gets the given model edition form.
+
+    We are looking for the form class in all installed apps.
+
+    """
     form_class_name = '%sForm' % model.__name__
-    try:
-        DocumentForm = getattr(document_forms, form_class_name)
-    except AttributeError:
+    apps = settings.INSTALLED_APPS
+    DocumentForm = None
+
+    for app in apps:
+        try:
+            _temp = __import__(
+                app + '.forms',
+                globals(),
+                locals(),
+                [form_class_name],
+                -1
+            )
+            DocumentForm = getattr(_temp, form_class_name)
+            break
+        except (ImportError, AttributeError):
+            continue
+
+    else:
         raise ImproperlyConfigured('Cannot find class %s' % form_class_name)
 
     return DocumentForm
