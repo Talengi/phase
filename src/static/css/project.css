@@ -231,11 +231,15 @@ button.ui-multiselect {
     padding-right: 20px;
     padding: 10px 20px;
 }
+#document-sidebar {
+    text-align: right;
+}
 #document-sidebar ul {
+    text-align: right;
     margin: 0;
-    padding: 0 0 0 20px;
+    padding: 0 20px 0 0;
     list-style-type: none;
-    border-left: 1px solid #e5e5e5;
+    border-right: 1px solid #e5e5e5;
 }
 #document-sidebar ul li {
     display: block;
