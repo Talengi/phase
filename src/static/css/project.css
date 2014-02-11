@@ -265,12 +265,16 @@ form.disabled select {
     margin-left: 0;
     box-shadow: none;
     -webkit-box-shadow: none;
-    cursor: pointer;
+    cursor: pointer !important;
 }
 form.disabled select {
     margin-left: -3px;
 }
 form.disabled div.input-group.date .input-group-addon {
+    display: none;
+}
+form.disabled .fileinput .clear,
+form.disabled .fileinput .change {
     display: none;
 }
 /* Off canvas sidebar */
