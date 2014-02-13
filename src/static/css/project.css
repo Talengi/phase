@@ -60,6 +60,18 @@ form.form-horizontal textarea {
 }
 
 /* Table rendering */
+#document-list-row {
+    /* Watch out, the following lines are PURE MAGIC!!! */
+    position: fixed;
+    top: 120px; /* Because of the two navbars */
+    bottom: 0;
+    left: 20px;
+    right: 20px;
+    max-height: 100%;
+    overflow: auto;
+}
+#main-table {
+}
 #main-table thead th {
     background-color: #f0f0f0;
 }
