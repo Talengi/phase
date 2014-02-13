@@ -265,19 +265,17 @@ class ContractorDeliverableRevision(MetadataRevision):
         verbose_name=_('Leader'),
         related_name='leading_contractor_deliverables',
         null=True, blank=True)
-    # TODO
-    #leader_comments = models.FileField(
-    #    _('Leader comments'),
-    #    null=True, blank=True)
+    leader_comments = RevisionFileField(
+        _('Leader comments'),
+        null=True, blank=True)
     approver = models.ForeignKey(
         User,
         verbose_name=_('Approver'),
         related_name='approving_contractor_deliverables',
         null=True, blank=True)
-    # TODO
-    #approver_comments = models.FileField(
-    #    _('Approver comments'),
-    #    null=True, blank=True)
+    approver_comments = RevisionFileField(
+        _('Approver comments'),
+        null=True, blank=True)
     under_gtg_review = models.NullBooleanField(
         _('Under GTG Review'),
         choices=BOOLEANS,

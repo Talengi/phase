@@ -100,7 +100,9 @@ class ContractorDeliverableRevisionForm(BaseDocumentForm):
                 'overdue',
                 'reviewers',
                 'leader',
+                'leader_comments',
                 'approver',
+                'approver_comments',
                 'under_gtg_review',
             )
         )
