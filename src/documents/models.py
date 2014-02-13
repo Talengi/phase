@@ -164,7 +164,7 @@ class Metadata(models.Model):
 
     @property
     def current_revision(self):
-        return self.latest_revision.revision
+        return '%(revision)02d' % {'revision': self.latest_revision.revision}
 
     @property
     def current_revision_date(self):

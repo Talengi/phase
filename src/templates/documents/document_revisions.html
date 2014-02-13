@@ -5,7 +5,7 @@
 {% for revision in revisions %}
     <li{% if forloop.first %} class="active"{% endif %}>
         <a href="#tab{{ forloop.counter }}" data-toggle="tab">
-            Revision {{ revision.revision }}
+            Revision {{ revision.revision|stringformat:"02d" }}
         </a>
     </li>
 {% endfor %}
