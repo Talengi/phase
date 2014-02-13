@@ -9,6 +9,7 @@ from documents.fields import RevisionFileField
 from documents.constants import (
     BOOLEANS, SEQUENTIAL_NUMBERS, CLASSES
 )
+from .validators import StringNumberValidator
 
 
 class ContractorDeliverable(Metadata):
@@ -46,9 +47,10 @@ class ContractorDeliverable(Metadata):
         list_index='DOCUMENT_TYPES')
     sequential_number = models.CharField(
         verbose_name=u"sequential Number",
+        help_text=_('Select a four digit number'),
         default=u"0001",
         max_length=4,
-        choices=SEQUENTIAL_NUMBERS)
+        validators=[StringNumberValidator(4)])
     project_phase = ConfigurableChoiceField(
         verbose_name=u"Engineering Phase",
         default=u"FEED",
