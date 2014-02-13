@@ -293,7 +293,8 @@ form.disabled div.input-group.date .input-group-addon {
     display: none;
 }
 form.disabled .fileinput .clear,
-form.disabled .fileinput .change {
+form.disabled .fileinput .change,
+form.disabled input[type="file"] {
     display: none;
 }
 /* Off canvas sidebar */
