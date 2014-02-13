@@ -278,6 +278,7 @@ form.disabled select {
     box-shadow: none;
     -webkit-box-shadow: none;
     cursor: pointer !important;
+    resize:none;
 }
 form.disabled select {
     margin-left: -3px;
