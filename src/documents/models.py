@@ -8,6 +8,7 @@ from django.core.urlresolvers import reverse
 
 from accounts.models import User
 from categories.models import Category
+from documents.utils import stringify_value
 
 
 class DocumentManager(models.Manager):
@@ -143,8 +144,15 @@ class Metadata(models.Model):
         The first element of the list is the linkified document number.
         """
         favorited = self.pk in document2favorite.keys()
-        fields_infos = dict((field[1], unicode(getattr(self, field[1])))
-                            for field in self.PhaseConfig.column_fields)
+        # TODO Use field[2] for getting field value
+
+        fields = tuple()
+        for field in self.PhaseConfig.column_fields:
+            key = field[1]
+            value = getattr(self, field[1])
+            fields += ((key, stringify_value(value)),)
+
+        fields_infos = dict(fields)
         fields_infos.update({
             'url': self.document.get_absolute_url(),
             'number': self.natural_key(),

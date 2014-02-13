@@ -106,3 +106,31 @@ def compress_documents(documents, format='both', revisions='latest'):
                     compress_type=compression
                 )
     return temp_file
+
+
+def stringify_value(val):
+    """Returns a value suitable for display in a document list.
+
+    >>> stringify_value('toto')
+    u'toto'
+
+    >>> stringify_value(None)
+    u'NC'
+
+    >>> stringify_value(True)
+    u'Yes'
+
+    >>> stringify_value(datetime.datetime(2000, 1, 1))  # noqa
+    u'2000-01-01'
+
+    >>> stringify_value(None)
+    u'NC'
+    """
+    if val is None:
+        unicode_val = u'NC'
+    elif type(val) == bool:
+        unicode_val = u'Yes' if val else u'No'
+    else:
+        unicode_val = unicode(val)
+
+    return unicode_val
