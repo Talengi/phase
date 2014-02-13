@@ -280,8 +280,14 @@ form.disabled select {
     cursor: pointer !important;
     resize:none;
 }
-form.disabled select {
+form.disabled .controls {
+    overflow: hidden;
+}
+form.disabled select,
+form.disabled input[type="number"] {
     margin-left: -3px;
+    /* Nasty hack to hide the select box selection arrow */
+    width: 115%;
 }
 form.disabled div.input-group.date .input-group-addon {
     display: none;
