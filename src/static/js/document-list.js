@@ -4,21 +4,6 @@ jQuery(function($) {
     // initialize minimal query parameters
     queryparams.fromString($('#table-filters').serialize());
 
-    /* Deal with download buttons */
-    $('.download-button').click(function () {
-        var btn = $(this),
-            format = btn.data('format'),
-            revisions = btn.data('revisions');
-        if (format !== undefined) {
-            $('#id_format').val(format);
-        } else if (revisions !== undefined) {
-            $('#id_revisions').val(revisions);
-        }
-    });
-
-
-    ///* document list *///
-
     /* Dealing with addition/removal of favorites */
     var updateDocumentNumber = function(display, total) {
         $("#display-results").text(display);
