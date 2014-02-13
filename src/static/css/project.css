@@ -294,7 +294,8 @@ form.disabled div.input-group.date .input-group-addon {
 }
 form.disabled .fileinput .clear,
 form.disabled .fileinput .change,
-form.disabled input[type="file"] {
+form.disabled input[type="file"],
+form.disabled .help-block {
     display: none;
 }
 /* Off canvas sidebar */
