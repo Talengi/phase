@@ -284,6 +284,103 @@ class ContractorDeliverableRevision(MetadataRevision):
         null=True, blank=True)
 
 
+class Correspondence(Metadata):
+    latest_revision = models.ForeignKey(
+        'CorrespondenceRevision',
+        verbose_name=_('Latest revision'))
+
+    reference = models.CharField(
+        _('Reference'),
+        max_length=30)
+
+    # General information
+    subject = models.TextField(_('Subject'))
+    correspondence_date = models.DateField(_('Correspondence date'))
+    received_sent_date = models.DateField(_('Received / sent date'))
+    contract_number = ConfigurableChoiceField(
+        _('Contract Number'),
+        max_length=8,
+        list_index='CONTRACT_NBS')
+    originator = ConfigurableChoiceField(
+        _('Originator'),
+        default='FWF',
+        max_length=3,
+        list_index='ORIGINATORS')
+    recipient = ConfigurableChoiceField(
+        _('Recipient'),
+        default='FWF',
+        max_length=3,
+        list_index='RECIPIENTS')
+    document_type = ConfigurableChoiceField(
+        _('Document Type'),
+        default="PID",
+        max_length=3,
+        list_index='DOCUMENT_TYPES')
+    sequential_number = models.CharField(
+        _('Sequential Number'),
+        default=u"0001",
+        max_length=4,
+        choices=SEQUENTIAL_NUMBERS)
+    author = ConfigurableChoiceField(
+        _('Author'),
+        null=True,
+        blank=True,
+        max_length=250,
+        list_index='AUTHORS')
+    addresses = ConfigurableChoiceField(
+        _('Addresses'),
+        null=True,
+        blank=True,
+        list_index='ADDRESSES')
+    response_required = models.NullBooleanField(
+        _('Response required'),
+        null=True,
+        blank=True)
+    due_date = models.DateField(
+        _('Due date'),
+        null=True,
+        blank=True)
+
+    # Revision
+    current_revision = ConfigurableChoiceField(
+        _('Revision'),
+        default='00',
+        max_length=2,
+        list_index='REVISIONS')
+    current_revision_date = models.DateField(_('Revision Date'))
+
+    # Related documents
+    related_documents = models.ManyToManyField(
+        'documents.Document',
+        related_name='correspondence_related_set',
+        null=True, blank=True)
+
+    class Meta:
+        ordering = ('id',)
+
+    class PhaseConfig:
+        pass
+
+    def generate_document_key(self):
+        return slugify(
+            u"{contract_number}-{originator}-{recipient}"
+            u"{document_type}-{sequential_number}"
+            .format(
+                contract_number=self.contract_number,
+                originator=self.originator,
+                recipient=self.recipient,
+                document_type=self.document_type,
+                sequential_number=self.sequential_number
+            )).upper()
+
+    def natural_key(self):
+        return self.reference
+
+
+class CorrespondenceRevision(MetadataRevision):
+    pass
+
+
 class Transmittals(Metadata):
 
     # General informations
