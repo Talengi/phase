@@ -44,17 +44,9 @@ jQuery(function($) {
                 topLink.fadeIn();
             }
         };
-        scrollTimeout = setTimeout(scrollHandler, 250);
 
-        // Debounce the scroll handler using timeouts
-        // See https://github.com/shichuan/javascript-patterns/blob/master/jquery-patterns/window-scroll-event.html
-        $window.scroll(function() {
-            if (scrollTimeout) {
-                clearTimeout(scrollTimeout);
-                scrollTimeout = null;
-            }
-            scrollTimeout = setTimeout(scrollHandler, 250);
-        });
+        // Binding to the scroll event is awful for performances
+        scrollInterval = setInterval(scrollHandler, 3000);
     };
     configureBackToTopLink();
 
