@@ -17,7 +17,7 @@
               enctype="multipart/form-data"
               id="document-edit">
             {% csrf_token %}
-            {% if document_form.is_bound and not document_form.is_valid %}
+            {% if document_form.errors or revision_form.errors %}
                 <div class="alert alert-danger">
                     <p>There was errors processing your data. See below.</p>
                 </div>
