@@ -90,7 +90,7 @@ class Metadata(models.Model):
         abstract = True
 
     def __unicode__(self):
-        return self.natural_key()
+        return self.document_key
 
     def get_absolute_url(self):
         return self.document.get_absolute_url()

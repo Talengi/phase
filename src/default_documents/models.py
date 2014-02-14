@@ -289,10 +289,6 @@ class Correspondence(Metadata):
         'CorrespondenceRevision',
         verbose_name=_('Latest revision'))
 
-    reference = models.CharField(
-        _('Reference'),
-        max_length=30)
-
     # General information
     subject = models.TextField(_('Subject'))
     correspondence_date = models.DateField(_('Correspondence date'))
@@ -341,14 +337,6 @@ class Correspondence(Metadata):
         null=True,
         blank=True)
 
-    # Revision
-    current_revision = ConfigurableChoiceField(
-        _('Revision'),
-        default='00',
-        max_length=2,
-        list_index='REVISIONS')
-    current_revision_date = models.DateField(_('Revision Date'))
-
     # Related documents
     related_documents = models.ManyToManyField(
         'documents.Document',
@@ -369,7 +357,7 @@ class Correspondence(Metadata):
             'originator', 'recipient', 'status', 'under_review',
             'overdue', 'leader'
         )
-        searchable_fields = ('reference', 'subject')
+        searchable_fields = ('document_key', 'subject')
         column_fields = (
             ('Reference', 'document_key', 'document_key'),
             ('Subject', 'subject', 'subject'),
@@ -398,7 +386,7 @@ class Correspondence(Metadata):
             )).upper()
 
     def natural_key(self):
-        return (self.reference,)
+        return (self.document_key,)
 
 
 class CorrespondenceRevision(MetadataRevision):
@@ -480,15 +468,6 @@ class Transmittals(Metadata):
         related_name='received_transmittals',
         null=True, blank=True)
 
-    # Revision
-    current_revision = ConfigurableChoiceField(
-        verbose_name=u"Revision",
-        default=u"00",
-        max_length=2,
-        list_index='REVISIONS')
-    current_revision_date = models.DateField(
-        verbose_name=u"Revision Date")
-
     # Related documents
     related_documents = models.ManyToManyField(
         'documents.Document',
@@ -551,7 +530,7 @@ class DemoMetadata(Metadata):
         column_fields = (
             ('Document Number', 'document_key', 'document_key'),
             ('Title', 'title', 'title'),
-            ('Rev.', 'current_revision', 'latest_revision__revision'),
+            ('Rev.', 'current_revision', 'current_revision'),
             ('Rev. Date', 'current_revision_date', 'latest_revision__created_on'),
             ('Status', 'status', 'latest_revision__status'),
         )
