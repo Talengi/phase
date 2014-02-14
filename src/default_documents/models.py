@@ -185,7 +185,7 @@ class ContractorDeliverable(Metadata):
         )
 
     def natural_key(self):
-        return self.document_key
+        return (self.document_key,)
 
     def generate_document_key(self):
         return slugify(
@@ -453,7 +453,7 @@ class Transmittals(Metadata):
         verbose_name_plural = _('Transmittals documents')
 
     def natural_key(self):
-        return self.reference
+        return (self.reference,)
 
 
 class TransmittalsRevision(MetadataRevision):
@@ -510,7 +510,7 @@ class DemoMetadata(Metadata):
         )
 
     def natural_key(self):
-        return self.document_key
+        return (self.document_key,)
 
     def generate_document_key(self):
         return slugify(self.title)
