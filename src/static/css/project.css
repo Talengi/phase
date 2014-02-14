@@ -58,6 +58,13 @@ form.form-horizontal textarea {
 .btn-block {
     margin-bottom: 15px;
 }
+form div.alert-danger ul {
+    margin: 0;
+    padding: 0;
+}
+form div.alert-danger ul li {
+    list-style-type: none;
+}
 
 /* Table rendering */
 #document-list-row {

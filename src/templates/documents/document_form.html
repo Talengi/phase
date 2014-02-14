@@ -17,14 +17,9 @@
               enctype="multipart/form-data"
               id="document-edit">
             {% csrf_token %}
-            {% if not form.is_valid %}
+            {% if document_form.is_bound and not document_form.is_valid %}
                 <div class="alert alert-danger">
                     <p>There was errors processing your data. See below.</p>
-                </div>
-            {% endif %}
-            {% if form.non_field_errors %}
-                <div class="alert alert-danger">
-                    <p><strong>Please fix this error:</strong> {{ form.non_field_errors.0 }}</p>
                 </div>
             {% endif %}
             {% crispy document_form document_form.helper %}
