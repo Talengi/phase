@@ -26,6 +26,24 @@
   }
 },
 {
+  "pk": 3,
+  "model": "categories.categorytemplate",
+  "fields": {
+    "name": "Minutes of meeting",
+    "slug": "minutes-of-meeting",
+    "metadata_model": ["default_documents", "minutesofmeeting"]
+  }
+},
+{
+  "pk": 4,
+  "model": "categories.categorytemplate",
+  "fields": {
+    "name": "Transmittals",
+    "slug": "transmittals",
+    "metadata_model": ["default_documents", "transmittals"]
+  }
+},
+{
   "pk": 1,
   "model": "categories.category",
   "fields": {
@@ -40,6 +58,24 @@
   "fields": {
     "organisation": 1,
     "category_template": 2,
+    "users": [1, 2, 3]
+  }
+},
+{
+  "pk": 3,
+  "model": "categories.category",
+  "fields": {
+    "organisation": 1,
+    "category_template": 3,
+    "users": [1, 2, 3]
+  }
+},
+{
+  "pk": 4,
+  "model": "categories.category",
+  "fields": {
+    "organisation": 1,
+    "category_template": 4,
     "users": [1, 2, 3]
   }
 }
