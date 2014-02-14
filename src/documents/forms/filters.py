@@ -31,7 +31,8 @@ def filterform_factory(model):
 
     """
     revision_model = model.latest_revision.get_queryset().model
-    all_fields = model._meta.concrete_fields + revision_model._meta.concrete_fields
+    all_fields = dict((field.name, field) for field in (
+        model._meta.concrete_fields + revision_model._meta.concrete_fields))
 
     # Get the list of all configured fields
     config = getattr(model, 'PhaseConfig', None)
@@ -44,9 +45,11 @@ def filterform_factory(model):
     }
 
     field_list = []
-    for f in all_fields:
-        if not f.name in filter_fields:
+    for field_name in filter_fields:
+        if not field_name in all_fields:
             continue
+
+        f = all_fields[field_name]
 
         # Create form field from model field
         # TODO Include indexes in choices
