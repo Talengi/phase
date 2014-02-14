@@ -7,6 +7,7 @@ from .models import (
     ContractorDeliverable, ContractorDeliverableRevision,
     Correspondence, CorrespondenceRevision,
     MinutesOfMeeting, MinutesOfMeetingRevision,
+    Transmittals, TransmittalsRevision,
     DemoMetadata, DemoMetadataRevision
 )
 from .layout import (
@@ -164,12 +165,12 @@ class CorrespondenceRevisionForm(BaseDocumentForm):
 class MinutesOfMeetingForm(BaseDocumentForm):
     def build_layout(self):
         if self.read_only:
-            related_documents = DocumentFieldset(
+            response_reference = DocumentFieldset(
                 _('Response reference'),
                 FlatRelatedDocumentsLayout('response_reference'),
             )
         else:
-            related_documents = DocumentFieldset(
+            response_reference = DocumentFieldset(
                 _('Response reference'),
                 'response_reference',
             )
@@ -188,7 +189,7 @@ class MinutesOfMeetingForm(BaseDocumentForm):
                 'sequential_number',
                 'prepared_by',
                 'signed',
-                related_documents,
+                response_reference,
             )
         )
 
@@ -210,6 +211,58 @@ class MinutesOfMeetingRevisionForm(BaseDocumentForm):
 
     class Meta:
         model = MinutesOfMeetingRevision
+        exclude = ('document', 'revision', 'revision_date', 'created_on',
+                   'updated_on')
+
+
+class TransmittalsForm(BaseDocumentForm):
+    def build_layout(self):
+        if self.read_only:
+            related_documents = DocumentFieldset(
+                _('Related documents'),
+                FlatRelatedDocumentsLayout('related_documents'),
+            )
+        else:
+            related_documents = DocumentFieldset(
+                _('Related documents'),
+                'related_documents',
+            )
+
+        return Layout(
+            DocumentFieldset(
+                _('General information'),
+                'document_key',
+                'transmittal_date',
+                'ack_of_receipt_date',
+                'contract_number',
+                'originator',
+                'recipient',
+                'document_type',
+                'sequential_number',
+                'frm',
+                'to',
+                related_documents,
+            )
+        )
+
+    class Meta:
+        model = Transmittals
+        exclude = ('document', 'latest_revision')
+
+
+class TransmittalsRevisionForm(BaseDocumentForm):
+    def build_layout(self):
+        return Layout(
+            DocumentFieldset(
+                _('Revision'),
+                'status',
+                'native_file',
+                'pdf_file',
+            ),
+        )
+
+    class Meta:
+        model = TransmittalsRevision
         exclude = ('document', 'revision', 'revision_date', 'created_on',
                    'updated_on')
 

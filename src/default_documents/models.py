@@ -15,8 +15,7 @@ from .validators import StringNumberValidator
 class ContractorDeliverable(Metadata):
     latest_revision = models.ForeignKey(
         'ContractorDeliverableRevision',
-        verbose_name=_('Latest revision'),
-        null=True)  # TODO No!
+        verbose_name=_('Latest revision'))
 
     # General information
     title = models.TextField(
@@ -545,29 +544,30 @@ class MinutesOfMeetingRevision(MetadataRevision):
 
 
 class Transmittals(Metadata):
+    latest_revision = models.ForeignKey(
+        'TransmittalsRevision',
+        verbose_name=_('Latest revision'))
 
     # General informations
-    reference = models.CharField(
-        _('Reference'),
-        max_length=30)
     transmittal_date = models.DateField(
-        _('Transmittal date'))
+        _('Transmittal date'),
+        null=True, blank=True)
     ack_of_receipt_date = models.DateField(
         _('Acknowledgment of receipt date'),
         null=True, blank=True)
     contract_number = ConfigurableChoiceField(
-        verbose_name=u"Contract Number",
+        _('Contract Number'),
         max_length=8,
         list_index='CONTRACT_NBS')
     originator = ConfigurableChoiceField(
         _('Originator'),
-        default=u"FWF",
+        default='FWF',
         max_length=3,
         list_index='ORIGINATORS')
     recipient = ConfigurableChoiceField(
         _('Recipient'),
         max_length=50,
-        list_index='Recipients')
+        list_index='RECIPIENTS')
     document_type = ConfigurableChoiceField(
         _('Document Type'),
         default="PID",
@@ -575,15 +575,10 @@ class Transmittals(Metadata):
         list_index='DOCUMENT_TYPES')
     sequential_number = models.CharField(
         verbose_name=u"sequential Number",
-        help_text=_('Select a four digit number'),
+        help_text=_('Type in a four digit number'),
         default=u"0001",
         max_length=4,
         validators=[StringNumberValidator(4)])
-    project_phase = ConfigurableChoiceField(
-        _('Engineering Phase'),
-        default=u"FEED",
-        max_length=4,
-        list_index='ENGINEERING_PHASES')
     frm = models.ForeignKey(
         User,
         verbose_name=_('From'),
@@ -604,24 +599,61 @@ class Transmittals(Metadata):
     class Meta:
         verbose_name = _('Transmittals document')
         verbose_name_plural = _('Transmittals documents')
+        ordering = ('document_key',)
+        unique_together = (
+            (
+                "contract_number", "originator", "recipient",
+                "document_type", "sequential_number",
+            ),
+        )
+
+    class PhaseConfig:
+        filter_fields = (
+            'originator', 'recipient', 'status',
+        )
+        searchable_fields = ('document_key', 'transmittal_date')
+        column_fields = (
+            ('Reference', 'document_key', 'document_key'),
+            ('Transmittal date', 'transmittal_date', 'transmittal_date'),
+            ('Ack. of receipt date', 'ack_of_receipt_date', 'ack_of_receipt_date'),
+            ('Originator', 'originator', 'originator'),
+            ('Recipient', 'recipient', 'recipient'),
+            ('Document type', 'document_type', 'document_type'),
+            ('Status', 'status', 'latest_revision.status'),
+            ('Created on', 'created_on', 'latest_revision.created_on'),
+        )
+
+    def generate_document_key(self):
+        return slugify(
+            u"{contract_number}-{originator}-{recipient}"
+            u"{document_type}-{sequential_number}"
+            .format(
+                contract_number=self.contract_number,
+                originator=self.originator,
+                recipient=self.recipient,
+                document_type=self.document_type,
+                sequential_number=self.sequential_number
+            )).upper()
 
     def natural_key(self):
-        return (self.reference,)
+        return (self.document_key,)
+
+    @property
+    def status(self):
+        return self.latest_revision.status
 
 
 class TransmittalsRevision(MetadataRevision):
-    # Revision
-    status = ConfigurableChoiceField(
-        verbose_name=u"Status",
-        default="STD",
-        max_length=3,
-        list_index='STATUSES',
+    status = models.CharField(
+        verbose_name=_('Status'),
+        choices=CORRESPONDENCE_STATUSES,
+        max_length=20,
         null=True, blank=True)
     native_file = RevisionFileField(
-        verbose_name=u"Native File",
+        _('Native File'),
         null=True, blank=True)
     pdf_file = RevisionFileField(
-        verbose_name=u"PDF File",
+        _('PDF File'),
         null=True, blank=True)
 
 
