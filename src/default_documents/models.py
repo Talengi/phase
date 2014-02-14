@@ -7,7 +7,7 @@ from accounts.models import User
 from documents.models import Metadata, MetadataRevision
 from documents.fields import RevisionFileField
 from documents.constants import (
-    BOOLEANS, SEQUENTIAL_NUMBERS, CLASSES
+    BOOLEANS, CLASSES
 )
 from .validators import StringNumberValidator
 
@@ -412,10 +412,11 @@ class Transmittals(Metadata):
         max_length=3,
         list_index='DOCUMENT_TYPES')
     sequential_number = models.CharField(
-        _('Sequential Number'),
+        verbose_name=u"sequential Number",
+        help_text=_('Select a four digit number'),
         default=u"0001",
         max_length=4,
-        choices=SEQUENTIAL_NUMBERS)
+        validators=[StringNumberValidator(4)])
     project_phase = ConfigurableChoiceField(
         _('Engineering Phase'),
         default=u"FEED",
