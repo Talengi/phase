@@ -1,6 +1,8 @@
 from django import forms
 from django.core.exceptions import ImproperlyConfigured
 
+from crispy_forms.helper import FormHelper
+
 from django.conf import settings
 
 
@@ -38,6 +40,16 @@ class BaseDocumentForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.read_only = kwargs.pop('read_only', False)
         super(BaseDocumentForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.layout = self.build_layout()
+
+        # Document key is automatically generated, this field should not be required
+        if 'document_key' in self.fields:
+            self.fields['document_key'].required = False
+
+    def build_layout(self):
+        raise NotImplementedError('Missing "build_layout" method')
 
     def clean_native_file(self):
         """Do not allow a PDF file to be uploaded as a native file.

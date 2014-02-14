@@ -304,7 +304,7 @@ class Correspondence(Metadata):
         list_index='ORIGINATORS')
     recipient = ConfigurableChoiceField(
         _('Recipient'),
-        max_length=3,
+        max_length=50,
         list_index='RECIPIENTS')
     document_type = ConfigurableChoiceField(
         _('Document Type'),
@@ -334,6 +334,10 @@ class Correspondence(Metadata):
         blank=True)
     due_date = models.DateField(
         _('Due date'),
+        null=True,
+        blank=True)
+    external_reference = models.TextField(
+        _('External reference'),
         null=True,
         blank=True)
 
@@ -388,6 +392,18 @@ class Correspondence(Metadata):
     def natural_key(self):
         return (self.document_key,)
 
+    @property
+    def status(self):
+        return self.latest_revision.status
+
+    @property
+    def overdue(self):
+        return self.latest_revision.overdue
+
+    @property
+    def leader(self):
+        return self.latest_revision.leader
+
 
 class CorrespondenceRevision(MetadataRevision):
     status = models.CharField(
@@ -438,8 +454,7 @@ class Transmittals(Metadata):
         list_index='ORIGINATORS')
     recipient = ConfigurableChoiceField(
         _('Recipient'),
-        default=u"FWF",
-        max_length=3,
+        max_length=50,
         list_index='Recipients')
     document_type = ConfigurableChoiceField(
         _('Document Type'),

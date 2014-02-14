@@ -1,12 +1,12 @@
 from django.utils.translation import ugettext_lazy as _
 
-from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field
 
 from documents.forms.models import BaseDocumentForm
 from .models import (
-    ContractorDeliverable, ContractorDeliverableRevision, DemoMetadata,
-    DemoMetadataRevision
+    ContractorDeliverable, ContractorDeliverableRevision,
+    Correspondence, CorrespondenceRevision,
+    DemoMetadata, DemoMetadataRevision
 )
 from .layout import (
     DocumentFieldset, ScheduleLayout, ScheduleStatusLayout,
@@ -14,15 +14,6 @@ from .layout import (
 
 
 class ContractorDeliverableForm(BaseDocumentForm):
-    def __init__(self, *args, **kwargs):
-        super(ContractorDeliverableForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_tag = False
-        self.helper.layout = self.build_layout()
-
-        # Document key is automatically generated, this field should not be required
-        self.fields['document_key'].required = False
-
     def build_layout(self):
         if self.read_only:
             related_documents = DocumentFieldset(
@@ -74,12 +65,6 @@ class ContractorDeliverableForm(BaseDocumentForm):
 
 
 class ContractorDeliverableRevisionForm(BaseDocumentForm):
-    def __init__(self, *args, **kwargs):
-        super(ContractorDeliverableRevisionForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_tag = False
-        self.helper.layout = self.build_layout()
-
     def build_layout(self):
         return Layout(
             DocumentFieldset(
@@ -113,17 +98,73 @@ class ContractorDeliverableRevisionForm(BaseDocumentForm):
                    'updated_on')
 
 
-class DemoMetadataForm(BaseDocumentForm):
-    helper = FormHelper()
-    helper.form_tag = False
+class CorrespondenceForm(BaseDocumentForm):
+    def build_layout(self):
+        if self.read_only:
+            related_documents = DocumentFieldset(
+                _('Related documents'),
+                FlatRelatedDocumentsLayout('related_documents'),
+            )
+        else:
+            related_documents = DocumentFieldset(
+                _('Related documents'),
+                'related_documents',
+            )
 
+        return Layout(
+            DocumentFieldset(
+                _('General information'),
+                'document_key',
+                Field('subject', rows=2),
+                'correspondence_date',
+                'received_sent_date',
+                'contract_number',
+                'originator',
+                'recipient',
+                'document_type',
+                'sequential_number',
+                'author',
+                'addresses',
+                'response_required',
+                'due_date',
+                'external_reference',
+                related_documents,
+            )
+        )
+
+    class Meta:
+        model = Correspondence
+        exclude = ('document', 'latest_revision')
+
+
+class CorrespondenceRevisionForm(BaseDocumentForm):
+    def build_layout(self):
+        return Layout(
+            DocumentFieldset(
+                _('Revision'),
+                'status',
+                'native_file',
+                'pdf_file',
+            ),
+            DocumentFieldset(
+                _('Review'),
+                'under_review',
+                'overdue',
+                'leader',
+            )
+        )
+
+    class Meta:
+        model = CorrespondenceRevision
+        exclude = ('document', 'revision', 'revision_date', 'created_on',
+                   'updated_on')
+
+
+class DemoMetadataForm(BaseDocumentForm):
     class Meta:
         model = DemoMetadata
 
 
 class DemoMetadataRevisionForm(BaseDocumentForm):
-    helper = FormHelper()
-    helper.form_tag = False
-
     class Meta:
         model = DemoMetadataRevision
