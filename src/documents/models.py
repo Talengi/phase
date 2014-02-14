@@ -143,12 +143,12 @@ class Metadata(models.Model):
 
         The first element of the list is the linkified document number.
         """
-        favorited = self.pk in document2favorite.keys()
-        # TODO Use field[2] for getting field value
+        favorited = self.document.pk in document2favorite.keys()
 
         fields = tuple()
         for field in self.PhaseConfig.column_fields:
             key = field[1]
+            # TODO Use field[2] for getting field value
             value = getattr(self, field[1])
             fields += ((key, stringify_value(value)),)
 
@@ -157,7 +157,8 @@ class Metadata(models.Model):
             'url': self.document.get_absolute_url(),
             'number': self.natural_key(),
             'pk': self.pk,
-            'favorite_id': document2favorite.get(self.pk, ''),
+            'document_pk': self.document.pk,
+            'favorite_id': document2favorite.get(self.document.pk, ''),
             'favorited': favorited,
         })
         return fields_infos

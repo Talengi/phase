@@ -89,7 +89,7 @@ jQuery(function($) {
         var form = document.querySelector('.navbar-form');
         $("#documents tbody").on('change', 'input[type=checkbox]', function(e) {
             $row = $(this).closest('tr');
-            var documentId = $row.data('document-id');
+            var documentId = $row.data('metadata-id');
             $('#download-button').removeClass('disabled');
             if ($(this).is(':checked')) {
                 $row.addClass('selected');
