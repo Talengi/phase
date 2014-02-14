@@ -432,6 +432,118 @@ class CorrespondenceRevision(MetadataRevision):
         null=True, blank=True)
 
 
+class MinutesOfMeeting(Metadata):
+    latest_revision = models.ForeignKey(
+        'MinutesOfMeetingRevision',
+        verbose_name=_('Latest revision'))
+
+    # General information
+    subject = models.TextField(_('Subject'))
+    meeting_date = models.DateField(_('Meeting date'))
+    received_sent_date = models.DateField(_('Received / sent date'))
+    contract_number = ConfigurableChoiceField(
+        _('Contract Number'),
+        max_length=8,
+        list_index='CONTRACT_NBS')
+    originator = ConfigurableChoiceField(
+        _('Originator'),
+        default='FWF',
+        max_length=3,
+        list_index='ORIGINATORS')
+    recipient = ConfigurableChoiceField(
+        _('Recipient'),
+        max_length=50,
+        list_index='RECIPIENTS')
+    document_type = ConfigurableChoiceField(
+        _('Document Type'),
+        default="PID",
+        max_length=3,
+        list_index='DOCUMENT_TYPES')
+    sequential_number = models.CharField(
+        verbose_name=u"sequential Number",
+        help_text=_('Type in a four digit number'),
+        default=u"0001",
+        max_length=4,
+        validators=[StringNumberValidator(4)])
+    prepared_by = ConfigurableChoiceField(
+        _('Prepared by'),
+        null=True,
+        blank=True,
+        max_length=250,
+        list_index='AUTHORS')
+    signed = models.NullBooleanField(
+        _('Signed'),
+        null=True, blank=True,
+        choices=BOOLEANS)
+
+    # Response reference
+    # TODO Check the queryset
+    response_reference = models.ManyToManyField(
+        'Correspondence',
+        related_name='mom_correspondence_related_set',
+        null=True, blank=True)
+
+    class Meta:
+        ordering = ('document_key',)
+        unique_together = (
+            (
+                "contract_number", "originator", "recipient",
+                "document_type", "sequential_number",
+            ),
+        )
+
+    class PhaseConfig:
+        filter_fields = (
+            'originator', 'recipient', 'status', 'signed', 'prepared_by',
+        )
+        searchable_fields = ('document_key', 'subject')
+        column_fields = (
+            ('Reference', 'document_key', 'document_key'),
+            ('Subject', 'subject', 'subject'),
+            ('Meeting date', 'meeting_date', 'meeting_date'),
+            ('Rec./sent date', 'received_sent_date', 'received_sent_date'),
+            ('Originator', 'originator', 'originator'),
+            ('Recipient', 'recipient', 'recipient'),
+            ('Document type', 'document_type', 'document_type'),
+            ('Prepared by', 'prepared_by', 'prepared_by'),
+            ('Signed', 'signed', 'signed'),
+            ('Status', 'status', 'latest_revision.status'),
+        )
+
+    def generate_document_key(self):
+        return slugify(
+            u"{contract_number}-{originator}-{recipient}"
+            u"{document_type}-{sequential_number}"
+            .format(
+                contract_number=self.contract_number,
+                originator=self.originator,
+                recipient=self.recipient,
+                document_type=self.document_type,
+                sequential_number=self.sequential_number
+            )).upper()
+
+    def natural_key(self):
+        return (self.document_key,)
+
+    @property
+    def status(self):
+        return self.latest_revision.status
+
+
+class MinutesOfMeetingRevision(MetadataRevision):
+    status = models.CharField(
+        verbose_name=_('Status'),
+        choices=CORRESPONDENCE_STATUSES,
+        max_length=20,
+        null=True, blank=True)
+    native_file = RevisionFileField(
+        _('Native File'),
+        null=True, blank=True)
+    pdf_file = RevisionFileField(
+        _('PDF File'),
+        null=True, blank=True)
+
+
 class Transmittals(Metadata):
 
     # General informations

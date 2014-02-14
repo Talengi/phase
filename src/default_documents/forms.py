@@ -6,6 +6,7 @@ from documents.forms.models import BaseDocumentForm
 from .models import (
     ContractorDeliverable, ContractorDeliverableRevision,
     Correspondence, CorrespondenceRevision,
+    MinutesOfMeeting, MinutesOfMeetingRevision,
     DemoMetadata, DemoMetadataRevision
 )
 from .layout import (
@@ -156,6 +157,59 @@ class CorrespondenceRevisionForm(BaseDocumentForm):
 
     class Meta:
         model = CorrespondenceRevision
+        exclude = ('document', 'revision', 'revision_date', 'created_on',
+                   'updated_on')
+
+
+class MinutesOfMeetingForm(BaseDocumentForm):
+    def build_layout(self):
+        if self.read_only:
+            related_documents = DocumentFieldset(
+                _('Response reference'),
+                FlatRelatedDocumentsLayout('response_reference'),
+            )
+        else:
+            related_documents = DocumentFieldset(
+                _('Response reference'),
+                'response_reference',
+            )
+
+        return Layout(
+            DocumentFieldset(
+                _('General information'),
+                'document_key',
+                Field('subject', rows=2),
+                'meeting_date',
+                'received_sent_date',
+                'contract_number',
+                'originator',
+                'recipient',
+                'document_type',
+                'sequential_number',
+                'prepared_by',
+                'signed',
+                related_documents,
+            )
+        )
+
+    class Meta:
+        model = MinutesOfMeeting
+        exclude = ('document', 'latest_revision')
+
+
+class MinutesOfMeetingRevisionForm(BaseDocumentForm):
+    def build_layout(self):
+        return Layout(
+            DocumentFieldset(
+                _('Revision'),
+                'status',
+                'native_file',
+                'pdf_file',
+            ),
+        )
+
+    class Meta:
+        model = MinutesOfMeetingRevision
         exclude = ('document', 'revision', 'revision_date', 'created_on',
                    'updated_on')
 
