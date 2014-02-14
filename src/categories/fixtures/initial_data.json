@@ -20,9 +20,9 @@
   "pk": 2,
   "model": "categories.categorytemplate",
   "fields": {
-    "name": "Correspondances",
-    "slug": "correspondances",
-    "metadata_model": ["default_documents", "contractordeliverable"]
+    "name": "Correspondences",
+    "slug": "correspondences",
+    "metadata_model": ["default_documents", "correspondence"]
   }
 },
 {
