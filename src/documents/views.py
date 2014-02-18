@@ -271,6 +271,7 @@ class BaseDocumentFormView(DocumentFormMixin,
         """Saves both the document and it's revision."""
         self.revision = revision_form.save()
         self.object = document_form.save()
+        cache.clear()
 
         return HttpResponseRedirect(self.get_success_url())
 
@@ -399,6 +400,8 @@ class DocumentCreate(PermissionRequiredMixin,
         self.object.document = document
         self.object.latest_revision = self.revision
         self.object.save()
+
+        cache.clear()
 
         return HttpResponseRedirect(self.get_success_url())
 
