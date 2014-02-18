@@ -1,4 +1,4 @@
-upstream app_server {
+upstream phase {
     server localhost:8000;
 }
 
@@ -16,7 +16,7 @@ server {
     }
 
     location / {
-        proxy_pass http://app_server;
+        proxy_pass http://phase;
         proxy_redirect off;
         proxy_set_header Host $http_host;
         proxy_set_header X-Real-IP $remote_addr;
