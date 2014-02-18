@@ -278,6 +278,7 @@ form.disabled input[type="text"],
 form.disabled input[type="number"],
 form.disabled textarea,
 form.disabled select {
+    color: black;
     border: 0 !important;
     background-color: transparent !important;
     padding-left: 0 !important;
@@ -286,6 +287,9 @@ form.disabled select {
     -webkit-box-shadow: none;
     cursor: pointer !important;
     resize:none;
+}
+form.disabled #form-schedule-table input.dateinput {
+    text-align: center;
 }
 form.disabled .controls {
     overflow: hidden;
