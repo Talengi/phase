@@ -37,9 +37,9 @@ class ConfigurableChoiceField(models.CharField):
     def _get_choices(self):
         if self._choices == []:
             choices = get_choices_from_list(self.list_index)
-            if choices is None:
-                return BLANK_CHOICE_DASH
-            else:
+            if choices:
                 self._choices = choices
+            else:
+                return list(BLANK_CHOICE_DASH)
         return self._choices
     choices = property(_get_choices)
