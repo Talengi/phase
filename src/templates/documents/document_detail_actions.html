@@ -13,7 +13,7 @@
             <ul class="dropdown-menu" role="menu">
                 {% for revision in revisions reversed %}
                     {% url "document_edit" organisation_slug category_slug document.document_key revision.revision as edit_url %}
-                    <li><a href="{{ edit_url }}">Edit revision {{ revision.revision }}</a></li>
+                    <li><a href="{{ edit_url }}">Edit revision {{ revision.revision|stringformat:"02d" }}</a></li>
                 {% endfor %}
             </ul>
         </div>
