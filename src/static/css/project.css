@@ -310,7 +310,7 @@ form.disabled .help-block {
     display: none;
 }
 /* Off canvas sidebar */
-.row-offcanvas .sidebar-offcanvas {
+.sidebar-offcanvas {
     position: fixed;
     display: block;
     right: 0;
@@ -319,7 +319,7 @@ form.disabled .help-block {
     background-color: white;
     z-index: 9999;
 }
-.row-offcanvas #controls-rows {
+.sidebar-offcanvas #controls-rows {
     position: fixed;
     right: 0;
     top: 170px;
@@ -327,20 +327,14 @@ form.disabled .help-block {
     bottom: 0;
     overflow-y: auto;
 }
-
-.row-offcanvas {
-    -webkit-transition: all 0.25s ease-out;
-    -moz-transition: all 0.25s ease-out;
-    transition: all 0.25s ease-out;
-}
-.row-offcanvas .sidebar-offcanvas {
+.sidebar-offcanvas {
     display: none;
     width: 350px;
 }
-.row-offcanvas #controls-rows {
+.sidebar-offcanvas #controls-rows {
     width: 350px;
 }
-.row-offcanvas.active .sidebar-offcanvas {
+.sidebar-offcanvas.active {
     display: block;
     top: 0;
     border-left: 1px solid #e7e7e7;
@@ -348,7 +342,7 @@ form.disabled .help-block {
     -webkit-box-shadow: -8px 0 5px -1px #666;
     box-shadow: -8px 0 5px -1px #666;
 }
-.row-offcanvas.active #controls-rows {
+.sidebar-offcanvas.active #controls-rows {
     display: block;
     top: 70px;
 }

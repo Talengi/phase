@@ -153,7 +153,7 @@ jQuery(function($) {
 
     // off canvas
     $('[data-toggle=offcanvas]').click(function() {
-        var row = $('.row-offcanvas');
-        row.toggleClass('active');
+        var offcanvas = $('.sidebar-offcanvas');
+        offcanvas.toggleClass('active');
     });
 });
