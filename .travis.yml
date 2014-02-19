@@ -1,0 +1,18 @@
+language: python
+python:
+  - "2.6"
+  - "2.7"
+install:
+  - "pip install -r requirements/test.txt --use-mirrors"
+script:
+  - export DJANGO_SETTINGS_MODULE=core.settings.test
+  - cd src
+  - coverage run --source='.' manage.py test
+  - flake8 --exclude=migrations,urls.py --ignore=E501 .
+after_success:
+  - coveralls
+notifications:
+  - recipients:
+    - thibault@jouannic.fr
+  - on_success: change
+  - on_failure: always
