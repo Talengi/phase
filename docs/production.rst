@@ -35,7 +35,7 @@ version url on the Node.js site <http://nodejs.org/dist/v0.10.25/node-v0.10.25.t
 Let's install it::
 
     cd /opt/
-    wget http://nodejs.org/dist/v0.10.25/node-v0.10.25.tar.gz
+    wget http://nodejs.org/dist/latest/node-v0.10.25.tar.gz
     tar -zvxf node-v0.10.25.tar.gz
     cd node-v0.10.25
     ./configure
