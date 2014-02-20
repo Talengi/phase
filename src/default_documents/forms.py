@@ -17,16 +17,6 @@ from .layout import (
 
 class ContractorDeliverableForm(BaseDocumentForm):
     def build_layout(self):
-        if self.read_only:
-            related_documents = DocumentFieldset(
-                _('Related documents'),
-                FlatRelatedDocumentsLayout('related_documents'),
-            )
-        else:
-            related_documents = DocumentFieldset(
-                _('Related documents'),
-                'related_documents',
-            )
 
         return Layout(
             DocumentFieldset(
@@ -45,7 +35,7 @@ class ContractorDeliverableForm(BaseDocumentForm):
                 'wbs',
                 'weight',
             ),
-            related_documents,
+            self.related_documents,
             DocumentFieldset(
                 _('Schedule'),
                 ScheduleLayout(
@@ -102,17 +92,6 @@ class ContractorDeliverableRevisionForm(BaseDocumentForm):
 
 class CorrespondenceForm(BaseDocumentForm):
     def build_layout(self):
-        if self.read_only:
-            related_documents = DocumentFieldset(
-                _('Related documents'),
-                FlatRelatedDocumentsLayout('related_documents'),
-            )
-        else:
-            related_documents = DocumentFieldset(
-                _('Related documents'),
-                'related_documents',
-            )
-
         return Layout(
             DocumentFieldset(
                 _('General information'),
@@ -130,7 +109,7 @@ class CorrespondenceForm(BaseDocumentForm):
                 'response_required',
                 'due_date',
                 'external_reference',
-                related_documents,
+                self.related_documents,
             )
         )
 
@@ -217,17 +196,6 @@ class MinutesOfMeetingRevisionForm(BaseDocumentForm):
 
 class TransmittalsForm(BaseDocumentForm):
     def build_layout(self):
-        if self.read_only:
-            related_documents = DocumentFieldset(
-                _('Related documents'),
-                FlatRelatedDocumentsLayout('related_documents'),
-            )
-        else:
-            related_documents = DocumentFieldset(
-                _('Related documents'),
-                'related_documents',
-            )
-
         return Layout(
             DocumentFieldset(
                 _('General information'),
@@ -241,7 +209,7 @@ class TransmittalsForm(BaseDocumentForm):
                 'sequential_number',
                 'frm',
                 'to',
-                related_documents,
+                self.related_documents,
             )
         )
 
@@ -271,7 +239,30 @@ class DemoMetadataForm(BaseDocumentForm):
     class Meta:
         model = DemoMetadata
 
+    def build_layout(self):
+        return Layout(
+            DocumentFieldset(
+                _('General information'),
+                'document_key',
+                Field('title', rows=2),
+                'leader',
+                self.related_documents,
+            )
+        )
+
 
 class DemoMetadataRevisionForm(BaseDocumentForm):
     class Meta:
         model = DemoMetadataRevision
+        exclude = ('document', 'revision', 'revision_date', 'created_on',
+                   'updated_on')
+
+    def build_layout(self):
+        return Layout(
+            DocumentFieldset(
+                _('Revision'),
+                'status',
+                'native_file',
+                'pdf_file',
+            ),
+        )
