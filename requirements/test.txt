@@ -1,3 +1,6 @@
+-r base.txt
+
 factory-boy==2.1.2
 coveralls==0.4.1
 flake8==2.1.0
+coverage==3.6
