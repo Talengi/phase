@@ -8,6 +8,7 @@ script:
   - export DJANGO_SETTINGS_MODULE=core.settings.test
   - cd src
   - flake8 --exclude=migrations,urls.py --ignore=E501 .
+  - python manage.py collectstatic
   - coverage run --source='.' manage.py test
 after_success:
   - coveralls
