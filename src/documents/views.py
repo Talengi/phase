@@ -319,46 +319,6 @@ class DocumentDetail(LoginRequiredMixin, DocumentFormMixin, DetailView):
         return context
 
 
-class DocumentEdit(PermissionRequiredMixin,
-                   BaseDocumentFormView):
-    """Edit a document and a selected revision."""
-    permission_required = 'documents.change_document'
-    context_object_name = 'document'
-    template_name = 'documents/document_form.html'
-
-    # We don't subclass UpdateView because there is too much to rewrite
-    # since we manage two forms at a time.
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        self.revision = self.get_revision()
-        return super(DocumentEdit, self).get(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        self.revision = self.get_revision()
-        return super(DocumentEdit, self).post(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super(DocumentEdit, self).get_context_data(**kwargs)
-        # Add a context var to make the difference with creation view
-        context.update({
-            'is_edit': True,
-        })
-        return context
-
-    def get_success_url(self):
-        """Redirect to a different URL given the button clicked by the user."""
-        if "save-view" in self.request.POST:
-            url = self.object.get_absolute_url()
-        else:
-            url = reverse('category_document_list', args=[
-                self.kwargs['organisation'],
-                self.kwargs['category'],
-            ])
-        return url
-
-
 class DocumentCreate(PermissionRequiredMixin,
                      BaseDocumentFormView):
     permission_required = 'documents.add_document'
@@ -416,6 +376,46 @@ class DocumentCreate(PermissionRequiredMixin,
             url = reverse('category_document_list', args=[
                 self.kwargs['organisation'],
                 self.kwargs['category']
+            ])
+        return url
+
+
+class DocumentEdit(PermissionRequiredMixin,
+                   BaseDocumentFormView):
+    """Edit a document and a selected revision."""
+    permission_required = 'documents.change_document'
+    context_object_name = 'document'
+    template_name = 'documents/document_form.html'
+
+    # We don't subclass UpdateView because there is too much to rewrite
+    # since we manage two forms at a time.
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.revision = self.get_revision()
+        return super(DocumentEdit, self).get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.revision = self.get_revision()
+        return super(DocumentEdit, self).post(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(DocumentEdit, self).get_context_data(**kwargs)
+        # Add a context var to make the difference with creation view
+        context.update({
+            'is_edit': True,
+        })
+        return context
+
+    def get_success_url(self):
+        """Redirect to a different URL given the button clicked by the user."""
+        if "save-view" in self.request.POST:
+            url = self.object.get_absolute_url()
+        else:
+            url = reverse('category_document_list', args=[
+                self.kwargs['organisation'],
+                self.kwargs['category'],
             ])
         return url
 
