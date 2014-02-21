@@ -96,7 +96,7 @@ class Metadata(models.Model):
         return self.document.get_absolute_url()
 
     def save(self, *args, **kwargs):
-        """Make sure the document as a document key."""
+        """Make sure the document has a document key."""
         if not self.document_key:
             self.document_key = self.generate_document_key()
         super(Metadata, self).save(*args, **kwargs)
