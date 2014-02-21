@@ -7,7 +7,8 @@ from django.core.urlresolvers import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.conf import settings
 
-from accounts.factories import UserFactory, CategoryFactory
+from accounts.factories import UserFactory
+from categories.factories import CategoryFactory
 from categories.models import Category
 from default_documents.factories import MetadataRevisionFactory
 from default_documents.models import ContractorDeliverable
