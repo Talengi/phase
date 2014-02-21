@@ -193,51 +193,45 @@ class DocumentCreateTest(TestCase):
 
 
 class DocumentEditTest(TestCase):
-
     def setUp(self):
-        user = UserFactory(email='testadmin@phase.fr', password='pass',
-                           is_superuser=True)
+        self.category = CategoryFactory()
+        user = UserFactory(
+            email='testadmin@phase.fr',
+            password='pass',
+            is_superuser=True,
+            category=self.category,
+        )
+        self.create_url = reverse('document_create', args=[
+            self.category.organisation.slug,
+            self.category.slug,
+        ])
         self.client.login(email=user.email, password='pass')
+        self.sample_path = join(settings.DJANGO_ROOT, 'documents', 'tests')
 
     def test_edition_errors(self):
         """
         Tests that a document can't be edited without required fields.
         """
         required_error = u'This field is required.'
-        document = Document.objects.create(
-            title=u'HAZOP report',
-            current_revision_date='2012-04-20',
-            sequencial_number="0004",
-            discipline="HSE",
-            document_type="REP"
-        )
-        DocumentRevision.objects.create(
-            document=document,
-            revision=u"00",
-            revision_date='2012-04-20',
+        doc = DocumentFactory(
+            category=self.category,
+            document_key='FAC09001-FWF-000-HSE-REP-0004',
+            metadata={
+                'title': u'HAZOP related 1',
+            },
+            revision={
+                'status': 'STD',
+            }
         )
         c = self.client
-        edit_url = reverse(
-            "document_edit",
-            args=['FAC09001-FWF-000-HSE-REP-0004']
-        )
+        edit_url = doc.get_edit_url()
         r = c.get(edit_url)
         self.assertEqual(r.status_code, 200)
 
-        r = c.post(edit_url, {})
+        r = c.post(edit_url, {'document_key': doc.document_key})
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r.context['form'].errors, {
-            'originator': [required_error],
-            'discipline': [required_error],
             'title': [required_error],
-            'sequencial_number': [required_error],
-            'engineering_phase': [required_error],
-            'klass': [required_error],
-            'document_type': [required_error],
-            'contract_number': [required_error],
-            'unit': [required_error],
-            'current_revision': [required_error],
-            'current_revision_date': [required_error],
         })
 
     def test_edition_success(self):
@@ -245,35 +239,20 @@ class DocumentEditTest(TestCase):
         Tests that a document can be created with required fields.
         """
         original_number_of_document = Document.objects.all().count()
-        document = Document.objects.create(
-            title=u'HAZOP report',
-            current_revision_date='2012-04-20',
-            sequencial_number="0004",
-            discipline="HSE",
-            document_type="REP"
-        )
-        DocumentRevision.objects.create(
-            document=document,
-            revision=u"00",
-            revision_date='2012-04-20',
+        doc = DocumentFactory(
+            category=self.category,
+            document_key='FAC09001-FWF-000-HSE-REP-0004',
+            metadata={
+                'title': u'HAZOP related 1',
+            },
+            revision={
+                'status': 'STD',
+            }
         )
         c = self.client
-        edit_url = reverse(
-            "document_edit",
-            args=['FAC09001-FWF-000-HSE-REP-0004']
-        )
-        r = c.post(edit_url, {
-            'originator': "FWF",
-            'discipline': "ARC",
-            'title': u'a title',
-            'sequencial_number': "0001",
-            'engineering_phase': "FEED",
-            'klass': 1,
-            'document_type': "ANA",
-            'contract_number': "FAC09001",
-            'unit': "000",
-            'current_revision': "00",
-            'current_revision_date': "2013-04-20",
+        r = c.post(doc.get_edit_url(), {
+            'document_key': doc.document_key,
+            'title': u'a new title',
         })
         if r.status_code == 302:
             self.assertEqual(
@@ -289,68 +268,37 @@ class DocumentEditTest(TestCase):
         Tests that a document edition is redirected to the item
         or the list.
         """
-        document = Document.objects.create(
-            title=u'HAZOP report',
-            current_revision_date='2012-04-20',
-            sequencial_number="0004",
-            discipline="HSE",
-            document_type="REP"
-        )
-        DocumentRevision.objects.create(
-            document=document,
-            revision=u"00",
-            revision_date='2012-04-20',
+        doc = DocumentFactory(
+            category=self.category,
+            document_key='FAC09001-FWF-000-HSE-REP-0004',
+            metadata={
+                'title': u'HAZOP related 1',
+            },
+            revision={
+                'status': 'STD',
+            }
         )
         c = self.client
-        edit_url = reverse(
-            "document_edit",
-            args=['FAC09001-FWF-000-HSE-REP-0004']
-        )
-        r = c.post(edit_url, {
-            'originator': "FWF",
-            'discipline': "ARC",
-            'title': u'a title',
-            'sequencial_number': "0001",
-            'engineering_phase': "FEED",
-            'klass': 1,
-            'document_type': "ANA",
-            'contract_number': "FAC09001",
-            'unit': "000",
-            'current_revision': "01",
-            'current_revision_date': "2013-04-20",
+        r = c.post(doc.get_edit_url(), {
+            'document_key': doc.document_key,
+            'title': u'a new title',
+            'save-view': 'View',
         }, follow=True)
         self.assertEqual(
             r.redirect_chain,
             [('http://testserver{url}'.format(
-                url=reverse('category_list')
+                url=doc.get_absolute_url(),
             ), 302)]
         )
 
-        edit_url = reverse(
-            "document_edit",
-            args=['FAC09001-FWF-000-ARC-ANA-0001']
-        )
-        r = c.post(edit_url, {
-            'originator': "FWF",
-            'discipline': "ARC",
-            'title': u'a title',
-            'sequencial_number': "0001",
-            'engineering_phase': "FEED",
-            'klass': 1,
-            'document_type': "BAS",
-            'contract_number': "FAC09001",
-            'unit': "000",
-            'current_revision': "02",
-            'current_revision_date': "2013-04-20",
-            'save-view': None,
+        r = c.post(doc.get_edit_url(), {
+            'document_key': doc.document_key,
+            'title': u'a new new title',
         }, follow=True)
         self.assertEqual(
             r.redirect_chain,
             [('http://testserver{url}'.format(
-                url=reverse(
-                    'document_detail',
-                    args=['FAC09001-FWF-000-ARC-BAS-0001']
-                )
+                url=self.category.get_absolute_url(),
             ), 302)]
         )
 
