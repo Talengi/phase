@@ -54,11 +54,12 @@ class DocumentTest(TestCase):
                 'favorited': False,
                 'title': u'HAZOP report',
                 'url': '/documents/FAC09001-FWF-000-HSE-REP-0004/',
-                'current_revision': u'1',
+                'current_revision': u'01',
                 'number': u'FAC09001-FWF-000-HSE-REP-0004',
-                'current_revision_date': '2013-04-20',
+                'current_revision_date': u'2013-04-20',
                 'pk': 1,
                 'favorite_id': '',
+                'document_pk': 1,
                 'document_key': u'FAC09001-FWF-000-HSE-REP-0004',
             }
         )

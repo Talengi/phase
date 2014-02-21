@@ -178,7 +178,7 @@ class Metadata(models.Model):
         fields_infos = dict(fields)
         fields_infos.update({
             'url': self.document.get_absolute_url(),
-            'number': self.natural_key(),
+            'number': self.document_key,
             'pk': self.pk,
             'document_pk': self.document.pk,
             'favorite_id': document2favorite.get(self.document.pk, ''),
