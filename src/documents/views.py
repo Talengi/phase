@@ -12,7 +12,6 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.core.servers.basehttp import FileWrapper
 from django.views.generic import (
     View, ListView, DetailView, RedirectView)
-from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import (
     ModelFormMixin, ProcessFormView, SingleObjectTemplateResponseMixin)
 from django.core.urlresolvers import reverse
@@ -348,18 +347,21 @@ class DocumentCreate(PermissionRequiredMixin,
         self.revision = revision_form.save(commit=False)
         self.object = document_form.save(commit=False)
 
+        key = self.object.document_key or self.object.generate_document_key()
         document = Document.objects.create(
-            document_key=self.object.generate_document_key(),
+            document_key=key,
             category=self.category,
             current_revision=self.revision.revision,
             current_revision_date=timezone.now())
 
         self.revision.document = document
         self.revision.save()
+        revision_form.save_m2m()
 
         self.object.document = document
         self.object.latest_revision = self.revision
         self.object.save()
+        document_form.save_m2m()
 
         cache.clear()
 
@@ -420,34 +422,54 @@ class DocumentEdit(PermissionRequiredMixin,
         return url
 
 
-class DocumentRevise(DocumentListMixin, SingleObjectMixin, View):
+class DocumentRevise(DocumentEdit):
     """Creates a new revision for the document."""
-    http_method_names = ['post']
+
+    def get_revision(self):
+        """returns an empty revision, since we are creating a new one."""
+        return None
+
+    def get_forms(self):
+        """Returns both the document and revision forms.
+
+        When we create a new revision, all the revision form
+        fields must be empty.
+
+        """
+        document_form, revision_form = super(DocumentRevise, self).get_forms()
+
+        # Let's take the complete field list, and build
+        # a dict of empty strings from it.
+        initial_data = dict(map(lambda x: (x, None), revision_form.fields.keys()))
+        revision_form.initial = initial_data
+
+        return document_form, revision_form
 
     @transaction.atomic
-    def post(self, request, *args, **kwargs):
-        """Creates revision then redirect to edition form."""
-        document = self.get_object()
+    def form_valid(self, document_form, revision_form):
+        """Saves both the document and it's revision."""
+        self.revision = revision_form.save(commit=False)
+        self.object = document_form.save(commit=False)
 
-        # Cloning the latest revision to create a new one
-        revision = document.latest_revision
-        revision.pk = None
-        revision.revision = revision.revision + 1
-        revision.save()
+        # Saves the newly created revision
+        latest_revision = self.object.latest_revision
+        self.revision.revision = latest_revision.revision + 1
+        self.revision.document = self.object.document
+        self.revision.save()
+        revision_form.save_m2m()
 
-        document.latest_revision = revision
-        document.save()
+        # Update the metadata object
+        # This will also update the master Document object
+        self.object.latest_revision = self.revision
+        self.object.save()
+        document_form.save_m2m()
 
-        message = _('You just created revision %s') % revision.revision
-        messages.success(request, message)
+        cache.clear()
 
-        edit_url = reverse('document_edit', args=[
-            kwargs['organisation'],
-            kwargs['category'],
-            kwargs['document_key'],
-            revision.revision
-        ])
-        return HttpResponseRedirect(edit_url)
+        message = _('You just created revision %02d') % self.revision.revision
+        messages.success(self.request, message)
+
+        return HttpResponseRedirect(self.get_success_url())
 
 
 class DocumentDownload(BaseDocumentList):

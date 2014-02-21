@@ -19,10 +19,7 @@
         </div>
 
         {% url "document_revise" organisation_slug category_slug document.document_key as revise_url %}
-        <form action="{{ revise_url }}" method="post" class="pull-right">
-            {% csrf_token %}
-            <input type="submit" class="btn btn-primary" value="{{ _('Create revision') }}">
-        </form>
+        <a href="{{ revise_url }}" class="btn btn-primary pull-right" />{{ _('Create revision') }}</a>
 
     {% endif %}
 </div>

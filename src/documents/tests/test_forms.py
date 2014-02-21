@@ -353,3 +353,64 @@ class DocumentEditTest(TestCase):
                 )
             ), 302)]
         )
+
+
+class DocumentReviseTest(TestCase):
+
+    def setUp(self):
+        self.category = CategoryFactory()
+        user = UserFactory(
+            email='testadmin@phase.fr',
+            password='pass',
+            is_superuser=True,
+            category=self.category,
+        )
+        self.client.login(email=user.email, password='pass')
+
+    def test_new_revision_form_is_empty(self):
+        document = DocumentFactory(
+            category=self.category,
+            document_key='FAC09001-FWF-000-HSE-REP-0004',
+            revision={
+                'status': 'STD',
+            }
+        )
+        revision = document.metadata.latest_revision
+        self.assertEqual(revision.revision, 1)
+
+        url = reverse('document_revise', args=[
+            self.category.organisation.slug,
+            self.category.slug,
+            document.document_key
+        ])
+        res = self.client.get(url)
+        self.assertNotContains(res, 'selected="selected" value="STD"')
+
+    def test_new_revision_id_is_bumped(self):
+        document = DocumentFactory(
+            category=self.category,
+            document_key='FAC09001-FWF-000-HSE-REP-0004',
+            revision={
+                'status': 'STD',
+            }
+        )
+        revision = document.metadata.latest_revision
+        self.assertEqual(revision.revision, 1)
+
+        url = reverse('document_revise', args=[
+            self.category.organisation.slug,
+            self.category.slug,
+            document.document_key
+        ])
+        res = self.client.post(url, {
+            'document_key': document.document_key,
+            'title': document.metadata.title,
+            'status': 'SPD',
+        }, follow=True)
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, 'You just created revision 02')
+
+        revision = DemoMetadataRevision.objects \
+            .filter(document=document) \
+            .order_by('-id')[0]
+        self.assertEqual(revision.revision, 2)
