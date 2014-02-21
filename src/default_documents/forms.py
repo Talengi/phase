@@ -62,8 +62,6 @@ class ContractorDeliverableRevisionForm(BaseDocumentForm):
             DocumentFieldset(
                 _('Revision'),
                 'status',
-                #'revision_date',
-                #'created_on',
                 'final_revision',
                 'native_file',
                 'pdf_file',
@@ -238,6 +236,7 @@ class TransmittalsRevisionForm(BaseDocumentForm):
 class DemoMetadataForm(BaseDocumentForm):
     class Meta:
         model = DemoMetadata
+        exclude = ('document', 'latest_revision')
 
     def build_layout(self):
         return Layout(
