@@ -67,7 +67,7 @@ class Document(models.Model):
         Otherwise, we return the short url to prevent a useless query.
 
         """
-        if self._category_cache:
+        if hasattr(self, '_category_cache'):
             url = reverse('document_detail', args=[
                 self.category.organisation.slug,
                 self.category.slug,
