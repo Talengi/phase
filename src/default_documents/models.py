@@ -665,7 +665,7 @@ class DemoMetadata(Metadata):
         null=True)
     title = models.CharField(
         _('Title'),
-        max_length=50)
+        max_length=250)
     related_documents = models.ManyToManyField(
         'documents.Document',
         related_name='demometadata_related_set',
@@ -706,15 +706,30 @@ class DemoMetadata(Metadata):
 
 
 class DemoMetadataRevision(MetadataRevision):
+    STATUSES = (
+        ('STD', 'Started'),
+        ('IDC', 'Inter Discipline Check'),
+        ('IFR', 'Issued For Review'),
+        ('IFA', 'Issued For Approval'),
+        ('IFD', 'Issued For Design'),
+        ('IFC', 'Issued For Construction'),
+        ('FIN', 'Final'),
+        ('IFI', 'Issued For Information'),
+        ('ASB', 'As Built'),
+        ('CLD', 'Cancelled'),
+        ('SPD', 'Superseded'),
+        ('ANA', 'Analysis'),
+        ('BAS', 'Design Basis'),
+    )
     native_file = RevisionFileField(
         _('Native File'),
         null=True, blank=True)
     pdf_file = RevisionFileField(
         _('PDF File'),
         null=True, blank=True)
-    status = ConfigurableChoiceField(
+    status = models.CharField(
         verbose_name=_('Status'),
         default="STD",
         max_length=3,
-        list_index='STATUSES',
+        choices=STATUSES,
         null=True, blank=True)
