@@ -125,6 +125,7 @@ class DocumentDetailTest(TestCase):
 
 class DocumentFilterTest(TestCase):
     fixtures = ['initial_data', 'initial_documents']
+    maxDiff = None
 
     def setUp(self):
         # Login as admin so we won't be bothered by missing permissions
@@ -373,7 +374,11 @@ class DocumentFilterTest(TestCase):
         self.assertEqual(int(data['display']), 10)
         documents = ContractorDeliverable.objects.filter(**{
             'latest_revision__leader': leader
-        })
+        }).select_related(
+            'document',
+            'document__category',
+            'document__category__category_template',
+            'document__category__organisation')
         self.assertEqual(
             data['data'],
             [doc.jsonified() for doc in documents[0:10]]
