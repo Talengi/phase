@@ -30,7 +30,8 @@ jQuery(function($) {
             if (params) {
                 updateDocumentNumber(params['display'], params['total']);
             } else {
-                updateDocumentNumber(config.numItemsPerPage, config.totalItems);
+                var displayItems = Math.min(config.numItemsPerPage, config.totalItems);
+                updateDocumentNumber(displayItems, config.totalItems);
             }
         }
     });
