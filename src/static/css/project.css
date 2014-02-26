@@ -126,27 +126,27 @@ button.ui-multiselect {
 }
 
 /* Datatables custom */
-#documents thead th {
+#main-table table thead th {
     white-space: nowrap;
 }
-#documents th, #documents td {
+#main-table table th, #main-table table td {
     text-align: center;
 }
-#documents td.columntitle {
+#main-table table td.columntitle {
     text-align: left;
     overflow: hidden;
     text-overflow: ellipsis;
 }
-#documents tbody td:not(.columnselect):not(.columnfavorite),
-#documents tbody td.columnfavorite i {
+#main-table table tbody td:not(.columnselect):not(.columnfavorite),
+#main-table table tbody td.columnfavorite i {
     font-size: 11px;
     cursor: pointer;
 }
-#documents tbody td.document-number {
+#main-table table tbody td.document-number {
     white-space: nowrap;
 }
 
-#documents-template {
+#main-table table-template {
     display: none;
 }
 
