@@ -312,6 +312,10 @@ form.disabled input[type="file"],
 form.disabled .help-block {
     display: none;
 }
+.asteriskField {
+    color: #ff1133;
+    margin-left: 7px;
+}
 /* Off canvas sidebar */
 .sidebar-offcanvas {
     position: fixed;
