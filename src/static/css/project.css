@@ -67,6 +67,9 @@ form div.alert-danger ul li {
 }
 
 /* Table rendering */
+body > .container > h2 {
+    margin-top: 0;
+}
 #document-list-row {
     /* Watch out, the following lines are PURE MAGIC!!! */
     position: fixed;
