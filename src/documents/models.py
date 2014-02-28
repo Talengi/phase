@@ -60,8 +60,31 @@ class Document(models.Model):
         super(Document, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
-        # TODO Return short or long url depending on loaded foreign key
-        return reverse('document_short_url', args=[self.document_key])
+        """Get the document url.
+
+        If the category is already in cache, we return the full url.
+
+        Otherwise, we return the short url to prevent a useless query.
+
+        """
+        if hasattr(self, '_category_cache'):
+            url = reverse('document_detail', args=[
+                self.category.organisation.slug,
+                self.category.slug,
+                self.document_key
+            ])
+        else:
+            url = reverse('document_short_url', args=[self.document_key])
+
+        return url
+
+    def get_edit_url(self):
+        url = reverse('document_edit', args=(
+            self.category.organisation.slug,
+            self.category.category_template.slug,
+            self.document_key,
+        ))
+        return url
 
     def natural_key(self):
         # You MUST return a tuple here to prevent this bug
@@ -96,7 +119,7 @@ class Metadata(models.Model):
         return self.document.get_absolute_url()
 
     def save(self, *args, **kwargs):
-        """Make sure the document as a document key."""
+        """Make sure the document has a document key."""
         if not self.document_key:
             self.document_key = self.generate_document_key()
         super(Metadata, self).save(*args, **kwargs)
@@ -155,7 +178,7 @@ class Metadata(models.Model):
         fields_infos = dict(fields)
         fields_infos.update({
             'url': self.document.get_absolute_url(),
-            'number': self.natural_key(),
+            'number': self.document_key,
             'pk': self.pk,
             'document_pk': self.document.pk,
             'favorite_id': document2favorite.get(self.document.pk, ''),

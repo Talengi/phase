@@ -13,16 +13,13 @@
             <ul class="dropdown-menu" role="menu">
                 {% for revision in revisions reversed %}
                     {% url "document_edit" organisation_slug category_slug document.document_key revision.revision as edit_url %}
-                    <li><a href="{{ edit_url }}">Edit revision {{ revision.revision }}</a></li>
+                    <li><a href="{{ edit_url }}">Edit revision {{ revision.revision|stringformat:"02d" }}</a></li>
                 {% endfor %}
             </ul>
         </div>
 
         {% url "document_revise" organisation_slug category_slug document.document_key as revise_url %}
-        <form action="{{ revise_url }}" method="post" class="pull-right">
-            {% csrf_token %}
-            <input type="submit" class="btn btn-primary" value="{{ _('Create revision') }}">
-        </form>
+        <a href="{{ revise_url }}" class="btn btn-primary pull-right" />{{ _('Create revision') }}</a>
 
     {% endif %}
 </div>

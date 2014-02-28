@@ -35,12 +35,31 @@ version url on the Node.js site <http://nodejs.org/dist/v0.10.25/node-v0.10.25.t
 Let's install it::
 
     cd /opt/
-    wget http://nodejs.org/dist/v0.10.25/node-v0.10.25.tar.gz
+    wget http://nodejs.org/dist/latest/node-v0.10.25.tar.gz
     tar -zvxf node-v0.10.25.tar.gz
     cd node-v0.10.25
     ./configure
     make
     make install
+
+
+Database creation
+-----------------
+
+::
+
+    su - postgres
+    createuser -P
+
+        Enter name of role to add: phase
+        Enter password for new role: phase
+        Enter it again: phase
+        Shall the new role be a superuser? (y/n) n
+        Shall the new role be allowed to create databases? (y/n) n
+        Shall the new role be allowed to create more new roles? (y/n) n
+
+    createdb --owner phase phase
+
 
 Python configuration
 --------------------
@@ -67,24 +86,6 @@ Then::
 
     source ~.profile
 
-Database creation
------------------
-
-::
-
-    su - postgres
-    createuser -P
-
-        Enter name of role to add: phase
-        Enter password for new role: phase
-        Enter it again: phase
-        Shall the new role be a superuser? (y/n) n
-        Shall the new role be allowed to create databases? (y/n) n
-        Shall the new role be allowed to create more new roles? (y/n) n
-
-    createdb --owner phase phase
-
-
 Phase installation
 ------------------
 
@@ -99,16 +100,20 @@ As phase user::
     git clone https://github.com/Talengi/phase.git
     cd phase/src
     pip install -r ../requirements/production.txt
-    export DJANGO_SETTINGS_MODULE=src.core.production
+    export DJANGO_SETTINGS_MODULE=core.settings.production
     python manage.py collectstatic
     python manage.py syncdb
 
 Web server configuration
 ------------------------
 
-Remove the default nginx site::
+If you don't host any other site on the same server, you can replace nginx's
+default virtual host in */etc/nginx/sites-available/default*::
 
-    rm /etc/nginx/sites-enabled/default
+    server {
+            listen 80 default_server;
+            return 444;
+    }
 
 Create the Phase configuration file in ``/etc/nginx/sites-available/phase``.
 Here is a working sample.
@@ -135,4 +140,5 @@ Create the ``/etc/supervisor/conf.d/phase.conf`` config file. here is a working 
 
 Run this thing with::
 
-    supervisorctl start phase
+    supervisorctl reread
+    supervisorctl reload

@@ -1,7 +1,9 @@
 from django import forms
+from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ImproperlyConfigured
 
 from crispy_forms.helper import FormHelper
+from default_documents.layout import DocumentFieldset, FlatRelatedDocumentsLayout
 
 from django.conf import settings
 
@@ -40,6 +42,7 @@ class BaseDocumentForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.read_only = kwargs.pop('read_only', False)
         super(BaseDocumentForm, self).__init__(*args, **kwargs)
+        self.prepare_form(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_tag = False
         self.helper.layout = self.build_layout()
@@ -50,6 +53,22 @@ class BaseDocumentForm(forms.ModelForm):
 
     def build_layout(self):
         raise NotImplementedError('Missing "build_layout" method')
+
+    def prepare_form(self, *args, **kwargs):
+        """Perform some common operations."""
+
+        # Init related documents field
+        if 'related_documents' in self.fields:
+            if self.read_only:
+                self.related_documents = DocumentFieldset(
+                    _('Related documents'),
+                    FlatRelatedDocumentsLayout('related_documents'),
+                )
+            else:
+                self.related_documents = DocumentFieldset(
+                    _('Related documents'),
+                    'related_documents',
+                )
 
     def clean_native_file(self):
         """Do not allow a PDF file to be uploaded as a native file.

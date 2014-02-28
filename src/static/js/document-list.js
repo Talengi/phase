@@ -30,7 +30,8 @@ jQuery(function($) {
             if (params) {
                 updateDocumentNumber(params['display'], params['total']);
             } else {
-                updateDocumentNumber(config.numItemsPerPage, config.totalItems);
+                var displayItems = Math.min(config.numItemsPerPage, config.totalItems);
+                updateDocumentNumber(displayItems, config.totalItems);
             }
         }
     });
@@ -153,7 +154,7 @@ jQuery(function($) {
 
     // off canvas
     $('[data-toggle=offcanvas]').click(function() {
-        var row = $('.row-offcanvas');
-        row.toggleClass('active');
+        var offcanvas = $('.sidebar-offcanvas');
+        offcanvas.toggleClass('active');
     });
 });

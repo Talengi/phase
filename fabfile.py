@@ -3,12 +3,13 @@ from fabric.api import run, env, local, cd, prefix, sudo
 # Create an ssh config in ~/.ssh/config
 # Host phase
 #     HostName phase.testing.com
-#     User username
+#     User phase
 #
-# Also add this line in /etc/sudoers on the server:
-# talengi ALL = NOPASSWD: /etc/init.d/apache2
+# Also add this line in /etc/sudoers on the server if you want
+# the phase user to be able to restart supervisor:
+# phase ALL = NOPASSWD: supervisorctl
 
-USERNAME = 'talengi'
+USERNAME = 'phase'
 VENV_HOME = '/home/%s/.virtualenvs/' % USERNAME
 env.use_ssh_config = True
 env.hosts = ['phase']

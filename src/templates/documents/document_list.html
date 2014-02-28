@@ -8,19 +8,19 @@
 {% endblock %}
 
 {% block content %}
-    <div id="document-list-row" class="row row-offcanvas">
+    <div id="document-list-row" class="row">
         <div id="main-table" class="col-xs-12">
             {% include "documents/list_table.html" %}
         </div>
+    </div>
 
-        <div class="sidebar-offcanvas" id="sidebar">
-            <form action="{% url 'document_filter' organisation_slug category_slug %}"
-                  method="get"
-                  id="table-filters">
-                {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
-                {% include "documents/form_filtering.html" %}
-            </form>
-        </div>
+    <div class="sidebar-offcanvas" id="sidebar">
+        <form action="{% url 'document_filter' organisation_slug category_slug %}"
+              method="get"
+              id="table-filters">
+            {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
+            {% include "documents/form_filtering.html" %}
+        </form>
     </div>
 {% endblock %}
 

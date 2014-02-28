@@ -67,6 +67,9 @@ form div.alert-danger ul li {
 }
 
 /* Table rendering */
+body > .container > h2 {
+    margin-top: 0;
+}
 #document-list-row {
     /* Watch out, the following lines are PURE MAGIC!!! */
     position: fixed;
@@ -123,23 +126,23 @@ button.ui-multiselect {
 }
 
 /* Datatables custom */
-#documents thead th {
+#main-table table thead th {
     white-space: nowrap;
 }
-#documents th, #documents td {
+#main-table table th, #main-table table td {
     text-align: center;
 }
-#documents td.columntitle {
+#main-table table td.columntitle {
     text-align: left;
     overflow: hidden;
     text-overflow: ellipsis;
 }
-#documents tbody td:not(.columnselect):not(.columnfavorite),
-#documents tbody td.columnfavorite i {
+#main-table table tbody td:not(.columnselect):not(.columnfavorite),
+#main-table table tbody td.columnfavorite i {
     font-size: 11px;
     cursor: pointer;
 }
-#documents tbody td.document-number {
+#main-table table tbody td.document-number {
     white-space: nowrap;
 }
 
@@ -278,6 +281,7 @@ form.disabled input[type="text"],
 form.disabled input[type="number"],
 form.disabled textarea,
 form.disabled select {
+    color: black;
     border: 0 !important;
     background-color: transparent !important;
     padding-left: 0 !important;
@@ -286,6 +290,9 @@ form.disabled select {
     -webkit-box-shadow: none;
     cursor: pointer !important;
     resize:none;
+}
+form.disabled #form-schedule-table input.dateinput {
+    text-align: center;
 }
 form.disabled .controls {
     overflow: hidden;
@@ -305,8 +312,12 @@ form.disabled input[type="file"],
 form.disabled .help-block {
     display: none;
 }
+.asteriskField {
+    color: #ff1133;
+    margin-left: 7px;
+}
 /* Off canvas sidebar */
-.row-offcanvas .sidebar-offcanvas {
+.sidebar-offcanvas {
     position: fixed;
     display: block;
     right: 0;
@@ -315,7 +326,7 @@ form.disabled .help-block {
     background-color: white;
     z-index: 9999;
 }
-.row-offcanvas #controls-rows {
+.sidebar-offcanvas #controls-rows {
     position: fixed;
     right: 0;
     top: 170px;
@@ -323,20 +334,14 @@ form.disabled .help-block {
     bottom: 0;
     overflow-y: auto;
 }
-
-.row-offcanvas {
-    -webkit-transition: all 0.25s ease-out;
-    -moz-transition: all 0.25s ease-out;
-    transition: all 0.25s ease-out;
-}
-.row-offcanvas .sidebar-offcanvas {
+.sidebar-offcanvas {
     display: none;
     width: 350px;
 }
-.row-offcanvas #controls-rows {
+.sidebar-offcanvas #controls-rows {
     width: 350px;
 }
-.row-offcanvas.active .sidebar-offcanvas {
+.sidebar-offcanvas.active {
     display: block;
     top: 0;
     border-left: 1px solid #e7e7e7;
@@ -344,7 +349,7 @@ form.disabled .help-block {
     -webkit-box-shadow: -8px 0 5px -1px #666;
     box-shadow: -8px 0 5px -1px #666;
 }
-.row-offcanvas.active #controls-rows {
+.sidebar-offcanvas.active #controls-rows {
     display: block;
     top: 70px;
 }

@@ -112,6 +112,30 @@
   }
 },
 {
+  "pk": 15,
+  "model": "metadata.valueslist",
+  "fields": {
+    "index": "RECIPIENTS",
+    "name": "Recipients"
+  }
+},
+{
+  "pk": 16,
+  "model": "metadata.valueslist",
+  "fields": {
+    "index": "AUTHORS",
+    "name": "Recipients"
+  }
+},
+{
+  "pk": 17,
+  "model": "metadata.valueslist",
+  "fields": {
+    "index": "ADDRESSES",
+    "name": "Addresses"
+  }
+},
+{
   "pk": 1,
   "model": "metadata.listentry",
   "fields": {
