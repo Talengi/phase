@@ -72,8 +72,8 @@ class ContractorDeliverableRevisionForm(BaseDocumentForm):
             DocumentFieldset(
                 _('Revision'),
                 'status',
-                #'revision_date',
-                #'created_on',
+                'revision_date',
+                'created_on',
                 'final_revision',
                 'native_file',
                 'pdf_file',
@@ -96,8 +96,7 @@ class ContractorDeliverableRevisionForm(BaseDocumentForm):
 
     class Meta:
         model = ContractorDeliverableRevision
-        exclude = ('document', 'revision', 'revision_date', 'created_on',
-                   'updated_on')
+        exclude = ('document', 'revision', 'updated_on')
 
 
 class CorrespondenceForm(BaseDocumentForm):
@@ -145,6 +144,8 @@ class CorrespondenceRevisionForm(BaseDocumentForm):
             DocumentFieldset(
                 _('Revision'),
                 'status',
+                'revision_date',
+                'created_on',
                 'native_file',
                 'pdf_file',
             ),
@@ -158,8 +159,7 @@ class CorrespondenceRevisionForm(BaseDocumentForm):
 
     class Meta:
         model = CorrespondenceRevision
-        exclude = ('document', 'revision', 'revision_date', 'created_on',
-                   'updated_on')
+        exclude = ('document', 'revision', 'updated_on')
 
 
 class MinutesOfMeetingForm(BaseDocumentForm):
@@ -204,6 +204,8 @@ class MinutesOfMeetingRevisionForm(BaseDocumentForm):
             DocumentFieldset(
                 _('Revision'),
                 'status',
+                'revision_date',
+                'created_on',
                 'native_file',
                 'pdf_file',
             ),
@@ -211,8 +213,7 @@ class MinutesOfMeetingRevisionForm(BaseDocumentForm):
 
     class Meta:
         model = MinutesOfMeetingRevision
-        exclude = ('document', 'revision', 'revision_date', 'created_on',
-                   'updated_on')
+        exclude = ('document', 'revision', 'updated_on')
 
 
 class TransmittalsForm(BaseDocumentForm):
@@ -256,6 +257,8 @@ class TransmittalsRevisionForm(BaseDocumentForm):
             DocumentFieldset(
                 _('Revision'),
                 'status',
+                'revision_date',
+                'created_on',
                 'native_file',
                 'pdf_file',
             ),
@@ -263,8 +266,7 @@ class TransmittalsRevisionForm(BaseDocumentForm):
 
     class Meta:
         model = TransmittalsRevision
-        exclude = ('document', 'revision', 'revision_date', 'created_on',
-                   'updated_on')
+        exclude = ('document', 'revision', 'updated_on')
 
 
 class DemoMetadataForm(BaseDocumentForm):
