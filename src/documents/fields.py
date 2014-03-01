@@ -5,19 +5,13 @@ from documents.fileutils import upload_to_path, private_storage
 from documents.widgets import PhaseClearableFileInput
 
 
-class RevisionFileField(models.FileField):
-    """Custom file field to store revision files.
-
-    We only define this to override the default widget.
-
-    """
-
+class PrivateFileField(models.FileField):
+    """Store files in a private dir."""
     def __init__(self, *args, **kwargs):
         kwargs.update({
-            'upload_to': upload_to_path,
             'storage': private_storage,
         })
-        return super(RevisionFileField, self).__init__(*args, **kwargs)
+        return super(PrivateFileField, self).__init__(*args, **kwargs)
 
     def formfield(self, **kwargs):
         defaults = {
@@ -27,7 +21,17 @@ class RevisionFileField(models.FileField):
         if 'initial' in kwargs:
             defaults['required'] = False
         defaults.update(kwargs)
-        return super(RevisionFileField, self).formfield(**defaults)
+        return super(PrivateFileField, self).formfield(**defaults)
+
+
+class RevisionFileField(PrivateFileField):
+    """Custom file field to store revision files."""
+
+    def __init__(self, *args, **kwargs):
+        kwargs.update({
+            'upload_to': upload_to_path,
+        })
+        return super(RevisionFileField, self).__init__(*args, **kwargs)
 
 
 class PhaseClearableFileField(fields.FileField):
