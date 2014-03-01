@@ -124,7 +124,7 @@
   "model": "metadata.valueslist",
   "fields": {
     "index": "AUTHORS",
-    "name": "Recipients"
+    "name": "Authors"
   }
 },
 {
@@ -107003,6 +107003,36 @@
     "values_list": 14,
     "order": 0,
     "value": "Wiring Diagram"
+  }
+},
+{
+  "pk": 10688,
+  "model": "metadata.listentry",
+  "fields": {
+    "index": "test_recipient",
+    "values_list": 15,
+    "order": 0,
+    "value": "Test recipient"
+  }
+},
+{
+  "pk": 10689,
+  "model": "metadata.listentry",
+  "fields": {
+    "index": "test_author",
+    "values_list": 16,
+    "order": 0,
+    "value": "Test author"
+  }
+},
+{
+  "pk": 10690,
+  "model": "metadata.listentry",
+  "fields": {
+    "index": "test_address",
+    "values_list": 17,
+    "order": 0,
+    "value": "Test address"
   }
 }
 ]
