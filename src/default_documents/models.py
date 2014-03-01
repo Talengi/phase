@@ -360,7 +360,6 @@ class Correspondence(Metadata):
             'originator', 'recipient', 'status', 'under_review',
             'overdue', 'leader'
         )
-        searchable_fields = ('document_key', 'subject')
         column_fields = (
             ('Reference', 'document_key', 'document_key'),
             ('Subject', 'subject', 'subject'),
@@ -374,6 +373,17 @@ class Correspondence(Metadata):
             ('Originator', 'originator', 'originator'),
             ('Recipient', 'recipient', 'recipient'),
             ('Document type', 'document_type', 'document_type'),
+        )
+        searchable_fields = (
+            'document_key',
+            'subject',
+            'received_sent_date',
+            'due_date',
+            'status',
+            'leader__name',
+            'originator',
+            'recipient',
+            'document_type',
         )
 
     def generate_document_key(self):
@@ -495,7 +505,6 @@ class MinutesOfMeeting(Metadata):
         filter_fields = (
             'originator', 'recipient', 'status', 'signed', 'prepared_by',
         )
-        searchable_fields = ('document_key', 'subject')
         column_fields = (
             ('Reference', 'document_key', 'document_key'),
             ('Subject', 'subject', 'subject'),
@@ -507,6 +516,17 @@ class MinutesOfMeeting(Metadata):
             ('Prepared by', 'prepared_by', 'prepared_by'),
             ('Signed', 'signed', 'signed'),
             ('Status', 'status', 'latest_revision.status'),
+        )
+        searchable_fields = (
+            'document_key',
+            'subject',
+            'meeting_date',
+            'received_sent_date',
+            'originator',
+            'recipient',
+            'document_type',
+            'prepared_by',
+            'status',
         )
 
     def generate_document_key(self):
@@ -611,7 +631,6 @@ class Transmittals(Metadata):
         filter_fields = (
             'originator', 'recipient', 'status',
         )
-        searchable_fields = ('document_key', 'transmittal_date')
         column_fields = (
             ('Reference', 'document_key', 'document_key'),
             ('Transmittal date', 'transmittal_date', 'transmittal_date'),
@@ -621,6 +640,16 @@ class Transmittals(Metadata):
             ('Document type', 'document_type', 'document_type'),
             ('Status', 'status', 'latest_revision.status'),
             ('Created on', 'created_on', 'latest_revision.created_on'),
+        )
+        searchable_fields = (
+            'document_key',
+            'transmittal_date',
+            'ack_of_receipt_date',
+            'originator',
+            'recipient',
+            'document_type',
+            'status',
+            'created_on'
         )
 
     def generate_document_key(self):
@@ -641,6 +670,10 @@ class Transmittals(Metadata):
     @property
     def status(self):
         return self.latest_revision.status
+
+    @property
+    def created_on(self):
+        return self.latest_revision.created_on
 
 
 class TransmittalsRevision(MetadataRevision):
