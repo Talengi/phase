@@ -5,7 +5,9 @@ from django.template.defaultfilters import slugify
 from metadata.fields import ConfigurableChoiceField
 from accounts.models import User
 from documents.models import Metadata, MetadataRevision
-from documents.fields import RevisionFileField
+from documents.fields import (
+    RevisionFileField, LeaderCommentsFileField, ApproverCommentsFileField
+)
 from documents.constants import (
     BOOLEANS, CLASSES, CORRESPONDENCE_STATUSES
 )
@@ -266,7 +268,7 @@ class ContractorDeliverableRevision(MetadataRevision):
         verbose_name=_('Leader'),
         related_name='leading_contractor_deliverables',
         null=True, blank=True)
-    leader_comments = RevisionFileField(
+    leader_comments = LeaderCommentsFileField(
         _('Leader comments'),
         null=True, blank=True)
     approver = models.ForeignKey(
@@ -274,7 +276,7 @@ class ContractorDeliverableRevision(MetadataRevision):
         verbose_name=_('Approver'),
         related_name='approving_contractor_deliverables',
         null=True, blank=True)
-    approver_comments = RevisionFileField(
+    approver_comments = ApproverCommentsFileField(
         _('Approver comments'),
         null=True, blank=True)
     under_gtg_review = models.NullBooleanField(
@@ -759,6 +761,12 @@ class DemoMetadataRevision(MetadataRevision):
         null=True, blank=True)
     pdf_file = RevisionFileField(
         _('PDF File'),
+        null=True, blank=True)
+    leader_comments = LeaderCommentsFileField(
+        _('Leader comments'),
+        null=True, blank=True)
+    approver_comments = ApproverCommentsFileField(
+        _('Approver comments'),
         null=True, blank=True)
     status = models.CharField(
         verbose_name=_('Status'),
