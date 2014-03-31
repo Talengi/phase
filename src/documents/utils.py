@@ -1,10 +1,5 @@
 import zipfile
 import tempfile
-try:
-    import zlib  # noqa
-    compression = zipfile.ZIP_DEFLATED
-except:
-    compression = zipfile.ZIP_STORED
 
 from django.db.models import Q
 
@@ -103,7 +98,7 @@ def compress_documents(documents, format='both', revisions='latest'):
                 zip_file.write(
                     file_.path,
                     file_.name,
-                    compress_type=compression
+                    compress_type=zipfile.ZIP_DEFLATED
                 )
     return temp_file
 
