@@ -6,7 +6,7 @@ from django.contrib.auth.models import (
 )
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
-from django.utils.http import int_to_base36
+from django.utils.http import urlsafe_base64_encode
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.contrib.sites.models import Site
@@ -87,7 +87,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         if not site:
             site = Site.objects.get_current()
         ctx = {
-            'uidb36': int_to_base36(self.id),
+            'uidb64': urlsafe_base64_encode('%s' % self.id),
             'token': token,
             'username': self.name,
             'site': site,

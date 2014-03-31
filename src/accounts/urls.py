@@ -11,7 +11,7 @@ urlpatterns = patterns(
     url('^logout/$',
         'django.contrib.auth.views.logout_then_login',
         name='logout'),
-    url('^password-reset/(?P<uidb64>[0-9A-Za-z_\-]+)-(?P<token>[\d\w-]+)/$',
+    url('^password-reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>.+)/$',
         'django.contrib.auth.views.password_reset_confirm',
         name='password_reset_confirm'),
     url('^password-reset-complete/$',
