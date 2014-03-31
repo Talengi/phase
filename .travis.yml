@@ -3,8 +3,9 @@ python:
   - "2.6"
   - "2.7"
 install:
-  - "pip install -r requirements/test.txt"
-  - "npm install -g yuglify"
+  - pip install -r requirements/test.txt
+  - npm install -g yuglify
+  - sudo apt-get install zlib1g-dev
 script:
   - export DJANGO_SETTINGS_MODULE=core.settings.test
   - cd src
