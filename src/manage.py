@@ -9,10 +9,14 @@ if __name__ == "__main__":
     settings_module = os.environ.get('DJANGO_SETTINGS_MODULE')
     if 'test' in sys.argv and not settings_module.endswith('test'):
         confirm = raw_input("""
-WOW!
+Wow! Wow! WOW!
 
 It looks like you are running tests, but you did'nt set the
 testing settings module.
+
+Maybe you forgot to export the correct environment variable?
+
+    export DJANGO_SETTINGS_MODULE="core.settings.test"
 
 Are you sure you want to continue? [y/N] """)
         if confirm != 'y':
