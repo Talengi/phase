@@ -173,16 +173,16 @@ class Metadata(models.Model):
             key = field[1]
             # TODO Use field[2] for getting field value
             value = getattr(self, field[1])
-            fields += ((key, stringify_value(value)),)
+            fields += ((unicode(key), stringify_value(value)),)
 
         fields_infos = dict(fields)
         fields_infos.update({
-            'url': self.document.get_absolute_url(),
-            'number': self.document_key,
-            'pk': self.pk,
-            'document_pk': self.document.pk,
-            'favorite_id': document2favorite.get(self.document.pk, ''),
-            'favorited': favorited,
+            u'url': self.document.get_absolute_url(),
+            u'number': self.document_key,
+            u'pk': self.pk,
+            u'document_pk': self.document.pk,
+            u'favorite_id': document2favorite.get(self.document.pk, u''),
+            u'favorited': favorited,
         })
         return fields_infos
 

@@ -148,6 +148,13 @@ class DocumentFilterTest(TestCase):
             'sort_by': 'document_key',
         }
         c = self.client
+        base_qs = ContractorDeliverable.objects \
+            .all() \
+            .select_related(
+                'document',
+                'document__category',
+                'document__category__category_template',
+                'document__category__organisation')
 
         # Default: 10 items returned
         r = c.get(self.filter_url, get_parameters)
@@ -155,9 +162,10 @@ class DocumentFilterTest(TestCase):
         self.assertEqual(len(data['data']), 10)
         self.assertEqual(int(data['total']), 500)
         self.assertEqual(int(data['display']), 10)
+        documents = base_qs[0:10]
         self.assertEqual(
             data['data'],
-            [doc.jsonified() for doc in ContractorDeliverable.objects.all()[0:10]]
+            [doc.jsonified() for doc in documents]
         )
 
         # With 100 results
@@ -167,9 +175,10 @@ class DocumentFilterTest(TestCase):
         self.assertEqual(len(data['data']), 100)
         self.assertEqual(int(data['total']), 500)
         self.assertEqual(int(data['display']), 100)
+        documents = base_qs[0:100]
         self.assertEqual(
             data['data'],
-            [doc.jsonified() for doc in ContractorDeliverable.objects.all()[0:100]]
+            [doc.jsonified() for doc in documents]
         )
 
         # With 25 results, starting at 10
@@ -180,9 +189,10 @@ class DocumentFilterTest(TestCase):
         self.assertEqual(len(data['data']), 25)
         self.assertEqual(int(data['total']), 500)
         self.assertEqual(int(data['display']), 35)
+        documents = base_qs[10:35]
         self.assertEqual(
             data['data'],
-            [doc.jsonified() for doc in ContractorDeliverable.objects.all()[10:35]]
+            [doc.jsonified() for doc in documents]
         )
 
     def test_ordering(self):
@@ -195,14 +205,22 @@ class DocumentFilterTest(TestCase):
             'sort_by': 'document_key',
         }
         c = self.client
+        base_qs = ContractorDeliverable.objects \
+            .all() \
+            .select_related(
+                'document',
+                'document__category',
+                'document__category__category_template',
+                'document__category__organisation')
 
         # Default: sorted by document_number
         r = c.get(self.filter_url, get_parameters)
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 10)
+        documents = base_qs[0:10]
         self.assertEqual(
             data['data'],
-            [doc.jsonified() for doc in ContractorDeliverable.objects.all()[0:10]]
+            [doc.jsonified() for doc in documents]
         )
 
         # Sorting by title
@@ -210,10 +228,10 @@ class DocumentFilterTest(TestCase):
         r = c.get(self.filter_url, get_parameters)
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 10)
-        documents = ContractorDeliverable.objects.all()
+        documents = base_qs.order_by('title')[0:10]
         self.assertEqual(
             data['data'],
-            [doc.jsonified() for doc in documents.order_by('title')[0:10]]
+            [doc.jsonified() for doc in documents]
         )
 
         # Sorting by title (reversed)
@@ -221,10 +239,10 @@ class DocumentFilterTest(TestCase):
         r = c.get(self.filter_url, get_parameters)
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 10)
-        documents = ContractorDeliverable.objects.all()
+        documents = base_qs.order_by('-title')[0:10]
         self.assertEqual(
             data['data'],
-            [doc.jsonified() for doc in documents.order_by('-title')[0:10]]
+            [doc.jsonified() for doc in documents]
         )
 
     def test_global_filtering(self):
@@ -255,6 +273,13 @@ class DocumentFilterTest(TestCase):
             'sort_by': 'document_key',
         }
         c = self.client
+        base_qs = ContractorDeliverable.objects \
+            .all() \
+            .select_related(
+                'document',
+                'document__category',
+                'document__category__category_template',
+                'document__category__organisation')
 
         # Searching 'ASB' status
         status = u'ASB'
@@ -264,12 +289,12 @@ class DocumentFilterTest(TestCase):
         self.assertEqual(len(data['data']), 10)
         self.assertEqual(int(data['total']), 44)
         self.assertEqual(int(data['display']), 10)
-        documents = ContractorDeliverable.objects.filter(**{
+        documents = base_qs.filter(**{
             'latest_revision__status__icontains': status
-        })
+        })[0:10]
         self.assertEqual(
             data['data'],
-            [doc.jsonified() for doc in documents[0:10]]
+            [doc.jsonified() for doc in documents]
         )
 
         # Searching 'ASB' status + 'PLA' document_type
@@ -280,13 +305,13 @@ class DocumentFilterTest(TestCase):
         r = c.get(self.filter_url, get_parameters)
         data = json.loads(r.content)
         self.assertEqual(len(data['data']), 1)
-        documents = ContractorDeliverable.objects.filter(**{
+        documents = base_qs.filter(**{
             'latest_revision__status__icontains': status,
             'document_type__icontains': document_type
-        })
+        })[0:10]
         self.assertEqual(
             data['data'],
-            [doc.jsonified() for doc in documents[0:10]]
+            [doc.jsonified() for doc in documents]
         )
 
     def test_combining(self):
@@ -394,7 +419,11 @@ class DocumentFilterTest(TestCase):
         documents = ContractorDeliverable.objects.filter(**{
             'latest_revision__leader': leader,
             'latest_revision__approver': approver
-        })
+        }).select_related(
+            'document',
+            'document__category',
+            'document__category__category_template',
+            'document__category__organisation')
         self.assertEqual(
             data['data'],
             [doc.jsonified() for doc in documents[0:10]]

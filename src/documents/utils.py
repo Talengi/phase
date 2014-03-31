@@ -120,7 +120,8 @@ def stringify_value(val):
     >>> stringify_value(True)
     u'Yes'
 
-    >>> stringify_value(datetime.datetime(2000, 1, 1))  # noqa
+    >>> import datetime
+    >>> stringify_value(datetime.datetime(2000, 1, 1))
     u'2000-01-01'
 
     >>> stringify_value(None)
