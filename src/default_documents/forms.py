@@ -146,7 +146,7 @@ class MinutesOfMeetingForm(BaseDocumentForm):
         if self.read_only:
             response_reference = DocumentFieldset(
                 _('Response reference'),
-                FlatRelatedDocumentsLayout('response_reference'),
+                'response_reference',
             )
         else:
             response_reference = DocumentFieldset(
