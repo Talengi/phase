@@ -1,7 +1,7 @@
 from base import *  # noqa
 
 
-########## IN-MEMORY TEST DATABASE
+# ######### IN-MEMORY TEST DATABASE
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",

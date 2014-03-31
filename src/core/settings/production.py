@@ -44,7 +44,7 @@ INSTALLED_APPS += (
     'gunicorn',
 )
 
-########## EMAIL CONFIGURATION
+# ######### EMAIL CONFIGURATION
 EMAIL_SUBJECT_PREFIX = '[%s] ' % SITE_NAME
 DEFAULT_FROM_EMAIL = get_prod_setting('DEFAULT_FROM_EMAIL')
 EMAIL_BACKEND = get_prod_setting('EMAIL_BACKEND')
@@ -55,15 +55,15 @@ EMAIL_PORT = get_prod_setting('EMAIL_PORT')
 EMAIL_USE_TLS = get_prod_setting('EMAIL_USE_TLS')
 SERVER_EMAIL = get_prod_setting('SERVER_EMAIL')
 
-########## DATABASE CONFIGURATION
+# ######### DATABASE CONFIGURATION
 DATABASES = get_prod_setting('DATABASES')
 
-########## CACHE CONFIGURATION
+# ######### CACHE CONFIGURATION
 CACHES = get_prod_setting('CACHES')
 
-########## SECRET CONFIGURATION
+# ######### SECRET CONFIGURATION
 SECRET_KEY = get_prod_setting('SECRET_KEY')
 
-########## CUSTOM CONFIGURATION
+# ######### CUSTOM CONFIGURATION
 ALLOWED_HOSTS = get_prod_setting('ALLOWED_HOSTS')
 USE_X_SENDFILE = False

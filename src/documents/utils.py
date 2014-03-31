@@ -26,7 +26,7 @@ def filter_documents(queryset, data):
 
             # does the field belong to the Metadata or the corresponding Revision?
             prefix = ''
-            if not field in model._meta.get_all_field_names():
+            if field not in model._meta.get_all_field_names():
                 prefix = 'latest_revision__'
 
             q.add(Q(**{prefix + '%s__icontains' % field: search_terms}), Q.OR)
@@ -39,7 +39,7 @@ def filter_documents(queryset, data):
 
         # does the field belong to the Metadata or the corresponding Revision?
         prefix = ''
-        if not parameter_name in model._meta.get_all_field_names():
+        if parameter_name not in model._meta.get_all_field_names():
             prefix = 'latest_revision__'
 
         parameter = data.get(parameter_name, None)

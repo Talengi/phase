@@ -7,7 +7,7 @@ from unipath import Path
 from logging.handlers import SysLogHandler
 
 
-########## PATH CONFIGURATION
+# ######### PATH CONFIGURATION
 # Absolute filesystem path to the Django project directory:
 DJANGO_ROOT = Path(__file__).ancestor(3)
 
@@ -30,19 +30,19 @@ PRIVATE_ROOT = SITE_ROOT.child('private')
 # name in our dotted import paths:
 path.append(DJANGO_ROOT)
 path.append(CONFIGURATION_APP_ROOT)
-########## END PATH CONFIGURATION
+# ######### END PATH CONFIGURATION
 
 
-########## DEBUG CONFIGURATION
+# ######### DEBUG CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#debug
 DEBUG = False
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-debug
 TEMPLATE_DEBUG = DEBUG
-########## END DEBUG CONFIGURATION
+# ######### END DEBUG CONFIGURATION
 
 
-########## MANAGER CONFIGURATION
+# ######### MANAGER CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
 ADMINS = (
     ('Matthieu Lamy', 'matthieu@talengi.fr'),
@@ -51,10 +51,10 @@ ADMINS = (
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#managers
 MANAGERS = ADMINS
-########## END MANAGER CONFIGURATION
+# ######### END MANAGER CONFIGURATION
 
 
-########## DATABASE CONFIGURATION
+# ######### DATABASE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
     'default': {
@@ -66,10 +66,10 @@ DATABASES = {
         'PORT': '',
     }
 }
-########## END DATABASE CONFIGURATION
+# ######### END DATABASE CONFIGURATION
 
 
-########## GENERAL CONFIGURATION
+# ######### GENERAL CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#time-zone
 TIME_ZONE = 'America/Los_Angeles'
 
@@ -87,19 +87,19 @@ USE_L10N = True
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#use-tz
 USE_TZ = True
-########## END GENERAL CONFIGURATION
+# ######### END GENERAL CONFIGURATION
 
 
-########## MEDIA CONFIGURATION
+# ######### MEDIA CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#media-root
 MEDIA_ROOT = PUBLIC_ROOT.child('media')
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#media-url
 MEDIA_URL = '/media/'
-########## END MEDIA CONFIGURATION
+# ######### END MEDIA CONFIGURATION
 
 
-########## STATIC FILE CONFIGURATION
+# ######### STATIC FILE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#static-root
 STATIC_ROOT = PUBLIC_ROOT.child('static')
 
@@ -116,25 +116,25 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
-########## END STATIC FILE CONFIGURATION
+# ######### END STATIC FILE CONFIGURATION
 
 
-########## SECRET CONFIGURATION
+# ######### SECRET CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 # Note: This key only used for development and testing.
 SECRET_KEY = r"This is a dummy secret key!"
-########## END SECRET CONFIGURATION
+# ######### END SECRET CONFIGURATION
 
 
-########## FIXTURE CONFIGURATION
+# ######### FIXTURE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-FIXTURE_DIRS
 FIXTURE_DIRS = (
     DJANGO_ROOT.child('fixtures'),
 )
-########## END FIXTURE CONFIGURATION
+# ######### END FIXTURE CONFIGURATION
 
 
-########## TEMPLATE CONFIGURATION
+# ######### TEMPLATE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-context-processors
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
@@ -158,10 +158,10 @@ TEMPLATE_LOADERS = (
 TEMPLATE_DIRS = (
     DJANGO_ROOT.child('templates'),
 )
-########## END TEMPLATE CONFIGURATION
+# ######### END TEMPLATE CONFIGURATION
 
 
-########## MIDDLEWARE CONFIGURATION
+# ######### MIDDLEWARE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#middleware-classes
 MIDDLEWARE_CLASSES = (
     # Performance middlewares
@@ -177,16 +177,16 @@ MIDDLEWARE_CLASSES = (
 
     # Custom middlewares
 )
-########## END MIDDLEWARE CONFIGURATION
+# ######### END MIDDLEWARE CONFIGURATION
 
 
-########## URL CONFIGURATION
+# ######### URL CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#root-urlconf
 ROOT_URLCONF = 'core.urls'
-########## END URL CONFIGURATION
+# ######### END URL CONFIGURATION
 
 
-########## APP CONFIGURATION
+# ######### APP CONFIGURATION
 DJANGO_APPS = (
     # Default Django apps:
     'django.contrib.auth',
@@ -225,10 +225,10 @@ LOCAL_APPS = (
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
-########## END APP CONFIGURATION
+# ######### END APP CONFIGURATION
 
 
-########## LOGGING CONFIGURATION
+# ######### LOGGING CONFIGURATION
 # See http://www.miximum.fr/bien-developper/876-an-effective-logging-strategy-with-django
 LOGGING = {
     'version': 1,
@@ -261,12 +261,6 @@ LOGGING = {
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler',
         },
-        # critical errors are logged to sentry
-        #'sentry': {
-        #    'level': 'ERROR',
-        #    'filters': ['require_debug_false'],
-        #    'class': 'raven.contrib.django.handlers.SentryHandler',
-        #},
     },
     'loggers': {
         # This is the "catch all" logger
@@ -282,15 +276,15 @@ LOGGING = {
         },
     }
 }
-########## END LOGGING CONFIGURATION
+# ######### END LOGGING CONFIGURATION
 
 
-########## WSGI CONFIGURATION
+# ######### WSGI CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#wsgi-application
 WSGI_APPLICATION = 'wsgi.application'
-########## END WSGI CONFIGURATION
+# ######### END WSGI CONFIGURATION
 
-########## PIPELINE CONFIGURATION
+# ######### PIPELINE CONFIGURATION
 STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 
 PIPELINE_CSS = {
@@ -353,13 +347,13 @@ PIPELINE_JS = {
         'output_filename': 'js/datatable.js',
     },
 }
-########## END PIPELINE CONFIGURATION
+# ######### END PIPELINE CONFIGURATION
 
-########## EMAIL CONFIGURATION
+# ######### EMAIL CONFIGURATION
 DEFAULT_FROM_EMAIL = 'admin@phase.fr'
-########## END EMAIL CONFIGURATION
+# ######### END EMAIL CONFIGURATION
 
-########## CUSTOM CONFIGURATION
+# ######### CUSTOM CONFIGURATION
 PAGINATE_BY = 50  # Document list pagination
 CACHE_TIMEOUT_SECONDS = 300  # seconds == 5 minutes
 AUTH_USER_MODEL = 'accounts.User'
@@ -371,4 +365,4 @@ CRISPY_FAIL_SILENTLY = False
 REVISION_FILES_ROOT = PRIVATE_ROOT.child('documents')
 REVISION_FILES_URL = '/files/'
 USE_X_SENDFILE = DEBUG
-########## END CUSTOM CONFIGURATION
+# ######### END CUSTOM CONFIGURATION

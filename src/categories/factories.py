@@ -21,7 +21,7 @@ class CategoryTemplateFactory(factory.DjangoModelFactory):
 
     @classmethod
     def _prepare(cls, create, **kwargs):
-        if not 'metadata_model' in kwargs:
+        if 'metadata_model' not in kwargs:
             kwargs.update({
                 'metadata_model': ContentType.objects.get_for_model(DemoMetadata)
             })

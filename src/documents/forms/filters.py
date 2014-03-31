@@ -46,7 +46,7 @@ def filterform_factory(model):
 
     field_list = []
     for field_name in filter_fields:
-        if not field_name in all_fields:
+        if field_name not in all_fields:
             continue
 
         f = all_fields[field_name]
