@@ -9,14 +9,33 @@
             <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="{% url "category_list" %}">Phase</a>
+
+        {% if category %}
+        <p class="navbar-text visible-xs">
+            <span class="glyphicon glyphicon-info-sign"></span>
+            {{ category }}
+        </p>
+        {% endif %}
     </div>
+
 
     <div class="navbar-collapse collapse">
         {% if user.is_authenticated %}
             <ul class="nav navbar-nav">
                 {% include 'documents/categories_menu.html' %}
-                <li{% if favorites_active %} class="active"{% endif %}><a href="{% url "favorite_list" %}">Favorites</a></li>
+                <li{% if favorites_active %} class="active"{% endif %}>
+                    <a href="{% url "favorite_list" %}">
+                        <span class="glyphicon glyphicon-star"></span> Favorites
+                    </a>
+                </li>
             </ul>
+
+            {% if category %}
+            <p class="navbar-text hidden-xs hidden-sm">
+                <span class="glyphicon glyphicon-info-sign"></span>
+                {{ category }}
+            </p>
+            {% endif %}
 
             <ul class="nav navbar-nav navbar-right">
                 {% if user.is_superuser %}

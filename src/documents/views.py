@@ -49,6 +49,7 @@ class DocumentListMixin(object):
         context.update({
             'organisation_slug': self.kwargs['organisation'],
             'category_slug': self.kwargs['category'],
+            'category': self.category,
         })
         return context
 
