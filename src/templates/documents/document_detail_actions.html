@@ -19,7 +19,7 @@
         </div>
 
         {% url "document_revise" organisation_slug category_slug document.document_key as revise_url %}
-        <a href="{{ revise_url }}" class="btn btn-primary pull-right" />{{ _('Create revision') }}</a>
+        <a href="{{ revise_url }}" class="btn btn-primary pull-right">{{ _('Create revision') }}</a>
 
     {% endif %}
 </div>

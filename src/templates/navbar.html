@@ -11,7 +11,7 @@
         <a class="navbar-brand" href="{% url "category_list" %}">Phase</a>
 
         {% if category %}
-        <p class="navbar-text visible-xs">
+        <p class="category-info navbar-text visible-xs">
             <span class="glyphicon glyphicon-info-sign"></span>
             {{ category }}
         </p>
@@ -31,7 +31,7 @@
             </ul>
 
             {% if category %}
-            <p class="navbar-text hidden-xs hidden-sm">
+            <p class="category-info navbar-text hidden-xs hidden-sm">
                 <span class="glyphicon glyphicon-info-sign"></span>
                 {{ category }}
             </p>
