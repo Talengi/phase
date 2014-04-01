@@ -65,10 +65,13 @@ class DocumentListMixin(object):
         if not hasattr(self, 'category'):
             try:
                 self.category = Category.objects \
-                    .select_related('category_template__metadata_model') \
-                    .get(users=self.request.user,
-                         organisation__slug=organisation_slug,
-                         category_template__slug=category_slug)
+                    .select_related(
+                        'organisation',
+                        'category_template__metadata_model') \
+                    .get(
+                        users=self.request.user,
+                        organisation__slug=organisation_slug,
+                        category_template__slug=category_slug)
             except Category.DoesNotExist:
                 raise Http404('Category not found')
 
