@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
+from django.db.models.base import ModelBase
 from django.utils.translation import ugettext_lazy as _
-from django.utils import timezone
+from django.utils import timezone, six
 from django.core.urlresolvers import reverse
 
 from accounts.models import User
@@ -99,7 +100,31 @@ class Document(models.Model):
         return metadata
 
 
-class Metadata(models.Model):
+class MetadataBase(ModelBase):
+    """Custom metaclass for metadata.
+
+    Add a validation for all metadata objects.
+
+    """
+    def __new__(cls, name, bases, attrs):
+        if name != 'NewBase' and name != 'Metadata':
+            phase_config = attrs.get('PhaseConfig', None)
+            if not phase_config:
+                raise TypeError('You are missing the "PhaseConfig" configuration '
+                                'class on %s' % name)
+
+            filter_fields = getattr(phase_config, 'filter_fields', None)
+            searchable_fields = getattr(phase_config, 'searchable_fields', None)
+            column_fields = getattr(phase_config, 'column_fields', None)
+
+            if not all((filter_fields, searchable_fields, column_fields)):
+                raise TypeError('Your "PhaseConfig" definition is incorrect '
+                                'on %s. Please check the doc' % name)
+
+        return super(MetadataBase, cls).__new__(cls, name, bases, attrs)
+
+
+class Metadata(six.with_metaclass(MetadataBase), models.Model):
     document = models.ForeignKey(
         Document,
         unique=True)
