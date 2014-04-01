@@ -9,7 +9,7 @@ from documents.fields import (
     RevisionFileField, LeaderCommentsFileField, ApproverCommentsFileField
 )
 from documents.constants import (
-    BOOLEANS, CLASSES, CORRESPONDENCE_STATUSES
+    BOOLEANS, CORRESPONDENCE_STATUSES
 )
 from .validators import StringNumberValidator
 
@@ -52,15 +52,11 @@ class ContractorDeliverable(Metadata):
         default=u"0001",
         max_length=4,
         validators=[StringNumberValidator(4)])
-    project_phase = ConfigurableChoiceField(
-        verbose_name=u"Engineering Phase",
-        default=u"FEED",
-        max_length=4,
-        list_index='ENGINEERING_PHASES')
-    klass = models.IntegerField(
+    klass = ConfigurableChoiceField(
         verbose_name=u"Class",
-        default=1,
-        choices=CLASSES)
+        default='1',
+        max_length=1,
+        list_index='CLASSES')
     system = ConfigurableChoiceField(
         verbose_name=u"System",
         list_index='SYSTEMS',
@@ -77,7 +73,7 @@ class ContractorDeliverable(Metadata):
     # Related documents
     related_documents = models.ManyToManyField(
         'documents.Document',
-        related_name='contractordeliverable_related_set',
+        related_name='cd_related_documents',
         null=True, blank=True)
 
     # Schedule
@@ -155,25 +151,26 @@ class ContractorDeliverable(Metadata):
         null=True, blank=True)
 
     class PhaseConfig:
-        # TODO Create metaclass to validate those fields
         filter_fields = (
-            'status', 'discipline', 'document_type',
-            'unit', 'klass', 'contract_number', 'originator',
-            'contractor_document_number', 'engineering_phase', 'feed_update',
-            'system', 'wbs', 'under_ca_review', 'under_contractor_review',
-            'leader', 'approver',
+            'klass', 'status', 'unit', 'discipline', 'document_type',
+            'overdue', 'leader', 'approver'
         )
-        searchable_fields = (
-            'document_key', 'title', 'unit', 'discipline',
-            'document_type', 'klass', 'contract_number', 'originator',
-            'sequential_number',
-        )
+        searchable_fields = ('document_key', 'title',)
         column_fields = (
             ('Document Number', 'document_key', 'document_key'),
             ('Title', 'title', 'title'),
-            ('Rev.', 'current_revision', 'latest_revision__revision'),
-            ('Rev. Date', 'current_revision_date', 'latest_revision__created_on'),
-            ('Status', 'status', 'latest_revision__status'),
+            ('Rev.', 'current_revision', 'latest_revision.revision'),
+            ('Status', 'status', 'latest_revision.status'),
+            ('Class', 'klass', 'klass'),
+            ('Unit', 'unit', 'unit'),
+            ('Discipline', 'discipline', 'discipline'),
+            ('Document type', 'document_type', 'document_type'),
+            ('Review start date', 'review_start_date', 'latest_revision__review_start_date'),
+            ('Review due date', 'review_due_date', 'latest_revision__review_due_date'),
+            ('Under review', 'under_review', 'latest_revision__under_review'),
+            ('Overdue', 'overdue', 'latest_revision__overdue'),
+            ('Leader', 'leader', 'latest_revision__leader'),
+            ('Final revision', 'final_revision', 'latest_revision__final_revision'),
         )
 
     class Meta:
@@ -186,7 +183,7 @@ class ContractorDeliverable(Metadata):
         )
 
     def natural_key(self):
-        return (self.document_key,)
+        return self.document_key
 
     def generate_document_key(self):
         return slugify(
@@ -201,10 +198,6 @@ class ContractorDeliverable(Metadata):
                 sequential_number=self.sequential_number
             )).upper()
 
-    @property
-    def status(self):
-        return self.latest_revision.status
-
     def get_all_revisions(self):
         """Return all revisions data of this document."""
         Revision = self.get_revision_class()
@@ -218,6 +211,34 @@ class ContractorDeliverable(Metadata):
             )
         return revisions
 
+    @property
+    def status(self):
+        return self.latest_revision.status
+
+    @property
+    def final_revision(self):
+        return self.latest_revision.final_revision
+
+    @property
+    def review_start_date(self):
+        return self.latest_revision.review_start_date
+
+    @property
+    def review_due_date(self):
+        return self.latest_revision.review_due_date
+
+    @property
+    def under_review(self):
+        return self.latest_revision.under_review
+
+    @property
+    def overdue(self):
+        return self.latest_revision.overdue
+
+    @property
+    def leader(self):
+        return self.latest_revision.leader
+
 
 class ContractorDeliverableRevision(MetadataRevision):
     # Revision
@@ -227,9 +248,11 @@ class ContractorDeliverableRevision(MetadataRevision):
         max_length=3,
         list_index='STATUSES',
         null=True, blank=True)
-    final_revision = models.BooleanField(
+    final_revision = models.NullBooleanField(
         _('Is final revision?'),
-        default=False)
+        choices=BOOLEANS,
+        null=True,
+        blank=True)
     native_file = RevisionFileField(
         verbose_name=u"Native File",
         null=True, blank=True)
@@ -251,10 +274,6 @@ class ContractorDeliverableRevision(MetadataRevision):
         verbose_name=u"Under Review",
         choices=BOOLEANS,
         null=True, blank=True)
-    under_contractor_review = models.NullBooleanField(
-        verbose_name=u"Under Contractor Review",
-        choices=BOOLEANS,
-        null=True, blank=True)
     overdue = models.NullBooleanField(
         _('Overdue'),
         choices=BOOLEANS,
@@ -266,7 +285,7 @@ class ContractorDeliverableRevision(MetadataRevision):
     leader = models.ForeignKey(
         User,
         verbose_name=_('Leader'),
-        related_name='leading_contractor_deliverables',
+        related_name='cd_leader',
         null=True, blank=True)
     leader_comments = LeaderCommentsFileField(
         _('Leader comments'),
@@ -274,14 +293,10 @@ class ContractorDeliverableRevision(MetadataRevision):
     approver = models.ForeignKey(
         User,
         verbose_name=_('Approver'),
-        related_name='approving_contractor_deliverables',
+        related_name='cd_approver',
         null=True, blank=True)
     approver_comments = ApproverCommentsFileField(
         _('Approver comments'),
-        null=True, blank=True)
-    under_gtg_review = models.NullBooleanField(
-        _('Under GTG Review'),
-        choices=BOOLEANS,
         null=True, blank=True)
 
 

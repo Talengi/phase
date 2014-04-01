@@ -11,13 +11,12 @@ from .models import (
     DemoMetadata, DemoMetadataRevision
 )
 from .layout import (
-    DocumentFieldset, ScheduleLayout, ScheduleStatusLayout,
-    FlatRelatedDocumentsLayout)
+    DocumentFieldset, ScheduleLayout, ScheduleStatusLayout
+)
 
 
 class ContractorDeliverableForm(BaseDocumentForm):
     def build_layout(self):
-
         return Layout(
             DocumentFieldset(
                 _('General information'),
@@ -29,7 +28,6 @@ class ContractorDeliverableForm(BaseDocumentForm):
                 'discipline',
                 'document_type',
                 'sequential_number',
-                'project_phase',
                 'klass',
                 'system',
                 'wbs',
@@ -62,8 +60,6 @@ class ContractorDeliverableRevisionForm(BaseDocumentForm):
             DocumentFieldset(
                 _('Revision'),
                 'status',
-                'revision_date',
-                'created_on',
                 'final_revision',
                 'native_file',
                 'pdf_file',
@@ -73,20 +69,19 @@ class ContractorDeliverableRevisionForm(BaseDocumentForm):
                 'review_start_date',
                 'review_due_date',
                 'under_review',
-                'under_contractor_review',
                 'overdue',
                 'reviewers',
                 'leader',
                 'leader_comments',
                 'approver',
                 'approver_comments',
-                'under_gtg_review',
             )
         )
 
     class Meta:
         model = ContractorDeliverableRevision
-        exclude = ('document', 'revision', 'updated_on')
+        exclude = ('document', 'revision', 'revision_date', 'created_on',
+                   'updated_on')
 
 
 class CorrespondenceForm(BaseDocumentForm):
