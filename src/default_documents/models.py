@@ -4,6 +4,7 @@ from django.template.defaultfilters import slugify
 
 from metadata.fields import ConfigurableChoiceField
 from accounts.models import User
+from reviews.models import ReviewMixin
 from documents.models import Metadata, MetadataRevision
 from documents.fields import (
     RevisionFileField, LeaderCommentsFileField, ApproverCommentsFileField
@@ -240,7 +241,7 @@ class ContractorDeliverable(Metadata):
         return self.latest_revision.leader
 
 
-class ContractorDeliverableRevision(MetadataRevision):
+class ContractorDeliverableRevision(ReviewMixin, MetadataRevision):
     # Revision
     status = ConfigurableChoiceField(
         verbose_name=u"Status",
@@ -258,45 +259,6 @@ class ContractorDeliverableRevision(MetadataRevision):
         null=True, blank=True)
     pdf_file = RevisionFileField(
         verbose_name=u"PDF File",
-        null=True, blank=True)
-
-    # Review
-    review_start_date = models.DateField(
-        _('Review start date'),
-        null=True, blank=True
-    )
-    review_due_date = models.DateField(
-        _('Review due date'),
-        null=True, blank=True
-    )
-    # review_countdown = due_date - now
-    under_review = models.NullBooleanField(
-        verbose_name=u"Under Review",
-        choices=BOOLEANS,
-        null=True, blank=True)
-    overdue = models.NullBooleanField(
-        _('Overdue'),
-        choices=BOOLEANS,
-        null=True, blank=True)
-    reviewers = models.ManyToManyField(
-        User,
-        verbose_name=_('Reviewers'),
-        null=True, blank=True)
-    leader = models.ForeignKey(
-        User,
-        verbose_name=_('Leader'),
-        related_name='cd_leader',
-        null=True, blank=True)
-    leader_comments = LeaderCommentsFileField(
-        _('Leader comments'),
-        null=True, blank=True)
-    approver = models.ForeignKey(
-        User,
-        verbose_name=_('Approver'),
-        related_name='cd_approver',
-        null=True, blank=True)
-    approver_comments = ApproverCommentsFileField(
-        _('Approver comments'),
         null=True, blank=True)
 
 
