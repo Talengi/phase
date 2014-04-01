@@ -56,17 +56,18 @@ module.exports = function(grunt) {
       }
     },
 
-    recess: {
-      options: {
-        compile: true
-      },
+    less: {
       bootstrap: {
-        src: ['less/bootstrap.less'],
-        dest: '<%= dist %>/css/<%= pkg.name %>.css'
-      },
-      theme: {
-        src: ['less/theme.less'],
-        dest: '<%= dist %>/css/<%= pkg.name %>-theme.css'
+        options: {
+          strictMath: true,
+          sourceMap: false,
+          outputSourceFiles: true,
+          sourceMapURL: 'bootstrap.css.map',
+          sourceMapFilename: '<%= dist %>/css/bootstrap.css.map'
+        },
+        files: {
+          '<%= dist %>/css/<%= pkg.name %>.css': 'less/bootstrap.less'
+        },
       },
     },
 
@@ -86,13 +87,13 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-recess');
+  grunt.loadNpmTasks('grunt-contrib-less');
 
   // JS distribution task.
   grunt.registerTask('dist-js', ['concat', 'uglify']);
 
   // CSS distribution task.
-  grunt.registerTask('dist-css', ['recess']);
+  grunt.registerTask('dist-css', ['less']);
 
   // Fonts distribution task.
   grunt.registerTask('dist-fonts', ['copy']);
