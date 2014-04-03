@@ -631,8 +631,10 @@ class DocumentDownloadTest(TestCase):
         try:
             import zlib  # noqa
             zip_size = 598
+            print 'zip imported'
         except:
             zip_size = 602
+            print 'no zip imported'
 
         self.assertEqual(r._headers, {
             'vary': ('Vary', 'Cookie, Accept-Encoding'),
