@@ -21,6 +21,10 @@ class ReviewMixin(models.Model):
         _('Review due date'),
         null=True, blank=True
     )
+    review_end_date = models.DateField(
+        _('Review end date'),
+        null=True, blank=True
+    )
 
     under_review = models.NullBooleanField(
         verbose_name=u"Under Review",
@@ -84,3 +88,16 @@ class ReviewMixin(models.Model):
         self.review_start_date = today
         self.review_due_date = today + datetime.timedelta(days=duration)
         self.save()
+
+    def end_review(self):
+        """Ends the review.
+
+        Again, we don't validate the document state here. Be responsible.
+
+        """
+        self.review_end_date = datetime.date.today()
+        self.save()
+
+    def is_under_review(self):
+        """It's under review only if review has started but not ended."""
+        return bool(self.review_start_date) != bool(self.review_end_date)

@@ -69,3 +69,33 @@ class ReviewMixinTests(TestCase):
 
         self.assertEqual(revision.review_start_date, today)
         self.assertEqual(revision.review_due_date, in_two_weeks)
+
+    def test_end_review_process(self):
+        doc = DocumentFactory(category=self.category)
+        revision = doc.latest_revision
+        revision.leader = self.user
+        revision.approver = self.user
+        revision.reviewers.add(self.user)
+        revision.save()
+
+        revision.start_review()
+        revision.end_review()
+
+        today = datetime.date.today()
+        self.assertEqual(revision.review_end_date, today)
+
+    def test_under_review(self):
+        doc = DocumentFactory(category=self.category)
+        revision = doc.latest_revision
+        revision.leader = self.user
+        revision.approver = self.user
+        revision.reviewers.add(self.user)
+        revision.save()
+
+        self.assertFalse(revision.is_under_review())
+
+        revision.start_review()
+        self.assertTrue(revision.is_under_review())
+
+        revision.end_review()
+        self.assertFalse(revision.is_under_review())
