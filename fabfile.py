@@ -7,7 +7,7 @@ from fabric.api import run, env, local, cd, prefix, sudo
 #
 # Also add this line in /etc/sudoers on the server if you want
 # the phase user to be able to restart supervisor:
-# phase ALL = NOPASSWD: supervisorctl
+# phase ALL = (root) NOPASSWD:/usr/bin/supervisorctl restart phase
 
 USERNAME = 'phase'
 VENV_HOME = '/home/%s/.virtualenvs/' % USERNAME
@@ -48,7 +48,7 @@ def check():
 
 
 def restart_webserver():
-    sudo('/etc/init.d/apache2 restart', shell=False)
+    sudo('supervisorctl restart phase', shell=False)
 
 
 def deploy(with_data=True):
@@ -63,7 +63,7 @@ def deploy(with_data=True):
             run('pip install -r requirements/production.txt')
             run(collectstatic + with_production_settings)
             if with_data:
-                run('rm phase.db')
+                run('rm src/phase.db')
                 run('rm private/* -Rf')
                 run(syncdb + with_production_settings)
                 run(generate + with_production_settings)
