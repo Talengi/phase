@@ -49,6 +49,9 @@ class Document(models.Model):
         verbose_name = _('Document')
         verbose_name_plural = _('Documents')
 
+        # Custom permission for document controllers
+        permissions = (('can_control_document', 'Can control document'),)
+
     def __unicode__(self):
         return self.document_key
 
