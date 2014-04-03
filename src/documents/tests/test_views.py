@@ -618,9 +618,25 @@ class DocumentDownloadTest(TestCase):
             'revisions': 'all',
         })
         self.assertEqual(r.status_code, 200)
+
+        # This is a very annoying problem. We use the zipfile.ZIP_DEFLATED
+        # compression type to create the file archive, and the test runs just
+        # fine in local.
+        # However, it seems the Travis-ci Python build lacks the zlib python
+        # module, hence the files are archived without compression, and the
+        # test breaks.
+        # That's why we have to write the following test to make sure tests
+        # pass in both environments. Please change this if you have a better
+        # idea. Sorry for this long comment.
+        try:
+            import zlib  # noqa
+            zip_size = 598
+        except:
+            zip_size = 602
+
         self.assertEqual(r._headers, {
             'vary': ('Vary', 'Cookie, Accept-Encoding'),
-            'content-length': ('Content-Length', '598'),
+            'content-length': ('Content-Length', '%s' % zip_size),
             'content-type': ('Content-Type', 'application/zip'),
             'content-disposition': (
                 'Content-Disposition',
