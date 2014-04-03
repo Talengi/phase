@@ -33,7 +33,7 @@ class ReviewMixin(models.Model):
     leader = models.ForeignKey(
         User,
         verbose_name=_('Leader'),
-        related_name='cd_leader',
+        related_name='%(app_label)s_%(class)s_related_leader',
         null=True, blank=True)
     leader_comments = LeaderCommentsFileField(
         _('Leader comments'),
@@ -41,7 +41,7 @@ class ReviewMixin(models.Model):
     approver = models.ForeignKey(
         User,
         verbose_name=_('Approver'),
-        related_name='cd_approver',
+        related_name='%(app_label)s_%(class)s_related_approver',
         null=True, blank=True)
     approver_comments = ApproverCommentsFileField(
         _('Approver comments'),
@@ -49,3 +49,19 @@ class ReviewMixin(models.Model):
 
     class Meta:
         abstract = True
+
+    def can_be_reviewed(self):
+        """Is this revision ready to be reviewed.
+
+        A revision can only be reviewed if all roles have been filled
+        (leader, approver and at least one reviewer).
+
+        Also, a revision can only be reviewed once.
+
+        """
+        return all((
+            self.leader,
+            self.approver,
+            self.reviewers.count(),
+            not self.review_start_date
+        ))
