@@ -5,7 +5,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
 from accounts.models import User
-from documents.constants import BOOLEANS
 from documents.fields import (
     LeaderCommentsFileField, ApproverCommentsFileField
 )
@@ -26,14 +25,6 @@ class ReviewMixin(models.Model):
         null=True, blank=True
     )
 
-    under_review = models.NullBooleanField(
-        verbose_name=u"Under Review",
-        choices=BOOLEANS,
-        null=True, blank=True)
-    overdue = models.NullBooleanField(
-        _('Overdue'),
-        choices=BOOLEANS,
-        null=True, blank=True)
     reviewers = models.ManyToManyField(
         User,
         verbose_name=_('Reviewers'),
