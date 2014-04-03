@@ -6,9 +6,7 @@ from metadata.fields import ConfigurableChoiceField
 from accounts.models import User
 from reviews.models import ReviewMixin
 from documents.models import Metadata, MetadataRevision
-from documents.fields import (
-    RevisionFileField, LeaderCommentsFileField, ApproverCommentsFileField
-)
+from documents.fields import RevisionFileField
 from documents.constants import (
     BOOLEANS, CORRESPONDENCE_STATUSES
 )
@@ -717,7 +715,7 @@ class DemoMetadata(Metadata):
         return self.latest_revision.status
 
 
-class DemoMetadataRevision(MetadataRevision):
+class DemoMetadataRevision(ReviewMixin, MetadataRevision):
     STATUSES = (
         ('STD', 'Started'),
         ('IDC', 'Inter Discipline Check'),
@@ -738,12 +736,6 @@ class DemoMetadataRevision(MetadataRevision):
         null=True, blank=True)
     pdf_file = RevisionFileField(
         _('PDF File'),
-        null=True, blank=True)
-    leader_comments = LeaderCommentsFileField(
-        _('Leader comments'),
-        null=True, blank=True)
-    approver_comments = ApproverCommentsFileField(
-        _('Approver comments'),
         null=True, blank=True)
     status = models.CharField(
         verbose_name=_('Status'),
