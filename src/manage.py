@@ -11,7 +11,7 @@ if __name__ == "__main__":
         confirm = raw_input("""
 Wow! Wow! WOW!
 
-It looks like you are running tests, but you did'nt set the
+It looks like you are running tests, but you didn't set the
 testing settings module.
 
 Maybe you forgot to export the correct environment variable?
