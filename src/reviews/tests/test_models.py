@@ -84,7 +84,7 @@ class ReviewMixinTests(TestCase):
         today = datetime.date.today()
         self.assertEqual(revision.review_end_date, today)
 
-    def test_under_review(self):
+    def test_is_under_review(self):
         doc = DocumentFactory(category=self.category)
         revision = doc.latest_revision
         revision.leader = self.user
@@ -99,3 +99,23 @@ class ReviewMixinTests(TestCase):
 
         revision.end_review()
         self.assertFalse(revision.is_under_review())
+
+    def test_is_overdue(self):
+        doc = DocumentFactory(category=self.category)
+        revision = doc.latest_revision
+        revision.leader = self.user
+        revision.approver = self.user
+        revision.reviewers.add(self.user)
+        revision.save()
+
+        self.assertFalse(revision.is_overdue())
+
+        today = datetime.date.today()
+        revision.review_due_date = today + datetime.timedelta(days=1)
+        self.assertFalse(revision.is_overdue())
+
+        revision.review_due_date = today - datetime.timedelta(days=1)
+        self.assertTrue(revision.is_overdue())
+
+        revision.review_due_date = today
+        self.assertFalse(revision.is_overdue())
