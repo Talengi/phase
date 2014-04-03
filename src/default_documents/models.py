@@ -228,11 +228,11 @@ class ContractorDeliverable(Metadata):
 
     @property
     def under_review(self):
-        return self.latest_revision.under_review
+        return self.latest_revision.is_under_review()
 
     @property
     def overdue(self):
-        return self.latest_revision.overdue
+        return self.latest_revision.is_overdue()
 
     @property
     def leader(self):
