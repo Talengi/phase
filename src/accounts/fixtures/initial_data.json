@@ -5,6 +5,10 @@
   "fields": {
     "name": "Document controllers",
     "permissions": [
+      ["add_document", "documents", "document"],
+      ["change_document", "documents", "document"],
+      ["delete_document", "documents", "document"],
+      ["can_control_document", "documents", "document"]
     ]
   }
 },
