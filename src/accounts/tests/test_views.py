@@ -25,7 +25,7 @@ class NavbarTests(TestCase):
     def test_anonymous_navbar(self):
         res = self.client.get(self.url, follow=True)
         self.assertNotContains(res, 'href="/favorites/"')
-        self.assertNotContains(res, '<a href="#" class="dropdown-toggle" data-toggle="dropdown">Documents')
+        self.assertNotContains(res, '<a href="#" id="document-link"')
         self.assertNotContains(res, 'href="%s"' % self.create_url)
         self.assertNotContains(res, 'href="/admin/"')
 
@@ -35,7 +35,7 @@ class NavbarTests(TestCase):
 
         res = self.client.get(self.url, follow=True)
         self.assertContains(res, 'href="/favorites/"')
-        self.assertContains(res, '<a href="#" class="dropdown-toggle" data-toggle="dropdown">Documents')
+        self.assertContains(res, '<a href="#" id="document-link"')
         self.assertNotContains(res, 'href="%s"' % self.create_url)
         self.assertNotContains(res, 'href="/admin/"')
 
@@ -49,7 +49,7 @@ class NavbarTests(TestCase):
 
         res = self.client.get(self.url, follow=True)
         self.assertContains(res, 'href="/favorites/"')
-        self.assertContains(res, '<a href="#" class="dropdown-toggle" data-toggle="dropdown">Documents')
+        self.assertContains(res, '<a href="#" id="document-link"')
         self.assertContains(res, 'href="%s"' % self.create_url)
         self.assertNotContains(res, 'href="/admin/"')
 
@@ -61,7 +61,7 @@ class NavbarTests(TestCase):
 
         res = self.client.get(self.url, follow=True)
         self.assertContains(res, 'href="/favorites/"')
-        self.assertContains(res, '<a href="#" class="dropdown-toggle" data-toggle="dropdown">Documents')
+        self.assertContains(res, '<a href="#" id="document-link"')
         self.assertContains(res, 'href="%s"' % self.create_url)
         self.assertContains(res, 'href="/admin/"')
 
