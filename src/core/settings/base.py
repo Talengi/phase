@@ -361,6 +361,7 @@ AUTH_USER_MODEL = 'accounts.User'
 LOGIN_URL = 'login'
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 CRISPY_FAIL_SILENTLY = False
+REVIEW_DURATION = 14
 
 # Where should revisions' files go
 REVISION_FILES_ROOT = PRIVATE_ROOT.child('documents')

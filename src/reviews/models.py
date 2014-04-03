@@ -1,5 +1,8 @@
+import datetime
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
 
 from accounts.models import User
 from documents.constants import BOOLEANS
@@ -18,6 +21,7 @@ class ReviewMixin(models.Model):
         _('Review due date'),
         null=True, blank=True
     )
+
     under_review = models.NullBooleanField(
         verbose_name=u"Under Review",
         choices=BOOLEANS,
@@ -65,3 +69,18 @@ class ReviewMixin(models.Model):
             self.reviewers.count(),
             not self.review_start_date
         ))
+
+    def start_review(self):
+        """Starts the review process.
+
+        This methods initiates the review process. We don't check whether the
+        document can be reviewed or not, or if the process was already
+        initiated. It's up to the developer to perform those checks before
+        calling this method.
+
+        """
+        today = datetime.date.today()
+        duration = settings.REVIEW_DURATION
+        self.review_start_date = today
+        self.review_due_date = today + datetime.timedelta(days=duration)
+        self.save()
