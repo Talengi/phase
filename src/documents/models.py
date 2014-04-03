@@ -94,10 +94,28 @@ class Document(models.Model):
 
     @property
     def metadata(self):
-        """Returns the metadata object."""
+        """Returns the metadata object.
+
+        XXX WARNING XXX
+
+        This method is a useful shortcut that makes tests writing easier.
+        It should not really used in the application code, because it's
+        not optimal, since it generates a new query.
+
+        """
         Model = self.category.category_template.metadata_model
         metadata = Model.get_object_for_this_type(document=self)
         return metadata
+
+    @property
+    def latest_revision(self):
+        """Returns the latest revision.
+
+        XXX WARNING XXX
+
+        See `metadata`
+        """
+        return self.metadata.latest_revision
 
 
 class MetadataBase(ModelBase):
