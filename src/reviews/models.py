@@ -95,4 +95,4 @@ class ReviewMixin(models.Model):
 
     def is_overdue(self):
         today = datetime.date.today()
-        return self.review_due_date and self.review_due_date < today
+        return bool(self.review_due_date and self.review_due_date < today)
