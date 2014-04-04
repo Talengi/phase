@@ -1,6 +1,7 @@
 import zipfile
 import tempfile
 
+from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 
 
@@ -130,3 +131,13 @@ def stringify_value(val):
         unicode_val = unicode(val)
 
     return unicode_val
+
+
+def get_all_document_classes():
+    """Returns all document classes available."""
+    qs = ContentType.objects \
+        .filter(app_label__endswith='_documents') \
+        .exclude(model__icontains='revision')
+
+    klasses = [content_type.model_class() for content_type in qs]
+    return klasses
