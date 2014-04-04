@@ -199,15 +199,13 @@ class ContractorDeliverable(Metadata):
 
     def get_all_revisions(self):
         """Return all revisions data of this document."""
-        Revision = self.get_revision_class()
-        revisions = Revision.objects \
-            .filter(document=self.document) \
+        revisions = super(ContractorDeliverable, self) \
+            .get_all_revisions() \
             .select_related(
                 'document',
                 'document__category__organisation',
                 'leader',
-                'approver',
-            )
+                'approver')
         return revisions
 
     @property

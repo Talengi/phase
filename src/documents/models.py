@@ -188,7 +188,8 @@ class Metadata(six.with_metaclass(MetadataBase), models.Model):
         Revision = self.get_revision_class()
         revisions = Revision.objects \
             .filter(document=self.document) \
-            .select_related('document')
+            .select_related('document') \
+            .order_by('-id')
         return revisions
 
     def get_revision(self, revision):
