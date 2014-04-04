@@ -92,7 +92,9 @@ class ReviewMixin(models.Model):
     def is_under_review(self):
         """It's under review only if review has started but not ended."""
         return bool(self.review_start_date) != bool(self.review_end_date)
+    is_under_review.short_description = _('Under review')
 
     def is_overdue(self):
         today = datetime.date.today()
         return bool(self.review_due_date and self.review_due_date < today)
+    is_overdue.short_description = _('Overdue')
