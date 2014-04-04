@@ -678,11 +678,6 @@ class DemoMetadata(Metadata):
         'documents.Document',
         related_name='demometadata_related_set',
         null=True, blank=True)
-    leader = models.ForeignKey(
-        User,
-        verbose_name=_('Leader'),
-        related_name='leading_demo_metadata',
-        null=True, blank=True)
 
     class Meta:
         ordering = ('title',)

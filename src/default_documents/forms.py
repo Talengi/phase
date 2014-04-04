@@ -245,7 +245,6 @@ class DemoMetadataForm(BaseDocumentForm):
                 _('General information'),
                 'document_key',
                 Field('title', rows=2),
-                'leader',
                 self.related_documents,
             )
         )
@@ -265,4 +264,16 @@ class DemoMetadataRevisionForm(BaseDocumentForm):
                 'native_file',
                 'pdf_file',
             ),
+            DocumentFieldset(
+                _('Review'),
+                UneditableField('review_start_date'),
+                UneditableField('review_due_date'),
+                PropertyLayout('is_under_review'),
+                PropertyLayout('is_overdue'),
+                'reviewers',
+                'leader',
+                'leader_comments',
+                'approver',
+                'approver_comments',
+            )
         )
