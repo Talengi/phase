@@ -30,6 +30,10 @@ body.fullwidth > .container,
 }
 body > .container > .messages {
     margin-top: 15px;
+    padding-left: 0;
+}
+body > .container > .messages li {
+    list-style-type: none;
 }
 #back-to-top {
     position: fixed;
