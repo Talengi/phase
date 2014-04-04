@@ -68,8 +68,8 @@ class ContractorDeliverableRevisionForm(BaseDocumentForm):
             ),
             DocumentFieldset(
                 _('Review'),
-                UneditableField('review_start_date', disabled=True),
-                UneditableField('review_due_date', disabled=True),
+                UneditableField('review_start_date'),
+                UneditableField('review_due_date'),
                 PropertyLayout('is_under_review'),
                 PropertyLayout('is_overdue'),
                 'reviewers',
