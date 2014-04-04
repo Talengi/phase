@@ -19,17 +19,25 @@
             </ul>
         </div>
 
-        {% url "document_revise" organisation_slug category_slug document.document_key as revise_url %}
-        <a href="{{ revise_url }}" class="btn btn-primary pull-right last-button">{{ _('Create revision') }}</a>
+        {% if not latest_revision.is_under_review %}
+            {% url "document_revise" organisation_slug category_slug document.document_key as revise_url %}
+            <a href="{{ revise_url }}" class="btn btn-primary pull-right last-button">{{ _('Create revision') }}</a>
+        {% else %}
+            <button type="button" class="btn btn-primary pull-right last-button disabled">{{ _('Create revision') }}</button>
+        {% endif %}
 
         {% if latest_revision.can_be_reviewed and perms.documents.can_control_document %}
-        {% url "document_start_review" organisation_slug category_slug document.document_key as review_url %}
-        <form class="inlineform pull-right" method="post" action="{{ review_url }}">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-warning">
+            {% url "document_start_review" organisation_slug category_slug document.document_key as review_url %}
+            <form class="inlineform pull-right" method="post" action="{{ review_url }}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-warning">
+                    {{ _('Start review') }}
+                </button>
+            </form>
+        {% else %}
+            <button type="button" class="btn btn-warning disabled pull-right">
                 {{ _('Start review') }}
             </button>
-        </form>
         {% endif %}
 
     {% endif %}

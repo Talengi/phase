@@ -8,7 +8,9 @@ except ImportError:
 from django.utils import timezone
 from django.conf import settings
 from django.core.cache import cache
-from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.http import (
+    HttpResponse, Http404, HttpResponseForbidden, HttpResponseRedirect
+)
 from django.core.servers.basehttp import FileWrapper
 from django.views.generic import (
     View, ListView, DetailView, RedirectView)
@@ -433,6 +435,14 @@ class DocumentEdit(PermissionRequiredMixin,
 
 class DocumentRevise(DocumentEdit):
     """Creates a new revision for the document."""
+
+    def get(self, *args, **kwargs):
+        doc = self.get_object()
+        revision = doc.latest_revision
+        if revision.is_under_review():
+            return HttpResponseForbidden('You cannot revise a document during review')
+
+        return super(DocumentRevise, self).get(*args, **kwargs)
 
     def get_revision(self):
         """returns an empty revision, since we are creating a new one."""

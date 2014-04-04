@@ -624,3 +624,37 @@ class DocumentDownloadTest(TestCase):
         zipfile = BytesIO(r.content)
         filelist = ZipFile(zipfile).namelist()
         self.assertEqual(len(filelist), 4)
+
+
+class DocumentReviseTests(TestCase):
+
+    def setUp(self):
+        self.category = CategoryFactory()
+        user = UserFactory(
+            email='testadmin@phase.fr',
+            password='pass',
+            is_superuser=True,
+            category=self.category,
+        )
+        self.client.login(email=user.email, password='pass')
+
+    def test_cannot_revise_document_in_review(self):
+        document = DocumentFactory(
+            category=self.category,
+            document_key='FAC09001-FWF-000-HSE-REP-0004',
+            revision={
+                'status': 'STD',
+                'review_start_date': '2014-04-04'
+            }
+        )
+        revision = document.latest_revision
+        self.assertTrue(revision.is_under_review)
+
+        url = reverse('document_revise', args=[
+            self.category.organisation.slug,
+            self.category.slug,
+            document.document_key
+        ])
+
+        res = self.client.get(url)
+        self.assertEqual(res.status_code, 403)
