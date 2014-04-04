@@ -22,6 +22,11 @@
         {% if user.is_authenticated %}
             <ul class="nav navbar-nav">
                 {% include 'documents/categories_menu.html' %}
+                <li{% if reviews_active %} class="active"{% endif %}>
+                    <a href="{% url "review_document_list" %}">
+                        <span class="glyphicon glyphicon-comment"></span> Reviews
+                    </a>
+                </li>
                 <li{% if favorites_active %} class="active"{% endif %}>
                     <a href="{% url "favorite_list" %}">
                         <span class="glyphicon glyphicon-star"></span> Favorites
