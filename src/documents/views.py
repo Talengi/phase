@@ -14,6 +14,9 @@ from django.views.generic import (
     View, ListView, DetailView, RedirectView)
 from django.views.generic.edit import (
     ModelFormMixin, ProcessFormView, SingleObjectTemplateResponseMixin)
+from django.views.generic.detail import (
+    SingleObjectMixin
+)
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.static import serve
@@ -314,10 +317,12 @@ class DocumentDetail(LoginRequiredMixin, DocumentFormMixin, DetailView):
         RevisionForm = self.get_revisionform_class()
         for revision in revisions:
             revision.form = RevisionForm(instance=revision)
+
         context.update({
             'is_detail': True,
             'form': form,
             'revisions': revisions,
+            'latest_revision': document.latest_revision,
         })
         return context
 
@@ -474,6 +479,34 @@ class DocumentRevise(DocumentEdit):
         messages.success(self.request, message)
 
         return HttpResponseRedirect(self.get_success_url())
+
+
+class DocumentStartReview(PermissionRequiredMixin,
+                          DocumentListMixin,
+                          SingleObjectMixin,
+                          View):
+    """Start the review process."""
+    permission_required = 'documents.can_control_document'
+    context_object_name = 'metadata'
+
+    def get_redirect_url(self, *args, **kwargs):
+        document = self.metadata.document
+        return reverse('document_detail', args=[
+            document.category.organisation.slug,
+            document.category.slug,
+            document.document_key])
+
+    def post(self, request, *args, **kwargs):
+        self.metadata = self.get_object()
+        revision = self.metadata.latest_revision
+
+        if revision.can_be_reviewed():
+            revision.start_review()
+            messages.success(request, _('The review has started'))
+        else:
+            messages.error(request, _('The review process cannot start'))
+
+        return HttpResponseRedirect(self.get_redirect_url())
 
 
 class DocumentDownload(BaseDocumentList):
