@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load compressed %}
+
+{% block custombodyclass %}documentlist fullwidth{% endblock %}
+
+{% block content %}
+<div id="review-list-row" class="row">
+    <div id="main-table" class="col-xs-12">
+        <table id="documents" class="table table-bordered table-condensed table-hover">
+            <thead>
+                <tr>
+                    <th>{{ _('Doc. number') }}</th>
+                    <th>{{ _('Title') }}</th>
+                    <th>{{ _('Revision') }}</th>
+                    <th>{{ _('Status') }}</th>
+                    <th>{{ _('Start date') }}</th>
+                    <th>{{ _('Due date') }}</th>
+                    <th>{{ _('Step') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for doc in documents %}
+            <tr>
+                <td>{{ doc.document_key }}
+                <td>{{ doc.title }}
+                <td>{{ doc.latest_revision.revision }}
+                <td>{{ doc.latest_revision.status }}
+                <td>{{ doc.review_start_date }}
+                <td>{{ doc.review_due_date }}
+                <td></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

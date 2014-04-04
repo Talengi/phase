@@ -74,7 +74,8 @@ form div.alert-danger ul li {
 body > .container > h2 {
     margin-top: 0;
 }
-#document-list-row {
+#document-list-row,
+#review-list-row {
     /* Watch out, the following lines are PURE MAGIC!!! */
     position: fixed;
     top: 120px; /* Because of the two navbars */
@@ -83,6 +84,9 @@ body > .container > h2 {
     right: 20px;
     max-height: 100%;
     overflow: auto;
+}
+#review-list-row {
+    top: 60px;
 }
 #main-table {
 }
