@@ -1,6 +1,7 @@
 from django.utils.translation import ugettext_lazy as _
 
 from crispy_forms.layout import Layout, Field
+from crispy_forms.bootstrap import UneditableField
 
 from documents.forms.models import BaseDocumentForm
 from .models import (
@@ -11,7 +12,8 @@ from .models import (
     DemoMetadata, DemoMetadataRevision
 )
 from .layout import (
-    DocumentFieldset, ScheduleLayout, ScheduleStatusLayout
+    DocumentFieldset, ScheduleLayout, ScheduleStatusLayout,
+    PropertyLayout
 )
 
 
@@ -66,10 +68,10 @@ class ContractorDeliverableRevisionForm(BaseDocumentForm):
             ),
             DocumentFieldset(
                 _('Review'),
-                'review_start_date',
-                'review_due_date',
-                'under_review',
-                'overdue',
+                UneditableField('review_start_date', disabled=True),
+                UneditableField('review_due_date', disabled=True),
+                PropertyLayout('is_under_review'),
+                PropertyLayout('is_overdue'),
                 'reviewers',
                 'leader',
                 'leader_comments',

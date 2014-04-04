@@ -279,6 +279,7 @@ button.ui-multiselect {
 }
 form.disabled input[type="text"],
 form.disabled input[type="number"],
+form.disabled .uneditable-input,
 form.disabled textarea,
 form.disabled select {
     color: black;
@@ -311,6 +312,9 @@ form.disabled .fileinput .change,
 form.disabled input[type="file"],
 form.disabled .help-block {
     display: none;
+}
+div.control-label {
+    font-weight: bold;
 }
 .asteriskField {
     color: #ff1133;

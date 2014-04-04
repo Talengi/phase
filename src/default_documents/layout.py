@@ -5,8 +5,9 @@ See https://django-crispy-forms.readthedocs.org/en/d-0/layouts.html
 """
 
 from django.template.loader import render_to_string
-from django.template import Context
+from django.template import Context, Template
 from django.utils.text import slugify
+from crispy_forms.compatibility import text_type
 from crispy_forms.layout import LayoutObject, Fieldset
 from crispy_forms.utils import render_field
 
@@ -89,6 +90,35 @@ class FlatRelatedDocumentsLayout(LayoutObject):
                 'documents': documents,
                 'form_style': form_style,
             }))
+
+
+class PropertyLayout(LayoutObject):
+
+    html = '''
+    <div id="" class="form-group{% if field.css_classes %} {{ field.css_classes }}{% endif %}">
+        <div class="control-label">{{ name|safe }}</div>
+        <div class="controls">
+            <span {{ flat_attrs|safe }}>{{ value }}</span>
+        </div>
+    </div>
+    '''
+
+    def __init__(self, name):
+        self.property_name = name
+
+    def render(self, form, form_style, context, template_pack=None):
+        prop = getattr(form.instance, self.property_name)
+
+        if hasattr(prop, 'short_description'):
+            name = prop.short_description
+        else:
+            name = self.property_name
+
+        context.update({
+            'name': name,
+            'value': prop,
+        })
+        return Template(text_type(self.html)).render(context)
 
 
 class DocumentFieldset(Fieldset):
