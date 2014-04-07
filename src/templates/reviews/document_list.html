@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load compressed %}
+{% load compressed documents %}
 
 {% block custombodyclass %}documentlist fullwidth{% endblock %}
 
@@ -19,14 +19,14 @@
                 </tr>
             </thead>
             <tbody>
-            {% for doc in documents %}
+            {% for rev in revisions %}
             <tr>
-                <td>{{ doc.document_key }}
-                <td>{{ doc.title }}
-                <td>{{ doc.latest_revision.revision }}
-                <td>{{ doc.latest_revision.status }}
-                <td>{{ doc.review_start_date }}
-                <td>{{ doc.review_due_date }}
+                <td class="columndocument-key">{{ rev.document.document_key }}
+                <td class="columntitle">{{ rev.document.title }}
+                <td class="columncurrent_revision">{{ rev.revision|stringformat:"02d" }}
+                <td class="columnstatus">{{ rev.status }}
+                <td class="columnreview_start_date">{{ rev.review_start_date|stringify }}
+                <td class="columnreview_due_date">{{ rev.review_due_date|stringify }}
                 <td></td>
             </tr>
             {% endfor %}
