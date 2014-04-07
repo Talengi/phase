@@ -1,14 +1,25 @@
 from django.conf.urls import patterns, url
+from django.views.generic.base import RedirectView
 
 from reviews.views import (
-    DocumentList
+    ReviewersDocumentList, LeaderDocumentList, ApproverDocumentList
 )
 
 urlpatterns = patterns(
     '',
 
-    # Documents
+    # Unexisting url, redirect to home
     url(r'^$',
-        DocumentList.as_view(),
-        name="review_document_list"),
+        RedirectView.as_view(url='/')),
+
+    # Review steps
+    url(r'^reviewers/$',
+        ReviewersDocumentList.as_view(),
+        name="reviewers_review_document_list"),
+    url(r'^leader/$',
+        LeaderDocumentList.as_view(),
+        name="leader_review_document_list"),
+    url(r'^approver/$',
+        ApproverDocumentList.as_view(),
+        name="approver_review_document_list"),
 )

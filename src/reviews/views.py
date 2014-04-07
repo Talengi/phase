@@ -6,12 +6,12 @@ from documents.utils import get_all_revision_classes
 from reviews.models import ReviewMixin
 
 
-class DocumentList(LoginRequiredMixin, ListView):
+class ReviewersDocumentList(LoginRequiredMixin, ListView):
     template_name = 'reviews/document_list.html'
     context_object_name = 'revisions'
 
     def get_context_data(self, **kwargs):
-        context = super(DocumentList, self).get_context_data(**kwargs)
+        context = super(ReviewersDocumentList, self).get_context_data(**kwargs)
         context.update({
             'reviews_active': True,
         })
@@ -43,3 +43,11 @@ class DocumentList(LoginRequiredMixin, ListView):
             revisions += list(qs)
 
         return revisions
+
+
+class LeaderDocumentList(LoginRequiredMixin, ListView):
+    pass
+
+
+class ApproverDocumentList(LoginRequiredMixin, ListView):
+    pass
