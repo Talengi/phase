@@ -21,7 +21,7 @@
             <tbody>
             {% for rev in revisions %}
             <tr>
-                <td class="columndocument-key">{{ rev.document.document_key }}
+                <td class="columndocument_key">{{ rev.document.document_key }}
                 <td class="columntitle">{{ rev.document.title }}
                 <td class="columncurrent_revision">{{ rev.revision|stringformat:"02d" }}
                 <td class="columnstatus">{{ rev.status }}
