@@ -151,16 +151,16 @@ class ReviewMixinTests(TestCase):
     def test_current_step(self):
         revision = self.create_reviewable_document()
 
-        self.assertEqual(revision.current_step(), 'new')
+        self.assertEqual(revision.current_review_step(), 'new')
 
         revision.start_review()
-        self.assertEqual(revision.current_step(), 'reviewers')
+        self.assertEqual(revision.current_review_step(), 'reviewers')
 
         revision.end_reviewers_step()
-        self.assertEqual(revision.current_step(), 'leader')
+        self.assertEqual(revision.current_review_step(), 'leader')
 
         revision.end_leader_step()
-        self.assertEqual(revision.current_step(), 'approver')
+        self.assertEqual(revision.current_review_step(), 'approver')
 
         revision.end_review()
-        self.assertEqual(revision.current_step(), 'closed')
+        self.assertEqual(revision.current_review_step(), 'closed')

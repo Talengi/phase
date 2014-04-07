@@ -132,7 +132,7 @@ class ReviewMixin(models.Model):
         return bool(self.review_due_date and self.review_due_date < today)
     is_overdue.short_description = _('Overdue')
 
-    def current_step(self):
+    def current_review_step(self):
         """Return a string representing the current step.
 
             - new
@@ -154,3 +154,4 @@ class ReviewMixin(models.Model):
             return 'approver'
 
         return 'closed'
+    current_review_step.short_description = _('Current review step')
