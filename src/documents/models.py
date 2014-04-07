@@ -26,6 +26,8 @@ class Document(models.Model):
         unique=True,
         db_index=True,
         max_length=250)
+    title = models.TextField(
+        verbose_name=u"Title")
     category = models.ForeignKey(
         Category,
         verbose_name=_('Category'),
@@ -173,6 +175,7 @@ class Metadata(six.with_metaclass(MetadataBase), models.Model):
         self.document.updated_on = timezone.now()
         self.document.current_revision = self.latest_revision.revision
         self.document.current_revision_date = self.latest_revision.updated_on
+        self.document.title = self.title
         self.document.save()
 
     def generate_document_key(self):
