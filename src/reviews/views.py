@@ -37,6 +37,8 @@ class DocumentList(LoginRequiredMixin, ListView):
         for klass in klasses:
             qs = klass.objects \
                 .filter(q_reviewers | q_approver | q_leader) \
+                .exclude(review_start_date=None) \
+                .filter(review_end_date=None) \
                 .select_related('document')
             revisions += list(qs)
 
