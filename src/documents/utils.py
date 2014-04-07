@@ -141,3 +141,13 @@ def get_all_document_classes():
 
     klasses = [content_type.model_class() for content_type in qs]
     return klasses
+
+
+def get_all_revision_classes():
+    """Returns all classes inheriting MetadataRevision."""
+    qs = ContentType.objects \
+        .filter(app_label__endswith='_documents') \
+        .filter(model__icontains='revision')
+
+    klasses = [content_type.model_class() for content_type in qs]
+    return klasses

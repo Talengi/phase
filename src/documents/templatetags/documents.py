@@ -1,5 +1,7 @@
 from django import template
 
+from ..utils import stringify_value
+
 
 register = template.Library()
 
@@ -40,3 +42,8 @@ def generate_template_markup(document_class):
         ))
 
     return ' '.join(tds)
+
+
+@register.filter
+def stringify(val):
+    return stringify_value(val)
