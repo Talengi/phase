@@ -27,7 +27,7 @@
                 <td class="columnstatus">{{ rev.status }}
                 <td class="columnreview_start_date">{{ rev.review_start_date|stringify }}
                 <td class="columnreview_due_date">{{ rev.review_due_date|stringify }}
-                <td></td>
+                <td>{{ rev.current_step }}</td>
             </tr>
             {% endfor %}
             </tbody>

@@ -20,11 +20,18 @@ class ReviewMixin(models.Model):
         _('Review due date'),
         null=True, blank=True
     )
+    reviewers_step_closed = models.DateField(
+        _('Reviewers step closed'),
+        null=True, blank=True
+    )
+    leader_step_closed = models.DateField(
+        _('Leader step closed'),
+        null=True, blank=True
+    )
     review_end_date = models.DateField(
         _('Review end date'),
         null=True, blank=True
     )
-
     reviewers = models.ManyToManyField(
         User,
         verbose_name=_('Reviewers'),
@@ -80,14 +87,40 @@ class ReviewMixin(models.Model):
         self.review_due_date = today + datetime.timedelta(days=duration)
         self.save()
 
-    def end_review(self):
+    def end_reviewers_step(self, save=True):
+        """Ends the first step of the review."""
+        self.reviewers_step_closed = datetime.date.today()
+
+        if save:
+            self.save()
+
+    def end_leader_step(self, save=True):
+        """Ends the second step of the review.
+
+        Also ends the first step if it wasn't already done.
+
+        """
+        self.leader_step_closed = datetime.date.today()
+
+        if self.reviewers_step_closed is None:
+            self.end_reviewers_step(save=False)
+
+        if save:
+            self.save()
+
+    def end_review(self, save=True):
         """Ends the review.
 
-        Again, we don't validate the document state here. Be responsible.
+        Also ends the steps before.
 
         """
         self.review_end_date = datetime.date.today()
-        self.save()
+
+        if self.leader_step_closed is None:
+            self.end_leader_step(save=False)
+
+        if save:
+            self.save()
 
     def is_under_review(self):
         """It's under review only if review has started but not ended."""
@@ -98,3 +131,26 @@ class ReviewMixin(models.Model):
         today = datetime.date.today()
         return bool(self.review_due_date and self.review_due_date < today)
     is_overdue.short_description = _('Overdue')
+
+    def current_step(self):
+        """Return a string representing the current step.
+
+            - new
+            - reviewers
+            - leader
+            - approver
+            - closed
+        """
+        if self.review_start_date is None:
+            return 'new'
+
+        if self.reviewers_step_closed is None:
+            return 'reviewers'
+
+        if self.leader_step_closed is None:
+            return 'leader'
+
+        if self.review_end_date is None:
+            return 'approver'
+
+        return 'closed'
