@@ -123,10 +123,12 @@ class Document(models.Model):
         return self.metadata.latest_revision
 
 
+# TODO Add the "latest_revision" test
 class MetadataBase(ModelBase):
-    """Custom metaclass for metadata.
+    """Custom metaclass for Metadata.
 
-    Add a validation for all metadata objects.
+    Validates that all classes inheriting from Metadata
+    define all the required fields.
 
     """
     def __new__(cls, name, bases, attrs):
