@@ -121,6 +121,52 @@ class PropertyLayout(LayoutObject):
         return Template(text_type(self.html)).render(context)
 
 
+class UneditableFile(LayoutObject):
+    existing_file_html = '''
+    <div id="div_{{ field.auto_id }}" class="form-group{% if field.css_classes %} {{ field.css_classes }}{% endif %}">
+        <label for="{{ field.id_for_label }}" class="control-label">
+            {{ field.label|safe }}
+        </label>
+        <div class="controls">
+            <a href="{{ url }}">{{ name }}</a>
+        </div>
+    </div>
+    '''
+
+    no_file_html = '''
+    <div id="div_{{ field.auto_id }}" class="form-group{% if field.css_classes %} {{ field.css_classes }}{% endif %}">
+        <label for="{{ field.id_for_label }}" class="control-label">
+            {{ field.label|safe }}
+        </label>
+        <div class="controls">
+            <span>There is no associated file</span>
+        </div>
+    </div>
+    '''
+
+    def __init__(self, name):
+        self.name = name
+
+    def render(self, form, form_style, context, template_pack=None):
+        field = form[self.name]
+        value = field.value()
+        try:
+            html = self.existing_file_html
+            name = value.name
+            url = value.url
+        except ValueError:
+            html = self.no_file_html
+            name = None
+            url = None
+
+        context.update({
+            'field': field,
+            'name': name,
+            'url': url,
+        })
+        return Template(text_type(html)).render(context)
+
+
 class DocumentFieldset(Fieldset):
     """We need to overload this class to always add a default id attribute."""
 

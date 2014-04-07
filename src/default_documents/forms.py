@@ -13,7 +13,7 @@ from .models import (
 )
 from .layout import (
     DocumentFieldset, ScheduleLayout, ScheduleStatusLayout,
-    PropertyLayout
+    PropertyLayout, UneditableFile
 )
 
 
@@ -70,13 +70,14 @@ class ContractorDeliverableRevisionForm(BaseDocumentForm):
                 _('Review'),
                 UneditableField('review_start_date'),
                 UneditableField('review_due_date'),
+                PropertyLayout('current_review_step'),
                 PropertyLayout('is_under_review'),
                 PropertyLayout('is_overdue'),
                 'reviewers',
                 'leader',
-                'leader_comments',
+                UneditableFile('leader_comments'),
                 'approver',
-                'approver_comments',
+                UneditableFile('approver_comments'),
             )
         )
 
