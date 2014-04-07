@@ -116,3 +116,14 @@ class MetadataFactory(factory.DjangoModelFactory):
 
 class MetadataRevisionFactory(factory.DjangoModelFactory):
     FACTORY_FOR = DemoMetadataRevision
+
+    @factory.post_generation
+    def reviewers(self, create, extracted, **kwargs):
+        if not create:
+            # Simple build, do nothing.
+            return
+
+        if extracted:
+            # A list of groups were passed in, use them
+            for reviewer in extracted:
+                self.reviewers.add(reviewer)
