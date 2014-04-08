@@ -2,5 +2,15 @@
 {% load compressed crispy_forms_tags %}
 
 {% block content %}
-    {{ form }}
+<div class="col-sm-4">
+</div>
+<div class="col-sm-8">
+    <h1>{{ _('Review document') }}</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        {% crispy form form.helper %}
+        <hr />
+        <input type="submit" />
+    </form>
+</div>
 {% endblock %}

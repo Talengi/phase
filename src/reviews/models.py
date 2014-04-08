@@ -155,3 +155,11 @@ class ReviewMixin(models.Model):
 
         return 'closed'
     current_review_step.short_description = _('Current review step')
+
+    def document_key(self):
+        return self.document.document_key
+    document_key.short_description = _('Document number')
+
+    def title(self):
+        return self.document.title
+    title.short_description = _('Title')

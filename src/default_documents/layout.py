@@ -98,7 +98,7 @@ class PropertyLayout(LayoutObject):
     <div id="" class="form-group{% if field.css_classes %} {{ field.css_classes }}{% endif %}">
         <div class="control-label">{{ name|safe }}</div>
         <div class="controls">
-            <span {{ flat_attrs|safe }}>{{ value }}</span>
+            <span class="uneditable-input" {{ flat_attrs|safe }}>{{ value }}</span>
         </div>
     </div>
     '''
@@ -144,11 +144,11 @@ class UneditableFile(LayoutObject):
     </div>
     '''
 
-    def __init__(self, name):
-        self.name = name
+    def __init__(self, *args, **kwargs):
+        self.fields = list(args)
 
     def render(self, form, form_style, context, template_pack=None):
-        field = form[self.name]
+        field = form[self.fields[0]]
         value = field.value()
         try:
             html = self.existing_file_html
@@ -164,6 +164,11 @@ class UneditableFile(LayoutObject):
             'name': name,
             'url': url,
         })
+
+        field_name = self.fields[0]
+        if field_name not in form.rendered_fields:
+            form.rendered_fields.add(field_name)
+
         return Template(text_type(html)).render(context)
 
 

@@ -5,6 +5,7 @@ from accounts.views import LoginRequiredMixin
 from documents.utils import get_all_revision_classes
 from documents.models import Document
 from reviews.models import ReviewMixin
+from reviews.forms import reviewform_factory
 
 
 class BaseReviewDocumentList(LoginRequiredMixin, ListView):
@@ -82,3 +83,7 @@ class ReviewForm(LoginRequiredMixin, UpdateView):
 
         document = get_object_or_404(qs, document_key=document_key)
         return document.latest_revision
+
+    def get_form_class(self):
+        Form = reviewform_factory(self.object.__class__)
+        return Form
