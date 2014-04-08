@@ -21,12 +21,14 @@
             <tbody>
             {% for rev in revisions %}
             <tr>
-                <td class="columndocument_key">{{ rev.document.document_key }}
-                <td class="columntitle">{{ rev.document.title }}
-                <td class="columncurrent_revision">{{ rev.revision|stringformat:"02d" }}
-                <td class="columnstatus">{{ rev.status }}
-                <td class="columnreview_start_date">{{ rev.review_start_date|stringify }}
-                <td class="columnreview_due_date">{{ rev.review_due_date|stringify }}
+                <td class="columndocument_key">
+                    <a href="{% url 'review_document' rev.document.document_key %}">{{ rev.document.document_key }}</a>
+                </td>
+                <td class="columntitle">{{ rev.document.title }}</td>
+                <td class="columncurrent_revision">{{ rev.revision|stringformat:"02d" }}</td>
+                <td class="columnstatus">{{ rev.status }}</td>
+                <td class="columnreview_start_date">{{ rev.review_start_date|stringify }}</td>
+                <td class="columnreview_due_date">{{ rev.review_due_date|stringify }}</td>
                 <td>{{ rev.current_review_step }}</td>
             </tr>
             {% endfor %}

@@ -2,7 +2,8 @@ from django.conf.urls import patterns, url
 from django.views.generic.base import RedirectView
 
 from reviews.views import (
-    ReviewersDocumentList, LeaderDocumentList, ApproverDocumentList
+    ReviewersDocumentList, LeaderDocumentList, ApproverDocumentList,
+    ReviewForm
 )
 
 urlpatterns = patterns(
@@ -22,4 +23,9 @@ urlpatterns = patterns(
     url(r'^approver/$',
         ApproverDocumentList.as_view(),
         name="approver_review_document_list"),
+
+    # Review form
+    url(r'^(?P<document_key>[\w-]+)/$',
+        ReviewForm.as_view(),
+        name="review_document"),
 )

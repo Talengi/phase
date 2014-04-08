@@ -1,7 +1,9 @@
-from django.views.generic import ListView
+from django.views.generic import ListView, UpdateView
+from django.shortcuts import get_object_or_404
 
 from accounts.views import LoginRequiredMixin
 from documents.utils import get_all_revision_classes
+from documents.models import Document
 from reviews.models import ReviewMixin
 
 
@@ -66,3 +68,17 @@ class ApproverDocumentList(BaseReviewDocumentList):
 
     def step_filter(self, qs):
         return qs.filter(approver=self.request.user)
+
+
+class ReviewForm(LoginRequiredMixin, UpdateView):
+    context_object_name = 'revision'
+    slug_url_kwarg = 'document_key'
+    template_name = 'reviews/review_form.html'
+
+    def get_object(self, queryset=None):
+        document_key = self.kwargs.get(self.slug_url_kwarg)
+        qs = Document.objects \
+            .filter(category__users=self.request.user)
+
+        document = get_object_or_404(qs, document_key=document_key)
+        return document.latest_revision
