@@ -1,8 +1,13 @@
 {% extends "base.html" %}
-{% load compressed crispy_forms_tags %}
+{% load compressed crispy_forms_tags document_forms %}
 
 {% block content %}
-<div class="col-sm-4">
+<div id="document-sidebar" class="hidden-xs col-sm-4 col-lg-3 col-lg-offset-1">
+    <ul id="document-navigation"
+        class="nav"
+        data-spy="affix">
+        {% crispy_menu form form.helper %}
+    </ul>
 </div>
 <div class="col-sm-8">
     <h1>{{ _('Review document') }}</h1>
