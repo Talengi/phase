@@ -5,9 +5,39 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
 from accounts.models import User
+from documents.models import Document
 from documents.fields import (
-    LeaderCommentsFileField, ApproverCommentsFileField
+    LeaderCommentsFileField, ApproverCommentsFileField, PrivateFileField
 )
+from reviews.fileutils import reviewers_comments_file_path
+
+
+class Review(models.Model):
+    reviewer = models.ForeignKey(
+        User,
+        verbose_name=_('User'),
+    )
+    document = models.ForeignKey(
+        Document,
+        verbose_name=_('Document')
+    )
+    revision = models.PositiveIntegerField(
+        _('Revision')
+    )
+    reviewed_on = models.DateField(
+        _('Reviewed on'),
+        null=True, blank=True
+    )
+    comments = PrivateFileField(
+        _('Comments'),
+        null=True, blank=True,
+        upload_to=reviewers_comments_file_path
+    )
+
+    class Meta:
+        verbose_name = _('Review')
+        verbose_name_plural = _('Reviews')
+        index_together = (('reviewer', 'document', 'revision'),)
 
 
 class ReviewMixin(models.Model):
