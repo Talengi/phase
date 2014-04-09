@@ -66,36 +66,30 @@
     <fieldset>
         <legend>{{ _('Reviewers') }}</legend>
 
-        <div class="form-group">
-            <div class="control-label">{{ _('Reviewers') }}</div>
-            <div class="controls">
-                <ul>
-                {% for reviewer in revision.reviewers.all %}
-                    <li>{{ reviewer }}</li>
-                {% endfor %}
-                </ul>
-            </div>
-        </div>
+        <table class="table ">
 
-        <div class="form-group">
-            <div class="control-label">{{ _('Leader') }}</div>
-            <div class="controls">
-                <span class="uneditable-input">
-                    {{ revision.leader }}
-                    {% review_leader_icons revision %}
-                </span>
-            </div>
-        </div>
+            {% for reviewer in revision.reviewers.all %}
+            <tr>
+                <td></td>
+                <td>{{ reviewer }}</td>
+                <td></td>
+            </tr>
+            {% endfor %}
 
-        <div class="form-group">
-            <div class="control-label">{{ _('Approver') }}</div>
-            <div class="controls">
-                <span class="uneditable-input">
-                    {{ revision.approver }}
-                    {% review_approver_icons revision %}
-                </span>
-            </div>
-        </div>
+
+            <tr>
+                <td class="center">{% yesno revision.leader_step_closed %}</td>
+                <td>{{ revision.leader }}</td>
+                <td>{{ revision.leader_comments }}</td>
+            </tr>
+
+            <tr>
+                <td class="center">{% yesno revision.revision_end_date %}</td>
+                <td>{{ revision.approver }}</td>
+                <td>{{ revision.approver_comments }}</td>
+            </tr>
+
+        </table>
 
     </fieldset>
 

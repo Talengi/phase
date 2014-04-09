@@ -13,6 +13,12 @@ def icons(names):
 
 
 @register.simple_tag
+def yesno(value):
+    name = 'ok' if value else 'remove'
+    return icon(name)
+
+
+@register.simple_tag
 def review_leader_icons(revision):
     names = []
     if revision.leader_step_closed:
