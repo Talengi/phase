@@ -10,6 +10,13 @@
 {% block content %}
     {% include 'documents/document_detail_sidebar.html' with form=document_form revision_form=revision_form %}
     <div class="col-sm-8">
+
+        {% if revision.is_under_review %}
+            <p class="alert alert-warning">
+                {{ _('You are trying to update a document that is under review. Please handle with care.') }}
+            </p>
+        {% endif %}
+
         <h1>{{ is_edit|yesno:"Edit,New" }} document</h1>
         <form action="."
               method="post"

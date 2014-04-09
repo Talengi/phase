@@ -418,6 +418,7 @@ class DocumentEdit(PermissionRequiredMixin,
         # Add a context var to make the difference with creation view
         context.update({
             'is_edit': True,
+            'revision': self.revision,
         })
         return context
 
