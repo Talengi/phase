@@ -164,3 +164,20 @@ class ReviewMixinTests(TestCase):
 
         revision.end_review()
         self.assertEqual(revision.current_review_step(), 'closed')
+
+    def test_start_review_creates_review_objects(self):
+        revision = self.create_reviewable_document()
+        revision.reviewers.add(
+            UserFactory(),
+            UserFactory(),
+            UserFactory(),
+            UserFactory(),
+            UserFactory(),
+        )
+
+        reviews = revision.get_reviews()
+        self.assertEqual(len(reviews), 0)
+
+        revision.start_review()
+        reviews = revision.get_reviews()
+        self.assertEqual(len(reviews), 6)

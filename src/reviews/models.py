@@ -1,6 +1,6 @@
 import datetime
 
-from django.db import models
+from django.db import models, transaction
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
@@ -102,6 +102,7 @@ class ReviewMixin(models.Model):
             not self.review_start_date
         ))
 
+    @transaction.atomic
     def start_review(self):
         """Starts the review process.
 
@@ -116,6 +117,13 @@ class ReviewMixin(models.Model):
         self.review_start_date = today
         self.review_due_date = today + datetime.timedelta(days=duration)
         self.save()
+
+        for user in self.reviewers.all():
+            Review.objects.create(
+                reviewer=user,
+                document=self.document,
+                revision=self.revision
+            )
 
     def end_reviewers_step(self, save=True):
         """Ends the first step of the review."""
