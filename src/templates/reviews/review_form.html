@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load compressed crispy_forms_tags document_forms %}
+{% load compressed crispy_forms_tags documents document_forms review_form %}
 
 {% block content %}
 <div id="document-sidebar" class="hidden-xs col-sm-4 col-lg-3 col-lg-offset-1">
@@ -11,11 +11,95 @@
 </div>
 <div class="col-sm-8">
     <h1>{{ _('Review document') }}</h1>
-    <form action="" method="post">
-        {% csrf_token %}
-        {% crispy form form.helper %}
+
+    <fieldset>
+        <legend>{{ _('General information') }}</legend>
+
+        <div class="form-group">
+            <div class="control-label">{{ _('Document number') }}</div>
+            <div class="controls">
+                <span class="uneditable-input">{{ revision.document.document_key }}</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="control-label">{{ _('Title') }}</div>
+            <div class="controls">
+                <p class="uneditable-input">{{ revision.document.title }}</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="control-label">{{ _('Status') }}</div>
+            <div class="controls">
+                <span class="uneditable-input">{{ revision.status }}</span>
+            </div>
+        </div>
+
+    </fieldset>
+
+    <fieldset>
+        <legend>{{ _('Review data') }}</legend>
+
+        <div class="form-group">
+            <div class="control-label">{{ _('Review start date') }}</div>
+            <div class="controls">
+                <span class="uneditable-input">{{ revision.review_start_date|stringify }}</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="control-label">{{ _('Review due date') }}</div>
+            <div class="controls">
+                <span class="uneditable-input">{{ revision.review_due_date|stringify }}</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="control-label">{{ _('Review step') }}</div>
+            <div class="controls">
+                <span class="uneditable-input">{{ revision.current_review_step }}</span>
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>{{ _('Reviewers') }}</legend>
+
+        <div class="form-group">
+            <div class="control-label">{{ _('Reviewers') }}</div>
+            <div class="controls">
+                <ul>
+                {% for reviewer in revision.reviewers.all %}
+                    <li>{{ reviewer }}</li>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="control-label">{{ _('Leader') }}</div>
+            <div class="controls">
+                <span class="uneditable-input">
+                    {{ revision.leader }}
+                    {% review_leader_icons revision %}
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="control-label">{{ _('Approver') }}</div>
+            <div class="controls">
+                <span class="uneditable-input">
+                    {{ revision.approver }}
+                    {% review_approver_icons revision %}
+                </span>
+            </div>
+        </div>
+
+    </fieldset>
+
         <hr />
         <input type="submit" />
-    </form>
 </div>
 {% endblock %}
