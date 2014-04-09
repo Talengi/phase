@@ -42,6 +42,13 @@
         </div>
 
         <div class="form-group">
+            <div class="control-label">{{ _('Revision') }}</div>
+            <div class="controls">
+                <span class="uneditable-input">{{ revision.revision }}</span>
+            </div>
+        </div>
+
+        <div class="form-group">
             <div class="control-label">{{ _('Native file') }}</div>
             <div class="controls">
                 {% file_link revision.native_file %}
