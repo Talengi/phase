@@ -97,10 +97,14 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(ReviewFormView, self).get_context_data(**kwargs)
+
+        user = self.request.user
         context.update({
             'revision': self.object,
             'current_review': self.review if hasattr(self, 'review') else None,
             'reviews': self.object.get_reviews(),
+            'is_leader': user == self.object.leader,
+            'is_approver': user == self.object.approver,
         })
         return context
 
@@ -162,18 +166,28 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
 
         Multiple cases:
           - A reviewer is submitting a review, submitting a file or not
-          - The leader is closing it's step, submitting a file or not
-          - The approver is closing it's step, submitting a file or not.
+          - The leader is closing the reviewer step
+          - The leader is submitting it's review, with or without file
+          - The approver is closing the reviewer step
+          - The approver is closing the leader step
+          - The approver is submitting it's review, with or without file
 
         """
         self.object = self.get_object()
 
         step = self.object.current_review_step()
         step_method = '%s_step_post' % step
-
         url = self.get_success_url()
-        if hasattr(self, step_method):
+
+        if hasattr(self, step_method) and 'review' in request.POST:
             getattr(self, step_method)(request, *args, **kwargs)
+
+        if 'close_reviewers_step' in request.POST and request.user in (
+                self.object.leader, self.object.approver):
+            self.object.end_reviewers_step()
+
+        if 'close_leader_step' in request.POST and request.user == self.object.approver:
+            self.object.end_leader_step()
 
         return HttpResponseRedirect(url)
 
@@ -190,7 +204,7 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
 
         if self.object.leader == request.user:
             self.object.leader_comments = comments_file
-            self.object.leader_step_closed = datetime.date.today()
+            self.object.end_leader_step(save=False)
             self.object.save()
 
     def approver_step_post(self, request, *args, **kwargs):
@@ -198,5 +212,5 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
 
         if self.object.approver == request.user:
             self.object.approver_comments = comments_file
-            self.object.review_end_date = datetime.date.today()
+            self.object.end_review(save=False)
             self.object.save()

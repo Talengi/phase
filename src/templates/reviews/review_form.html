@@ -144,11 +144,27 @@
         </fieldset>
 
         <hr />
-        <input class="btn btn-primary pull-right"
+
+        <input class="btn btn-primary pull-right last-button"
                id="review_submit"
                type="submit"
                name="review"
                value="{{ _('Finish review') }}" />
+
+        {% if is_leader or is_approver %}
+            <input class="btn btn-warning{% if revision.current_review_step != 'reviewers' %} disabled{% endif %}"
+                   type="submit"
+                   name="close_reviewers_step"
+                   value="{{ _('Close reviewers step') }}" />
+        {% endif %}
+
+        {% if is_approver %}
+            <input class="btn btn-warning last-button{% if revision.current_review_step == 'approver' %} disabled{% endif %}"
+                   type="submit"
+                   name="close_leader_step"
+                   value="{{ _('Close leader step') }}" />
+        {% endif %}
+
     </form>
 </div>
 {% endblock %}
