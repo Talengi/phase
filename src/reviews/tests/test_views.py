@@ -1,9 +1,12 @@
+import datetime
+
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 
 from categories.factories import CategoryFactory
 from documents.factories import DocumentFactory
 from accounts.factories import UserFactory
+from reviews.models import Review
 
 
 class ReviewersDocumentListTests(TestCase):
@@ -78,6 +81,25 @@ class ReviewersDocumentListTests(TestCase):
         doc.latest_revision.start_review()
         doc.latest_revision.end_review()
         self.assertFalse(doc.latest_revision.is_under_review())
+        res = self.client.get(self.url)
+        self.assertNotContains(res, '<td class="columndocument_key"')
+
+    def test_review_done(self):
+        doc = DocumentFactory(
+            revision={
+                'reviewers': [self.user],
+                'leader': self.user,
+                'approver': self.user,
+            }
+        )
+        doc.latest_revision.start_review()
+        self.assertTrue(doc.latest_revision.is_under_review())
+        Review.objects \
+            .filter(document=doc) \
+            .filter(revision=doc.latest_revision.revision) \
+            .filter(reviewer=self.user) \
+            .update(reviewed_on=datetime.date.today())
+
         res = self.client.get(self.url)
         self.assertNotContains(res, '<td class="columndocument_key"')
 

@@ -52,10 +52,27 @@ class BaseReviewDocumentList(LoginRequiredMixin, ListView):
 class ReviewersDocumentList(BaseReviewDocumentList):
     """Display the list of documents at the first review step."""
 
+    def get_pending_reviews(self):
+        """Get all pending reviews for this user."""
+        if not hasattr(self, '_pending_reviews'):
+            reviews = Review.objects \
+                .filter(reviewer=self.request.user) \
+                .filter(reviewed_on=None) \
+                .filter(closed=False)
+
+            self._pending_reviews = reviews.values_list('document_id', flat=True)
+
+        return self._pending_reviews
+
     def step_filter(self, qs):
+        pending_reviews = self.get_pending_reviews()
+
+        # A reviewer can only review a revision once
+        # Once it's reviewed, the document should disappear from the list
         return qs \
             .filter(reviewers_step_closed=None) \
-            .filter(reviewers=self.request.user)
+            .filter(reviewers=self.request.user) \
+            .filter(document_id__in=pending_reviews)
 
 
 class LeaderDocumentList(BaseReviewDocumentList):

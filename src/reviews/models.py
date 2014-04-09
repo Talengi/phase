@@ -37,6 +37,10 @@ class Review(models.Model):
         _('Reviewed on'),
         null=True, blank=True
     )
+    closed = models.BooleanField(
+        _('Closed'),
+        default=False,
+    )
     comments = PrivateFileField(
         _('Comments'),
         null=True, blank=True,
@@ -134,9 +138,15 @@ class ReviewMixin(models.Model):
                 revision=self.revision
             )
 
+    @transaction.atomic
     def end_reviewers_step(self, save=True):
         """Ends the first step of the review."""
         self.reviewers_step_closed = datetime.date.today()
+
+        Review.objects \
+            .filter(document=self.document) \
+            .filter(revision=self.revision) \
+            .update(closed=True)
 
         if save:
             self.save()
