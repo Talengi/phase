@@ -65,7 +65,7 @@ class LeaderDocumentList(BaseReviewDocumentList):
 
 
 class ApproverDocumentList(BaseReviewDocumentList):
-    """Display the list of documents at the three review steps."""
+    """Display the list of documents at the third review steps."""
 
     def step_filter(self, qs):
         return qs.filter(approver=self.request.user)
