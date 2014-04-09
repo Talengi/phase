@@ -193,3 +193,12 @@ class ReviewMixin(models.Model):
     def title(self):
         return self.document.title
     title.short_description = _('Title')
+
+    def get_reviews(self):
+        """Get all reviews associated with this revision."""
+        qs = Review.objects \
+            .filter(document=self.document) \
+            .filter(revision=self.revision) \
+            .select_related('reviewer')
+
+        return qs
