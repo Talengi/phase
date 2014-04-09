@@ -149,8 +149,7 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
             qs = Review.objects \
                 .filter(document=document) \
                 .filter(reviewer=self.request.user) \
-                .filter(revision=revision.revision) \
-                .filter(reviewed_on=None)
+                .filter(revision=revision.revision)
             self.review = get_object_or_404(qs)
 
         return revision
