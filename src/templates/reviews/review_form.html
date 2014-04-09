@@ -44,14 +44,14 @@
         <div class="form-group">
             <div class="control-label">{{ _('Native file') }}</div>
             <div class="controls">
-                <a href="{{ revision.native_file.url }}">{{ revision.native_file }}</a>
+                {% file_link revision.native_file %}
             </div>
         </div>
 
         <div class="form-group">
             <div class="control-label">{{ _('Pdf file') }}</div>
             <div class="controls">
-                <a href="{{ revision.pdf_file.url }}">{{ revision.pdf_file }}</a>
+                {% file_link revision.pdf_file %}
             </div>
         </div>
 
@@ -93,7 +93,7 @@
                     <span title="Reviewer" class="glyphicon glyphicon-user"></span>
                     {{ review.reviewer }}
                 </td>
-                <td class="alignright">{{ review.reviewed_on|yesno:_('Completed,Pending') }}</td>
+                <td>{{ review.reviewed_on|yesno:_('Completed,Pending') }}</td>
                 <td class="alignright">{% file_link review.comments %}</td>
             </tr>
             {% endfor %}
@@ -104,7 +104,7 @@
                     <span title="Leader" class="glyphicon glyphicon-eye-open"></span>
                     {{ revision.leader }}
                 </td>
-                <td class="alignright">{{ revision.leader_step_closed|yesno:_('Completed,Pending') }}</td>
+                <td>{{ revision.leader_step_closed|yesno:_('Completed,Pending') }}</td>
                 <td class="alignright">{% file_link revision.leader_comments %}</td>
             </tr>
 
@@ -113,7 +113,7 @@
                     <span title="Approver" class="glyphicon glyphicon-thumbs-up"></span>
                     {{ revision.approver }}
                 </td>
-                <td class="alignright">{{ revision.revision_end_date|yesno:_('Completed,Pending') }}</td>
+                <td>{{ revision.revision_end_date|yesno:_('Completed,Pending') }}</td>
                 <td class="alignright">{% file_link revision.approver_comments %}</td>
             </tr>
 
@@ -130,7 +130,7 @@
             <div class="form-group">
                 <label class="control-label">{{ _('Upload your comments') }}</label>
                 <div class="controls">
-                    {{ form.comments }}
+                    <input type="file" name="comments" />
                 </div>
             </div>
 

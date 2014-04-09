@@ -3,6 +3,7 @@ import datetime
 from django.db import models, transaction
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+from model_utils import Choices
 
 from accounts.models import User
 from documents.models import Document
@@ -13,6 +14,14 @@ from reviews.fileutils import reviewers_comments_file_path
 
 
 class Review(models.Model):
+    STEPS = Choices(
+        ('pending', _('Pending')),
+        ('reviewers', _('New')),
+        ('leader', _('New')),
+        ('approver', _('New')),
+        ('closed', _('New')),
+    )
+
     reviewer = models.ForeignKey(
         User,
         verbose_name=_('User'),
@@ -171,28 +180,24 @@ class ReviewMixin(models.Model):
     is_overdue.short_description = _('Overdue')
 
     def current_review_step(self):
-        """Return a string representing the current step.
-
-            - new
-            - reviewers
-            - leader
-            - approver
-            - closed
-        """
+        """Return a string representing the current step."""
         if self.review_start_date is None:
-            return 'new'
+            return Review.STEPS.pending
 
         if self.reviewers_step_closed is None:
-            return 'reviewers'
+            return Review.STEPS.reviewers
 
         if self.leader_step_closed is None:
-            return 'leader'
+            return Review.STEPS.leader
 
         if self.review_end_date is None:
-            return 'approver'
+            return Review.STEPS.approver
 
-        return 'closed'
+        return Review.STEPS.closed
     current_review_step.short_description = _('Current review step')
+
+    def is_at_review_step(self, step):
+        return step == self.current_review_step()
 
     def document_key(self):
         return self.document.document_key
@@ -210,3 +215,15 @@ class ReviewMixin(models.Model):
             .select_related('reviewer')
 
         return qs
+
+    def get_review(self, user):
+        """Get the review from this specific user."""
+        review = Review.objects \
+            .filter(document=self.document) \
+            .filter(revision=self.revision) \
+            .select_related('reviewer') \
+            .get(reviewer=user)
+        return review
+
+    def is_reviewer(self, user):
+        return user in self.reviewers.all()

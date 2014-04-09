@@ -1,11 +1,14 @@
-from django.views.generic import ListView, UpdateView
+import datetime
+
+from django.views.generic import ListView, DetailView
 from django.shortcuts import get_object_or_404
+from django.http import HttpResponseRedirect, Http404
+from django.core.urlresolvers import reverse
 
 from accounts.views import LoginRequiredMixin
 from documents.utils import get_all_revision_classes
 from documents.models import Document
 from reviews.models import ReviewMixin, Review
-from reviews.forms import ReviewForm
 
 
 class BaseReviewDocumentList(LoginRequiredMixin, ListView):
@@ -71,33 +74,112 @@ class ApproverDocumentList(BaseReviewDocumentList):
         return qs.filter(approver=self.request.user)
 
 
-class ReviewForm(LoginRequiredMixin, UpdateView):
-    context_object_name = 'review'
+class ReviewFormView(LoginRequiredMixin, DetailView):
+    context_object_name = 'revision'
     template_name = 'reviews/review_form.html'
-    form_class = ReviewForm
 
     def get_context_data(self, **kwargs):
-        context = super(ReviewForm, self).get_context_data(**kwargs)
+        context = super(ReviewFormView, self).get_context_data(**kwargs)
         context.update({
-            'revision': self.revision,
-            'reviews': self.revision.get_reviews(),
+            'revision': self.object,
+            'current_review': self.review if hasattr(self, 'review') else None,
+            'reviews': self.object.get_reviews(),
         })
         return context
+
+    def check_permission(self, revision, user):
+        """Test the user permission to access the current step.
+
+          - A reviewer can only access the review at the fisrt step
+          - The leader can access the review at the two first steps
+          - The approver can access the review at any step
+        """
+        if not revision.is_under_review():
+            raise Http404()
+
+        # Approver can acces all steps
+        elif user == revision.approver:
+            pass
+
+        # Leader can only access steps <= approver step
+        elif user == revision.leader:
+            if revision.leader_step_closed:
+                raise Http404()
+
+        # Reviewers can only access the first step
+        elif revision.is_reviewer(user):
+            if revision.reviewers_step_closed:
+                raise Http404()
+
+        # User is not even part of the review
+        else:
+            raise Http404()
 
     def get_object(self, queryset=None):
         document_key = self.kwargs.get('document_key')
         qs = Document.objects \
             .filter(category__users=self.request.user)
         document = get_object_or_404(qs, document_key=document_key)
-        self.revision = document.latest_revision
+        revision = document.latest_revision
 
-        qs = Review.objects \
-            .filter(document=document) \
-            .filter(reviewer=self.request.user) \
-            .filter(revision=self.revision.revision)
-        review = get_object_or_404(qs)
-        return review
+        self.check_permission(revision, self.request.user)
+
+        if revision.is_reviewer(self.request.user) and revision.is_at_review_step('reviewers'):
+            qs = Review.objects \
+                .filter(document=document) \
+                .filter(reviewer=self.request.user) \
+                .filter(revision=revision.revision) \
+                .filter(reviewed_on=None)
+            self.review = get_object_or_404(qs)
+
+        return revision
 
     def get_success_url(self):
-        # TODO
-        return ''
+        step = self.object.current_review_step()
+        url = '%s_review_document_list' % step
+
+        return reverse(url)
+
+    def post(self, request, *args, **kwargs):
+        """Process the submitted file and form.
+
+        Multiple cases:
+          - A reviewer is submitting a review, submitting a file or not
+          - The leader is closing it's step, submitting a file or not
+          - The approver is closing it's step, submitting a file or not.
+
+        """
+        self.object = self.get_object()
+
+        step = self.object.current_review_step()
+        step_method = '%s_step_post' % step
+
+        url = self.get_success_url()
+        if hasattr(self, step_method):
+            getattr(self, step_method)(request, *args, **kwargs)
+
+        return HttpResponseRedirect(url)
+
+    def reviewers_step_post(self, request, *args, **kwargs):
+        comments_file = request.FILES.get('comments', None)
+
+        if hasattr(self, 'review'):
+            self.review.reviewed_on = datetime.date.today()
+            self.review.comments = comments_file
+            self.review.save()
+
+    def leader_step_post(self, request, *args, **kwargs):
+        comments_file = request.FILES.get('comments', None)
+
+        if self.object.leader == request.user:
+            self.object.leader_comments = comments_file
+            self.object.leader_step_closed = datetime.date.today()
+            self.object.save()
+
+    def approver_step_post(self, request, *args, **kwargs):
+        comments_file = request.FILES.get('comments', None)
+
+        if self.object.approver == request.user:
+            self.object.approver_comments = comments_file
+            self.object.review_end_date = datetime.date.today()
+            self.object.save()

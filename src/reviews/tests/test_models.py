@@ -151,7 +151,7 @@ class ReviewMixinTests(TestCase):
     def test_current_step(self):
         revision = self.create_reviewable_document()
 
-        self.assertEqual(revision.current_review_step(), 'new')
+        self.assertEqual(revision.current_review_step(), 'pending')
 
         revision.start_review()
         self.assertEqual(revision.current_review_step(), 'reviewers')

@@ -3,7 +3,7 @@ from django.views.generic.base import RedirectView
 
 from reviews.views import (
     ReviewersDocumentList, LeaderDocumentList, ApproverDocumentList,
-    ReviewForm
+    ReviewFormView
 )
 
 urlpatterns = patterns(
@@ -26,6 +26,6 @@ urlpatterns = patterns(
 
     # Review form
     url(r'^(?P<document_key>[\w-]+)/$',
-        ReviewForm.as_view(),
+        ReviewFormView.as_view(),
         name="review_document"),
 )
