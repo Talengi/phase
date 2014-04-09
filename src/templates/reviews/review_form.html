@@ -68,24 +68,33 @@
 
         <table class="table ">
 
-            {% for reviewer in revision.reviewers.all %}
+            {% for review in reviews %}
             <tr>
-                <td></td>
-                <td>{{ reviewer }}</td>
-                <td></td>
+                <td>
+                    <span title="Reviewer" class="glyphicon glyphicon-user"></span>
+                    {{ review.reviewer }}
+                </td>
+                <td>{{ review.reviewed_on|yesno:_('Completed,Pending') }}</td>
+                <td>{{ review.comments }}</td>
             </tr>
             {% endfor %}
 
 
             <tr>
-                <td class="center">{% yesno revision.leader_step_closed %}</td>
-                <td>{{ revision.leader }}</td>
+                <td>
+                    <span title="Leader" class="glyphicon glyphicon-eye-open"></span>
+                    {{ revision.leader }}
+                </td>
+                <td>{{ revision.leader_step_closed|yesno:_('Completed,Pending') }}</td>
                 <td>{{ revision.leader_comments }}</td>
             </tr>
 
             <tr>
-                <td class="center">{% yesno revision.revision_end_date %}</td>
-                <td>{{ revision.approver }}</td>
+                <td>
+                    <span title="Approver" class="glyphicon glyphicon-thumbs-up"></span>
+                    {{ revision.approver }}
+                </td>
+                <td>{{ revision.revision_end_date|yesno:_('Completed,Pending') }}</td>
                 <td>{{ revision.approver_comments }}</td>
             </tr>
 
