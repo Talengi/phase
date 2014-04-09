@@ -331,6 +331,9 @@ div.control-label {
 td.center {
     text-align: center;
 }
+td.alignright {
+    text-align: right;
+}
 /* Off canvas sidebar */
 .sidebar-offcanvas {
     position: fixed;

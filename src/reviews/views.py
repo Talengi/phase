@@ -4,8 +4,8 @@ from django.shortcuts import get_object_or_404
 from accounts.views import LoginRequiredMixin
 from documents.utils import get_all_revision_classes
 from documents.models import Document
-from reviews.models import ReviewMixin
-from reviews.forms import reviewform_factory
+from reviews.models import ReviewMixin, Review
+from reviews.forms import ReviewForm
 
 
 class BaseReviewDocumentList(LoginRequiredMixin, ListView):
@@ -72,25 +72,32 @@ class ApproverDocumentList(BaseReviewDocumentList):
 
 
 class ReviewForm(LoginRequiredMixin, UpdateView):
-    context_object_name = 'revision'
-    slug_url_kwarg = 'document_key'
+    context_object_name = 'review'
     template_name = 'reviews/review_form.html'
+    form_class = ReviewForm
 
     def get_context_data(self, **kwargs):
         context = super(ReviewForm, self).get_context_data(**kwargs)
         context.update({
-            'reviews': self.object.get_reviews(),
+            'revision': self.revision,
+            'reviews': self.revision.get_reviews(),
         })
         return context
 
     def get_object(self, queryset=None):
-        document_key = self.kwargs.get(self.slug_url_kwarg)
+        document_key = self.kwargs.get('document_key')
         qs = Document.objects \
             .filter(category__users=self.request.user)
-
         document = get_object_or_404(qs, document_key=document_key)
-        return document.latest_revision
+        self.revision = document.latest_revision
 
-    def get_form_class(self):
-        Form = reviewform_factory(self.object.__class__)
-        return Form
+        qs = Review.objects \
+            .filter(document=document) \
+            .filter(reviewer=self.request.user) \
+            .filter(revision=self.revision.revision)
+        review = get_object_or_404(qs)
+        return review
+
+    def get_success_url(self):
+        # TODO
+        return ''

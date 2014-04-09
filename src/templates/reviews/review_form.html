@@ -6,13 +6,18 @@
     <ul id="document-navigation"
         class="nav"
         data-spy="affix">
-        {% crispy_menu form form.helper %}
+        <li><a href="#fieldset-general-information">General information</a></li>
+        <li><a href="#fieldset-review-data">Review data</a></li>
+        <li><a href="#fieldset-reviewers">Reviewers</a></li>
+        <li><a href="#fieldset-your-comments">Your comments</a></li>
+    </ul>
     </ul>
 </div>
 <div class="col-sm-8">
     <h1>{{ _('Review document') }}</h1>
+    {{ form.errors }}
 
-    <fieldset>
+    <fieldset id="fieldset-general-information">
         <legend>{{ _('General information') }}</legend>
 
         <div class="form-group">
@@ -52,7 +57,7 @@
 
     </fieldset>
 
-    <fieldset>
+    <fieldset id="fieldset-review-data">
         <legend>{{ _('Review data') }}</legend>
 
         <div class="form-group">
@@ -77,7 +82,7 @@
         </div>
     </fieldset>
 
-    <fieldset>
+    <fieldset id="fieldset-reviewers">
         <legend>{{ _('Reviewers') }}</legend>
 
         <table class="table ">
@@ -88,8 +93,8 @@
                     <span title="Reviewer" class="glyphicon glyphicon-user"></span>
                     {{ review.reviewer }}
                 </td>
-                <td>{{ review.reviewed_on|yesno:_('Completed,Pending') }}</td>
-                <td>{{ review.comments }}</td>
+                <td class="alignright">{{ review.reviewed_on|yesno:_('Completed,Pending') }}</td>
+                <td class="alignright">{% file_link review.comments %}</td>
             </tr>
             {% endfor %}
 
@@ -99,8 +104,8 @@
                     <span title="Leader" class="glyphicon glyphicon-eye-open"></span>
                     {{ revision.leader }}
                 </td>
-                <td>{{ revision.leader_step_closed|yesno:_('Completed,Pending') }}</td>
-                <td>{{ revision.leader_comments }}</td>
+                <td class="alignright">{{ revision.leader_step_closed|yesno:_('Completed,Pending') }}</td>
+                <td class="alignright">{% file_link revision.leader_comments %}</td>
             </tr>
 
             <tr>
@@ -108,15 +113,34 @@
                     <span title="Approver" class="glyphicon glyphicon-thumbs-up"></span>
                     {{ revision.approver }}
                 </td>
-                <td>{{ revision.revision_end_date|yesno:_('Completed,Pending') }}</td>
-                <td>{{ revision.approver_comments }}</td>
+                <td class="alignright">{{ revision.revision_end_date|yesno:_('Completed,Pending') }}</td>
+                <td class="alignright">{% file_link revision.approver_comments %}</td>
             </tr>
 
         </table>
 
     </fieldset>
 
+    <form method="post" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <fieldset id="fieldset-your-comments">
+            <legend>{{ _('Your comments') }}</legend>
+
+            <div class="form-group">
+                <label class="control-label">{{ _('Upload your comments') }}</label>
+                <div class="controls">
+                    {{ form.comments }}
+                </div>
+            </div>
+
+        </fieldset>
+
         <hr />
-        <input type="submit" />
+        <input class="btn btn-primary pull-right"
+               type="submit"
+               name="review"
+               value="{{ _('Finish review — without comments') }}" />
+    </form>
 </div>
 {% endblock %}
