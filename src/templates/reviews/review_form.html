@@ -36,6 +36,20 @@
             </div>
         </div>
 
+        <div class="form-group">
+            <div class="control-label">{{ _('Native file') }}</div>
+            <div class="controls">
+                <a href="{{ revision.native_file.url }}">{{ revision.native_file }}</a>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="control-label">{{ _('Pdf file') }}</div>
+            <div class="controls">
+                <a href="{{ revision.pdf_file.url }}">{{ revision.pdf_file }}</a>
+            </div>
+        </div>
+
     </fieldset>
 
     <fieldset>
