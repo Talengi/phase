@@ -98,7 +98,7 @@
             <tr>
                 <td>{{ review.reviewer }}</td>
                 <td>{{ _('Reviewer') }}</td>
-                <td>{{ review.reviewed_on|yesno:_('Completed,Pending') }}</td>
+                <td>{{ review.closed|yesno:_('Completed,Pending') }}</td>
                 <td class="alignright">{% file_link review.comments %}</td>
             </tr>
             {% endfor %}

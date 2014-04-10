@@ -215,6 +215,7 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
         if hasattr(self, 'review'):
             self.review.reviewed_on = datetime.date.today()
             self.review.comments = comments_file
+            self.review.closed = True
             self.review.save()
 
             # If every reviewer has posted comments, close the reviewers step
