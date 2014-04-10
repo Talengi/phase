@@ -199,6 +199,10 @@ button.ui-multiselect {
 #documents th, #documents td {
     vertical-align: middle;
 }
+#documents td a {
+    text-decoration: inherit;
+    color: inherit;
+}
 
 /* Table filters */
 #table-filters legend {

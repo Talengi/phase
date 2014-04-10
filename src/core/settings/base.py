@@ -347,6 +347,12 @@ PIPELINE_JS = {
         ),
         'output_filename': 'js/datatable.js',
     },
+    'review_list': {
+        'source_filenames': (
+            'js/review-list.js',
+        ),
+        'output_filename': 'js/review-list.js',
+    },
     'review': {
         'source_filenames': (
             'js/review.js',

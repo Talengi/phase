@@ -20,11 +20,13 @@
             </thead>
             <tbody>
             {% for rev in revisions %}
-            <tr>
+            <tr data-document-key="{{ rev.document.document_key }}">
                 <td class="columndocument_key">
                     <a href="{% url 'review_document' rev.document.document_key %}">{{ rev.document.document_key }}</a>
                 </td>
-                <td class="columntitle">{{ rev.document.title }}</td>
+                <td class="columntitle">
+                    <a href="{% url 'review_document' rev.document.document_key %}">{{ rev.document.title }}</a>
+                </td>
                 <td class="columncurrent_revision">{{ rev.revision|stringformat:"02d" }}</td>
                 <td class="columnstatus">{{ rev.status }}</td>
                 <td class="columnreview_start_date">{{ rev.review_start_date|stringify }}</td>
@@ -36,4 +38,13 @@
         </table>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+    {% compressed_js "review_list" %}
+    <script>
+    var config = {
+        detailUrl: "{% url "review_document" "documentNumber" %}",
+    };
+    </script>
 {% endblock %}
