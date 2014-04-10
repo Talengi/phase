@@ -145,7 +145,7 @@
 
         <hr />
 
-        <input class="btn btn-primary pull-right last-button"
+        <input class="btn btn-primary pull-right last-button{% if not can_comment %} disabled{% endif %}"
                id="review_submit"
                type="submit"
                name="review"

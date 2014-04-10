@@ -100,12 +100,18 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
         context = super(ReviewFormView, self).get_context_data(**kwargs)
 
         user = self.request.user
+
+        can_comment = any((
+            (self.object.is_at_review_step('approver') and user == self.object.approver),
+            (self.object.is_at_review_step('leader') and user == self.object.leader),
+            (self.object.is_at_review_step('reviewers') and self.object.is_approver(user))
+        ))
         context.update({
             'revision': self.object,
-            'current_review': self.review if hasattr(self, 'review') else None,
             'reviews': self.object.get_reviews(),
             'is_leader': user == self.object.leader,
             'is_approver': user == self.object.approver,
+            'can_comment': can_comment,
         })
         return context
 
