@@ -187,7 +187,11 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
 
         step = self.object.current_review_step()
         step_method = '%s_step_post' % step
-        url = self.get_success_url()
+
+        if 'review' in request.POST:
+            url = self.get_success_url()
+        else:
+            url = ''
 
         # A comment file was submitted
         if hasattr(self, step_method) and 'review' in request.POST:
