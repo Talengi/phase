@@ -156,8 +156,12 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
         return revision
 
     def get_success_url(self):
-        step = self.object.current_review_step()
-        url = '%s_review_document_list' % step
+        if self.request.user == self.object.approver:
+            url = 'approver_review_document_list'
+        elif self.request.user == self.object.leader:
+            url = 'leader_review_document_list'
+        else:
+            url = 'reviewers_review_document_list'
 
         return reverse(url)
 
