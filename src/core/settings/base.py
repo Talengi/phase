@@ -210,6 +210,7 @@ THIRD_PARTY_APPS = (
     'pipeline',
     'widget_tweaks',
     'crispy_forms',
+    'rest_framework',
 )
 
 # Apps specific for this project go here.
