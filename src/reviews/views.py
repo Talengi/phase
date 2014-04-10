@@ -104,7 +104,7 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
         can_comment = any((
             (self.object.is_at_review_step('approver') and user == self.object.approver),
             (self.object.is_at_review_step('leader') and user == self.object.leader),
-            (self.object.is_at_review_step('reviewers') and self.object.is_approver(user))
+            (self.object.is_at_review_step('reviewers') and self.object.is_reviewer(user))
         ))
         context.update({
             'revision': self.object,
