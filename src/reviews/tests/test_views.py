@@ -295,6 +295,26 @@ class ReviewFormTests(TestCase):
             review = revision.get_review(self.user)
             self.assertTrue(review.comments)
 
+    def test_all_reviewers_have_submitted_review(self):
+        """When all reviewers have reviewed the doc, proceed to next step."""
+        doc = DocumentFactory(
+            document_key='test_key',
+            category=self.category,
+            revision={
+                'reviewers': [self.user],
+                'leader': self.other_user,
+                'approver': self.other_user,
+            }
+        )
+        revision = doc.latest_revision
+        revision.start_review()
+        self.assertIsNone(revision.reviewers_step_closed)
+
+        self.client.post(self.url, {'review': 'something'})
+
+        revision = revision.__class__.objects.get(pk=revision.pk)
+        self.assertIsNotNone(revision.reviewers_step_closed)
+
     def test_non_reviewer_submit_review(self):
         doc = DocumentFactory(
             document_key='test_key',

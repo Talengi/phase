@@ -1,5 +1,6 @@
 import datetime
 
+from django.db import transaction
 from django.views.generic import ListView, DetailView
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect, Http404
@@ -178,8 +179,11 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
         step_method = '%s_step_post' % step
         url = self.get_success_url()
 
+        # A comment file was submitted
         if hasattr(self, step_method) and 'review' in request.POST:
             getattr(self, step_method)(request, *args, **kwargs)
+
+        # Close XXX step buttons
 
         if 'close_reviewers_step' in request.POST and request.user in (
                 self.object.leader, self.object.approver):
@@ -190,6 +194,7 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
 
         return HttpResponseRedirect(url)
 
+    @transaction.atomic
     def reviewers_step_post(self, request, *args, **kwargs):
         comments_file = request.FILES.get('comments', None)
 
@@ -197,6 +202,14 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
             self.review.reviewed_on = datetime.date.today()
             self.review.comments = comments_file
             self.review.save()
+
+            # If every reviewer has posted comments, close the reviewers step
+            qs = Review.objects \
+                .filter(document=self.object.document) \
+                .filter(revision=self.object.revision) \
+                .exclude(reviewed_on=None)
+            if qs.count() == self.object.reviewers.count():
+                self.object.end_reviewers_step()
 
     def leader_step_post(self, request, *args, **kwargs):
         comments_file = request.FILES.get('comments', None)
