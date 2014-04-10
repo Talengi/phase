@@ -111,8 +111,8 @@ class ReviewMixin(models.Model):
 
         """
         return all((
-            self.leader,
-            self.approver,
+            self.leader_id,
+            self.approver_id,
             self.reviewers.count(),
             not self.review_start_date
         ))
