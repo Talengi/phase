@@ -154,7 +154,7 @@ class UneditableFile(LayoutObject):
             html = self.existing_file_html
             name = value.name
             url = value.url
-        except ValueError:
+        except (ValueError, AttributeError):
             html = self.no_file_html
             name = None
             url = None
