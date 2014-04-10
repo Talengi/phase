@@ -8,7 +8,7 @@
         data-spy="affix">
         <li><a href="#fieldset-general-information">General information</a></li>
         <li><a href="#fieldset-review-data">Review data</a></li>
-        <li><a href="#fieldset-reviewers">Reviewers</a></li>
+        <li><a href="#fieldset-reviewers">Reviewer participants</a></li>
         <li><a href="#fieldset-your-comments">Your comments</a></li>
     </ul>
     </ul>
@@ -90,16 +90,14 @@
     </fieldset>
 
     <fieldset id="fieldset-reviewers">
-        <legend>{{ _('Reviewers') }}</legend>
+        <legend>{{ _('Review participants') }}</legend>
 
         <table class="table ">
 
             {% for review in reviews %}
             <tr>
-                <td>
-                    <span title="Reviewer" class="glyphicon glyphicon-user"></span>
-                    {{ review.reviewer }}
-                </td>
+                <td>{{ review.reviewer }}</td>
+                <td>{{ _('Reviewer') }}</td>
                 <td>{{ review.reviewed_on|yesno:_('Completed,Pending') }}</td>
                 <td class="alignright">{% file_link review.comments %}</td>
             </tr>
@@ -107,19 +105,15 @@
 
 
             <tr>
-                <td>
-                    <span title="Leader" class="glyphicon glyphicon-eye-open"></span>
-                    {{ revision.leader }}
-                </td>
+                <td>{{ revision.leader }}</td>
+                <td>{{ _('Leader') }}</td>
                 <td>{{ revision.leader_step_closed|yesno:_('Completed,Pending') }}</td>
                 <td class="alignright">{% file_link revision.leader_comments %}</td>
             </tr>
 
             <tr>
-                <td>
-                    <span title="Approver" class="glyphicon glyphicon-thumbs-up"></span>
-                    {{ revision.approver }}
-                </td>
+                <td>{{ revision.approver }}</td>
+                <td>{{ _('Approver') }}</td>
                 <td>{{ revision.revision_end_date|yesno:_('Completed,Pending') }}</td>
                 <td class="alignright">{% file_link revision.approver_comments %}</td>
             </tr>
