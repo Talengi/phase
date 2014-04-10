@@ -223,6 +223,7 @@ LOCAL_APPS = (
     'metadata',
     'favorites',
     'bootstrap',
+    'api',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
