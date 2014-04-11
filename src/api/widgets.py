@@ -1,7 +1,7 @@
-from django.forms.widgets import Select
+from django.forms.widgets import TextInput
 
 
-class AutocompleteTextInput(Select):
+class AutocompleteTextInput(TextInput):
     class Media:
         css = {
             'all': ('css/selectize.css',)
