@@ -7,6 +7,7 @@ See https://django-crispy-forms.readthedocs.org/en/d-0/layouts.html
 from django.template.loader import render_to_string
 from django.template import Context, Template
 from django.utils.text import slugify
+from django.core.exceptions import ImproperlyConfigured
 from crispy_forms.compatibility import text_type
 from crispy_forms.layout import LayoutObject, Fieldset
 from crispy_forms.utils import render_field
@@ -103,22 +104,50 @@ class PropertyLayout(LayoutObject):
     </div>
     '''
 
+    list_html = '''
+     <div id="" class="form-group{% if field.css_classes %} {{ field.css_classes }}{% endif %}">
+         <div class="control-label">{{ name|safe }}</div>
+         <div class="controls">
+             <ul {{ flat_attrs|safe }}>
+                 {{ value|safe }}
+             </ul>
+         </div>
+     </div>
+     '''
+
     def __init__(self, name):
         self.property_name = name
 
     def render(self, form, form_style, context, template_pack=None):
-        prop = getattr(form.instance, self.property_name)
+        prop = getattr(form.instance, self.property_name) or ''
 
+        # Get the property label
         if hasattr(prop, 'short_description'):
             name = prop.short_description
+        elif self.property_name in form.fields:
+            name = form.fields[self.property_name].label
         else:
             name = self.property_name
 
+        # If the property is some kind of list
+        iterator = None
+        if isinstance(prop, (list, tuple)):
+            iterator = prop
+        elif prop.__class__.__name__ == 'ManyRelatedManager':
+            iterator = prop.all()
+
+        if iterator is not None:
+            template = self.list_html
+            value = '<li>%s</li>' % '</li><li>'.join(iterator)
+        else:
+            template = self.html
+            value = prop
+
         context.update({
             'name': name,
-            'value': prop,
+            'value': value,
         })
-        return Template(text_type(self.html)).render(context)
+        return Template(text_type(template)).render(context)
 
 
 class UneditableFile(LayoutObject):

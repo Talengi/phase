@@ -318,7 +318,7 @@ class DocumentDetail(LoginRequiredMixin, DocumentFormMixin, DetailView):
         revisions = document.get_all_revisions()
         RevisionForm = self.get_revisionform_class()
         for revision in revisions:
-            revision.form = RevisionForm(instance=revision)
+            revision.form = RevisionForm(instance=revision, read_only=True)
 
         context.update({
             'is_detail': True,
