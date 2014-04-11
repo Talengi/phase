@@ -205,7 +205,9 @@ class ContractorDeliverable(Metadata):
                 'document',
                 'document__category__organisation',
                 'leader',
-                'approver')
+                'approver') \
+            .prefetch_related('reviewers')
+
         return revisions
 
     @property
