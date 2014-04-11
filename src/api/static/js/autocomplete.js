@@ -7,12 +7,13 @@ jQuery(function($) {
         var labelField = input.data('label-field');
         var searchFields = input.data('search-fields');
         var url = input.data('url');
+        var mode = input.data('mode');
 
         input.selectize({
             valueField: valueField,
             labelField: labelField,
             searchField: searchFields,
-            maxItems: 1,
+            mode: mode,
             options: [],
             create: false,
             load: function(query, callback) {
@@ -29,7 +30,7 @@ jQuery(function($) {
                         callback();
                     },
                     success: function(res) {
-                        callback(res);
+                        callback(res.results);
                     }
                 });
             }

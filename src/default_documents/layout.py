@@ -138,7 +138,7 @@ class PropertyLayout(LayoutObject):
 
         if iterator is not None:
             template = self.list_html
-            value = '<li>%s</li>' % '</li><li>'.join(iterator)
+            value = '<li>%s</li>' % '</li><li>'.join([unicode(i) for i in iterator])
         else:
             template = self.html
             value = prop
