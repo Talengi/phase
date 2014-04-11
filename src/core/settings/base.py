@@ -371,6 +371,13 @@ PIPELINE_JS = {
 DEFAULT_FROM_EMAIL = 'admin@phase.fr'
 # ######### END EMAIL CONFIGURATION
 
+# ######### API CONFIGURATION
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
+}
+
 # ######### CUSTOM CONFIGURATION
 PAGINATE_BY = 50  # Document list pagination
 CACHE_TIMEOUT_SECONDS = 300  # seconds == 5 minutes
