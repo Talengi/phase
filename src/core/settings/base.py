@@ -305,6 +305,7 @@ PIPELINE_CSS = {
         'source_filenames': (
             'css/jquery.multiselect.css',
             'css/jquery.multiselect.filter.css',
+            'css/selectize.css',
         ),
         'output_filename': 'css/detail.css',
     },
@@ -333,6 +334,8 @@ PIPELINE_JS = {
         'source_filenames': (
             'js/jquery.multiselect.js',
             'js/jquery.multiselect.filter.js',
+            'js/selectize.js',
+            'js/autocomplete.js',
             'js/document-detail.js',
         ),
         'output_filename': 'js/detail.js',

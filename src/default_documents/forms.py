@@ -1,9 +1,11 @@
 from django.utils.translation import ugettext_lazy as _
+from django import forms
 
 from crispy_forms.layout import Layout, Field
 from crispy_forms.bootstrap import UneditableField
 
 from documents.forms.models import BaseDocumentForm
+from api.widgets import UserAutocomplete
 from .models import (
     ContractorDeliverable, ContractorDeliverableRevision,
     Correspondence, CorrespondenceRevision,
@@ -85,6 +87,11 @@ class ContractorDeliverableRevisionForm(BaseDocumentForm):
         model = ContractorDeliverableRevision
         exclude = ('document', 'revision', 'revision_date', 'created_on',
                    'updated_on')
+        widgets = {
+            'approver': UserAutocomplete,
+            'leader': UserAutocomplete,
+            'reviewers': forms.Select(),
+        }
 
 
 class CorrespondenceForm(BaseDocumentForm):
