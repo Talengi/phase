@@ -158,8 +158,8 @@ class ContractorDeliverable(Metadata):
         column_fields = (
             ('Document Number', 'document_key', 'document_key'),
             ('Title', 'title', 'title'),
-            ('Rev.', 'current_revision', 'latest_revision.revision'),
-            ('Status', 'status', 'latest_revision.status'),
+            ('Rev.', 'current_revision', 'latest_revision__revision'),
+            ('Status', 'status', 'latest_revision__status'),
             ('Class', 'klass', 'klass'),
             ('Unit', 'unit', 'unit'),
             ('Discipline', 'discipline', 'discipline'),
@@ -205,7 +205,9 @@ class ContractorDeliverable(Metadata):
                 'document',
                 'document__category__organisation',
                 'leader',
-                'approver')
+                'approver') \
+            .prefetch_related('reviewers')
+
         return revisions
 
     @property

@@ -210,6 +210,7 @@ THIRD_PARTY_APPS = (
     'pipeline',
     'widget_tweaks',
     'crispy_forms',
+    'rest_framework',
 )
 
 # Apps specific for this project go here.
@@ -222,6 +223,7 @@ LOCAL_APPS = (
     'metadata',
     'favorites',
     'bootstrap',
+    'api',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -303,6 +305,7 @@ PIPELINE_CSS = {
         'source_filenames': (
             'css/jquery.multiselect.css',
             'css/jquery.multiselect.filter.css',
+            'css/selectize.css',
         ),
         'output_filename': 'css/detail.css',
     },
@@ -331,6 +334,8 @@ PIPELINE_JS = {
         'source_filenames': (
             'js/jquery.multiselect.js',
             'js/jquery.multiselect.filter.js',
+            'js/selectize.js',
+            'js/autocomplete.js',
             'js/document-detail.js',
         ),
         'output_filename': 'js/detail.js',
@@ -366,6 +371,13 @@ PIPELINE_JS = {
 DEFAULT_FROM_EMAIL = 'admin@phase.fr'
 # ######### END EMAIL CONFIGURATION
 
+# ######### API CONFIGURATION
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
+}
+
 # ######### CUSTOM CONFIGURATION
 PAGINATE_BY = 50  # Document list pagination
 CACHE_TIMEOUT_SECONDS = 300  # seconds == 5 minutes
@@ -373,7 +385,7 @@ AUTH_USER_MODEL = 'accounts.User'
 LOGIN_URL = 'login'
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 CRISPY_FAIL_SILENTLY = False
-REVIEW_DURATION = 14
+REVIEW_DURATION = 13
 
 # Where should revisions' files go
 REVISION_FILES_ROOT = PRIVATE_ROOT.child('documents')

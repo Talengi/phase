@@ -4,6 +4,7 @@ from crispy_forms.layout import Layout, Field
 from crispy_forms.bootstrap import UneditableField
 
 from documents.forms.models import BaseDocumentForm
+from api.fields import UserChoiceField, UserMultipleChoiceField
 from .models import (
     ContractorDeliverable, ContractorDeliverableRevision,
     Correspondence, CorrespondenceRevision,
@@ -57,7 +58,20 @@ class ContractorDeliverableForm(BaseDocumentForm):
 
 
 class ContractorDeliverableRevisionForm(BaseDocumentForm):
+    leader = UserChoiceField(label=_('Leader'), required=False)
+    approver = UserChoiceField(label=_('Approver'), required=False)
+    reviewers = UserMultipleChoiceField(label=_('Reviewers'), required=False)
+
     def build_layout(self):
+        if self.read_only:
+            reviewers = PropertyLayout('reviewers')
+            leader = PropertyLayout('leader')
+            approver = PropertyLayout('approver')
+        else:
+            reviewers = 'reviewers'
+            leader = 'leader'
+            approver = 'approver'
+
         return Layout(
             DocumentFieldset(
                 _('Revision'),
@@ -73,10 +87,10 @@ class ContractorDeliverableRevisionForm(BaseDocumentForm):
                 PropertyLayout('current_review_step'),
                 PropertyLayout('is_under_review'),
                 PropertyLayout('is_overdue'),
-                'reviewers',
-                'leader',
+                reviewers,
+                leader,
                 UneditableFile('leader_comments'),
-                'approver',
+                approver,
                 UneditableFile('approver_comments'),
             )
         )

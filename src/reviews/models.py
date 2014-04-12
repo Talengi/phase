@@ -3,6 +3,7 @@ import datetime
 from django.db import models, transaction
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+from django.utils.functional import cached_property
 from model_utils import Choices
 
 from accounts.models import User
@@ -99,6 +100,7 @@ class ReviewMixin(models.Model):
     class Meta:
         abstract = True
 
+    @cached_property
     def can_be_reviewed(self):
         """Is this revision ready to be reviewed.
 
@@ -109,8 +111,8 @@ class ReviewMixin(models.Model):
 
         """
         return all((
-            self.leader,
-            self.approver,
+            self.leader_id,
+            self.approver_id,
             self.reviewers.count(),
             not self.review_start_date
         ))

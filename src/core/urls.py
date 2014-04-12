@@ -2,6 +2,7 @@ from django.conf.urls import patterns, include, url
 from django.http import HttpResponse
 from django.contrib import admin
 
+
 admin.autodiscover()
 
 admin.site.login_template = 'registration/login.html'
@@ -9,6 +10,7 @@ admin.site.login_template = 'registration/login.html'
 urlpatterns = patterns(
     '',
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^api/', include('api.urls')),
     url(r'^accounts/', include('accounts.urls')),
     url(r'^favorites/', include('favorites.urls')),
     url(r'^reviews/', include('reviews.urls')),

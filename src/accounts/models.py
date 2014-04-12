@@ -76,6 +76,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name = 'User'
         verbose_name_plural = 'Users'
 
+    def __unicode__(self):
+        return self.name
+
     def get_full_name(self):
         return self.name
 
