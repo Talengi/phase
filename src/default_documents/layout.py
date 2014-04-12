@@ -108,7 +108,7 @@ class PropertyLayout(LayoutObject):
      <div id="" class="form-group{% if field.css_classes %} {{ field.css_classes }}{% endif %}">
          <div class="control-label">{{ name|safe }}</div>
          <div class="controls">
-             <ul {{ flat_attrs|safe }}>
+             <ul>
                  {{ value|safe }}
              </ul>
          </div>
