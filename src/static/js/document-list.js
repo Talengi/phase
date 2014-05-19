@@ -87,11 +87,25 @@ jQuery(function($) {
     // select rows
     var selectableRow = function() {
         var $row;
-        var form = document.querySelector('.navbar-form');
+        var form = $('.navbar-form');
+        var buttons = $('.navbar-action');
+
+        // Update form action depending on clicked button
+        buttons.on('click', function(event) {
+            var action = $(this).data('form-action');
+            form.attr('action', action);
+        });
+
+        // TODO
+        // Dont't close dropdown
+        $('.dropdown-form').parent().on('hide.bs.dropdown', function(e) {
+            e.preventDefault();
+        });
+
         $("#documents tbody").on('change', 'input[type=checkbox]', function(e) {
+            buttons.removeClass('disabled');
             $row = $(this).closest('tr');
             var documentId = $row.data('metadata-id');
-            $('#download-button').removeClass('disabled');
             if ($(this).is(':checked')) {
                 $row.addClass('selected');
                 var input = document.createElement('input');
@@ -99,7 +113,7 @@ jQuery(function($) {
                 input.name = "document_ids";
                 input.type = "hidden";
                 input.value = documentId;
-                form.appendChild(input);
+                form[0].appendChild(input);
             } else {
                 $row.removeClass('selected');
                 $(".navbar-form input#document-id-"+documentId).remove();

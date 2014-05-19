@@ -12,6 +12,10 @@ from documents.models import Document
 from reviews.models import ReviewMixin, Review
 
 
+class BatchStartReview(ListView):
+    pass
+
+
 class BaseReviewDocumentList(LoginRequiredMixin, ListView):
     template_name = 'reviews/document_list.html'
     context_object_name = 'revisions'

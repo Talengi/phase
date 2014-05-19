@@ -2,8 +2,8 @@ from django.conf.urls import patterns, url
 from django.views.generic.base import RedirectView
 
 from reviews.views import (
-    ReviewersDocumentList, LeaderDocumentList, ApproverDocumentList,
-    ReviewFormView
+    BatchStartReview, ReviewersDocumentList, LeaderDocumentList,
+    ApproverDocumentList, ReviewFormView
 )
 
 urlpatterns = patterns(
@@ -12,6 +12,11 @@ urlpatterns = patterns(
     # Unexisting url, redirect to home
     url(r'^$',
         RedirectView.as_view(url='/')),
+
+    # Batch action
+    url(r'^batch/$',
+        BatchStartReview.as_view(),
+        name="batch_start_review"),
 
     # Review steps
     url(r'^reviewers/$',

@@ -522,10 +522,10 @@ class DocumentStartReview(PermissionRequiredMixin,
 
 class DocumentDownload(BaseDocumentList):
 
-    def get(self, request, *args, **kwargs):
-        # Deals with GET parameters
+    def post(self, request, *args, **kwargs):
+        # Deals with POST parameters
         qs = self.get_queryset()
-        form = DocumentDownloadForm(self.request.GET, queryset=qs)
+        form = DocumentDownloadForm(self.request.POST, queryset=qs)
         if form.is_valid():
             data = form.cleaned_data
         else:

@@ -1,41 +1,26 @@
-<div id="download-modal" class="modal" role="dialog">
-    <form action="{% url "document_download" organisation_slug category_slug %}" class="navbar-form">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Download selected documents</h4>
-                </div>
-                <div class="modal-body">
-                    <div>
-                        <div class="btn-toolbar">
-                            <div class="btn-group" data-toggle="buttons">
-                                <label class="btn btn-default active">
-                                    <input type="radio" name="format" value="pdf" id="format_pdf" checked>PDF
-                                </label>
-                                <label class="btn btn-default">
-                                    <input type="radio" name="format" value="native" id="format_native">Native
-                                </label>
-                                <label class="btn btn-default">
-                                    <input type="radio" name="format" value="both" id="format_all">Both formats
-                                </label>
-                            </div>
-                            <div class="btn-group" data-toggle="buttons">
-                                <label class="btn btn-default active">
-                                    <input type="radio" name="revisions" value="latest" id="revisions_latest" checked>Latest
-                                </label>
-                                <label class="btn btn-default">
-                                    <input type="radio" name="revisions" value="all" id="revisions_all">All revisions
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-info"><span class="glyphicon glyphicon-download glyphicon-white"></span> Download</button>
-                </div>
-            </div>
-        </div>
-    </form>
+<div class="btn-toolbar">
+    <div class="btn-group" data-toggle="buttons">
+        <label class="btn btn-default active">
+            <input type="radio" name="format" value="pdf" id="format_pdf" checked>PDF
+        </label>
+        <label class="btn btn-default">
+            <input type="radio" name="format" value="native" id="format_native">Native
+        </label>
+        <label class="btn btn-default">
+            <input type="radio" name="format" value="both" id="format_all">Both formats
+        </label>
+    </div>
+    <div class="btn-group" data-toggle="buttons">
+        <label class="btn btn-default active">
+            <input type="radio" name="revisions" value="latest" id="revisions_latest" checked>Latest
+        </label>
+        <label class="btn btn-default">
+            <input type="radio" name="revisions" value="all" id="revisions_all">All revisions
+        </label>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-default">Close</button>
+    <button type="submit" class="btn btn-info"><span class="glyphicon glyphicon-download glyphicon-white"></span> Download</button>
 </div>
