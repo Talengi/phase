@@ -511,7 +511,7 @@ class DocumentStartReview(PermissionRequiredMixin,
         self.metadata = self.get_object()
         revision = self.metadata.latest_revision
 
-        if revision.can_be_reviewed():
+        if revision.can_be_reviewed:
             revision.start_review()
             messages.success(request, _('The review has started'))
         else:

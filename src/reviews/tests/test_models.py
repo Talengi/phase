@@ -31,7 +31,7 @@ class ReviewMixinTests(TestCase):
 
     def test_new_doc_cannot_be_reviewed(self):
         doc = DocumentFactory(category=self.category)
-        self.assertFalse(doc.latest_revision.can_be_reviewed())
+        self.assertFalse(doc.latest_revision.can_be_reviewed)
 
     def test_doc_without_reviewers_cannot_be_reviewed(self):
         doc = DocumentFactory(category=self.category)
@@ -40,18 +40,18 @@ class ReviewMixinTests(TestCase):
         revision.approver = self.user
         revision.save()
 
-        self.assertFalse(revision.can_be_reviewed())
+        self.assertFalse(revision.can_be_reviewed)
 
     def test_doc_can_be_reviewed(self):
         revision = self.create_reviewable_document()
-        self.assertTrue(revision.can_be_reviewed())
+        self.assertTrue(revision.can_be_reviewed)
 
     def test_doc_can_only_be_reviewed_once(self):
         revision = self.create_reviewable_document()
         revision.review_start_date = datetime.date.today()
         revision.save()
 
-        self.assertFalse(revision.can_be_reviewed())
+        self.assertFalse(revision.can_be_reviewed)
 
     def test_start_review_process(self):
         revision = self.create_reviewable_document()
@@ -63,7 +63,7 @@ class ReviewMixinTests(TestCase):
 
         revision.start_review()
         today = datetime.date.today()
-        in_two_weeks = today + datetime.timedelta(days=14)
+        in_two_weeks = today + datetime.timedelta(days=13)
 
         self.assertEqual(revision.review_start_date, today)
         self.assertEqual(revision.review_due_date, in_two_weeks)
