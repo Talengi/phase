@@ -22,6 +22,9 @@ urlpatterns = patterns(
         name="batch_start_review"),
 
     # Review steps
+    url(r'^priorities/$',
+        ReviewersDocumentList.as_view(),
+        name="priorities_review_document_list"),
     url(r'^reviewers/$',
         ReviewersDocumentList.as_view(),
         name="reviewers_review_document_list"),

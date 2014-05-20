@@ -7,6 +7,12 @@
     <ul class="dropdown-menu">
         <li class="dropdown-header">{{ _('Select review step') }}</li>
         <li>
+            <a href="{% url 'priorities_review_document_list' %}">
+                {{ _('Priorities') }}
+                <span class="glyphicon glyphicon-fire"></span>
+            </a>
+        </li>
+        <li>
             <a href="{% url 'reviewers_review_document_list' %}">
                 {{ _('Reviewers') }}
             </a>
