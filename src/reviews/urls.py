@@ -3,7 +3,7 @@ from django.views.generic.base import RedirectView
 
 from reviews.views import (
     ReviewersDocumentList, LeaderDocumentList, ApproverDocumentList,
-    ReviewFormView, StartReview, BatchReview
+    ReviewFormView, StartReview, BatchReview, PrioritiesDocumentList
 )
 
 urlpatterns = patterns(
@@ -23,7 +23,7 @@ urlpatterns = patterns(
 
     # Review steps
     url(r'^priorities/$',
-        ReviewersDocumentList.as_view(),
+        PrioritiesDocumentList.as_view(),
         name="priorities_review_document_list"),
     url(r'^reviewers/$',
         ReviewersDocumentList.as_view(),

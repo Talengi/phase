@@ -8,6 +8,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.utils.translation import ugettext, ugettext_lazy as _
+from django.db.models import Q
 
 from accounts.views import LoginRequiredMixin, PermissionRequiredMixin
 from documents.utils import get_all_revision_classes
@@ -102,6 +103,14 @@ class BaseReviewDocumentList(LoginRequiredMixin, ListView):
         """Filter document list to get reviews at the current step."""
         raise NotImplementedError('Implement me in the child class.')
 
+    def order_revisions(self, revisions):
+        """Return an ordered list of revisions.
+
+        Override in subclasses for a custom sort.
+
+        """
+        return revisions
+
     def get_queryset(self):
         """Base queryset to fetch all documents under review.
 
@@ -122,7 +131,30 @@ class BaseReviewDocumentList(LoginRequiredMixin, ListView):
             qs = self.step_filter(qs)
             revisions += list(qs)
 
+        return self.order_revisions(revisions)
+
+
+class PrioritiesDocumentList(BaseReviewDocumentList):
+    """High priority document list.
+
+    Document have a high priority if:
+     * Due date is < 5 days
+     * User is leader or approver
+     * Document is of class >= 2
+
+    """
+    def order_revisions(self, revisions):
+        revisions.sort(lambda x, y: cmp(x.review_due_date, y.review_due_date))
         return revisions
+
+    def step_filter(self, qs):
+        role_q = Q(leader=self.request.user) | Q(approver=self.request.user)
+        delta = datetime.date.today() + datetime.timedelta(days=5)
+
+        qs = qs \
+            .filter(role_q) \
+            .filter(review_due_date__lte=delta)
+        return qs
 
 
 class ReviewersDocumentList(BaseReviewDocumentList):
