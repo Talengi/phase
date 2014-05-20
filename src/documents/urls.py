@@ -3,7 +3,7 @@ from django.conf.urls import patterns, url
 from documents.views import (
     DocumentList, DocumentFilter, DocumentCreate, DocumentDetail,
     DocumentEdit, DocumentDownload, DocumentRedirect, DocumentRevise,
-    DocumentStartReview, ProtectedDownload
+    DocumentStartReview, DocumentBatchReview, ProtectedDownload
 )
 
 urlpatterns = patterns(
@@ -26,6 +26,11 @@ urlpatterns = patterns(
     url(r'^files/(?P<file_name>[-\w.]+)/$',
         ProtectedDownload.as_view(),
         name="protected_download"),
+
+    # Batch review
+    url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/batchreview/$',
+        DocumentBatchReview.as_view(),
+        name="batch_start_review"),
 
     # Documents
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/$',

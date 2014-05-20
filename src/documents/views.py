@@ -520,6 +520,18 @@ class DocumentStartReview(PermissionRequiredMixin,
         return HttpResponseRedirect(self.get_redirect_url())
 
 
+class DocumentBatchReview(BaseDocumentList):
+    """Starts the review process more multiple documents at once."""
+
+    def get_redirect_url(self, *args, **kwargs):
+        return reverse('category_document_list', args=[
+            self.kwargs.get('organisation'),
+            self.kwargs.get('category')])
+
+    def post(self, request, *args, **kwargs):
+        return HttpResponseRedirect(self.get_redirect_url())
+
+
 class DocumentDownload(BaseDocumentList):
 
     def post(self, request, *args, **kwargs):
@@ -552,6 +564,8 @@ class ProtectedDownload(LoginRequiredMixin, View):
 
     One might consider some alternate way, like this one:
     https://github.com/johnsensible/django-sendfile
+
+    TODO Replace with django-downloadview
 
     """
 
