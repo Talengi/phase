@@ -86,6 +86,73 @@ class BatchReviewTests(TestCase):
         self.assertContains(res, self.nok)
 
 
+class PrioritiesDocumentListTests(TestCase):
+
+    def setUp(self):
+        self.category = CategoryFactory()
+        self.user = UserFactory(
+            email='testadmin@phase.fr',
+            password='pass',
+            is_superuser=True,
+            category=self.category
+        )
+        self.other_user = UserFactory(
+            email='test@phase.fr',
+            category=self.category
+        )
+        self.client.login(email=self.user.email, password='pass')
+        self.url = reverse('priorities_review_document_list')
+
+    def test_empty_review_list(self):
+        res = self.client.get(self.url)
+        self.assertNotContains(res, '<td class="columndocument_key"')
+
+    def test_non_prioritary_document(self):
+        """User is not approver nor leader."""
+        doc = DocumentFactory(
+            revision={
+                'reviewers': [self.user],
+                'leader': self.other_user,
+                'approver': self.other_user,
+            }
+        )
+        doc.latest_revision.start_review()
+        res = self.client.get(self.url)
+        self.assertNotContains(res, '<td class="columndocument_key"')
+
+    def test_non_prioritary_document2(self):
+        """Due date > 5 days."""
+        doc = DocumentFactory(
+            revision={
+                'reviewers': [self.user],
+                'leader': self.user,
+                'approver': self.other_user,
+            }
+        )
+        revision = doc.latest_revision
+        revision.start_review()
+        revision.review_due_date = datetime.date.today() + datetime.timedelta(days=6)
+        revision.save()
+        res = self.client.get(self.url)
+        self.assertNotContains(res, '<td class="columndocument_key"')
+
+    def test_prioritary_document(self):
+        doc = DocumentFactory(
+            revision={
+                'reviewers': [self.user],
+                'leader': self.user,
+                'approver': self.other_user,
+            }
+        )
+        revision = doc.latest_revision
+        revision.start_review()
+        revision.review_due_date = datetime.date.today()
+        revision.save()
+        self.assertTrue(doc.latest_revision.is_under_review())
+        res = self.client.get(self.url)
+        self.assertContains(res, '<td class="columndocument_key"')
+
+
 class ReviewersDocumentListTests(TestCase):
 
     def setUp(self):
