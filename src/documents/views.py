@@ -16,9 +16,6 @@ from django.views.generic import (
     View, ListView, DetailView, RedirectView)
 from django.views.generic.edit import (
     ModelFormMixin, ProcessFormView, SingleObjectTemplateResponseMixin)
-from django.views.generic.detail import (
-    SingleObjectMixin
-)
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.static import serve
@@ -492,40 +489,12 @@ class DocumentRevise(DocumentEdit):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class DocumentStartReview(PermissionRequiredMixin,
-                          DocumentListMixin,
-                          SingleObjectMixin,
-                          View):
-    """Start the review process."""
-    permission_required = 'documents.can_control_document'
-    context_object_name = 'metadata'
-
-    def get_redirect_url(self, *args, **kwargs):
-        document = self.metadata.document
-        return reverse('document_detail', args=[
-            document.category.organisation.slug,
-            document.category.slug,
-            document.document_key])
-
-    def post(self, request, *args, **kwargs):
-        self.metadata = self.get_object()
-        revision = self.metadata.latest_revision
-
-        if revision.can_be_reviewed:
-            revision.start_review()
-            messages.success(request, _('The review has started'))
-        else:
-            messages.error(request, _('The review process cannot start'))
-
-        return HttpResponseRedirect(self.get_redirect_url())
-
-
 class DocumentDownload(BaseDocumentList):
 
-    def get(self, request, *args, **kwargs):
-        # Deals with GET parameters
+    def post(self, request, *args, **kwargs):
+        # Deals with POST parameters
         qs = self.get_queryset()
-        form = DocumentDownloadForm(self.request.GET, queryset=qs)
+        form = DocumentDownloadForm(self.request.POST, queryset=qs)
         if form.is_valid():
             data = form.cleaned_data
         else:
@@ -552,6 +521,8 @@ class ProtectedDownload(LoginRequiredMixin, View):
 
     One might consider some alternate way, like this one:
     https://github.com/johnsensible/django-sendfile
+
+    TODO Replace with django-downloadview
 
     """
 

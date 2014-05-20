@@ -1,7 +1,5 @@
-{% include 'documents/download_modal.html' %}
-
 <div class="navbar additional-navbar navbar-default navbar-static-top" id="table-controls">
-<div class="container">
+<div class="container-fluid">
 
     <button type="button" class="navbar-toggle pull-left" data-toggle="collapse" data-target=".document-list-form">
         <span class="sr-only">Toggle navigation</span>
@@ -23,23 +21,42 @@
     </button>
 
     <div class="collapse navbar-collapse document-list-form">
-        <button id="download-button"
-            type="button"
-            data-toggle="modal"
-            href="#download-modal"
-            class="btn btn-info navbar-btn navbar-left disabled">
-            <span class="glyphicon glyphicon-download glyphicon-white"></span> Download
-       </button>
+    <form method="post" action="{% url "document_download" organisation_slug category_slug %}" class="navbar-form navbar-left">
+        {% csrf_token %}
 
-        {% if perms.documents.add_document %}
-        <div class="hidden-xs hidden-sm">
-            <a class="btn btn-primary navbar-btn"
-                href="{% url "document_create" organisation_slug category_slug %}">
-                <span class="glyphicon glyphicon-plus icon-white"></span> New document
-            </a>
+        <div class="form-group dropdown">
+            <button id="download-button"
+                type="button"
+                data-toggle="dropdown"
+                data-form-action="{% url "document_download" organisation_slug category_slug %}"
+                class="btn btn-info navbar-left navbar-action disabled dropdown-toggle">
+                <span class="glyphicon glyphicon-download glyphicon-white"></span> Download
+            </button>
+            <div id="download-dropdown" class="dropdown-form dropdown-menu">
+                {% include 'documents/download_modal.html' %}
+            </div>
         </div>
-        {% endif %}
 
+        <div class="form-group">
+            <button id="review-button"
+                type="submit"
+                data-form-action="{% url "batch_start_review" organisation_slug category_slug %}"
+                class="btn btn-info navbar-left navbar-action disabled">
+                <span class="glyphicon glyphicon-eye-open glyphicon-white"></span> Start review
+           </button>
+       </div>
+
+        <div class="form-group">
+            {% if perms.documents.add_document %}
+            <div class="hidden-xs hidden-sm navbar-left">
+                <a class="btn btn-primary"
+                    href="{% url "document_create" organisation_slug category_slug %}">
+                    <span class="glyphicon glyphicon-plus icon-white"></span> New document
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </form>
     </div>
 </div>
 </div>

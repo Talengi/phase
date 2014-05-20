@@ -1,9 +1,8 @@
 from django.conf.urls import patterns, url
 
 from documents.views import (
-    DocumentList, DocumentFilter, DocumentCreate, DocumentDetail,
-    DocumentEdit, DocumentDownload, DocumentRedirect, DocumentRevise,
-    DocumentStartReview, ProtectedDownload
+    DocumentList, DocumentFilter, DocumentCreate, DocumentDetail, DocumentEdit,
+    DocumentDownload, DocumentRedirect, DocumentRevise, ProtectedDownload
 )
 
 urlpatterns = patterns(
@@ -43,9 +42,6 @@ urlpatterns = patterns(
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/(?P<document_key>[\w-]+)/revise/$',
         DocumentRevise.as_view(),
         name="document_revise"),
-    url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/(?P<document_key>[\w-]+)/startreview/$',
-        DocumentStartReview.as_view(),
-        name="document_start_review"),
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/(?P<document_key>[\w-]+)/edit/(?P<revision>\d+)/$',
         DocumentEdit.as_view(),
         name="document_edit"),
