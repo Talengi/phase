@@ -1,15 +1,59 @@
 import datetime
 
 from django.db import transaction
-from django.views.generic import ListView, DetailView
+from django.views.generic import View, ListView, DetailView
+from django.views.generic.detail import SingleObjectMixin
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect, Http404
 from django.core.urlresolvers import reverse
+from django.contrib import messages
+from django.utils.translation import ugettext_lazy as _
 
-from accounts.views import LoginRequiredMixin
+from accounts.views import LoginRequiredMixin, PermissionRequiredMixin
 from documents.utils import get_all_revision_classes
 from documents.models import Document
+from documents.views import DocumentListMixin, BaseDocumentList
 from reviews.models import ReviewMixin, Review
+
+
+class StartReview(PermissionRequiredMixin,
+                  DocumentListMixin,
+                  SingleObjectMixin,
+                  View):
+    """Start the review process."""
+    permission_required = 'documents.can_control_document'
+    context_object_name = 'metadata'
+
+    def get_redirect_url(self, *args, **kwargs):
+        document = self.metadata.document
+        return reverse('document_detail', args=[
+            document.category.organisation.slug,
+            document.category.slug,
+            document.document_key])
+
+    def post(self, request, *args, **kwargs):
+        self.metadata = self.get_object()
+        revision = self.metadata.latest_revision
+
+        if revision.can_be_reviewed:
+            revision.start_review()
+            messages.success(request, _('The review has started'))
+        else:
+            messages.error(request, _('The review process cannot start'))
+
+        return HttpResponseRedirect(self.get_redirect_url())
+
+
+class BatchReview(BaseDocumentList):
+    """Starts the review process more multiple documents at once."""
+
+    def get_redirect_url(self, *args, **kwargs):
+        return reverse('category_document_list', args=[
+            self.kwargs.get('organisation'),
+            self.kwargs.get('category')])
+
+    def post(self, request, *args, **kwargs):
+        return HttpResponseRedirect(self.get_redirect_url())
 
 
 class BaseReviewDocumentList(LoginRequiredMixin, ListView):
