@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect, Http404
 from django.core.urlresolvers import reverse
 from django.contrib import messages
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext, ugettext_lazy as _
 
 from accounts.views import LoginRequiredMixin, PermissionRequiredMixin
 from documents.utils import get_all_revision_classes
@@ -48,11 +48,42 @@ class BatchReview(BaseDocumentList):
     """Starts the review process more multiple documents at once."""
 
     def get_redirect_url(self, *args, **kwargs):
+        """Redirects to document list after that."""
         return reverse('category_document_list', args=[
             self.kwargs.get('organisation'),
             self.kwargs.get('category')])
 
     def post(self, request, *args, **kwargs):
+        ids = request.POST.getlist('document_ids')
+        docs = self.get_document_class().objects \
+            .filter(document_id__in=ids) \
+            .select_related('document', 'latest_revision')
+
+        ok = []
+        nok = []
+        for doc in docs:
+            if doc.latest_revision.can_be_reviewed:
+                doc.latest_revision.start_review()
+                ok.append(doc)
+            else:
+                nok.append(doc)
+
+        if len(ok) > 0:
+            ok_message = ugettext('The review started for the following documents:')
+            ok_list = '</li><li>'.join('%s' % doc for doc in ok)
+            messages.success(request, '{} <ul><li>{}</li></ul>'.format(
+                ok_message,
+                ok_list
+            ))
+
+        if len(nok) > 0:
+            nok_message = ugettext("We could'nt start the review for the following documents:")
+            nok_list = '</li><li>'.join('%s' % doc for doc in nok)
+            messages.error(request, '{} <ul><li>{}</li></ul>'.format(
+                nok_message,
+                nok_list
+            ))
+
         return HttpResponseRedirect(self.get_redirect_url())
 
 

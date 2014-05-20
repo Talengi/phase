@@ -9,6 +9,83 @@ from accounts.factories import UserFactory
 from reviews.models import Review
 
 
+class BatchReviewTests(TestCase):
+    def setUp(self):
+        self.category = CategoryFactory()
+        self.user = UserFactory(
+            email='testadmin@phase.fr',
+            password='pass',
+            is_superuser=True,
+            category=self.category
+        )
+        self.client.login(email=self.user.email, password='pass')
+        self.url = reverse('batch_start_review', args=[
+            self.category.organisation.slug,
+            self.category.slug,
+        ])
+        self.doc1 = DocumentFactory(
+            revision={
+                'reviewers': [self.user],
+                'leader': self.user,
+                'approver': self.user,
+            }
+        )
+        self.doc2 = DocumentFactory(
+            revision={
+                'reviewers': [self.user],
+                'leader': self.user,
+                'approver': self.user,
+            }
+        )
+        self.doc3 = DocumentFactory(
+            revision={
+                'reviewers': [],
+                'leader': None,
+                'approver': None,
+            }
+        )
+        self.ok = 'The review started for the following documents'
+        self.nok = "We could'nt start the review for the following documents"
+
+    def test_batch_review_redirect(self):
+        document_list_url = reverse('category_document_list', args=[
+            self.category.organisation.slug,
+            self.category.slug,
+        ])
+        res = self.client.post(
+            self.url,
+            {'document_ids': [self.doc1.id, self.doc2.id]}
+        )
+        self.assertRedirects(res, document_list_url)
+
+    def test_batch_review_documents_success(self):
+        res = self.client.post(
+            self.url,
+            {'document_ids': [self.doc1.id, self.doc2.id]},
+            follow=True
+        )
+        self.assertContains(res, self.ok)
+        self.assertNotContains(res, self.nok)
+
+    def test_batch_review_errors(self):
+        res = self.client.post(
+            self.url,
+            {'document_ids': [self.doc3.id]},
+            follow=True
+        )
+        self.assertNotContains(res, self.ok)
+        self.assertContains(res, self.nok)
+
+    def test_batch_review_half_success(self):
+        res = self.client.post(
+            self.url,
+            {'document_ids': [self.doc1.id, self.doc3.id]},
+            follow=True
+        )
+        self.assertContains(res, self.ok)
+        self.assertContains(res, self.nok)
+
+
 class ReviewersDocumentListTests(TestCase):
 
     def setUp(self):

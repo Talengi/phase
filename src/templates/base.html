@@ -25,7 +25,7 @@
                     {% for message in messages %}
                         <li id="message_{{ forloop.counter }}"
                             {% if message.tags %} class="alert alert-{% if message.tags == "error" %}danger{% else %}{{ message.tags }}{% endif %}"{% endif %}>
-                            {{ message }}
+                            {{ message|safe }}
                         </li>
                     {% endfor %}
                 </ul>
