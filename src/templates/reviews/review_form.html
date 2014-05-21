@@ -96,26 +96,47 @@
 
             {% for review in reviews %}
             <tr>
+                <td>
+                    <span class="glyphicon glyphicon-time"
+                          rel="tooltip"
+                          data-toggle="tooltip"
+                          title="{{ review.reviewed_on|na_if_none }}">
+                    </span>
+                </td>
                 <td>{{ review.reviewer }}</td>
                 <td>{{ _('Reviewer') }}</td>
                 <td>{{ review.closed|yesno:_('Completed,Pending') }}</td>
-                <td class="alignright">{% file_link review.comments %}</td>
+                <td class="center">{% file_link review.comments 'Comments' %}</td>
             </tr>
             {% endfor %}
 
 
             <tr>
+                <td>
+                    <span class="glyphicon glyphicon-time"
+                          rel="tooltip"
+                          data-toggle="tooltip"
+                          title="{{ revision.leader_step_closed|na_if_none }}">
+                    </span>
+                </td>
                 <td>{{ revision.leader }}</td>
                 <td>{{ _('Leader') }}</td>
                 <td>{{ revision.leader_step_closed|yesno:_('Completed,Pending') }}</td>
-                <td class="alignright">{% file_link revision.leader_comments %}</td>
+                <td class="center">{% file_link revision.leader_comments 'Comments' %}</td>
             </tr>
 
             <tr>
+                <td>
+                    <span class="glyphicon glyphicon-time"
+                          rel="tooltip"
+                          data-toggle="tooltip"
+                          title="{{ revision.review_end_date|na_if_none }}">
+                    </span>
+                </td>
                 <td>{{ revision.approver }}</td>
                 <td>{{ _('Approver') }}</td>
-                <td>{{ revision.revision_end_date|yesno:_('Completed,Pending') }}</td>
-                <td class="alignright">{% file_link revision.approver_comments %}</td>
+                <td>{{ revision.review_end_date|yesno:_('Completed,Pending') }}</td>
+                <td class="center">{% file_link revision.approver_comments 'Comments' %}</td>
             </tr>
 
         </table>

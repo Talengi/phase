@@ -9,4 +9,6 @@ jQuery(function($) {
         submitButton.val(with_file_label);
     });
 
+    var tooltips = $('span[rel=tooltip]');
+    tooltips.tooltip();
 });

@@ -339,6 +339,12 @@ td.center {
 td.alignright {
     text-align: right;
 }
+
+/* Review form */
+#fieldset-reviewers table tr td:first-child {
+    width: 1px;
+}
+
 /* Off canvas sidebar */
 .sidebar-offcanvas {
     position: fixed;
