@@ -1,10 +1,6 @@
 <nav id="top" class="navbar main-navbar navbar-inverse navbar-static-top">
 <div class="container">
 
-    <div class="navbar-header">
-        <a class="navbar-brand" href="{% url "category_list" %}">Phase</a>
-    </div>
-
     {% if user.is_authenticated %}
 
         <button class="btn btn-primary navbar-btn navbar-left"
@@ -16,6 +12,9 @@
 
         {% include 'navbar_breadcrumb.html' %}
 
+    {% endif %}
+
+    {% if user.is_authenticated %}
         <p class="navbar-text navbar-right">
             Hello {{ user.get_full_name }}
         </p>

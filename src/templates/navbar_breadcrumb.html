@@ -1,11 +1,16 @@
+{{ toto }}
 <ul class="navbar-text breadcrumbs">
     <li><a href="{% url 'category_list' %}">{{ _('Home') }}</a></li>
-    <li><a href="{% url 'category_list' %}">{{ _('Home') }}</a></li>
-    <li><a href="{% url 'category_list' %}">{{ _('Home') }}</a></li>
-</ul>
 
-{% if category %}
-<p class="navbar-text hidden-xs hidden-sm">
-    {{ category }}
-</p>
-{% endif %}
+    {% if category %}
+        <li><a href="#">
+            {{ category }}
+        </a></li>
+    {% endif %}
+
+    {% if document %}
+    <li><a href="#">
+        {{ document }}
+    </a></li>
+    {% endif %}
+</ul>

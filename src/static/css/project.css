@@ -24,6 +24,11 @@ body.documentlist .main-navbar {
 .navbar ul.breadcrumbs li:first-child:before {
     content: "";
 }
+.navbar .site-header a {
+  color: #999999;
+  text-align: center;
+  display: block;
+}
 body.fullwidth > .container,
 .navbar > .container {
     width: 100%;
