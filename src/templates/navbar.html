@@ -14,12 +14,7 @@
             <span class="glyphicon glyphicon-align-justify"></span>
         </button>
 
-        {% if category %}
-        <p class="navbar-text hidden-xs hidden-sm">
-            <span class="glyphicon glyphicon-info-sign"></span>
-            {{ category }}
-        </p>
-        {% endif %}
+        {% include 'navbar_breadcrumb.html' %}
 
         <p class="navbar-text navbar-right">
             Hello {{ user.get_full_name }}

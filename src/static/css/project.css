@@ -7,6 +7,23 @@ body.documentlist .main-navbar {
     z-index: 1000;
     border: none;
 }
+.navbar ul.breadcrumbs {
+    padding-left: 0;
+}
+.navbar ul.breadcrumbs li {
+    display: inline;
+}
+.navbar ul.breadcrumbs a {
+    color: white;
+}
+.navbar ul.breadcrumbs li:before {
+    content: ">";
+    margin-right: 5px;
+    color: white;
+}
+.navbar ul.breadcrumbs li:first-child:before {
+    content: "";
+}
 body.fullwidth > .container,
 .navbar > .container {
     width: 100%;
