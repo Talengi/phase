@@ -7,10 +7,11 @@
 
     {% if user.is_authenticated %}
 
-        <button class="btn btn-default navbar-btn navbar-left"
+        <button class="btn btn-primary navbar-btn navbar-left"
                 data-toggle="collapse"
-                data-target="#sidebar-container">
-            Menu
+                data-target="#sidebar-container"
+                alt="{{ _('Menu') }}">
+            <span class="glyphicon glyphicon-align-justify"></span>
         </button>
 
         {% if category %}
