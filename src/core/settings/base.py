@@ -176,6 +176,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 
     # Custom middlewares
+    'breadcrumbs.middleware.BreadcrumbMiddleware',
 )
 # ######### END MIDDLEWARE CONFIGURATION
 
@@ -224,6 +225,7 @@ LOCAL_APPS = (
     'favorites',
     'bootstrap',
     'api',
+    'breadcrumbs',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
