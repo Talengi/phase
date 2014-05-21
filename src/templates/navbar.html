@@ -2,53 +2,29 @@
 <div class="container">
 
     <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
         <a class="navbar-brand" href="{% url "category_list" %}">Phase</a>
+    </div>
+
+    {% if user.is_authenticated %}
+
+        <button class="btn btn-default navbar-btn navbar-left"
+                data-toggle="collapse"
+                data-target="#sidebar-container">
+            Menu
+        </button>
 
         {% if category %}
-        <p class="category-info navbar-text visible-xs">
+        <p class="navbar-text hidden-xs hidden-sm">
             <span class="glyphicon glyphicon-info-sign"></span>
             {{ category }}
         </p>
         {% endif %}
-    </div>
 
-    <div class="navbar-collapse collapse">
-        {% if user.is_authenticated %}
-            <ul class="nav navbar-nav">
-                {% include 'documents/categories_menu.html' %}
-                {% include 'reviews/review_menu.html' %}
-                <li{% if favorites_active %} class="active"{% endif %}>
-                    <a href="{% url "favorite_list" %}">
-                        <span class="glyphicon glyphicon-star"></span> Favorites
-                    </a>
-                </li>
-            </ul>
+        <p class="navbar-text navbar-right">
+            Hello {{ user.get_full_name }}
+        </p>
 
-            {% if category %}
-            <p class="category-info navbar-text hidden-xs hidden-sm">
-                <span class="glyphicon glyphicon-info-sign"></span>
-                {{ category }}
-            </p>
-            {% endif %}
-
-            <ul class="nav navbar-nav navbar-right">
-                {% if user.is_superuser %}
-                    <li><a href="{% url "admin:index" %}">Admin</a></li>
-                {% endif %}
-                <li><a href="{% url "logout" %}">Log out</a></li>
-            </ul>
-
-            <p class="navbar-text navbar-right">
-                Hello {{ user.get_full_name }}
-            </p>
-        {% endif %}
-    </div><!--/.nav-collapse -->
+    {% endif %}
 
 </div>
 </nav>

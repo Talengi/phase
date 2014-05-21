@@ -15,6 +15,7 @@
 
     <body class="{% block custombodyclass %}{% endblock %}">
 
+        {% include 'side_menu.html' %}
         {% include 'navbar.html' %}
 
         {% block additional_navbar %}{% endblock %}

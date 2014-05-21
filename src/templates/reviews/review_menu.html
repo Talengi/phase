@@ -1,11 +1,13 @@
 <li{% if reviews_active %} class="active"{% endif %}>
-    <a href="#" id="review-link" class="dropdown-toggle" data-toggle="dropdown">
+    <a href="#nav-reviews"
+       id="review-link"
+       data-toggle="collapse"
+       data-parent="#sidebar-nav">
         <span class="glyphicon glyphicon-comment"></span>
         Review <b class="caret"></b>
     </a>
 
-    <ul class="dropdown-menu">
-        <li class="dropdown-header">{{ _('Select review step') }}</li>
+    <ul id="nav-reviews" class="nav nav-stacked collapse">
         <li>
             <a href="{% url 'priorities_review_document_list' %}">
                 {{ _('Priorities') }}
