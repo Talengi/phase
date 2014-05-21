@@ -1,5 +1,8 @@
 <li{% if documents_active %} class="active"{% endif %}>
-    <a href="#" id="document-link" class="dropdown-toggle" data-toggle="dropdown">
+    <a href="#nav-organisations"
+       id="document-link"
+       data-toggle="collapse"
+       data-parent="#sidebar-nav">
         <span class="glyphicon glyphicon-briefcase"></span>
         Documents <b class="caret"></b>
     </a>
@@ -9,9 +12,9 @@
 
     {% regroup user_categories by organisation as organisation_list %}
 
-    <ul class="dropdown-menu">
+    <ul id="nav-organisations" class="nav nav-stacked collapse">
     {% for organisation in organisation_list %}
-        <li class="dropdown-header">{{ organisation.grouper }}</li>
+        <li class="disabled"><a href="#">{{ organisation.grouper }}</a></li>
         {% for category in organisation.list %}
             <li>
                 <a href="{{ category.get_absolute_url }}">
@@ -22,6 +25,5 @@
     {% endfor %}
     </ul>
     {% endcache %}
-
 </li>
 

@@ -5,6 +5,7 @@ body {
 body.documentlist .main-navbar {
     margin-bottom: 0;
     z-index: 1000;
+    border: none;
 }
 body.fullwidth > .container,
 .navbar > .container {
@@ -346,6 +347,40 @@ td.alignright {
 }
 
 /* Off canvas sidebar */
+#sidebar {
+    position: fixed;
+    display: block;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background-color: white;
+    z-index: 1050;
+    width: 350px;
+    padding: 0px;
+}
+#sidebar > span {
+    text-align: right;
+    display: block;
+    padding: 5px;
+    background-color: #428BCA;
+    height: 50px;
+}
+#sidebar > span button {
+    border: none;
+    color: white;
+    background-color: inherit;
+    font-size: 25px;
+}
+#sidebar-nav > li > a{
+    color: inherit;
+}
+#sidebar-nav li.active > a{
+  background-color: #eeeeee;
+  border-color: #428bca;
+}
+#sidebar-nav li li a {
+    padding-left: 20px;
+}
 .sidebar-offcanvas {
     position: fixed;
     display: block;
@@ -354,6 +389,8 @@ td.alignright {
     padding-top: 15px;
     background-color: white;
     z-index: 9999;
+    display: none;
+    width: 350px;
 }
 .sidebar-offcanvas #controls-rows {
     position: fixed;
@@ -362,12 +399,6 @@ td.alignright {
     width: 16.67%;
     bottom: 0;
     overflow-y: auto;
-}
-.sidebar-offcanvas {
-    display: none;
-    width: 350px;
-}
-.sidebar-offcanvas #controls-rows {
     width: 350px;
 }
 .sidebar-offcanvas.active {
