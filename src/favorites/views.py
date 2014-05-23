@@ -1,6 +1,7 @@
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import ListView, CreateView, DeleteView
 from django.http import HttpResponse
+from django.utils.translation import ugettext_lazy as _
 
 from accounts.views import LoginRequiredMixin
 from .models import Favorite
@@ -9,6 +10,9 @@ from .forms import FavoriteForm
 
 class FavoriteList(LoginRequiredMixin, ListView):
     model = Favorite
+
+    def breadcrumb_section(self):
+        return _('Favorites')
 
     def get_context_data(self, **kwargs):
         context = super(FavoriteList, self).get_context_data(**kwargs)
