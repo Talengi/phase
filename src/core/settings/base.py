@@ -176,7 +176,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 
     # Custom middlewares
-    'breadcrumbs.middleware.BreadcrumbMiddleware',
 )
 # ######### END MIDDLEWARE CONFIGURATION
 
