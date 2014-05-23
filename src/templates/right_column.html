@@ -1,0 +1,21 @@
+{% load notifications %}
+<div id="right-sidebar-container" class="collapse">
+<div class="modal-backdrop in"></div>
+<nav id="right-sidebar" class="sidebar">
+    <span>
+        <button data-toggle="collapse"
+                data-target="#right-sidebar-container"
+                type="button">
+            &times;</button>
+    </span>
+
+    {% for message in messages %}
+    <div class="notification">
+        {% notification_icon message.tags %}
+        {{ message|safe }}
+    </div>
+    <hr />
+    {% endfor %}
+
+</nav>
+</div>

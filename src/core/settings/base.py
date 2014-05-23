@@ -225,6 +225,7 @@ LOCAL_APPS = (
     'bootstrap',
     'api',
     'breadcrumbs',
+    'notifications',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

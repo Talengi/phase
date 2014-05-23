@@ -15,22 +15,13 @@
 
     <body class="{% block custombodyclass %}{% endblock %}">
 
-        {% include 'side_menu.html' %}
+        {% include 'left_column.html' %}
+        {% include 'right_column.html' %}
         {% include 'navbar.html' %}
 
         {% block additional_navbar %}{% endblock %}
 
         <div class="container">
-            {% if messages %}
-                <ul class="messages">
-                    {% for message in messages %}
-                        <li id="message_{{ forloop.counter }}"
-                            {% if message.tags %} class="alert alert-{% if message.tags == "error" %}danger{% else %}{{ message.tags }}{% endif %}"{% endif %}>
-                            {{ message|safe }}
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
             {% block content %}{% endblock content %}
         </div> <!-- /container -->
 

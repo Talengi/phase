@@ -5,16 +5,21 @@
 
         <button class="btn btn-primary navbar-btn navbar-left"
                 data-toggle="collapse"
-                data-target="#sidebar-container"
+                data-target="#left-sidebar-container"
                 alt="{{ _('Menu') }}">
             <span class="glyphicon glyphicon-align-justify"></span>
         </button>
 
         {% include 'navbar_breadcrumb.html' %}
 
-    {% endif %}
+        <button type="button"
+                class="btn btn-primary navbar-right navbar-btn last-button {% if not messages %}disabled{% endif %}"
+                data-toggle="collapse"
+                href="#right-sidebar-container">
+            <span class="glyphicon glyphicon-bell"></span>
+            {% if messages %} <span class="badge">{{ messages|length }}</span> {% endif %}
+        </button>
 
-    {% if user.is_authenticated %}
         <p class="navbar-text navbar-right">
             Hello {{ user.get_full_name }}
         </p>

@@ -369,10 +369,9 @@ td.alignright {
 }
 
 /* Off canvas sidebar */
-#sidebar {
+.sidebar {
     position: fixed;
     display: block;
-    left: 0;
     top: 0;
     bottom: 0;
     background-color: white;
@@ -380,14 +379,20 @@ td.alignright {
     width: 350px;
     padding: 0px;
 }
-#sidebar > span {
+#left-sidebar {
+    left: 0;
+}
+#right-sidebar {
+    right: 0;
+}
+.sidebar > span {
     text-align: right;
     display: block;
     padding: 5px;
     background-color: #428BCA;
     height: 50px;
 }
-#sidebar > span button {
+.sidebar > span button {
     border: none;
     color: white;
     background-color: inherit;
@@ -402,6 +407,9 @@ td.alignright {
 }
 #sidebar-nav li li a {
     padding-left: 20px;
+}
+.sidebar .notification {
+    padding: 15px;
 }
 .sidebar-offcanvas {
     position: fixed;
