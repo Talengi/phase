@@ -13,7 +13,7 @@ def crumb(obj):
             url = obj.get_absolute_url()
         else:
             url = '#'
-        link = '<li><a href="{}">{}</a></li>'.format(url, obj)
+        link = '<li><a href="{}">{}</a></li>&nbsp;'.format(url, obj)
     else:
         link = ''
 

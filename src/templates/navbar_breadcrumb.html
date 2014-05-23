@@ -1,7 +1,7 @@
 {% load cache breadcrumbs %}
 {% cache 500 breadcrumb request.path_info %}
-<ul class="navbar-text breadcrumbs">
-    <li><a href="{% url 'category_list' %}">{{ _('Home') }}</a></li>
+<ul class="navbar-text breadcrumbs hidden-xs">
+    <li><a href="{% url 'category_list' %}">{{ _('Home') }}</a></li>&nbsp;
     {% crumb view.breadcrumb_section %}
     {% crumb view.breadcrumb_subsection %}
     {% crumb view.breadcrumb_object %}
