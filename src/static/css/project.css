@@ -169,9 +169,11 @@ button.ui-multiselect {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-#main-table table tbody td:not(.columnselect):not(.columnfavorite),
-#main-table table tbody td.columnfavorite i {
+#main-table table tbody td:not(.columnselect):not(.columnfavorite) {
     font-size: 11px;
+    cursor: pointer;
+}
+#main-table table tbody td.columnfavorite span {
     cursor: pointer;
 }
 #main-table table tbody td.document-number {
