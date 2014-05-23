@@ -46,6 +46,12 @@ class DocumentListMixin(object):
     slug_url_kwarg = 'document_key'
     slug_field = 'document_key'
 
+    def breadcrumb_section(self):
+        return None
+
+    def breadcrumb_subsection(self):
+        return self.category
+
     def get_context_data(self, **kwargs):
         context = super(DocumentListMixin, self).get_context_data(**kwargs)
         context.update({
@@ -209,6 +215,9 @@ class DocumentRedirect(RedirectView):
 
 
 class DocumentFormMixin(DocumentListMixin):
+    def breadcrumb_object(self):
+        return self.object
+
     def get_form_class(self):
         """Get the document form edition form class."""
         return documentform_factory(self.get_document_class())

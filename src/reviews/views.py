@@ -92,6 +92,9 @@ class BaseReviewDocumentList(LoginRequiredMixin, ListView):
     template_name = 'reviews/document_list.html'
     context_object_name = 'revisions'
 
+    def breadcrumb_section(self):
+        return _('Review')
+
     def get_context_data(self, **kwargs):
         context = super(BaseReviewDocumentList, self).get_context_data(**kwargs)
         context.update({
@@ -143,6 +146,9 @@ class PrioritiesDocumentList(BaseReviewDocumentList):
      * Document is of class >= 2
 
     """
+    def breadcrumb_subsection(self):
+        return _('Priorities')
+
     def order_revisions(self, revisions):
         revisions.sort(lambda x, y: cmp(x.review_due_date, y.review_due_date))
         return revisions
@@ -159,6 +165,9 @@ class PrioritiesDocumentList(BaseReviewDocumentList):
 
 class ReviewersDocumentList(BaseReviewDocumentList):
     """Display the list of documents at the first review step."""
+
+    def breadcrumb_subsection(self):
+        return _('Reviewer')
 
     def get_pending_reviews(self):
         """Get all pending reviews for this user."""
@@ -186,6 +195,9 @@ class ReviewersDocumentList(BaseReviewDocumentList):
 class LeaderDocumentList(BaseReviewDocumentList):
     """Display the list of documents at the two first review steps."""
 
+    def breadcrumb_subsection(self):
+        return _('Leader')
+
     def step_filter(self, qs):
         return qs \
             .filter(leader_step_closed=None) \
@@ -195,6 +207,9 @@ class LeaderDocumentList(BaseReviewDocumentList):
 class ApproverDocumentList(BaseReviewDocumentList):
     """Display the list of documents at the third review steps."""
 
+    def breadcrumb_subsection(self):
+        return _('Approver')
+
     def step_filter(self, qs):
         return qs.filter(approver=self.request.user)
 
@@ -202,6 +217,12 @@ class ApproverDocumentList(BaseReviewDocumentList):
 class ReviewFormView(LoginRequiredMixin, DetailView):
     context_object_name = 'revision'
     template_name = 'reviews/review_form.html'
+
+    def breadcrumb_section(self):
+        return _('Review')
+
+    def breadcrumb_object(self):
+        return self.object.document
 
     def get_context_data(self, **kwargs):
         context = super(ReviewFormView, self).get_context_data(**kwargs)
