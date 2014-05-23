@@ -41,11 +41,17 @@ class UserAutocomplete(BaseUserAutocomplete):
         super(UserAutocomplete, self).__init__(attrs)
 
     def render(self, name, value, attrs=None):
-        obj = self.choices.queryset.get(pk=value)
-        attrs.update({
-            'data-initial-id': value,
-            'data-initial-label': unicode(obj),
-        })
+        if value:
+            obj = self.choices.queryset.get(pk=value)
+            attrs.update({
+                'data-initial-id': value,
+                'data-initial-label': unicode(obj),
+            })
+        else:
+            attrs.update({
+                'data-initial-id': '',
+                'data-initial-label': '',
+            })
         return super(AutocompleteTextInput, self).render(name, value, attrs)
 
 
@@ -59,6 +65,7 @@ class MultipleUserAutocomplete(BaseUserAutocomplete):
         super(MultipleUserAutocomplete, self).__init__(attrs)
 
     def render(self, name, value, attrs=None):
+        value = value or []
         objects = self.choices.queryset.filter(pk__in=value)
         attrs.update({
             'data-initial-id': '[%s]' % ','.join(unicode(val) for val in value),
