@@ -1,17 +1,18 @@
 from django.conf.urls import patterns, url
-from django.views.generic.base import RedirectView
 
 from reviews.views import (
     ReviewersDocumentList, LeaderDocumentList, ApproverDocumentList,
-    ReviewFormView, StartReview, BatchReview, PrioritiesDocumentList
+    ReviewFormView, StartReview, BatchReview, PrioritiesDocumentList,
+    ReviewHome,
 )
 
 urlpatterns = patterns(
     '',
 
-    # Unexisting url, redirect to home
+    # Review home page
     url(r'^$',
-        RedirectView.as_view(url='/')),
+        ReviewHome.as_view(),
+        name='review_home'),
 
     # Start review
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/(?P<document_key>[\w-]+)/$',

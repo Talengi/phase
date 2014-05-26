@@ -1,7 +1,7 @@
 import datetime
 
 from django.db import transaction
-from django.views.generic import View, ListView, DetailView
+from django.views.generic import View, ListView, DetailView, TemplateView
 from django.views.generic.detail import SingleObjectMixin
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect, Http404
@@ -15,6 +15,13 @@ from documents.utils import get_all_revision_classes
 from documents.models import Document
 from documents.views import DocumentListMixin, BaseDocumentList
 from reviews.models import ReviewMixin, Review
+
+
+class ReviewHome(TemplateView):
+    template_name = 'reviews/home.html'
+
+    def breadcrumb_section(self):
+        return _('Review'), reverse('review_home')
 
 
 class StartReview(PermissionRequiredMixin,
@@ -93,7 +100,7 @@ class BaseReviewDocumentList(LoginRequiredMixin, ListView):
     context_object_name = 'revisions'
 
     def breadcrumb_section(self):
-        return _('Review')
+        return _('Review'), reverse('review_home')
 
     def get_context_data(self, **kwargs):
         context = super(BaseReviewDocumentList, self).get_context_data(**kwargs)
