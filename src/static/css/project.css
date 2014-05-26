@@ -8,6 +8,7 @@ body.documentlist .main-navbar {
     border: none;
 }
 .navbar ul.breadcrumbs {
+    margin-left: 0;
     padding-left: 0;
 }
 .navbar ul.breadcrumbs li {
@@ -37,6 +38,9 @@ body.fullwidth > .container,
 }
 .last-button {
     margin-left: 15px;
+}
+.navbar-left {
+    margin-right: 10px;
 }
 .date-error {
     color: #B94A48;
