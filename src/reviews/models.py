@@ -7,6 +7,7 @@ from django.utils.functional import cached_property
 from model_utils import Choices
 
 from accounts.models import User
+from metadata.fields import ConfigurableChoiceField
 from documents.models import Document
 from documents.fields import (
     LeaderCommentsFileField, ApproverCommentsFileField, PrivateFileField
@@ -96,6 +97,11 @@ class ReviewMixin(models.Model):
     approver_comments = ApproverCommentsFileField(
         _('Approver comments'),
         null=True, blank=True)
+    klass = ConfigurableChoiceField(
+        verbose_name=u"Class",
+        default='1',
+        max_length=1,
+        list_index='CLASSES')
 
     class Meta:
         abstract = True

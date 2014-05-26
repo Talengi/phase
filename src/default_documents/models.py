@@ -51,11 +51,6 @@ class ContractorDeliverable(Metadata):
         default=u"0001",
         max_length=4,
         validators=[StringNumberValidator(4)])
-    klass = ConfigurableChoiceField(
-        verbose_name=u"Class",
-        default='1',
-        max_length=1,
-        list_index='CLASSES')
     system = ConfigurableChoiceField(
         verbose_name=u"System",
         list_index='SYSTEMS',
@@ -237,6 +232,10 @@ class ContractorDeliverable(Metadata):
     @property
     def leader(self):
         return self.latest_revision.leader
+
+    @property
+    def klass(self):
+        return self.latest_revision.klass
 
 
 class ContractorDeliverableRevision(ReviewMixin, MetadataRevision):
