@@ -89,6 +89,7 @@ jQuery(function($) {
         var $row;
         var form = $('.navbar-form');
         var buttons = $('.navbar-action');
+        var close_btn = $('.dropdown-form button[data-toggle=dropdown]');
 
         // Update form action depending on clicked button
         buttons.on('click', function(event) {
@@ -96,10 +97,16 @@ jQuery(function($) {
             form.attr('action', action);
         });
 
-        // TODO
-        // Dont't close dropdown
+        // Prevent closing dropdown on any click
         $('.dropdown-form').parent().on('hide.bs.dropdown', function(e) {
             e.preventDefault();
+        });
+
+        // Since we blocked form dropdown to be automaticaly closed,
+        // we must manually bind the close button to do it
+        close_btn.on('click', function(event) {
+            var dropdown = $(this).closest('.dropdown');
+            dropdown.toggleClass('open');
         });
 
         $("#documents tbody").on('change', 'input[type=checkbox]', function(e) {
