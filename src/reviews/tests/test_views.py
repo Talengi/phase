@@ -114,6 +114,7 @@ class PrioritiesDocumentListTests(TestCase):
                 'reviewers': [self.user],
                 'leader': self.other_user,
                 'approver': self.other_user,
+                'klass': 1,
             }
         )
         doc.latest_revision.start_review()
@@ -127,11 +128,29 @@ class PrioritiesDocumentListTests(TestCase):
                 'reviewers': [self.user],
                 'leader': self.user,
                 'approver': self.other_user,
+                'klass': 1,
             }
         )
         revision = doc.latest_revision
         revision.start_review()
         revision.review_due_date = datetime.date.today() + datetime.timedelta(days=6)
+        revision.save()
+        res = self.client.get(self.url)
+        self.assertNotContains(res, '<td class="columndocument_key"')
+
+    def test_non_prioritary_document3(self):
+        """Klass < 2"""
+        doc = DocumentFactory(
+            revision={
+                'reviewers': [self.user],
+                'leader': self.user,
+                'approver': self.other_user,
+                'klass': 3,
+            }
+        )
+        revision = doc.latest_revision
+        revision.start_review()
+        revision.review_due_date = datetime.date.today()
         revision.save()
         res = self.client.get(self.url)
         self.assertNotContains(res, '<td class="columndocument_key"')
@@ -142,6 +161,7 @@ class PrioritiesDocumentListTests(TestCase):
                 'reviewers': [self.user],
                 'leader': self.user,
                 'approver': self.other_user,
+                'klass': 1,
             }
         )
         revision = doc.latest_revision

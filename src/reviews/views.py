@@ -159,7 +159,8 @@ class PrioritiesDocumentList(BaseReviewDocumentList):
 
         qs = qs \
             .filter(role_q) \
-            .filter(review_due_date__lte=delta)
+            .filter(review_due_date__lte=delta) \
+            .filter(klass__lte=2)
         return qs
 
 
