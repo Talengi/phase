@@ -31,7 +31,6 @@ class ContractorDeliverableForm(BaseDocumentForm):
                 'discipline',
                 'document_type',
                 'sequential_number',
-                'klass',
                 'system',
                 'wbs',
                 'weight',
@@ -75,6 +74,7 @@ class ContractorDeliverableRevisionForm(BaseDocumentForm):
         return Layout(
             DocumentFieldset(
                 _('Revision'),
+                'klass',
                 'status',
                 'final_revision',
                 'native_file',
