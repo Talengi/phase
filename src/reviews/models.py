@@ -7,7 +7,6 @@ from django.utils.functional import cached_property
 from model_utils import Choices
 
 from accounts.models import User
-from metadata.fields import ConfigurableChoiceField
 from documents.models import Document
 from documents.fields import (
     LeaderCommentsFileField, ApproverCommentsFileField, PrivateFileField
@@ -57,6 +56,13 @@ class Review(models.Model):
 
 class ReviewMixin(models.Model):
     """A Mixin to use to define reviewable document types."""
+    CLASSES = (
+        (1, '1'),
+        (2, '2'),
+        (3, '3'),
+        (4, '4'),
+    )
+
     review_start_date = models.DateField(
         _('Review start date'),
         null=True, blank=True
@@ -97,11 +103,10 @@ class ReviewMixin(models.Model):
     approver_comments = ApproverCommentsFileField(
         _('Approver comments'),
         null=True, blank=True)
-    klass = ConfigurableChoiceField(
+    klass = models.IntegerField(
         verbose_name=u"Class",
-        default='1',
-        max_length=1,
-        list_index='CLASSES')
+        default=1,
+        choices=CLASSES)
 
     class Meta:
         abstract = True
