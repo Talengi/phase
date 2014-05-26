@@ -211,6 +211,7 @@ THIRD_PARTY_APPS = (
     'widget_tweaks',
     'crispy_forms',
     'rest_framework',
+    'django_extensions',
 )
 
 # Apps specific for this project go here.
@@ -226,6 +227,7 @@ LOCAL_APPS = (
     'api',
     'breadcrumbs',
     'notifications',
+    'imports',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
