@@ -20,5 +20,5 @@ class UserMultipleChoiceField(ModelMultipleChoiceField):
         super(UserMultipleChoiceField, self).__init__(qs, *args, **kwargs)
 
     def clean(self, value):
-        value = value.split(',')
+        value = value.split(',') if value else value
         return super(UserMultipleChoiceField, self).clean(value)
