@@ -104,8 +104,8 @@ body > .container > h2 {
     position: fixed;
     top: 120px; /* Because of the two navbars */
     bottom: 0;
-    left: 20px;
-    right: 20px;
+    left: 15px;
+    right: 15px;
     max-height: 100%;
     overflow: auto;
 }
