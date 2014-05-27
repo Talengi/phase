@@ -14,6 +14,7 @@ urlpatterns = patterns(
     url(r'^accounts/', include('accounts.urls')),
     url(r'^favorites/', include('favorites.urls')),
     url(r'^reviews/', include('reviews.urls')),
+    url(r'^imports/', include('imports.urls')),
     url(r'^', include('categories.urls')),
     url(r'^', include('documents.urls')),
     url(r'^robots\.txt$', lambda r: HttpResponse(
