@@ -1,4 +1,4 @@
-{% load widget_tweaks %}
+{% load widget_tweaks forms %}
 {{ form.media }}
 
 {% if form.non_field_errors %}
@@ -17,7 +17,12 @@
         <label for="{{ field.id }}" class="control-label">
             {{ field.label }}
         </label>
-        {{ field|add_class:"form-control" }}
+
+        {% if field|is_input_file %}
+            {{ field }}
+        {% else %}
+            {{ field|add_class:"form-control" }}
+        {% endif %}
 
         {% if field.help_text %}
             <span class="help-block">({{ field.help_text }})</span>
