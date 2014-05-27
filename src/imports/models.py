@@ -9,6 +9,7 @@ from django_extensions.db.fields import UUIDField
 from model_utils import Choices
 
 from documents.models import Document
+from documents.forms.models import documentform_factory
 
 
 @python_2_unicode_compatible
@@ -46,6 +47,22 @@ class ImportBatch(models.Model):
 
     def get_absolute_url(self):
         return reverse('import_status', args=[self.uid])
+
+    def get_form_class(self):
+        form_class = documentform_factory(self.imported_type.model_class())
+        return form_class
+
+    def get_form(self):
+        return self.get_form_class()()
+
+    def get_revisionform_class(self):
+        obj_class = self.imported_type.model_class()
+        obj = obj_class()
+        form_class = documentform_factory(obj.get_revision_class())
+        return form_class
+
+    def get_revisionform(self):
+        return self.get_revisionform_class()()
 
 
 class Import(models.Model):
