@@ -1,2 +1,2 @@
-document_key;subject;meeting_date;received_sent_date;contract_number;originator;recipient;document_type;sequential_number;prepared_by;signed;status;
-test-1234;Test meeting;2014-01-15;2014-02-16;FAC09001;FWF;test_recipient;PID;5678;test_author;False;closed
+document_key;subject;meeting_date;received_sent_date;contract_number;originator;recipient;document_type;sequential_number;prepared_by;signed;status;created_on;revision_date;
+test-1234;Test meeting;2014-01-15;2014-02-16;FAC09001;FWF;test_recipient;PID;5678;test_author;False;closed;2014-05-28;2014-05-28;
