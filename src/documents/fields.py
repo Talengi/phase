@@ -1,5 +1,7 @@
 from django.db import models
+from django import forms
 from django.forms import fields
+from django.contrib.contenttypes.models import ContentType
 
 from documents.fileutils import (
     private_storage, revision_file_path, leader_comments_file_path,
@@ -59,3 +61,20 @@ class ApproverCommentsFileField(PrivateFileField):
 
 class PhaseClearableFileField(fields.FileField):
     widget = PhaseClearableFileInput
+
+
+class MetadataTypeChoiceField(forms.ModelChoiceField):
+    """A custom model choice field limited to document classes."""
+    def __init__(self, *args, **kwargs):
+
+        # We will set our own queryset, so user should not pass one
+        qs = kwargs.pop('queryset', None)
+        if qs:
+            raise ValueError("We don't need a queryset, thank you")
+
+        queryset = ContentType.objects \
+            .filter(app_label__endswith='_documents') \
+            .exclude(model__icontains='revision')
+        kwargs.update({'queryset': queryset})
+
+        super(MetadataTypeChoiceField, self).__init__(*args, **kwargs)

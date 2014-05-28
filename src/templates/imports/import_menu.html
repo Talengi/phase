@@ -1,0 +1,13 @@
+<li{% if imports_active %} class="active"{% endif %}>
+    <a href="#nav-imports"
+       data-toggle="collapse"
+       data-parent="#sidebar-nav">
+        <span class="glyphicon glyphicon-upload"></span>
+        Imports <b class="caret"></b>
+    </a>
+
+    <ul id="nav-imports" class="nav nav-stacked collapse">
+        <li><a href="{% url 'import_file' %}">Import document list</a></li>
+        <li><a href="{% url 'import_list' %}">List all imports</a></li>
+    </ul>
+</li>

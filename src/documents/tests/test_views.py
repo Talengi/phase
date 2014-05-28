@@ -469,7 +469,7 @@ class DocumentDownloadTest(TestCase):
             }
         )
         c = self.client
-        r = c.get(self.download_url, {
+        r = c.post(self.download_url, {
             'document_ids': document.id,
         })
         self.assertEqual(r.status_code, 200)
@@ -491,7 +491,7 @@ class DocumentDownloadTest(TestCase):
             document_key=u'HAZOP-related',
             category=self.category,
         )
-        r = self.client.get(self.download_url, {'document_ids': [document.id]})
+        r = self.client.post(self.download_url, {'document_ids': [document.id]})
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r._headers, {
             'content-length': ('Content-Length', '22'),
@@ -529,7 +529,7 @@ class DocumentDownloadTest(TestCase):
                 'pdf_file': SimpleUploadedFile(pdf_doc, sample_path + pdf_doc),
             }
         )
-        r = self.client.get(self.download_url, {
+        r = self.client.post(self.download_url, {
             'document_ids': [
                 document1.id,
                 document2.id,
@@ -573,7 +573,7 @@ class DocumentDownloadTest(TestCase):
             }
         )
         c = self.client
-        r = c.get(self.download_url, {
+        r = c.post(self.download_url, {
             'document_ids': [
                 document1.id,
                 document2.id,
@@ -615,7 +615,7 @@ class DocumentDownloadTest(TestCase):
             native_file=SimpleUploadedFile(native_doc, sample_path + native_doc),
             pdf_file=SimpleUploadedFile(pdf_doc, sample_path + pdf_doc),
         )
-        r = self.client.get(document.category.get_download_url(), {
+        r = self.client.post(document.category.get_download_url(), {
             'document_ids': document.id,
             'revisions': 'all',
         })

@@ -28,7 +28,8 @@ from braces.views import JSONResponseMixin
 from favorites.models import Favorite
 from categories.models import Category
 from documents.models import Document
-from documents.utils import filter_documents, compress_documents
+from documents.utils import (
+    filter_documents, compress_documents, create_document_from_forms)
 from documents.forms.models import documentform_factory
 from documents.forms.utils import DocumentDownloadForm
 from documents.forms.filters import filterform_factory
@@ -361,25 +362,8 @@ class DocumentCreate(PermissionRequiredMixin,
     @transaction.atomic
     def form_valid(self, document_form, revision_form):
         """Saves both the document and it's revision."""
-        self.revision = revision_form.save(commit=False)
-        self.object = document_form.save(commit=False)
-
-        key = self.object.document_key or self.object.generate_document_key()
-        document = Document.objects.create(
-            document_key=key,
-            category=self.category,
-            current_revision=self.revision.revision,
-            current_revision_date=timezone.now())
-
-        self.revision.document = document
-        self.revision.save()
-        revision_form.save_m2m()
-
-        self.object.document = document
-        self.object.latest_revision = self.revision
-        self.object.save()
-        document_form.save_m2m()
-
+        doc, metadata, revision = create_document_from_forms(
+            document_form, revision_form, self.category)
         cache.clear()
 
         return HttpResponseRedirect(self.get_success_url())

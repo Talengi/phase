@@ -3,6 +3,43 @@ import tempfile
 
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
+from django.utils import timezone
+from django.db import transaction
+
+
+@transaction.atomic
+def create_document_from_forms(metadata_form, revision_form, category, draft=False):
+    """Create a document from it's different forms.
+
+    Two forms are necessary to edit a document : the metadata and revision forms.
+
+    """
+    from documents.models import Document
+    assert metadata_form.is_valid()
+    assert revision_form.is_valid()
+
+    revision = revision_form.save(commit=False)
+    metadata = metadata_form.save(commit=False)
+
+    key = metadata.document_key or metadata.generate_document_key()
+    status = Document.STATUSES.draft if draft else Document.STATUSES.saved
+    document = Document.objects.create(
+        document_key=key,
+        category=category,
+        status=status,
+        current_revision=revision.revision,
+        current_revision_date=timezone.now())
+
+    revision.document = document
+    revision.save()
+    revision_form.save_m2m()
+
+    metadata.document = document
+    metadata.latest_revision = revision
+    metadata.save()
+    metadata_form.save_m2m()
+
+    return document, metadata, revision
 
 
 def filter_documents(queryset, data):
