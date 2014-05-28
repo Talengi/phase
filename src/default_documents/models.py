@@ -524,6 +524,10 @@ class MinutesOfMeeting(Metadata):
     def status(self):
         return self.latest_revision.status
 
+    @property
+    def title(self):
+        return self.subject
+
 
 class MinutesOfMeetingRevision(MetadataRevision):
     status = models.CharField(
