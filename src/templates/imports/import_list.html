@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<p>
+<a href="{% url 'import_file' %}" class="btn btn-primary">{{ _('New import') }}</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <th>{{ _('Import') }}</th>
+        <th>{{ _('Date') }}</th>
+        <th>{{ _('Category') }}</th>
+        <th>{{ _('Status') }}</th>
+    </thead>
+    <tbody>
+    {% for batch in object_list %}
+        <tr>
+            <td><a href="{{ batch.get_absolute_url }}">{{ batch.uid }}</a></td>
+            <td></td>
+            <td>{{ batch.category }}</td>
+            <td>{{ batch.get_status_display }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

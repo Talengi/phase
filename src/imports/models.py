@@ -94,10 +94,21 @@ class ImportBatch(models.Model):
 
     def do_import(self):
         line = 1
+        error_count = 0
         for imp in self:
             imp.do_import(line)
             imp.save()
+            if imp.status == Import.STATUSES.error:
+                error_count += 1
             line += 1
+
+        if error_count == line - 1:
+            self.status = self.STATUSES.error
+        elif error_count > 0:
+            self.status = self.STATUSES.partial_success
+        else:
+            self.status = self.STATUSES.success
+        self.save()
 
 
 class Import(models.Model):
