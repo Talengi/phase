@@ -1,6 +1,9 @@
+# -*- coding: utf-8 -*-
+
 from __future__ import unicode_literals
 from django.utils.encoding import python_2_unicode_compatible
 
+import csv
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
@@ -10,6 +13,17 @@ from model_utils import Choices
 
 from documents.models import Document
 from documents.forms.models import documentform_factory
+
+
+class normal_dialect(csv.Dialect):
+    delimiter = b';'
+    quotechar = b'"'
+    doublequote = False
+    skipinitialspace = True
+    lineterminator = b'\r\n'
+    quoting = csv.QUOTE_NONE
+    strict = True
+csv.register_dialect('normal', normal_dialect)
 
 
 @python_2_unicode_compatible
@@ -64,6 +78,19 @@ class ImportBatch(models.Model):
     def get_revisionform(self):
         return self.get_revisionform_class()()
 
+    def __iter__(self):
+        with open(self.file.path, 'rb') as f:
+            csvfile = csv.DictReader(f, dialect='normal')
+            for row in csvfile:
+                yield row
+
+    def do_import(self):
+        # data = open file
+        # for each line in data:
+        #    import = Import(columns, line)
+        #    import.import()
+        pass
+
 
 class Import(models.Model):
     batch = models.ForeignKey(
@@ -74,3 +101,12 @@ class Import(models.Model):
         Document,
         null=True, blank=True
     )
+
+    def do_import(self, columns, data):
+        # data = zip(columns, data)
+        # forms = form(**data), revisionform(**data)
+        # revision = create revision
+        # metadata = create metadata
+        # create document
+        # save everything
+        pass
