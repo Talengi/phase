@@ -521,10 +521,6 @@ class MinutesOfMeeting(Metadata):
         return (self.document_key,)
 
     @property
-    def title(self):
-        return self.subject
-
-    @property
     def status(self):
         return self.latest_revision.status
 

@@ -150,8 +150,7 @@ class CorrespondenceRevisionForm(BaseDocumentForm):
 
     class Meta:
         model = CorrespondenceRevision
-        exclude = ('document', 'revision', 'revision_date', 'created_on',
-                   'updated_on')
+        exclude = ('document', 'revision', 'updated_on')
 
 
 class MinutesOfMeetingForm(BaseDocumentForm):
@@ -205,8 +204,7 @@ class MinutesOfMeetingRevisionForm(BaseDocumentForm):
 
     class Meta:
         model = MinutesOfMeetingRevision
-        exclude = ('document', 'revision', 'revision_date', 'created_on',
-                   'updated_on')
+        exclude = ('document', 'revision', 'updated_on')
 
 
 class TransmittalsForm(BaseDocumentForm):
@@ -248,8 +246,7 @@ class TransmittalsRevisionForm(BaseDocumentForm):
 
     class Meta:
         model = TransmittalsRevision
-        exclude = ('document', 'revision', 'revision_date', 'created_on',
-                   'updated_on')
+        exclude = ('document', 'revision', 'updated_on')
 
 
 class DemoMetadataForm(BaseDocumentForm):
