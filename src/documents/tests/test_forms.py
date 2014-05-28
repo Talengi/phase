@@ -65,6 +65,7 @@ class DocumentCreateTest(TestCase):
                     'title': u'a title',
                     'native_file': pdf_file,
                     'pdf_file': native_file,
+                    'klass': 1,
                 })
                 self.assertEqual(r.status_code, 200)
                 self.assertEqual(r.context['revision_form'].errors, {
@@ -96,6 +97,7 @@ class DocumentCreateTest(TestCase):
         c = self.client
         c.post(self.create_url, {
             'title': u'a title',
+            'klass': 1,
         }, follow=True)
         doc = Document.objects.all().order_by('-id')[0]
         self.assertEqual(doc.document_key, 'a-title')
@@ -103,6 +105,7 @@ class DocumentCreateTest(TestCase):
         c.post(self.create_url, {
             'title': u'another title',
             'document_key': u'gloubiboulga',
+            'klass': 1,
         }, follow=True)
         doc = Document.objects.all().order_by('-id')[0]
         self.assertEqual(doc.document_key, 'gloubiboulga')
@@ -137,6 +140,7 @@ class DocumentCreateTest(TestCase):
         c = self.client
         r = c.post(self.create_url, {
             'title': u'a title',
+            'klass': 1,
             'save-create': None,
         }, follow=True)
         self.assertEqual(
@@ -148,6 +152,7 @@ class DocumentCreateTest(TestCase):
 
         r = c.post(self.create_url, {
             'title': u'another title',
+            'klass': 1,
         }, follow=True)
         self.assertEqual(
             r.redirect_chain,
@@ -183,6 +188,7 @@ class DocumentCreateTest(TestCase):
         c.post(self.create_url, {
             'document_key': 'FAC09001-FWF-000-HSE-REP-0006',
             'title': u'HAZOP report',
+            'klass': 1,
             'related_documents': [doc.pk for doc in related]
         })
         document = Document.objects.get(document_key='FAC09001-FWF-000-HSE-REP-0006')
@@ -282,6 +288,7 @@ class DocumentEditTest(TestCase):
         r = c.post(doc.get_edit_url(), {
             'document_key': doc.document_key,
             'title': u'a new title',
+            'klass': 1,
             'save-view': 'View',
         }, follow=True)
         self.assertEqual(
@@ -294,6 +301,7 @@ class DocumentEditTest(TestCase):
         r = c.post(doc.get_edit_url(), {
             'document_key': doc.document_key,
             'title': u'a new new title',
+            'klass': 1,
         }, follow=True)
         self.assertEqual(
             r.redirect_chain,
@@ -354,6 +362,7 @@ class DocumentReviseTest(TestCase):
             'document_key': document.document_key,
             'title': document.metadata.title,
             'status': 'SPD',
+            'klass': 1,
         }, follow=True)
         self.assertEqual(res.status_code, 200)
         self.assertContains(res, 'You just created revision 02')
