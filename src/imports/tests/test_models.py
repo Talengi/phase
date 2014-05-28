@@ -1,8 +1,8 @@
 from django.test import TestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.contrib.contenttypes.models import ContentType
 
-from imports.models import ImportBatch
+from categories.factories import CategoryFactory
+from imports.models import ImportBatch, Import
 
 
 class ImportTests(TestCase):
@@ -12,18 +12,15 @@ class ImportTests(TestCase):
         csv_file = 'demo_import_file.csv'
         f = open(sample_path + csv_file, 'rb')
         self.file = SimpleUploadedFile(csv_file, f.read())
-        self.type = ContentType.objects.get(
-            app_label='default_documents',
-            model='demometadata'
-        )
-
-    def test_get_columns(self):
+        category = CategoryFactory()
         data = {
-            'imported_type': self.type,
+            'category': category,
             'file': self.file,
         }
-        batch = ImportBatch.objects.create(**data)
-        rows = [row for row in batch]
+        self.batch = ImportBatch.objects.create(**data)
+
+    def test_batch_iter(self):
+        rows = [row.data for row in self.batch]
         self.assertEqual(rows, [
             {
                 'document_key': 'toto',
@@ -36,3 +33,12 @@ class ImportTests(TestCase):
                 'status': 'FIN',
             }
         ])
+
+    def test_import(self):
+        data = {
+            'document_key': 'toto',
+            'title': 'doc-toto',
+            'status': 'STD',
+        }
+        imp = Import(batch=self.batch, data=data)
+        imp.do_import()
