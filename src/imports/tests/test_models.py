@@ -46,6 +46,20 @@ class ImportTests(TestCase):
         imp = Import(batch=self.batch, data=data)
         imp.do_import()
         imp.save()
+
+        self.assertEqual(imp.status, 'success')
         imp = Import.objects.get(pk=imp.pk)
         self.assertEqual(imp.document.document_key, 'toto')
         self.assertEqual(imp.document.status, 1)
+
+    def test_failure_import(self):
+        data = {
+            'document_key': 'toto',
+            'title': 'doc-toto',
+            'status': 'STD',
+        }
+        imp = Import(batch=self.batch, data=data)
+        imp.do_import()
+        imp.save()
+
+        self.assertEqual(imp.status, 'error')

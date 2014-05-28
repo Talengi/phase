@@ -1,0 +1,2 @@
+subject;meeting_date;received_sent_date;contract_number;originator;recipient;document_type;sequential_number;prepared_by;signed;status;
+Test meeting;2014-01-15;2014-0216;1234;Originator;Recipient;Type;5678;Preparor;False;None
