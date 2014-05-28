@@ -107,7 +107,7 @@ class Import(models.Model):
     )
 
     def __init__(self, *args, **kwargs):
-        self.data = kwargs.pop('data')
+        self.data = kwargs.pop('data', None)
         super(Import, self).__init__(*args, **kwargs)
 
     def get_forms(self):
@@ -118,7 +118,9 @@ class Import(models.Model):
 
     def do_import(self):
         assert hasattr(self, 'data')
+
         form, revision_form = self.get_forms()
         if form.is_valid() and revision_form.is_valid():
             doc, metadata, revision = create_document_from_forms(
-                form, revision_form, self.batch.category)
+                form, revision_form, self.batch.category, draft=True)
+            self.document = doc

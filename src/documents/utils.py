@@ -8,7 +8,7 @@ from django.db import transaction
 
 
 @transaction.atomic
-def create_document_from_forms(metadata_form, revision_form, category):
+def create_document_from_forms(metadata_form, revision_form, category, draft=False):
     """Create a document from it's different forms.
 
     Two forms are necessary to edit a document : the metadata and revision forms.
@@ -22,9 +22,11 @@ def create_document_from_forms(metadata_form, revision_form, category):
     metadata = metadata_form.save(commit=False)
 
     key = metadata.document_key or metadata.generate_document_key()
+    status = Document.STATUSES.draft if draft else Document.STATUSES.saved
     document = Document.objects.create(
         document_key=key,
         category=category,
+        status=status,
         current_revision=revision.revision,
         current_revision_date=timezone.now())
 

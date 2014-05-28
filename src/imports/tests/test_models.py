@@ -26,11 +26,13 @@ class ImportTests(TestCase):
                 'document_key': 'toto',
                 'title': 'doc-toto',
                 'status': 'STD',
+                'klass': '1',
             },
             {
                 'document_key': 'tata',
                 'title': 'doc-tata',
                 'status': 'FIN',
+                'klass': '2',
             }
         ])
 
@@ -39,6 +41,11 @@ class ImportTests(TestCase):
             'document_key': 'toto',
             'title': 'doc-toto',
             'status': 'STD',
+            'klass': '1',
         }
         imp = Import(batch=self.batch, data=data)
         imp.do_import()
+        imp.save()
+        imp = Import.objects.get(pk=imp.pk)
+        self.assertEqual(imp.document.document_key, 'toto')
+        self.assertEqual(imp.document.status, 1)
