@@ -1,5 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{{ object }}
+<h1>{{ object }}</h1>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <th>{{ _('Line') }}</th>
+        <th>{{ _('Status') }}</th>
+        <th>{{ _('Document') }}</th>
+        <th>{{ _('errors') }}</th>
+    </thead>
+    <tbody>
+    {% for import in object.import_set.all %}
+        <tr>
+            <td>{{ import.line }}</td>
+            <td>{{ import.get_status_display }}</td>
+            <td>{{ import.document|default_if_none:'' }}</td>
+            <td>{{ import.errors }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+
 {% endblock %}

@@ -4,6 +4,7 @@ from django.views.generic import CreateView, DetailView
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 
+from accounts.views import LoginRequiredMixin
 from imports.models import ImportBatch
 from imports.forms import FileUploadForm
 
@@ -21,12 +22,25 @@ class ImportMixin(object):
         return context
 
 
-class FileUpload(ImportMixin, CreateView):
+class FileUpload(ImportMixin, LoginRequiredMixin, CreateView):
     template_name = 'imports/upload_file.html'
     form_class = FileUploadForm
 
+    def form_valid(self, form):
+        response = super(FileUpload, self).form_valid(form)
+        self.object.do_import()
+        return response
 
-class ImportStatus(ImportMixin, DetailView):
+
+class ImportStatus(ImportMixin, LoginRequiredMixin, DetailView):
     model = ImportBatch
     pk_url_kwarg = 'uid'
     template_name = 'imports/import_status.html'
+
+    def breadcrumb_object(self):
+        return self.object
+
+    def get_context_data(self, **kwargs):
+        context = super(ImportStatus, self).get_context_data(**kwargs)
+
+        return context

@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django.utils.encoding import python_2_unicode_compatible
 
 import csv
+import json
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
@@ -92,8 +93,11 @@ class ImportBatch(models.Model):
                 yield imp
 
     def do_import(self):
+        line = 1
         for imp in self:
-            imp.do_import()
+            imp.do_import(line)
+            imp.save()
+            line += 1
 
 
 class Import(models.Model):
@@ -103,9 +107,10 @@ class Import(models.Model):
         ('error', _('Error')),
     )
 
+    line = models.IntegerField(_('Line'))
     batch = models.ForeignKey(
         ImportBatch,
-        verbose_name=_('Batch')
+        verbose_name=_('Batch'),
     )
     document = models.ForeignKey(
         Document,
@@ -116,6 +121,10 @@ class Import(models.Model):
         max_length=50,
         choices=STATUSES,
         default=STATUSES.new
+    )
+    errors = models.TextField(
+        _('Errors'),
+        null=True, blank=True,
     )
 
     def __init__(self, *args, **kwargs):
@@ -128,8 +137,10 @@ class Import(models.Model):
             self.batch.get_revisionform(self.data)
         )
 
-    def do_import(self):
+    def do_import(self, line):
         assert hasattr(self, 'data')
+
+        self.line = line
 
         form, revision_form = self.get_forms()
         if form.is_valid() and revision_form.is_valid():
@@ -138,4 +149,7 @@ class Import(models.Model):
             self.document = doc
             self.status = self.STATUSES.success
         else:
+            errors = dict(form.errors.items() + revision_form.errors.items())
+            self.errors = json.dumps(errors)
+
             self.status = self.STATUSES.error
