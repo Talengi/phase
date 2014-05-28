@@ -97,6 +97,12 @@ class ImportBatch(models.Model):
 
 
 class Import(models.Model):
+    STATUSES = Choices(
+        ('new', _('New')),
+        ('success', _('Success')),
+        ('error', _('Error')),
+    )
+
     batch = models.ForeignKey(
         ImportBatch,
         verbose_name=_('Batch')
@@ -104,6 +110,12 @@ class Import(models.Model):
     document = models.ForeignKey(
         Document,
         null=True, blank=True
+    )
+    status = models.CharField(
+        _('Status'),
+        max_length=50,
+        choices=STATUSES,
+        default=STATUSES.new
     )
 
     def __init__(self, *args, **kwargs):
@@ -124,3 +136,6 @@ class Import(models.Model):
             doc, metadata, revision = create_document_from_forms(
                 form, revision_form, self.batch.category, draft=True)
             self.document = doc
+            self.status = self.STATUSES.success
+        else:
+            self.status = self.STATUSES.error
