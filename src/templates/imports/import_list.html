@@ -16,7 +16,7 @@
     {% for batch in object_list %}
         <tr>
             <td><a href="{{ batch.get_absolute_url }}">{{ batch.uid }}</a></td>
-            <td></td>
+            <td>{{ batch.created_on|date }}</td>
             <td>{{ batch.category }}</td>
             <td>{{ batch.get_status_display }}</td>
         </tr>

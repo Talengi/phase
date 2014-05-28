@@ -22,7 +22,7 @@ class ImportMixin(object):
         return context
 
 
-class ImportList(ImportMixin, ListView):
+class ImportList(ImportMixin, LoginRequiredMixin, ListView):
     template_name = 'imports/import_list.html'
     model = ImportBatch
 

@@ -53,6 +53,10 @@ class ImportBatch(models.Model):
         choices=STATUSES,
         default=STATUSES.new
     )
+    created_on = models.DateField(
+        _('Created on'),
+        auto_now_add=True
+    )
 
     class Meta:
         verbose_name = _('Import batch')

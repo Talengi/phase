@@ -16,7 +16,7 @@
             <td>{{ import.line }}</td>
             <td>{{ import.get_status_display }}</td>
             <td>{{ import.document|default_if_none:'' }}</td>
-            <td>{{ import.errors }}</td>
+            <td>{{ import.errors|default_if_none:'' }}</td>
         </tr>
     {% endfor %}
     </tbody>
