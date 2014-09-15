@@ -9,6 +9,7 @@ from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.utils.translation import ugettext, ugettext_lazy as _
 from django.db.models import Q
+from django.core.cache import cache
 
 from accounts.views import LoginRequiredMixin, PermissionRequiredMixin
 from documents.utils import get_all_revision_classes
@@ -83,6 +84,8 @@ class BatchReview(BaseDocumentList):
                 ok_message,
                 ok_list
             ))
+
+            cache.clear()
 
         if len(nok) > 0:
             nok_message = ugettext("We could'nt start the review for the following documents:")
