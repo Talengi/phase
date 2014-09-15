@@ -38,9 +38,9 @@ class FieldTests(TestCase):
         revision = document.metadata.latest_revision
         self.assertEqual(
             revision.leader_comments.name,
-            u'HAZOP-related_1_leader_comments.zip'
+            u'HAZOP-related_01_leader_comments.zip'
         )
         self.assertEqual(
             revision.approver_comments.name,
-            u'HAZOP-related_1_GTG_comments.zip'
+            u'HAZOP-related_01_GTG_comments.zip'
         )
