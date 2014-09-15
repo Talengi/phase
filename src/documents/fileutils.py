@@ -10,7 +10,7 @@ def revision_file_path(revision, filename):
     """
     return "{key}_{revision}.{extension}".format(
         key=revision.document.document_key,
-        revision=revision.revision,
+        revision=revision.name,
         extension=filename.split('.')[-1]
     )
 
@@ -23,7 +23,7 @@ def leader_comments_file_path(revision, filename):
     """
     return "{key}_{revision}_leader_comments.{extension}".format(
         key=revision.document.document_key,
-        revision=revision.revision,
+        revision=revision.name,
         extension=filename.split('.')[-1]
     )
 
@@ -36,7 +36,7 @@ def approver_comments_file_path(revision, filename):
     """
     return "{key}_{revision}_GTG_comments.{extension}".format(
         key=revision.document.document_key,
-        revision=revision.revision,
+        revision=revision.name,
         extension=filename.split('.')[-1]
     )
 
