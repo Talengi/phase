@@ -256,7 +256,7 @@ class Metadata(six.with_metaclass(MetadataBase), models.Model):
 
     @property
     def current_revision(self):
-        return '%(revision)02d' % {'revision': self.latest_revision.revision}
+        return self.latest_revision.name
 
     @property
     def current_revision_date(self):
@@ -284,3 +284,8 @@ class MetadataRevision(models.Model):
         ordering = ('-revision',)
         get_latest_by = 'revision'
         unique_together = ('document', 'revision')
+
+    @property
+    def name(self):
+        """A revision identifier should be displayed with two digits"""
+        return '%02d' % self.revision

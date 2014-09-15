@@ -27,7 +27,7 @@
                 <td class="columntitle">
                     <a href="{% url 'review_document' rev.document.document_key %}">{{ rev.document.title }}</a>
                 </td>
-                <td class="columncurrent_revision">{{ rev.revision|stringformat:"02d" }}</td>
+                <td class="columncurrent_revision">{{ rev.name }}</td>
                 <td class="columnstatus">{{ rev.status }}</td>
                 <td class="columnreview_start_date">{{ rev.review_start_date|stringify }}</td>
                 <td class="columnreview_due_date">{{ rev.review_due_date|stringify }}</td>
