@@ -17,10 +17,10 @@ from reviews.fileutils import reviewers_comments_file_path
 class Review(models.Model):
     STEPS = Choices(
         ('pending', _('Pending')),
-        ('reviewers', _('New')),
-        ('leader', _('New')),
-        ('approver', _('New')),
-        ('closed', _('New')),
+        ('reviewers', _('Reviewrs')),
+        ('leader', _('Leader')),
+        ('approver', _('Approver')),
+        ('closed', _('Closed')),
     )
 
     reviewer = models.ForeignKey(
