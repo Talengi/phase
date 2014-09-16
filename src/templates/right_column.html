@@ -16,6 +16,8 @@
         </div>
         <time datetime="{{ notification.created_on|date:"c" }}">{{ notification.created_on|naturaltime }}</time>
         <hr />
+        {% empty %}
+            {{ _('No unread notifications') }}
         {% endfor %}
     </div>
 </nav>
