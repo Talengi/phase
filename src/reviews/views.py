@@ -16,6 +16,7 @@ from documents.utils import get_all_revision_classes
 from documents.models import Document
 from documents.views import DocumentListMixin, BaseDocumentList
 from reviews.models import ReviewMixin, Review
+from notifications.models import notify
 
 
 class ReviewHome(TemplateView):
@@ -43,10 +44,19 @@ class StartReview(PermissionRequiredMixin,
     def post(self, request, *args, **kwargs):
         self.metadata = self.get_object()
         revision = self.metadata.latest_revision
+        document = self.metadata.document
 
         if revision.can_be_reviewed:
             revision.start_review()
-            messages.success(request, _('The review has started'))
+            message_text = '''You started the review on revision %(rev)s of
+                           the document <a href="%(url)s">%(key)s (%(title)s)</a>'''
+            message_data = {
+                'rev': revision.name,
+                'url': document.get_absolute_url(),
+                'key': document.document_key,
+                'title': document.title
+            }
+            notify(request.user, _(message_text) % message_data)
         else:
             messages.error(request, _('The review process cannot start'))
 
