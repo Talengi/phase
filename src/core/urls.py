@@ -10,7 +10,7 @@ admin.site.login_template = 'registration/login.html'
 urlpatterns = patterns(
     '',
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^api/', include('api.urls')),
+    url(r'^api/', include('restapi.urls')),
     url(r'^accounts/', include('accounts.urls')),
     url(r'^favorites/', include('favorites.urls')),
     url(r'^reviews/', include('reviews.urls')),

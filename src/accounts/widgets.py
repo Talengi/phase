@@ -1,6 +1,6 @@
 from django.core.urlresolvers import reverse
 
-from api.widgets import AutocompleteTextInput
+from restapi.widgets import AutocompleteTextInput
 
 
 class BaseUserAutocomplete(AutocompleteTextInput):
