@@ -14,7 +14,9 @@ def notifications(request):
     context = {}
 
     if not isinstance(user, AnonymousUser):
-        notifications = Message.objects.filter(user=user)
+        notifications = Message.objects \
+            .filter(user=user) \
+            .order_by('-created_on')
 
         context.update({
             'notifications': notifications,
