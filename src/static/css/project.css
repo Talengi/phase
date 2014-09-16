@@ -393,6 +393,7 @@ td.alignright {
 }
 #right-sidebar {
     right: 0;
+    height: 100%;
 }
 .sidebar hr {
     margin: 5px 0 10px 0;
@@ -403,7 +404,7 @@ td.alignright {
     display: block;
     padding: 5px;
     background-color: #428BCA;
-    height: 50px;
+    height: 51px;
 }
 .sidebar > span button {
     border: none;
@@ -423,6 +424,11 @@ td.alignright {
 }
 .sidebar #notifications {
     padding: 15px;
+    position: fixed;
+    overflow-y: auto;
+    max-height: 100%;
+    top: 51px;
+    bottom: 0;
 }
 .sidebar #notifications time {
     color: #666;
