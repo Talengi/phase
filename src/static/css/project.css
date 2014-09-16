@@ -430,6 +430,10 @@ td.alignright {
     top: 51px;
     bottom: 0;
 }
+.sidebar #notifications ul {
+    padding-left: 25px;
+    list-style-type: square;
+}
 .sidebar #notifications time {
     color: #666;
     font-size: 90%;

@@ -6,7 +6,6 @@ from django.views.generic.detail import SingleObjectMixin
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect, Http404
 from django.core.urlresolvers import reverse
-from django.contrib import messages
 from django.utils.translation import ugettext, ugettext_lazy as _
 from django.db.models import Q
 from django.core.cache import cache
@@ -58,7 +57,16 @@ class StartReview(PermissionRequiredMixin,
             }
             notify(request.user, _(message_text) % message_data)
         else:
-            messages.error(request, _('The review process cannot start'))
+            message_text = '''The review on revision %(rev)s of the document
+                           <a href="%(url)s">%(key)s (%(title)s)</a>
+                           cannot be started'''
+            message_data = {
+                'rev': revision.name,
+                'url': document.get_absolute_url(),
+                'key': document.document_key,
+                'title': document.title
+            }
+            notify(request.user, _(message_text) % message_data)
 
         return HttpResponseRedirect(self.get_redirect_url())
 
@@ -89,8 +97,8 @@ class BatchReview(BaseDocumentList):
 
         if len(ok) > 0:
             ok_message = ugettext('The review started for the following documents:')
-            ok_list = '</li><li>'.join('%s' % doc for doc in ok)
-            messages.success(request, '{} <ul><li>{}</li></ul>'.format(
+            ok_list = '</li><li>'.join('<a href="%s">%s</a>' % (doc.get_absolute_url(), doc) for doc in ok)
+            notify(request.user, '{} <ul><li>{}</li></ul>'.format(
                 ok_message,
                 ok_list
             ))
@@ -98,9 +106,9 @@ class BatchReview(BaseDocumentList):
             cache.clear()
 
         if len(nok) > 0:
-            nok_message = ugettext("We could'nt start the review for the following documents:")
-            nok_list = '</li><li>'.join('%s' % doc for doc in nok)
-            messages.error(request, '{} <ul><li>{}</li></ul>'.format(
+            nok_message = ugettext("We failed to start the review for the following documents:")
+            nok_list = '</li><li>'.join('<a href="%s">%s</a>' % (doc.get_absolute_url(), doc) for doc in nok)
+            notify(request.user, '{} <ul><li>{}</li></ul>'.format(
                 nok_message,
                 nok_list
             ))
