@@ -341,6 +341,7 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
 
         """
         self.object = self.get_object()
+        document = self.object.document
 
         step = self.object.current_review_step()
         step_method = '%s_step_post' % step
@@ -353,6 +354,23 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
         # A comment file was submitted
         if hasattr(self, step_method) and 'review' in request.POST:
             getattr(self, step_method)(request, *args, **kwargs)
+
+            comments_file = request.FILES.get('comments', None)
+            if comments_file:
+                message_text = '''You reviewed document
+                               <a href="%(url)s">%(key)s (%(title)s)</a>
+                               in revision %(rev)s with comments.'''
+            else:
+                message_text = '''You reviewed document
+                               <a href="%(url)s">%(key)s (%(title)s)</a>
+                               in revision %(rev)s without comments.'''
+            message_data = {
+                'rev': self.object.name,
+                'url': document.get_absolute_url(),
+                'key': document.document_key,
+                'title': document.title
+            }
+            notify(request.user, _(message_text) % message_data)
 
         # Close XXX step buttons
 
