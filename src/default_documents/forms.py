@@ -4,7 +4,7 @@ from crispy_forms.layout import Layout, Field
 from crispy_forms.bootstrap import UneditableField
 
 from documents.forms.models import BaseDocumentForm
-from api.fields import UserChoiceField, UserMultipleChoiceField
+from accounts.fields import UserChoiceField, UserMultipleChoiceField
 from .models import (
     ContractorDeliverable, ContractorDeliverableRevision,
     Correspondence, CorrespondenceRevision,

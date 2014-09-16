@@ -2,7 +2,7 @@ from django.db.models import Q
 from rest_framework import viewsets
 
 from accounts.models import User
-from api.serializers import UserSerializer
+from accounts.api.serializers import UserSerializer
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):

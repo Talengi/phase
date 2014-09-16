@@ -1,7 +1,7 @@
 from django.forms.models import ModelChoiceField, ModelMultipleChoiceField
 
-from api.widgets import UserAutocomplete, MultipleUserAutocomplete
 from accounts.models import User
+from accounts.widgets import UserAutocomplete, MultipleUserAutocomplete
 
 
 class UserChoiceField(ModelChoiceField):

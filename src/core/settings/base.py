@@ -224,7 +224,7 @@ LOCAL_APPS = (
     'metadata',
     'favorites',
     'bootstrap',
-    'api',
+    'restapi',
     'breadcrumbs',
     'notifications',
     'imports',
