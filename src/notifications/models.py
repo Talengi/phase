@@ -27,3 +27,8 @@ class Message(models.Model):
     class Meta:
         verbose_name = _('Message')
         verbose_name_plural = _('Messages')
+
+
+def notify(user, message):
+    message = Message.objects.create(user=user, body=message)
+    return message
