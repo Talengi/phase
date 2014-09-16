@@ -1,4 +1,4 @@
-{% load notifications %}
+{% load notifications humanize %}
 <div id="right-sidebar-container" class="collapse">
 <div class="modal-backdrop in"></div>
 <nav id="right-sidebar" class="sidebar">
@@ -9,13 +9,14 @@
             &times;</button>
     </span>
 
-    {% for message in messages %}
-    <div class="notification">
-        {% notification_icon message.tags %}
-        {{ message|safe }}
+    <div id="notifications">
+        {% for notification in notifications %}
+        <div class="notification">
+            {{ notification.body|safe }}
+        </div>
+        <time datetime="{{ notification.created_on|date:"c" }}">{{ notification.created_on|naturaltime }}</time>
+        <hr />
+        {% endfor %}
     </div>
-    <hr />
-    {% endfor %}
-
 </nav>
 </div>

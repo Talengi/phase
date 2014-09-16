@@ -394,6 +394,10 @@ td.alignright {
 #right-sidebar {
     right: 0;
 }
+.sidebar hr {
+    margin: 5px 0 10px 0;
+    padding: 0;
+}
 .sidebar > span {
     text-align: right;
     display: block;
@@ -417,8 +421,12 @@ td.alignright {
 #sidebar-nav li li a {
     padding-left: 20px;
 }
-.sidebar .notification {
+.sidebar #notifications {
     padding: 15px;
+}
+.sidebar #notifications time {
+    color: #666;
+    font-size: 90%;
 }
 .sidebar-offcanvas {
     position: fixed;
