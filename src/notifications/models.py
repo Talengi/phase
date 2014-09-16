@@ -17,7 +17,7 @@ class Message(models.Model):
         _('Body'),
         null=True,
         blank=True)
-    created_on = models.DateField(
+    created_on = models.DateTimeField(
         _('Created on'),
         default=timezone.now)
     seen = models.BooleanField(
