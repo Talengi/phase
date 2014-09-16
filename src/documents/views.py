@@ -365,6 +365,15 @@ class DocumentCreate(PermissionRequiredMixin,
             document_form, revision_form, self.category)
         cache.clear()
 
+        message_text = '''You created the document
+                       <a href="%(url)s">%(key)s (%(title)s)</a>'''
+        message_data = {
+            'url': doc.get_absolute_url(),
+            'key': doc.document_key,
+            'title': doc.title
+        }
+        notify(self.request.user, _(message_text) % message_data)
+
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
