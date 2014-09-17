@@ -23,7 +23,7 @@
             <button type="button" class="btn btn-primary pull-right last-button disabled">{{ _('Create revision') }}</button>
 
             {% if perms.documents.can_control_document %}
-                {% url "document_cancel_review" organisation_slug category_slug document.document_key as cancel_review_url %}
+                {% url "document_cancel_review" document.document_key as cancel_review_url %}
                 <form class="inlineform pull-right" method="post" action="{{ cancel_review_url }}">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-warning last-button">

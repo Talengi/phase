@@ -72,12 +72,18 @@ class StartReview(PermissionRequiredMixin,
 
 
 class CancelReview(PermissionRequiredMixin,
-                   DocumentListMixin,
                    SingleObjectMixin,
                    View):
     """Cancel the review process."""
     permission_required = 'documents.can_control_document'
     context_object_name = 'metadata'
+
+    def get_object(self, queryset=None):
+        document_key = self.kwargs.get('document_key')
+        qs = Document.objects \
+            .filter(category__users=self.request.user)
+        document = get_object_or_404(qs, document_key=document_key)
+        return document.metadata
 
     def get_redirect_url(self, *args, **kwargs):
         document = self.metadata.document

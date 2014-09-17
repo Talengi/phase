@@ -14,13 +14,15 @@ urlpatterns = patterns(
         ReviewHome.as_view(),
         name='review_home'),
 
+    # Cancel review
+    url(r'^(?P<document_key>[\w-]+)/cancel/$',
+        CancelReview.as_view(),
+        name="document_cancel_review"),
+
     # Start review
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/(?P<document_key>[\w-]+)/$',
         StartReview.as_view(),
         name="document_start_review"),
-    url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/(?P<document_key>[\w-]+)/cancel/$',
-        CancelReview.as_view(),
-        name="document_cancel_review"),
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/$',
         BatchReview.as_view(),
         name="batch_start_review"),
