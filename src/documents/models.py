@@ -268,7 +268,7 @@ class MetadataRevision(models.Model):
 
     revision = models.PositiveIntegerField(
         verbose_name=u"Revision",
-        default=1)
+        default=0)
     revision_date = models.DateField(
         default=timezone.now,
         verbose_name=u"Revision Date")
