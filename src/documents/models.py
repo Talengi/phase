@@ -138,6 +138,11 @@ class Document(models.Model):
         """
         return self.metadata.latest_revision
 
+    @property
+    def current_revision_name(self):
+        """A revision identifier should be displayed with two digits"""
+        return '%02d' % self.current_revision
+
 
 # TODO Add the "latest_revision" test
 class MetadataBase(ModelBase):
