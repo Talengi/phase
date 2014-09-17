@@ -22,7 +22,7 @@ class Message(models.Model):
         default=timezone.now)
     seen = models.BooleanField(
         _('Seen'),
-        default=timezone.now)
+        default=False)
 
     class Meta:
         verbose_name = _('Message')
