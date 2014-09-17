@@ -5,6 +5,7 @@ from django.test import TestCase
 from categories.factories import CategoryFactory
 from documents.factories import DocumentFactory
 from accounts.factories import UserFactory
+from reviews.models import Review
 
 
 class ReviewMixinTests(TestCase):
@@ -67,6 +68,22 @@ class ReviewMixinTests(TestCase):
 
         self.assertEqual(revision.review_start_date, today)
         self.assertEqual(revision.review_due_date, in_two_weeks)
+
+    def test_cancel_review(self):
+        revision = self.create_reviewable_document()
+        revision.start_review()
+
+        reviews = Review.objects.filter(document=revision.document)
+        self.assertTrue(reviews.count() > 0)
+
+        revision.cancel_review()
+        reviews = Review.objects.filter(document=revision.document)
+        self.assertEqual(reviews.count(), 0)
+        self.assertIsNone(revision.review_start_date)
+        self.assertIsNone(revision.review_due_date)
+        self.assertIsNone(revision.review_end_date)
+        self.assertIsNone(revision.reviewers_step_closed)
+        self.assertIsNone(revision.leader_step_closed)
 
     def test_end_reviewers_step(self):
         revision = self.create_reviewable_document()

@@ -152,6 +152,31 @@ class ReviewMixin(models.Model):
             )
 
     @transaction.atomic
+    def cancel_review(self):
+        """Stops the review process.
+
+        This methods reverts the "start_review" process. It simply deletes all
+        data related to the current review, and leaves the document in the
+        state it was before starting the review.
+
+        This method can cause data loss.
+
+        """
+        Review.objects \
+            .filter(document=self.document) \
+            .filter(revision=self.revision) \
+            .delete()
+
+        self.review_start_date = None
+        self.review_due_date = None
+        self.review_end_date = None
+        self.reviewers_step_closed = None
+        self.leader_step_closed = None
+        self.leader_comments = None
+        self.approver_comments = None
+        self.save()
+
+    @transaction.atomic
     def end_reviewers_step(self, save=True):
         """Ends the first step of the review."""
         self.reviewers_step_closed = datetime.date.today()

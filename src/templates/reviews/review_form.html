@@ -11,9 +11,22 @@
         <li><a href="#fieldset-reviewers">Distribution list</a></li>
         <li><a href="#fieldset-your-comments">Your comments</a></li>
     </ul>
-    </ul>
 </div>
 <div class="col-sm-8">
+    <div class="form-actions">
+        <a class="btn btn-default" href="{% url "review_home" %}">Close</a>
+        {% if perms.documents.can_control_document %}
+            {% url "document_cancel_review" revision.document.document_key as cancel_review_url %}
+            <form class="inlineform pull-right" method="post" action="{{ cancel_review_url }}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-warning last-button">
+                    {{ _('Cancel review') }}
+                </button>
+            </form>
+        {% endif %}
+    </div>
+    <hr />
+
     <h1>{{ _('Review document') }}</h1>
     {{ form.errors }}
 
