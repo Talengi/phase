@@ -146,6 +146,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.messages.context_processors.messages',
     'django.core.context_processors.request',
     'accounts.context_processors.navigation',
+    'notifications.context_processors.notifications',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-loaders
@@ -195,9 +196,7 @@ DJANGO_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    # Useful template tags:
-    # 'django.contrib.humanize',
+    'django.contrib.humanize',
 
     # Admin panel and documentation:
     'django.contrib.admin',
@@ -324,6 +323,7 @@ PIPELINE_JS = {
             # after jquery-ui js to avoid conflicts
             'js/phase-bootstrap.js',
             'js/bootstrap-datepicker.js',
+            'js/notifications.js',
         ),
         'output_filename': 'js/base.js',
     },

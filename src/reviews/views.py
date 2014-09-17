@@ -6,7 +6,6 @@ from django.views.generic.detail import SingleObjectMixin
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect, Http404
 from django.core.urlresolvers import reverse
-from django.contrib import messages
 from django.utils.translation import ugettext, ugettext_lazy as _
 from django.db.models import Q
 from django.core.cache import cache
@@ -16,6 +15,7 @@ from documents.utils import get_all_revision_classes
 from documents.models import Document
 from documents.views import DocumentListMixin, BaseDocumentList
 from reviews.models import ReviewMixin, Review
+from notifications.models import notify
 
 
 class ReviewHome(TemplateView):
@@ -43,12 +43,30 @@ class StartReview(PermissionRequiredMixin,
     def post(self, request, *args, **kwargs):
         self.metadata = self.get_object()
         revision = self.metadata.latest_revision
+        document = self.metadata.document
 
         if revision.can_be_reviewed:
             revision.start_review()
-            messages.success(request, _('The review has started'))
+            message_text = '''You started the review on revision %(rev)s of
+                           the document <a href="%(url)s">%(key)s (%(title)s)</a>'''
+            message_data = {
+                'rev': revision.name,
+                'url': document.get_absolute_url(),
+                'key': document.document_key,
+                'title': document.title
+            }
+            notify(request.user, _(message_text) % message_data)
         else:
-            messages.error(request, _('The review process cannot start'))
+            message_text = '''The review on revision %(rev)s of the document
+                           <a href="%(url)s">%(key)s (%(title)s)</a>
+                           cannot be started'''
+            message_data = {
+                'rev': revision.name,
+                'url': document.get_absolute_url(),
+                'key': document.document_key,
+                'title': document.title
+            }
+            notify(request.user, _(message_text) % message_data)
 
         return HttpResponseRedirect(self.get_redirect_url())
 
@@ -79,8 +97,8 @@ class BatchReview(BaseDocumentList):
 
         if len(ok) > 0:
             ok_message = ugettext('The review started for the following documents:')
-            ok_list = '</li><li>'.join('%s' % doc for doc in ok)
-            messages.success(request, '{} <ul><li>{}</li></ul>'.format(
+            ok_list = '</li><li>'.join('<a href="%s">%s</a>' % (doc.get_absolute_url(), doc) for doc in ok)
+            notify(request.user, '{} <ul><li>{}</li></ul>'.format(
                 ok_message,
                 ok_list
             ))
@@ -88,9 +106,9 @@ class BatchReview(BaseDocumentList):
             cache.clear()
 
         if len(nok) > 0:
-            nok_message = ugettext("We could'nt start the review for the following documents:")
-            nok_list = '</li><li>'.join('%s' % doc for doc in nok)
-            messages.error(request, '{} <ul><li>{}</li></ul>'.format(
+            nok_message = ugettext("We failed to start the review for the following documents:")
+            nok_list = '</li><li>'.join('<a href="%s">%s</a>' % (doc.get_absolute_url(), doc) for doc in nok)
+            notify(request.user, '{} <ul><li>{}</li></ul>'.format(
                 nok_message,
                 nok_list
             ))
@@ -323,6 +341,7 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
 
         """
         self.object = self.get_object()
+        document = self.object.document
 
         step = self.object.current_review_step()
         step_method = '%s_step_post' % step
@@ -335,6 +354,23 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
         # A comment file was submitted
         if hasattr(self, step_method) and 'review' in request.POST:
             getattr(self, step_method)(request, *args, **kwargs)
+
+            comments_file = request.FILES.get('comments', None)
+            if comments_file:
+                message_text = '''You reviewed document
+                               <a href="%(url)s">%(key)s (%(title)s)</a>
+                               in revision %(rev)s with comments.'''
+            else:
+                message_text = '''You reviewed document
+                               <a href="%(url)s">%(key)s (%(title)s)</a>
+                               in revision %(rev)s without comments.'''
+            message_data = {
+                'rev': self.object.name,
+                'url': document.get_absolute_url(),
+                'key': document.document_key,
+                'title': document.title
+            }
+            notify(request.user, _(message_text) % message_data)
 
         # Close XXX step buttons
 

@@ -13,11 +13,11 @@
         {% include 'navbar_breadcrumb.html' %}
 
         <button type="button"
-                class="btn btn-primary navbar-right navbar-btn last-button {% if not messages %}disabled{% endif %}"
+                id="notifications-button"
+                class="btn btn-primary navbar-right navbar-btn last-button"
                 data-toggle="collapse"
                 href="#right-sidebar-container">
             <span class="glyphicon glyphicon-bell"></span>
-            {% if messages %}&nbsp; <span class="badge">{{ messages|length }}</span> {% endif %}
         </button>
 
         <p class="navbar-text navbar-right hidden-xs">

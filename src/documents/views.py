@@ -22,7 +22,6 @@ from django.views.static import serve
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 from django.db import transaction
-from django.contrib import messages
 from braces.views import JSONResponseMixin
 
 from favorites.models import Favorite
@@ -33,7 +32,7 @@ from documents.utils import (
 from documents.forms.models import documentform_factory
 from documents.forms.utils import DocumentDownloadForm
 from documents.forms.filters import filterform_factory
-
+from notifications.models import notify
 from accounts.views import LoginRequiredMixin, PermissionRequiredMixin
 
 
@@ -366,6 +365,15 @@ class DocumentCreate(PermissionRequiredMixin,
             document_form, revision_form, self.category)
         cache.clear()
 
+        message_text = '''You created the document
+                       <a href="%(url)s">%(key)s (%(title)s)</a>'''
+        message_data = {
+            'url': doc.get_absolute_url(),
+            'key': doc.document_key,
+            'title': doc.title
+        }
+        notify(self.request.user, _(message_text) % message_data)
+
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
@@ -476,8 +484,15 @@ class DocumentRevise(DocumentEdit):
 
         cache.clear()
 
-        message = _('You just created revision %02d') % self.revision.revision
-        messages.success(self.request, message)
+        message_text = '''You created revision %(rev)s for document
+                       <a href="%(url)s">%(key)s (%(title)s)</a>'''
+        message_data = {
+            'rev': self.revision.name,
+            'url': self.object.get_absolute_url(),
+            'key': self.object.document_key,
+            'title': self.object.title
+        }
+        notify(self.request.user, _(message_text) % message_data)
 
         return HttpResponseRedirect(self.get_success_url())
 
