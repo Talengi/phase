@@ -71,6 +71,41 @@ class StartReview(PermissionRequiredMixin,
         return HttpResponseRedirect(self.get_redirect_url())
 
 
+class CancelReview(PermissionRequiredMixin,
+                   DocumentListMixin,
+                   SingleObjectMixin,
+                   View):
+    """Cancel the review process."""
+    permission_required = 'documents.can_control_document'
+    context_object_name = 'metadata'
+
+    def get_redirect_url(self, *args, **kwargs):
+        document = self.metadata.document
+        return reverse('document_detail', args=[
+            document.category.organisation.slug,
+            document.category.slug,
+            document.document_key])
+
+    def post(self, request, *args, **kwargs):
+        self.metadata = self.get_object()
+        revision = self.metadata.latest_revision
+        document = self.metadata.document
+
+        if revision.is_under_review():
+            revision.cancel_review()
+            message_text = '''You canceled the review on revision %(rev)s of
+                           the document <a href="%(url)s">%(key)s (%(title)s)</a>'''
+            message_data = {
+                'rev': revision.name,
+                'url': document.get_absolute_url(),
+                'key': document.document_key,
+                'title': document.title
+            }
+            notify(request.user, _(message_text) % message_data)
+
+        return HttpResponseRedirect(self.get_redirect_url())
+
+
 class BatchReview(BaseDocumentList):
     """Starts the review process more multiple documents at once."""
 
