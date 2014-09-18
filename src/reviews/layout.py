@@ -13,7 +13,8 @@ class ReviewsLayout(LayoutObject):
         reviews = Review.objects \
             .filter(document=revision.document) \
             .filter(revision=revision.revision) \
-            .order_by('id')
+            .order_by('id') \
+            .select_related('reviewer')
 
         return render_to_string(
             self.template,

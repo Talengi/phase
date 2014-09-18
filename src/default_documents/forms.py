@@ -64,7 +64,7 @@ class ContractorDeliverableRevisionForm(BaseDocumentForm):
 
     def build_layout(self):
         if self.read_only:
-            review_layout = Layout(
+            review_layout = (
                 DocumentFieldset(
                     _('Review'),
                     UneditableField('review_start_date'),
@@ -79,16 +79,18 @@ class ContractorDeliverableRevisionForm(BaseDocumentForm):
                 )
             )
         else:
-            review_layout = DocumentFieldset(
-                _('Review'),
-                UneditableField('review_start_date'),
-                UneditableField('review_due_date'),
-                PropertyLayout('current_review_step'),
-                PropertyLayout('is_under_review'),
-                PropertyLayout('is_overdue'),
-                'reviewers',
-                'leader',
-                'approver',
+            review_layout = (
+                DocumentFieldset(
+                    _('Review'),
+                    UneditableField('review_start_date'),
+                    UneditableField('review_due_date'),
+                    PropertyLayout('current_review_step'),
+                    PropertyLayout('is_under_review'),
+                    PropertyLayout('is_overdue'),
+                    'reviewers',
+                    'leader',
+                    'approver',
+                ),
             )
 
         return Layout(
@@ -100,7 +102,7 @@ class ContractorDeliverableRevisionForm(BaseDocumentForm):
                 'native_file',
                 'pdf_file',
             ),
-            review_layout,
+            *review_layout
         )
 
     class Meta:
