@@ -285,5 +285,20 @@ class ReviewMixin(models.Model):
 
         return qs
 
+    def get_review(self, user, role='reviewer'):
+        """Get the review from this specific user.
+
+        We have to specify the role because, a same user could be reviewer *and*
+        leader or approver.
+
+        """
+        review = Review.objects \
+            .filter(document=self.document) \
+            .filter(revision=self.revision) \
+            .filter(role=role) \
+            .select_related('reviewer') \
+            .get(reviewer=user)
+        return review
+
     def is_reviewer(self, user):
         return user in self.reviewers.all()

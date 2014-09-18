@@ -171,7 +171,7 @@ class ReviewMixinTests(TestCase):
         self.assertEqual(revision.current_review_step(), 'pending')
 
         revision.start_review()
-        self.assertEqual(revision.current_review_step(), 'reviewers')
+        self.assertEqual(revision.current_review_step(), 'reviewer')
 
         revision.end_reviewers_step()
         self.assertEqual(revision.current_review_step(), 'leader')
@@ -197,4 +197,4 @@ class ReviewMixinTests(TestCase):
 
         revision.start_review()
         reviews = revision.get_reviews()
-        self.assertEqual(len(reviews), 6)
+        self.assertEqual(len(reviews), 8)
