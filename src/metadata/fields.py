@@ -15,7 +15,7 @@ def get_choices_from_list(list_index):
         # Execute query now, so we can catch any database error
         # For example if db does not exists, and we are trying to
         # run manage.py syncdb
-        values = list(values)
+        values = [(key, '%s - %s' % (key, value)) for key, value in values]
     except DatabaseError:
         values = None
 
