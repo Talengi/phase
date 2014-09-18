@@ -105,25 +105,7 @@
     <fieldset id="fieldset-reviewers">
         <legend>{{ _('Distribution list') }}</legend>
 
-        <table class="table table-bordered">
-
-            {% for review in reviews %}
-            <tr>
-                <td>
-                    <span class="glyphicon glyphicon-time"
-                          rel="tooltip"
-                          data-toggle="tooltip"
-                          title="{{ review.reviewed_on|na_if_none }}">
-                    </span>
-                </td>
-                <td>{{ review.reviewer }}</td>
-                <td>{{ review.get_role_display }}</td>
-                <td>{{ review.closed|yesno:_('Completed,Pending') }}</td>
-                <td class="center">{% file_link review.comments 'Comments' %}</td>
-            </tr>
-            {% endfor %}
-
-        </table>
+        {% include 'layout/reviews_table.html' with reviews=reviews %}
 
     </fieldset>
 

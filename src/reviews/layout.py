@@ -12,7 +12,8 @@ class ReviewsLayout(LayoutObject):
         revision = form.instance
         reviews = Review.objects \
             .filter(document=revision.document) \
-            .filter(revision=revision.revision)
+            .filter(revision=revision.revision) \
+            .order_by('id')
 
         return render_to_string(
             self.template,
