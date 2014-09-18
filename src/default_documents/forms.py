@@ -295,8 +295,6 @@ class DemoMetadataRevisionForm(BaseDocumentForm):
                 PropertyLayout('is_overdue'),
                 'reviewers',
                 'leader',
-                'leader_comments',
                 'approver',
-                'approver_comments',
             )
         )
