@@ -61,6 +61,10 @@ class Review(models.Model):
         verbose_name_plural = _('Reviews')
         index_together = (('reviewer', 'document', 'revision'),)
 
+    @property
+    def revision_name(self):
+        return '%02d' % self.revision
+
 
 class ReviewMixin(models.Model):
     """A Mixin to use to define reviewable document types."""
