@@ -50,7 +50,7 @@ class BatchReviewTests(TestCase):
             }
         )
         self.ok = 'The review started for the following documents'
-        self.nok = "We could'nt start the review for the following documents"
+        self.nok = "We failed to start the review for the following documents"
 
     def test_batch_review_redirect(self):
         document_list_url = reverse('category_document_list', args=[
@@ -91,16 +91,19 @@ class BatchReviewTests(TestCase):
         self.assertContains(res, self.nok)
 
     def test_batch_review_clears_cache(self):
-        cache_key = '{}_/organisation_2/category_5/'
+        cache_key = '{}_/%s/%s/' % (
+            self.category.organisation.slug,
+            self.category.slug,
+        )
         data = cache.get(cache_key)
         self.assertIsNone(data)
 
         # First call to populate cache
-        res = self.client.get(self.list_url)
+        self.client.get(self.list_url)
         data = cache.get(cache_key)
         self.assertIsNotNone(data)
 
-        res = self.client.post(
+        self.client.post(
             self.url,
             {'document_ids': [self.doc1.id, self.doc2.id]},
             follow=False
