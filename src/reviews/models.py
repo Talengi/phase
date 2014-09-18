@@ -8,10 +8,8 @@ from model_utils import Choices
 
 from accounts.models import User
 from documents.models import Document
-from documents.fields import (
-    LeaderCommentsFileField, ApproverCommentsFileField, PrivateFileField
-)
-from reviews.fileutils import reviewers_comments_file_path
+from documents.fields import PrivateFileField
+from reviews.fileutils import review_comments_file_path
 
 
 class Review(models.Model):
@@ -22,10 +20,20 @@ class Review(models.Model):
         ('approver', _('Approver')),
         ('closed', _('Closed')),
     )
+    ROLES = Choices(
+        ('reviewer', _('Reviewer')),
+        ('leader', _('Leader')),
+        ('approver', _('Approver')),
+    )
 
     reviewer = models.ForeignKey(
         User,
         verbose_name=_('User'),
+    )
+    role = models.CharField(
+        _('Role'),
+        max_length=8,
+        default=ROLES.reviewer
     )
     document = models.ForeignKey(
         Document,
@@ -45,7 +53,7 @@ class Review(models.Model):
     comments = PrivateFileField(
         _('Comments'),
         null=True, blank=True,
-        upload_to=reviewers_comments_file_path
+        upload_to=review_comments_file_path
     )
 
     class Meta:
@@ -92,16 +100,10 @@ class ReviewMixin(models.Model):
         verbose_name=_('Leader'),
         related_name='%(app_label)s_%(class)s_related_leader',
         null=True, blank=True)
-    leader_comments = LeaderCommentsFileField(
-        _('Leader comments'),
-        null=True, blank=True)
     approver = models.ForeignKey(
         User,
         verbose_name=_('Approver'),
         related_name='%(app_label)s_%(class)s_related_approver',
-        null=True, blank=True)
-    approver_comments = ApproverCommentsFileField(
-        _('Approver comments'),
         null=True, blank=True)
     klass = models.IntegerField(
         verbose_name=u"Class",
@@ -151,6 +153,20 @@ class ReviewMixin(models.Model):
                 revision=self.revision
             )
 
+        Review.objects.create(
+            reviewer=self.leader,
+            role=Review.ROLES.leader,
+            document=self.document,
+            revision=self.revision,
+        )
+
+        Review.objects.create(
+            reviewer=self.approver,
+            role=Review.ROLES.approver,
+            document=self.document,
+            revision=self.revision,
+        )
+
     @transaction.atomic
     def cancel_review(self):
         """Stops the review process.
@@ -172,8 +188,6 @@ class ReviewMixin(models.Model):
         self.review_end_date = None
         self.reviewers_step_closed = None
         self.leader_step_closed = None
-        self.leader_comments = None
-        self.approver_comments = None
         self.save()
 
     @transaction.atomic
