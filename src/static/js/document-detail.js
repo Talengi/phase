@@ -52,4 +52,7 @@ jQuery(function($) {
     configureBackToTopLink();
 
     $('body').scrollspy({ target: '#document-sidebar' });
+
+    var tooltips = $('span[rel=tooltip]');
+    tooltips.tooltip();
 });

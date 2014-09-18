@@ -3,6 +3,7 @@ import datetime
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.core.cache import cache
+from django.utils import timezone
 
 from categories.factories import CategoryFactory
 from documents.factories import DocumentFactory
@@ -50,7 +51,7 @@ class BatchReviewTests(TestCase):
             }
         )
         self.ok = 'The review started for the following documents'
-        self.nok = "We could'nt start the review for the following documents"
+        self.nok = "We failed to start the review for the following documents"
 
     def test_batch_review_redirect(self):
         document_list_url = reverse('category_document_list', args=[
@@ -91,16 +92,19 @@ class BatchReviewTests(TestCase):
         self.assertContains(res, self.nok)
 
     def test_batch_review_clears_cache(self):
-        cache_key = '{}_/organisation_2/category_5/'
+        cache_key = '{}_/%s/%s/' % (
+            self.category.organisation.slug,
+            self.category.slug,
+        )
         data = cache.get(cache_key)
         self.assertIsNone(data)
 
         # First call to populate cache
-        res = self.client.get(self.list_url)
+        self.client.get(self.list_url)
         data = cache.get(cache_key)
         self.assertIsNotNone(data)
 
-        res = self.client.post(
+        self.client.post(
             self.url,
             {'document_ids': [self.doc1.id, self.doc2.id]},
             follow=False
@@ -156,7 +160,7 @@ class PrioritiesDocumentListTests(TestCase):
         )
         revision = doc.latest_revision
         revision.start_review()
-        revision.review_due_date = datetime.date.today() + datetime.timedelta(days=6)
+        revision.review_due_date = timezone.now() + datetime.timedelta(days=6)
         revision.save()
         res = self.client.get(self.url)
         self.assertNotContains(res, '<td class="columndocument_key"')
@@ -173,7 +177,7 @@ class PrioritiesDocumentListTests(TestCase):
         )
         revision = doc.latest_revision
         revision.start_review()
-        revision.review_due_date = datetime.date.today()
+        revision.review_due_date = timezone.now()
         revision.save()
         res = self.client.get(self.url)
         self.assertNotContains(res, '<td class="columndocument_key"')
@@ -189,7 +193,7 @@ class PrioritiesDocumentListTests(TestCase):
         )
         revision = doc.latest_revision
         revision.start_review()
-        revision.review_due_date = datetime.date.today()
+        revision.review_due_date = timezone.now()
         revision.save()
         self.assertTrue(doc.latest_revision.is_under_review())
         res = self.client.get(self.url)
@@ -285,7 +289,7 @@ class ReviewersDocumentListTests(TestCase):
             .filter(document=doc) \
             .filter(revision=doc.latest_revision.revision) \
             .filter(reviewer=self.user) \
-            .update(reviewed_on=datetime.date.today())
+            .update(reviewed_on=timezone.now())
 
         res = self.client.get(self.url)
         self.assertNotContains(res, '<td class="columndocument_key"')
@@ -574,7 +578,6 @@ class ReviewFormTests(TestCase):
         self.client.post(self.url, {'review': 'something'})
         revision = revision.__class__.objects.get(pk=revision.pk)
         self.assertIsNotNone(revision.leader_step_closed)
-        self.assertFalse(revision.leader_comments)
 
     def test_leader_submit_review_with_file(self):
         doc = DocumentFactory(
@@ -594,7 +597,6 @@ class ReviewFormTests(TestCase):
             self.client.post(self.url, {'review': 'something', 'comments': fp})
             revision = revision.__class__.objects.get(pk=revision.pk)
             self.assertIsNotNone(revision.leader_step_closed)
-            self.assertTrue(revision.leader_comments)
 
     def test_leader_cannot_access_review_when_step_is_closed(self):
         doc = DocumentFactory(
@@ -631,7 +633,6 @@ class ReviewFormTests(TestCase):
         self.client.post(self.url, {'review': 'something'})
         revision = revision.__class__.objects.get(pk=revision.pk)
         self.assertIsNotNone(revision.review_end_date)
-        self.assertFalse(revision.approver_comments)
 
     def test_approver_submit_review_with_file(self):
         doc = DocumentFactory(
@@ -651,7 +652,6 @@ class ReviewFormTests(TestCase):
             self.client.post(self.url, {'review': 'something', 'comments': fp})
             revision = revision.__class__.objects.get(pk=revision.pk)
             self.assertIsNotNone(revision.review_end_date)
-            self.assertTrue(revision.approver_comments)
 
     def test_approver_cannot_access_a_closed_review(self):
         doc = DocumentFactory(

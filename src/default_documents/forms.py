@@ -12,9 +12,10 @@ from .models import (
     Transmittals, TransmittalsRevision,
     DemoMetadata, DemoMetadataRevision
 )
+from reviews.layout import ReviewsLayout
 from .layout import (
     DocumentFieldset, ScheduleLayout, ScheduleStatusLayout,
-    PropertyLayout, UneditableFile
+    PropertyLayout
 )
 
 
@@ -63,13 +64,34 @@ class ContractorDeliverableRevisionForm(BaseDocumentForm):
 
     def build_layout(self):
         if self.read_only:
-            reviewers = PropertyLayout('reviewers')
-            leader = PropertyLayout('leader')
-            approver = PropertyLayout('approver')
+            review_layout = (
+                DocumentFieldset(
+                    _('Review'),
+                    UneditableField('review_start_date'),
+                    UneditableField('review_due_date'),
+                    PropertyLayout('current_review_step'),
+                    PropertyLayout('is_under_review'),
+                    PropertyLayout('is_overdue'),
+                ),
+                DocumentFieldset(
+                    _('Distribution list'),
+                    ReviewsLayout(),
+                )
+            )
         else:
-            reviewers = 'reviewers'
-            leader = 'leader'
-            approver = 'approver'
+            review_layout = (
+                DocumentFieldset(
+                    _('Review'),
+                    UneditableField('review_start_date'),
+                    UneditableField('review_due_date'),
+                    PropertyLayout('current_review_step'),
+                    PropertyLayout('is_under_review'),
+                    PropertyLayout('is_overdue'),
+                    'reviewers',
+                    'leader',
+                    'approver',
+                ),
+            )
 
         return Layout(
             DocumentFieldset(
@@ -80,19 +102,7 @@ class ContractorDeliverableRevisionForm(BaseDocumentForm):
                 'native_file',
                 'pdf_file',
             ),
-            DocumentFieldset(
-                _('Review'),
-                UneditableField('review_start_date'),
-                UneditableField('review_due_date'),
-                PropertyLayout('current_review_step'),
-                PropertyLayout('is_under_review'),
-                PropertyLayout('is_overdue'),
-                reviewers,
-                leader,
-                UneditableFile('leader_comments'),
-                approver,
-                UneditableFile('approver_comments'),
-            )
+            *review_layout
         )
 
     class Meta:
@@ -287,8 +297,6 @@ class DemoMetadataRevisionForm(BaseDocumentForm):
                 PropertyLayout('is_overdue'),
                 'reviewers',
                 'leader',
-                'leader_comments',
                 'approver',
-                'approver_comments',
             )
         )

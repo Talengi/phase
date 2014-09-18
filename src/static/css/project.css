@@ -373,7 +373,7 @@ td.alignright {
 }
 
 /* Review form */
-#fieldset-reviewers table tr td:first-child {
+table.reviewers tr td:first-child {
     width: 1px;
 }
 

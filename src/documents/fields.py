@@ -3,10 +3,7 @@ from django import forms
 from django.forms import fields
 from django.contrib.contenttypes.models import ContentType
 
-from documents.fileutils import (
-    private_storage, revision_file_path, leader_comments_file_path,
-    approver_comments_file_path
-)
+from documents.fileutils import private_storage, revision_file_path
 from documents.widgets import PhaseClearableFileInput
 
 
@@ -37,26 +34,6 @@ class RevisionFileField(PrivateFileField):
             'upload_to': revision_file_path,
         })
         return super(RevisionFileField, self).__init__(*args, **kwargs)
-
-
-class LeaderCommentsFileField(PrivateFileField):
-    """Custom file field to store leader comments files."""
-
-    def __init__(self, *args, **kwargs):
-        kwargs.update({
-            'upload_to': leader_comments_file_path,
-        })
-        return super(LeaderCommentsFileField, self).__init__(*args, **kwargs)
-
-
-class ApproverCommentsFileField(PrivateFileField):
-    """Custom file field to store approver comments files."""
-
-    def __init__(self, *args, **kwargs):
-        kwargs.update({
-            'upload_to': approver_comments_file_path,
-        })
-        return super(ApproverCommentsFileField, self).__init__(*args, **kwargs)
 
 
 class PhaseClearableFileField(fields.FileField):

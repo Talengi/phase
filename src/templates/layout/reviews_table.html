@@ -1,0 +1,22 @@
+{% load review_form %}
+<table class="table table-bordered reviewers">
+    {% for review in reviews %}
+    <tr>
+        <td>
+            <span class="glyphicon glyphicon-time"
+                  rel="tooltip"
+                  data-toggle="tooltip"
+                  title="{{ review.reviewed_on|na_if_none }}">
+            </span>
+        </td>
+        <td>{{ review.reviewer }}</td>
+        <td>{{ review.get_role_display }}</td>
+        <td>{{ review.closed|yesno:_('Completed,Pending') }}</td>
+        <td class="center">{% file_link review.comments 'Comments' %}</td>
+    </tr>
+
+    {% empty %}
+        <tr><td colspan="5">{{ _('There are no reviews associated to this revision') }}</td></tr>
+    {% endfor %}
+
+</table>
