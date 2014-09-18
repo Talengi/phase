@@ -11,7 +11,7 @@
             </span>
         </td>
         <td>{{ review.reviewer }}</td>
-        <td>{{ _('Reviewer') }}</td>
+        <td>{{ review.get_role_display }}</td>
         <td>{{ review.closed|yesno:_('Completed,Pending') }}</td>
         <td class="center">{% file_link review.comments 'Comments' %}</td>
     </tr>

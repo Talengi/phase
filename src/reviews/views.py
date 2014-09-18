@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import datetime
 
 from django.db import transaction
@@ -9,6 +11,7 @@ from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext, ugettext_lazy as _
 from django.db.models import Q
 from django.core.cache import cache
+from django.utils import timezone
 
 from accounts.views import LoginRequiredMixin, PermissionRequiredMixin
 from documents.utils import get_all_revision_classes
@@ -302,7 +305,7 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
         can_comment = any((
             (self.object.is_at_review_step('approver') and user == self.object.approver),
             (self.object.is_at_review_step('leader') and user == self.object.leader),
-            (self.object.is_at_review_step('reviewers') and self.object.is_reviewer(user))
+            (self.object.is_at_review_step('reviewer') and self.object.is_reviewer(user))
         ))
         context.update({
             'revision': self.object,
@@ -350,13 +353,6 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
 
         self.check_permission(revision, self.request.user)
 
-        if revision.is_reviewer(self.request.user) and revision.is_at_review_step('reviewers'):
-            qs = Review.objects \
-                .filter(document=document) \
-                .filter(reviewer=self.request.user) \
-                .filter(revision=revision.revision)
-            self.review = get_object_or_404(qs)
-
         return revision
 
     def get_success_url(self):
@@ -373,28 +369,17 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
         """Process the submitted file and form.
 
         Multiple cases:
-          - A reviewer is submitting a review, submitting a file or not
+          - A reviewer/leader/approver is submitting a review, withe a comment file or not
           - The leader is closing the reviewer step
-          - The leader is submitting it's review, with or without file
           - The approver is closing the reviewer step
           - The approver is closing the leader step
-          - The approver is submitting it's review, with or without file
 
         """
         self.object = self.get_object()
-        document = self.object.document
 
-        step = self.object.current_review_step()
-        step_method = '%s_step_post' % step
-
+        # A review was posted, with or without file
         if 'review' in request.POST:
-            url = self.get_success_url()
-        else:
-            url = ''
-
-        # A comment file was submitted
-        if hasattr(self, step_method) and 'review' in request.POST:
-            getattr(self, step_method)(request, *args, **kwargs)
+            self.post_review(request, *args, **kwargs)
 
             comments_file = request.FILES.get('comments', None)
             if comments_file:
@@ -405,6 +390,8 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
                 message_text = '''You reviewed document
                                <a href="%(url)s">%(key)s (%(title)s)</a>
                                in revision %(rev)s without comments.'''
+
+            document = self.object.document
             message_data = {
                 'rev': self.object.name,
                 'url': document.get_absolute_url(),
@@ -413,8 +400,6 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
             }
             notify(request.user, _(message_text) % message_data)
 
-        # Close XXX step buttons
-
         if 'close_reviewers_step' in request.POST and request.user in (
                 self.object.leader, self.object.approver):
             self.object.end_reviewers_step()
@@ -422,38 +407,51 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
         if 'close_leader_step' in request.POST and request.user == self.object.approver:
             self.object.end_leader_step()
 
+        url = self.get_success_url() if 'review' in request.POST else ''
         return HttpResponseRedirect(url)
 
     @transaction.atomic
-    def reviewers_step_post(self, request, *args, **kwargs):
+    def post_review(self, request, *args, **kwargs):
+        """Update the Review object with posted data.
+
+        Also, updates the document if any review step is finished.
+
+        """
+        document = self.object.document
+        revision = self.object
+        step = self.object.current_review_step()
         comments_file = request.FILES.get('comments', None)
 
-        if hasattr(self, 'review'):
-            self.review.reviewed_on = datetime.date.today()
-            self.review.comments = comments_file
-            self.review.closed = True
-            self.review.save()
+        # Get the current review being submitted…
+        qs = Review.objects \
+            .filter(document=document) \
+            .filter(revision=revision.revision) \
+            .filter(reviewer=request.user) \
+            .filter(role=step)
+        review = get_object_or_404(qs)
 
-            # If every reviewer has posted comments, close the reviewers step
+        # … and update it
+        review.reviewed_on = timezone.now()
+        review.comments = comments_file
+        review.closed = True
+        review.save()
+
+        # If every reviewer has posted comments, close the reviewers step
+        if self.object.is_at_review_step('reviewer'):
             qs = Review.objects \
-                .filter(document=self.object.document) \
-                .filter(revision=self.object.revision) \
+                .filter(document=document) \
+                .filter(revision=revision.revision) \
+                .filter(role='reviewer') \
                 .exclude(reviewed_on=None)
             if qs.count() == self.object.reviewers.count():
                 self.object.end_reviewers_step()
 
-    def leader_step_post(self, request, *args, **kwargs):
-        comments_file = request.FILES.get('comments', None)
-
-        if self.object.leader == request.user:
-            self.object.leader_comments = comments_file
+        # If leader, end leader step
+        elif self.object.is_at_review_step('leader'):
             self.object.end_leader_step(save=False)
             self.object.save()
 
-    def approver_step_post(self, request, *args, **kwargs):
-        comments_file = request.FILES.get('comments', None)
-
-        if self.object.approver == request.user:
-            self.object.approver_comments = comments_file
+        # If approver, end approver step
+        elif self.object.is_at_review_step('approver'):
             self.object.end_review(save=False)
             self.object.save()

@@ -15,7 +15,7 @@ from reviews.fileutils import review_comments_file_path
 class Review(models.Model):
     STEPS = Choices(
         ('pending', _('Pending')),
-        ('reviewers', _('Reviewrs')),
+        ('reviewer', _('Reviewer')),
         ('leader', _('Leader')),
         ('approver', _('Approver')),
         ('closed', _('Closed')),
@@ -33,6 +33,7 @@ class Review(models.Model):
     role = models.CharField(
         _('Role'),
         max_length=8,
+        choices=ROLES,
         default=ROLES.reviewer
     )
     document = models.ForeignKey(
@@ -42,7 +43,7 @@ class Review(models.Model):
     revision = models.PositiveIntegerField(
         _('Revision')
     )
-    reviewed_on = models.DateField(
+    reviewed_on = models.DateTimeField(
         _('Reviewed on'),
         null=True, blank=True
     )
@@ -59,7 +60,7 @@ class Review(models.Model):
     class Meta:
         verbose_name = _('Review')
         verbose_name_plural = _('Reviews')
-        index_together = (('reviewer', 'document', 'revision'),)
+        index_together = (('reviewer', 'document', 'revision', 'role'),)
 
     @property
     def revision_name(self):
@@ -202,6 +203,7 @@ class ReviewMixin(models.Model):
         Review.objects \
             .filter(document=self.document) \
             .filter(revision=self.revision) \
+            .filter(role=Review.ROLES.reviewer) \
             .update(closed=True)
 
         if save:
@@ -251,7 +253,7 @@ class ReviewMixin(models.Model):
             return Review.STEPS.pending
 
         if self.reviewers_step_closed is None:
-            return Review.STEPS.reviewers
+            return Review.STEPS.reviewer
 
         if self.leader_step_closed is None:
             return Review.STEPS.leader
@@ -278,18 +280,10 @@ class ReviewMixin(models.Model):
         qs = Review.objects \
             .filter(document=self.document) \
             .filter(revision=self.revision) \
+            .order_by('id') \
             .select_related('reviewer')
 
         return qs
-
-    def get_review(self, user):
-        """Get the review from this specific user."""
-        review = Review.objects \
-            .filter(document=self.document) \
-            .filter(revision=self.revision) \
-            .select_related('reviewer') \
-            .get(reviewer=user)
-        return review
 
     def is_reviewer(self, user):
         return user in self.reviewers.all()
