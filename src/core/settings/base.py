@@ -382,6 +382,12 @@ REST_FRAMEWORK = {
     )
 }
 
+# ######### CELERY CONFIG
+BROKER_URL = 'amqp://guest:guest@localhost:5672/'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
 # ######### CUSTOM CONFIGURATION
 PAGINATE_BY = 50  # Document list pagination
 CACHE_TIMEOUT_SECONDS = 300  # seconds == 5 minutes

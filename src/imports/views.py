@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 from accounts.views import LoginRequiredMixin
 from imports.models import ImportBatch
 from imports.forms import FileUploadForm
+from imports.tasks import do_import
 
 
 class ImportMixin(object):
@@ -36,7 +37,7 @@ class FileUpload(ImportMixin, LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         response = super(FileUpload, self).form_valid(form)
-        self.object.do_import()
+        do_import.delay(self.object.uid)
         return response
 
 
