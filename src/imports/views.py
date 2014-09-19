@@ -31,7 +31,7 @@ class FileUpload(ImportMixin, LoginRequiredMixin, CreateView):
     template_name = 'imports/upload_file.html'
     form_class = FileUploadForm
 
-    def breandcrumb_object(self):
+    def breadcrumb_object(self):
         return _('Upload file'), reverse('import_file')
 
     def form_valid(self, form):
