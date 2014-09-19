@@ -5,6 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 
 from accounts.views import LoginRequiredMixin
+from notifications.models import notify
 from imports.models import ImportBatch
 from imports.forms import FileUploadForm
 from imports.tasks import do_import
@@ -38,6 +39,14 @@ class FileUpload(ImportMixin, LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         response = super(FileUpload, self).form_valid(form)
         do_import.delay(self.object.uid)
+
+        message_text = '''You required the import of a new file. Results
+                       <a href="%(url)s">should be available in a few
+                       seconds.</a>'''
+        message_data = {
+            'url': self.object.get_absolute_url(),
+        }
+        notify(self.request.user, _(message_text) % message_data)
         return response
 
 
