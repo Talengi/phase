@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals
+
 from django.utils.encoding import python_2_unicode_compatible
+from django.utils import timezone
 
 import csv
 import json
@@ -55,12 +57,13 @@ class ImportBatch(models.Model):
     )
     created_on = models.DateField(
         _('Created on'),
-        auto_now_add=True
+        default=timezone.now
     )
 
     class Meta:
         verbose_name = _('Import batch')
         verbose_name_plural = _('Import batches')
+        ordering = ['-created_on']
 
     @property
     def imported_type(self):

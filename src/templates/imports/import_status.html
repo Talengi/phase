@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load imports %}
+
 {% block content %}
 <h1>{{ object }}</h1>
 
@@ -16,7 +18,7 @@
             <td>{{ import.line }}</td>
             <td>{{ import.get_status_display }}</td>
             <td>{{ import.document|default_if_none:'' }}</td>
-            <td>{{ import.errors|default_if_none:'' }}</td>
+            <td>{% errors_to_list import.errors %}</td>
         </tr>
     {% endfor %}
     </tbody>
