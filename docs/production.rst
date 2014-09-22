@@ -25,7 +25,7 @@ install the following packages::
     apt-get upgrade
     apt-get purge apache2
     apt-get install build-essential libpq-dev python-dev
-    apt-get install postgresql postgresql-contrib nginx git supervisor
+    apt-get install postgresql postgresql-contrib nginx git supervisor rabbitmq-server
 
 NodeJS installation
 -------------------
@@ -137,6 +137,10 @@ Running the application
 Create the ``/etc/supervisor/conf.d/phase.conf`` config file. here is a working sample.
 
 .. literalinclude:: supervisor_example
+
+Phase uses celery as a task queue. Here is the corresponding supervisor file.
+
+.. literalinclude:: supervisor_celery
 
 Run this thing with::
 

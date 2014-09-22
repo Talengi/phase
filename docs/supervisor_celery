@@ -1,0 +1,11 @@
+[program:celery]
+environment=DJANGO_SETTINGS_MODULE='core.settings.production'
+directory=/home/phase/phase/src/
+command=/home/phase/.virtualenvs/phase/bin/celery -A core.celery worker -l info
+user=phase
+numprocs=1
+stdout_logfile=/var/log/celery_stdout.log
+stderr_logfile=/var/log/celery_stderr.log
+autostart=true
+autorestart=true
+startsecs=10
