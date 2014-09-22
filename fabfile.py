@@ -8,6 +8,7 @@ from fabric.api import run, env, local, cd, prefix, sudo
 # Also add this line in /etc/sudoers on the server if you want
 # the phase user to be able to restart supervisor:
 # phase ALL = (root) NOPASSWD:/usr/bin/supervisorctl restart phase
+# phase ALL = (root) NOPASSWD:/usr/bin/supervisorctl restart celery
 
 USERNAME = 'phase'
 VENV_HOME = '/home/%s/.virtualenvs/' % USERNAME
@@ -49,6 +50,7 @@ def check():
 
 def restart_webserver():
     sudo('supervisorctl restart phase', shell=False)
+    sudo('supervisorctl restart celery', shell=False)
 
 
 def deploy(with_data=True):
