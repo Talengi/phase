@@ -50,7 +50,6 @@ class ImportTests(TestCase):
         self.assertEqual(imp.status, 'success')
         imp = Import.objects.get(pk=imp.pk)
         self.assertEqual(imp.document.document_key, 'toto')
-        self.assertEqual(imp.document.status, 1)
 
     def test_failure_import(self):
         data = {

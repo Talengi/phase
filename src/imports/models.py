@@ -163,7 +163,7 @@ class Import(models.Model):
         form, revision_form = self.get_forms()
         if form.is_valid() and revision_form.is_valid():
             doc, metadata, revision = create_document_from_forms(
-                form, revision_form, self.batch.category, draft=True)
+                form, revision_form, self.batch.category)
             self.document = doc
             self.status = self.STATUSES.success
         else:

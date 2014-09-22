@@ -14,21 +14,12 @@ from documents.utils import stringify_value
 
 
 class DocumentManager(models.Manager):
-    def get_queryset(self):
-        qs = super(DocumentManager, self).get_queryset()
-        return qs.filter(status=Document.STATUSES.saved)
-
     def get_by_natural_key(self, document_key):
         return self.get(document_key=document_key)
 
 
 class Document(models.Model):
     """A single document base model."""
-    STATUSES = Choices(
-        (1, 'draft', _('Draft')),
-        (2, 'saved', _('Saved'))
-    )
-
     objects = DocumentManager()
 
     document_key = models.SlugField(
@@ -36,12 +27,6 @@ class Document(models.Model):
         unique=True,
         db_index=True,
         max_length=250)
-    status = models.IntegerField(
-        _('Status'),
-        db_index=True,
-        choices=STATUSES,
-        default=STATUSES.saved
-    )
     title = models.TextField(
         verbose_name=u"Title")
     category = models.ForeignKey(
