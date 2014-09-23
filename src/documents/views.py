@@ -28,7 +28,7 @@ from favorites.models import Favorite
 from categories.models import Category
 from documents.models import Document
 from documents.utils import (
-    filter_documents, compress_documents, create_document_from_forms)
+    filter_documents, compress_documents, save_document_forms)
 from documents.forms.models import documentform_factory
 from documents.forms.utils import DocumentDownloadForm
 from documents.forms.filters import filterform_factory
@@ -283,8 +283,9 @@ class BaseDocumentFormView(DocumentFormMixin,
 
     def form_valid(self, document_form, revision_form):
         """Saves both the document and it's revision."""
-        self.revision = revision_form.save()
-        self.object = document_form.save()
+        document, self.object, self.revision = save_document_forms(
+            document_form, revision_form, self.category
+        )
         cache.clear()
 
         return HttpResponseRedirect(self.get_success_url())
@@ -361,7 +362,7 @@ class DocumentCreate(PermissionRequiredMixin,
     @transaction.atomic
     def form_valid(self, document_form, revision_form):
         """Saves both the document and it's revision."""
-        doc, metadata, revision = create_document_from_forms(
+        doc, metadata, revision = save_document_forms(
             document_form, revision_form, self.category)
         cache.clear()
 
@@ -466,21 +467,8 @@ class DocumentRevise(DocumentEdit):
     @transaction.atomic
     def form_valid(self, document_form, revision_form):
         """Saves both the document and it's revision."""
-        self.revision = revision_form.save(commit=False)
-        self.object = document_form.save(commit=False)
-
-        # Saves the newly created revision
-        latest_revision = self.object.latest_revision
-        self.revision.revision = latest_revision.revision + 1
-        self.revision.document = self.object.document
-        self.revision.save()
-        revision_form.save_m2m()
-
-        # Update the metadata object
-        # This will also update the master Document object
-        self.object.latest_revision = self.revision
-        self.object.save()
-        document_form.save_m2m()
+        document, self.object, self.revision = save_document_forms(
+            document_form, revision_form, self.category)
 
         cache.clear()
 
