@@ -6,7 +6,7 @@ from django.db.models.base import ModelBase
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone, six
 from django.core.urlresolvers import reverse
-from model_utils import Choices
+from annoying.functions import get_object_or_None
 
 from accounts.models import User
 from categories.models import Category
@@ -206,10 +206,10 @@ class Metadata(six.with_metaclass(MetadataBase), models.Model):
     def get_revision(self, revision):
         """Returns the rivision with the specified number."""
         Revision = self.get_revision_class()
-        revision = Revision.objects \
+        qs = Revision.objects \
             .filter(document=self.document) \
-            .select_related('document') \
-            .get(revision=revision)
+            .select_related('document')
+        revision = get_object_or_None(qs, revision=revision)
         return revision
 
     def natural_key(self):

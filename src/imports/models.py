@@ -89,8 +89,8 @@ class ImportBatch(models.Model):
         form_class = documentform_factory(obj.get_revision_class())
         return form_class
 
-    def get_revisionform(self, data=None):
-        return self.get_revisionform_class()(data)
+    def get_revisionform(self, data=None, **kwargs):
+        return self.get_revisionform_class()(data, **kwargs)
 
     def __iter__(self):
         """Loop over csv data."""
@@ -150,10 +150,10 @@ class Import(models.Model):
         self.data = kwargs.pop('data', None)
         super(Import, self).__init__(*args, **kwargs)
 
-    def get_forms(self, metadata_instance=None):
+    def get_forms(self, metadata_instance=None, revision_instance=None):
         return (
             self.batch.get_form(self.data, instance=metadata_instance),
-            self.batch.get_revisionform(self.data)
+            self.batch.get_revisionform(self.data, instance=revision_instance)
         )
 
     def do_import(self, line):
@@ -166,7 +166,11 @@ class Import(models.Model):
         doc = get_object_or_None(Document, document_key=key)
         metadata = doc.metadata if doc else None
 
-        form, revision_form = self.get_forms(metadata)
+        # Checking if the revision already exists
+        revision_num = self.data.get('revision', None)
+        revision = metadata.get_revision(revision_num) if metadata and revision_num else None
+
+        form, revision_form = self.get_forms(metadata, revision)
         if form.is_valid() and revision_form.is_valid():
 
             doc, metadata, revision = save_document_forms(
@@ -176,5 +180,4 @@ class Import(models.Model):
         else:
             errors = dict(form.errors.items() + revision_form.errors.items())
             self.errors = json.dumps(errors)
-
             self.status = self.STATUSES.error
