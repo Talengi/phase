@@ -172,7 +172,6 @@ class Import(models.Model):
 
         form, revision_form = self.get_forms(metadata, revision)
         if form.is_valid() and revision_form.is_valid():
-
             doc, metadata, revision = save_document_forms(
                 form, revision_form, self.batch.category)
             self.document = doc
