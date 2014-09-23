@@ -3,20 +3,41 @@ import tempfile
 
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
-from django.utils import timezone
 from django.db import transaction
 
 
 @transaction.atomic
-def create_document_from_forms(metadata_form, revision_form, category):
-    """Create a document from it's different forms.
+def save_document_forms(metadata_form, revision_form, category):
+    """Creates or updates a document from it's different forms.
 
     Two forms are necessary to edit a document : the metadata and revision forms.
 
+    There are multiple cases to handle:
+
+      * We are creating a completely new document
+      * We are creating a new revision of an existing document
+      * We are editing an existing revision
+
     """
-    from documents.models import Document
     assert metadata_form.is_valid()
     assert revision_form.is_valid()
+
+    revision = revision_form.save(commit=False)
+    metadata = metadata_form.save(commit=False)
+
+    # Thos three functions could be regrouped, but they form
+    # an if / else russian mountain
+    if metadata.pk is None:
+        return create_document_from_forms(metadata_form, revision_form, category)
+    elif revision.pk is None:
+        return create_revision_from_forms(metadata_form, revision_form, category)
+    else:
+        return update_revision_from_forms(metadata_form, revision_form, category)
+
+
+def create_document_from_forms(metadata_form, revision_form, category):
+    """Creates a brand new document"""
+    from documents.models import Document
 
     revision = revision_form.save(commit=False)
     metadata = metadata_form.save(commit=False)
@@ -26,7 +47,7 @@ def create_document_from_forms(metadata_form, revision_form, category):
         document_key=key,
         category=category,
         current_revision=revision.revision,
-        current_revision_date=timezone.now())
+        current_revision_date=revision.revision_date)
 
     revision.document = document
     revision.save()
@@ -36,6 +57,37 @@ def create_document_from_forms(metadata_form, revision_form, category):
     metadata.latest_revision = revision
     metadata.save()
     metadata_form.save_m2m()
+
+    return document, metadata, revision
+
+
+def create_revision_from_forms(metadata_form, revision_form, category):
+    """Updates an existing document and creates a new revision."""
+    revision = revision_form.save(commit=False)
+    metadata = metadata_form.save(commit=False)
+    document = metadata.document
+
+    revision.revision = metadata.latest_revision.revision + 1
+    revision.document = document
+    revision.save()
+    revision_form.save_m2m()
+
+    metadata.latest_revision = revision
+    metadata.save()
+    metadata_form.save_m2m()
+
+    document.current_revision = revision.revision
+    document.current_revision_date = revision.revision_date
+    document.save()
+
+    return document, metadata, revision
+
+
+def update_revision_from_forms(metadata_form, revision_form, category):
+    """Updates and existing document and revision."""
+    revision = revision_form.save()
+    metadata = metadata_form.save()
+    document = metadata.document
 
     return document, metadata, revision
 
