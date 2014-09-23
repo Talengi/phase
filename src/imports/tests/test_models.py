@@ -1,6 +1,10 @@
 from django.test import TestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
 
+from documents.models import Document
+from documents.factories import DocumentFactory
+from accounts.factories import UserFactory
+from default_documents.models import DemoMetadataRevision
 from categories.factories import CategoryFactory
 from imports.models import ImportBatch, Import
 
@@ -12,9 +16,15 @@ class ImportTests(TestCase):
         csv_file = 'demo_import_file.csv'
         f = open(sample_path + csv_file, 'rb')
         self.file = SimpleUploadedFile(csv_file, f.read())
-        category = CategoryFactory()
+        self.category = CategoryFactory()
+        self.user = UserFactory(
+            email='testadmin@phase.fr',
+            password='pass',
+            is_superuser=True,
+            category=self.category
+        )
         data = {
-            'category': category,
+            'category': self.category,
             'file': self.file,
         }
         self.batch = ImportBatch.objects.create(**data)
@@ -44,7 +54,7 @@ class ImportTests(TestCase):
             'klass': '1',
         }
         imp = Import(batch=self.batch, data=data)
-        imp.do_import()
+        imp.do_import(line=1)
         imp.save()
 
         self.assertEqual(imp.status, 'success')
@@ -52,13 +62,102 @@ class ImportTests(TestCase):
         self.assertEqual(imp.document.document_key, 'toto')
 
     def test_failure_import(self):
+        """The required "klass" field is missing."""
         data = {
             'document_key': 'toto',
             'title': 'doc-toto',
             'status': 'STD',
         }
         imp = Import(batch=self.batch, data=data)
-        imp.do_import()
+        imp.do_import(line=1)
+        imp.save()
+
+        self.assertEqual(imp.status, 'error')
+
+    def test_import_multiple_revisions(self):
+        data = {
+            'document_key': 'toto',
+            'title': 'doc-toto',
+            'status': 'STD',
+            'klass': '1',
+        }
+        imp = Import(batch=self.batch, data=data)
+        imp.do_import(line=1)
+        imp.save()
+
+        revisions = DemoMetadataRevision.objects \
+            .filter(document__document_key='toto')
+        self.assertEqual(revisions.count(), 1)
+
+        # Importing other revisions
+        data = {
+            'document_key': 'toto',
+            'title': 'doc-toto',
+            'status': 'IDC',
+            'klass': '2',
+        }
+        imp = Import(batch=self.batch, data=data)
+        imp.do_import(line=2)
+        imp.save()
+
+        data = {
+            'document_key': 'toto',
+            'title': 'doc-toto',
+            'status': 'IFA',
+            'klass': '3',
+        }
+        imp = Import(batch=self.batch, data=data)
+        imp.do_import(line=2)
+        imp.save()
+
+        revisions = DemoMetadataRevision.objects \
+            .filter(document__document_key='toto')
+        self.assertEqual(revisions.count(), 3)
+
+    def test_import_multiple_revisions_updates_document_fields(self):
+        data = {
+            'document_key': 'toto',
+            'title': 'doc-toto',
+            'status': 'STD',
+            'klass': '1',
+        }
+        imp = Import(batch=self.batch, data=data)
+        imp.do_import(line=1)
+        imp.save()
+
+        data = {
+            'document_key': 'toto',
+            'title': 'doc-tata',
+            'status': 'IDC',
+            'klass': '1',
+        }
+        imp = Import(batch=self.batch, data=data)
+        imp.do_import(line=2)
+        imp.save()
+
+        doc = Document.objects.get(document_key='toto')
+        self.assertEqual(doc.title, 'doc-tata')
+
+    def test_import_revision_document_under_review(self):
+        doc = DocumentFactory(
+            document_key='toto',
+            category=self.category,
+            revision={
+                'reviewers': [self.user],
+                'leader': self.user,
+                'approver': self.user,
+            }
+        )
+        doc.latest_revision.start_review()
+        self.assertTrue(doc.latest_revision.is_under_review())
+
+        data = {
+            'document_key': 'toto',
+            'status': 'IDC',
+            'klass': '1',
+        }
+        imp = Import(batch=self.batch, data=data)
+        imp.do_import(line=2)
         imp.save()
 
         self.assertEqual(imp.status, 'error')

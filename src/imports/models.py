@@ -2,21 +2,22 @@
 
 from __future__ import unicode_literals
 
-from django.utils.encoding import python_2_unicode_compatible
-from django.utils import timezone
-
 import csv
 import json
+
+from django.utils.encoding import python_2_unicode_compatible
+from django.utils import timezone
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django_extensions.db.fields import UUIDField
 from model_utils import Choices
+from annoying.functions import get_object_or_None
 
 from categories.models import Category
 from documents.models import Document
 from documents.forms.models import documentform_factory
-from documents.utils import create_document_from_forms
+from documents.utils import save_document_forms
 
 
 class normal_dialect(csv.Dialect):
@@ -79,8 +80,8 @@ class ImportBatch(models.Model):
         form_class = documentform_factory(self.imported_type.model_class())
         return form_class
 
-    def get_form(self, data=None):
-        return self.get_form_class()(data)
+    def get_form(self, data=None, **kwargs):
+        return self.get_form_class()(data, **kwargs)
 
     def get_revisionform_class(self):
         obj_class = self.imported_type.model_class()
@@ -149,9 +150,9 @@ class Import(models.Model):
         self.data = kwargs.pop('data', None)
         super(Import, self).__init__(*args, **kwargs)
 
-    def get_forms(self):
+    def get_forms(self, metadata_instance=None):
         return (
-            self.batch.get_form(self.data),
+            self.batch.get_form(self.data, instance=metadata_instance),
             self.batch.get_revisionform(self.data)
         )
 
@@ -160,9 +161,15 @@ class Import(models.Model):
 
         self.line = line
 
-        form, revision_form = self.get_forms()
+        # Checking if the document already exists
+        key = self.data.get('document_key', None)
+        doc = get_object_or_None(Document, document_key=key)
+        metadata = doc.metadata if doc else None
+
+        form, revision_form = self.get_forms(metadata)
         if form.is_valid() and revision_form.is_valid():
-            doc, metadata, revision = create_document_from_forms(
+
+            doc, metadata, revision = save_document_forms(
                 form, revision_form, self.batch.category)
             self.document = doc
             self.status = self.STATUSES.success
