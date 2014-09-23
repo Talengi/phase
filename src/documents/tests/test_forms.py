@@ -365,7 +365,7 @@ class DocumentReviseTest(TestCase):
             'klass': 1,
         }, follow=True)
         self.assertEqual(res.status_code, 200)
-        self.assertContains(res, 'You just created revision 02')
+        self.assertContains(res, 'You created revision 02')
 
         revision = DemoMetadataRevision.objects \
             .filter(document=document) \
