@@ -189,3 +189,31 @@ class ImportTests(TestCase):
         imp.save()
 
         self.assertEqual(imp.status, 'error')
+
+
+class ExcelTests(TestCase):
+
+    def setUp(self):
+        sample_path = 'imports/tests/'
+        csv_file = 'demo_import_file.xlsx'
+        f = open(sample_path + csv_file, 'rb')
+        self.file = SimpleUploadedFile(csv_file, f.read())
+        self.category = CategoryFactory()
+        self.user = UserFactory(
+            email='testadmin@phase.fr',
+            password='pass',
+            is_superuser=True,
+            category=self.category
+        )
+        data = {
+            'category': self.category,
+            'file': self.file,
+        }
+        self.batch = ImportBatch.objects.create(**data)
+
+    def test_import(self):
+        self.assertEqual(Document.objects.all().count(), 0)
+
+        self.batch.do_import()
+        self.assertEqual(Document.objects.all().count(), 1)
+        self.assertEqual(DemoMetadataRevision.objects.all().count(), 2)

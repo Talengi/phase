@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 
 import csv
 import json
+from itertools import izip_longest
 
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils import timezone
@@ -13,6 +14,7 @@ from django.core.urlresolvers import reverse
 from django_extensions.db.fields import UUIDField
 from model_utils import Choices
 from annoying.functions import get_object_or_None
+from openpyxl import load_workbook
 
 from categories.models import Category
 from documents.models import Document
@@ -29,6 +31,30 @@ class normal_dialect(csv.Dialect):
     quoting = csv.QUOTE_NONE
     strict = True
 csv.register_dialect('normal', normal_dialect)
+
+
+def xls_to_django(value):
+    """Converts an excel value into a format we can use.
+
+    Excel stores all numeric values as floats. For exemple, if you put "1" in
+    a cell, importing that cell will yield a value of "1.0", which can cause
+    errors.
+
+    We need to convert numbers into strings since this is the format expected
+    by django forms
+
+    I feel like this is an awful hack. But Excel is a gigantic hack, so it's
+    the best I can do.
+
+    """
+    if value is None:
+        value = ''
+    elif hasattr(value, 'is_integer') and value.is_integer():
+        value = '%s' % int(value)
+    else:
+        value = '%s' % value
+
+    return value
 
 
 @python_2_unicode_compatible
@@ -94,9 +120,22 @@ class ImportBatch(models.Model):
 
     def __iter__(self):
         """Loop over csv data."""
-        with open(self.file.path, 'rb') as f:
-            csvfile = csv.DictReader(f, dialect='normal')
-            for row in csvfile:
+        if self.file.path.endswith('csv'):
+            with open(self.file.path, 'rb') as f:
+                csvfile = csv.DictReader(f, dialect='normal')
+                for row in csvfile:
+                    imp = Import(batch=self, data=row)
+                    yield imp
+        else:
+            wb = load_workbook(filename=self.file.path, use_iterators=True)
+            sheet = wb.active
+            header_row = None
+            for row in sheet.iter_rows():
+                if header_row is None:
+                    header_row = [c.value for c in list(row)]
+                    continue
+                values = [xls_to_django(c.value) for c in list(row)]
+                row = dict(izip_longest(header_row, values))
                 imp = Import(batch=self, data=row)
                 yield imp
 
