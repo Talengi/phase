@@ -322,32 +322,11 @@ button.ui-multiselect {
 #document-sidebar ul a:hover {
     background-color: white;
 }
-form.disabled input[type="text"],
-form.disabled input[type="number"],
-form.disabled .uneditable-input,
-form.disabled textarea,
-form.disabled select {
-    color: black;
-    border: 0 !important;
-    background-color: transparent !important;
-    padding-left: 0 !important;
-    margin-left: 0;
-    box-shadow: none;
-    -webkit-box-shadow: none;
-    cursor: pointer !important;
-    resize:none;
-}
 form.disabled #form-schedule-table input.dateinput {
     text-align: center;
 }
 form.disabled .controls {
     overflow: hidden;
-}
-form.disabled select,
-form.disabled input[type="number"] {
-    margin-left: -3px;
-    /* Nasty hack to hide the select box selection arrow */
-    width: 115%;
 }
 form.disabled div.input-group.date .input-group-addon {
     display: none;
@@ -360,10 +339,14 @@ form.disabled .help-block {
 }
 div.control-label {
     font-weight: bold;
+    margin-bottom: 5px;
 }
 .asteriskField {
     color: #ff1133;
     margin-left: 7px;
+}
+form.disabled .asteriskField {
+    display: none;
 }
 td.center {
     text-align: center;
