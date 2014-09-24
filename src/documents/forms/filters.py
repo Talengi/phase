@@ -1,6 +1,5 @@
 from django import forms
 from django.conf import settings
-from django.core.exceptions import ImproperlyConfigured
 
 
 class BaseDocumentFilterForm(forms.Form):
@@ -35,9 +34,7 @@ def filterform_factory(model):
         model._meta.concrete_fields + revision_model._meta.concrete_fields))
 
     # Get the list of all configured fields
-    config = getattr(model, 'PhaseConfig', None)
-    if config is None:
-        raise ImproperlyConfigured('Configure your document in a PhaseConfig subclass')
+    config = getattr(model, 'PhaseConfig')
     filter_fields = config.filter_fields
 
     kwargs = {
