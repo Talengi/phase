@@ -1,0 +1,4 @@
+document_key;transmittal_date;ack_of_receipt_date;contract_number;originator;recipient;document_type;sequential_number;frm;to;status;revision_date;created_on;revision;
+test-1;2014-09-24;2014-09-24;FAC09001;FWF;test_recipient;PID;0001;1;2;opened;2014-09-24;2014-09-24;0;
+test-1;2014-09-24;2014-09-24;FAC09001;FWF;test_recipient;PID;0002;1;2;closed;2014-09-24;2014-09-24;1;
+test-1;2014-09-24;2014-09-24;FAC09001;FWF;test_recipient;PID;0002;1;2;closed;2014-09-25;2014-09-25;1;
