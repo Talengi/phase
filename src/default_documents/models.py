@@ -389,6 +389,10 @@ class Correspondence(Metadata):
     def leader(self):
         return self.latest_revision.leader
 
+    @property
+    def title(self):
+        return self.subject
+
 
 class CorrespondenceRevision(MetadataRevision):
     status = models.CharField(
@@ -654,6 +658,10 @@ class Transmittals(Metadata):
     @property
     def created_on(self):
         return self.latest_revision.created_on
+
+    @property
+    def title(self):
+        return self.document_key
 
 
 class TransmittalsRevision(MetadataRevision):
