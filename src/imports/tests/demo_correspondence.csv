@@ -1,0 +1,2 @@
+document_key;subject;correspondence_date;received_sent_date;contract_number;originator;recipient;document_type;sequential_number;author;addresses;response_required;due_date;external_reference;status;revision_date;created_on;
+;Test aéiö;2014-09-24;2014-09-24;FAC09001;CTR;test_recipient;PID;0001;test_author;test_address;2;2014-09-30;reference 123;opened;2014-09-24;2014-09-24;
