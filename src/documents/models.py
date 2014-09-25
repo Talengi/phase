@@ -127,6 +127,9 @@ class Document(models.Model):
         """A revision identifier should be displayed with two digits"""
         return '%02d' % self.current_revision
 
+    def to_json(self):
+        return self.metadata.jsonified()
+
 
 # TODO Add the "latest_revision" test
 class MetadataBase(ModelBase):
