@@ -281,6 +281,16 @@ LOGGING = {
         'django.request': {
             'propagate': True,
         },
+        'elasticsearch': {
+            'handlers': ['console', 'syslog', 'mail_admins'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'elasticsearch.trace': {
+            'handlers': ['console', 'syslog', 'mail_admins'],
+            'level': 'INFO',
+            'propagate': False,
+        }
     }
 }
 # ######### END LOGGING CONFIGURATION
@@ -388,6 +398,10 @@ BROKER_URL = 'amqp://guest:guest@localhost:5672/'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+
+# ######### SEARCH CONFIG
+ELASTIC_HOSTS = [{'host': 'localhost', 'port': '9200'}]
+ELASTIC_INDEX = 'documents'
 
 # ######### CUSTOM CONFIGURATION
 PAGINATE_BY = 50  # Document list pagination
