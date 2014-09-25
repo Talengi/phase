@@ -33,6 +33,11 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         call_command('delete_index', **options)
         call_command('create_index', **options)
+
+        # This method is highly inefficient, since we are making way too
+        # much sql queries and http requests.
+        # We don't really care, however, since this command should only
+        # be used exceptionnaly (e.g post syncdb)
         docs = Document.objects.all()
         for doc in docs:
             index_document(doc)
