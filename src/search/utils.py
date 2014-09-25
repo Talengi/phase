@@ -13,3 +13,10 @@ def index_document(document):
         id=document.pk,
         body=document.to_json()
     )
+
+
+def unindex_document(document):
+    elastic.delete(
+        index=settings.ELASTIC_INDEX,
+        id=document.pk
+    )

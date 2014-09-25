@@ -1,8 +1,8 @@
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_delete
 from django.conf import settings
 
 from documents.models import Document
-from search.utils import index_document
+from search.utils import index_document, unindex_document
 
 
 def update_index(sender, instance, **kwargs):
@@ -17,5 +17,10 @@ def update_index(sender, instance, **kwargs):
         index_document(instance)
 
 
+def remove_from_index(sender, instance, **kwargs):
+    unindex_document(instance)
+
+
 if settings.ELASTIC_AUTOINDEX:
     post_save.connect(update_index, sender=Document, dispatch_uid='update_index')
+    pre_delete.connect(remove_from_index, sender=Document, dispatch_uid='remove_from_index')
