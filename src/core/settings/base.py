@@ -227,6 +227,7 @@ LOCAL_APPS = (
     'breadcrumbs',
     'notifications',
     'imports',
+    'search',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
