@@ -57,14 +57,6 @@ class Document(models.Model):
     def __unicode__(self):
         return self.document_key
 
-    def save(self, *args, **kwargs):
-        if self.pk is None:
-            # This is a document creation
-            # TODO get document key from metadata object
-            # TODO get fields required for favorites management
-            pass
-        super(Document, self).save(*args, **kwargs)
-
     def get_absolute_url(self):
         """Get the document url.
 

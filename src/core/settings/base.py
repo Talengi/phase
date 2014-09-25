@@ -402,6 +402,7 @@ CELERY_RESULT_SERIALIZER = 'json'
 # ######### SEARCH CONFIG
 ELASTIC_HOSTS = [{'host': 'localhost', 'port': '9200'}]
 ELASTIC_INDEX = 'documents'
+ELASTIC_AUTOINDEX = True
 
 # ######### CUSTOM CONFIGURATION
 PAGINATE_BY = 50  # Document list pagination

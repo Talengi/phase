@@ -22,11 +22,11 @@
 
 from __future__ import unicode_literals
 
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from django.core.management import call_command
 
 from documents.models import Document
-from search.search_backend import index_document
+from search.utils import index_document
 
 
 class Command(BaseCommand):
