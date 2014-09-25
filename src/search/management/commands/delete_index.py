@@ -13,9 +13,9 @@ from search import elastic
 class Command(BaseCommand):
     def handle(self, *args, **options):
         index = settings.ELASTIC_INDEX
-        self.stdout.write('Creating index %s' % index)
+        self.stdout.write('Deleting index %s' % index)
 
         try:
-            elastic.indices.create(index=index, ignore=400)
+            elastic.indices.delete(index=index, ignore=404)
         except ConnectionError:
             raise CommandError('Elasticsearch cannot be found')
