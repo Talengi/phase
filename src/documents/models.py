@@ -104,7 +104,7 @@ class Document(models.Model):
         XXX WARNING XXX
 
         This method is a useful shortcut that makes tests writing easier.
-        It should not really used in the application code, because it's
+        It should not really be used in the application code because it's
         not optimal, since it generates a new query.
 
         """
