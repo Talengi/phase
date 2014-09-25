@@ -130,6 +130,11 @@ class Document(models.Model):
     def to_json(self):
         return self.metadata.jsonified()
 
+    def document_type(self):
+        metadata = self.metadata
+        doc_type = '%s.%s' % (metadata.__module__, metadata.__class__.__name__)
+        return doc_type
+
 
 # TODO Add the "latest_revision" test
 class MetadataBase(ModelBase):
