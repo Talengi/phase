@@ -40,7 +40,7 @@
                     }
                 }
                 for(i in values) {
-                    if(values[i]) {
+                    if(typeof values[i] !== 'undefined' && values[i] !== '') {
                         this.data[i] = values[i];
                     }
                     else {
