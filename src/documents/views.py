@@ -165,7 +165,7 @@ class DocumentList(BaseDocumentList):
 
         context.update({
             'download_form': download_form,
-            'form': FilterForm(initial={'start': -50}),
+            'form': FilterForm(),
             'documents_active': True,
             #'initial_data': json.dumps(json_data),
             'initial_data': '{}',

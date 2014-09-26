@@ -3,6 +3,7 @@ jQuery(function($) {
 
     // initialize minimal query parameters
     queryparams.fromString($('#table-filters').serialize());
+    isFirstPage = true;
 
     /* Dealing with addition/removal of favorites */
     var updateDocumentNumber = function(display, total) {
@@ -157,10 +158,14 @@ jQuery(function($) {
 
     // click on next page appends rows to table
     $('.pagination a').on('click', function(evt) {
-        var d = queryparams.data;
-        // increment 'start' parameter to get next page
-        d['start'] = parseInt(d['start'], 10) + parseInt(d['length'], 10);
-        queryparams.update(d);
+
+        if (!isFirstPage) {
+            var d = queryparams.data;
+            // increment 'start' parameter to get next page
+            d['start'] = parseInt(d['start'], 10) + parseInt(d['length'], 10);
+            queryparams.update(d);
+            isFirstPage = false;
+        }
         // update the table
         datatable.append(queryparams.data);
         evt.preventDefault();
