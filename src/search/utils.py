@@ -7,6 +7,7 @@ from django.conf import settings
 
 
 def index_document(document):
+    """Stores a document into the ES index."""
     elastic.index(
         index=settings.ELASTIC_INDEX,
         doc_type=document.document_type(),
@@ -16,6 +17,7 @@ def index_document(document):
 
 
 def unindex_document(document):
+    """Removes the document from the index."""
     elastic.delete(
         index=settings.ELASTIC_INDEX,
         id=document.pk
