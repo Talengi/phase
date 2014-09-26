@@ -124,7 +124,7 @@ class Document(models.Model):
 
     def document_type(self):
         metadata = self.metadata
-        doc_type = '%s.%s' % (metadata.__module__, metadata.__class__.__name__)
+        doc_type = '%s.%s' % (metadata._meta.app_label, metadata.__class__.__name__)
         return doc_type
 
 
