@@ -58,6 +58,7 @@ class DocumentListMixin(object):
             'organisation_slug': self.kwargs['organisation'],
             'category_slug': self.kwargs['category'],
             'category': self.category,
+            'document_type': self.category.document_type(),
         })
         return context
 
@@ -154,8 +155,8 @@ class DocumentList(BaseDocumentList):
 
     def get_context_data(self, **kwargs):
         context = super(DocumentList, self).get_context_data(**kwargs)
-        json_data = self.get_serializable_document_list(context,
-                                                        context['paginator'].count)
+        #json_data = self.get_serializable_document_list(context,
+        #                                                context['paginator'].count)
         model = context['object_list'].model
         FilterForm = filterform_factory(model)
 
@@ -164,9 +165,10 @@ class DocumentList(BaseDocumentList):
 
         context.update({
             'download_form': download_form,
-            'form': FilterForm(),
+            'form': FilterForm(initial={'start': -50}),
             'documents_active': True,
-            'initial_data': json.dumps(json_data),
+            #'initial_data': json.dumps(json_data),
+            'initial_data': '{}',
             'items_per_page': self.paginate_by,
             'document_class': self.get_document_class(),
         })

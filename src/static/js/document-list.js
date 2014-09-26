@@ -23,7 +23,7 @@ jQuery(function($) {
 
     /* Initializing the datatable */
     var datatable = $('#documents').datatable({
-        filterUrl: config.filterUrl,
+        filterUrl: config.searchUrl,
         updated: function(rows, params) {
             params && params['total'] == rows.length ? $('.pagination a').hide() : $('.pagination a').show();
             // update headers information

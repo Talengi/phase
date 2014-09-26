@@ -123,8 +123,7 @@ class Document(models.Model):
         return self.metadata.jsonified()
 
     def document_type(self):
-        Model = self.category.category_template.metadata_model
-        return '%s.%s' % (Model.app_label, Model.model)
+        return self.category.document_type()
 
 
 # TODO Add the "latest_revision" test

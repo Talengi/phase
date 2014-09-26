@@ -41,9 +41,11 @@
         deleteUrl: "{% url "favorite_delete" "0" %}",
         filterUrl: "{% url "document_filter" organisation_slug category_slug %}",
         detailUrl: "{% url "document_detail" organisation_slug category_slug "documentNumber" %}",
+        searchUrl: "{% url "search_documents" organisation_slug category_slug %}",
         numPages: {{ paginator.num_pages }},
         totalItems: {{ paginator.count }},
-        numItemsPerPage: {{ items_per_page }}
+        numItemsPerPage: {{ items_per_page }},
+        documentType: "{{ document_type }}"
     };
     var tableData = {{ initial_data|safe }};
 
