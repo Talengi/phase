@@ -61,7 +61,7 @@ class SearchDocuments(JSONResponseMixin, BaseDocumentList):
             s = s.query('multi_match', query=search_terms, fields=searchable_fields)
 
         # Sort query
-        order = data.get('sort_by', 'document_key') or 'document_key'
+        order = data.get('sort_by', 'sort_key') or 'sort_key'
         s = s.sort(order)
 
         # Pagination

@@ -243,6 +243,7 @@ class Metadata(six.with_metaclass(MetadataBase), models.Model):
             u'document_pk': self.document.pk,
             u'favorite_id': document2favorite.get(self.document.pk, u''),
             u'favorited': favorited,
+            u'sort_key': self.document_key.replace('-', '').lower(),
         })
         return fields_infos
 
