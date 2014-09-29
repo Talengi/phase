@@ -8,7 +8,7 @@ register = template.Library()
 
 HEADER_TPL = '<th id="%s" data-sortby="%s">%s <span class="%s"></span></th>'
 SORT_MARKER_CLASS = 'glyphicon glyphicon-chevron-down'
-TD_TPL = '<td class="column%s">{{%s}}</td>'
+TD_TPL = '<td class="column%s"><%%= %s %%></td>'
 
 
 @register.simple_tag()

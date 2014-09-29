@@ -30,11 +30,9 @@
 {% endblock %}
 
 {% block extra_js %}
-    {% compressed_js "list" %}
-    {% compressed_js "datatable" %}
-
     <script>
-    var config = {
+    var Phase = {};
+    Phase.Config = {
         userId: {% if request.user.is_authenticated %}{{ request.user.id }}{% else %}undefined{% endif %},
         csrfToken: "{{ csrf_token }}",
         createUrl: "{% url "favorite_create" %}",
@@ -47,7 +45,6 @@
         numItemsPerPage: {{ items_per_page }},
         documentType: "{{ document_type }}"
     };
-    var tableData = {{ initial_data|safe }};
-
     </script>
+    {% compressed_js "list" %}
 {% endblock extra_js %}

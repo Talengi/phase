@@ -15,15 +15,13 @@
 </table>
 
 {% verbatim %}
-<table id="documents-template">
-    <tbody>
-        <tr data-document-id="{{document_pk}}" data-metadata-id="{{pk}}" data-document-key="{{document_key}}">
-            <td class="columnselect"><input type="checkbox" /></td>
-            <td class="columnfavorite"><span class="{{../icon}}" data-favorite-id="{{favorite_id}}" title="{{../icon_title}}"></span></td>
-            {% endverbatim %}{% generate_template_markup document_class %}{% verbatim %}
-        </tr>
-    </tbody>
-</table>
+<script id="documents-template" type="text/x-underscore-template">
+    <tr data-document-id="<%= document_pk %>" data-metadata-id="<%= pk %>" data-document-key="<%= document_key %>">
+        <td class="columnselect"><input type="checkbox" /></td>
+        <td class="columnfavorite"><span class="glyphicon glyphicon-star-empty" data-favorite-id="<%= favorite_id %>" title="{{ _('Add to favorites') }}"></span></td>
+        {% endverbatim %}{% generate_template_markup document_class %}{% verbatim %}
+    </tr>
+</script>
 {% endverbatim %}
 
 
