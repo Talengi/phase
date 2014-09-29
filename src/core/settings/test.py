@@ -18,5 +18,8 @@ MEDIA_ROOT = '/tmp/phase_media/'
 REVISION_FILES_ROOT = MEDIA_ROOT
 
 PIPELINE_ENABLED = False
+STATICFILES_STORAGE = 'pipeline.storage.NonPackagingPipelineStorage'
 
 ELASTIC_AUTOINDEX = False
+
+ELASTIC_HOSTS = [{'host': 'www.mocky.io', 'port': '80'}]
