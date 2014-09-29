@@ -340,6 +340,8 @@ PIPELINE_JS = {
     },
     'list': {
         'source_filenames': (
+            'js/vendor/underscore.js',
+            'js/vendor/backbone.js',
             'js/jquery.afterkeyup.js',
             'js/document-list.js',
         ),
@@ -355,18 +357,18 @@ PIPELINE_JS = {
         ),
         'output_filename': 'js/detail.js',
     },
-    'datatable': {
-        'source_filenames': (
-            'js/templayed.js',
-            # must be loaded after templayed js
-            'js/jquery.datatable.js',
-            'js/jquery.favbystar.js',
-            'js/jquery.infinitescroll.js',
-            'js/queryparams.js',
-            'js/jquery.inview.js',
-        ),
-        'output_filename': 'js/datatable.js',
-    },
+    #'datatable': {
+    #    'source_filenames': (
+    #        'js/templayed.js',
+    #        # must be loaded after templayed js
+    #        'js/jquery.datatable.js',
+    #        'js/jquery.favbystar.js',
+    #        'js/jquery.infinitescroll.js',
+    #        'js/queryparams.js',
+    #        'js/jquery.inview.js',
+    #    ),
+    #    'output_filename': 'js/datatable.js',
+    #},
     'review_list': {
         'source_filenames': (
             'js/review-list.js',
