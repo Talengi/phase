@@ -1,0 +1,17 @@
+{
+  "name": "Phase",
+  "version": "0.0.0",
+  "description": "Testing tools for Phase",
+  "main": "index.html",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "sinon": "~1.7.3",
+    "grunt": "~0.4.2",
+    "grunt-contrib-jshint": "~0.8.0",
+    "jshint-stylish": "~0.1.5"
+  }
+}
