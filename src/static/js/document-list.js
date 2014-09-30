@@ -1,3 +1,5 @@
+var Phase = Phase || {};
+
 (function(exports, Phase, Backbone, _) {
     "use strict";
 
@@ -14,7 +16,7 @@
         url: Phase.Config.searchUrl,
         parse: function(response) {
             this.total = response.total;
-            return response.data
+            return response.data;
         }
     });
 
