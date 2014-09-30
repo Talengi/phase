@@ -21,5 +21,3 @@ PIPELINE_ENABLED = False
 STATICFILES_STORAGE = 'pipeline.storage.NonPackagingPipelineStorage'
 
 ELASTIC_AUTOINDEX = False
-
-ELASTIC_HOSTS = [{'host': 'www.mocky.io', 'port': '80'}]

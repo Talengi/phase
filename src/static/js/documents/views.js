@@ -3,22 +3,7 @@ var Phase = Phase || {};
 (function(exports, Phase, Backbone, _) {
     "use strict";
 
-    Phase.Collections = Phase.Collections || {};
-    Phase.Models = Phase.Models || {};
-    Phase.Views = Phase.Views || {};
-
-    Phase.Models.Document = Backbone.Model.extend({
-        idAttribute: '_id'
-    });
-
-    Phase.Collections.DocumentCollection = Backbone.Collection.extend({
-        model: Phase.Models.Document,
-        url: Phase.Config.searchUrl,
-        parse: function(response) {
-            this.total = response.total;
-            return response.data;
-        }
-    });
+    Phase.Views = {};
 
     /**
      * This is the main view, englobing all other views.
@@ -56,9 +41,4 @@ var Phase = Phase || {};
         }
     });
 
-    exports.Phase = Phase;
 })(this, Phase, Backbone, _);
-
-jQuery(function($) {
-    var mainView = new Phase.Views.MainView();
-});
