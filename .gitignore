@@ -36,3 +36,5 @@ private/
 TODO
 
 docs/_build
+
+node_modules
