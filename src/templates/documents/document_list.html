@@ -31,7 +31,6 @@
 
 {% block extra_js %}
     <script>
-    var Phase = {};
     Phase.Config = {
         userId: {% if request.user.is_authenticated %}{{ request.user.id }}{% else %}undefined{% endif %},
         csrfToken: "{{ csrf_token }}",
