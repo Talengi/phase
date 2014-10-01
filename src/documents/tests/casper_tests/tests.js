@@ -24,9 +24,27 @@ casper.test.begin('Document list tests', 0, function suite(test) {
     casper.start(document_list_url, function() {
         test.assertTitle('Phase');
         casper.wait(500);
+        test.assertSelectorHasText('#display-results', '1 document on 1')
         test.assertElementCount('table#documents tbody tr', 1);
-        test.assertSelectorHasText('#display-results', '1',
-            'Result count is updated');
+    });
+
+    casper.run(function() {
+        test.done();
+    });
+});
+
+casper.test.begin('Buttons are enabled on checkbox click', 0, function suite(test) {
+    casper.start(document_list_url, function() {
+        test.assertExists('button#download-button.disabled');
+    });
+
+    casper.then(function() {
+        casper.click('td.columnselect input[type=checkbox]');
+    });
+
+    casper.then(function() {
+        test.assertDoesntExist('button#download-button.disabled');
+        test.assertExists('button#download-button');
     });
 
     casper.run(function() {

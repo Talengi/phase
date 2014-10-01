@@ -10,10 +10,39 @@ var Phase = Phase || {};
      */
     Phase.Views.MainView = Backbone.View.extend({
         initialize: function() {
-            this.documentsCollection = new Phase.Collections.DocumentCollection();
-            this.tableView = new Phase.Views.TableView({ collection: this.documentsCollection });
+            _.bindAll(this, 'render');
 
-            this.documentsCollection.fetch();
+            this.documentsCollection = new Phase.Collections.DocumentCollection();
+
+            this.tableView = new Phase.Views.TableView();
+            this.paginationView = new Phase.Views.PaginationView();
+
+            this.listenTo(this.documentsCollection, 'add', this.addDocument);
+            this.documentsCollection.fetch({
+                success: this.render
+            });
+        },
+        addDocument: function(document) {
+            this.tableView.addDocumentView(
+                new Phase.Views.RowView({ model: document })
+            );
+        },
+        render: function() {
+            var displayedDocuments = this.documentsCollection.length;
+            var totalDocuments = this.documentsCollection.total;
+            this.paginationView.render(displayedDocuments, totalDocuments);
+
+            return this;
+        }
+    });
+
+    /**
+     * The whole document table, using sub views to represent rows.
+     */
+    Phase.Views.TableView = Backbone.View.extend({
+        el: 'table#documents tbody',
+        addDocumentView: function(documentView) {
+            this.$el.append(documentView.render());
         }
     });
 
@@ -28,16 +57,21 @@ var Phase = Phase || {};
     });
 
     /**
-     * The whole document table, using sub views to represent rows.
+     * A small view to handle the pagination text.
+     * "xxx documents on yyy"
      */
-    Phase.Views.TableView = Backbone.View.extend({
-        el: 'table#documents tbody',
-        initialize: function() {
-            this.listenTo(this.collection, 'add', this.addDocument);
-        },
-        addDocument: function(document) {
-            var documentView = new Phase.Views.RowView({ model: document });
-            this.$el.append(documentView.render());
+    Phase.Views.PaginationView = Backbone.View.extend({
+        el: 'p#display-results',
+        render: function(displayed, total) {
+            var results;
+            if (displayed <= 1) {
+                results = '' + displayed + ' document on ' + total;
+            } else {
+                results = '' + displayed + ' documents on ' + total;
+            }
+            this.$el.html(results);
+
+            return this;
         }
     });
 
