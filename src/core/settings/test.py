@@ -21,3 +21,15 @@ PIPELINE_ENABLED = False
 STATICFILES_STORAGE = 'pipeline.storage.NonPackagingPipelineStorage'
 
 ELASTIC_AUTOINDEX = False
+
+LOGGING['loggers']['elasticsearch'] = {
+    'handlers': ['console', 'syslog', 'mail_admins'],
+    'level': 'ERROR',
+    'propagate': False,
+}
+
+LOGGING['loggers']['elasticsearch.trace'] = {
+    'handlers': ['console', 'syslog', 'mail_admins'],
+    'level': 'ERROR',
+    'propagate': False,
+}
