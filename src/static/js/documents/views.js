@@ -19,7 +19,7 @@ var Phase = Phase || {};
             this.headerView = new Phase.Views.HeaderView();
             this.tableView = new Phase.Views.TableView();
             this.paginationView = new Phase.Views.PaginationView();
-            this.buttonView = new Phase.Views.ActionButtonsView();
+            this.formView = new Phase.Views.ActionFormView();
 
             this.listenTo(this.documentsCollection, 'add', this.addDocument);
 
@@ -78,7 +78,7 @@ var Phase = Phase || {};
             'click input[type=checkbox]': 'selectRow',
         },
         initialize: function() {
-            this.listenTo(dispatcher, 'selectAll', this.checkRow);
+            this.listenTo(dispatcher, 'selectAll', this.setRowState);
         },
         render: function() {
             this.$el.html(this.template(this.model.attributes));
@@ -86,17 +86,20 @@ var Phase = Phase || {};
 
             return this;
         },
-        checkRow: function(checked) {
-            this.checkbox.prop('checked', checked);
-            this.selectRow();
+        setRowState: function(checked) {
+            if (checked != this.checkbox.is(':checked')) {
+                this.checkbox.prop('checked', checked);
+                this.selectRow();
+            }
         },
         selectRow: function() {
-            dispatcher.trigger('rowSelected', this.model);
-            if (this.checkbox.is(':checked')) {
+            var checked = this.checkbox.is(':checked');
+            if (checked) {
                 this.$el.addClass('selected');
             } else {
                 this.$el.removeClass('selected');
             }
+            dispatcher.trigger('rowSelected', this.model, checked);
         }
     });
 
@@ -119,7 +122,7 @@ var Phase = Phase || {};
         }
     });
 
-    Phase.Views.ActionButtonsView = Backbone.View.extend({
+    Phase.Views.ActionFormView = Backbone.View.extend({
         el: '#document-list-form form',
         initialize: function() {
             this.buttons = this.$el.find('.navbar-action');
@@ -128,9 +131,7 @@ var Phase = Phase || {};
 
             this.configureForm();
             this.listenToOnce(dispatcher, 'rowSelected', this.activateButtons);
-        },
-        activateButtons: function() {
-            this.buttons.removeClass('disabled');
+            this.listenTo(dispatcher, 'rowSelected', this.rowSelected);
         },
         configureForm: function() {
             // We update the form action depending on
@@ -152,6 +153,21 @@ var Phase = Phase || {};
                 var dropdown = $(this).closest('.dropdown');
                 dropdown.toggleClass('open');
             });
+        },
+        activateButtons: function() {
+            this.buttons.removeClass('disabled');
+        },
+        rowSelected: function(document, checked) {
+            if (checked) {
+                var input = $('<input type="hidden" name="document_ids"></input>');
+                input.attr('id', 'document-id-' + document.id);
+                input.val(document.id);
+                this.$el.append(input);
+            } else {
+                var input_id = '#document-id-' + document.id;
+                var input = this.$el.find(input_id);
+                input.remove();
+            }
         }
     });
 

@@ -114,3 +114,23 @@ casper.test.begin('Select all checkbox', 0, function suite(test) {
         test.done();
     });
 });
+
+casper.test.begin('Selecting a row creates an input field in download form', 0, function suite(test) {
+    casper.start(document_list_url, function() {
+        test.assertDoesntExist('input[name=document_ids]');
+    });
+
+    casper.then(function() {
+        casper.click('td.columnselect input[type=checkbox]');
+        test.assertExists('input[name=document_ids]');
+    });
+
+    casper.then(function() {
+        casper.click('td.columnselect input[type=checkbox]');
+        test.assertDoesntExist('input[name=document_ids]');
+    });
+
+    casper.run(function() {
+        test.done();
+    });
+});
