@@ -2,11 +2,14 @@ language: python
 python:
   - "2.7"
   - "3.4"
+services:
+  - elasticsearch
 before_install:
   - sudo apt-get install -qq zlib1g-dev
 install:
   - pip install -r requirements/test.txt
   - npm install -g yuglify
+  - npm install -g casperjs
 script:
   - export DJANGO_SETTINGS_MODULE=core.settings.test
   - cd src
