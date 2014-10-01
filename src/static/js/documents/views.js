@@ -18,9 +18,9 @@ var Phase = Phase || {};
 
             this.tableView = new Phase.Views.TableView();
             this.paginationView = new Phase.Views.PaginationView();
+            this.buttonView = new Phase.Views.ActionButtonsView();
 
             this.listenTo(this.documentsCollection, 'add', this.addDocument);
-            this.listenTo(dispatcher, 'rowSelected', this.selectRow);
 
             this.documentsCollection.fetch({
                 success: this.render
@@ -86,6 +86,17 @@ var Phase = Phase || {};
             this.$el.html(results);
 
             return this;
+        }
+    });
+
+    Phase.Views.ActionButtonsView = Backbone.View.extend({
+        el: '#document-list-form form',
+        initialize: function() {
+            this.listenTo(dispatcher, 'rowSelected', this.activateButtons);
+        },
+        activateButtons: function() {
+            var buttons = this.$el.find('.disabled');
+            buttons.removeClass('disabled');
         }
     });
 
