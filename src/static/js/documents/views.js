@@ -5,6 +5,8 @@ var Phase = Phase || {};
 
     Phase.Views = {};
 
+    var dispatcher = _.clone(Backbone.Events);
+
     /**
      * This is the main view, englobing all other views.
      */
@@ -18,6 +20,8 @@ var Phase = Phase || {};
             this.paginationView = new Phase.Views.PaginationView();
 
             this.listenTo(this.documentsCollection, 'add', this.addDocument);
+            this.listenTo(dispatcher, 'rowSelected', this.selectRow);
+
             this.documentsCollection.fetch({
                 success: this.render
             });
@@ -33,6 +37,8 @@ var Phase = Phase || {};
             this.paginationView.render(displayedDocuments, totalDocuments);
 
             return this;
+        },
+        selectRow: function(document) {
         }
     });
 
@@ -42,7 +48,7 @@ var Phase = Phase || {};
     Phase.Views.TableView = Backbone.View.extend({
         el: 'table#documents tbody',
         addDocumentView: function(documentView) {
-            this.$el.append(documentView.render());
+            this.$el.append(documentView.render().el);
         }
     });
 
@@ -50,9 +56,17 @@ var Phase = Phase || {};
      * A single view in the document table
      */
     Phase.Views.RowView = Backbone.View.extend({
+        tagName: 'tr',
+        events: {
+            'click input[type=checkbox]': 'selectRow',
+        },
         template: _.template($('#documents-template').html()),
         render: function() {
-            return this.template(this.model.attributes);
+            this.$el.html(this.template(this.model.attributes));
+            return this;
+        },
+        selectRow: function() {
+            dispatcher.trigger('rowSelected', this.model);
         }
     });
 
