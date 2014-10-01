@@ -20,12 +20,32 @@ function inject_cookies() {
 }
 inject_cookies();
 
-casper.test.begin('Document list tests', 0, function suite(test) {
+casper.test.begin('Documents are fetched on page load', 0, function suite(test) {
     casper.start(document_list_url, function() {
         test.assertTitle('Phase');
         casper.wait(500);
         test.assertSelectorHasText('#display-results', '1 document on 1')
         test.assertElementCount('table#documents tbody tr', 1);
+    });
+
+    casper.run(function() {
+        test.done();
+    });
+});
+
+casper.test.begin('Clicking on a checkbox add a class to the tr', 0, function suite(test) {
+    casper.start(document_list_url, function() {
+        test.assertDoesntExist('tr.selected');
+    });
+
+    casper.then(function() {
+        casper.click('td.columnselect input[type=checkbox]');
+        test.assertExists('tr.selected');
+    });
+
+    casper.then(function() {
+        casper.click('td.columnselect input[type=checkbox]');
+        test.assertDoesntExist('tr.selected');
     });
 
     casper.run(function() {
@@ -40,9 +60,6 @@ casper.test.begin('Buttons are enabled on checkbox click', 0, function suite(tes
 
     casper.then(function() {
         casper.click('td.columnselect input[type=checkbox]');
-    });
-
-    casper.then(function() {
         test.assertDoesntExist('button#download-button.disabled');
         test.assertExists('button#download-button');
     });

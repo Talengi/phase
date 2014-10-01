@@ -63,10 +63,17 @@ var Phase = Phase || {};
         template: _.template($('#documents-template').html()),
         render: function() {
             this.$el.html(this.template(this.model.attributes));
+            this.checkbox = this.$el.find('input[type=checkbox]').first();
+
             return this;
         },
         selectRow: function() {
             dispatcher.trigger('rowSelected', this.model);
+            if (this.checkbox.is(':checked')) {
+                this.$el.addClass('selected');
+            } else {
+                this.$el.removeClass('selected');
+            }
         }
     });
 
