@@ -51,3 +51,28 @@ casper.test.begin('Buttons are enabled on checkbox click', 0, function suite(tes
         test.done();
     });
 });
+
+casper.test.begin('Dropdown behavior', 0, function suite(test) {
+    casper.start(document_list_url, function() {
+        casper.click('td.columnselect input[type=checkbox]');
+        test.assertDoesntExist('.dropdown.open');
+    });
+
+    casper.then(function() {
+        casper.click('#download-button');
+        test.assertExists('.dropdown.open');
+    });
+
+    casper.then(function() {
+        // A random click does not close the dropdown
+        casper.click('body');
+        test.assertExists('.dropdown.open');
+
+        casper.click('.dropdown-form button[data-toggle=dropdown]');
+        test.assertDoesntExist('.dropdown.open');
+    });
+
+    casper.run(function() {
+        test.done();
+    });
+});

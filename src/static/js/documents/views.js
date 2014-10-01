@@ -92,11 +92,36 @@ var Phase = Phase || {};
     Phase.Views.ActionButtonsView = Backbone.View.extend({
         el: '#document-list-form form',
         initialize: function() {
+            this.buttons = this.$el.find('.navbar-action');
+            this.dropdown = this.$el.find('.dropdown-form');
+            this.closeBtn = this.dropdown.find('button[data-toggle=dropdown]');
+
+            this.configureForm();
             this.listenToOnce(dispatcher, 'rowSelected', this.activateButtons);
         },
         activateButtons: function() {
-            var buttons = this.$el.find('.disabled');
-            buttons.removeClass('disabled');
+            this.buttons.removeClass('disabled');
+        },
+        configureForm: function() {
+            // We update the form action depending on
+            // the clicked button
+            var form = this.$el;
+            this.buttons.on('click', function(event) {
+                var action = $(this).data('form-action');
+                form.attr('action', action);
+            });
+
+            // Prevent closing dropdown on any click
+            this.dropdown.parent().on('hide.bs.dropdown', function(e) {
+                e.preventDefault();
+            });
+
+            // Since we blocked form dropdown to be automaticaly closed,
+            // we must manually bind the close button to do it
+            this.closeBtn.on('click', function(event) {
+                var dropdown = $(this).closest('.dropdown');
+                dropdown.toggleClass('open');
+            });
         }
     });
 
