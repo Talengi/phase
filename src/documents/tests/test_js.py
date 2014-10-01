@@ -5,6 +5,8 @@ from casper.tests import CasperTestCase
 
 from accounts.factories import UserFactory
 from categories.factories import CategoryFactory
+from documents.factories import DocumentFactory
+from search.utils import index_document, unindex_document
 
 
 class DocumentListTests(CasperTestCase):
@@ -14,6 +16,11 @@ class DocumentListTests(CasperTestCase):
         user = UserFactory(email='testadmin@phase.fr', password='pass',
                            is_superuser=True,
                            category=self.category)
+        self.document = DocumentFactory(
+            document_key='hazop-report',
+            category=self.category,
+        )
+        index_document(self.document)
         document_list_url = reverse('category_document_list', args=[
             self.category.organisation.slug,
             self.category.slug
@@ -26,7 +33,10 @@ class DocumentListTests(CasperTestCase):
             'tests.js'
         )
 
-    def test_initial_collection_fetch(self):
+    def tearDown(self):
+        unindex_document(self.document)
+
+    def test_js(self):
         self.assertTrue(self.casper(
             self.test_file,
             url=self.url
