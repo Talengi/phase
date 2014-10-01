@@ -92,7 +92,7 @@ var Phase = Phase || {};
     Phase.Views.ActionButtonsView = Backbone.View.extend({
         el: '#document-list-form form',
         initialize: function() {
-            this.listenTo(dispatcher, 'rowSelected', this.activateButtons);
+            this.listenToOnce(dispatcher, 'rowSelected', this.activateButtons);
         },
         activateButtons: function() {
             var buttons = this.$el.find('.disabled');
