@@ -16,6 +16,7 @@ module.exports = function(grunt) {
                 'Gruntfile.js',
                 '<%= phase.src %>/js/*.js',
                 '<%= phase.src %>/js/**/*.js',
+                '*/tests/**/*.js',
                 '!<%= phase.src %>/js/vendor/*.js',
                 '!bootstrap/**/*.js'
             ]

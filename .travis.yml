@@ -6,13 +6,16 @@ services:
   - elasticsearch
 before_install:
   - sudo apt-get install -qq zlib1g-dev
+  - npm install -g grunt-cli
 install:
   - pip install -r requirements/test.txt
   - npm install -g yuglify
   - npm install -g casperjs
+  - cd src
+  - npm install
 script:
   - export DJANGO_SETTINGS_MODULE=core.settings.test
-  - cd src
+  - grunt
   - flake8 --exclude=migrations,docs,urls.py --ignore=E501 .
   - python manage.py collectstatic --noinput
   - coverage run --source='.' manage.py test
