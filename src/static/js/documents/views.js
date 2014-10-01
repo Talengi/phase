@@ -16,6 +16,7 @@ var Phase = Phase || {};
 
             this.documentsCollection = new Phase.Collections.DocumentCollection();
 
+            this.headerView = new Phase.Views.HeaderView();
             this.tableView = new Phase.Views.TableView();
             this.paginationView = new Phase.Views.PaginationView();
             this.buttonView = new Phase.Views.ActionButtonsView();
@@ -43,6 +44,21 @@ var Phase = Phase || {};
     });
 
     /**
+     * The document table header
+     */
+    Phase.Views.HeaderView = Backbone.View.extend({
+        el: 'table#documents thead',
+        events: {
+            'click #select-all': 'selectAll'
+        },
+        selectAll: function(event) {
+            var target = $(event.currentTarget);
+            var checked = target.is(':checked');
+            dispatcher.trigger('selectAll', checked);
+        }
+    });
+
+    /**
      * The whole document table, using sub views to represent rows.
      */
     Phase.Views.TableView = Backbone.View.extend({
@@ -57,15 +73,22 @@ var Phase = Phase || {};
      */
     Phase.Views.RowView = Backbone.View.extend({
         tagName: 'tr',
+        template: _.template($('#documents-template').html()),
         events: {
             'click input[type=checkbox]': 'selectRow',
         },
-        template: _.template($('#documents-template').html()),
+        initialize: function() {
+            this.listenTo(dispatcher, 'selectAll', this.checkRow);
+        },
         render: function() {
             this.$el.html(this.template(this.model.attributes));
             this.checkbox = this.$el.find('input[type=checkbox]').first();
 
             return this;
+        },
+        checkRow: function(checked) {
+            this.checkbox.prop('checked', checked);
+            this.selectRow();
         },
         selectRow: function() {
             dispatcher.trigger('rowSelected', this.model);

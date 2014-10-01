@@ -93,3 +93,24 @@ casper.test.begin('Dropdown behavior', 0, function suite(test) {
         test.done();
     });
 });
+
+casper.test.begin('Select all checkbox', 0, function suite(test) {
+    casper.start(document_list_url, function() {
+        test.assertElementCount('#documents input:checked', 0);
+    });
+
+    casper.then(function() {
+        casper.click('#select-all');
+        test.assertElementCount('#documents input:checked', 2);
+    });
+
+    casper.then(function() {
+        casper.click('#select-all');
+        test.assertElementCount('#documents input:checked', 0);
+
+    });
+
+    casper.run(function() {
+        test.done();
+    });
+});
