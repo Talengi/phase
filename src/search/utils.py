@@ -20,5 +20,6 @@ def unindex_document(document):
     """Removes the document from the index."""
     elastic.delete(
         index=settings.ELASTIC_INDEX,
+        doc_type=document.document_type(),
         id=document.pk
     )
