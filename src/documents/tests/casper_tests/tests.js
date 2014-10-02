@@ -24,8 +24,8 @@ casper.test.begin('Documents are fetched on page load', 0, function suite(test) 
     casper.start(document_list_url, function() {
         test.assertTitle('Phase');
         casper.wait(500);
-        test.assertSelectorHasText('#display-results', '1 document on 1')
-        test.assertElementCount('table#documents tbody tr', 1);
+        test.assertElementCount('table#documents tbody tr', 5);
+        test.assertSelectorHasText('#display-results', '5 documents on 20')
     });
 
     casper.run(function() {
@@ -101,7 +101,7 @@ casper.test.begin('Select all checkbox', 0, function suite(test) {
 
     casper.then(function() {
         casper.click('#select-all');
-        test.assertElementCount('#documents input:checked', 2);
+        test.assertElementCount('#documents input:checked', 6);
     });
 
     casper.then(function() {
@@ -142,7 +142,7 @@ casper.test.begin('Clicking a row redirects to the document page', 0, function s
     });
 
     casper.then(function() {
-        test.assertUrlMatch(/\/organisation_\d+\/category_\d+\/hazop-report\/$/);
+        test.assertUrlMatch(/\/organisation_\d+\/category_\d+\/hazop-report-0\/$/);
     });
 
     casper.run(function() {

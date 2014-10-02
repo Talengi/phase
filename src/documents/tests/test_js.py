@@ -1,14 +1,16 @@
 import os.path
 
 from django.core.urlresolvers import reverse
+from django.test.utils import override_settings
 from casper.tests import CasperTestCase
 
 from accounts.factories import UserFactory
 from categories.factories import CategoryFactory
 from documents.factories import DocumentFactory
-from search.utils import index_document, unindex_document
+from search.utils import index_document
 
 
+@override_settings(PAGINATE_BY=5)
 class DocumentListTests(CasperTestCase):
 
     def setUp(self):
@@ -16,11 +18,14 @@ class DocumentListTests(CasperTestCase):
         user = UserFactory(email='testadmin@phase.fr', password='pass',
                            is_superuser=True,
                            category=self.category)
-        self.document = DocumentFactory(
-            document_key='hazop-report',
-            category=self.category,
-        )
-        index_document(self.document)
+
+        for doc_id in xrange(20):
+            document = DocumentFactory(
+                document_key='hazop-report-%d' % doc_id,
+                category=self.category,
+            )
+            index_document(document)
+
         document_list_url = reverse('category_document_list', args=[
             self.category.organisation.slug,
             self.category.slug
@@ -32,9 +37,6 @@ class DocumentListTests(CasperTestCase):
             'casper_tests',
             'tests.js'
         )
-
-    def tearDown(self):
-        unindex_document(self.document)
 
     def test_js(self):
         self.assertTrue(self.casper(
