@@ -29,7 +29,7 @@ var Phase = Phase || {};
         onFetch: function() {
             var displayedDocuments = this.documentsCollection.length;
             var totalDocuments = this.documentsCollection.total;
-            dispatcher.trigger('documentsFetched', {
+            dispatcher.trigger('onDocumentsFetched', {
                 displayed: displayedDocuments,
                 total: totalDocuments
             });
@@ -49,7 +49,7 @@ var Phase = Phase || {};
         selectAll: function(event) {
             var target = $(event.currentTarget);
             var checked = target.is(':checked');
-            dispatcher.trigger('selectAll', checked);
+            dispatcher.trigger('onAllRowsSelected', checked);
         }
     });
 
@@ -74,7 +74,7 @@ var Phase = Phase || {};
             'click td:not(.columnselect):not(.columnfavorite)': 'clickRow'
         },
         initialize: function() {
-            this.listenTo(dispatcher, 'selectAll', this.setRowState);
+            this.listenTo(dispatcher, 'onAllRowsSelected', this.setRowState);
         },
         render: function() {
             this.$el.html(this.template(this.model.attributes));
@@ -95,7 +95,7 @@ var Phase = Phase || {};
             } else {
                 this.$el.removeClass('selected');
             }
-            dispatcher.trigger('rowSelected', this.model, checked);
+            dispatcher.trigger('onRowSelected', this.model, checked);
         },
         clickRow: function() {
             var detailUrl = Phase.Config.detailUrl;
@@ -120,9 +120,9 @@ var Phase = Phase || {};
             this.resultsP = this.$el.find('p#display-results');
 
             this.configureForm();
-            this.listenToOnce(dispatcher, 'rowSelected', this.activateButtons);
-            this.listenTo(dispatcher, 'rowSelected', this.rowSelected);
-            this.listenTo(dispatcher, 'documentsFetched', this.renderResults);
+            this.listenToOnce(dispatcher, 'onRowSelected', this.activateButtons);
+            this.listenTo(dispatcher, 'onRowSelected', this.rowSelected);
+            this.listenTo(dispatcher, 'onDocumentsFetched', this.renderResults);
         },
         configureForm: function() {
             // We update the form action depending on
@@ -160,7 +160,7 @@ var Phase = Phase || {};
             }
         },
         showSearchForm: function() {
-            dispatcher.trigger('showSearchForm');
+            dispatcher.trigger('onSearchFormDisplayed');
         },
         renderResults: function(data) {
             var results;
@@ -182,7 +182,7 @@ var Phase = Phase || {};
         initialize: function() {
             this.filterForm = this.$el.find('form').first();
 
-            this.listenTo(dispatcher, 'showSearchForm', this.showSearchForm);
+            this.listenTo(dispatcher, 'onSearchFormDisplayed', this.showSearchForm);
         },
         showSearchForm: function () {
             this.$el.addClass('active');
@@ -197,8 +197,11 @@ var Phase = Phase || {};
 
     Phase.Views.PaginationView = Backbone.View.extend({
         el: '#documents-pagination',
+        events: {
+            'click': 'loadMoreDocuments'
+        },
         initialize: function() {
-            this.listenTo(dispatcher, 'documentsFetched', this.onDocumentsFetched);
+            this.listenTo(dispatcher, 'onDocumentsFetched', this.onDocumentsFetched);
         },
         onDocumentsFetched: function(data) {
             var displayed = data.displayed;
@@ -215,6 +218,9 @@ var Phase = Phase || {};
         },
         hidePaginationButton: function() {
             this.$el.hide();
+        },
+        loadMoreDocuments: function() {
+            dispatch.trigger('onMoreDocumentsRequested');
         }
     });
 
