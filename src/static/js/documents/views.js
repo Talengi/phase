@@ -19,7 +19,7 @@ var Phase = Phase || {};
             this.tableHeaderView = new Phase.Views.TableHeaderView();
             this.tableBodyView = new Phase.Views.TableBodyView();
             this.paginationView = new Phase.Views.PaginationView();
-            this.formView = new Phase.Views.ActionFormView();
+            this.navbarView = new Phase.Views.NavbarView();
 
             this.listenTo(this.documentsCollection, 'add', this.addDocument);
 
@@ -126,11 +126,12 @@ var Phase = Phase || {};
         }
     });
 
-    Phase.Views.ActionFormView = Backbone.View.extend({
-        el: '#document-list-form form',
+    Phase.Views.NavbarView = Backbone.View.extend({
+        el: '#table-controls',
         initialize: function() {
-            this.buttons = this.$el.find('.navbar-action');
-            this.dropdown = this.$el.find('.dropdown-form');
+            this.actionForm = this.$el.find('#document-list-form form').first();
+            this.actionButtons = this.actionForm.find('.navbar-action');
+            this.dropdown = this.actionForm.find('.dropdown-form');
             this.closeBtn = this.dropdown.find('button[data-toggle=dropdown]');
 
             this.configureForm();
@@ -140,10 +141,9 @@ var Phase = Phase || {};
         configureForm: function() {
             // We update the form action depending on
             // the clicked button
-            var form = this.$el;
-            this.buttons.on('click', function(event) {
+            this.actionButtons.on('click', function(event) {
                 var action = $(this).data('form-action');
-                form.attr('action', action);
+                this.actionForm.attr('action', action);
             });
 
             // Prevent closing dropdown on any click
@@ -159,17 +159,17 @@ var Phase = Phase || {};
             });
         },
         activateButtons: function() {
-            this.buttons.removeClass('disabled');
+            this.actionButtons.removeClass('disabled');
         },
         rowSelected: function(document, checked) {
             if (checked) {
                 var input = $('<input type="hidden" name="document_ids"></input>');
                 input.attr('id', 'document-id-' + document.id);
                 input.val(document.id);
-                this.$el.append(input);
+                this.actionForm.append(input);
             } else {
                 var input_id = '#document-id-' + document.id;
-                var input = this.$el.find(input_id);
+                var input = this.actionForm.find(input_id);
                 input.remove();
             }
         }
