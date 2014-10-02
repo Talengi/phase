@@ -185,9 +185,12 @@ var Phase = Phase || {};
     Phase.Views.SearchView = Backbone.View.extend({
         el: '#search-sidebar',
         events: {
-            'click #sidebar-close-btn': 'hideSearchForm'
+            'click #sidebar-close-btn': 'hideSearchForm',
+            'submit form': 'submitForm'
         },
         initialize: function() {
+            this.filterForm = this.$el.find('form').first();
+
             this.listenTo(dispatcher, 'showSearchForm', this.showSearchForm);
         },
         showSearchForm: function () {
@@ -195,6 +198,9 @@ var Phase = Phase || {};
         },
         hideSearchForm: function () {
             this.$el.removeClass('active');
+        },
+        submitForm: function(event) {
+            event.preventDefault();
         }
     });
 

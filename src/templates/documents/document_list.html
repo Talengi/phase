@@ -20,7 +20,7 @@
     </div>
 
     <div id="search-sidebar" class="sidebar-offcanvas">
-        <form action="{% url 'document_filter' organisation_slug category_slug %}"
+        <form action="{% url 'search_documents' organisation_slug category_slug %}"
               method="get"
               id="table-filters">
             {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}

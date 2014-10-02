@@ -169,3 +169,19 @@ casper.test.begin('Clicking the "Search" button shows the search sidebar', 0, fu
         test.done();
     });
 });
+
+casper.test.begin('The filter form cannot be submitted', 0, function suite(test) {
+    casper.start(document_list_url, function() {
+        casper.fill('#search-sidebar form', {
+            'search_terms': 'toto'
+        }, true);
+    });
+
+    casper.then(function() {
+        test.assertEqual(casper.getCurrentUrl(), document_list_url);
+    });
+
+    casper.run(function() {
+        test.done();
+    });
+});
