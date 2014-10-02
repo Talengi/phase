@@ -12,34 +12,32 @@ var Phase = Phase || {};
      */
     Phase.Views.MainView = Backbone.View.extend({
         initialize: function() {
-            _.bindAll(this, 'render');
+            _.bindAll(this, 'onFetch');
 
             this.documentsCollection = new Phase.Collections.DocumentCollection();
 
             this.tableHeaderView = new Phase.Views.TableHeaderView();
             this.tableBodyView = new Phase.Views.TableBodyView();
-            this.resultsView = new Phase.Views.ResultsView();
             this.navbarView = new Phase.Views.NavbarView();
             this.searchView = new Phase.Views.SearchView();
             this.paginationView = new Phase.Views.PaginationView();
 
             this.listenTo(this.documentsCollection, 'add', this.addDocument);
 
-            this.documentsCollection.fetch({
-                success: this.render
+            this.documentsCollection.fetch({ success: this.onFetch });
+        },
+        onFetch: function() {
+            var displayedDocuments = this.documentsCollection.length;
+            var totalDocuments = this.documentsCollection.total;
+            dispatcher.trigger('documentsFetched', {
+                displayed: displayedDocuments,
+                total: totalDocuments
             });
         },
         addDocument: function(document) {
             this.tableBodyView.addDocumentView(
                 new Phase.Views.TableRowView({ model: document })
             );
-        },
-        render: function() {
-            var displayedDocuments = this.documentsCollection.length;
-            var totalDocuments = this.documentsCollection.total;
-            this.resultsView.render(displayedDocuments, totalDocuments);
-
-            return this;
         }
     });
 
@@ -109,25 +107,6 @@ var Phase = Phase || {};
         }
     });
 
-    /**
-     * A small view to handle the pagination text.
-     * "xxx documents on yyy"
-     */
-    Phase.Views.ResultsView = Backbone.View.extend({
-        el: 'p#display-results',
-        render: function(displayed, total) {
-            var results;
-            if (displayed <= 1) {
-                results = '' + displayed + ' document on ' + total;
-            } else {
-                results = '' + displayed + ' documents on ' + total;
-            }
-            this.$el.html(results);
-
-            return this;
-        }
-    });
-
     Phase.Views.NavbarView = Backbone.View.extend({
         el: '#table-controls',
         events: {
@@ -138,10 +117,12 @@ var Phase = Phase || {};
             this.actionButtons = this.actionForm.find('.navbar-action');
             this.dropdown = this.actionForm.find('.dropdown-form');
             this.closeBtn = this.dropdown.find('button[data-toggle=dropdown]');
+            this.resultsP = this.$el.find('p#display-results');
 
             this.configureForm();
             this.listenToOnce(dispatcher, 'rowSelected', this.activateButtons);
             this.listenTo(dispatcher, 'rowSelected', this.rowSelected);
+            this.listenTo(dispatcher, 'documentsFetched', this.renderResults);
         },
         configureForm: function() {
             // We update the form action depending on
@@ -180,6 +161,15 @@ var Phase = Phase || {};
         },
         showSearchForm: function() {
             dispatcher.trigger('showSearchForm');
+        },
+        renderResults: function(data) {
+            var results;
+            if (data.displayed <= 1) {
+                results = '' + data.displayed + ' document on ' + data.total;
+            } else {
+                results = '' + data.displayed + ' documents on ' + data.total;
+            }
+            this.resultsP.html(results);
         }
     });
 
