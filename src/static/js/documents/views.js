@@ -16,8 +16,8 @@ var Phase = Phase || {};
 
             this.documentsCollection = new Phase.Collections.DocumentCollection();
 
-            this.headerView = new Phase.Views.HeaderView();
-            this.tableView = new Phase.Views.TableView();
+            this.tableHeaderView = new Phase.Views.TableHeaderView();
+            this.tableBodyView = new Phase.Views.TableBodyView();
             this.paginationView = new Phase.Views.PaginationView();
             this.formView = new Phase.Views.ActionFormView();
 
@@ -28,8 +28,8 @@ var Phase = Phase || {};
             });
         },
         addDocument: function(document) {
-            this.tableView.addDocumentView(
-                new Phase.Views.RowView({ model: document })
+            this.tableBodyView.addDocumentView(
+                new Phase.Views.TableRowView({ model: document })
             );
         },
         render: function() {
@@ -38,15 +38,10 @@ var Phase = Phase || {};
             this.paginationView.render(displayedDocuments, totalDocuments);
 
             return this;
-        },
-        selectRow: function(document) {
         }
     });
 
-    /**
-     * The document table header
-     */
-    Phase.Views.HeaderView = Backbone.View.extend({
+    Phase.Views.TableHeaderView = Backbone.View.extend({
         el: 'table#documents thead',
         events: {
             'click #select-all': 'selectAll'
@@ -61,7 +56,7 @@ var Phase = Phase || {};
     /**
      * The whole document table, using sub views to represent rows.
      */
-    Phase.Views.TableView = Backbone.View.extend({
+    Phase.Views.TableBodyView = Backbone.View.extend({
         el: 'table#documents tbody',
         addDocumentView: function(documentView) {
             this.$el.append(documentView.render().el);
@@ -71,7 +66,7 @@ var Phase = Phase || {};
     /**
      * A single view in the document table
      */
-    Phase.Views.RowView = Backbone.View.extend({
+    Phase.Views.TableRowView = Backbone.View.extend({
         tagName: 'tr',
         template: _.template($('#documents-template').html()),
         events: {
