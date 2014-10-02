@@ -198,7 +198,24 @@ var Phase = Phase || {};
     Phase.Views.PaginationView = Backbone.View.extend({
         el: '#documents-pagination',
         initialize: function() {
+            this.listenTo(dispatcher, 'documentsFetched', this.onDocumentsFetched);
         },
+        onDocumentsFetched: function(data) {
+            var displayed = data.displayed;
+            var total = data.total;
+
+            if (displayed < total) {
+                this.showPaginationButton();
+            } else {
+                this.hidePaginationButton();
+            }
+        },
+        showPaginationButton: function() {
+            this.$el.show();
+        },
+        hidePaginationButton: function() {
+            this.$el.hide();
+        }
     });
 
 })(this, Phase, Backbone, _);
