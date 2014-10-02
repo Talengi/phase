@@ -76,6 +76,7 @@ var Phase = Phase || {};
         template: _.template($('#documents-template').html()),
         events: {
             'click input[type=checkbox]': 'selectRow',
+            'click td:not(.columnselect):not(.columnfavorite)': 'clickRow'
         },
         initialize: function() {
             this.listenTo(dispatcher, 'selectAll', this.setRowState);
@@ -100,6 +101,14 @@ var Phase = Phase || {};
                 this.$el.removeClass('selected');
             }
             dispatcher.trigger('rowSelected', this.model, checked);
+        },
+        clickRow: function() {
+            var detailUrl = Phase.Config.detailUrl;
+            var documentUrl = detailUrl.replace(
+                'document_key',
+                this.model.get('document_key')
+            );
+            window.location = documentUrl;
         }
     });
 

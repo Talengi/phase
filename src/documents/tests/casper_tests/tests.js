@@ -134,3 +134,18 @@ casper.test.begin('Selecting a row creates an input field in download form', 0, 
         test.done();
     });
 });
+
+casper.test.begin('Clicking a row redirects to the document page', 0, function suite(test) {
+    casper.start(document_list_url, function() {
+        test.assertUrlMatch(/\/organisation_\d+\/category_\d+\/$/);
+        casper.click('td.columndocument_key');
+    });
+
+    casper.then(function() {
+        test.assertUrlMatch(/\/organisation_\d+\/category_\d+\/hazop-report\/$/);
+    });
+
+    casper.run(function() {
+        test.done();
+    });
+});
