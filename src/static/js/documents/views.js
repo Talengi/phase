@@ -12,21 +12,29 @@ var Phase = Phase || {};
      */
     Phase.Views.MainView = Backbone.View.extend({
         initialize: function() {
-            _.bindAll(this, 'onFetch');
+            _.bindAll(this, 'onDocumentsFetched');
 
             this.documentsCollection = new Phase.Collections.DocumentCollection();
 
             this.tableHeaderView = new Phase.Views.TableHeaderView();
-            this.tableBodyView = new Phase.Views.TableBodyView();
+            this.tableBodyView = new Phase.Views.TableBodyView({ collection: this.documentsCollection });
             this.navbarView = new Phase.Views.NavbarView();
             this.searchView = new Phase.Views.SearchView();
             this.paginationView = new Phase.Views.PaginationView();
 
-            this.listenTo(this.documentsCollection, 'add', this.addDocument);
+            this.listenTo(dispatcher, 'onMoreDocumentsRequested', this.onMoreDocumentsRequested);
 
-            this.documentsCollection.fetch({ success: this.onFetch });
+            this.search = new Phase.Models.Search();
+            this.fetchDocuments();
         },
-        onFetch: function() {
+        fetchDocuments: function() {
+            this.documentsCollection.fetch({
+                data: this.search.attributes,
+                remove: false,
+                success: this.onDocumentsFetched
+            });
+        },
+        onDocumentsFetched: function() {
             var displayedDocuments = this.documentsCollection.length;
             var totalDocuments = this.documentsCollection.total;
             dispatcher.trigger('onDocumentsFetched', {
@@ -34,10 +42,9 @@ var Phase = Phase || {};
                 total: totalDocuments
             });
         },
-        addDocument: function(document) {
-            this.tableBodyView.addDocumentView(
-                new Phase.Views.TableRowView({ model: document })
-            );
+        onMoreDocumentsRequested: function() {
+            this.search.nextPage();
+            this.fetchDocuments();
         }
     });
 
@@ -58,6 +65,14 @@ var Phase = Phase || {};
      */
     Phase.Views.TableBodyView = Backbone.View.extend({
         el: 'table#documents tbody',
+        initialize: function() {
+            this.listenTo(this.collection, 'add', this.addDocument);
+        },
+        addDocument: function(document) {
+            this.addDocumentView(
+                new Phase.Views.TableRowView({ model: document })
+            );
+        },
         addDocumentView: function(documentView) {
             this.$el.append(documentView.render().el);
         }
@@ -198,7 +213,7 @@ var Phase = Phase || {};
     Phase.Views.PaginationView = Backbone.View.extend({
         el: '#documents-pagination',
         events: {
-            'click': 'loadMoreDocuments'
+            'click': 'fetchMoreDocuments'
         },
         initialize: function() {
             this.listenTo(dispatcher, 'onDocumentsFetched', this.onDocumentsFetched);
@@ -219,8 +234,8 @@ var Phase = Phase || {};
         hidePaginationButton: function() {
             this.$el.hide();
         },
-        loadMoreDocuments: function() {
-            dispatch.trigger('onMoreDocumentsRequested');
+        fetchMoreDocuments: function() {
+            dispatcher.trigger('onMoreDocumentsRequested');
         }
     });
 

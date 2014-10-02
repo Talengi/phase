@@ -9,7 +9,7 @@ class BaseDocumentFilterForm(forms.Form):
     the datatables jquery plugin.
 
     """
-    length = forms.IntegerField(
+    size = forms.IntegerField(
         widget=forms.HiddenInput(),
         required=False,
         initial=settings.PAGINATE_BY)

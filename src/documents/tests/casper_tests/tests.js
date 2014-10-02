@@ -26,6 +26,26 @@ casper.test.begin('Documents are fetched on page load', 0, function suite(test) 
         casper.wait(500);
         test.assertElementCount('table#documents tbody tr', 5);
         test.assertSelectorHasText('#display-results', '5 documents on 20')
+        test.assertVisible('#documents-pagination');
+
+        casper.click('#documents-pagination');
+    });
+
+    casper.then(function() {
+        test.assertElementCount('table#documents tbody tr', 10);
+        test.assertSelectorHasText('#display-results', '10 documents on 20')
+        test.assertVisible('#documents-pagination');
+
+        casper.click('#documents-pagination');
+        casper.wait(500);
+        casper.click('#documents-pagination');
+        casper.wait(500);
+    });
+
+    casper.then(function() {
+        test.assertElementCount('table#documents tbody tr', 20);
+        test.assertSelectorHasText('#display-results', '20 documents on 20')
+        test.assertNotVisible('#documents-pagination');
     });
 
     casper.run(function() {
