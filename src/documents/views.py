@@ -1,5 +1,4 @@
 import os
-import json
 try:
     from urllib.parse import unquote
 except ImportError:
@@ -151,12 +150,9 @@ class BaseDocumentList(LoginRequiredMixin, DocumentListMixin, ListView):
 
 class DocumentList(BaseDocumentList):
     template_name = 'documents/document_list.html'
-    paginate_by = settings.PAGINATE_BY
 
     def get_context_data(self, **kwargs):
         context = super(DocumentList, self).get_context_data(**kwargs)
-        #json_data = self.get_serializable_document_list(context,
-        #                                                context['paginator'].count)
         model = context['object_list'].model
         FilterForm = filterform_factory(model)
 
@@ -167,9 +163,7 @@ class DocumentList(BaseDocumentList):
             'download_form': download_form,
             'form': FilterForm(),
             'documents_active': True,
-            #'initial_data': json.dumps(json_data),
-            'initial_data': '{}',
-            'items_per_page': self.paginate_by,
+            'paginate_by': settings.PAGINATE_BY,
             'document_class': self.get_document_class(),
         })
         return context

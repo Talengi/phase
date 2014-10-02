@@ -39,9 +39,7 @@
         filterUrl: "{% url "document_filter" organisation_slug category_slug %}",
         detailUrl: "{% url "document_detail" organisation_slug category_slug "document_key" %}",
         searchUrl: "{% url "search_documents" organisation_slug category_slug %}",
-        numPages: {{ paginator.num_pages }},
-        totalItems: {{ paginator.count }},
-        numItemsPerPage: {{ items_per_page }},
+        paginateBy: {{ paginate_by }},
         documentType: "{{ document_type }}"
     };
     </script>

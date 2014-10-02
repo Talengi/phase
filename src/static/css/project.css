@@ -191,23 +191,10 @@ button.ui-multiselect {
     display: none;
 }
 
-.pagination {
-    margin: 0;
-}
-.pagination ul {
-    width: 100%;
-    margin: 0;
-    display: block;
-}
-.pagination li {
-    display: block;
-    list-style: none;
-}
-.pagination ul > li > a {
-    display: block;
-    width: 100%;
+#documents-pagination {
+    margin-bottom: 15px;
     text-align: center;
-    padding: 5px 0;
+    display: none;
 }
 
 /* columns width */

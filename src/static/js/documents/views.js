@@ -18,9 +18,10 @@ var Phase = Phase || {};
 
             this.tableHeaderView = new Phase.Views.TableHeaderView();
             this.tableBodyView = new Phase.Views.TableBodyView();
-            this.paginationView = new Phase.Views.PaginationView();
+            this.resultsView = new Phase.Views.ResultsView();
             this.navbarView = new Phase.Views.NavbarView();
             this.searchView = new Phase.Views.SearchView();
+            this.paginationView = new Phase.Views.PaginationView();
 
             this.listenTo(this.documentsCollection, 'add', this.addDocument);
 
@@ -36,7 +37,7 @@ var Phase = Phase || {};
         render: function() {
             var displayedDocuments = this.documentsCollection.length;
             var totalDocuments = this.documentsCollection.total;
-            this.paginationView.render(displayedDocuments, totalDocuments);
+            this.resultsView.render(displayedDocuments, totalDocuments);
 
             return this;
         }
@@ -112,7 +113,7 @@ var Phase = Phase || {};
      * A small view to handle the pagination text.
      * "xxx documents on yyy"
      */
-    Phase.Views.PaginationView = Backbone.View.extend({
+    Phase.Views.ResultsView = Backbone.View.extend({
         el: 'p#display-results',
         render: function(displayed, total) {
             var results;
@@ -202,6 +203,12 @@ var Phase = Phase || {};
         submitForm: function(event) {
             event.preventDefault();
         }
+    });
+
+    Phase.Views.PaginationView = Backbone.View.extend({
+        el: '#documents-pagination',
+        initialize: function() {
+        },
     });
 
 })(this, Phase, Backbone, _);
