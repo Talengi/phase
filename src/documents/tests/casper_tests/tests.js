@@ -149,3 +149,23 @@ casper.test.begin('Clicking a row redirects to the document page', 0, function s
         test.done();
     });
 });
+
+casper.test.begin('Clicking the "Search" button shows the search sidebar', 0, function suite(test) {
+    casper.start(document_list_url, function() {
+        test.assertNotVisible('div.sidebar-offcanvas');
+        casper.click('button#toggle-filters-button');
+    });
+
+    casper.then(function() {
+        test.assertVisible('div.sidebar-offcanvas');
+        casper.click('button#sidebar-close-btn');
+    });
+
+    casper.then(function() {
+        test.assertNotVisible('div.sidebar-offcanvas');
+    });
+
+    casper.run(function() {
+        test.done();
+    });
+});

@@ -20,6 +20,7 @@ var Phase = Phase || {};
             this.tableBodyView = new Phase.Views.TableBodyView();
             this.paginationView = new Phase.Views.PaginationView();
             this.navbarView = new Phase.Views.NavbarView();
+            this.searchView = new Phase.Views.SearchView();
 
             this.listenTo(this.documentsCollection, 'add', this.addDocument);
 
@@ -128,6 +129,9 @@ var Phase = Phase || {};
 
     Phase.Views.NavbarView = Backbone.View.extend({
         el: '#table-controls',
+        events: {
+            'click #toggle-filters-button': 'showSearchForm'
+        },
         initialize: function() {
             this.actionForm = this.$el.find('#document-list-form form').first();
             this.actionButtons = this.actionForm.find('.navbar-action');
@@ -172,6 +176,25 @@ var Phase = Phase || {};
                 var input = this.actionForm.find(input_id);
                 input.remove();
             }
+        },
+        showSearchForm: function() {
+            dispatcher.trigger('showSearchForm');
+        }
+    });
+
+    Phase.Views.SearchView = Backbone.View.extend({
+        el: '#search-sidebar',
+        events: {
+            'click #sidebar-close-btn': 'hideSearchForm'
+        },
+        initialize: function() {
+            this.listenTo(dispatcher, 'showSearchForm', this.showSearchForm);
+        },
+        showSearchForm: function () {
+            this.$el.addClass('active');
+        },
+        hideSearchForm: function () {
+            this.$el.removeClass('active');
         }
     });
 
