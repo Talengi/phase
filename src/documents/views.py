@@ -164,6 +164,7 @@ class DocumentList(BaseDocumentList):
             'form': FilterForm(),
             'documents_active': True,
             'paginate_by': settings.PAGINATE_BY,
+            'sort_by': model._meta.ordering[0],
             'document_class': self.get_document_class(),
         })
         return context

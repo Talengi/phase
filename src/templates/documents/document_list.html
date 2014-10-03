@@ -40,6 +40,7 @@
         detailUrl: "{% url "document_detail" organisation_slug category_slug "document_key" %}",
         searchUrl: "{% url "search_documents" organisation_slug category_slug %}",
         paginateBy: {{ paginate_by }},
+        sortBy: "{{ sort_by }}",
         documentType: "{{ document_type }}"
     };
     </script>

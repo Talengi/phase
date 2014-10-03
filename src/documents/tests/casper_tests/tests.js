@@ -205,3 +205,32 @@ casper.test.begin('The filter form cannot be submitted', 0, function suite(test)
         test.done();
     });
 });
+
+casper.test.begin('Clicking a column sorts stuff', 0, function suite(test) {
+    casper.start(document_list_url, function() {
+        test.assertExists('#columndocument_key span.glyphicon.glyphicon-chevron-down');
+        test.assertSelectorHasText('tbody tr:first-of-type td:nth-of-type(3)', 'hazop-report-0');
+    });
+
+    casper.then(function() {
+        casper.click('#columndocument_key');
+        test.assertExists('#columndocument_key span.glyphicon.glyphicon-chevron-up');
+        test.assertSelectorHasText('tbody tr:first-of-type td:nth-of-type(3)', 'hazop-report-9');
+    });
+
+    casper.then(function() {
+        casper.click('#columndocument_key');
+        test.assertExists('#columndocument_key span.glyphicon.glyphicon-chevron-down');
+        test.assertSelectorHasText('tbody tr:first-of-type td:nth-of-type(3)', 'hazop-report-0');
+    });
+
+    casper.then(function() {
+        casper.click('#columntitle');
+        test.assertDoesntExist('#columndocument_key span.glyphicon');
+        test.assertExists('#columntitle span.glyphicon.glyphicon-chevron-down');
+    });
+
+    casper.run(function() {
+        test.done();
+    });
+});

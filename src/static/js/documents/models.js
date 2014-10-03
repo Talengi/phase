@@ -30,6 +30,10 @@ var Phase = Phase || {};
             var start = this.get('start');
             var size = this.get('size');
             this.set('start', start + size);
+        },
+        reset: function() {
+            var start = this.defaults.start;
+            var size = this.defaults.size;
         }
     });
 

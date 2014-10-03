@@ -693,7 +693,7 @@ class DemoMetadata(Metadata):
         null=True, blank=True)
 
     class Meta:
-        ordering = ('title',)
+        ordering = ('document_key',)
 
     class PhaseConfig:
         filter_fields = (

@@ -23,14 +23,19 @@ var Phase = Phase || {};
             this.paginationView = new Phase.Views.PaginationView();
 
             this.listenTo(dispatcher, 'onMoreDocumentsRequested', this.onMoreDocumentsRequested);
+            this.listenTo(dispatcher, 'onSort', this.onSort);
 
             this.search = new Phase.Models.Search();
-            this.fetchDocuments();
+            this.fetchDocuments(false);
         },
-        fetchDocuments: function() {
+        resetSearch: function() {
+            this.search.reset();
+        },
+        fetchDocuments: function(reset) {
             this.documentsCollection.fetch({
                 data: this.search.attributes,
                 remove: false,
+                reset: reset,
                 success: this.onDocumentsFetched
             });
         },
@@ -44,19 +49,66 @@ var Phase = Phase || {};
         },
         onMoreDocumentsRequested: function() {
             this.search.nextPage();
-            this.fetchDocuments();
+            this.fetchDocuments(false);
+        },
+        onSort: function(data) {
+            var sortField = data.field;
+            var sortDirection = data.direction;
+            var prefix = sortDirection == 'down' ? '' : '-';
+
+            this.search.set('sort_by', prefix + sortField);
+            this.resetSearch();
+            this.fetchDocuments(true);
         }
     });
 
     Phase.Views.TableHeaderView = Backbone.View.extend({
         el: 'table#documents thead',
         events: {
-            'click #select-all': 'selectAll'
+            'click #select-all': 'selectAll',
+            'click th:not(#columnselect):not(#columnfavorite)': 'sort'
+        },
+        initialize: function() {
+            this.sortDirection = 'down';
+            this.sortField = Phase.Config.sortBy;
         },
         selectAll: function(event) {
             var target = $(event.currentTarget);
             var checked = target.is(':checked');
             dispatcher.trigger('onAllRowsSelected', checked);
+        },
+        sort: function(event) {
+            var th = $(event.currentTarget);
+            var sortBy = th.data('sortby');
+
+            if (sortBy === this.sortField) {
+                this.switchSortDirection();
+            } else {
+                this.setSortField(sortBy);
+            }
+
+            this.render();
+            dispatcher.trigger('onSort', {
+                field: this.sortField,
+                direction: this.sortDirection
+            });
+        },
+        switchSortDirection: function() {
+            this.sortDirection = this.sortDirection == 'up' ? 'down' : 'up';
+        },
+        setSortField: function(field) {
+            this.sortDirection = 'down';
+            this.sortField = field;
+        },
+        render: function() {
+            var spans = this.$el.find('th:not(#columnselect):not(#columnfavorite) span');
+            spans.remove();
+
+            var span = '<span class="glyphicon glyphicon-chevron-' + this.sortDirection + '"></span>';
+            var field = this.$el.find('#column' + this.sortField).first();
+            field.append($(span));
+
+            return this;
         }
     });
 
@@ -66,15 +118,17 @@ var Phase = Phase || {};
     Phase.Views.TableBodyView = Backbone.View.extend({
         el: 'table#documents tbody',
         initialize: function() {
+            _.bindAll(this, 'addDocument');
             this.listenTo(this.collection, 'add', this.addDocument);
+            this.listenTo(this.collection, 'reset', this.addAllDocuments);
         },
         addDocument: function(document) {
-            this.addDocumentView(
-                new Phase.Views.TableRowView({ model: document })
-            );
+            var view = new Phase.Views.TableRowView({ model: document });
+            this.$el.append(view.render().el);
         },
-        addDocumentView: function(documentView) {
-            this.$el.append(documentView.render().el);
+        addAllDocuments: function() {
+            this.$el.empty();
+            this.collection.map(this.addDocument);
         }
     });
 
