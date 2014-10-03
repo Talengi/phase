@@ -20,7 +20,7 @@ var Phase = Phase || {};
             size: Phase.Config.paginateBy
         },
         fromForm: function(form) {
-            data = form.serializeArray();
+            var data = form.serializeArray();
             self = this;
             _.each(data, function(field) {
                 self.set(field.name, field.value);
@@ -32,8 +32,8 @@ var Phase = Phase || {};
             this.set('start', start + size);
         },
         reset: function() {
-            var start = this.defaults.start;
-            var size = this.defaults.size;
+            this.set('start', this.defaults.start);
+            this.set('size',  this.defaults.size);
         }
     });
 

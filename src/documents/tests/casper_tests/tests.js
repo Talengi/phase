@@ -234,3 +234,22 @@ casper.test.begin('Clicking a column sorts stuff', 0, function suite(test) {
         test.done();
     });
 });
+
+casper.test.begin('The search form searches', 0, function suite(test) {
+    casper.start(document_list_url, function() {
+        test.assertElementCount('table#documents tbody tr', 5);
+        casper.fill('#table-filters', {
+            'search_terms': 'gloubiboulga'
+        });
+        casper.page.sendEvent('keyup');
+        casper.wait(500);
+        test.assertElementCount('table#documents tbody tr', 0);
+    });
+
+    casper.then(function() {
+    });
+
+    casper.run(function() {
+        test.done();
+    });
+});

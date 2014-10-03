@@ -15,17 +15,18 @@ var Phase = Phase || {};
             _.bindAll(this, 'onDocumentsFetched');
 
             this.documentsCollection = new Phase.Collections.DocumentCollection();
+            this.search = new Phase.Models.Search();
 
             this.tableHeaderView = new Phase.Views.TableHeaderView();
             this.tableBodyView = new Phase.Views.TableBodyView({ collection: this.documentsCollection });
             this.navbarView = new Phase.Views.NavbarView();
-            this.searchView = new Phase.Views.SearchView();
+            this.searchView = new Phase.Views.SearchView({ model: this.search });
             this.paginationView = new Phase.Views.PaginationView();
 
             this.listenTo(dispatcher, 'onMoreDocumentsRequested', this.onMoreDocumentsRequested);
             this.listenTo(dispatcher, 'onSort', this.onSort);
+            this.listenTo(dispatcher, 'onSearch', this.onSearch);
 
-            this.search = new Phase.Models.Search();
             this.fetchDocuments(false);
         },
         resetSearch: function() {
@@ -57,6 +58,10 @@ var Phase = Phase || {};
             var prefix = sortDirection == 'down' ? '' : '-';
 
             this.search.set('sort_by', prefix + sortField);
+            this.resetSearch();
+            this.fetchDocuments(true);
+        },
+        onSearch: function() {
             this.resetSearch();
             this.fetchDocuments(true);
         }
@@ -246,12 +251,27 @@ var Phase = Phase || {};
         el: '#search-sidebar',
         events: {
             'click #sidebar-close-btn': 'hideSearchForm',
-            'submit form': 'submitForm'
+            'submit form': 'submitForm',
+            'keyup input': 'debouncedSearch',
+            'change select': 'search',
+            'click #resetForm': 'debouncedSearch'
         },
         initialize: function() {
+            _.bindAll(this, 'updateFormAttribute');
+
             this.filterForm = this.$el.find('form').first();
+            this.filterForm.get(0).reset();
 
             this.listenTo(dispatcher, 'onSearchFormDisplayed', this.showSearchForm);
+            this.listenTo(this.model, 'change', this.updateForm);
+        },
+        updateForm: function() {
+            _.map(this.model.attributes, this.updateFormAttribute);
+        },
+        updateFormAttribute: function(value, field_name) {
+            var field_id = '#id_' + field_name;
+            var field = this.$el.find(field_id);
+            field.val(value);
         },
         showSearchForm: function () {
             this.$el.addClass('active');
@@ -261,7 +281,17 @@ var Phase = Phase || {};
         },
         submitForm: function(event) {
             event.preventDefault();
-        }
+        },
+        search: function() {
+            this.stopListening(this.model, 'change');
+            this.model.fromForm(this.filterForm);
+            this.listenTo(this.model, 'change', this.updateForm);
+
+            dispatcher.trigger('onSearch');
+        },
+        debouncedSearch: _.debounce(function() {
+            this.search();
+        }, 250)
     });
 
     Phase.Views.PaginationView = Backbone.View.extend({
