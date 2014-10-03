@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 from django.db import models
@@ -10,7 +9,6 @@ from annoying.functions import get_object_or_None
 
 from accounts.models import User
 from categories.models import Category
-from documents.utils import stringify_value
 
 
 class DocumentManager(models.Manager):
@@ -58,14 +56,6 @@ class Document(models.Model):
     def __unicode__(self):
         return self.document_key
 
-    def save(self, *args, **kwargs):
-        if self.pk is None:
-            # This is a document creation
-            # TODO get document key from metadata object
-            # TODO get fields required for favorites management
-            pass
-        super(Document, self).save(*args, **kwargs)
-
     def get_absolute_url(self):
         """Get the document url.
 
@@ -105,7 +95,7 @@ class Document(models.Model):
         XXX WARNING XXX
 
         This method is a useful shortcut that makes tests writing easier.
-        It should not really used in the application code, because it's
+        It should not really be used in the application code because it's
         not optimal, since it generates a new query.
 
         """
@@ -127,6 +117,12 @@ class Document(models.Model):
     def current_revision_name(self):
         """A revision identifier should be displayed with two digits"""
         return '%02d' % self.current_revision
+
+    def to_json(self):
+        return self.metadata.jsonified()
+
+    def document_type(self):
+        return self.category.document_type()
 
 
 # TODO Add the "latest_revision" test
@@ -224,28 +220,38 @@ class Metadata(six.with_metaclass(MetadataBase), models.Model):
         """
         raise NotImplementedError()
 
-    def jsonified(self, document2favorite={}):
+    def jsonified(self):
         """Returns a list of document values ready to be json-encoded.
 
         The first element of the list is the linkified document number.
-        """
-        favorited = self.document.pk in document2favorite.keys()
 
+        If a value is a Model instance (e.g a foreign key), we return both it's
+        unicode and id values.
+        """
         fields = tuple()
+
+        def add_to_fields(key):
+            value = getattr(self, key)
+
+            if isinstance(value, models.Model):
+                field = (
+                    (unicode(key), value.__unicode__()),
+                    (u'%s_id' % key, value.pk)
+                )
+            else:
+                field = ((unicode(key), value),)
+
+            return field
+
         for field in self.PhaseConfig.column_fields:
             key = field[1]
-            # TODO Use field[2] for getting field value
-            value = getattr(self, field[1])
-            fields += ((unicode(key), stringify_value(value)),)
+            fields += add_to_fields(key)
 
         fields_infos = dict(fields)
         fields_infos.update({
             u'url': self.document.get_absolute_url(),
-            u'number': self.document_key,
             u'pk': self.pk,
             u'document_pk': self.document.pk,
-            u'favorite_id': document2favorite.get(self.document.pk, u''),
-            u'favorited': favorited,
         })
         return fields_infos
 

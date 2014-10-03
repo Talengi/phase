@@ -15,6 +15,6 @@ jQuery(function($) {
     }
 
     notifButton.one('click', function() {
-        $.post(markAsReadUrl, {})
+        $.post(markAsReadUrl, {});
     });
 });

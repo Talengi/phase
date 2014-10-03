@@ -1,3 +1,6 @@
+var without_file_label = without_file_label || '';
+var with_file_label = with_file_label || '';
+
 jQuery(function($) {
     "use strict";
 

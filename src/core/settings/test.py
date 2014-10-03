@@ -18,3 +18,18 @@ MEDIA_ROOT = '/tmp/phase_media/'
 REVISION_FILES_ROOT = MEDIA_ROOT
 
 PIPELINE_ENABLED = False
+STATICFILES_STORAGE = 'pipeline.storage.NonPackagingPipelineStorage'
+
+ELASTIC_AUTOINDEX = False
+
+LOGGING['loggers']['elasticsearch'] = {
+    'handlers': ['console', 'syslog', 'mail_admins'],
+    'level': 'ERROR',
+    'propagate': False,
+}
+
+LOGGING['loggers']['elasticsearch.trace'] = {
+    'handlers': ['console', 'syslog', 'mail_admins'],
+    'level': 'ERROR',
+    'propagate': False,
+}

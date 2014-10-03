@@ -20,7 +20,7 @@ jQuery(function($) {
             create: false,
             options: [],
             load: function(query, callback) {
-                if (!query.length) return callback();
+                if (!query.length) { return callback(); }
                 $.ajax({
                     url: url,
                     type: 'GET',

@@ -1,3 +1,5 @@
+var config = config || {};
+
 jQuery(function($) {
     /* browse documents if you click on table cells */
 

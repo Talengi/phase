@@ -15,24 +15,16 @@
 </table>
 
 {% verbatim %}
-<table id="documents-template">
-    <tbody>
-        <tr data-document-id="{{document_pk}}" data-metadata-id="{{pk}}" data-document-key="{{document_key}}">
-            <td class="columnselect"><input type="checkbox" /></td>
-            <td class="columnfavorite"><span class="{{../icon}}" data-favorite-id="{{favorite_id}}" title="{{../icon_title}}"></span></td>
-            {% endverbatim %}{% generate_template_markup document_class %}{% verbatim %}
-        </tr>
-    </tbody>
-</table>
+<script id="documents-template" type="text/x-underscore-template">
+    <td class="columnselect"><input type="checkbox" /></td>
+    <td class="columnfavorite"><span class="glyphicon glyphicon-star-empty" data-favorite-id="" title="Add to favorites"></span></td>
+    {% endverbatim %}{% generate_template_markup document_class %}{% verbatim %}
+</script>
 {% endverbatim %}
 
-
-{% if is_paginated %}
-<div class="pagination text-center">
-  <ul>
-    {% if page_obj.has_next %}
-        <li><a href="?page={{ page_obj.next_page_number }}">Loading more documents…</a></li>
-    {% endif %}
-  </ul>
+<div id="documents-pagination">
+    <button class="btn btn-primary">
+        {{ _('Loading more documents') }}
+        <span class="glyphicon glyphicon-refresh"></span>
+    </button>
 </div>
-{% endif %}

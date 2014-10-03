@@ -19,8 +19,8 @@
         </div>
     </div>
 
-    <div class="sidebar-offcanvas">
-        <form action="{% url 'document_filter' organisation_slug category_slug %}"
+    <div id="search-sidebar" class="sidebar-offcanvas">
+        <form action="{% url 'search_documents' organisation_slug category_slug %}"
               method="get"
               id="table-filters">
             {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
@@ -30,22 +30,19 @@
 {% endblock %}
 
 {% block extra_js %}
-    {% compressed_js "list" %}
-    {% compressed_js "datatable" %}
-
     <script>
-    var config = {
+    Phase.Config = {
         userId: {% if request.user.is_authenticated %}{{ request.user.id }}{% else %}undefined{% endif %},
         csrfToken: "{{ csrf_token }}",
         createUrl: "{% url "favorite_create" %}",
         deleteUrl: "{% url "favorite_delete" "0" %}",
         filterUrl: "{% url "document_filter" organisation_slug category_slug %}",
-        detailUrl: "{% url "document_detail" organisation_slug category_slug "documentNumber" %}",
-        numPages: {{ paginator.num_pages }},
-        totalItems: {{ paginator.count }},
-        numItemsPerPage: {{ items_per_page }}
+        detailUrl: "{% url "document_detail" organisation_slug category_slug "document_key" %}",
+        searchUrl: "{% url "search_documents" organisation_slug category_slug %}",
+        paginateBy: {{ paginate_by }},
+        sortBy: "{{ sort_by }}",
+        documentType: "{{ document_type }}"
     };
-    var tableData = {{ initial_data|safe }};
-
     </script>
+    {% compressed_js "list" %}
 {% endblock extra_js %}

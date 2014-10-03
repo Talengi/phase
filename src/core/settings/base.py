@@ -227,6 +227,7 @@ LOCAL_APPS = (
     'breadcrumbs',
     'notifications',
     'imports',
+    'search',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -280,6 +281,16 @@ LOGGING = {
         'django.request': {
             'propagate': True,
         },
+        'elasticsearch': {
+            'handlers': ['console', 'syslog', 'mail_admins'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'elasticsearch.trace': {
+            'handlers': ['console', 'syslog', 'mail_admins'],
+            'level': 'INFO',
+            'propagate': False,
+        }
     }
 }
 # ######### END LOGGING CONFIGURATION
@@ -317,45 +328,50 @@ PIPELINE_CSS = {
 PIPELINE_JS = {
     'base': {
         'source_filenames': (
-            'js/jquery.js',
-            'js/jquery-ui.min.js',
+            'js/vendor/jquery.js',
+            'js/vendor/jquery-ui.min.js',
             # both bootstrap and bootstrap-datepicker must be loaded
             # after jquery-ui js to avoid conflicts
             'js/phase-bootstrap.js',
-            'js/bootstrap-datepicker.js',
+            'js/vendor/bootstrap-datepicker.js',
             'js/notifications.js',
         ),
         'output_filename': 'js/base.js',
     },
     'list': {
         'source_filenames': (
-            'js/jquery.afterkeyup.js',
-            'js/document-list.js',
+            'js/vendor/underscore.js',
+            'js/vendor/backbone.js',
+            'js/vendor/jquery.afterkeyup.js',
+            'js/documents/models.js',
+            'js/documents/collections.js',
+            'js/documents/views.js',
+            'js/documents/app.js',
         ),
         'output_filename': 'js/list.js',
     },
     'detail': {
         'source_filenames': (
-            'js/jquery.multiselect.js',
-            'js/jquery.multiselect.filter.js',
-            'js/selectize.js',
+            'js/vendor/jquery.multiselect.js',
+            'js/vendor/jquery.multiselect.filter.js',
+            'js/vendor/selectize.js',
             'js/autocomplete.js',
             'js/document-detail.js',
         ),
         'output_filename': 'js/detail.js',
     },
-    'datatable': {
-        'source_filenames': (
-            'js/templayed.js',
-            # must be loaded after templayed js
-            'js/jquery.datatable.js',
-            'js/jquery.favbystar.js',
-            'js/jquery.infinitescroll.js',
-            'js/queryparams.js',
-            'js/jquery.inview.js',
-        ),
-        'output_filename': 'js/datatable.js',
-    },
+    #'datatable': {
+    #    'source_filenames': (
+    #        'js/templayed.js',
+    #        # must be loaded after templayed js
+    #        'js/jquery.datatable.js',
+    #        'js/jquery.favbystar.js',
+    #        'js/jquery.infinitescroll.js',
+    #        'js/queryparams.js',
+    #        'js/jquery.inview.js',
+    #    ),
+    #    'output_filename': 'js/datatable.js',
+    #},
     'review_list': {
         'source_filenames': (
             'js/review-list.js',
@@ -387,6 +403,11 @@ BROKER_URL = 'amqp://guest:guest@localhost:5672/'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+
+# ######### SEARCH CONFIG
+ELASTIC_HOSTS = [{'host': 'localhost', 'port': '9200'}]
+ELASTIC_INDEX = 'documents'
+ELASTIC_AUTOINDEX = True
 
 # ######### CUSTOM CONFIGURATION
 PAGINATE_BY = 50  # Document list pagination
