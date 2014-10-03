@@ -1,4 +1,5 @@
-from elasticsearch_dsl import Search, Q
+from django.db import models
+from elasticsearch_dsl import Search
 from braces.views import JSONResponseMixin
 
 from search import elastic
@@ -52,6 +53,9 @@ class SearchDocuments(JSONResponseMixin, BaseDocumentList):
         for field in filter_fields:
             value = data.get(field, None)
             if value:
+                if isinstance(value, models.Model):
+                    value = value.pk
+                    field = '%s_id' % field
                 s = s.filter({'term': {field: value}})
 
         # Search query

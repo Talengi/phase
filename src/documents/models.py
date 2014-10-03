@@ -9,7 +9,6 @@ from annoying.functions import get_object_or_None
 
 from accounts.models import User
 from categories.models import Category
-from documents.utils import stringify_value
 
 
 class DocumentManager(models.Manager):
@@ -225,18 +224,32 @@ class Metadata(six.with_metaclass(MetadataBase), models.Model):
         """Returns a list of document values ready to be json-encoded.
 
         The first element of the list is the linkified document number.
+
+        If a value is a Model instance (e.g a foreign key), we return both it's
+        unicode and id values.
         """
         fields = tuple()
+
+        def add_to_fields(key):
+            value = getattr(self, key)
+
+            if isinstance(value, models.Model):
+                field = (
+                    (unicode(key), value.__unicode__()),
+                    (u'%s_id' % key, value.pk)
+                )
+            else:
+                field = ((unicode(key), value),)
+
+            return field
+
         for field in self.PhaseConfig.column_fields:
             key = field[1]
-            # TODO Use field[2] for getting field value
-            value = getattr(self, field[1])
-            fields += ((unicode(key), value),)
+            fields += add_to_fields(key)
 
         fields_infos = dict(fields)
         fields_infos.update({
             u'url': self.document.get_absolute_url(),
-            u'number': self.document_key,
             u'pk': self.pk,
             u'document_pk': self.document.pk,
         })

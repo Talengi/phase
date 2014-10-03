@@ -163,7 +163,8 @@ class ContractorDeliverable(Metadata):
             ('Review due date', 'review_due_date', 'latest_revision__review_due_date'),
             ('Under review', 'under_review', 'latest_revision__under_review'),
             ('Overdue', 'overdue', 'latest_revision__overdue'),
-            #('Leader', 'leader', 'latest_revision__leader'),
+            ('Leader', 'leader', 'latest_revision__leader'),
+            ('Approver', 'approver', 'latest_revision__approver'),
             ('Final revision', 'final_revision', 'latest_revision__final_revision'),
         )
 
@@ -232,6 +233,10 @@ class ContractorDeliverable(Metadata):
     @property
     def leader(self):
         return self.latest_revision.leader
+
+    @property
+    def approver(self):
+        return self.latest_revision.approver
 
     @property
     def klass(self):
