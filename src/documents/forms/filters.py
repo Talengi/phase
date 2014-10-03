@@ -3,12 +3,7 @@ from django.conf import settings
 
 
 class BaseDocumentFilterForm(forms.Form):
-    """Base form for filtering documents of any type.
-
-    This base form will be used to build forms to validate data submitted with
-    the datatables jquery plugin.
-
-    """
+    """Base form for filtering documents of any type."""
     size = forms.IntegerField(
         widget=forms.HiddenInput(),
         required=False,

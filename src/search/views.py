@@ -52,7 +52,7 @@ class SearchDocuments(JSONResponseMixin, BaseDocumentList):
         for field in filter_fields:
             value = data.get(field, None)
             if value:
-                s = s.filter(Q({'term': {field: value}}))
+                s = s.filter({'term': {field: value}})
 
         # Search query
         search_terms = data.get('search_terms', None)
@@ -61,7 +61,7 @@ class SearchDocuments(JSONResponseMixin, BaseDocumentList):
             s = s.query('multi_match', query=search_terms, fields=searchable_fields)
 
         # Sort query
-        sort_field = data.get('sort_by', 'sort_key') or 'sort_key'
+        sort_field = data.get('sort_by', 'document_key') or 'document_key'
         if sort_field.startswith('-'):
             sort_field = sort_field.lstrip('-')
             sort_direction = 'desc'

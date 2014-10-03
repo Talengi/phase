@@ -151,10 +151,26 @@ var Phase = Phase || {};
             this.listenTo(dispatcher, 'onAllRowsSelected', this.setRowState);
         },
         render: function() {
-            this.$el.html(this.template(this.model.attributes));
+            var attributes = this.stringAttributes();
+            this.$el.html(this.template(attributes));
             this.checkbox = this.$el.find('input[type=checkbox]').first();
 
             return this;
+        },
+        /**
+         * TODO use a template?
+         */
+        stringAttributes: function() {
+            var attributes = {};
+            _.each(this.model.attributes, function(value, key) {
+                switch (typeof value) {
+                    case 'boolean':
+                        value = value ? 'Yes' : 'No';
+                        break;
+                }
+                attributes[key] = value;
+            });
+            return attributes;
         },
         setRowState: function(checked) {
             if (checked != this.checkbox.is(':checked')) {

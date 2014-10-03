@@ -15,7 +15,7 @@ var Phase = Phase || {};
     Phase.Models.Search = Backbone.Model.extend({
         defaults: {
             search_terms: '',
-            sort_by: 'sort_key',
+            sort_by: 'document_key',
             start: 0,
             size: Phase.Config.paginateBy
         },

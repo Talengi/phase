@@ -221,19 +221,17 @@ class Metadata(six.with_metaclass(MetadataBase), models.Model):
         """
         raise NotImplementedError()
 
-    def jsonified(self, document2favorite={}):
+    def jsonified(self):
         """Returns a list of document values ready to be json-encoded.
 
         The first element of the list is the linkified document number.
         """
-        favorited = self.document.pk in document2favorite.keys()
-
         fields = tuple()
         for field in self.PhaseConfig.column_fields:
             key = field[1]
             # TODO Use field[2] for getting field value
             value = getattr(self, field[1])
-            fields += ((unicode(key), stringify_value(value)),)
+            fields += ((unicode(key), value),)
 
         fields_infos = dict(fields)
         fields_infos.update({
@@ -241,9 +239,6 @@ class Metadata(six.with_metaclass(MetadataBase), models.Model):
             u'number': self.document_key,
             u'pk': self.pk,
             u'document_pk': self.document.pk,
-            u'favorite_id': document2favorite.get(self.document.pk, u''),
-            u'favorited': favorited,
-            u'sort_key': self.document_key.replace('-', '').lower(),
         })
         return fields_infos
 
