@@ -303,6 +303,7 @@ WSGI_APPLICATION = 'wsgi.application'
 
 # ######### PIPELINE CONFIGURATION
 STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+PIPELINE_YUI_JS_ARGUMENTS = 'mangle:False'
 
 PIPELINE_CSS = {
     'base': {
