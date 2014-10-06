@@ -15,11 +15,16 @@ var Phase = Phase || {};
             _.bindAll(this, 'onDocumentsFetched');
 
             this.documentsCollection = new Phase.Collections.DocumentCollection();
-            this.favoriteCollection = new Phase.Collections.FavoriteCollection();
+            this.favoriteCollection = new Phase.Collections.FavoriteCollection(
+                Phase.Config.initialFavorites
+            );
             this.search = new Phase.Models.Search();
 
             this.tableHeaderView = new Phase.Views.TableHeaderView();
-            this.tableBodyView = new Phase.Views.TableBodyView({ collection: this.documentsCollection });
+            this.tableBodyView = new Phase.Views.TableBodyView({
+                collection: this.documentsCollection,
+                favorites: this.favoriteCollection
+            });
             this.navbarView = new Phase.Views.NavbarView();
             this.searchView = new Phase.Views.SearchView({ model: this.search });
             this.paginationView = new Phase.Views.PaginationView();
@@ -28,7 +33,6 @@ var Phase = Phase || {};
             this.listenTo(dispatcher, 'onSort', this.onSort);
             this.listenTo(dispatcher, 'onSearch', this.onSearch);
 
-            this.favoriteCollection.reset(Phase.Config.initialFavorites);
             this.fetchDocuments(false);
         },
         resetSearch: function() {
@@ -124,18 +128,26 @@ var Phase = Phase || {};
      */
     Phase.Views.TableBodyView = Backbone.View.extend({
         el: 'table#documents tbody',
-        initialize: function() {
+        initialize: function(options) {
             _.bindAll(this, 'addDocument');
+            this.favorites = options['favorites'];
             this.listenTo(this.collection, 'add', this.addDocument);
             this.listenTo(this.collection, 'reset', this.addAllDocuments);
         },
         addDocument: function(document) {
-            var view = new Phase.Views.TableRowView({ model: document });
+            var view = new Phase.Views.TableRowView({
+                model: document,
+                favorite: this.isFavorite(document)
+            });
             this.$el.append(view.render().el);
         },
         addAllDocuments: function() {
             this.$el.empty();
             this.collection.map(this.addDocument);
+        },
+        isFavorite: function(document) {
+            var fav = this.favorites.get(document.id);
+            return fav !== undefined;
         }
     });
 
@@ -150,8 +162,9 @@ var Phase = Phase || {};
             'click td:not(.columnselect):not(.columnfavorite)': 'clickRow',
             'click td.columnfavorite': 'toggleFavorite'
         },
-        initialize: function() {
+        initialize: function(options) {
             this.listenTo(dispatcher, 'onAllRowsSelected', this.setRowState);
+            this.isFavorite = options['isFavorite'];
         },
         render: function() {
             var attributes = this.stringAttributes();
