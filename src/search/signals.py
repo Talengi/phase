@@ -25,7 +25,7 @@ def remove_from_index(sender, instance, **kwargs):
 def save_mapping(sender, instance, **kwargs):
     created = kwargs.pop('created')
     if created:
-        put_category_mapping(sender)
+        put_category_mapping(instance)
 
 
 def connect_signals():
