@@ -21,13 +21,11 @@ from django.views.static import serve
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 from django.db import transaction
-from braces.views import JSONResponseMixin
 
 from favorites.models import Favorite
 from categories.models import Category
 from documents.models import Document
-from documents.utils import (
-    filter_documents, compress_documents, save_document_forms)
+from documents.utils import compress_documents, save_document_forms
 from documents.forms.models import documentform_factory
 from documents.forms.utils import DocumentDownloadForm
 from documents.forms.filters import filterform_factory
@@ -168,29 +166,6 @@ class DocumentList(BaseDocumentList):
             'document_class': self.get_document_class(),
         })
         return context
-
-
-class DocumentFilter(JSONResponseMixin, BaseDocumentList):
-
-    def render_to_response(self, context, **response_kwargs):
-        return self.render_json_response(context, **response_kwargs)
-
-    def get_context_data(self, **kwargs):
-        full_context = super(DocumentFilter, self).get_context_data(**kwargs)
-        context = self.get_serializable_document_list(full_context)
-        return context
-
-    def get_queryset(self):
-        """Given DataTables' GET parameters, filter the initial queryset."""
-        queryset = super(DocumentFilter, self).get_queryset()
-        if self.request.method == "GET":
-            FilterForm = filterform_factory(queryset.model)
-            form = FilterForm(self.request.GET)
-            if form.is_valid():
-                queryset = filter_documents(queryset, form.cleaned_data)
-            else:
-                raise Exception(form.errors)
-        return queryset
 
 
 class DocumentRedirect(RedirectView):

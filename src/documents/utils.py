@@ -2,7 +2,6 @@ import zipfile
 import tempfile
 
 from django.contrib.contenttypes.models import ContentType
-from django.db.models import Q
 from django.db import transaction
 
 
@@ -90,60 +89,6 @@ def update_revision_from_forms(metadata_form, revision_form, category):
     document = metadata.document
 
     return document, metadata, revision
-
-
-def filter_documents(queryset, data):
-    """Filter documents from a queryset given data from DataTables.
-
-    Documentation (lack of is more accurate though):
-    http://www.datatables.net/examples/server_side/server_side.html
-    """
-    model = queryset.model
-
-    # Paging (done at the view level, the whole queryset is still required)
-
-    # Ordering
-    queryset = queryset.order_by(data.get('sort_by', 'document_number') or 'document_number')
-
-    # Filtering (search)
-    searchable_fields = model.PhaseConfig.searchable_fields
-    search_terms = data.get('search_terms', None)
-    if search_terms:
-        q = Q()
-        for field in searchable_fields:
-
-            # does the field belong to the Metadata or the corresponding Revision?
-            prefix = ''
-            if field not in model._meta.get_all_field_names():
-                prefix = 'latest_revision__'
-
-            q.add(Q(**{prefix + '%s__icontains' % field: search_terms}), Q.OR)
-        queryset = queryset.filter(q)
-
-    # Filtering (custom fields)
-    filter_fields = model.PhaseConfig.filter_fields
-    advanced_args = {}
-    for parameter_name in filter_fields:
-
-        # does the field belong to the Metadata or the corresponding Revision?
-        prefix = ''
-        if parameter_name not in model._meta.get_all_field_names():
-            prefix = 'latest_revision__'
-
-        parameter = data.get(parameter_name, None)
-        if parameter:
-            advanced_args[prefix + parameter_name] = parameter
-
-    queryset = queryset.filter(**advanced_args)
-
-    # Special case of advanced filtering with a text field
-    cdn = data.get('contractor_document_number', None)
-    if cdn:
-        queryset = queryset.filter(
-            contractor_document_number__icontains=cdn
-        )
-
-    return queryset
 
 
 # HACK to fix http://hg.python.org/cpython/rev/4f0988e8fcb1/

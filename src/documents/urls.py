@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, url
 
 from documents.views import (
-    DocumentList, DocumentFilter, DocumentCreate, DocumentDetail, DocumentEdit,
+    DocumentList, DocumentCreate, DocumentDetail, DocumentEdit,
     DocumentDownload, DocumentRedirect, DocumentRevise, ProtectedDownload
 )
 
@@ -12,11 +12,6 @@ urlpatterns = patterns(
     url(r'^documents/(?P<document_key>[\w-]+)/$',
         DocumentRedirect.as_view(),
         name='document_short_url'),
-
-    # Filters
-    url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/filter/$',
-        DocumentFilter.as_view(),
-        name="document_filter"),
 
     # Downloads
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/download/$',
