@@ -33,6 +33,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         call_command('delete_index', **options)
         call_command('create_index', **options)
+        call_command('set_mappings', **options)
 
         # This method is highly inefficient, since we are making way too
         # much sql queries and http requests.

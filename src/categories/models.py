@@ -80,6 +80,10 @@ class Category(models.Model):
     def slug(self):
         return self.category_template.slug
 
+    def document_class(self):
+        Model = self.category_template.metadata_model
+        return Model.model_class()
+
     def document_type(self):
         Model = self.category_template.metadata_model
         return '%s.%s' % (Model.app_label, Model.model)

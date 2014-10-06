@@ -191,6 +191,7 @@ class Metadata(six.with_metaclass(MetadataBase), models.Model):
         """Returns a uniquely identifying key."""
         raise NotImplementedError()
 
+    @classmethod
     def get_revision_class(self):
         """Return the class of the associated revision model."""
         return self._meta.get_field('latest_revision').rel.to
