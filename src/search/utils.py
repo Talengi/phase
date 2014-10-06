@@ -18,6 +18,17 @@ TYPE_MAPPING = [
 ]
 
 
+def put_category_mapping(category):
+    doc_class = category.document_class()
+    doc_type = category.document_type()
+    mapping = get_mapping(doc_class)
+    elastic.indices.put_mapping(
+        index=settings.ELASTIC_INDEX,
+        doc_type=doc_type,
+        body=mapping
+    )
+
+
 def get_mapping(doc_class):
     """Creates an elasticsearch mapping for a given document class.
 
