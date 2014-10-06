@@ -145,7 +145,8 @@ var Phase = Phase || {};
         template: _.template($('#documents-template').html()),
         events: {
             'click input[type=checkbox]': 'selectRow',
-            'click td:not(.columnselect):not(.columnfavorite)': 'clickRow'
+            'click td:not(.columnselect):not(.columnfavorite)': 'clickRow',
+            'click td.columnfavorite': 'toggleFavorite'
         },
         initialize: function() {
             this.listenTo(dispatcher, 'onAllRowsSelected', this.setRowState);
@@ -194,6 +195,8 @@ var Phase = Phase || {};
                 this.model.get('document_key')
             );
             window.location = documentUrl;
+        },
+        toggleFavorite: function() {
         }
     });
 
