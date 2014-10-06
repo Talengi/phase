@@ -21,8 +21,10 @@ from django.views.static import serve
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 from django.db import transaction
+from rest_framework.renderers import JSONRenderer
 
 from favorites.models import Favorite
+from favorites.api.serializers import FavoriteSerializer
 from categories.models import Category
 from documents.models import Document
 from documents.utils import compress_documents, save_document_forms
@@ -56,6 +58,7 @@ class DocumentListMixin(object):
             'category_slug': self.kwargs['category'],
             'category': self.category,
             'document_type': self.category.document_type(),
+            'favorites': self.get_favorites()
         })
         return context
 
@@ -98,48 +101,10 @@ class DocumentListMixin(object):
         qs = self.get_queryset()
         return qs.model
 
-    def get_serializable_document_list(self, context, total=None):
-        """Returns document list data in a json serializable format.
-
-        TODO The conceptual purity of this API is not really satisfying.
-        Let's rewrite it some day.
-
-        """
-        start = int(self.request.GET.get('start', 0))
-        end = start + int(self.request.GET.get('length', settings.PAGINATE_BY))
-        documents = context['object_list']
-        total = total if total else documents.count()
-        display = min(end, total)
-
-        user = self.request.user
-        favorites = Favorite.objects \
-            .filter(user=user) \
-            .values_list('id', 'document')
-        document2favorite = dict((v, k) for k, v in favorites)
-
-        data = self.get_cached_data(documents, document2favorite, start, end)
-
-        return {
-            'total': total,
-            'display': display,
-            'data': data,
-        }
-
-    def get_cached_data(self, documents, document2favorite, start, end):
-        """Get existing cached data, or set it otherwise."""
-        CACHE_DATA_KEY = '{document2favorite}_{get_parameters}'.format(
-            # We want to update the cache if favorites have changed
-            document2favorite=document2favorite,
-            # ...and if filtering GET parameters have changed
-            get_parameters=self.request.get_full_path(),
-        ).replace(' ', '_')[:249]  # memcached restrictions
-        data = cache.get(CACHE_DATA_KEY)
-        if data is None:
-            data = [doc.jsonified(document2favorite)
-                    for doc in documents[start:end]]
-            cache.set(CACHE_DATA_KEY, data, settings.CACHE_TIMEOUT_SECONDS)
-
-        return data
+    def get_favorites(self):
+        qs = Favorite.objects.filter(user=self.request.user)
+        serializer = FavoriteSerializer(qs, many=True)
+        return JSONRenderer().render(serializer.data)
 
 
 class BaseDocumentList(LoginRequiredMixin, DocumentListMixin, ListView):

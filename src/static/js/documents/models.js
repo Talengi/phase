@@ -9,6 +9,8 @@ var Phase = Phase || {};
         idAttribute: 'pk'
     });
 
+    Phase.Models.Favorite = Backbone.Model.extend({});
+
     /**
      * Represents a single search query set of parameters
      */

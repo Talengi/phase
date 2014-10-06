@@ -15,6 +15,7 @@ var Phase = Phase || {};
             _.bindAll(this, 'onDocumentsFetched');
 
             this.documentsCollection = new Phase.Collections.DocumentCollection();
+            this.favoriteCollection = new Phase.Collections.FavoriteCollection();
             this.search = new Phase.Models.Search();
 
             this.tableHeaderView = new Phase.Views.TableHeaderView();
@@ -27,6 +28,7 @@ var Phase = Phase || {};
             this.listenTo(dispatcher, 'onSort', this.onSort);
             this.listenTo(dispatcher, 'onSearch', this.onSearch);
 
+            this.favoriteCollection.reset(Phase.Config.initialFavorites);
             this.fetchDocuments(false);
         },
         resetSearch: function() {

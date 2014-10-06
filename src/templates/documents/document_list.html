@@ -39,7 +39,8 @@
         favoriteUrl: "{% url "favorite_list" %}",
         paginateBy: {{ paginate_by }},
         sortBy: "{{ sort_by }}",
-        documentType: "{{ document_type }}"
+        documentType: "{{ document_type }}",
+        initialFavorites: {{ favorites|safe }}
     };
     </script>
     {% compressed_js "list" %}
