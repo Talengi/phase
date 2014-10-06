@@ -56,6 +56,8 @@ class SearchDocuments(JSONResponseMixin, BaseDocumentList):
                 if isinstance(value, models.Model):
                     value = value.pk
                     field = '%s_id' % field
+                else:
+                    field = '%s.raw' % field
                 s = s.filter({'term': {field: value}})
 
         # Search query
@@ -66,6 +68,7 @@ class SearchDocuments(JSONResponseMixin, BaseDocumentList):
 
         # Sort query
         sort_field = data.get('sort_by', 'document_key') or 'document_key'
+        sort_field = '%s.raw' % sort_field
         if sort_field.startswith('-'):
             sort_field = sort_field.lstrip('-')
             sort_direction = 'desc'

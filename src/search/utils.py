@@ -19,19 +19,27 @@ TYPE_MAPPING = [
 
 
 def get_mapping(doc_class):
+    """Creates an elasticsearch mapping for a given document class.
+
+    See: http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/mapping.html
+
+    Note: with elasticsearch, sorting cannot be done on "analyzed" values. We
+    use multifields so fields can be indexed twice, one analyzed version, and
+    one not_analyzed. Thus, we can search, filter, sort or query any field.
+
+    See: http://www.elasticsearch.org/guide/en/elasticsearch/guide/current/multi-fields.html
+
+    """
     revision_class = doc_class.get_revision_class()
     mapping = {
-        'properties': {
-            'document_key': {'type': 'string', 'index': 'not_analyzed'},
-            'url': {'type': 'string', 'index': 'not_analyzed'},
-            'pk': {'type': 'long', 'index': 'not_analyzed'},
-            'document_pk': {'type': 'long', 'index': 'not_analyzed'},
-            'title': {'type': 'string', 'index': 'not_analyzed'},
-        }
+        'properties': {}
     }
 
     config = doc_class.PhaseConfig
-    for field_name in config.filter_fields:
+    filter_fields = list(config.filter_fields)
+    column_fields = [field[1] for field in config.column_fields]
+    fields = filter_fields + column_fields
+    for field_name in fields:
 
         try:
             field = doc_class._meta.get_field_by_name(field_name)[0]
@@ -44,7 +52,15 @@ def get_mapping(doc_class):
         es_type = get_mapping_type(field) if field else 'string'
 
         mapping['properties'].update({
-            field_name: {'type': es_type, 'index': 'not_analyzed'}
+            field_name: {
+                'type': es_type,
+                'fields': {
+                    'raw': {
+                        'type': es_type,
+                        'index': 'not_analyzed'
+                    }
+                }
+            }
         })
 
     return mapping
