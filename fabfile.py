@@ -61,6 +61,7 @@ def deploy(with_data=True):
             collectstatic = 'python src/manage.py collectstatic --noinput'
             syncdb = 'python src/manage.py syncdb --noinput'
             generate = 'python src/manage.py loaddata initial_documents'
+            reindex = 'python src/manage.py reindex_all --noinput'
             with_production_settings = ' --settings=core.settings.production'
             run('pip install -r requirements/production.txt')
             run(collectstatic + with_production_settings)
