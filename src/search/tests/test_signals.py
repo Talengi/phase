@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 from django.test import TestCase
+from django.core.management import call_command
 
 from mock import patch
 
@@ -26,6 +27,9 @@ class SignalsTests(TestCase):
         # Since test settings disable auto indexing, we need to
         # manually connect the signal here
         connect_signals()
+        call_command('delete_index')
+        call_command('create_index')
+        call_command('set_mappings')
 
     @patch('search.signals.index_document')
     def test_created_document_is_indexed(self, index_mock):
