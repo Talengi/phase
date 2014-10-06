@@ -3,15 +3,13 @@
 from __future__ import unicode_literals
 
 from django.test import TestCase
-from django.db.models.signals import post_save, pre_delete
 
 from mock import patch
 
 from accounts.factories import UserFactory
 from categories.factories import CategoryFactory
-from documents.models import Document
 from documents.factories import DocumentFactory
-from search.signals import update_index, remove_from_index
+from search.signals import connect_signals
 
 
 class SignalsTests(TestCase):
@@ -27,8 +25,7 @@ class SignalsTests(TestCase):
 
         # Since test settings disable auto indexing, we need to
         # manually connect the signal here
-        post_save.connect(update_index, sender=Document, dispatch_uid='update_index')
-        pre_delete.connect(remove_from_index, sender=Document, dispatch_uid='remove_from_index')
+        connect_signals()
 
     @patch('search.signals.index_document')
     def test_created_document_is_indexed(self, index_mock):

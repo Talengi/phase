@@ -2,7 +2,8 @@ from django.db.models.signals import post_save, pre_delete
 from django.conf import settings
 
 from documents.models import Document
-from search.utils import index_document, unindex_document
+from categories.models import Category
+from search.utils import index_document, unindex_document, put_category_mapping
 
 
 def update_index(sender, instance, **kwargs):
@@ -21,6 +22,17 @@ def remove_from_index(sender, instance, **kwargs):
     unindex_document(instance)
 
 
-if settings.ELASTIC_AUTOINDEX:
+def save_mapping(sender, instance, **kwargs):
+    created = kwargs.pop('created')
+    if created:
+        put_category_mapping(sender)
+
+
+def connect_signals():
     post_save.connect(update_index, sender=Document, dispatch_uid='update_index')
     pre_delete.connect(remove_from_index, sender=Document, dispatch_uid='remove_from_index')
+    post_save.connect(save_mapping, sender=Category, dispatch_uid='put_category_mapping')
+
+
+if settings.ELASTIC_AUTOINDEX:
+    connect_signals()
