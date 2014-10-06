@@ -269,8 +269,9 @@ var Phase = Phase || {};
             'click #sidebar-close-btn': 'hideSearchForm',
             'submit form': 'submitForm',
             'keyup input': 'debouncedSearch',
-            'change select': 'search',
-            'click #resetForm': 'debouncedSearch'
+            'change select': 'setFilter',
+            'click span.glyphicon-remove': 'removeFilter',
+            'click #resetForm': 'resetForm'
         },
         initialize: function() {
             _.bindAll(this, 'updateFormAttribute');
@@ -307,7 +308,29 @@ var Phase = Phase || {};
         },
         debouncedSearch: _.debounce(function() {
             this.search();
-        }, 250)
+        }, 250),
+        setFilter: function(event) {
+            var select = $(event.currentTarget);
+            if (select.val() != '') {
+                select.siblings('span').css('display', 'inline-block');
+            } else {
+                select.siblings('span').css('display', 'none');
+            }
+
+            this.search();
+        },
+        removeFilter: function(event) {
+            var span = $(event.currentTarget);
+            var select = span.siblings('select');
+            select.val('');
+            span.css('display', 'none');
+            this.search();
+        },
+        resetForm: function() {
+            var spans = this.$el.find('span.glyphicon-remove');
+            spans.css('display', 'none');
+            this.debouncedSearch();
+        }
     });
 
     Phase.Views.PaginationView = Backbone.View.extend({
