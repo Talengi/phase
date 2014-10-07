@@ -76,7 +76,6 @@ class DocumentListTest(GenericViewTest):
     def test_document_number(self):
         self.assertGet()
         self.assertContext('documents_active', True)
-        self.assertContextLength('object_list', 50)
 
 
 class DocumentDetailTest(TestCase):
@@ -165,7 +164,7 @@ class DocumentDownloadTest(TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r._headers, {
             'vary': ('Vary', 'Cookie, Accept-Encoding'),
-            'content-length': ('Content-Length', '322'),
+            'content-length': ('Content-Length', '326'),
             'content-type': ('Content-Type', 'application/zip'),
             'content-disposition': (
                 'Content-Disposition',
@@ -228,7 +227,7 @@ class DocumentDownloadTest(TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r._headers, {
             'vary': ('Vary', 'Cookie, Accept-Encoding'),
-            'content-length': ('Content-Length', '630'),
+            'content-length': ('Content-Length', '638'),
             'content-type': ('Content-Type', 'application/zip'),
             'content-disposition': (
                 'Content-Disposition',
@@ -273,7 +272,7 @@ class DocumentDownloadTest(TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r._headers, {
             'vary': ('Vary', 'Cookie, Accept-Encoding'),
-            'content-length': ('Content-Length', '320'),
+            'content-length': ('Content-Length', '324'),
             'content-type': ('Content-Type', 'application/zip'),
             'content-disposition': (
                 'Content-Disposition',
