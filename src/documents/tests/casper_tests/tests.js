@@ -253,3 +253,21 @@ casper.test.begin('The search form searches', 0, function suite(test) {
         test.done();
     });
 });
+
+casper.test.begin('Favorite tests', 0, function suite(test) {
+    casper.start(document_list_url, function() {
+        test.assertElementCount('td.columnfavorite span.glyphicon-star', 0);
+        casper.click('tbody tr:nth-of-type(1) td.columnfavorite');
+        casper.click('tbody tr:nth-of-type(3) td.columnfavorite');
+        casper.click('tbody tr:nth-of-type(5) td.columnfavorite');
+        casper.reload();
+    });
+
+    casper.then(function() {
+        test.assertElementCount('td.columnfavorite span.glyphicon-star', 3);
+    });
+
+    casper.run(function() {
+        test.done();
+    });
+});
