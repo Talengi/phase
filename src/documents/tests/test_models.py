@@ -50,16 +50,13 @@ class DocumentTest(TestCase):
         self.assertEqual(
             document.metadata.jsonified(),
             {
-                'status': u'STD',
-                'favorited': False,
-                'title': u'HAZOP report',
-                'url': '/documents/FAC09001-FWF-000-HSE-REP-0004/',
-                'current_revision': u'01',
-                'number': u'FAC09001-FWF-000-HSE-REP-0004',
-                'current_revision_date': u'2013-04-20',
-                'pk': 1,
-                'favorite_id': '',
-                'document_pk': 1,
-                'document_key': u'FAC09001-FWF-000-HSE-REP-0004',
+                u'status': u'STD',
+                u'title': u'HAZOP report',
+                u'url': '/documents/FAC09001-FWF-000-HSE-REP-0004/',
+                u'current_revision': u'01',
+                u'current_revision_date': datetime.date(2013, 4, 20),
+                u'pk': 1,
+                u'document_pk': 1,
+                u'document_key': u'FAC09001-FWF-000-HSE-REP-0004',
             }
         )

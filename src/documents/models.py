@@ -116,7 +116,7 @@ class Document(models.Model):
     @property
     def current_revision_name(self):
         """A revision identifier should be displayed with two digits"""
-        return '%02d' % self.current_revision
+        return u'%02d' % self.current_revision
 
     def to_json(self):
         return self.metadata.jsonified()
@@ -290,4 +290,4 @@ class MetadataRevision(models.Model):
     @property
     def name(self):
         """A revision identifier should be displayed with two digits"""
-        return '%02d' % self.revision
+        return u'%02d' % self.revision
