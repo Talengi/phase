@@ -44,11 +44,16 @@ def get_mapping(doc_class):
     """
     revision_class = doc_class.get_revision_class()
     mapping = {
+        '_all': {
+            "index_analyzer": "nGram_analyzer",
+            "search_analyzer": "whitespace_analyzer"
+        },
         'properties': {}
     }
 
     config = doc_class.PhaseConfig
     filter_fields = list(config.filter_fields)
+    searchable_fields = list(config.searchable_fields)
     column_fields = [field[1] for field in config.column_fields]
     fields = filter_fields + column_fields
     for field_name in fields:
@@ -69,7 +74,8 @@ def get_mapping(doc_class):
                 'fields': {
                     'raw': {
                         'type': es_type,
-                        'index': 'not_analyzed'
+                        'index': 'not_analyzed',
+                        'include_in_all': field_name in searchable_fields
                     }
                 }
             }

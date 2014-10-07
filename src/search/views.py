@@ -63,8 +63,13 @@ class SearchDocuments(JSONResponseMixin, BaseDocumentList):
         # Search query
         search_terms = data.get('search_terms', None)
         if search_terms:
-            searchable_fields = Model.PhaseConfig.searchable_fields
-            s = s.query('multi_match', query=search_terms, fields=searchable_fields)
+            s = s.query({
+                'match': {
+                    '_all': {
+                        'query': search_terms,
+                        'operator': 'and'}
+                }
+            })
 
         # Sort query
         sort_field = data.get('sort_by', 'document_key') or 'document_key'
