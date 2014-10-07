@@ -102,7 +102,9 @@ class DocumentListMixin(object):
         return qs.model
 
     def get_favorites(self):
-        qs = Favorite.objects.filter(user=self.request.user)
+        qs = Favorite.objects \
+            .select_related('user') \
+            .filter(user=self.request.user)
         serializer = FavoriteSerializer(qs, many=True)
         return JSONRenderer().render(serializer.data)
 
