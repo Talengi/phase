@@ -16,19 +16,13 @@ INDEX_SETTINGS = {
                 "nGram_filter": {
                     "type": "nGram",
                     "min_gram": 2,
-                    "max_gram": 40,
-                    "token_chars": [
-                        "letter",
-                        "digit",
-                        "punctuation",
-                        "symbol"
-                    ]
+                    "max_gram": 256,  # Is this value reasonable? I don't know
                 }
             },
             "analyzer": {
                 "nGram_analyzer": {
                     "type": "custom",
-                    "tokenizer": "whitespace",
+                    "tokenizer": "keyword",
                     "filter": [
                         "lowercase",
                         "asciifolding",
@@ -37,7 +31,7 @@ INDEX_SETTINGS = {
                 },
                 "whitespace_analyzer": {
                     "type": "custom",
-                    "tokenizer": "whitespace",
+                    "tokenizer": "keyword",
                     "filter": [
                         "lowercase",
                         "asciifolding"

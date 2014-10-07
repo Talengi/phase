@@ -45,8 +45,9 @@ def get_mapping(doc_class):
     revision_class = doc_class.get_revision_class()
     mapping = {
         '_all': {
-            "index_analyzer": "nGram_analyzer",
-            "search_analyzer": "whitespace_analyzer"
+            'index_analyzer': 'nGram_analyzer',
+            'search_analyzer': 'whitespace_analyzer',
+            'index': 'not_analyzed',
         },
         'properties': {}
     }
@@ -56,8 +57,8 @@ def get_mapping(doc_class):
     searchable_fields = list(config.searchable_fields)
     column_fields = [field[1] for field in config.column_fields]
     fields = filter_fields + column_fields
-    for field_name in fields:
 
+    for field_name in fields:
         try:
             field = doc_class._meta.get_field_by_name(field_name)[0]
         except FieldDoesNotExist:
@@ -71,11 +72,12 @@ def get_mapping(doc_class):
         mapping['properties'].update({
             field_name: {
                 'type': es_type,
+                'include_in_all': field_name in searchable_fields,
                 'fields': {
                     'raw': {
                         'type': es_type,
                         'index': 'not_analyzed',
-                        'include_in_all': field_name in searchable_fields
+                        'include_in_all': False
                     }
                 }
             }

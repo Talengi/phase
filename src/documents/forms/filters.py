@@ -16,18 +16,6 @@ class BaseDocumentFilterForm(forms.Form):
         label=u'Search all columns',
         required=False)
 
-    def clean_search_terms(self):
-        """Filter the query string.
-
-        Since elasticsearch uses a Ngram filter with a min length of
-        2, we want to remove every search term shorter than that.
-
-        """
-        search_terms = self.cleaned_data['search_terms']
-        search_terms = search_terms.split()
-        search_terms = filter(lambda x: len(x) >= 2, search_terms)
-        return ' '.join(search_terms)
-
 
 def filterform_factory(model):
     """Dynamicaly create a filter form for the given Metadata model.

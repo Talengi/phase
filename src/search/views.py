@@ -62,12 +62,14 @@ class SearchDocuments(JSONResponseMixin, BaseDocumentList):
 
         # Search query
         search_terms = data.get('search_terms', None)
+        search_fields = Model.PhaseConfig.searchable_fields
+        raw_search_fields = map(lambda x: '%s.raw' % x, search_fields)
         if search_terms:
             s = s.query({
-                'match': {
-                    '_all': {
-                        'query': search_terms,
-                        'operator': 'and'}
+                'multi_match': {
+                    'query': search_terms,
+                    'fields': ['_all'] + raw_search_fields,
+                    'operator': 'and'
                 }
             })
 
