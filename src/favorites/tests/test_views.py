@@ -42,34 +42,3 @@ class FavoriteTest(GenericViewTest):
         self.client.login(email=self.user2.email, password='pass')
         res = self.client.get(self.url)
         self.assertContains(res, 'gloubigoulba')
-
-    def test_favorite_creation(self):
-        """Tests that a favorite creation is possible. """
-        document = DocumentFactory(
-            document_key='gloubigoulba',
-            category=self.category,
-        )
-        self.url = reverse("favorite_create")
-        self.assertPost({
-            'document': document.id,
-            'user': self.user.id,
-        })
-        # First favorite created
-        self.assertEqual(self.content, '1')
-        self.assertEqual(Favorite.objects.all().count(), 1)
-
-    def test_favorite_deletion(self):
-        """
-        Tests that a favorite deletion is possible.
-        """
-        document = DocumentFactory(
-            document_key='gloubigoulba',
-            category=self.category,
-        )
-        favorite = Favorite.objects.create(
-            document=document,
-            user=self.user
-        )
-        self.url = reverse("favorite_delete", args=[favorite.pk])
-        self.assertPost(status_code=302)
-        self.assertEqual(Favorite.objects.all().count(), 0)
