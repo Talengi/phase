@@ -61,15 +61,20 @@ def deploy(with_data=True):
             collectstatic = 'python src/manage.py collectstatic --noinput'
             syncdb = 'python src/manage.py syncdb --noinput'
             generate = 'python src/manage.py loaddata initial_documents'
-            reindex = 'python src/manage.py reindex_all --noinput'
+            delete_index = 'python src/manage.py delete_index'
+            create_index = 'python src/manage.py create_index'
+            reindex = 'python src/manage.py reindex_all'
             with_production_settings = ' --settings=core.settings.production'
             run('pip install -r requirements/production.txt')
             run(collectstatic + with_production_settings)
             if with_data:
                 run('rm src/phase.db')
                 run('rm private/* -Rf')
+                run(delete_index + with_production_settings)
+                run(create_index + with_production_settings)
                 run(syncdb + with_production_settings)
                 run(generate + with_production_settings)
+                run(reindex + with_production_settings)
     restart_webserver()
 
 
