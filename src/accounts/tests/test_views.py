@@ -6,8 +6,8 @@ from categories.factories import CategoryFactory
 from accounts.factories import UserFactory
 
 
-class NavbarTests(TestCase):
-    """Navbar shows different options depending on user's permissions."""
+class NavigationTests(TestCase):
+    """Navbar and navigation column shows different options depending on user's permissions."""
 
     def setUp(self):
         category = CategoryFactory()
@@ -25,7 +25,7 @@ class NavbarTests(TestCase):
     def test_anonymous_navbar(self):
         res = self.client.get(self.url, follow=True)
         self.assertNotContains(res, 'href="/favorites/"')
-        self.assertNotContains(res, '<a href="#" id="document-link"')
+        self.assertNotContains(res, '<a href="#nav-organisations"')
         self.assertNotContains(res, 'href="%s"' % self.create_url)
         self.assertNotContains(res, 'href="/admin/"')
 
@@ -35,7 +35,7 @@ class NavbarTests(TestCase):
 
         res = self.client.get(self.url, follow=True)
         self.assertContains(res, 'href="/favorites/"')
-        self.assertContains(res, '<a href="#" id="document-link"')
+        self.assertContains(res, '<a href="#nav-organisations"')
         self.assertNotContains(res, 'href="%s"' % self.create_url)
         self.assertNotContains(res, 'href="/admin/"')
 
@@ -49,7 +49,7 @@ class NavbarTests(TestCase):
 
         res = self.client.get(self.url, follow=True)
         self.assertContains(res, 'href="/favorites/"')
-        self.assertContains(res, '<a href="#" id="document-link"')
+        self.assertContains(res, '<a href="#nav-organisations"')
         self.assertContains(res, 'href="%s"' % self.create_url)
         self.assertNotContains(res, 'href="/admin/"')
 
@@ -61,7 +61,7 @@ class NavbarTests(TestCase):
 
         res = self.client.get(self.url, follow=True)
         self.assertContains(res, 'href="/favorites/"')
-        self.assertContains(res, '<a href="#" id="document-link"')
+        self.assertContains(res, '<a href="#nav-organisations"')
         self.assertContains(res, 'href="%s"' % self.create_url)
         self.assertContains(res, 'href="/admin/"')
 
