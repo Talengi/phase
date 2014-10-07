@@ -8,23 +8,25 @@ from accounts.factories import UserFactory
 from categories.factories import CategoryFactory
 from documents.factories import DocumentFactory
 from search.utils import index_document
+from search.signals import connect_signals
 
 
 @override_settings(PAGINATE_BY=5)
 class DocumentListTests(CasperTestCase):
 
     def setUp(self):
+        connect_signals()
+
         self.category = CategoryFactory()
         user = UserFactory(email='testadmin@phase.fr', password='pass',
                            is_superuser=True,
                            category=self.category)
 
         for doc_id in xrange(20):
-            document = DocumentFactory(
+            DocumentFactory(
                 document_key='hazop-report-%d' % doc_id,
                 category=self.category,
             )
-            index_document(document)
 
         document_list_url = reverse('category_document_list', args=[
             self.category.organisation.slug,

@@ -32,6 +32,7 @@ var Phase = Phase || {};
             this.listenTo(dispatcher, 'onMoreDocumentsRequested', this.onMoreDocumentsRequested);
             this.listenTo(dispatcher, 'onSort', this.onSort);
             this.listenTo(dispatcher, 'onSearch', this.onSearch);
+            this.listenTo(dispatcher, 'onFavoriteSet', this.onFavoriteSet);
 
             this.fetchDocuments(false);
         },
@@ -70,6 +71,19 @@ var Phase = Phase || {};
         onSearch: function() {
             this.resetSearch();
             this.fetchDocuments(true);
+        },
+        onFavoriteSet: function(data) {
+            var document_id = data.document_id;
+            var isFavorite = data.isFavorite;
+
+            if (isFavorite) {
+                var favorite = new Phase.Models.Favorite({document: document_id});
+                this.favoriteCollection.add(favorite);
+                favorite.save();
+            } else {
+                var favorite = this.favoriteCollection.findWhere({'document': document_id});
+                favorite.destroy();
+            }
         }
     });
 
@@ -137,7 +151,7 @@ var Phase = Phase || {};
         addDocument: function(document) {
             var view = new Phase.Views.TableRowView({
                 model: document,
-                favorite: this.isFavorite(document)
+                isFavorite: this.isFavorite(document)
             });
             this.$el.append(view.render().el);
         },
@@ -146,7 +160,9 @@ var Phase = Phase || {};
             this.collection.map(this.addDocument);
         },
         isFavorite: function(document) {
-            var fav = this.favorites.get(document.id);
+            // TODO This is probably not the most efficienc way
+            // to do this.
+            var fav = this.favorites.findWhere({'document': document.id});
             return fav !== undefined;
         }
     });
@@ -170,6 +186,12 @@ var Phase = Phase || {};
             var attributes = this.stringAttributes();
             this.$el.html(this.template(attributes));
             this.checkbox = this.$el.find('input[type=checkbox]').first();
+            this.favoriteIcon = this.$el.find('td.columnfavorite span').first();
+
+            if (this.isFavorite) {
+                this.favoriteIcon.removeClass('glyphicon-star-empty');
+                this.favoriteIcon.addClass('glyphicon-star');
+            }
 
             return this;
         },
@@ -212,6 +234,18 @@ var Phase = Phase || {};
             window.location = documentUrl;
         },
         toggleFavorite: function() {
+            this.isFavorite = !this.isFavorite;
+            dispatcher.trigger('onFavoriteSet', {
+                'document_id': this.model.id,
+                'isFavorite': this.isFavorite
+            });
+            if (this.isFavorite) {
+                this.favoriteIcon.addClass('glyphicon-star');
+                this.favoriteIcon.removeClass('glyphicon-star-empty');
+            } else {
+                this.favoriteIcon.removeClass('glyphicon-star');
+                this.favoriteIcon.addClass('glyphicon-star-empty');
+            }
         }
     });
 

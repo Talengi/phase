@@ -36,7 +36,7 @@
         csrfToken: "{{ csrf_token }}",
         detailUrl: "{% url "document_detail" organisation_slug category_slug "document_key" %}",
         searchUrl: "{% url "search_documents" organisation_slug category_slug %}",
-        favoriteUrl: "{% url "favorite_list" %}",
+        favoriteUrl: "{% url "favorite-list" %}",
         paginateBy: {{ paginate_by }},
         sortBy: "{{ sort_by }}",
         documentType: "{{ document_type }}",

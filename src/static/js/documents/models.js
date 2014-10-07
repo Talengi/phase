@@ -9,7 +9,12 @@ var Phase = Phase || {};
         idAttribute: 'pk'
     });
 
-    Phase.Models.Favorite = Backbone.Model.extend({});
+    Phase.Models.Favorite = Backbone.Model.extend({
+        url: function() {
+            var origUrl = Backbone.Model.prototype.url.call(this);
+            return origUrl + (origUrl.charAt(origUrl.length - 1) == '/' ? '' : '/');
+        }
+    });
 
     /**
      * Represents a single search query set of parameters
