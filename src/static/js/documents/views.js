@@ -62,7 +62,7 @@ var Phase = Phase || {};
         onSort: function(data) {
             var sortField = data.field;
             var sortDirection = data.direction;
-            var prefix = sortDirection == 'down' ? '' : '-';
+            var prefix = sortDirection === 'down' ? '' : '-';
 
             this.search.set('sort_by', prefix + sortField);
             this.resetSearch();
@@ -76,12 +76,13 @@ var Phase = Phase || {};
             var document_id = data.document_id;
             var isFavorite = data.isFavorite;
 
+            var favorite;
             if (isFavorite) {
-                var favorite = new Phase.Models.Favorite({document: document_id});
+                favorite = new Phase.Models.Favorite({document: document_id});
                 this.favoriteCollection.add(favorite);
                 favorite.save();
             } else {
-                var favorite = this.favoriteCollection.findWhere({'document': document_id});
+                favorite = this.favoriteCollection.findWhere({'document': document_id});
                 favorite.destroy();
             }
         }
@@ -119,7 +120,7 @@ var Phase = Phase || {};
             });
         },
         switchSortDirection: function() {
-            this.sortDirection = this.sortDirection == 'up' ? 'down' : 'up';
+            this.sortDirection = this.sortDirection === 'up' ? 'down' : 'up';
         },
         setSortField: function(field) {
             this.sortDirection = 'down';
@@ -211,7 +212,7 @@ var Phase = Phase || {};
             return attributes;
         },
         setRowState: function(checked) {
-            if (checked != this.checkbox.is(':checked')) {
+            if (checked !== this.checkbox.is(':checked')) {
                 this.checkbox.prop('checked', checked);
                 this.selectRow();
             }
@@ -290,14 +291,15 @@ var Phase = Phase || {};
             this.actionButtons.removeClass('disabled');
         },
         rowSelected: function(document, checked) {
+            var input;
             if (checked) {
-                var input = $('<input type="hidden" name="document_ids"></input>');
+                input = $('<input type="hidden" name="document_ids"></input>');
                 input.attr('id', 'document-id-' + document.id);
                 input.val(document.id);
                 this.actionForm.append(input);
             } else {
                 var input_id = '#document-id-' + document.id;
-                var input = this.actionForm.find(input_id);
+                input = this.actionForm.find(input_id);
                 input.remove();
             }
         },
@@ -363,7 +365,7 @@ var Phase = Phase || {};
         }, 250),
         setFilter: function(event) {
             var select = $(event.currentTarget);
-            if (select.val() != '') {
+            if (select.val() !== '') {
                 select.siblings('span').css('display', 'inline-block');
             } else {
                 select.siblings('span').css('display', 'none');

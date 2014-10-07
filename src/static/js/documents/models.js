@@ -12,7 +12,7 @@ var Phase = Phase || {};
     Phase.Models.Favorite = Backbone.Model.extend({
         url: function() {
             var origUrl = Backbone.Model.prototype.url.call(this);
-            return origUrl + (origUrl.charAt(origUrl.length - 1) == '/' ? '' : '/');
+            return origUrl + (origUrl.charAt(origUrl.length - 1) === '/' ? '' : '/');
         }
     });
 
@@ -28,7 +28,7 @@ var Phase = Phase || {};
         },
         fromForm: function(form) {
             var data = form.serializeArray();
-            self = this;
+            var self = this;
             _.each(data, function(field) {
                 self.set(field.name, field.value);
             });

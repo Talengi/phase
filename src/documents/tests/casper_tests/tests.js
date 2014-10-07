@@ -1,4 +1,5 @@
 var casper = casper || {};
+var phantom = phantom || {};
 var document_list_url = casper.cli.options['url'];
 
 casper.options.clientScripts.push("../../../static/js/vendor/sinon.js");
@@ -25,7 +26,7 @@ casper.test.begin('Documents are fetched on page load', 0, function suite(test) 
         test.assertTitle('Phase');
         casper.wait(500);
         test.assertElementCount('table#documents tbody tr', 5);
-        test.assertSelectorHasText('#display-results', '5 documents on 20')
+        test.assertSelectorHasText('#display-results', '5 documents on 20');
         test.assertVisible('#documents-pagination');
 
         casper.click('#documents-pagination');
@@ -33,7 +34,7 @@ casper.test.begin('Documents are fetched on page load', 0, function suite(test) 
 
     casper.then(function() {
         test.assertElementCount('table#documents tbody tr', 10);
-        test.assertSelectorHasText('#display-results', '10 documents on 20')
+        test.assertSelectorHasText('#display-results', '10 documents on 20');
         test.assertVisible('#documents-pagination');
 
         casper.click('#documents-pagination');
@@ -44,7 +45,7 @@ casper.test.begin('Documents are fetched on page load', 0, function suite(test) 
 
     casper.then(function() {
         test.assertElementCount('table#documents tbody tr', 20);
-        test.assertSelectorHasText('#display-results', '20 documents on 20')
+        test.assertSelectorHasText('#display-results', '20 documents on 20');
         test.assertNotVisible('#documents-pagination');
     });
 
