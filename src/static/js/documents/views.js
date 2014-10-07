@@ -270,9 +270,10 @@ var Phase = Phase || {};
         configureForm: function() {
             // We update the form action depending on
             // the clicked button
+            var self = this;
             this.actionButtons.on('click', function(event) {
                 var action = $(this).data('form-action');
-                this.actionForm.attr('action', action);
+                self.actionForm.attr('action', action);
             });
 
             // Prevent closing dropdown on any click
