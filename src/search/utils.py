@@ -25,7 +25,8 @@ def put_category_mapping(category):
     elastic.indices.put_mapping(
         index=settings.ELASTIC_INDEX,
         doc_type=doc_type,
-        body=mapping
+        body=mapping,
+        ignore_conflicts=True
     )
 
 
