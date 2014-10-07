@@ -163,7 +163,7 @@ var Phase = Phase || {};
         isFavorite: function(document) {
             // TODO This is probably not the most efficienc way
             // to do this.
-            var fav = this.favorites.findWhere({'document': document.id});
+            var fav = this.favorites.findWhere({'document': document.get('document_pk')});
             return fav !== undefined;
         }
     });
@@ -237,7 +237,7 @@ var Phase = Phase || {};
         toggleFavorite: function() {
             this.isFavorite = !this.isFavorite;
             dispatcher.trigger('onFavoriteSet', {
-                'document_id': this.model.id,
+                'document_id': this.model.get('document_pk'),
                 'isFavorite': this.isFavorite
             });
             if (this.isFavorite) {
