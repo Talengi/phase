@@ -7,7 +7,6 @@ See https://django-crispy-forms.readthedocs.org/en/d-0/layouts.html
 from django.template.loader import render_to_string
 from django.template import Context, Template
 from django.utils.text import slugify
-from django.core.exceptions import ImproperlyConfigured
 from crispy_forms.compatibility import text_type
 from crispy_forms.layout import LayoutObject, Fieldset
 from crispy_forms.utils import render_field

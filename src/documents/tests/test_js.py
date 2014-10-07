@@ -7,7 +7,6 @@ from casper.tests import CasperTestCase
 from accounts.factories import UserFactory
 from categories.factories import CategoryFactory
 from documents.factories import DocumentFactory
-from search.utils import index_document
 from search.signals import connect_signals
 
 
