@@ -91,27 +91,6 @@ class BatchReviewTests(TestCase):
         self.assertContains(res, self.ok)
         self.assertContains(res, self.nok)
 
-    def test_batch_review_clears_cache(self):
-        cache_key = '{}_/%s/%s/' % (
-            self.category.organisation.slug,
-            self.category.slug,
-        )
-        data = cache.get(cache_key)
-        self.assertIsNone(data)
-
-        # First call to populate cache
-        self.client.get(self.list_url)
-        data = cache.get(cache_key)
-        self.assertIsNotNone(data)
-
-        self.client.post(
-            self.url,
-            {'document_ids': [self.doc1.id, self.doc2.id]},
-            follow=False
-        )
-        data = cache.get(cache_key)
-        self.assertIsNone(data)
-
 
 class PrioritiesDocumentListTests(TestCase):
 
