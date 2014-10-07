@@ -210,12 +210,18 @@ class Import(models.Model):
         revision = metadata.get_revision(revision_num) if metadata and revision_num else None
 
         form, revision_form = self.get_forms(metadata, revision)
-        if form.is_valid() and revision_form.is_valid():
-            doc, metadata, revision = save_document_forms(
-                form, revision_form, self.batch.category)
-            self.document = doc
-            self.status = self.STATUSES.success
-        else:
-            errors = dict(form.errors.items() + revision_form.errors.items())
-            self.errors = json.dumps(errors)
+        try:
+            if form.is_valid() and revision_form.is_valid():
+                doc, metadata, revision = save_document_forms(
+                    form, revision_form, self.batch.category)
+                self.document = doc
+                self.status = self.STATUSES.success
+            else:
+                errors = dict(form.errors.items() + revision_form.errors.items())
+                self.errors = json.dumps(errors)
+                self.status = self.STATUSES.error
+        except Exception as e:
+            self.errors = json.dumps({
+                'An error occurred': [str(e)]
+            })
             self.status = self.STATUSES.error
