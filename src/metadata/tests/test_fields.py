@@ -15,7 +15,7 @@ class ConfigurableChoiceFieldTest(TestCase):
         )
         choices = get_choices_from_list(values_list.index)
         self.assertItemsEqual(choices, [
-            (u'test1', u'Test 1'),
-            (u'test2', u'Test 2'),
-            (u'test3', u'Test 3'),
+            (u'test1', u'test1 - Test 1'),
+            (u'test2', u'test2 - Test 2'),
+            (u'test3', u'test3 - Test 3'),
         ])
