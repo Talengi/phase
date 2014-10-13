@@ -19,17 +19,17 @@ def update_index(sender, instance, **kwargs):
     # Thus, we MUST not index the document on the first save, since the
     # metadata and revision does not exist yet
     if not created:
-        index_document(instance)
+        index_document.delay(instance.pk)
 
 
 def remove_from_index(sender, instance, **kwargs):
-    unindex_document(instance)
+    unindex_document.delay(instance.pk, instance.document_type())
 
 
 def save_mapping(sender, instance, **kwargs):
     created = kwargs.pop('created')
     if created:
-        put_category_mapping(instance)
+        put_category_mapping.delay(instance.pk)
 
 
 def connect_signals():

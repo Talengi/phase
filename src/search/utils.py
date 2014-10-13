@@ -9,6 +9,9 @@ from django.db import models
 
 from elasticsearch.exceptions import ConnectionError
 
+from core.celery import app
+from documents.models import Document
+from categories.models import Category
 from search import elastic
 from django.conf import settings
 
@@ -25,7 +28,12 @@ TYPE_MAPPING = [
 ]
 
 
-def put_category_mapping(category):
+@app.task
+def put_category_mapping(category_id):
+    category = Category.objects \
+        .select_related('organisation', 'category_template') \
+        .get(pk=category_id)
+
     doc_class = category.document_class()
     doc_type = category.document_type()
     mapping = get_mapping(doc_class)
@@ -101,8 +109,10 @@ def get_mapping_type(field):
     return 'string'
 
 
-def index_document(document):
+@app.task
+def index_document(document_id):
     """Stores a document into the ES index."""
+    document = Document.objects.get(pk=document_id)
     try:
         elastic.index(
             index=settings.ELASTIC_INDEX,
@@ -111,16 +121,17 @@ def index_document(document):
             body=document.to_json()
         )
     except ConnectionError:
-        logger.error('Error connecting to ES. The doc %d will no be indexed' % document.pk)
+        logger.error('Error connecting to ES. The doc %d will no be indexed' % document_id)
 
 
-def unindex_document(document):
+@app.task
+def unindex_document(document_id, document_type):
     """Removes the document from the index."""
     try:
         elastic.delete(
             index=settings.ELASTIC_INDEX,
-            doc_type=document.document_type(),
-            id=document.pk
+            doc_type=document_type,
+            id=document_id
         )
     except ConnectionError:
-        logger.error('Error connecting to ES. The doc %d will no be un-indexed' % document.pk)
+        logger.error('Error connecting to ES. The doc %d will no be un-indexed' % document_id)
