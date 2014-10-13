@@ -138,7 +138,7 @@ class DocumentList(BaseDocumentList):
 class DocumentRedirect(RedirectView):
     """Redirects from short document url to full url."""
 
-    # Permanent redirections are cached and doc locution can change, so...
+    # Permanent redirections are cached and doc location can change, so...
     permanent = False
 
     def get_redirect_url(self, **kwargs):
