@@ -13,7 +13,7 @@ from documents.factories import DocumentFactory
 from search.signals import connect_signals
 
 
-class SignalsTests(TestCase):
+class SignalTests(TestCase):
     def setUp(self):
         self.category = CategoryFactory()
         user = UserFactory(
@@ -31,7 +31,7 @@ class SignalsTests(TestCase):
         call_command('create_index')
         call_command('set_mappings')
 
-    @patch('search.signals.index_document')
+    @patch('search.signals.index_document.delay')
     def test_created_document_is_indexed(self, index_mock):
         DocumentFactory(
             category=self.category,
@@ -39,8 +39,8 @@ class SignalsTests(TestCase):
         )
         self.assertEqual(index_mock.call_count, 1)
 
-    @patch('search.signals.index_document')
-    @patch('search.signals.unindex_document')
+    @patch('search.signals.index_document.delay')
+    @patch('search.signals.unindex_document.delay')
     def test_deleted_document_is_unindexed(self, index_mock, unindex_mock):
         doc = DocumentFactory(
             category=self.category,
@@ -49,7 +49,7 @@ class SignalsTests(TestCase):
         doc.delete()
         self.assertEqual(unindex_mock.call_count, 1)
 
-    @patch('search.signals.index_document')
+    @patch('search.signals.index_document.delay')
     def test_updated_document_is_indexed(self, index_mock):
         doc = DocumentFactory(
             category=self.category,
@@ -59,7 +59,7 @@ class SignalsTests(TestCase):
         doc.save()
         self.assertEqual(index_mock.call_count, 2)
 
-    @patch('search.signals.index_document')
+    @patch('search.signals.index_document.delay')
     def test_revised_document_is_indexed(self, index_mock):
         doc = DocumentFactory(
             category=self.category,
