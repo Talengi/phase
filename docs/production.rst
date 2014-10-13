@@ -91,7 +91,7 @@ Phase installation
 
 As root::
 
-    npm install -g yuglify
+    npm install -g cssmin uglify-js
 
 As phase user::
 

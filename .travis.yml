@@ -9,7 +9,7 @@ before_install:
   - npm install -g grunt-cli
 install:
   - pip install -r requirements/test.txt
-  - npm install -g yuglify
+  - npm install -g cssmin uglify-jcssmin uglify-js
   - npm install -g casperjs
   - cd src
   - npm install

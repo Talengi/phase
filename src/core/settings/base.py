@@ -303,7 +303,9 @@ WSGI_APPLICATION = 'wsgi.application'
 
 # ######### PIPELINE CONFIGURATION
 STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
-PIPELINE_YUI_JS_ARGUMENTS = 'mangle:False'
+PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.uglifyjs.UglifyJSCompressor'
+PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.cssmin.CSSMinCompressor'
+PIPELINE_DISABLE_WRAPPER = True
 
 PIPELINE_CSS = {
     'base': {
