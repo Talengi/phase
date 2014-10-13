@@ -467,6 +467,10 @@ class ProtectedDownload(LoginRequiredMixin, View):
             settings.REVISION_FILES_ROOT,
             clean_name)
 
+        file_url = os.path.join(
+            settings.REVISION_FILES_URL,
+            clean_name)
+
         if not os.path.exists(full_path):
             raise Http404('File not found. Check the name.')
 
@@ -479,6 +483,7 @@ class ProtectedDownload(LoginRequiredMixin, View):
             response['Content-Disposition'] = 'attachment; filename=%s' % file_name
             response['Content-Type'] = ''  # Apache will guess this
             response['X-Sendfile'] = full_path
+            response['X-Accel-Redirect '] = file_url
             return response
         else:
             return serve(request, clean_name, settings.REVISION_FILES_ROOT)
