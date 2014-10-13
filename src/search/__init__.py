@@ -4,10 +4,12 @@ from __future__ import unicode_literals
 
 from django.conf import settings
 
-from elasticsearch import Elasticsearch
+from elasticsearch import Elasticsearch, RequestsHttpConnection
 
 
-elastic = Elasticsearch(settings.ELASTIC_HOSTS)
+elastic = Elasticsearch(
+    settings.ELASTIC_HOSTS,
+    connection_class=RequestsHttpConnection)
 
 
 # TODO On migration to Django 1.7, see
