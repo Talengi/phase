@@ -6,7 +6,6 @@ except ImportError:
 
 from django.utils import timezone
 from django.conf import settings
-from django.core.cache import cache
 from django.http import (
     HttpResponse, Http404, HttpResponseForbidden, HttpResponseRedirect
 )
@@ -225,8 +224,6 @@ class BaseDocumentFormView(DocumentFormMixin,
         document, self.object, self.revision = save_document_forms(
             document_form, revision_form, self.category
         )
-        cache.clear()
-
         return HttpResponseRedirect(self.get_success_url())
 
     def form_invalid(self, document_form, revision_form):
@@ -303,7 +300,6 @@ class DocumentCreate(PermissionRequiredMixin,
         """Saves both the document and it's revision."""
         doc, metadata, revision = save_document_forms(
             document_form, revision_form, self.category)
-        cache.clear()
 
         message_text = '''You created the document
                        <a href="%(url)s">%(key)s (%(title)s)</a>'''
@@ -408,8 +404,6 @@ class DocumentRevise(DocumentEdit):
         """Saves both the document and it's revision."""
         document, self.object, self.revision = save_document_forms(
             document_form, revision_form, self.category)
-
-        cache.clear()
 
         message_text = '''You created revision %(rev)s for document
                        <a href="%(url)s">%(key)s (%(title)s)</a>'''

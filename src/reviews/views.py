@@ -10,7 +10,6 @@ from django.http import HttpResponseRedirect, Http404
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext, ugettext_lazy as _
 from django.db.models import Q
-from django.core.cache import cache
 from django.utils import timezone
 
 from accounts.views import LoginRequiredMixin, PermissionRequiredMixin
@@ -146,8 +145,6 @@ class BatchReview(BaseDocumentList):
                 ok_message,
                 ok_list
             ))
-
-            cache.clear()
 
         if len(nok) > 0:
             nok_message = ugettext("We failed to start the review for the following documents:")
