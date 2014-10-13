@@ -215,10 +215,16 @@ class ReviewMixin(models.Model):
         Also ends the first step if it wasn't already done.
 
         """
-        self.leader_step_closed = datetime.date.today()
-
         if self.reviewers_step_closed is None:
             self.end_reviewers_step(save=False)
+
+        self.leader_step_closed = datetime.date.today()
+
+        Review.objects \
+            .filter(document=self.document) \
+            .filter(revision=self.revision) \
+            .filter(role=Review.ROLES.leader) \
+            .update(closed=True)
 
         if save:
             self.save(update_document=True)
@@ -229,10 +235,16 @@ class ReviewMixin(models.Model):
         Also ends the steps before.
 
         """
-        self.review_end_date = datetime.date.today()
-
         if self.leader_step_closed is None:
             self.end_leader_step(save=False)
+
+        self.review_end_date = datetime.date.today()
+
+        Review.objects \
+            .filter(document=self.document) \
+            .filter(revision=self.revision) \
+            .filter(role=Review.ROLES.approver) \
+            .update(closed=True)
 
         if save:
             self.save(update_document=True)
