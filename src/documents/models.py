@@ -287,6 +287,12 @@ class MetadataRevision(models.Model):
         get_latest_by = 'revision'
         unique_together = ('document', 'revision')
 
+    def save(self, *args, **kwargs):
+        super(MetadataRevision, self).save(*args, **kwargs)
+
+        self.document.updated_on = timezone.now()
+        self.document.save()
+
     @property
     def name(self):
         """A revision identifier should be displayed with two digits"""
