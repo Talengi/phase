@@ -394,7 +394,7 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
 # ######### SEARCH CONFIG
-ELASTIC_HOSTS = [{'host': 'localhost', 'port': '9200'}]
+ELASTIC_HOSTS = [{'host': 'localhost', 'port': 9200}]
 ELASTIC_INDEX = 'documents'
 ELASTIC_AUTOINDEX = True
 
