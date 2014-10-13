@@ -389,9 +389,9 @@ REST_FRAMEWORK = {
 
 # ######### CELERY CONFIG
 BROKER_URL = 'amqp://guest:guest@localhost:5672/'
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
+CELERY_ACCEPT_CONTENT = ['betterjson']
+CELERY_TASK_SERIALIZER = 'betterjson'
+CELERY_RESULT_SERIALIZER = 'betterjson'
 
 # ######### SEARCH CONFIG
 ELASTIC_HOSTS = [{'host': 'localhost', 'port': 9200}]
