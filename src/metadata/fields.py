@@ -1,23 +1,33 @@
+# -*- coding: utf-8 -*-
+
+from __future__ import unicode_literals
+
 from django.db import models
 from django.core.exceptions import ImproperlyConfigured
 from django.db.models.fields import BLANK_CHOICE_DASH
 from django.db.utils import DatabaseError
+from django.core.cache import cache
 
 
 def get_choices_from_list(list_index):
     """Creates a list of values from data in db."""
     from .models import ListEntry
-    try:
-        values = ListEntry.objects \
-            .filter(values_list__index=list_index) \
-            .values_list('index', 'value')
 
-        # Execute query now, so we can catch any database error
-        # For example if db does not exists, and we are trying to
-        # run manage.py syncdb
-        values = [(key, '%s - %s' % (key, value)) for key, value in values]
-    except DatabaseError:
-        values = None
+    values = cache.get(list_index)
+    if values is None:
+        try:
+            values = ListEntry.objects \
+                .select_related('values_list') \
+                .filter(values_list__index=list_index) \
+                .values_list('index', 'value')
+
+            # Execute query now, so we can catch any database error
+            # For example if db does not exists, and we are trying to
+            # run manage.py syncdb
+            values = [(key, '%s - %s' % (key, value)) for key, value in values]
+            cache.set(list_index, values, None)
+        except DatabaseError:
+            values = None
 
     return values
 
@@ -35,11 +45,6 @@ class ConfigurableChoiceField(models.CharField):
         super(ConfigurableChoiceField, self).__init__(*args, **defaults)
 
     def _get_choices(self):
-        if self._choices == []:
-            choices = get_choices_from_list(self.list_index)
-            if choices:
-                self._choices = choices
-            else:
-                return list(BLANK_CHOICE_DASH)
-        return self._choices
+        choices = get_choices_from_list(self.list_index)
+        return choices if choices else list(BLANK_CHOICE_DASH)
     choices = property(_get_choices)

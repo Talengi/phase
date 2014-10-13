@@ -1,5 +1,11 @@
+# -*- coding: utf-8 -*-
+
+from __future__ import unicode_literals
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+
+from django.core.cache import cache
 
 
 class ValuesList(models.Model):
@@ -45,3 +51,7 @@ class ListEntry(models.Model):
 
     def __unicode__(self):
         return '%s - %s' % (self.index, self.value)
+
+    def save(self, *args, **kwargs):
+        super(ListEntry, self).save(*args, **kwargs)
+        cache.delete(self.values_list.index)
