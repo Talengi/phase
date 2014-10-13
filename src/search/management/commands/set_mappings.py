@@ -17,6 +17,6 @@ class Command(BaseCommand):
             doc_class = category.document_class()
             self.stdout.write('Creating mapping for document type %s' % doc_class.__name__)
             try:
-                put_category_mapping(category)
+                put_category_mapping(category.id)
             except ConnectionError:
                 raise CommandError('Elasticsearch cannot be found')
