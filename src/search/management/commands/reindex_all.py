@@ -41,4 +41,4 @@ class Command(BaseCommand):
         # be used exceptionnaly (e.g post syncdb)
         docs = Document.objects.all()
         for doc in docs:
-            index_document(doc)
+            index_document.delay(doc.id, doc.document_type(), doc.to_json())

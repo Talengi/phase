@@ -304,12 +304,19 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
             (self.object.is_at_review_step('leader') and user == self.object.leader),
             (self.object.is_at_review_step('reviewer') and self.object.is_reviewer(user))
         ))
+        is_leader = user == self.object.leader
+        is_approver = self.object.approver
+        close_reviewers_button = self.object.is_at_review_step('reviewer') and (is_leader or is_approver)
+        close_leader_button = self.object.is_at_review_step('leader') and is_approver
+
         context.update({
             'revision': self.object,
             'reviews': self.object.get_reviews(),
-            'is_leader': user == self.object.leader,
-            'is_approver': user == self.object.approver,
+            'is_leader': is_leader,
+            'is_approver': is_approver,
             'can_comment': can_comment,
+            'close_reviewers_button': close_reviewers_button,
+            'close_leader_button': close_leader_button,
         })
         return context
 

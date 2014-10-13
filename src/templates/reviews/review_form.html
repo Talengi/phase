@@ -132,15 +132,15 @@
                name="review"
                value="{{ _('Finish review') }}" />
 
-        {% if is_leader or is_approver %}
-            <input class="btn btn-warning{% if revision.current_review_step != 'reviewer' %} disabled{% endif %}"
+        {% if close_reviewers_button %}
+            <input class="btn btn-warning"
                    type="submit"
                    name="close_reviewers_step"
                    value="{{ _('Close reviewers step') }}" />
         {% endif %}
 
-        {% if is_approver %}
-            <input class="btn btn-warning last-button{% if revision.current_review_step == 'approver' %} disabled{% endif %}"
+        {% if close_leader_button %}
+            <input class="btn btn-warning"
                    type="submit"
                    name="close_leader_step"
                    value="{{ _('Close leader step') }}" />
