@@ -287,11 +287,12 @@ class MetadataRevision(models.Model):
         get_latest_by = 'revision'
         unique_together = ('document', 'revision')
 
-    def save(self, *args, **kwargs):
+    def save(self, update_document=False, *args, **kwargs):
         super(MetadataRevision, self).save(*args, **kwargs)
 
-        self.document.updated_on = timezone.now()
-        self.document.save()
+        if update_document:
+            self.document.updated_on = timezone.now()
+            self.document.save()
 
     @property
     def name(self):

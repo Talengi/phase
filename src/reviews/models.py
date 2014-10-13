@@ -149,7 +149,7 @@ class ReviewMixin(models.Model):
         duration = settings.REVIEW_DURATION
         self.review_start_date = today
         self.review_due_date = today + datetime.timedelta(days=duration)
-        self.save()
+        self.save(update_document=True)
 
         for user in self.reviewers.all():
             Review.objects.create(
@@ -193,7 +193,7 @@ class ReviewMixin(models.Model):
         self.review_end_date = None
         self.reviewers_step_closed = None
         self.leader_step_closed = None
-        self.save()
+        self.save(update_document=True)
 
     @transaction.atomic
     def end_reviewers_step(self, save=True):
@@ -207,7 +207,7 @@ class ReviewMixin(models.Model):
             .update(closed=True)
 
         if save:
-            self.save()
+            self.save(update_document=True)
 
     def end_leader_step(self, save=True):
         """Ends the second step of the review.
@@ -221,7 +221,7 @@ class ReviewMixin(models.Model):
             self.end_reviewers_step(save=False)
 
         if save:
-            self.save()
+            self.save(update_document=True)
 
     def end_review(self, save=True):
         """Ends the review.
@@ -235,7 +235,7 @@ class ReviewMixin(models.Model):
             self.end_leader_step(save=False)
 
         if save:
-            self.save()
+            self.save(update_document=True)
 
     def is_under_review(self):
         """It's under review only if review has started but not ended."""
