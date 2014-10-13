@@ -10,7 +10,6 @@ from django.db import models
 from elasticsearch.exceptions import ConnectionError
 
 from core.celery import app
-from documents.models import Document
 from categories.models import Category
 from search import elastic
 from django.conf import settings
@@ -110,15 +109,14 @@ def get_mapping_type(field):
 
 
 @app.task
-def index_document(document_id):
+def index_document(document_id, document_type, document_json):
     """Stores a document into the ES index."""
-    document = Document.objects.get(pk=document_id)
     try:
         elastic.index(
             index=settings.ELASTIC_INDEX,
-            doc_type=document.document_type(),
-            id=document.pk,
-            body=document.to_json()
+            doc_type=document_type,
+            id=document_id,
+            body=document_json,
         )
     except ConnectionError:
         logger.error('Error connecting to ES. The doc %d will no be indexed' % document_id)
