@@ -2,11 +2,18 @@
 
 from __future__ import unicode_literals
 
+import logging
+
 from django.db.models.fields import FieldDoesNotExist
 from django.db import models
 
+from elasticsearch.exceptions import ConnectionError
+
 from search import elastic
 from django.conf import settings
+
+
+logger = logging.getLogger(__name__)
 
 
 TYPE_MAPPING = [
@@ -96,18 +103,24 @@ def get_mapping_type(field):
 
 def index_document(document):
     """Stores a document into the ES index."""
-    elastic.index(
-        index=settings.ELASTIC_INDEX,
-        doc_type=document.document_type(),
-        id=document.pk,
-        body=document.to_json()
-    )
+    try:
+        elastic.index(
+            index=settings.ELASTIC_INDEX,
+            doc_type=document.document_type(),
+            id=document.pk,
+            body=document.to_json()
+        )
+    except ConnectionError:
+        logger.error('Error connecting to ES. The doc %d will no be indexed' % document.pk)
 
 
 def unindex_document(document):
     """Removes the document from the index."""
-    elastic.delete(
-        index=settings.ELASTIC_INDEX,
-        doc_type=document.document_type(),
-        id=document.pk
-    )
+    try:
+        elastic.delete(
+            index=settings.ELASTIC_INDEX,
+            doc_type=document.document_type(),
+            id=document.pk
+        )
+    except ConnectionError:
+        logger.error('Error connecting to ES. The doc %d will no be un-indexed' % document.pk)
