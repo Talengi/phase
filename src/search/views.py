@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+
+from __future__ import unicode_literals
+
 from django.db import models
 from elasticsearch_dsl import Search
 from braces.views import JSONResponseMixin
@@ -21,11 +25,44 @@ class SearchDocuments(JSONResponseMixin, BaseDocumentList):
         total = response.hits.total
         display = min(end, total)
         search_data = [hit._d_ for hit in response.hits]
+        aggregations = self.format_aggregations(response.aggregations)
+
         return {
             'total': total,
             'display': display,
-            'data': search_data
+            'data': search_data,
+            'aggregations': aggregations,
         }
+
+    def format_aggregations(self, aggregations):
+        """Transfroms the ES "aggregations" response into something we can use.
+
+        aggregations = {
+            'filter_name': {
+                'buckets': [
+                    {'key': 'some_name', 'doc_count': 123},
+                    …
+                ]
+            },
+            …
+        }
+
+        We want :
+
+        aggregations = {
+            'filter_name': [{'some_name': 123}, …],
+            …
+        }
+
+        """
+        def flatten(bucket):
+            key = bucket[0]
+            buckets = bucket[1]['buckets']
+            bucket_values = dict([(b['key'], b['doc_count']) for b in buckets])
+            return (key, bucket_values)
+        buckets = aggregations.to_dict().items()
+        response = dict(map(flatten, buckets))
+        return response
 
     def get_queryset(self):
         """Given DataTables' GET parameters, filter the initial queryset."""
@@ -38,6 +75,7 @@ class SearchDocuments(JSONResponseMixin, BaseDocumentList):
                 self.category.document_type(),
                 form.cleaned_data)
             response = s.execute()
+
             return response
 
         return []
@@ -59,6 +97,10 @@ class SearchDocuments(JSONResponseMixin, BaseDocumentList):
                 else:
                     field = '%s.raw' % field
                 s = s.filter({'term': {field: value}})
+
+        # Aggregations (facets)
+        for field in filter_fields:
+            s.aggs.bucket(field, 'terms', field='%s.raw' % field, size=0)
 
         # Search query
         search_terms = data.get('search_terms', None)

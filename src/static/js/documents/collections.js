@@ -10,6 +10,7 @@ var Phase = Phase || {};
         url: Phase.Config.searchUrl,
         parse: function(response) {
             this.total = response.total;
+            this.aggregations = response.aggregations;
             return response.data;
         }
     });

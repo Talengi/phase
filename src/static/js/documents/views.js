@@ -50,10 +50,12 @@ var Phase = Phase || {};
         onDocumentsFetched: function() {
             var displayedDocuments = this.documentsCollection.length;
             var totalDocuments = this.documentsCollection.total;
+            var aggregations = this.documentsCollection.aggregations;
             dispatcher.trigger('onDocumentsFetched', {
                 displayed: displayedDocuments,
                 total: totalDocuments
             });
+            dispatcher.trigger('onAggregationsFetched', aggregations);
         },
         onMoreDocumentsRequested: function() {
             this.search.nextPage();
@@ -329,12 +331,13 @@ var Phase = Phase || {};
             'click #resetForm': 'resetForm'
         },
         initialize: function() {
-            _.bindAll(this, 'updateFormAttribute');
+            _.bindAll(this, 'updateFormAttribute', 'updateFacets', 'updateFacet');
 
             this.filterForm = this.$el.find('form').first();
             this.filterForm.get(0).reset();
 
             this.listenTo(dispatcher, 'onSearchFormDisplayed', this.showSearchForm);
+            this.listenTo(dispatcher, 'onAggregationsFetched', this.updateFacets);
             this.listenTo(this.model, 'change', this.updateForm);
         },
         updateForm: function() {
@@ -385,6 +388,45 @@ var Phase = Phase || {};
             var spans = this.$el.find('span.glyphicon-remove');
             spans.css('display', 'none');
             this.debouncedSearch();
+        },
+        updateFacets: function(aggregations) {
+            _.each(aggregations, this.updateFacet);
+        },
+        /**
+         * Get the buckets values from Elasticsearch aggregations, and
+         * update the filter fields display accordingly.
+         */
+        updateFacet: function(buckets, facet) {
+            // Let's get the field, and loop on every "option" tag
+            var field = this.filterForm.find('#id_' + facet).first();
+            var options = field.children('option');
+            var option_text_re = /^(.+) \(\d+\)$/i;
+            _.each(options, function(option) {
+                var option = $(option);
+                var text = option.text();
+                var val = option.val();
+
+                // This is the "--------" first option
+                if (val === '') {
+                    return;
+                }
+
+
+                // Strips existing count suffix
+                var match = option_text_re.exec(text);
+                if (match !== null) {
+                    text = match[1];
+                }
+
+                // ES doesn'nt return a value if the bucket is empty
+                var bucket_number = buckets[val];
+                if (bucket_number === undefined) {
+                    bucket_number = 0;
+                }
+
+                text = text + ' (' + bucket_number + ')';
+                option.text(text);
+            });
         }
     });
 
