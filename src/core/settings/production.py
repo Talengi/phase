@@ -66,4 +66,4 @@ SECRET_KEY = get_prod_setting('SECRET_KEY')
 
 # ######### CUSTOM CONFIGURATION
 ALLOWED_HOSTS = get_prod_setting('ALLOWED_HOSTS')
-USE_X_SENDFILE = False
+USE_X_SENDFILE = True
