@@ -58413,7 +58413,14 @@
     "status": "FIN",
     "native_file": "",
     "pdf_file": "",
-    "reviewers": [],
+    "reviewers": [
+      [
+        "admin@phase.fr"
+      ],
+      [
+        "dc@phase.fr"
+      ]
+    ],
     "approver": [
       "dc@phase.fr"
     ],
