@@ -468,7 +468,7 @@ class ProtectedDownload(LoginRequiredMixin, View):
             clean_path)
 
         file_url = os.path.join(
-            settings.PRIVATE_URL,
+            settings.NGING_X_ACCEL_PREFIX,
             clean_path)
 
         if not os.path.exists(full_path):
