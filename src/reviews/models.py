@@ -12,6 +12,14 @@ from documents.fields import PrivateFileField
 from reviews.fileutils import review_comments_file_path
 
 
+CLASSES = (
+    (1, '1'),
+    (2, '2'),
+    (3, '3'),
+    (4, '4'),
+)
+
+
 class Review(models.Model):
     STEPS = Choices(
         ('pending', _('Pending')),
@@ -43,6 +51,14 @@ class Review(models.Model):
     revision = models.PositiveIntegerField(
         _('Revision')
     )
+    due_date = models.DateField(
+        _('Review due date'),
+        null=True, blank=True
+    )
+    klass = models.IntegerField(
+        verbose_name=u"Class",
+        default=1,
+        choices=CLASSES)
     reviewed_on = models.DateTimeField(
         _('Reviewed on'),
         null=True, blank=True
@@ -69,12 +85,6 @@ class Review(models.Model):
 
 class ReviewMixin(models.Model):
     """A Mixin to use to define reviewable document types."""
-    CLASSES = (
-        (1, '1'),
-        (2, '2'),
-        (3, '3'),
-        (4, '4'),
-    )
 
     review_start_date = models.DateField(
         _('Review start date'),
@@ -155,7 +165,9 @@ class ReviewMixin(models.Model):
             Review.objects.create(
                 reviewer=user,
                 document=self.document,
-                revision=self.revision
+                revision=self.revision,
+                due_date=self.review_due_date,
+                klass=self.klass,
             )
 
         Review.objects.create(
@@ -163,6 +175,8 @@ class ReviewMixin(models.Model):
             role=Review.ROLES.leader,
             document=self.document,
             revision=self.revision,
+            due_date=self.review_due_date,
+            klass=self.klass,
         )
 
         Review.objects.create(
@@ -170,6 +184,8 @@ class ReviewMixin(models.Model):
             role=Review.ROLES.approver,
             document=self.document,
             revision=self.revision,
+            due_date=self.review_due_date,
+            klass=self.klass,
         )
 
     @transaction.atomic

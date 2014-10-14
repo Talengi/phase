@@ -10,8 +10,8 @@
     <ul id="nav-reviews" class="nav nav-stacked collapse">
         <li>
             <a href="{% url 'priorities_review_document_list' %}">
-                {{ _('Priorities') }}
                 <span class="glyphicon glyphicon-fire"></span>
+                {{ _('Priorities') }} ({{ priorities_count }})
             </a>
         </li>
         <li>

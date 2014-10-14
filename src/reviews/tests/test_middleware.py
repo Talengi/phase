@@ -5,10 +5,12 @@ from __future__ import unicode_literals
 from django.test import TestCase
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
+from django.utils import timezone
 
 from categories.factories import CategoryFactory
 from documents.factories import DocumentFactory
 from accounts.factories import UserFactory
+from reviews.models import Review
 
 
 class ReviewCountMiddleware(TestCase):
@@ -83,3 +85,19 @@ class ReviewCountMiddleware(TestCase):
         self.assertContains(res, 'Reviewer (1)')
         self.assertContains(res, 'Leader (1)')
         self.assertContains(res, 'Approver (1)')
+
+    def test_prioritary_review_count(self):
+        doc = DocumentFactory(
+            revision={
+                'reviewers': [self.user],
+                'leader': self.user,
+                'approver': self.other_user,
+                'klass': 1,
+            }
+        )
+        revision = doc.latest_revision
+        revision.start_review()
+        Review.objects.update(due_date=timezone.now())
+
+        res = self.client.get(self.url)
+        self.assertContains(res, 'Priorities (1)')
