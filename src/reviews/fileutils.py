@@ -8,7 +8,7 @@ def review_comments_file_path(review, filename):
         Review.ROLES.approver: 'GTG',
     }
 
-    return "{key}_{revision}_{role}_comments.{extension}".format(
+    return "reviews/{key}_{revision}_{role}_comments.{extension}".format(
         key=review.document.document_key,
         revision=review.revision_name,
         role=role_part[review.role],

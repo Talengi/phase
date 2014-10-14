@@ -23,9 +23,6 @@ CONFIGURATION_APP_ROOT = Path(__file__).ancestor(2)
 # Path to public files (served by the web server)
 PUBLIC_ROOT = SITE_ROOT.child('public')
 
-# Path to private files (must be served with X-SENDFILE)
-PRIVATE_ROOT = SITE_ROOT.child('private')
-
 # Add our project to our pythonpath, this way we don't need to type our project
 # name in our dotted import paths:
 path.append(DJANGO_ROOT)
@@ -409,8 +406,8 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 CRISPY_FAIL_SILENTLY = False
 REVIEW_DURATION = 13
 
-# Where should revisions' files go
-REVISION_FILES_ROOT = PRIVATE_ROOT.child('documents')
-REVISION_FILES_URL = '/files/'
+# Path to private files (must be served with X-SENDFILE)
+PRIVATE_ROOT = SITE_ROOT.child('private')
+PRIVATE_URL = '/private/'
 USE_X_SENDFILE = DEBUG
 # ######### END CUSTOM CONFIGURATION

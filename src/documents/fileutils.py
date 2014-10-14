@@ -8,7 +8,7 @@ def revision_file_path(revision, filename):
     based on the document number and the revision.
 
     """
-    return "{key}_{revision}.{extension}".format(
+    return "revisions/{key}_{revision}.{extension}".format(
         key=revision.document.document_key,
         revision=revision.name,
         extension=filename.split('.')[-1]
@@ -16,5 +16,5 @@ def revision_file_path(revision, filename):
 
 
 # Revision documents
-private_storage = FileSystemStorage(location=settings.REVISION_FILES_ROOT,
-                                    base_url=settings.REVISION_FILES_URL)
+private_storage = FileSystemStorage(location=settings.PRIVATE_ROOT,
+                                    base_url=settings.PRIVATE_URL)
