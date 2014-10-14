@@ -174,6 +174,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 
     # Custom middlewares
+    'reviews.middleware.ReviewCountMiddleware',
 )
 # ######### END MIDDLEWARE CONFIGURATION
 
