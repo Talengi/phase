@@ -15,6 +15,13 @@ server {
         alias   /home/phase/phase/public/media/;
     }
 
+    # Phase use x-sendfile / x-accel to serve protected file
+    # directly using the server.
+    location /xaccel/ {
+        internal;
+        alias /home/phase/phase/private/;
+    }
+
     location / {
         proxy_pass http://phase;
         proxy_redirect off;
