@@ -456,23 +456,25 @@ class ProtectedDownload(LoginRequiredMixin, View):
     """
 
     def get(self, request, *args, **kwargs):
-        file_name = kwargs.get('file_name')
+        file_path = kwargs.get('file_path')
 
         # Prevent nasty things to happen
-        clean_name = os.path.normpath(unquote(file_name))
-        if clean_name.startswith('/') or '..' in clean_name:
+        clean_path = os.path.normpath(unquote(file_path))
+        if clean_path.startswith('/') or '..' in clean_path:
             raise Http404('Nice try!')
 
         full_path = os.path.join(
-            settings.REVISION_FILES_ROOT,
-            clean_name)
+            settings.PRIVATE_ROOT,
+            clean_path)
 
         file_url = os.path.join(
-            settings.REVISION_FILES_URL,
-            clean_name)
+            settings.PRIVATE_URL,
+            clean_path)
 
         if not os.path.exists(full_path):
             raise Http404('File not found. Check the name.')
+
+        file_name = os.path.basename(clean_path)
 
         # The X-sendfile Apache module makes it possible to serve file
         # directly from apache, but keeping a control from Django.
@@ -486,4 +488,4 @@ class ProtectedDownload(LoginRequiredMixin, View):
             response['X-Accel-Redirect '] = file_url
             return response
         else:
-            return serve(request, clean_name, settings.REVISION_FILES_ROOT)
+            return serve(request, clean_path, settings.PRIVATE_ROOT)

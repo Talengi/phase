@@ -2,7 +2,7 @@ from django.conf.urls import patterns, url
 
 from documents.views import (
     DocumentList, DocumentCreate, DocumentDetail, DocumentEdit,
-    DocumentDownload, DocumentRedirect, DocumentRevise, ProtectedDownload
+    DocumentDownload, DocumentRedirect, DocumentRevise
 )
 
 urlpatterns = patterns(
@@ -17,9 +17,6 @@ urlpatterns = patterns(
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/download/$',
         DocumentDownload.as_view(),
         name="document_download"),
-    url(r'^files/(?P<file_name>[-\w.]+)/$',
-        ProtectedDownload.as_view(),
-        name="protected_download"),
 
     # Documents
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/$',
