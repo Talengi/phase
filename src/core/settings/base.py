@@ -144,6 +144,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'accounts.context_processors.navigation',
     'notifications.context_processors.notifications',
+    'reviews.context_processors.reviews',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-loaders
@@ -172,9 +173,6 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-
-    # Custom middlewares
-    'reviews.middleware.ReviewCountMiddleware',
 )
 # ######### END MIDDLEWARE CONFIGURATION
 

@@ -13,7 +13,7 @@ from accounts.factories import UserFactory
 from reviews.models import Review
 
 
-class ReviewCountMiddleware(TestCase):
+class ContextProcessorTests(TestCase):
 
     def setUp(self):
         cache.clear()
