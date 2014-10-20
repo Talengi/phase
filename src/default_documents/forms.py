@@ -1,7 +1,6 @@
 from django.utils.translation import ugettext_lazy as _
 
 from crispy_forms.layout import Layout, Field
-from crispy_forms.bootstrap import UneditableField
 
 from documents.forms.models import BaseDocumentForm
 from accounts.fields import UserChoiceField, UserMultipleChoiceField
@@ -67,8 +66,8 @@ class ContractorDeliverableRevisionForm(BaseDocumentForm):
             review_layout = (
                 DocumentFieldset(
                     _('Review'),
-                    UneditableField('review_start_date'),
-                    UneditableField('review_due_date'),
+                    Field('review_start_date', readonly='readonly'),
+                    Field('review_due_date', readonly='readonly'),
                     PropertyLayout('current_review_step'),
                     PropertyLayout('is_under_review'),
                     PropertyLayout('is_overdue'),
@@ -82,8 +81,8 @@ class ContractorDeliverableRevisionForm(BaseDocumentForm):
             review_layout = (
                 DocumentFieldset(
                     _('Review'),
-                    UneditableField('review_start_date'),
-                    UneditableField('review_due_date'),
+                    Field('review_start_date', readonly='readonly'),
+                    Field('review_due_date', readonly='readonly'),
                     PropertyLayout('current_review_step'),
                     PropertyLayout('is_under_review'),
                     PropertyLayout('is_overdue'),
@@ -291,8 +290,8 @@ class DemoMetadataRevisionForm(BaseDocumentForm):
             ),
             DocumentFieldset(
                 _('Review'),
-                UneditableField('review_start_date'),
-                UneditableField('review_due_date'),
+                Field('review_start_date', readonly='readonly'),
+                Field('review_due_date', readonly='readonly'),
                 PropertyLayout('is_under_review'),
                 PropertyLayout('is_overdue'),
                 'reviewers',
