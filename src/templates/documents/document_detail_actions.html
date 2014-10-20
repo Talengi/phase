@@ -19,37 +19,38 @@
             </ul>
         </div>
 
-        {% if latest_revision.is_under_review %}
-            <button type="button" class="btn btn-primary pull-right last-button disabled">{{ _('Create revision') }}</button>
+        <div class="btn-group {{ dropdirection}} pull-right">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                {{ _('Action') }} <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" role="menu">
 
-            {% if perms.documents.can_control_document %}
-                {% url "document_cancel_review" document.document_key as cancel_review_url %}
-                <form class="inlineform pull-right" method="post" action="{{ cancel_review_url }}">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-warning last-button">
-                        {{ _('Cancel review') }}
-                    </button>
-                </form>
-            {% endif %}
+                {% if latest_revision.is_under_review %}
+                    <li class="disabled"><a href="#">{{ _('Create revision') }}</a></li>
+                {% else %}
+                    {% url "document_revise" organisation_slug category_slug document.document_key as revise_url %}
+                    <li><a href="{{ revise_url }}">{{ _('Create revision') }}</a></li>
+                {% endif %}
 
-        {% else %}
-            {% url "document_revise" organisation_slug category_slug document.document_key as revise_url %}
-            <a href="{{ revise_url }}" class="btn btn-primary pull-right last-button">{{ _('Create revision') }}</a>
+                {% if latest_revision.is_under_review and perms.documents.can_control_document %}
+                    <li><a href="#" data-toggle="modal" data-target="#cancel-review-modal">{{ _('Cancel review') }}</a></li>
+                {% endif %}
 
-            {% if latest_revision.can_be_reviewed and perms.documents.can_control_document %}
-                {% url "document_start_review" organisation_slug category_slug document.document_key as review_url %}
-                <form class="inlineform pull-right" method="post" action="{{ review_url }}">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-warning">
-                        {{ _('Start review') }}
-                    </button>
-                </form>
-            {% else %}
-                <button type="button" class="btn btn-warning disabled pull-right">
-                    {{ _('Start review') }}
-                </button>
-            {% endif %}
-        {% endif %}
+                {% if not latest_revision.is_under_review %}
+                    {% if latest_revision.can_be_reviewed and perms.documents.can_control_document %}
+                        {% url "document_start_review" organisation_slug category_slug document.document_key as review_url %}
+                        <li>
+                            <form class="" method="post" action="{{ review_url }}">
+                                {% csrf_token %}
+                            </form>
+                            <a href="#" class="dropdown-submit">{{ _('Start review') }}</a>
+                        </li>
+                    {% else %}
+                        <li class="disabled"><a>{{ _('Start review') }}</a></li>
+                    {% endif %}
+                {% endif %}
 
+            </ul>
+        </div>
     {% endif %}
 </div>

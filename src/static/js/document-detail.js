@@ -32,6 +32,12 @@ jQuery(function($) {
         $(this).closest('div').find('.fileupload-preview').html('');
     });
 
+    /* Form in dropdown menu */
+    $('a.dropdown-submit').click(function(e) {
+        var form = $(this).prev('form');
+        form.submit();
+    });
+
     // Hide and show "back to top" link on scroll events
     var configureBackToTopLink = function() {
         var $window = $(window);
