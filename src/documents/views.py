@@ -152,7 +152,7 @@ class DocumentRedirect(RedirectView):
             document.document_key])
 
 
-class DocumentFormMixin(DocumentListMixin):
+class DocumentFormMixin(object):
     def breadcrumb_object(self):
         return self.object
 
@@ -199,7 +199,8 @@ class DocumentFormMixin(DocumentListMixin):
         return revision
 
 
-class BaseDocumentFormView(DocumentFormMixin,
+class BaseDocumentFormView(DocumentListMixin,
+                           DocumentFormMixin,
                            SingleObjectTemplateResponseMixin,
                            ModelFormMixin,
                            ProcessFormView):
@@ -234,7 +235,10 @@ class BaseDocumentFormView(DocumentFormMixin,
         ))
 
 
-class DocumentDetail(LoginRequiredMixin, DocumentFormMixin, DetailView):
+class DocumentDetail(LoginRequiredMixin,
+                     DocumentListMixin,
+                     DocumentFormMixin,
+                     DetailView):
     context_object_name = 'document'
     template_name = 'documents/document_detail.html'
 
