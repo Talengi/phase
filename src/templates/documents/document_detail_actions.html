@@ -50,7 +50,7 @@
                     {% endif %}
                 {% endif %}
 
-                {% if not latest_revision.is_under_review and perms.documents.can_control_document %}
+                {% if perms.documents.can_control_document %}
                     <li class="divider"></li>
                     <li><a href="#" data-toggle="modal" data-target="#delete-document-modal">
                         {{ _('Delete document') }} <span class="glyphicon glyphicon-warning-sign"></span>
