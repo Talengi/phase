@@ -20,6 +20,7 @@ from django.views.static import serve
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 from django.db import transaction
+from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 from rest_framework.renderers import JSONRenderer
 
 from favorites.models import Favorite
@@ -31,7 +32,6 @@ from documents.forms.models import documentform_factory
 from documents.forms.utils import DocumentDownloadForm
 from documents.forms.filters import filterform_factory
 from notifications.models import notify
-from accounts.views import LoginRequiredMixin, PermissionRequiredMixin
 
 
 class DocumentListMixin(object):

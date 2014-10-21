@@ -11,8 +11,8 @@ from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext, ugettext_lazy as _
 from django.db.models import Q
 from django.utils import timezone
+from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 
-from accounts.views import LoginRequiredMixin, PermissionRequiredMixin
 from documents.utils import get_all_revision_classes
 from documents.models import Document
 from documents.views import DocumentListMixin, BaseDocumentList

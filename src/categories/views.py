@@ -1,6 +1,6 @@
 from django.views.generic import ListView
+from braces.views import LoginRequiredMixin
 
-from accounts.views import LoginRequiredMixin
 from .models import Category
 
 

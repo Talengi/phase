@@ -3,8 +3,8 @@ from __future__ import unicode_literals
 from django.views.generic import CreateView, DetailView, ListView
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
+from braces.views import LoginRequiredMixin
 
-from accounts.views import LoginRequiredMixin
 from notifications.models import notify
 from imports.models import ImportBatch
 from imports.forms import FileUploadForm
