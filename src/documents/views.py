@@ -199,7 +199,9 @@ class DocumentFormMixin(object):
         return revision
 
 
-class BaseDocumentFormView(DocumentListMixin,
+class BaseDocumentFormView(LoginRequiredMixin,
+                           PermissionRequiredMixin,
+                           DocumentListMixin,
                            DocumentFormMixin,
                            SingleObjectTemplateResponseMixin,
                            ModelFormMixin,
@@ -276,8 +278,7 @@ class DocumentDetail(LoginRequiredMixin,
         return context
 
 
-class DocumentCreate(PermissionRequiredMixin,
-                     BaseDocumentFormView):
+class DocumentCreate(BaseDocumentFormView):
     permission_required = 'documents.add_document'
     context_object_name = 'document'
     template_name = 'documents/document_form.html'
@@ -331,8 +332,7 @@ class DocumentCreate(PermissionRequiredMixin,
         return url
 
 
-class DocumentEdit(PermissionRequiredMixin,
-                   BaseDocumentFormView):
+class DocumentEdit(BaseDocumentFormView):
     """Edit a document and a selected revision."""
     permission_required = 'documents.change_document'
     context_object_name = 'document'
