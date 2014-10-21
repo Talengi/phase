@@ -2,7 +2,7 @@
 
 from __future__ import unicode_literals
 
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_save, pre_delete
 from django.conf import settings
 
 from documents.models import Document
@@ -37,7 +37,7 @@ def save_mapping(sender, instance, **kwargs):
 
 def connect_signals():
     post_save.connect(update_index, sender=Document, dispatch_uid='update_index')
-    post_delete.connect(remove_from_index, sender=Document, dispatch_uid='remove_from_index')
+    pre_delete.connect(remove_from_index, sender=Document, dispatch_uid='remove_from_index')
     post_save.connect(save_mapping, sender=Category, dispatch_uid='put_category_mapping')
 
 
