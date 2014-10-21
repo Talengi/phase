@@ -1,5 +1,5 @@
-Phase in production
-###################
+Phase deployment
+################
 
 Phase is designed to be a lightweight alternative to traditional bloated and slow
 DMS. Hence a Phase instance can be run on a single virtual machine.
@@ -85,6 +85,26 @@ Add those lines in the ``~/.profile`` file::
 Then::
 
     source ~.profile
+
+
+Elasticsearch configuration
+---------------------------
+
+Phase uses `Elasticsearch <http://www.elasticsearch.org/>`_ to index documents
+and provides search features.
+
+The default Elasticsearch installation is enough, but remember that ES listens
+on 0.0.0.0 by default, which can be inconveniant.
+
+To limit ES connections to localhost, one can update the config file
+``/etc/elasticsearch/elasticsearch.yml`` as is:
+
+    …
+    network.host: 127.0.0.1
+    …
+
+You also need to make sure that your virtual machine has enough memory
+available.
 
 Phase installation
 ------------------
