@@ -381,11 +381,23 @@ class DocumentDelete(LoginRequiredMixin,
     raise_exception = True
     http_method_names = ['post']
 
+    def delete(self, request, *args, **kwargs):
+        """Delete the document and associated data.
+
+        We need to delete the top level document object. Thus, metadata and
+        revisions will also be deleted.
+
+        """
+        document = self.object.document
+        success_url = self.get_success_url()
+        document.delete()
+        return HttpResponseRedirect(success_url)
+
     def post(self, request, *args, **kwargs):
-        document = self.get_object()
-        if document.latest_revision.is_under_review():
+        self.object = self.get_object()
+        if self.object.latest_revision.is_under_review():
             return HttpResponseForbidden('Documents under review cannot be deleted')
-        return super(DocumentDelete, self).post(request, *args, **kwargs)
+        return self.delete(request, *args, **kwargs)
 
     def get_success_url(self):
         return self.category.get_absolute_url()

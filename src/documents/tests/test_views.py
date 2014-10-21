@@ -11,6 +11,7 @@ from django.conf import settings
 from accounts.factories import UserFactory
 from categories.factories import CategoryFactory
 from default_documents.factories import MetadataRevisionFactory
+from default_documents.models import DemoMetadata, DemoMetadataRevision
 from documents.factories import DocumentFactory
 from documents.tests.utils import generate_random_documents
 from documents.models import Document
@@ -385,6 +386,12 @@ class DocumentDeleteTests(TestCase):
 
         res = self.client.post(delete_url)
         self.assertEqual(res.status_code, 404)
+
+        metadata = DemoMetadata.objects.filter(document=document)
+        self.assertEqual(metadata.count(), 0)
+
+        revisions = DemoMetadataRevision.objects.filter(document=document)
+        self.assertEqual(revisions.count(), 0)
 
     def test_cannot_revise_document_in_review(self):
         document = DocumentFactory(
