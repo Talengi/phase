@@ -1,4 +1,6 @@
-{% if user.is_superuser %}
-    <li><a href="{% url "admin:index" %}">Admin</a></li>
-{% endif %}
-<li><a href="{% url "logout" %}">Log out</a></li>
+<ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="user-dropdown">
+    {% if user.is_superuser %}
+        <li><a href="{% url "admin:index" %}">Admin</a></li>
+    {% endif %}
+    <li><a href="{% url "logout" %}">Log out</a></li>
+</ul>

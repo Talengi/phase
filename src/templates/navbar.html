@@ -20,9 +20,16 @@
             <span class="glyphicon glyphicon-bell"></span>
         </button>
 
-        <p class="navbar-text navbar-right hidden-xs">
-            Hello {{ user.get_full_name }}
-        </p>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+            <a id="user-dropdown" href="#" class="dropdown-toggle navbar-link" data-toggle="dropdown">
+                Hello {{ user.get_full_name }}
+                <span class="caret"></span>
+            </a>
+            {% include 'accounts/user_menu.html' %}
+            </li>
+        </li>
+
 
     {% endif %}
 
