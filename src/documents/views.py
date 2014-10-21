@@ -11,7 +11,7 @@ from django.http import (
 )
 from django.core.servers.basehttp import FileWrapper
 from django.views.generic import (
-    View, ListView, DetailView, RedirectView)
+    View, ListView, DetailView, RedirectView, DeleteView)
 from django.views.generic.edit import (
     ModelFormMixin, ProcessFormView, SingleObjectTemplateResponseMixin)
 from django.core.urlresolvers import reverse
@@ -370,6 +370,25 @@ class DocumentEdit(BaseDocumentFormView):
                 self.kwargs['category'],
             ])
         return url
+
+
+class DocumentDelete(LoginRequiredMixin,
+                     PermissionRequiredMixin,
+                     DocumentListMixin,
+                     DeleteView):
+    """Edit a document and a selected revision."""
+    permission_required = 'documents.can_control_document'
+    raise_exception = True
+    http_method_names = ['post']
+
+    def post(self, request, *args, **kwargs):
+        document = self.get_object()
+        if document.latest_revision.is_under_review():
+            return HttpResponseForbidden('Documents under review cannot be deleted')
+        return super(DocumentDelete, self).post(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return self.category.get_absolute_url()
 
 
 class DocumentRevise(DocumentEdit):

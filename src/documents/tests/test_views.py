@@ -13,6 +13,7 @@ from categories.factories import CategoryFactory
 from default_documents.factories import MetadataRevisionFactory
 from documents.factories import DocumentFactory
 from documents.tests.utils import generate_random_documents
+from documents.models import Document
 
 
 class GenericViewTest(TestCase):
@@ -346,4 +347,87 @@ class DocumentReviseTests(TestCase):
         ])
 
         res = self.client.get(url)
+        self.assertEqual(res.status_code, 403)
+
+
+class DocumentDeleteTests(TestCase):
+
+    def setUp(self):
+        self.category = CategoryFactory()
+        user = UserFactory(
+            email='testadmin@phase.fr',
+            password='pass',
+            is_superuser=True,
+            category=self.category,
+        )
+        self.client.login(email=user.email, password='pass')
+        self.doc_list_url = self.category.get_absolute_url()
+
+    def test_delete_page_only_post(self):
+        document = DocumentFactory(category=self.category)
+        delete_url = reverse('document_delete', args=[
+            self.category.organisation.slug,
+            self.category.slug,
+            document.document_key
+        ])
+        res = self.client.get(delete_url)
+        self.assertEqual(res.status_code, 405)
+
+    def test_delete_document(self):
+        document = DocumentFactory(category=self.category)
+        delete_url = reverse('document_delete', args=[
+            self.category.organisation.slug,
+            self.category.slug,
+            document.document_key
+        ])
+        res = self.client.post(delete_url)
+        self.assertRedirects(res, self.category.get_absolute_url())
+
+        res = self.client.post(delete_url)
+        self.assertEqual(res.status_code, 404)
+
+    def test_cannot_revise_document_in_review(self):
+        document = DocumentFactory(
+            category=self.category,
+            document_key='FAC09001-FWF-000-HSE-REP-0004',
+            revision={
+                'status': 'STD',
+                'review_start_date': '2014-04-04'
+            }
+        )
+        delete_url = reverse('document_delete', args=[
+            self.category.organisation.slug,
+            self.category.slug,
+            document.document_key
+        ])
+
+        revision = document.latest_revision
+        self.assertTrue(revision.is_under_review)
+
+        res = self.client.post(delete_url)
+        self.assertEqual(res.status_code, 403)
+
+        try:
+            document = Document.objects.get(document_key=document.document_key)
+        except:
+            self.fail('Document was deleted')
+
+    def test_simple_user_cannot_delete_document(self):
+        user = UserFactory(
+            email='testuser@phase.fr',
+            password='pass',
+            is_superuser=False,
+            category=self.category,
+        )
+
+        self.client.login(email=user.email, password='pass')
+        document = DocumentFactory(category=self.category)
+        delete_url = reverse('document_delete', args=[
+            self.category.organisation.slug,
+            self.category.slug,
+            document.document_key
+        ])
+
+        res = self.client.post(delete_url)
+
         self.assertEqual(res.status_code, 403)
