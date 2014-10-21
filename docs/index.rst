@@ -7,6 +7,6 @@ Welcome to Phase's documentation!
    getting_started.rst
    usage.rst
    customizing.rst
-   production.rst
+   deployment.rst
    colophon.rst
 
