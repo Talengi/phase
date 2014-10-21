@@ -97,7 +97,7 @@ The default Elasticsearch installation is enough, but remember that ES listens
 on 0.0.0.0 by default, which can be inconveniant.
 
 To limit ES connections to localhost, one can update the config file
-``/etc/elasticsearch/elasticsearch.yml`` as is:
+``/etc/elasticsearch/elasticsearch.yml`` as is::
 
     …
     network.host: 127.0.0.1
