@@ -151,21 +151,21 @@ class ContractorDeliverable(Metadata):
         )
         searchable_fields = ('document_key', 'title',)
         column_fields = (
-            ('Document Number', 'document_key', 'document_key'),
-            ('Title', 'title', 'title'),
-            ('Rev.', 'current_revision', 'latest_revision__revision'),
-            ('Status', 'status', 'latest_revision__status'),
-            ('Class', 'klass', 'klass'),
-            ('Unit', 'unit', 'unit'),
-            ('Discipline', 'discipline', 'discipline'),
-            ('Document type', 'document_type', 'document_type'),
-            ('Review start date', 'review_start_date', 'latest_revision__review_start_date'),
-            ('Review due date', 'review_due_date', 'latest_revision__review_due_date'),
-            ('Under review', 'under_review', 'latest_revision__under_review'),
-            ('Overdue', 'overdue', 'latest_revision__overdue'),
-            ('Leader', 'leader', 'latest_revision__leader'),
-            ('Approver', 'approver', 'latest_revision__approver'),
-            ('Final revision', 'final_revision', 'latest_revision__final_revision'),
+            ('Document Number', 'document_key'),
+            ('Title', 'title'),
+            ('Rev.', 'current_revision'),
+            ('Status', 'status'),
+            ('Class', 'klass'),
+            ('Unit', 'unit'),
+            ('Discipline', 'discipline'),
+            ('Document type', 'document_type'),
+            ('Review start date', 'review_start_date'),
+            ('Review due date', 'review_due_date'),
+            ('Under review', 'under_review'),
+            ('Overdue', 'overdue'),
+            ('Leader', 'leader'),
+            ('Approver', 'approver'),
+            ('Final revision', 'final_revision'),
         )
 
     class Meta:
@@ -342,18 +342,18 @@ class Correspondence(Metadata):
             'overdue', 'leader'
         )
         column_fields = (
-            ('Reference', 'document_key', 'document_key'),
-            ('Subject', 'subject', 'subject'),
-            ('Rec./Sent date', 'received_sent_date', 'received_sent_date'),
-            ('Resp. required', 'response_required', 'response_required'),
-            ('Due date', 'due_date', 'due_date'),
-            ('Status', 'status', 'latest_revision.status'),
-            ('Under review', 'status', 'latest_revision.status'),
-            ('Overdue', 'overdue', 'latest_revision.overdue'),
-            ('Leader', 'leader', 'latest_revision.leader'),
-            ('Originator', 'originator', 'originator'),
-            ('Recipient', 'recipient', 'recipient'),
-            ('Document type', 'document_type', 'document_type'),
+            ('Reference', 'document_key'),
+            ('Subject', 'subject'),
+            ('Rec./Sent date', 'received_sent_date'),
+            ('Resp. required', 'response_required'),
+            ('Due date', 'due_date'),
+            ('Status', 'status'),
+            ('Under review', 'status'),
+            ('Overdue', 'overdue'),
+            ('Leader', 'leader'),
+            ('Originator', 'originator'),
+            ('Recipient', 'recipient'),
+            ('Document type', 'document_type'),
         )
         searchable_fields = (
             'document_key',
@@ -491,16 +491,16 @@ class MinutesOfMeeting(Metadata):
             'originator', 'recipient', 'status', 'signed', 'prepared_by',
         )
         column_fields = (
-            ('Reference', 'document_key', 'document_key'),
-            ('Subject', 'subject', 'subject'),
-            ('Meeting date', 'meeting_date', 'meeting_date'),
-            ('Rec./sent date', 'received_sent_date', 'received_sent_date'),
-            ('Originator', 'originator', 'originator'),
-            ('Recipient', 'recipient', 'recipient'),
-            ('Document type', 'document_type', 'document_type'),
-            ('Prepared by', 'prepared_by', 'prepared_by'),
-            ('Signed', 'signed', 'signed'),
-            ('Status', 'status', 'latest_revision.status'),
+            ('Reference', 'document_key'),
+            ('Subject', 'subject'),
+            ('Meeting date', 'meeting_date'),
+            ('Rec./sent date', 'received_sent_date'),
+            ('Originator', 'originator'),
+            ('Recipient', 'recipient'),
+            ('Document type', 'document_type'),
+            ('Prepared by', 'prepared_by'),
+            ('Signed', 'signed'),
+            ('Status', 'status'),
         )
         searchable_fields = (
             'document_key',
@@ -621,14 +621,14 @@ class Transmittals(Metadata):
             'originator', 'recipient', 'status',
         )
         column_fields = (
-            ('Reference', 'document_key', 'document_key'),
-            ('Transmittal date', 'transmittal_date', 'transmittal_date'),
-            ('Ack. of receipt date', 'ack_of_receipt_date', 'ack_of_receipt_date'),
-            ('Originator', 'originator', 'originator'),
-            ('Recipient', 'recipient', 'recipient'),
-            ('Document type', 'document_type', 'document_type'),
-            ('Status', 'status', 'latest_revision.status'),
-            ('Created on', 'created_on', 'latest_revision.created_on'),
+            ('Reference', 'document_key'),
+            ('Transmittal date', 'transmittal_date'),
+            ('Ack. of receipt date', 'ack_of_receipt_date'),
+            ('Originator', 'originator'),
+            ('Recipient', 'recipient'),
+            ('Document type', 'document_type'),
+            ('Status', 'status'),
+            ('Created on', 'created_on'),
         )
         searchable_fields = (
             'document_key',
@@ -708,11 +708,11 @@ class DemoMetadata(Metadata):
             'title', 'document_key', 'title',
         )
         column_fields = (
-            ('Document Number', 'document_key', 'document_key'),
-            ('Title', 'title', 'title'),
-            ('Rev.', 'current_revision', 'current_revision'),
-            ('Rev. Date', 'current_revision_date', 'latest_revision__created_on'),
-            ('Status', 'status', 'latest_revision__status'),
+            ('Document Number', 'document_key'),
+            ('Title', 'title'),
+            ('Rev.', 'current_revision'),
+            ('Rev. Date', 'current_revision_date'),
+            ('Status', 'status'),
         )
 
     def natural_key(self):

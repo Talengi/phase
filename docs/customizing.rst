@@ -59,11 +59,11 @@ Here's a basic sample:
             )
             # Column definition
             column_fields = (
-                ('Document Number', 'document_key', 'document_key'),
-                ('Title', 'title', 'title'),
-                ('Rev.', 'current_revision', 'latest_revision.revision'),
-                ('Rev. Date', 'current_revision_date', 'latest_revision.revision_date'),
-                ('Status', 'status', 'latest_revision.status'),
+                ('Document Number', 'document_key'),
+                ('Title', 'title'),
+                ('Rev.', 'current_revision'),
+                ('Rev. Date', 'current_revision_date'),
+                ('Status', 'status'),
             )
 
         def natural_key(self):
