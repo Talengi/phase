@@ -30,7 +30,7 @@ TYPE_MAPPING = [
 @app.task
 def put_category_mapping(category_id):
     category = Category.objects \
-        .select_related('organisation', 'category_template') \
+        .select_related('organisation', 'category_template__metadata_model') \
         .get(pk=category_id)
 
     doc_class = category.document_class()
