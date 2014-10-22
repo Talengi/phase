@@ -8,5 +8,6 @@ Welcome to Phase's documentation!
    usage.rst
    customizing.rst
    deployment.rst
+   cron.rst
    colophon.rst
 
