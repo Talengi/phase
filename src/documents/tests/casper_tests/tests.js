@@ -297,9 +297,10 @@ casper.test.begin('Searching updates the url', 0, function suite(test) {
 
     casper.then(function() {
         casper.fill('#search-sidebar form', {
+            'search_terms': 'toto',
             'leader': 1,
         });
-        casper.sendKeys('#id_search_terms', 'toto', {keepFocus: true});
+        casper.sendKeys('#id_search_terms', casper.page.event.key.Enter, {keepFocus: true});
         casper.wait(300);
     });
 
