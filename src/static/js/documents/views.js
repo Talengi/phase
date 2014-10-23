@@ -14,6 +14,8 @@ var Phase = Phase || {};
         initialize: function() {
             _.bindAll(this, 'onDocumentsFetched');
 
+            this.tableContainer = $('#document-list-row');
+
             this.documentsCollection = new Phase.Collections.DocumentCollection();
             this.favoriteCollection = new Phase.Collections.FavoriteCollection(
                 Phase.Config.initialFavorites
@@ -37,6 +39,7 @@ var Phase = Phase || {};
             this.fetchDocuments(false);
         },
         resetSearch: function() {
+            this.tableContainer.scrollTop(0);
             this.search.reset();
         },
         fetchDocuments: function(reset) {
