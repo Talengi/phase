@@ -341,6 +341,7 @@ PIPELINE_JS = {
         'source_filenames': (
             'js/vendor/underscore.js',
             'js/vendor/backbone.js',
+            'js/vendor/jquery.inview.js',
             'js/backbone-config.js',
             'js/documents/models.js',
             'js/documents/collections.js',

@@ -433,7 +433,8 @@ var Phase = Phase || {};
     Phase.Views.PaginationView = Backbone.View.extend({
         el: '#documents-pagination',
         events: {
-            'click': 'fetchMoreDocuments'
+            'click': 'fetchMoreDocuments',
+            'inview': 'onInview'
         },
         initialize: function() {
             this.listenTo(dispatcher, 'onDocumentsFetched', this.onDocumentsFetched);
@@ -456,6 +457,11 @@ var Phase = Phase || {};
         },
         fetchMoreDocuments: function() {
             dispatcher.trigger('onMoreDocumentsRequested');
+        },
+        onInview: function(event, isInView, visiblePartX, visiblePartY) {
+            if (isInView) {
+                this.$el.trigger('click');
+            }
         }
     });
 
