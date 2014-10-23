@@ -18,13 +18,10 @@ from django.conf import settings
 logger = logging.getLogger(__name__)
 
 
-TYPE_MAPPING = [
-    ((models.CharField, models.TextField), 'string'),
-    ((models.IntegerField,), 'long'),
-    ((models.DecimalField, models.FloatField,), 'double'),
-    ((models.DateField, models.TimeField,), 'date'),
-    ((models.BooleanField, models.NullBooleanField,), 'boolean'),
-]
+def create_index():
+    """Create all needed indexes."""
+    index = settings.ELASTIC_INDEX
+    elastic.indices.create(index=index, ignore=400, body=INDEX_SETTINGS)
 
 
 def delete_index():
@@ -33,10 +30,40 @@ def delete_index():
     elastic.indices.delete(index=index, ignore=404)
 
 
-def create_index():
-    """Create all needed indexes."""
-    index = settings.ELASTIC_INDEX
-    elastic.indices.create(index=index, ignore=400, body=INDEX_SETTINGS)
+@app.task
+def index_document(document_id, document_type, document_json):
+    """Stores a document into the ES index."""
+    try:
+        elastic.index(
+            index=settings.ELASTIC_INDEX,
+            doc_type=document_type,
+            id=document_id,
+            body=document_json,
+        )
+    except ConnectionError:
+        logger.error('Error connecting to ES. The doc %d will no be indexed' % document_id)
+
+
+@app.task
+def unindex_document(document_id, document_type):
+    """Removes the document from the index."""
+    try:
+        elastic.delete(
+            index=settings.ELASTIC_INDEX,
+            doc_type=document_type,
+            id=document_id
+        )
+    except ConnectionError:
+        logger.error('Error connecting to ES. The doc %d will no be un-indexed' % document_id)
+
+
+TYPE_MAPPING = [
+    ((models.CharField, models.TextField), 'string'),
+    ((models.IntegerField,), 'long'),
+    ((models.DecimalField, models.FloatField,), 'double'),
+    ((models.DateField, models.TimeField,), 'date'),
+    ((models.BooleanField, models.NullBooleanField,), 'boolean'),
+]
 
 
 @app.task
@@ -118,30 +145,3 @@ def get_mapping_type(field):
         if isinstance(field, typeinfo):
             return typename
     return 'string'
-
-
-@app.task
-def index_document(document_id, document_type, document_json):
-    """Stores a document into the ES index."""
-    try:
-        elastic.index(
-            index=settings.ELASTIC_INDEX,
-            doc_type=document_type,
-            id=document_id,
-            body=document_json,
-        )
-    except ConnectionError:
-        logger.error('Error connecting to ES. The doc %d will no be indexed' % document_id)
-
-
-@app.task
-def unindex_document(document_id, document_type):
-    """Removes the document from the index."""
-    try:
-        elastic.delete(
-            index=settings.ELASTIC_INDEX,
-            doc_type=document_type,
-            id=document_id
-        )
-    except ConnectionError:
-        logger.error('Error connecting to ES. The doc %d will no be un-indexed' % document_id)
