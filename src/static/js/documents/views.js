@@ -328,7 +328,6 @@ var Phase = Phase || {};
                     return;
                 }
 
-
                 // Strips existing count suffix
                 var match = option_text_re.exec(text);
                 if (match !== null) {
