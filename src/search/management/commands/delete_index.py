@@ -7,15 +7,14 @@ from django.conf import settings
 
 from elasticsearch.exceptions import ConnectionError
 
-from search import elastic
+from search.utils import delete_index
 
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        index = settings.ELASTIC_INDEX
-        self.stdout.write('Deleting index %s' % index)
+        self.stdout.write('Deleting index %s' % settings.ELASTIC_INDEX)
 
         try:
-            elastic.indices.delete(index=index, ignore=404)
+            delete_index()
         except ConnectionError:
             raise CommandError('Elasticsearch cannot be found')

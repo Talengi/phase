@@ -11,7 +11,7 @@ from elasticsearch.exceptions import ConnectionError
 
 from core.celery import app
 from categories.models import Category
-from search import elastic
+from search import elastic, INDEX_SETTINGS
 from django.conf import settings
 
 
@@ -25,6 +25,18 @@ TYPE_MAPPING = [
     ((models.DateField, models.TimeField,), 'date'),
     ((models.BooleanField, models.NullBooleanField,), 'boolean'),
 ]
+
+
+def delete_index():
+    """Delete existing ES indexes."""
+    index = settings.ELASTIC_INDEX
+    elastic.indices.delete(index=index, ignore=404)
+
+
+def create_index():
+    """Create all needed indexes."""
+    index = settings.ELASTIC_INDEX
+    elastic.indices.create(index=index, ignore=400, body=INDEX_SETTINGS)
 
 
 @app.task

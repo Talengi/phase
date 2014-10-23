@@ -7,48 +7,14 @@ from django.conf import settings
 
 from elasticsearch.exceptions import ConnectionError
 
-from search import elastic
-
-INDEX_SETTINGS = {
-    "settings": {
-        "analysis": {
-            "filter": {
-                "nGram_filter": {
-                    "type": "nGram",
-                    "min_gram": 2,
-                    "max_gram": 256,  # Is this value reasonable? I don't know
-                }
-            },
-            "analyzer": {
-                "nGram_analyzer": {
-                    "type": "custom",
-                    "tokenizer": "keyword",
-                    "filter": [
-                        "lowercase",
-                        "asciifolding",
-                        "nGram_filter"
-                    ]
-                },
-                "whitespace_analyzer": {
-                    "type": "custom",
-                    "tokenizer": "keyword",
-                    "filter": [
-                        "lowercase",
-                        "asciifolding"
-                    ]
-                }
-            }
-        }
-    }
-}
+from search.utils import create_index
 
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        index = settings.ELASTIC_INDEX
-        self.stdout.write('Creating index %s' % index)
+        self.stdout.write('Creating index %s' % settings.ELASTIC_INDEX)
 
         try:
-            elastic.indices.create(index=index, ignore=400, body=INDEX_SETTINGS)
+            create_index()
         except ConnectionError:
             raise CommandError('Elasticsearch cannot be found')
