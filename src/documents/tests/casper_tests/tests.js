@@ -24,7 +24,7 @@ inject_cookies();
 casper.test.begin('Documents are fetched on page load', 0, function suite(test) {
     casper.start(document_list_url, function() {
         test.assertTitle('Phase');
-        casper.wait(500);
+        casper.wait(300);
         test.assertElementCount('table#documents tbody tr', 5);
         test.assertSelectorHasText('#display-results', '5 documents on 20');
         test.assertVisible('#documents-pagination');
@@ -38,9 +38,9 @@ casper.test.begin('Documents are fetched on page load', 0, function suite(test) 
         test.assertVisible('#documents-pagination');
 
         casper.click('#documents-pagination');
-        casper.wait(500);
+        casper.wait(300);
         casper.click('#documents-pagination');
-        casper.wait(500);
+        casper.wait(300);
     });
 
     casper.then(function() {
@@ -215,18 +215,30 @@ casper.test.begin('Clicking a column sorts stuff', 0, function suite(test) {
 
     casper.then(function() {
         casper.click('#columndocument_key');
+        casper.wait(50);
+    });
+
+    casper.then(function() {
         test.assertExists('#columndocument_key span.glyphicon.glyphicon-chevron-up');
         test.assertSelectorHasText('tbody tr:first-of-type td:nth-of-type(3)', 'hazop-report-9');
     });
 
     casper.then(function() {
         casper.click('#columndocument_key');
+        casper.wait(50);
+    });
+
+    casper.then(function() {
         test.assertExists('#columndocument_key span.glyphicon.glyphicon-chevron-down');
         test.assertSelectorHasText('tbody tr:first-of-type td:nth-of-type(3)', 'hazop-report-0');
     });
 
     casper.then(function() {
         casper.click('#columntitle');
+        casper.wait(50);
+    });
+
+    casper.then(function() {
         test.assertDoesntExist('#columndocument_key span.glyphicon');
         test.assertExists('#columntitle span.glyphicon.glyphicon-chevron-down');
     });
@@ -239,15 +251,16 @@ casper.test.begin('Clicking a column sorts stuff', 0, function suite(test) {
 casper.test.begin('The search form searches', 0, function suite(test) {
     casper.start(document_list_url, function() {
         test.assertElementCount('table#documents tbody tr', 5);
-        casper.fill('#table-filters', {
-            'search_terms': 'gloubiboulga'
-        });
-        casper.page.sendEvent('keyup');
-        casper.wait(500);
-        test.assertElementCount('table#documents tbody tr', 0);
+        casper.click('button#toggle-filters-button');
     });
 
     casper.then(function() {
+        casper.sendKeys('#id_search_terms', 'gloubiboulga', {keepFocus: true});
+        casper.wait(400);
+    });
+
+    casper.then(function() {
+        test.assertElementCount('table#documents tbody tr', 0);
     });
 
     casper.run(function() {
