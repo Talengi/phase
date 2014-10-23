@@ -19,6 +19,7 @@ MEDIA_ROOT = '/tmp/phase_media/'
 PIPELINE_ENABLED = False
 STATICFILES_STORAGE = 'pipeline.storage.NonPackagingPipelineStorage'
 
+ELASTIC_INDEX = 'test_documents'
 ELASTIC_AUTOINDEX = False
 
 LOGGING['loggers']['elasticsearch'] = {
