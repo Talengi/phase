@@ -347,6 +347,9 @@ var Phase = Phase || {};
         }
     });
 
+    /**
+     * "Load more documents" button an infinite scrolling.
+     */
     Phase.Views.PaginationView = Backbone.View.extend({
         el: '#documents-pagination',
         events: {
