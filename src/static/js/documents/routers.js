@@ -30,9 +30,12 @@ var Phase = Phase || {};
             this.favoriteCollection = new Phase.Collections.FavoriteCollection(
                 Phase.Config.initialFavorites
             );
-            this.search = new Phase.Models.Search();
 
-            this.tableHeaderView = new Phase.Views.TableHeaderView();
+            var searchParams = this.extractSearchParameters();
+            this.search = new Phase.Models.Search(searchParams);
+
+            var sortField = searchParams.sort_by || Phase.Config.sortBy;
+            this.tableHeaderView = new Phase.Views.TableHeaderView({sortField: sortField});
             this.tableBodyView = new Phase.Views.TableBodyView({
                 collection: this.documentsCollection,
                 favorites: this.favoriteCollection
@@ -48,9 +51,34 @@ var Phase = Phase || {};
 
             this.fetchDocuments(false);
         },
+        /**
+         * Extract the search parameters from the query string, and returns
+         * a javascript object.
+         */
+        extractSearchParameters: function() {
+            var searchParams = {};
+            var query = window.location.search.substring(1);
+            if (query.indexOf('&') !== -1) {
+                var params = query.split('&');
+                for (var i = 0; i < params.length; i++) {
+                    var param = params[i].split('=');
+                    var key = decodeURIComponent(param[0]);
+                    var value = decodeURIComponent(param[1]);
+                    searchParams[key] = value;
+                }
+            }
+
+            // Pagination cannot be set by url parameters
+            // because it breaks… stuff…
+            delete searchParams.size;
+            delete searchParams.start;
+
+            return searchParams;
+        },
         resetSearch: function() {
             this.tableContainer.scrollTop(0);
             this.search.reset();
+            this.updateUrl();
         },
         fetchDocuments: function(reset) {
             this.documentsCollection.fetch({
@@ -86,7 +114,6 @@ var Phase = Phase || {};
         onSearch: function() {
             this.resetSearch();
             this.fetchDocuments(true);
-            this.updateUrl();
         },
         onFavoriteSet: function(data) {
             var document_id = data.document_id;

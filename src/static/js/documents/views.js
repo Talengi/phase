@@ -13,9 +13,16 @@ var Phase = Phase || {};
             'click #select-all': 'selectAll',
             'click th:not(#columnselect):not(#columnfavorite)': 'sort'
         },
-        initialize: function() {
+        initialize: function(options) {
             this.sortDirection = 'down';
-            this.sortField = Phase.Config.sortBy;
+            this.sortField = options.sortField || Phase.Config.sortBy;
+
+            if (this.sortField.indexOf('-') === 0) {
+                this.sortField = this.sortField.substring(1);
+                this.sortDirection = 'up';
+            }
+
+            this.render();
         },
         selectAll: function(event) {
             var target = $(event.currentTarget);
@@ -256,6 +263,8 @@ var Phase = Phase || {};
             this.listenTo(dispatcher, 'onSearchFormDisplayed', this.showSearchForm);
             this.listenTo(dispatcher, 'onAggregationsFetched', this.updateFacets);
             this.listenTo(this.model, 'change', this.updateForm);
+
+            this.updateForm();
         },
         updateForm: function() {
             _.map(this.model.attributes, this.updateFormAttribute);

@@ -313,3 +313,14 @@ casper.test.begin('Searching updates the url', 0, function suite(test) {
         test.done();
     });
 });
+
+casper.test.begin('Search queries can be bookmarked', 0, function suite(test) {
+    casper.start(document_list_url + '?search_terms=gloubi&leader=2', function() {
+        test.assertField('search_terms', 'gloubi');
+        test.assertField('leader', '2');
+    });
+
+    casper.run(function() {
+        test.done();
+    });
+});
