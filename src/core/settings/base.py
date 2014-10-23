@@ -345,6 +345,7 @@ PIPELINE_JS = {
             'js/backbone-config.js',
             'js/documents/models.js',
             'js/documents/collections.js',
+            'js/documents/routers.js',
             'js/documents/views.js',
             'js/documents/app.js',
         ),

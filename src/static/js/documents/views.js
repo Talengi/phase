@@ -15,6 +15,7 @@ var Phase = Phase || {};
             _.bindAll(this, 'onDocumentsFetched');
 
             this.tableContainer = $('#document-list-row');
+            this.router = new Phase.Routers.DocumentListRouter();
 
             this.documentsCollection = new Phase.Collections.DocumentCollection();
             this.favoriteCollection = new Phase.Collections.FavoriteCollection(
@@ -76,6 +77,7 @@ var Phase = Phase || {};
         onSearch: function() {
             this.resetSearch();
             this.fetchDocuments(true);
+            this.updateUrl();
         },
         onFavoriteSet: function(data) {
             var document_id = data.document_id;
@@ -90,6 +92,18 @@ var Phase = Phase || {};
                 favorite = this.favoriteCollection.findWhere({'document': document_id});
                 favorite.destroy();
             }
+        },
+        /**
+         * Store search query parameters in url
+         *
+         * We don't change the whole url, only the query string. We still use
+         * the Backbone router to ensure the best browser compatibility.
+         *
+         */
+        updateUrl: function() {
+            var attributes = this.search.attributes;
+            var querystring = $.param(attributes);
+            this.router.navigate('?' + querystring, {replace: true});
         }
     });
 

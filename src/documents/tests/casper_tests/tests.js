@@ -21,6 +21,10 @@ function inject_cookies() {
 }
 inject_cookies();
 
+casper.on('remote.message', function(message) {
+    this.echo(message);
+});
+
 casper.test.begin('Documents are fetched on page load', 0, function suite(test) {
     casper.start(document_list_url, function() {
         test.assertTitle('Phase');
@@ -279,6 +283,29 @@ casper.test.begin('Favorite tests', 0, function suite(test) {
 
     casper.then(function() {
         test.assertElementCount('td.columnfavorite span.glyphicon-star', 3);
+    });
+
+    casper.run(function() {
+        test.done();
+    });
+});
+
+casper.test.begin('Searching updates the url', 0, function suite(test) {
+    casper.start(document_list_url, function() {
+        casper.click('button#toggle-filters-button');
+    });
+
+    casper.then(function() {
+        casper.fill('#search-sidebar form', {
+            'leader': 1,
+        });
+        casper.sendKeys('#id_search_terms', 'toto', {keepFocus: true});
+        casper.wait(300);
+    });
+
+    casper.then(function() {
+        test.assertUrlMatches(/search_terms=toto/);
+        test.assertUrlMatches(/leader=1/);
     });
 
     casper.run(function() {
