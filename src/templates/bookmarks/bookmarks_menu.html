@@ -1,0 +1,24 @@
+<li>
+    <a href="#nav-bookmarks"
+       id="bookmarks-link"
+       data-toggle="collapse"
+       data-parent="#sidebar-nav">
+        <span class="glyphicon glyphicon-bookmark"></span>
+        Bookmarks <b class="caret"></b>
+    </a>
+
+    <ul id="nav-bookmarks" class="nav nav-stacked collapse">
+        {% for bookmark in bookmarkss %}
+            <li>
+                <a href="{{ bookmark.url }}">
+                    {{ bookmark.name }}
+                </a>
+            </li>
+        {% empty %}
+            <li class="dropdown-header">
+                {{ _('You don\'t have any bookmarks yet') }}
+            </li>
+        {% endfor %}
+    </ul>
+</li>
+
