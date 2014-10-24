@@ -137,7 +137,19 @@ var Phase = Phase || {};
          *
          */
         updateUrl: function() {
-            var attributes = this.search.attributes;
+            var attributes = _.clone(this.search.attributes);
+
+            // Pagination params should not make it to the url
+            delete attributes.start;
+            delete attributes.size;
+
+            // Let's remove attributes with empty values, so the search
+            // url only contains meaningful parameters
+            _.each(attributes, function(value, key) {
+                if ( value === "") {
+                    delete attributes[key];
+                }
+            });
             var querystring = $.param(attributes);
             this.navigate('?' + querystring, {replace: true});
         }
