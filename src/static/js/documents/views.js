@@ -272,7 +272,10 @@ var Phase = Phase || {};
         updateFormAttribute: function(value, field_name) {
             var field_id = '#id_' + field_name;
             var field = this.$el.find(field_id);
-            field.val(value);
+
+            if (field.length !== 0 && field.attr('type') !== 'hidden') {
+                field.val(value);
+            }
         },
         showSearchForm: function () {
             this.$el.addClass('active');
