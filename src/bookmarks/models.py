@@ -12,7 +12,7 @@ from accounts.models import User
 class Bookmark(models.Model):
     """A simple link stored in db."""
     user = models.ForeignKey(User)
-    url = models.UrlField(_('Url'))
+    url = models.URLField(_('Url'))
     created_on = models.DateField(
         _('Created on'),
         default=timezone.now)
