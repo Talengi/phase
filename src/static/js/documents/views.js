@@ -267,7 +267,7 @@ var Phase = Phase || {};
             this.updateForm();
         },
         updateForm: function() {
-            _.map(this.model.attributes, this.updateFormAttribute);
+            _.each(this.model.attributes, this.updateFormAttribute);
         },
         updateFormAttribute: function(value, field_name) {
             var field_id = '#id_' + field_name;
