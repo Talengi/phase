@@ -9,7 +9,7 @@ class FavoriteViewSet(viewsets.ModelViewSet):
     model = Favorite
     serializer_class = FavoriteSerializer
     paginate_by_param = 'page_limit'
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):
         return Favorite.objects.filter(user=self.request.user)
