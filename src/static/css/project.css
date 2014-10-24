@@ -225,6 +225,9 @@ button.ui-multiselect {
 }
 
 /* Table filters */
+#search-sidebar {
+    padding: 0 15px;
+}
 #table-filters legend {
     border: none;
     padding: 0;
