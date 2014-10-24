@@ -265,6 +265,9 @@ var Phase = Phase || {};
             this.listenTo(this.model, 'change', this.updateForm);
 
             this.updateForm();
+            if (!this.isDefaultForm()) {
+                this.showSearchForm();
+            }
         },
         updateForm: function() {
             _.each(this.model.attributes, this.updateFormAttribute);
@@ -276,6 +279,16 @@ var Phase = Phase || {};
             if (field.length !== 0 && field.attr('type') !== 'hidden') {
                 field.val(value);
             }
+        },
+        /**
+         * Check if any field of the form has been updated, or
+         * if it's still in it's default state.
+         */
+        isDefaultForm: function() {
+            var defaults = this.model.defaults;
+            var attributes = this.model.attributes;
+
+            return _.isEqual(defaults, attributes);
         },
         showSearchForm: function () {
             this.$el.addClass('active');
