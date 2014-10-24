@@ -12,6 +12,9 @@ from accounts.models import User
 class Bookmark(models.Model):
     """A simple link stored in db."""
     user = models.ForeignKey(User)
+    name = models.CharField(
+        _('Name'),
+        max_length=50)
     url = models.CharField(
         _('Url'),
         max_length=200)
