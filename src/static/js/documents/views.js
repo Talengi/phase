@@ -3,95 +3,9 @@ var Phase = Phase || {};
 (function(exports, Phase, Backbone, _) {
     "use strict";
 
+    var dispatcher = Phase.Events.dispatcher;
+
     Phase.Views = {};
-
-    var dispatcher = _.clone(Backbone.Events);
-
-    /**
-     * This is the main view, englobing all other views.
-     */
-    Phase.Views.MainView = Backbone.View.extend({
-        initialize: function() {
-            _.bindAll(this, 'onDocumentsFetched');
-
-            this.tableContainer = $('#document-list-row');
-
-            this.documentsCollection = new Phase.Collections.DocumentCollection();
-            this.favoriteCollection = new Phase.Collections.FavoriteCollection(
-                Phase.Config.initialFavorites
-            );
-            this.search = new Phase.Models.Search();
-
-            this.tableHeaderView = new Phase.Views.TableHeaderView();
-            this.tableBodyView = new Phase.Views.TableBodyView({
-                collection: this.documentsCollection,
-                favorites: this.favoriteCollection
-            });
-            this.navbarView = new Phase.Views.NavbarView();
-            this.searchView = new Phase.Views.SearchView({ model: this.search });
-            this.paginationView = new Phase.Views.PaginationView();
-
-            this.listenTo(dispatcher, 'onMoreDocumentsRequested', this.onMoreDocumentsRequested);
-            this.listenTo(dispatcher, 'onSort', this.onSort);
-            this.listenTo(dispatcher, 'onSearch', this.onSearch);
-            this.listenTo(dispatcher, 'onFavoriteSet', this.onFavoriteSet);
-
-            this.fetchDocuments(false);
-        },
-        resetSearch: function() {
-            this.tableContainer.scrollTop(0);
-            this.search.reset();
-        },
-        fetchDocuments: function(reset) {
-            this.documentsCollection.fetch({
-                data: this.search.attributes,
-                remove: false,
-                reset: reset,
-                success: this.onDocumentsFetched
-            });
-        },
-        onDocumentsFetched: function() {
-            var displayedDocuments = this.documentsCollection.length;
-            var totalDocuments = this.documentsCollection.total;
-            var aggregations = this.documentsCollection.aggregations;
-            dispatcher.trigger('onDocumentsFetched', {
-                displayed: displayedDocuments,
-                total: totalDocuments
-            });
-            dispatcher.trigger('onAggregationsFetched', aggregations);
-        },
-        onMoreDocumentsRequested: function() {
-            this.search.nextPage();
-            this.fetchDocuments(false);
-        },
-        onSort: function(data) {
-            var sortField = data.field;
-            var sortDirection = data.direction;
-            var prefix = sortDirection === 'down' ? '' : '-';
-
-            this.search.set('sort_by', prefix + sortField);
-            this.resetSearch();
-            this.fetchDocuments(true);
-        },
-        onSearch: function() {
-            this.resetSearch();
-            this.fetchDocuments(true);
-        },
-        onFavoriteSet: function(data) {
-            var document_id = data.document_id;
-            var isFavorite = data.isFavorite;
-
-            var favorite;
-            if (isFavorite) {
-                favorite = new Phase.Models.Favorite({document: document_id});
-                this.favoriteCollection.add(favorite);
-                favorite.save();
-            } else {
-                favorite = this.favoriteCollection.findWhere({'document': document_id});
-                favorite.destroy();
-            }
-        }
-    });
 
     Phase.Views.TableHeaderView = Backbone.View.extend({
         el: 'table#documents thead',
@@ -99,9 +13,16 @@ var Phase = Phase || {};
             'click #select-all': 'selectAll',
             'click th:not(#columnselect):not(#columnfavorite)': 'sort'
         },
-        initialize: function() {
+        initialize: function(options) {
             this.sortDirection = 'down';
-            this.sortField = Phase.Config.sortBy;
+            this.sortField = options.sortField || Phase.Config.sortBy;
+
+            if (this.sortField.indexOf('-') === 0) {
+                this.sortField = this.sortField.substring(1);
+                this.sortDirection = 'up';
+            }
+
+            this.render();
         },
         selectAll: function(event) {
             var target = $(event.currentTarget);
@@ -342,14 +263,32 @@ var Phase = Phase || {};
             this.listenTo(dispatcher, 'onSearchFormDisplayed', this.showSearchForm);
             this.listenTo(dispatcher, 'onAggregationsFetched', this.updateFacets);
             this.listenTo(this.model, 'change', this.updateForm);
+
+            this.updateForm();
+            if (!this.isDefaultForm()) {
+                this.showSearchForm();
+            }
         },
         updateForm: function() {
-            _.map(this.model.attributes, this.updateFormAttribute);
+            _.each(this.model.attributes, this.updateFormAttribute);
         },
         updateFormAttribute: function(value, field_name) {
             var field_id = '#id_' + field_name;
             var field = this.$el.find(field_id);
-            field.val(value);
+
+            if (field.length !== 0 && field.attr('type') !== 'hidden') {
+                field.val(value);
+            }
+        },
+        /**
+         * Check if any field of the form has been updated, or
+         * if it's still in it's default state.
+         */
+        isDefaultForm: function() {
+            var defaults = this.model.defaults;
+            var attributes = this.model.attributes;
+
+            return _.isEqual(defaults, attributes);
         },
         showSearchForm: function () {
             this.$el.addClass('active');
@@ -414,7 +353,6 @@ var Phase = Phase || {};
                     return;
                 }
 
-
                 // Strips existing count suffix
                 var match = option_text_re.exec(text);
                 if (match !== null) {
@@ -433,6 +371,9 @@ var Phase = Phase || {};
         }
     });
 
+    /**
+     * "Load more documents" button an infinite scrolling.
+     */
     Phase.Views.PaginationView = Backbone.View.extend({
         el: '#documents-pagination',
         events: {

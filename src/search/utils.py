@@ -11,11 +11,50 @@ from elasticsearch.exceptions import ConnectionError
 
 from core.celery import app
 from categories.models import Category
-from search import elastic
+from search import elastic, INDEX_SETTINGS
 from django.conf import settings
 
 
 logger = logging.getLogger(__name__)
+
+
+def create_index():
+    """Create all needed indexes."""
+    index = settings.ELASTIC_INDEX
+    elastic.indices.create(index=index, ignore=400, body=INDEX_SETTINGS)
+
+
+def delete_index():
+    """Delete existing ES indexes."""
+    index = settings.ELASTIC_INDEX
+    elastic.indices.delete(index=index, ignore=404)
+
+
+@app.task
+def index_document(document_id, document_type, document_json):
+    """Stores a document into the ES index."""
+    try:
+        elastic.index(
+            index=settings.ELASTIC_INDEX,
+            doc_type=document_type,
+            id=document_id,
+            body=document_json,
+        )
+    except ConnectionError:
+        logger.error('Error connecting to ES. The doc %d will no be indexed' % document_id)
+
+
+@app.task
+def unindex_document(document_id, document_type):
+    """Removes the document from the index."""
+    try:
+        elastic.delete(
+            index=settings.ELASTIC_INDEX,
+            doc_type=document_type,
+            id=document_id
+        )
+    except ConnectionError:
+        logger.error('Error connecting to ES. The doc %d will no be un-indexed' % document_id)
 
 
 TYPE_MAPPING = [
@@ -30,7 +69,7 @@ TYPE_MAPPING = [
 @app.task
 def put_category_mapping(category_id):
     category = Category.objects \
-        .select_related('organisation', 'category_template') \
+        .select_related('organisation', 'category_template__metadata_model') \
         .get(pk=category_id)
 
     doc_class = category.document_class()
@@ -106,30 +145,3 @@ def get_mapping_type(field):
         if isinstance(field, typeinfo):
             return typename
     return 'string'
-
-
-@app.task
-def index_document(document_id, document_type, document_json):
-    """Stores a document into the ES index."""
-    try:
-        elastic.index(
-            index=settings.ELASTIC_INDEX,
-            doc_type=document_type,
-            id=document_id,
-            body=document_json,
-        )
-    except ConnectionError:
-        logger.error('Error connecting to ES. The doc %d will no be indexed' % document_id)
-
-
-@app.task
-def unindex_document(document_id, document_type):
-    """Removes the document from the index."""
-    try:
-        elastic.delete(
-            index=settings.ELASTIC_INDEX,
-            doc_type=document_type,
-            id=document_id
-        )
-    except ConnectionError:
-        logger.error('Error connecting to ES. The doc %d will no be un-indexed' % document_id)

@@ -12,7 +12,8 @@ from search.utils import put_category_mapping
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        categories = Category.objects.select_related('category_template').all()
+        categories = Category.objects \
+            .select_related('category_template__metadata_model')
         for category in categories:
             doc_class = category.document_class()
             self.stdout.write('Creating mapping for document type %s' % doc_class.__name__)

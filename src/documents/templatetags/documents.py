@@ -6,8 +6,7 @@ from ..utils import stringify_value
 register = template.Library()
 
 
-HEADER_TPL = '<th id="column%s" data-sortby="%s">%s <span class="%s"></span></th>'
-SORT_MARKER_CLASS = 'glyphicon glyphicon-chevron-down'
+HEADER_TPL = '<th id="column%s" data-sortby="%s">%s</th>'
 TD_TPL = '<td class="column%s"><%%= %s %%></td>'
 
 
@@ -15,7 +14,6 @@ TD_TPL = '<td class="column%s"><%%= %s %%></td>'
 def generate_header_markup(document_class):
     """Generates the markup to be used in doc list table header."""
     columns = document_class.PhaseConfig.column_fields
-    default_sort = document_class._meta.ordering[0]
 
     headers = list()
     for column in columns:
@@ -23,7 +21,6 @@ def generate_header_markup(document_class):
             column[1],
             column[1],
             column[0],
-            SORT_MARKER_CLASS if column[1] == default_sort else '',
         ))
 
     return ' '.join(headers)

@@ -12,6 +12,40 @@ elastic = Elasticsearch(
     connection_class=RequestsHttpConnection)
 
 
+INDEX_SETTINGS = {
+    "settings": {
+        "analysis": {
+            "filter": {
+                "nGram_filter": {
+                    "type": "nGram",
+                    "min_gram": 2,
+                    "max_gram": 256,  # Is this value reasonable? I don't know
+                }
+            },
+            "analyzer": {
+                "nGram_analyzer": {
+                    "type": "custom",
+                    "tokenizer": "keyword",
+                    "filter": [
+                        "lowercase",
+                        "asciifolding",
+                        "nGram_filter"
+                    ]
+                },
+                "whitespace_analyzer": {
+                    "type": "custom",
+                    "tokenizer": "keyword",
+                    "filter": [
+                        "lowercase",
+                        "asciifolding"
+                    ]
+                }
+            }
+        }
+    }
+}
+
+
 # TODO On migration to Django 1.7, see
 # http://stackoverflow.com/a/22924754/665797
 import signals  # noqa
