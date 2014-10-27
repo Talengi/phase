@@ -5,7 +5,7 @@ var Phase = Phase || {};
 
     var dispatcher = Phase.Events.dispatcher;
 
-    Phase.Views = {};
+    Phase.Views = Phase.Views || {};
 
     Phase.Views.TableHeaderView = Backbone.View.extend({
         el: 'table#documents thead',

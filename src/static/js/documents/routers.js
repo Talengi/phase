@@ -43,6 +43,7 @@ var Phase = Phase || {};
             this.navbarView = new Phase.Views.NavbarView();
             this.searchView = new Phase.Views.SearchView({ model: this.search });
             this.paginationView = new Phase.Views.PaginationView();
+            this.bookmarkView = new Phase.Views.BookmarkFormView();
 
             this.listenTo(dispatcher, 'onMoreDocumentsRequested', this.onMoreDocumentsRequested);
             this.listenTo(dispatcher, 'onSort', this.onSort);

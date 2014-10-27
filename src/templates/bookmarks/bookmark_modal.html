@@ -1,23 +1,23 @@
-<form method="post" action="" class="form">
-{% csrf_token %}
-
 <div class="modal fade" id="bookmark-modal" tabindex="-1" role="dialog" aria-labelledby="bookmark-modal-label" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">{{ _('Cancel') }}</span></button>
-                <h4 class="modal-title" id="bookmark-modal-label">Create bookmark</h4>
-            </div>
-            <div class="modal-body">
-                <label for="name">Bookmark name</label><br/>
-                <input type="text" name="name" id="name" class="form-control" />
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">{{ _('Cancel') }}</button>
-                <button type="button" class="btn btn-primary">{{ _('Save bookmark') }}</button>
+    <form id="bookmark-form" method="post" action="{% url 'bookmark-list' %}" class="form">
+        {% csrf_token %}
+        <input type="hidden" name="url" value="" id="id_url"/>
+
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">{{ _('Cancel') }}</span></button>
+                    <h4 class="modal-title" id="bookmark-modal-label">Create bookmark</h4>
+                </div>
+                <div class="modal-body">
+                    <label for="name">Bookmark name</label><br/>
+                    <input type="text" name="name" id="name" class="form-control" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{ _('Cancel') }}</button>
+                    <button type="button" class="btn btn-primary">{{ _('Save bookmark') }}</button>
+                </div>
             </div>
         </div>
-    </div>
+    </form>
 </div>
-
-</form>

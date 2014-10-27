@@ -350,6 +350,7 @@ PIPELINE_JS = {
             'js/documents/collections.js',
             'js/documents/routers.js',
             'js/documents/views.js',
+            'js/bookmarks/views.js',
             'js/documents/app.js',
         ),
         'output_filename': 'js/list.js',
