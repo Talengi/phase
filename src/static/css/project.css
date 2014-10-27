@@ -226,7 +226,6 @@ button.ui-multiselect {
 
 /* Table filters */
 #search-sidebar {
-    padding: 0 15px;
 }
 #table-filters legend {
     border: none;
@@ -417,7 +416,7 @@ table.reviewers tr td:nth-child(4) {
     display: block;
     right: 0;
     bottom: 0;
-    padding-top: 15px;
+    padding: 15px;
     background-color: white;
     z-index: 9999;
     display: none;
