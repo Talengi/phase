@@ -14,7 +14,7 @@
             <div class="control-group {% if field.errors %}error{% endif %}">
                 <label class="control-label" for="{{ field.auto_id }}">{{ field.label }}</label>
                 <div class="controls">
-                    {{ field|add_class:"form-control" }} <span class="glyphicon glyphicon-remove"></span>
+                    {{ field|add_class:"form-control filter" }} <span class="glyphicon glyphicon-remove"></span>
                 </div>
                 {% if field.errors %}<span class="help-inline">{{ field.errors.0 }}</span>{% endif %}
             </div>

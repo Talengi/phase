@@ -250,7 +250,7 @@ var Phase = Phase || {};
             'click #sidebar-close-btn': 'hideSearchForm',
             'submit form': 'submitForm',
             'keyup input': 'debouncedSearch',
-            'change select': 'setFilter',
+            'change select.filter': 'setFilter',
             'click span.glyphicon-remove': 'removeFilter',
             'click #resetForm': 'resetForm'
         },
