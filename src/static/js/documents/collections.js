@@ -3,7 +3,7 @@ var Phase = Phase || {};
 (function(exports, Phase, Backbone, _) {
     "use strict";
 
-    Phase.Collections = {};
+    Phase.Collections = Phase.Collections || {};
 
     Phase.Collections.DocumentCollection = Backbone.Collection.extend({
         model: Phase.Models.Document,
