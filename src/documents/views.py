@@ -25,6 +25,8 @@ from rest_framework.renderers import JSONRenderer
 
 from favorites.models import Favorite
 from favorites.api.serializers import FavoriteSerializer
+from bookmarks.models import get_user_bookmarks
+from bookmarks.api.serializers import BookmarkSerializer
 from categories.models import Category
 from documents.models import Document
 from documents.utils import compress_documents, save_document_forms
@@ -57,7 +59,8 @@ class DocumentListMixin(object):
             'category_slug': self.kwargs['category'],
             'category': self.category,
             'document_type': self.category.document_type(),
-            'favorites': self.get_favorites()
+            'favorites': self.get_favorites(),
+            'bookmarks': self.get_bookmarks(),
         })
         return context
 
@@ -105,6 +108,11 @@ class DocumentListMixin(object):
             .select_related('user') \
             .filter(user=self.request.user)
         serializer = FavoriteSerializer(qs, many=True)
+        return JSONRenderer().render(serializer.data)
+
+    def get_bookmarks(self):
+        bookmarks = get_user_bookmarks(self.request.user)
+        serializer = BookmarkSerializer(bookmarks, many=True)
         return JSONRenderer().render(serializer.data)
 
 

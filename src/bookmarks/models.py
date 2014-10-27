@@ -39,3 +39,14 @@ class Bookmark(models.Model):
         """Clear query cache for the given user."""
         cache_key = 'bookmarks_%d' % self.user_id
         cache.delete(cache_key)
+
+
+def get_user_bookmarks(user):
+    """Get the number of pending reviews for given review step."""
+    cache_key = 'bookmarks_%d' % user.id
+    bookmarks = cache.get(cache_key)
+    if bookmarks is None:
+        bookmarks = Bookmark.objects.filter(user=user)
+        cache.set(cache_key, bookmarks, None)
+
+    return bookmarks
