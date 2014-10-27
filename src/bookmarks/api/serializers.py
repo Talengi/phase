@@ -8,8 +8,6 @@ from bookmarks.models import Bookmark
 
 
 class BookmarkSerializer(serializers.ModelSerializer):
-    user = serializers.Field(source='user.email')
-
     class Meta:
         model = Bookmark
-        fields = ('id', 'user', 'name', 'url')
+        fields = ('id', 'name', 'url')
