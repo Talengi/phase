@@ -30,6 +30,9 @@ var Phase = Phase || {};
             this.favoriteCollection = new Phase.Collections.FavoriteCollection(
                 Phase.Config.initialFavorites
             );
+            this.bookmarkCollection = new Phase.Collections.BookmarkCollection(
+                Phase.Config.initialBookmarks
+            );
 
             var searchParams = this.extractSearchParameters();
             this.search = new Phase.Models.Search(searchParams);
