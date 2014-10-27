@@ -7,6 +7,7 @@ from casper.tests import CasperTestCase
 from accounts.factories import UserFactory
 from categories.factories import CategoryFactory
 from documents.factories import DocumentFactory
+from bookmarks.factories import BookmarkFactory
 from search.signals import connect_signals, disconnect_signals
 from search.utils import create_index, delete_index, put_category_mapping
 
@@ -35,6 +36,18 @@ class DocumentListTests(CasperTestCase):
             self.category.organisation.slug,
             self.category.slug
         ])
+
+        BookmarkFactory(
+            user=user,
+            name='Hazop documents',
+            url='%s?search_terms=hazop' % document_list_url
+        )
+        BookmarkFactory(
+            user=user,
+            name='Rev ordered documents',
+            url='%s?sort_by=current_revision' % document_list_url
+        )
+
         self.url = '%s%s' % (self.live_server_url, document_list_url)
         self.client.login(email=user.email, password='pass')
         self.test_file = os.path.join(

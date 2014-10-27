@@ -19,6 +19,23 @@ function inject_cookies() {
 }
 inject_cookies();
 
+
+casper.test.begin('Bookmarks are loaded upon page load', 0, function suite(test) {
+    casper.start(document_list_url, function() {
+        casper.click('button#toggle-filters-button');
+    });
+
+    casper.then(function() {
+        var select = casper.getHTML('select#id_bookmark');
+        test.assertMatch(select, /value="\/organisation_2\/category_5\/\?search_terms=hazop"/);
+        test.assertMatch(select, /value="\/organisation_2\/category_5\/\?sort_by=current_revision"/);
+    });
+
+    casper.run(function() {
+        test.done();
+    });
+});
+
 casper.test.begin('Bookmarking a search', 0, function suite(test) {
     casper.start(document_list_url, function() {
         casper.viewport(1024, 768);
