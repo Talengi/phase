@@ -147,7 +147,7 @@ class ContractorDeliverable(Metadata):
     class PhaseConfig:
         filter_fields = (
             'klass', 'status', 'unit', 'discipline', 'document_type',
-            'overdue', 'leader', 'approver'
+            'under_review', 'overdue', 'leader', 'approver'
         )
         searchable_fields = ('document_key', 'title',)
         column_fields = (
