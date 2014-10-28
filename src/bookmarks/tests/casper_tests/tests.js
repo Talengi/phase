@@ -78,6 +78,25 @@ casper.test.begin('Search is updated when a bookmark is selected', 0, function s
 casper.test.begin('The bookmark is unselected when the search is refined', 0, function suite(test) {
     casper.start(document_list_url, function() {
         casper.click('button#toggle-filters-button');
+        casper.evaluate(function() {
+            $('#id_bookmark option#bookmark_1').prop('selected', true);
+            $('#id_bookmark').change();
+        });
+        casper.wait(50);
+    });
+
+    casper.then(function() {
+        test.assertField('bookmark', '/organisation_2/category_5/?search_terms=hazop');
+    });
+
+    casper.then(function() {
+        casper.fill('#table-filters', {
+            'search_terms': 'hazop'
+        }, true);
+    });
+
+    casper.then(function() {
+        test.assertField('bookmark', '');
     });
 
     casper.run(function() {
