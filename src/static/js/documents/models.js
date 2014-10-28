@@ -29,9 +29,11 @@ var Phase = Phase || {};
         /**
          * Reset the search parameters to default.
          */
-        reset: function() {
-            this.clear();
-            this.set(this.defaults);
+        reset: function(attrs) {
+            attrs || (attrs = {});
+            attrs = _.defaults({}, attrs, _.result(this, 'defaults'));
+            this.clear({silent: true});
+            this.set(attrs);
         },
         nextPage: function() {
             var start = this.get('start');
