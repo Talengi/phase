@@ -71,6 +71,7 @@ var Phase = Phase || {};
             var currentUrl = window.location.pathname + window.location.search;
             this.urlField = this.$el.find('#id_url');
             this.urlField.val(currentUrl);
+            this.nameField = this.$el.find('#id_name');
             this.modal = this.$el.find('.modal');
 
             this.listenTo(dispatcher, 'onUrlChange', this.onUrlChange);
@@ -84,6 +85,7 @@ var Phase = Phase || {};
                 data[datum.name] = datum.value;
             });
             this.collection.create(data, {wait: true});
+            this.nameField.val('');
             this.modal.modal('hide');
         },
         /**

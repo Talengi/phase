@@ -51,7 +51,6 @@ casper.test.begin('Search is updated when a bookmark is selected', 0, function s
     });
 
     casper.then(function() {
-        casper.debugHTML('#id_bookmark');
         test.assertUrlMatch(/search_terms=hazop/);
     });
 
@@ -100,6 +99,20 @@ casper.test.begin('Bookmarking a search', 0, function suite(test) {
 
     casper.then(function() {
         test.assertVisible('#bookmark-modal');
+        casper.fill('#bookmark-form', {
+            'name': 'Test bookmark'
+        }, true);
+        casper.wait(500);
+    });
+
+    casper.then(function() {
+        test.assertNotVisible('#bookmark-form');
+        casper.click('button#bookmark-button');
+        casper.wait(500);
+    });
+
+    casper.then(function() {
+        test.assertField('name', '');
     });
 
     casper.run(function() {
