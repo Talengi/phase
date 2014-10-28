@@ -39,11 +39,13 @@ class DocumentListTests(CasperTestCase):
 
         BookmarkFactory(
             user=user,
+            category=self.category,
             name='Hazop documents',
             url='%s?search_terms=hazop' % document_list_url
         )
         BookmarkFactory(
             user=user,
+            category=self.category,
             name='Rev ordered documents',
             url='%s?sort_by=current_revision' % document_list_url
         )
