@@ -11,6 +11,9 @@ var Phase = Phase || {};
 
     /**
      * Represents a single search query set of parameters
+     *
+     * Everytime this objects is modified ("change" event is triggered),
+     * a new search query is performed.
      */
     Phase.Models.Search = Backbone.Model.extend({
         defaults: {
@@ -18,13 +21,6 @@ var Phase = Phase || {};
             sort_by: 'document_key',
             start: 0,
             size: Phase.Config.paginateBy
-        },
-        fromForm: function(form) {
-            var data = form.serializeArray();
-            var self = this;
-            _.each(data, function(field) {
-                self.set(field.name, field.value);
-            });
         },
         /**
          * Reset the search parameters to default.
@@ -35,14 +31,29 @@ var Phase = Phase || {};
             this.clear({silent: true});
             this.set(attrs);
         },
+        /**
+         * Set the pagination params to fetch next batch of results.
+         *
+         * Since we don't want to replace the currently displayed results,
+         * we don't trigger the "change" event, and let the calling object
+         * be responsible of triggering the actual search query.
+         */
         nextPage: function() {
             var start = this.get('start');
             var size = this.get('size');
-            this.set('start', start + size);
+            this.set('start', start + size, {silent: true});
         },
+        /**
+         * Set the pagination params to fetch the first results.
+         *
+         * Don't trigger the "change" event, so we let the calling object be
+         * responsible of triggering the actual search query.
+         */
         firstPage: function() {
-            this.set('start', this.defaults.start);
-            this.set('size',  this.defaults.size);
+            this.set({
+                'start':this.defaults.start,
+                'size': this.defaults.size
+            }, {silent: true});
         }
     });
 

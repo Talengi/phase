@@ -51,14 +51,14 @@ var Phase = Phase || {};
                 collection: this.bookmarkCollection
             });
 
+            this.listenTo(this.search, 'change', this.onSearch);
             this.listenTo(dispatcher, 'onMoreDocumentsRequested', this.onMoreDocumentsRequested);
             this.listenTo(dispatcher, 'onSort', this.onSort);
-            this.listenTo(dispatcher, 'onSearch', this.onSearch);
             this.listenTo(dispatcher, 'onFavoriteSet', this.onFavoriteSet);
             this.listenTo(dispatcher, 'onBookmarkSelected', this.onBookmarkSelected);
 
-            this.fetchDocuments(false);
             this.bookmarkCollection.reset(Phase.Config.initialBookmarks);
+            this.fetchDocuments(false);
         },
         /**
          * Extract the search parameters from the query string, and returns
@@ -91,7 +91,6 @@ var Phase = Phase || {};
         resetPagination: function() {
             this.tableContainer.scrollTop(0);
             this.search.firstPage();
-            this.updateUrl();
         },
         /**
          * Call the API to get actual search results.
@@ -135,14 +134,13 @@ var Phase = Phase || {};
             var prefix = sortDirection === 'down' ? '' : '-';
 
             this.search.set('sort_by', prefix + sortField);
-            this.resetPagination();
-            this.fetchDocuments(true);
         },
         /**
          * The search form was updated / submitted.
          */
         onSearch: function() {
             this.resetPagination();
+            this.updateUrl();
             this.fetchDocuments(true);
         },
         onFavoriteSet: function(data) {
@@ -193,7 +191,6 @@ var Phase = Phase || {};
          */
         onBookmarkSelected: function(bookmark) {
             this.search.reset(bookmark.attributes);
-            dispatcher.trigger('onSearch');
         }
     });
 })(this, Phase, Backbone, _);

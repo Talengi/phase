@@ -249,35 +249,47 @@ var Phase = Phase || {};
         events: {
             'click #sidebar-close-btn': 'hideSearchForm',
             'submit form': 'submitForm',
-            'keyup input': 'debouncedSearch',
+            'keyup input': 'debouncedSetInput',
             'change select.filter': 'setFilter',
             'click span.glyphicon-remove': 'removeFilter',
             'click #resetForm': 'resetForm'
         },
         initialize: function() {
-            _.bindAll(this, 'updateFormAttribute', 'updateFacets', 'updateFacet');
+            _.bindAll(this, 'synchronizeAttribute', 'updateFacets', 'updateFacet');
 
             this.filterForm = this.$el.find('form').first();
             this.filterForm.get(0).reset();
 
             this.listenTo(dispatcher, 'onSearchFormDisplayed', this.showSearchForm);
             this.listenTo(dispatcher, 'onAggregationsFetched', this.updateFacets);
-            this.listenTo(this.model, 'change', this.updateForm);
+            this.listenTo(this.model, 'change', this.synchronizeForm);
 
-            this.updateForm();
+            this.synchronizeForm();
             if (!this.isDefaultForm()) {
                 this.showSearchForm();
             }
         },
-        updateForm: function() {
-            _.each(this.model.attributes, this.updateFormAttribute);
+        /**
+         * Update the whole form to reflect the search state.
+         */
+        synchronizeForm: function() {
+            this.filterForm.get(0).reset();
+            var spans = this.$el.find('span.glyphicon-remove');
+            spans.css('display', 'none');
+            _.each(this.model.attributes, this.synchronizeAttribute);
         },
-        updateFormAttribute: function(value, field_name) {
+        /**
+         * Synchronize a single field to reflect the search state.
+         */
+        synchronizeAttribute: function(value, field_name) {
             var field_id = '#id_' + field_name;
             var field = this.$el.find(field_id);
 
             if (field.length !== 0 && field.attr('type') !== 'hidden') {
                 field.val(value);
+                if (field.is('select')) {
+                    field.siblings('span').css('display', 'inline-block');
+                }
             }
         },
         /**
@@ -299,37 +311,34 @@ var Phase = Phase || {};
         submitForm: function(event) {
             event.preventDefault();
         },
-        search: function() {
-            this.stopListening(this.model, 'change');
-            this.model.fromForm(this.filterForm);
-            this.listenTo(this.model, 'change', this.updateForm);
+        setInput: function(event) {
+            var input = $(event.currentTarget);
+            var name = input.attr('name');
+            var val = input.val();
 
-            dispatcher.trigger('onSearch');
+            this.model.set(name, val);
         },
-        debouncedSearch: _.debounce(function() {
-            this.search();
+        debouncedSetInput: _.debounce(function(event) {
+            this.setInput(event);
         }, 250),
         setFilter: function(event) {
             var select = $(event.currentTarget);
-            if (select.val() !== '') {
-                select.siblings('span').css('display', 'inline-block');
-            } else {
-                select.siblings('span').css('display', 'none');
-            }
-
-            this.search();
+            var name = select.attr('name');
+            var val = select.val();
+            this.model.set(name, val);
         },
         removeFilter: function(event) {
             var span = $(event.currentTarget);
             var select = span.siblings('select');
-            select.val('');
-            span.css('display', 'none');
-            this.search();
+            var name = select.attr('name');
+            this.model.unset(name);
         },
+        /**
+         * We reset the search. The sort parameter must not change, however.
+         */
         resetForm: function() {
-            var spans = this.$el.find('span.glyphicon-remove');
-            spans.css('display', 'none');
-            this.debouncedSearch();
+            var sort_by = this.model.get('sort_by');
+            this.model.reset({sort_by: sort_by});
         },
         updateFacets: function(aggregations) {
             _.each(aggregations, this.updateFacet);
