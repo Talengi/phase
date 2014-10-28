@@ -344,7 +344,7 @@ PIPELINE_JS = {
             'js/vendor/backbone.js',
             'js/vendor/jquery.inview.js',
             'js/backbone-config.js',
-            'js/documents/events.js',
+            'js/events.js',
             'js/documents/models.js',
             'js/favorites/models.js',
             'js/bookmarks/models.js',
