@@ -26,7 +26,7 @@ var Phase = Phase || {};
          * Reset the search parameters to default.
          */
         reset: function(attrs) {
-            attrs || (attrs = {});
+            attrs = attrs || {};
             attrs = _.defaults({}, attrs, _.result(this, 'defaults'));
             this.clear({silent: true});
             this.set(attrs);

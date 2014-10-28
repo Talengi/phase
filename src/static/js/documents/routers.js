@@ -48,6 +48,7 @@ var Phase = Phase || {};
                 collection: this.bookmarkCollection
             });
             this.bookmarkSelectView = new Phase.Views.BookmarkSelectView({
+                model: this.search,
                 collection: this.bookmarkCollection
             });
 
@@ -55,7 +56,6 @@ var Phase = Phase || {};
             this.listenTo(dispatcher, 'onMoreDocumentsRequested', this.onMoreDocumentsRequested);
             this.listenTo(dispatcher, 'onSort', this.onSort);
             this.listenTo(dispatcher, 'onFavoriteSet', this.onFavoriteSet);
-            this.listenTo(dispatcher, 'onBookmarkSelected', this.onBookmarkSelected);
 
             this.bookmarkCollection.reset(Phase.Config.initialBookmarks);
             this.fetchDocuments(false);
@@ -173,15 +173,6 @@ var Phase = Phase || {};
             this.navigate(querystring, {replace: true});
 
             dispatcher.trigger('onUrlChange', querystring);
-        },
-        /**
-         * User selected a search bookmark.
-         *
-         * We need to completely reset the existing search parameters and
-         * replace them with the ones from the bookmark.
-         */
-        onBookmarkSelected: function(bookmark) {
-            this.search.reset(bookmark.attributes);
         }
     });
 })(this, Phase, Backbone, _);

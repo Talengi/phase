@@ -353,7 +353,7 @@ var Phase = Phase || {};
             var options = field.children('option');
             var option_text_re = /^(.+) \(\d+\)$/i;
             _.each(options, function(option) {
-                var option = $(option);
+                option = $(option);
                 var text = option.text();
                 var val = option.val();
 

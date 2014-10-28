@@ -24,6 +24,7 @@ var Phase = Phase || {};
         initialize: function() {
             _.bindAll(this, 'addBookmark');
 
+            this.listenTo(this.model, 'change', this.deselectBookmark);
             this.listenTo(this.collection, 'reset', this.render);
             this.listenTo(this.collection, 'add', this.addBookmark);
         },
@@ -42,7 +43,7 @@ var Phase = Phase || {};
         /**
          * A bookmark was selected.
          *
-         * Create an actual Bookmark objects and trigger a corresponding event.
+         * Create an actual Bookmark objects and update the search.
          *
          */
         selectBookmark: function(option) {
@@ -50,8 +51,14 @@ var Phase = Phase || {};
             if (querystring !== '') {
                 var bookmark = new Phase.Models.Bookmark();
                 bookmark.fromUrl(querystring);
-                dispatcher.trigger('onBookmarkSelected', bookmark);
+
+                this.stopListening(this.model, 'change');
+                this.model.reset(bookmark.attributes);
+                this.listenTo(this.model, 'change', this.deselectBookmark);
             }
+        },
+        deselectBookmark: function() {
+            this.$el.val('');
         }
     });
 

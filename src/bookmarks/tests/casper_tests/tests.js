@@ -91,11 +91,14 @@ casper.test.begin('The bookmark is unselected when the search is refined', 0, fu
 
     casper.then(function() {
         casper.fill('#table-filters', {
-            'search_terms': 'hazop'
-        }, true);
+            'search_terms': 'receiving'
+        });
+        casper.sendKeys('#id_search_terms', casper.page.event.key.Enter, {keepFocus: true});
+        casper.wait(300);
     });
 
     casper.then(function() {
+        casper.capture('/tmp/toto.png');
         test.assertField('bookmark', '');
     });
 
