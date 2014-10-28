@@ -225,54 +225,55 @@ button.ui-multiselect {
 }
 
 /* Table filters */
-#table-filters legend {
+#table-filters {
+    margin-top: 20px;
+}
+.sidebar-form legend {
     border: none;
     padding: 0;
     text-align: center;
     display: inline-block;
 }
-#table-filters .control-label,
-#table-filters .control-group {
+.sidebar-form .control-label,
+.sidebar-form .control-group {
     text-align: center;
 }
-#table-filters #controls-rows {
-}
-#table-filters .control-group {
+.sidebar-form .control-group {
     margin-bottom: 10px;
 }
-#table-filters .controls {
+.sidebar-form .controls {
     vertical-align: middle;
 }
-#table-filters .control-group .controls > select,
-#table-filters .control-group .controls > input {
+.sidebar-form .control-group .controls > select,
+.sidebar-form .control-group .controls > input {
     display: table-cell;
     width: 85%;
     margin-bottom: 0;
     padding: 2px 1px;
 }
-#table-filters .control-group .controls > input {
+.sidebar-form .control-group .controls > input {
     width: 85%; /* bottstrap enlarges input with margin and padding */
 }
-#table-filters .control-group .controls > span {
+.sidebar-form .control-group .controls > span {
     margin: 2px 0 0 2px;
     display: none;
     cursor: pointer;
 }
-#table-filters label {
+.sidebar-form label {
     margin-bottom: 2px;
 }
-#table-filters select, #filters select {
+.sidebar-form select, #filters select {
     height: 25px;
     line-height: 25px;
     font-size: 12px;
 }
-#table-filters input[type="text"] {
+.sidebar-form input[type="text"] {
     height: 25px;
     line-height: 25px;
     font-size: 12px;
 }
-#table-filters select,
-#table-filters input[type="text"] {
+.sidebar-form select,
+.sidebar-form input[type="text"] {
 }
 
 
@@ -414,16 +415,16 @@ table.reviewers tr td:nth-child(4) {
     display: block;
     right: 0;
     bottom: 0;
-    padding-top: 15px;
+    padding: 15px;
     background-color: white;
     z-index: 9999;
     display: none;
     width: 350px;
 }
-.sidebar-offcanvas #controls-rows {
+.sidebar-offcanvas .offcanvas-wrapper {
     position: fixed;
     right: 0;
-    top: 170px;
+    top: 0px;
     width: 16.67%;
     bottom: 0;
     overflow-y: auto;
@@ -436,10 +437,6 @@ table.reviewers tr td:nth-child(4) {
     -moz-box-shadow: -8px 0 5px -1px #666;
     -webkit-box-shadow: -8px 0 5px -1px #666;
     box-shadow: -8px 0 5px -1px #666;
-}
-.sidebar-offcanvas.active #controls-rows {
-    display: block;
-    top: 70px;
 }
 
 /* Signin */

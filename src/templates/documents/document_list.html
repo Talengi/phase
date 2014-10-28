@@ -20,13 +20,11 @@
     </div>
 
     <div id="search-sidebar" class="sidebar-offcanvas">
-        <form action="{% url 'search_documents' organisation_slug category_slug %}"
-              method="get"
-              id="table-filters">
-            {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
+        <div class="offcanvas-wrapper">
             {% include "documents/form_filtering.html" %}
-        </form>
+        </div>
     </div>
+    {% include "bookmarks/bookmark_modal.html" %}
 {% endblock %}
 
 {% block extra_js %}
@@ -37,11 +35,15 @@
         currentUrl: "{% url "category_document_list" organisation_slug category_slug %}",
         detailUrl: "{% url "document_detail" organisation_slug category_slug "document_key" %}",
         searchUrl: "{% url "search_documents" organisation_slug category_slug %}",
-        favoriteUrl: "{% url "favorite-list" %}",
         paginateBy: {{ paginate_by }},
         sortBy: "{{ sort_by }}",
         documentType: "{{ document_type }}",
-        initialFavorites: {{ favorites|safe }}
+
+        favoriteUrl: "{% url "favorite-list" %}",
+        initialFavorites: {{ favorites|safe }},
+
+        bookmarksUrl: "{% url "bookmark-list" %}",
+        initialBookmarks: {{ bookmarks|safe }}
     };
     </script>
     {% compressed_js "list" %}

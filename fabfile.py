@@ -63,7 +63,7 @@ def deploy(with_data=True):
             generate = 'python src/manage.py loaddata initial_documents'
             delete_index = 'python src/manage.py delete_index'
             create_index = 'python src/manage.py create_index'
-            reindex = 'python src/manage.py reindex_all'
+            reindex = 'python src/manage.py reindex_all --noinput'
             with_production_settings = ' --settings=core.settings.production'
             run('pip install -r requirements/production.txt')
             run(collectstatic + with_production_settings)

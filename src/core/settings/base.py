@@ -224,6 +224,7 @@ LOCAL_APPS = (
     'notifications',
     'imports',
     'search',
+    'bookmarks',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -343,11 +344,17 @@ PIPELINE_JS = {
             'js/vendor/backbone.js',
             'js/vendor/jquery.inview.js',
             'js/backbone-config.js',
-            'js/documents/events.js',
+            'js/events.js',
+            'js/querystring.js',
             'js/documents/models.js',
+            'js/favorites/models.js',
+            'js/bookmarks/models.js',
             'js/documents/collections.js',
+            'js/favorites/collections.js',
+            'js/bookmarks/collections.js',
             'js/documents/routers.js',
             'js/documents/views.js',
+            'js/bookmarks/views.js',
             'js/documents/app.js',
         ),
         'output_filename': 'js/list.js',

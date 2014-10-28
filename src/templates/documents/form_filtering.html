@@ -1,4 +1,9 @@
 {% load widget_tweaks %}
+<form action="{% url 'search_documents' organisation_slug category_slug %}"
+      method="get"
+      class="sidebar-form"
+      id="table-filters">
+{% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
 <fieldset>
     <legend>
         <button type="reset" id="resetForm" class="btn btn-primary">Reset filters</button>
@@ -14,11 +19,39 @@
             <div class="control-group {% if field.errors %}error{% endif %}">
                 <label class="control-label" for="{{ field.auto_id }}">{{ field.label }}</label>
                 <div class="controls">
-                    {{ field|add_class:"form-control" }} <span class="glyphicon glyphicon-remove"></span>
+                    {{ field|add_class:"form-control filter" }} <span class="glyphicon glyphicon-remove"></span>
                 </div>
                 {% if field.errors %}<span class="help-inline">{{ field.errors.0 }}</span>{% endif %}
             </div>
         </div>
     {% endfor %}
+        <div class="control-group">
+            <button id="bookmark-button"
+                    type="button"
+                    class="btn btn-primary"
+                    data-toggle="modal"
+                    data-target="#bookmark-modal">
+                {{ _('Save Bookmark') }}
+            </button>
+        </div>
     </div>
 </fieldset>
+</form>
+
+<form class="sidebar-form">
+<fieldset>
+    <div id="controls-rows">
+        <hr />
+        <div class="form-group">
+            <div class="control-group">
+                <label class="control-label" for="id_bookmark">{{ _('Bookmark') }}</label>
+                <div class="controls">
+                    <select id="id_bookmark">
+                        <option selected="selected"></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</fieldset>
+</form>

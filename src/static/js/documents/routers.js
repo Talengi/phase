@@ -30,6 +30,7 @@ var Phase = Phase || {};
             this.favoriteCollection = new Phase.Collections.FavoriteCollection(
                 Phase.Config.initialFavorites
             );
+            this.bookmarkCollection = new Phase.Collections.BookmarkCollection();
 
             var searchParams = this.extractSearchParameters();
             this.search = new Phase.Models.Search(searchParams);
@@ -43,12 +44,20 @@ var Phase = Phase || {};
             this.navbarView = new Phase.Views.NavbarView();
             this.searchView = new Phase.Views.SearchView({ model: this.search });
             this.paginationView = new Phase.Views.PaginationView();
+            this.bookmarkFormView = new Phase.Views.BookmarkFormView({
+                collection: this.bookmarkCollection
+            });
+            this.bookmarkSelectView = new Phase.Views.BookmarkSelectView({
+                collection: this.bookmarkCollection
+            });
 
+            this.listenTo(this.search, 'change', this.onSearch);
             this.listenTo(dispatcher, 'onMoreDocumentsRequested', this.onMoreDocumentsRequested);
             this.listenTo(dispatcher, 'onSort', this.onSort);
-            this.listenTo(dispatcher, 'onSearch', this.onSearch);
             this.listenTo(dispatcher, 'onFavoriteSet', this.onFavoriteSet);
+            this.listenTo(dispatcher, 'onBookmarkSelected', this.onBookmarkSelected);
 
+            this.bookmarkCollection.reset(Phase.Config.initialBookmarks);
             this.fetchDocuments(false);
         },
         /**
@@ -56,30 +65,27 @@ var Phase = Phase || {};
          * a javascript object.
          */
         extractSearchParameters: function() {
-            var searchParams = {};
-            var query = window.location.search.substring(1);
-            if (query.indexOf('&') !== -1) {
-                var params = query.split('&');
-                for (var i = 0; i < params.length; i++) {
-                    var param = params[i].split('=');
-                    var key = decodeURIComponent(param[0]);
-                    var value = decodeURIComponent(param[1]);
-                    searchParams[key] = value;
-                }
-            }
+            var querystring = new Phase.Models.Querystring();
+            var searchParams = querystring.attributes;
 
             // Pagination cannot be set by url parameters
-            // because it breaks… stuff…
+            // because it breaks… stuff.
             delete searchParams.size;
             delete searchParams.start;
 
             return searchParams;
         },
-        resetSearch: function() {
+        /**
+         * Since we use infinite scrolling, when the search parameters are
+         * updated, we need to start from page 1
+         */
+        resetPagination: function() {
             this.tableContainer.scrollTop(0);
-            this.search.reset();
-            this.updateUrl();
+            this.search.firstPage();
         },
+        /**
+         * Call the API to get actual search results.
+         */
         fetchDocuments: function(reset) {
             this.documentsCollection.fetch({
                 data: this.search.attributes,
@@ -88,6 +94,10 @@ var Phase = Phase || {};
                 success: this.onDocumentsFetched
             });
         },
+        /**
+         * When we get the search results from the API, we need to trigger
+         * different events so the different views can update themselves.
+         */
         onDocumentsFetched: function() {
             var displayedDocuments = this.documentsCollection.length;
             var totalDocuments = this.documentsCollection.total;
@@ -98,21 +108,30 @@ var Phase = Phase || {};
             });
             dispatcher.trigger('onAggregationsFetched', aggregations);
         },
+        /**
+         * User scrolled all the way to the bottom of the page, let's
+         * download more search results.
+         */
         onMoreDocumentsRequested: function() {
             this.search.nextPage();
             this.fetchDocuments(false);
         },
+        /**
+         * The user clicked one of the table header to sort results.
+         */
         onSort: function(data) {
             var sortField = data.field;
             var sortDirection = data.direction;
             var prefix = sortDirection === 'down' ? '' : '-';
 
             this.search.set('sort_by', prefix + sortField);
-            this.resetSearch();
-            this.fetchDocuments(true);
         },
+        /**
+         * The search form was updated / submitted.
+         */
         onSearch: function() {
-            this.resetSearch();
+            this.resetPagination();
+            this.updateUrl();
             this.fetchDocuments(true);
         },
         onFavoriteSet: function(data) {
@@ -150,8 +169,19 @@ var Phase = Phase || {};
                     delete attributes[key];
                 }
             });
-            var querystring = $.param(attributes);
-            this.navigate('?' + querystring, {replace: true});
+            var querystring = '?' + $.param(attributes);
+            this.navigate(querystring, {replace: true});
+
+            dispatcher.trigger('onUrlChange', querystring);
+        },
+        /**
+         * User selected a search bookmark.
+         *
+         * We need to completely reset the existing search parameters and
+         * replace them with the ones from the bookmark.
+         */
+        onBookmarkSelected: function(bookmark) {
+            this.search.reset(bookmark.attributes);
         }
     });
 })(this, Phase, Backbone, _);
