@@ -192,9 +192,8 @@ var Phase = Phase || {};
          * replace them with the ones from the bookmark.
          */
         onBookmarkSelected: function(bookmark) {
-            this.search.reset();
-            this.search.set(bookmark.attributes);
-            this.searchView.search();
+            this.search.reset(bookmark.attributes);
+            dispatcher.trigger('onSearch');
         }
     });
 })(this, Phase, Backbone, _);
