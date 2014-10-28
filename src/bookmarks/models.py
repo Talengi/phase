@@ -48,7 +48,9 @@ def get_user_bookmarks(user, category):
     cache_key = 'bookmarks_%d_%d' % (user.id, category.id)
     bookmarks = cache.get(cache_key)
     if bookmarks is None:
-        bookmarks = Bookmark.objects.filter(user=user)
+        bookmarks = Bookmark.objects \
+            .filter(user=user) \
+            .filter(category=category)
         cache.set(cache_key, bookmarks, None)
 
     return bookmarks
