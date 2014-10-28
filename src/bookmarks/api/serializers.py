@@ -8,6 +8,8 @@ from bookmarks.models import Bookmark
 
 
 class BookmarkSerializer(serializers.ModelSerializer):
+    category = serializers.PrimaryKeyRelatedField()
+
     class Meta:
         model = Bookmark
-        fields = ('id', 'name', 'url')
+        fields = ('id', 'category', 'name', 'url')
