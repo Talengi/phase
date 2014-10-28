@@ -67,14 +67,22 @@ var Phase = Phase || {};
         extractSearchParameters: function() {
             var searchParams = {};
             var query = window.location.search.substring(1);
+            if (query === '') {
+                return searchParams;
+            }
+
+            var params;
             if (query.indexOf('&') !== -1) {
-                var params = query.split('&');
-                for (var i = 0; i < params.length; i++) {
-                    var param = params[i].split('=');
-                    var key = decodeURIComponent(param[0]);
-                    var value = decodeURIComponent(param[1]);
-                    searchParams[key] = value;
-                }
+                params = query.split('&');
+            } else {
+                params = [query];
+            }
+
+            for (var i = 0; i < params.length; i++) {
+                var param = params[i].split('=');
+                var key = decodeURIComponent(param[0]);
+                var value = decodeURIComponent(param[1]);
+                searchParams[key] = value;
             }
 
             // Pagination cannot be set by url parameters
