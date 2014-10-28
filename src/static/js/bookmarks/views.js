@@ -47,9 +47,11 @@ var Phase = Phase || {};
          */
         selectBookmark: function(option) {
             var querystring = this.$el.val();
-            var bookmark = new Phase.Models.Bookmark();
-            bookmark.fromUrl(querystring);
-            dispatcher.trigger('onBookmarkSelected', bookmark);
+            if (querystring !== '') {
+                var bookmark = new Phase.Models.Bookmark();
+                bookmark.fromUrl(querystring);
+                dispatcher.trigger('onBookmarkSelected', bookmark);
+            }
         }
     });
 
