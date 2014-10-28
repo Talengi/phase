@@ -15,9 +15,4 @@ var Phase = Phase || {};
         }
     });
 
-    Phase.Collections.FavoriteCollection = Backbone.Collection.extend({
-        model: Phase.Models.Favorite,
-        url: Phase.Config.favoriteUrl
-    });
-
 })(this, Phase, Backbone, _);
