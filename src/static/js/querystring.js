@@ -12,9 +12,9 @@ var Phase = Phase || {};
         constructor: function(querystring) {
             querystring = querystring || window.location.search;
 
-            // stript everything before '?'
+            // strip everything before '?'
             var startIndex = querystring.indexOf('?');
-            if (startIndex !== 0) {
+            if (startIndex !== -1) {
                 querystring = querystring.substring(startIndex + 1);
             }
 
@@ -28,12 +28,15 @@ var Phase = Phase || {};
          */
         parse: function(querystring) {
             var data = {};
-            var params = querystring.split('&');
-            for (var i = 0; i < params.length; i++) {
-                var param = params[i].split('=');
-                var key = decodeURIComponent(param[0]);
-                var value = decodeURIComponent(param[1]);
-                data[key] = value;
+
+            if (querystring !== '') {
+                var params = querystring.split('&');
+                for (var i = 0; i < params.length; i++) {
+                    var param = params[i].split('=');
+                    var key = decodeURIComponent(param[0]);
+                    var value = decodeURIComponent(param[1]).replace(/\+/g, ' ');
+                    data[key] = value;
+                }
             }
 
             return data;

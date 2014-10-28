@@ -65,25 +65,8 @@ var Phase = Phase || {};
          * a javascript object.
          */
         extractSearchParameters: function() {
-            var searchParams = {};
-            var query = window.location.search.substring(1);
-            if (query === '') {
-                return searchParams;
-            }
-
-            var params;
-            if (query.indexOf('&') !== -1) {
-                params = query.split('&');
-            } else {
-                params = [query];
-            }
-
-            for (var i = 0; i < params.length; i++) {
-                var param = params[i].split('=');
-                var key = decodeURIComponent(param[0]);
-                var value = decodeURIComponent(param[1]);
-                searchParams[key] = value;
-            }
+            var querystring = new Phase.Models.Querystring();
+            var searchParams = querystring.attributes;
 
             // Pagination cannot be set by url parameters
             // because it breaks… stuff.
