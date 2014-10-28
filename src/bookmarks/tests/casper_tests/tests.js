@@ -36,6 +36,56 @@ casper.test.begin('Bookmarks are loaded upon page load', 0, function suite(test)
     });
 });
 
+casper.test.begin('Search is updated when a bookmark is selected', 0, function suite(test) {
+    casper.start(document_list_url, function() {
+        casper.viewport(1024, 768);
+        casper.click('button#toggle-filters-button');
+    });
+
+    casper.then(function() {
+        casper.evaluate(function() {
+            $('#id_bookmark option#bookmark_1').prop('selected', true);
+            $('#id_bookmark').change();
+        });
+        casper.wait(50);
+    });
+
+    casper.then(function() {
+        casper.debugHTML('#id_bookmark');
+        test.assertUrlMatch(/search_terms=hazop/);
+    });
+
+    casper.then(function() {
+        casper.evaluate(function() {
+            $('#id_bookmark option#bookmark_2').prop('selected', true);
+            $('#id_bookmark').change();
+        });
+        casper.wait(50);
+    });
+
+    casper.then(function() {
+        test.assertUrlMatch(/sort_by=current_revision/);
+
+        // previous url parameters are reset
+        var url = casper.getCurrentUrl();
+        test.assert(!url.match(/search_terms=hazop/));
+    });
+
+    casper.run(function() {
+        test.done();
+    });
+});
+
+casper.test.begin('The bookmark is unselected when the search is refined', 0, function suite(test) {
+    casper.start(document_list_url, function() {
+        casper.click('button#toggle-filters-button');
+    });
+
+    casper.run(function() {
+        test.done();
+    });
+});
+
 casper.test.begin('Bookmarking a search', 0, function suite(test) {
     casper.start(document_list_url, function() {
         casper.viewport(1024, 768);
