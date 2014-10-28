@@ -76,17 +76,24 @@ var Phase = Phase || {};
             }
 
             // Pagination cannot be set by url parameters
-            // because it breaks… stuff…
+            // because it breaks… stuff.
             delete searchParams.size;
             delete searchParams.start;
 
             return searchParams;
         },
-        resetSearch: function() {
+        /**
+         * Since we use infinite scrolling, when the search parameters are
+         * updated, we need to start from page 1
+         */
+        resetPagination: function() {
             this.tableContainer.scrollTop(0);
-            this.search.reset();
+            this.search.firstPage();
             this.updateUrl();
         },
+        /**
+         * Call the API to get actual search results.
+         */
         fetchDocuments: function(reset) {
             this.documentsCollection.fetch({
                 data: this.search.attributes,
@@ -95,6 +102,10 @@ var Phase = Phase || {};
                 success: this.onDocumentsFetched
             });
         },
+        /**
+         * When we get the search results from the API, we need to trigger
+         * different events so the different views can update themselves.
+         */
         onDocumentsFetched: function() {
             var displayedDocuments = this.documentsCollection.length;
             var totalDocuments = this.documentsCollection.total;
@@ -105,21 +116,31 @@ var Phase = Phase || {};
             });
             dispatcher.trigger('onAggregationsFetched', aggregations);
         },
+        /**
+         * User scrolled all the way to the bottom of the page, let's
+         * download more search results.
+         */
         onMoreDocumentsRequested: function() {
             this.search.nextPage();
             this.fetchDocuments(false);
         },
+        /**
+         * The user clicked one of the table header to sort results.
+         */
         onSort: function(data) {
             var sortField = data.field;
             var sortDirection = data.direction;
             var prefix = sortDirection === 'down' ? '' : '-';
 
             this.search.set('sort_by', prefix + sortField);
-            this.resetSearch();
+            this.resetPagination();
             this.fetchDocuments(true);
         },
+        /**
+         * The search form was updated / submitted.
+         */
         onSearch: function() {
-            this.resetSearch();
+            this.resetPagination();
             this.fetchDocuments(true);
         },
         onFavoriteSet: function(data) {

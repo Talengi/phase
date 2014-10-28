@@ -31,7 +31,7 @@ var Phase = Phase || {};
             var size = this.get('size');
             this.set('start', start + size);
         },
-        reset: function() {
+        firstPage: function() {
             this.set('start', this.defaults.start);
             this.set('size',  this.defaults.size);
         }
