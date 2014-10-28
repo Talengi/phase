@@ -1,4 +1,9 @@
 {% load widget_tweaks %}
+<form action="{% url 'search_documents' organisation_slug category_slug %}"
+      method="get"
+      class="sidebar-form"
+      id="table-filters">
+{% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
 <fieldset>
     <legend>
         <button type="reset" id="resetForm" class="btn btn-primary">Reset filters</button>
@@ -29,6 +34,13 @@
                 {{ _('Save Bookmark') }}
             </button>
         </div>
+    </div>
+</fieldset>
+</form>
+
+<form class="sidebar-form">
+<fieldset>
+    <div id="controls-rows">
         <hr />
         <div class="form-group">
             <div class="control-group">
@@ -42,3 +54,4 @@
         </div>
     </div>
 </fieldset>
+</form>

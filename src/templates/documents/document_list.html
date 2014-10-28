@@ -20,12 +20,9 @@
     </div>
 
     <div id="search-sidebar" class="sidebar-offcanvas">
-        <form action="{% url 'search_documents' organisation_slug category_slug %}"
-              method="get"
-              id="table-filters">
-            {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
+        <div class="offcanvas-wrapper">
             {% include "documents/form_filtering.html" %}
-        </form>
+        </div>
     </div>
     {% include "bookmarks/bookmark_modal.html" %}
 {% endblock %}
