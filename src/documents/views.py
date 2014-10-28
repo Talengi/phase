@@ -60,7 +60,7 @@ class DocumentListMixin(object):
             'category': self.category,
             'document_type': self.category.document_type(),
             'favorites': self.get_favorites(),
-            'bookmarks': self.get_bookmarks(),
+            'bookmarks': self.get_bookmarks(self.request.user, self.category),
         })
         return context
 
@@ -110,8 +110,8 @@ class DocumentListMixin(object):
         serializer = FavoriteSerializer(qs, many=True)
         return JSONRenderer().render(serializer.data)
 
-    def get_bookmarks(self):
-        bookmarks = get_user_bookmarks(self.request.user)
+    def get_bookmarks(self, user, category):
+        bookmarks = get_user_bookmarks(user, category)
         serializer = BookmarkSerializer(bookmarks, many=True)
         return JSONRenderer().render(serializer.data)
 
