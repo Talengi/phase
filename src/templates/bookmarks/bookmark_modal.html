@@ -1,7 +1,7 @@
-<div class="modal fade" id="bookmark-modal" tabindex="-1" role="dialog" aria-labelledby="bookmark-modal-label" aria-hidden="true">
-    <form id="bookmark-form" method="post" action="{% url 'bookmark-list' %}" class="form">
-        {% csrf_token %}
+<form id="bookmark-form" method="post" action="{% url 'bookmark-list' %}" class="form">
+    <div class="modal fade" id="bookmark-modal" tabindex="-1" role="dialog" aria-labelledby="bookmark-modal-label" aria-hidden="true">
         <input type="hidden" name="url" value="" id="id_url"/>
+        <input type="hidden" name="category" value="{{ category.id }}" >
 
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
@@ -11,13 +11,13 @@
                 </div>
                 <div class="modal-body">
                     <label for="name">Bookmark name</label><br/>
-                    <input type="text" name="name" id="name" class="form-control" />
+                    <input type="text" name="name" id="name" class="form-control" autocomplete="off" />
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">{{ _('Cancel') }}</button>
-                    <button type="button" class="btn btn-primary">{{ _('Save bookmark') }}</button>
+                    <button type="submit" class="btn btn-primary">{{ _('Save bookmark') }}</button>
                 </div>
             </div>
         </div>
-    </form>
-</div>
+    </div>
+</form>
