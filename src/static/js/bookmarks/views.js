@@ -39,8 +39,17 @@ var Phase = Phase || {};
 
             this.$el.append(option);
         },
+        /**
+         * A bookmark was selected.
+         *
+         * Create an actual Bookmark objects and trigger a corresponding event.
+         *
+         */
         selectBookmark: function(option) {
-            dispatcher.trigger('onBookmarkSelected', this.$el.val());
+            var querystring = this.$el.val();
+            var bookmark = new Phase.Models.Bookmark();
+            bookmark.fromUrl(querystring);
+            dispatcher.trigger('onBookmarkSelected', bookmark);
         }
     });
 

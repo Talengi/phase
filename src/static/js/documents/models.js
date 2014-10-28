@@ -26,6 +26,13 @@ var Phase = Phase || {};
                 self.set(field.name, field.value);
             });
         },
+        /**
+         * Reset the search parameters to default.
+         */
+        reset: function() {
+            this.clear();
+            this.set(this.defaults);
+        },
         nextPage: function() {
             var start = this.get('start');
             var size = this.get('size');

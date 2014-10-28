@@ -30,9 +30,7 @@ var Phase = Phase || {};
             this.favoriteCollection = new Phase.Collections.FavoriteCollection(
                 Phase.Config.initialFavorites
             );
-            this.bookmarkCollection = new Phase.Collections.BookmarkCollection(
-                Phase.Config.initialBookmarks
-            );
+            this.bookmarkCollection = new Phase.Collections.BookmarkCollection();
 
             var searchParams = this.extractSearchParameters();
             this.search = new Phase.Models.Search(searchParams);
@@ -46,7 +44,9 @@ var Phase = Phase || {};
             this.navbarView = new Phase.Views.NavbarView();
             this.searchView = new Phase.Views.SearchView({ model: this.search });
             this.paginationView = new Phase.Views.PaginationView();
-            this.bookmarkFormView = new Phase.Views.BookmarkFormView();
+            this.bookmarkFormView = new Phase.Views.BookmarkFormView({
+                collection: this.bookmarkCollection
+            });
             this.bookmarkSelectView = new Phase.Views.BookmarkSelectView({
                 collection: this.bookmarkCollection
             });
@@ -55,8 +55,10 @@ var Phase = Phase || {};
             this.listenTo(dispatcher, 'onSort', this.onSort);
             this.listenTo(dispatcher, 'onSearch', this.onSearch);
             this.listenTo(dispatcher, 'onFavoriteSet', this.onFavoriteSet);
+            this.listenTo(dispatcher, 'onBookmarkSelected', this.onBookmarkSelected);
 
             this.fetchDocuments(false);
+            this.bookmarkCollection.reset(Phase.Config.initialBookmarks);
         },
         /**
          * Extract the search parameters from the query string, and returns
@@ -178,8 +180,21 @@ var Phase = Phase || {};
                     delete attributes[key];
                 }
             });
-            var querystring = $.param(attributes);
-            this.navigate('?' + querystring, {replace: true});
+            var querystring = '?' + $.param(attributes);
+            this.navigate(querystring, {replace: true});
+
+            dispatcher.trigger('onUrlChange', querystring);
+        },
+        /**
+         * User selected a search bookmark.
+         *
+         * We need to completely reset the existing search parameters and
+         * replace them with the ones from the bookmark.
+         */
+        onBookmarkSelected: function(bookmark) {
+            this.search.reset();
+            this.search.set(bookmark.attributes);
+            this.searchView.search();
         }
     });
 })(this, Phase, Backbone, _);

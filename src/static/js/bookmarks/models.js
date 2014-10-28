@@ -7,6 +7,10 @@ var Phase = Phase || {};
 
     Phase.Models.Bookmark = Backbone.Model.extend({
         idAttribute: 'pk',
+        fromUrl: function(querystring) {
+            var q = new Phase.Models.Querystring(querystring);
+            this.set(q.attributes);
+        },
         fromForm: function(form) {
             var data = form.serializeArray();
             var self = this;
