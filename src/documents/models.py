@@ -294,6 +294,10 @@ class MetadataRevision(models.Model):
             self.document.updated_on = timezone.now()
             self.document.save()
 
+    def is_under_review(self):
+        """This method is overriden in the ReviewMixin class."""
+        return False
+
     @property
     def name(self):
         """A revision identifier should be displayed with two digits"""
