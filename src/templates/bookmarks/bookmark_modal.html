@@ -21,3 +21,32 @@
         </div>
     </div>
 </form>
+
+<form id="delete-bookmark-form" method="delete" action="{% url 'bookmark-list' %}" class="form">
+    <div class="modal fade" id="delete-bookmark-modal" tabindex="-1" role="dialog" aria-labelledby="delete-bookmark-modal-label" aria-hidden="true">
+        <input type="hidden" name="url" value="" id="id_url"/>
+
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">{{ _('Cancel') }}</span></button>
+                    <h4 class="modal-title" id="delete-bookmark-modal-label">Delete bookmarks</h4>
+                </div>
+                <div class="modal-body">
+                    <ul id="bookmark-list" class="list-group">
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{ _('Cancel') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script type="text/template" id="tpl-bookmark-item">
+    <%= name %>
+    <button type="button" class="pull-right btn btn-default btn-xs">
+        <span class="glyphicon glyphicon-remove"></span>
+    </button>
+</script>

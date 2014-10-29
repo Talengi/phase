@@ -26,15 +26,16 @@ var Phase = Phase || {};
         documentList: function() {
             this.tableContainer = $('#document-list-row');
 
+            // Models and collections
             this.documentsCollection = new Phase.Collections.DocumentCollection();
+            this.bookmarkCollection = new Phase.Collections.BookmarkCollection();
             this.favoriteCollection = new Phase.Collections.FavoriteCollection(
                 Phase.Config.initialFavorites
             );
-            this.bookmarkCollection = new Phase.Collections.BookmarkCollection();
-
             var searchParams = this.extractSearchParameters();
             this.search = new Phase.Models.Search(searchParams);
 
+            // Views
             var sortField = searchParams.sort_by || Phase.Config.sortBy;
             this.tableHeaderView = new Phase.Views.TableHeaderView({sortField: sortField});
             this.tableBodyView = new Phase.Views.TableBodyView({
@@ -51,12 +52,17 @@ var Phase = Phase || {};
                 model: this.search,
                 collection: this.bookmarkCollection
             });
+            this.bookmarkListView = new Phase.Views.BookmarkListView({
+                collection: this.bookmarkCollection
+            });
 
+            // Event binding
             this.listenTo(this.search, 'change', this.onSearch);
             this.listenTo(dispatcher, 'onMoreDocumentsRequested', this.onMoreDocumentsRequested);
             this.listenTo(dispatcher, 'onSort', this.onSort);
             this.listenTo(dispatcher, 'onFavoriteSet', this.onFavoriteSet);
 
+            // Data fetching
             this.bookmarkCollection.reset(Phase.Config.initialBookmarks);
             this.fetchDocuments(false);
         },

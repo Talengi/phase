@@ -104,4 +104,38 @@ var Phase = Phase || {};
         }
     });
 
+    /**
+     * Bookmark deletion view
+     */
+    Phase.Views.BookmarkListView = Backbone.View.extend({
+        el: 'ul#bookmark-list',
+        initialize: function() {
+            _.bindAll(this, 'addBookmark');
+
+            this.listenTo(this.collection, 'reset', this.render);
+            this.listenTo(this.collection, 'add', this.addBookmark);
+        },
+        render: function() {
+            this.collection.each(this.addBookmark);
+            return this;
+        },
+        addBookmark: function(bookmark) {
+            var view = new Phase.Views.BookmarkListItemView({ model: bookmark });
+            this.$el.append(view.render().el);
+        }
+    });
+
+    /**
+     * A single line in the bookmark list view.
+     */
+    Phase.Views.BookmarkListItemView = Backbone.View.extend({
+        tagName: 'li',
+        className: 'list-group-item',
+        template: _.template($('#tpl-bookmark-item').html()),
+        render: function() {
+            this.$el.html(this.template(this.model.attributes));
+            return this;
+        }
+    });
+
 })(this, Phase, Backbone, _);
