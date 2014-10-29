@@ -55,7 +55,7 @@ class Review(models.Model):
         _('Review due date'),
         null=True, blank=True
     )
-    klass = models.IntegerField(
+    docclass = models.IntegerField(
         verbose_name=u"Class",
         default=1,
         choices=CLASSES)
@@ -120,7 +120,7 @@ class ReviewMixin(models.Model):
         verbose_name=_('Approver'),
         related_name='%(app_label)s_%(class)s_related_approver',
         null=True, blank=True)
-    klass = models.IntegerField(
+    docclass = models.IntegerField(
         verbose_name=u"Class",
         default=1,
         choices=CLASSES)
@@ -167,7 +167,7 @@ class ReviewMixin(models.Model):
                 document=self.document,
                 revision=self.revision,
                 due_date=self.review_due_date,
-                klass=self.klass,
+                docclass=self.docclass,
             )
 
         Review.objects.create(
@@ -176,7 +176,7 @@ class ReviewMixin(models.Model):
             document=self.document,
             revision=self.revision,
             due_date=self.review_due_date,
-            klass=self.klass,
+            docclass=self.docclass,
         )
 
         Review.objects.create(
@@ -185,7 +185,7 @@ class ReviewMixin(models.Model):
             document=self.document,
             revision=self.revision,
             due_date=self.review_due_date,
-            klass=self.klass,
+            docclass=self.docclass,
         )
 
     @transaction.atomic

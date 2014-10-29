@@ -1,2 +1,2 @@
-document_key;title;contract_number;originator;unit;discipline;document_type;sequential_number;system;wbs;weight;status_std_planned_date;klass;status;revision_date;created_on
+document_key;title;contract_number;originator;unit;discipline;document_type;sequential_number;system;wbs;weight;status_std_planned_date;docclass;status;revision_date;created_on
 ;Mon contractor deliverable;FAC09001;CTR;000;MAI;SCH;1234;88;01-05-05-05-05;;2019-09-30;1;FIN;2014-09-24;2014-09-24

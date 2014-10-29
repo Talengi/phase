@@ -53,7 +53,7 @@ def get_priorities_count(user):
             .filter(due_date__lte=delta) \
             .filter(closed=False) \
             .filter(role__in=['leader', 'approver']) \
-            .filter(klass__lte=2) \
+            .filter(docclass__lte=2) \
             .count()
         cache.set(cache_key, count, None)
 

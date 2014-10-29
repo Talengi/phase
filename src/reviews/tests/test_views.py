@@ -120,7 +120,7 @@ class PrioritiesDocumentListTests(TestCase):
                 'reviewers': [self.user],
                 'leader': self.other_user,
                 'approver': self.other_user,
-                'klass': 1,
+                'docclass': 1,
             }
         )
         doc.latest_revision.start_review()
@@ -134,7 +134,7 @@ class PrioritiesDocumentListTests(TestCase):
                 'reviewers': [self.user],
                 'leader': self.user,
                 'approver': self.other_user,
-                'klass': 1,
+                'docclass': 1,
             }
         )
         revision = doc.latest_revision
@@ -145,13 +145,13 @@ class PrioritiesDocumentListTests(TestCase):
         self.assertNotContains(res, '<td class="columndocument_key"')
 
     def test_non_prioritary_document3(self):
-        """Klass < 2"""
+        """docclass < 2"""
         doc = DocumentFactory(
             revision={
                 'reviewers': [self.user],
                 'leader': self.user,
                 'approver': self.other_user,
-                'klass': 3,
+                'docclass': 3,
             }
         )
         revision = doc.latest_revision
@@ -167,7 +167,7 @@ class PrioritiesDocumentListTests(TestCase):
                 'reviewers': [self.user],
                 'leader': self.user,
                 'approver': self.other_user,
-                'klass': 1,
+                'docclass': 1,
             }
         )
         revision = doc.latest_revision

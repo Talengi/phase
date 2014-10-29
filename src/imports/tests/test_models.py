@@ -36,13 +36,13 @@ class ImportTests(TestCase):
                 'document_key': 'toto',
                 'title': 'doc-toto',
                 'status': 'STD',
-                'klass': '1',
+                'docclass': '1',
             },
             {
                 'document_key': 'tata',
                 'title': 'doc-tata',
                 'status': 'FIN',
-                'klass': '2',
+                'docclass': '2',
             }
         ])
 
@@ -51,7 +51,7 @@ class ImportTests(TestCase):
             'document_key': 'toto',
             'title': 'doc-toto',
             'status': 'STD',
-            'klass': '1',
+            'docclass': '1',
         }
         imp = Import(batch=self.batch, data=data)
         imp.do_import(line=1)
@@ -62,7 +62,7 @@ class ImportTests(TestCase):
         self.assertEqual(imp.document.document_key, 'toto')
 
     def test_failure_import(self):
-        """The required "klass" field is missing."""
+        """The required "docclass" field is missing."""
         data = {
             'document_key': 'toto',
             'title': 'doc-toto',
@@ -79,7 +79,7 @@ class ImportTests(TestCase):
             'document_key': 'toto',
             'title': 'doc-toto',
             'status': 'STD',
-            'klass': '1',
+            'docclass': '1',
         }
         imp = Import(batch=self.batch, data=data)
         imp.do_import(line=1)
@@ -94,7 +94,7 @@ class ImportTests(TestCase):
             'document_key': 'toto',
             'title': 'doc-toto',
             'status': 'IDC',
-            'klass': '2',
+            'docclass': '2',
         }
         imp = Import(batch=self.batch, data=data)
         imp.do_import(line=2)
@@ -104,7 +104,7 @@ class ImportTests(TestCase):
             'document_key': 'toto',
             'title': 'doc-toto',
             'status': 'IFA',
-            'klass': '3',
+            'docclass': '3',
         }
         imp = Import(batch=self.batch, data=data)
         imp.do_import(line=2)
@@ -119,7 +119,7 @@ class ImportTests(TestCase):
             'document_key': 'toto',
             'title': 'doc-toto',
             'status': 'STD',
-            'klass': '1',
+            'docclass': '1',
         }
         imp = Import(batch=self.batch, data=data)
         imp.do_import(line=1)
@@ -129,7 +129,7 @@ class ImportTests(TestCase):
             'document_key': 'toto',
             'title': 'doc-tata',
             'status': 'IDC',
-            'klass': '1',
+            'docclass': '1',
         }
         imp = Import(batch=self.batch, data=data)
         imp.do_import(line=2)
@@ -143,7 +143,7 @@ class ImportTests(TestCase):
             'document_key': 'toto',
             'title': 'doc-toto',
             'status': 'STD',
-            'klass': '1',
+            'docclass': '1',
         }
         imp = Import(batch=self.batch, data=data)
         imp.do_import(line=1)
@@ -154,7 +154,7 @@ class ImportTests(TestCase):
             'title': 'doc-tata',
             'revision': '0',
             'status': 'IDC',
-            'klass': '2',
+            'docclass': '2',
         }
         imp = Import(batch=self.batch, data=data)
         imp.do_import(line=2)
@@ -162,7 +162,7 @@ class ImportTests(TestCase):
 
         doc = Document.objects.get(document_key='toto')
         self.assertEqual(doc.current_revision, 0)
-        self.assertEqual(doc.latest_revision.klass, 2)
+        self.assertEqual(doc.latest_revision.docclass, 2)
 
     def test_import_revision_document_under_review(self):
         """Documents under review cannot be revised"""
@@ -182,7 +182,7 @@ class ImportTests(TestCase):
             'document_key': 'toto',
             'title': 'New title',
             'status': 'IDC',
-            'klass': '1',
+            'docclass': '1',
         }
         imp = Import(batch=self.batch, data=data)
         imp.do_import(line=2)

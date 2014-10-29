@@ -144,7 +144,7 @@ class ContractorDeliverable(Metadata):
 
     class PhaseConfig:
         filter_fields = (
-            'klass', 'status', 'unit', 'discipline', 'document_type',
+            'docclass', 'status', 'unit', 'discipline', 'document_type',
             'under_review', 'overdue', 'leader', 'approver'
         )
         searchable_fields = ('document_key', 'title',)
@@ -153,7 +153,7 @@ class ContractorDeliverable(Metadata):
             ('Title', 'title'),
             ('Rev.', 'current_revision'),
             ('Status', 'status'),
-            ('Class', 'klass'),
+            ('Class', 'docclass'),
             ('Unit', 'unit'),
             ('Discipline', 'discipline'),
             ('Document type', 'document_type'),
@@ -237,8 +237,8 @@ class ContractorDeliverable(Metadata):
         return self.latest_revision.approver
 
     @property
-    def klass(self):
-        return self.latest_revision.klass
+    def docclass(self):
+        return self.latest_revision.docclass
 
 
 class ContractorDeliverableRevision(ReviewMixin, MetadataRevision):

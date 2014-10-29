@@ -92,7 +92,7 @@ class ContextProcessorTests(TestCase):
                 'reviewers': [self.user],
                 'leader': self.user,
                 'approver': self.other_user,
-                'klass': 1,
+                'docclass': 1,
             }
         )
         revision = doc.latest_revision

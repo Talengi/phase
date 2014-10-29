@@ -95,7 +95,7 @@ class ContractorDeliverableRevisionForm(BaseDocumentForm):
         return Layout(
             DocumentFieldset(
                 _('Revision'),
-                'klass',
+                'docclass',
                 'status',
                 'final_revision',
                 'native_file',
