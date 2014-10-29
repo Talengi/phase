@@ -356,8 +356,6 @@ class Correspondence(Metadata):
         searchable_fields = (
             'document_key',
             'subject',
-            'received_sent_date',
-            'due_date',
             'status',
             'leader__name',
             'originator',
@@ -502,8 +500,6 @@ class MinutesOfMeeting(Metadata):
         searchable_fields = (
             'document_key',
             'subject',
-            'meeting_date',
-            'received_sent_date',
             'originator',
             'recipient',
             'document_type',
@@ -628,13 +624,10 @@ class Transmittals(Metadata):
         )
         searchable_fields = (
             'document_key',
-            'transmittal_date',
-            'ack_of_receipt_date',
             'originator',
             'recipient',
             'document_type',
             'status',
-            'created_on'
         )
 
     def generate_document_key(self):
