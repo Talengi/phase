@@ -1,5 +1,6 @@
 from django import template
 from django.utils.translation import ugettext_lazy as _
+from django.template.defaultfilters import filesizeformat
 
 
 register = template.Library()
@@ -9,7 +10,8 @@ register = template.Library()
 def file_link(file, name=None):
     name = name if name else file
     if file:
-        link = '<a href="%s">%s</a>' % (file.url, name)
+        link = '<a href="%s">%s</a> (%s)' % (
+            file.url, name, filesizeformat(file.size))
     else:
         link = ''
     return link
