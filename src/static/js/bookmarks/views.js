@@ -27,6 +27,7 @@ var Phase = Phase || {};
             this.listenTo(this.model, 'change', this.deselectBookmark);
             this.listenTo(this.collection, 'reset', this.render);
             this.listenTo(this.collection, 'add', this.addBookmark);
+            this.listenTo(this.collection, 'destroy', this.removeBookmark);
         },
         render: function() {
             this.collection.each(this.addBookmark);
@@ -39,6 +40,13 @@ var Phase = Phase || {};
             option.text(bookmark.get('name'));
 
             this.$el.append(option);
+        },
+        /**
+         * A bookmark was removed. Remove the corresponing option.
+         */
+        removeBookmark: function(bookmark) {
+            var option = this.$el.find('option#bookmark_' + bookmark.get('id'));
+            option.remove();
         },
         /**
          * A bookmark was selected.
@@ -132,9 +140,18 @@ var Phase = Phase || {};
         tagName: 'li',
         className: 'list-group-item',
         template: _.template($('#tpl-bookmark-item').html()),
+        events: {
+            'click button': 'deleteBookmark'
+        },
+        initialize: function() {
+            this.listenTo(this.model, 'destroy', this.remove);
+        },
         render: function() {
             this.$el.html(this.template(this.model.attributes));
             return this;
+        },
+        deleteBookmark: function() {
+            this.model.destroy();
         }
     });
 

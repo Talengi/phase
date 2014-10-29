@@ -6,7 +6,10 @@ var Phase = Phase || {};
     Phase.Models = Phase.Models || {};
 
     Phase.Models.Bookmark = Backbone.Model.extend({
-        idAttribute: 'pk',
+        url: function() {
+            var origUrl = Backbone.Model.prototype.url.call(this);
+            return origUrl + (origUrl.charAt(origUrl.length - 1) === '/' ? '' : '/');
+        },
         fromUrl: function(querystring) {
             var q = new Phase.Models.Querystring(querystring);
             this.set(q.attributes);
