@@ -3,6 +3,8 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.forms import ModelChoiceField
+
 from elasticsearch_dsl import Search
 from braces.views import JSONResponseMixin
 
@@ -73,21 +75,24 @@ class SearchDocuments(JSONResponseMixin, BaseDocumentList):
             s = self.build_search_query(
                 queryset.model,
                 self.category.document_type(),
-                form.cleaned_data)
+                form)
             response = s.execute()
 
             return response
 
         return []
 
-    def build_search_query(self, Model, document_type, data):
+    def build_search_query(self, Model, document_type, form):
         """Builds an elasticsearch query."""
 
         s = Search(using=elastic, doc_type=document_type) \
             .index(settings.ELASTIC_INDEX)
 
+        data = form.cleaned_data
+
         # Filter fields
         filter_fields = Model.PhaseConfig.filter_fields
+
         for field in filter_fields:
             value = data.get(field, None)
             if value:
@@ -99,8 +104,13 @@ class SearchDocuments(JSONResponseMixin, BaseDocumentList):
                 s = s.filter({'term': {field: value}})
 
         # Aggregations (facets)
+        # For foreign key fields, we need to organize buckets by primary keys
+        # For every other field, the ".raw" field is what we want
         for field in filter_fields:
-            s.aggs.bucket(field, 'terms', field='%s.raw' % field, size=0)
+            if isinstance(form.fields[field], ModelChoiceField):
+                s.aggs.bucket(field, 'terms', field='%s_id' % field, size=0)
+            else:
+                s.aggs.bucket(field, 'terms', field='%s.raw' % field, size=0)
 
         # Search query
         search_terms = data.get('search_terms', None)
