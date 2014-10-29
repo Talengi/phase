@@ -128,6 +128,22 @@
   }
 },
 {
+  "pk": 18,
+  "model": "metadata.valueslist",
+  "fields": {
+    "index": "STATUS_COR_MOM",
+    "name": "Correspondance statuses"
+  }
+},
+{
+  "pk": 19,
+  "model": "metadata.valueslist",
+  "fields": {
+    "index": "STATUS_TRANSMITTALS",
+    "name": "Transmittal statuses"
+  }
+},
+{
   "pk": 1,
   "model": "metadata.listentry",
   "fields": {
@@ -7035,6 +7051,66 @@
     "values_list": 17,
     "order": 0,
     "value": "Test address"
+  }
+},
+{
+  "pk": 10691,
+  "model": "metadata.listentry",
+  "fields": {
+    "index": "opened",
+    "values_list": 18,
+    "order": 0,
+    "value": "Opened"
+  }
+},
+{
+  "pk": 10692,
+  "model": "metadata.listentry",
+  "fields": {
+    "index": "closed",
+    "values_list": 18,
+    "order": 1,
+    "value": "Closed"
+  }
+},
+{
+  "pk": 10693,
+  "model": "metadata.listentry",
+  "fields": {
+    "index": "hold",
+    "values_list": 18,
+    "order": 2,
+    "value": "Hold"
+  }
+},
+{
+  "pk": 10694,
+  "model": "metadata.listentry",
+  "fields": {
+    "index": "in_preparation",
+    "values_list": 19,
+    "order": 0,
+    "value": "In preparation"
+  }
+},
+{
+  "pk": 10695,
+  "model": "metadata.listentry",
+  "fields": {
+    "index": "created",
+    "values_list": 19,
+    "order": 1,
+    "value": "Created"
+  }
+},
+{
+  "pk": 10696,
+  "model": "metadata.listentry",
+  "fields": {
+    "index": "sent",
+    "values_list": 19,
+    "order": 2,
+    "value": "Sent"
   }
 }
 ]

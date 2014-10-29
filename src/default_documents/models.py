@@ -7,9 +7,7 @@ from accounts.models import User
 from reviews.models import ReviewMixin
 from documents.models import Metadata, MetadataRevision
 from documents.fields import RevisionFileField
-from documents.constants import (
-    BOOLEANS, CORRESPONDENCE_STATUSES
-)
+from documents.constants import BOOLEANS
 from .validators import StringNumberValidator
 
 
@@ -400,11 +398,10 @@ class Correspondence(Metadata):
 
 
 class CorrespondenceRevision(MetadataRevision):
-    status = models.CharField(
-        verbose_name=_('Status'),
-        choices=CORRESPONDENCE_STATUSES,
+    status = ConfigurableChoiceField(
+        _('Status'),
         max_length=20,
-        null=True, blank=True)
+        list_index='STATUS_COR_MOM')
     native_file = RevisionFileField(
         _('Native File'),
         null=True, blank=True)
@@ -539,11 +536,10 @@ class MinutesOfMeeting(Metadata):
 
 
 class MinutesOfMeetingRevision(MetadataRevision):
-    status = models.CharField(
-        verbose_name=_('Status'),
-        choices=CORRESPONDENCE_STATUSES,
+    status = ConfigurableChoiceField(
+        _('Status'),
         max_length=20,
-        null=True, blank=True)
+        list_index='STATUS_COR_MOM')
     native_file = RevisionFileField(
         _('Native File'),
         null=True, blank=True)
@@ -670,11 +666,10 @@ class Transmittals(Metadata):
 
 
 class TransmittalsRevision(MetadataRevision):
-    status = models.CharField(
-        verbose_name=_('Status'),
-        choices=CORRESPONDENCE_STATUSES,
+    status = ConfigurableChoiceField(
+        _('Status'),
         max_length=20,
-        null=True, blank=True)
+        list_index='STATUS_TRANSMITTALS')
     native_file = RevisionFileField(
         _('Native File'),
         null=True, blank=True)
