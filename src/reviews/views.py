@@ -310,6 +310,7 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
         close_leader_button = self.object.is_at_review_step('leader') and is_approver
 
         context.update({
+            'document': self.object.document,
             'revision': self.object,
             'reviews': self.object.get_reviews(),
             'is_leader': is_leader,
@@ -459,3 +460,7 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
         elif self.object.is_at_review_step('approver'):
             self.object.end_review(save=False)
             self.object.save()
+
+
+class CommentsArchiveView(View):
+    pass

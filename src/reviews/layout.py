@@ -19,6 +19,8 @@ class ReviewsLayout(LayoutObject):
         return render_to_string(
             self.template,
             Context({
+                'document': revision.document,
+                'revision': revision,
                 'reviews': reviews,
                 'form_style': form_style,
             }))
