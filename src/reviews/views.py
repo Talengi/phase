@@ -11,7 +11,9 @@ from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext, ugettext_lazy as _
 from django.db.models import Q
 from django.utils import timezone
+
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
+from zipview.views import BaseZipView
 
 from documents.utils import get_all_revision_classes
 from documents.models import Document
@@ -20,7 +22,7 @@ from reviews.models import ReviewMixin, Review
 from notifications.models import notify
 
 
-class ReviewHome(TemplateView):
+class ReviewHome(LoginRequiredMixin, TemplateView):
     template_name = 'reviews/home.html'
 
     def breadcrumb_section(self):
@@ -462,5 +464,17 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
             self.object.save()
 
 
-class CommentsArchiveView(View):
-    pass
+class CommentsArchiveView(LoginRequiredMixin, BaseZipView):
+    """Download at once all comments for a review."""
+
+    zipfile_name = 'comments.zip'
+
+    def get_files(self):
+        revision = self.kwargs.get('revision')
+        document_key = self.kwargs.get('document_key')
+        reviews = Review.objects \
+            .filter(revision=revision) \
+            .filter(document__document_key=document_key) \
+            .exclude(comments__isnull=True)
+
+        return [review.comments.file for review in reviews if review.comments.name]
