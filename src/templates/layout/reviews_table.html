@@ -10,7 +10,7 @@
             <span class="glyphicon glyphicon-time"
                   rel="tooltip"
                   data-toggle="tooltip"
-                  title="{{ review.reviewed_on }}">
+                  title="{{ review.reviewed_on|default_if_none:'' }}">
             </span>
             {% endif %}
         </td>
