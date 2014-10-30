@@ -1,7 +1,7 @@
 {% load review_form humanize %}
 <table class="table table-bordered reviewers">
     {% for review in reviews %}
-    <tr>
+    <tr class="{{ review.role }}">
         <td>{{ review.reviewer }}</td>
         <td>{{ review.get_role_display }}</td>
         <td>{{ review.closed|yesno:_('Completed,Pending') }}</td>
