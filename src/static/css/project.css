@@ -347,6 +347,9 @@ td.alignright {
 table.reviewers tr td:nth-child(4) {
     width: 1px;
 }
+table.reviewers tr td:nth-child(1) {
+    width: 10%;
+}
 table.reviewers tr td:nth-child(2) {
     width: 50%;
 }
