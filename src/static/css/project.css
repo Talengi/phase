@@ -346,12 +346,9 @@ td.alignright {
 /* Review form */
 table.reviewers tr td:nth-child(4) {
     width: 1px;
-
 }
-table.reviewers tr.leader td,
-table.reviewers tr.approver td {
-    border-top-width: 2px;
-    border-top-color: #666;
+table.reviewers tr td:nth-child(2) {
+    width: 50%;
 }
 
 /* Off canvas sidebar */
