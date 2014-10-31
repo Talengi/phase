@@ -141,12 +141,25 @@ class PropertyLayout(LayoutObject):
         else:
             template = self.html
             value = prop
+            print value
 
         context.update({
             'name': name,
             'value': value,
         })
         return Template(text_type(template)).render(context)
+
+
+class YesNoLayout(PropertyLayout):
+
+    html = '''
+    <div id="" class="form-group{% if field.css_classes %} {{ field.css_classes }}{% endif %}">
+        <div class="control-label">{{ name|safe }}</div>
+        <div class="controls">
+            <span class="uneditable-input" {{ flat_attrs|safe }}>{{ value|yesno:_("Yes,No") }}</span>
+        </div>
+    </div>
+    '''
 
 
 class UneditableFile(LayoutObject):

@@ -14,7 +14,7 @@ from .models import (
 from reviews.layout import ReviewsLayout
 from .layout import (
     DocumentFieldset, ScheduleLayout, ScheduleStatusLayout,
-    PropertyLayout
+    PropertyLayout, YesNoLayout
 )
 
 
@@ -69,8 +69,8 @@ class ContractorDeliverableRevisionForm(BaseDocumentForm):
                     Field('review_start_date', readonly='readonly'),
                     Field('review_due_date', readonly='readonly'),
                     PropertyLayout('current_review_step'),
-                    PropertyLayout('is_under_review'),
-                    PropertyLayout('is_overdue'),
+                    YesNoLayout('is_under_review'),
+                    YesNoLayout('is_overdue'),
                 ),
                 DocumentFieldset(
                     _('Distribution list'),
@@ -84,8 +84,8 @@ class ContractorDeliverableRevisionForm(BaseDocumentForm):
                     Field('review_start_date', readonly='readonly'),
                     Field('review_due_date', readonly='readonly'),
                     PropertyLayout('current_review_step'),
-                    PropertyLayout('is_under_review'),
-                    PropertyLayout('is_overdue'),
+                    YesNoLayout('is_under_review'),
+                    YesNoLayout('is_overdue'),
                     'reviewers',
                     'leader',
                     'approver',
