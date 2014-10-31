@@ -1,10 +1,6 @@
 {% load review_form humanize %}
-
-{% for review in reviews %}
-
-{% ifchanged review.role %}
 <table class="table table-bordered reviewers">
-{% endifchanged %}
+    {% for review in reviews %}
     <tr class="{{ review.role }}">
         <td>{{ review.get_role_display }}</td>
         <td>{{ review.reviewer }}</td>
@@ -20,7 +16,10 @@
         </td>
         <td class="center">{% file_link review.comments 'Comments' %}</td>
     </tr>
-{% endfor %}
+
+    {% empty %}
+        <tr><td colspan="5">{{ _('There are no reviews associated to this revision') }}</td></tr>
+    {% endfor %}
 </table>
 <a href="{% url 'download_review_comments' document.document_key revision.revision %}"
    class="btn btn-default pull-right">
