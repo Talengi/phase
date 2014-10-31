@@ -107,7 +107,8 @@ class ContractorDeliverableRevisionForm(BaseDocumentForm):
     class Meta:
         model = ContractorDeliverableRevision
         exclude = ('document', 'revision', 'revision_date', 'created_on',
-                   'updated_on')
+                   'updated_on', 'review_end_date', 'reviewers_step_closed',
+                   'leader_step_closed')
 
 
 class CorrespondenceForm(BaseDocumentForm):
