@@ -455,13 +455,11 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
 
         # If leader, end leader step
         elif self.object.is_at_review_step('leader'):
-            self.object.end_leader_step(save=False)
-            self.object.save()
+            self.object.end_leader_step()
 
         # If approver, end approver step
         elif self.object.is_at_review_step('approver'):
-            self.object.end_review(save=False)
-            self.object.save()
+            self.object.end_review()
 
 
 class CommentsArchiveView(LoginRequiredMixin, BaseZipView):
