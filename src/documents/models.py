@@ -8,6 +8,7 @@ from django.core.urlresolvers import reverse
 from annoying.functions import get_object_or_None
 
 from accounts.models import User
+from documents.fields import RevisionFileField
 from categories.models import Category
 
 
@@ -274,6 +275,12 @@ class MetadataRevision(models.Model):
     revision_date = models.DateField(
         default=timezone.now,
         verbose_name=u"Revision Date")
+    native_file = RevisionFileField(
+        verbose_name=u"Native File",
+        null=True, blank=True)
+    pdf_file = RevisionFileField(
+        verbose_name=u"PDF File",
+        null=True, blank=True)
     created_on = models.DateField(
         _('Created on'),
         default=timezone.now)
