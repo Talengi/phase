@@ -30,6 +30,15 @@ class ReviewMixinTests(TestCase):
         )
         return doc.latest_revision
 
+    def create_leader_only_document(self):
+        doc = DocumentFactory(
+            category=self.category,
+            revision={
+                'leader': self.user,
+            }
+        )
+        return doc.latest_revision
+
     def test_new_doc_cannot_be_reviewed(self):
         doc = DocumentFactory(category=self.category)
         self.assertFalse(doc.latest_revision.can_be_reviewed)
@@ -44,10 +53,7 @@ class ReviewMixinTests(TestCase):
         self.assertFalse(revision.can_be_reviewed)
 
     def test_doc_with_leader_can_be_reviewed(self):
-        doc = DocumentFactory(category=self.category)
-        revision = doc.latest_revision
-        revision.leader = self.user
-        revision.save()
+        revision = self.create_leader_only_document()
 
         self.assertTrue(revision.can_be_reviewed)
 
@@ -204,10 +210,7 @@ class ReviewMixinTests(TestCase):
         self.assertEqual(len(reviews), 8)
 
     def test_start_review_with_leader_only(self):
-        doc = DocumentFactory(category=self.category)
-        revision = doc.latest_revision
-        revision.leader = self.user
-        revision.save()
+        revision = self.create_leader_only_document()
 
         revision.start_review()
         reviews = revision.get_reviews()
