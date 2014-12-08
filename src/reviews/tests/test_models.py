@@ -30,21 +30,31 @@ class ReviewMixinTests(TestCase):
         )
         return doc.latest_revision
 
+    def create_leader_only_document(self):
+        doc = DocumentFactory(
+            category=self.category,
+            revision={
+                'leader': self.user,
+            }
+        )
+        return doc.latest_revision
+
     def test_new_doc_cannot_be_reviewed(self):
         doc = DocumentFactory(category=self.category)
         self.assertFalse(doc.latest_revision.can_be_reviewed)
 
-    def test_doc_without_reviewers_cannot_be_reviewed(self):
+    def test_doc_without_leader_cannot_be_reviewed(self):
         doc = DocumentFactory(category=self.category)
         revision = doc.latest_revision
-        revision.leader = self.user
         revision.approver = self.user
+        revision.reviewers = [self.user]
         revision.save()
 
         self.assertFalse(revision.can_be_reviewed)
 
-    def test_doc_can_be_reviewed(self):
-        revision = self.create_reviewable_document()
+    def test_doc_with_leader_can_be_reviewed(self):
+        revision = self.create_leader_only_document()
+
         self.assertTrue(revision.can_be_reviewed)
 
     def test_doc_can_only_be_reviewed_once(self):
@@ -68,6 +78,33 @@ class ReviewMixinTests(TestCase):
 
         self.assertEqual(revision.review_start_date, today)
         self.assertEqual(revision.review_due_date, in_two_weeks)
+
+    def test_start_review_creates_review_objects(self):
+        revision = self.create_reviewable_document()
+        revision.reviewers.add(
+            UserFactory(),
+            UserFactory(),
+            UserFactory(),
+            UserFactory(),
+            UserFactory(),
+        )
+
+        reviews = revision.get_reviews()
+        self.assertEqual(len(reviews), 0)
+
+        revision.start_review()
+        reviews = revision.get_reviews()
+        self.assertEqual(len(reviews), 8)
+
+    def test_start_leader_only_review(self):
+        revision = self.create_leader_only_document()
+
+        revision.start_review()
+        self.assertIsNotNone(revision.reviewers_step_closed)
+        self.assertIsNone(revision.leader_step_closed)
+
+        reviews = revision.get_reviews()
+        self.assertEqual(len(reviews), 1)
 
     def test_cancel_review(self):
         revision = self.create_reviewable_document()
@@ -110,13 +147,19 @@ class ReviewMixinTests(TestCase):
         revision = self.create_reviewable_document()
         today = datetime.date.today()
         yesterday = today - datetime.timedelta(days=1)
-
         revision.review_start_date = yesterday
-
         revision.end_leader_step()
 
         self.assertEqual(revision.reviewers_step_closed, today)
         self.assertEqual(revision.leader_step_closed, today)
+
+    def test_end_leader_step_with_no_approver(self):
+        revision = self.create_leader_only_document()
+        today = datetime.date.today()
+        revision.start_review()
+        revision.end_leader_step()
+        self.assertEqual(revision.leader_step_closed, today)
+        self.assertEqual(revision.review_end_date, today)
 
     def test_end_review_process(self):
         revision = self.create_reviewable_document()
@@ -181,20 +224,3 @@ class ReviewMixinTests(TestCase):
 
         revision.end_review()
         self.assertEqual(revision.current_review_step(), 'closed')
-
-    def test_start_review_creates_review_objects(self):
-        revision = self.create_reviewable_document()
-        revision.reviewers.add(
-            UserFactory(),
-            UserFactory(),
-            UserFactory(),
-            UserFactory(),
-            UserFactory(),
-        )
-
-        reviews = revision.get_reviews()
-        self.assertEqual(len(reviews), 0)
-
-        revision.start_review()
-        reviews = revision.get_reviews()
-        self.assertEqual(len(reviews), 8)

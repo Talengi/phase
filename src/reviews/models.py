@@ -132,16 +132,13 @@ class ReviewMixin(models.Model):
     def can_be_reviewed(self):
         """Is this revision ready to be reviewed.
 
-        A revision can only be reviewed if all roles have been filled
-        (leader, approver and at least one reviewer).
+        A revision can only be reviewed if at least a leader was defined.
 
         Also, a revision can only be reviewed once.
 
         """
         return all((
             self.leader_id,
-            self.approver_id,
-            self.reviewers.count(),
             not self.review_start_date
         ))
 
@@ -155,21 +152,17 @@ class ReviewMixin(models.Model):
         calling this method.
 
         """
-        today = datetime.date.today()
-        duration = settings.REVIEW_DURATION
-        self.review_start_date = today
-        self.review_due_date = today + datetime.timedelta(days=duration)
-        self.save(update_document=True)
-
-        for user in self.reviewers.all():
+        reviewers = self.reviewers.all()
+        for reviewer in reviewers:
             Review.objects.create(
-                reviewer=user,
+                reviewer=reviewer,
                 document=self.document,
                 revision=self.revision,
                 due_date=self.review_due_date,
                 docclass=self.docclass,
             )
 
+        # Leader is mandatory, no need to test it
         Review.objects.create(
             reviewer=self.leader,
             role=Review.ROLES.leader,
@@ -179,14 +172,27 @@ class ReviewMixin(models.Model):
             docclass=self.docclass,
         )
 
-        Review.objects.create(
-            reviewer=self.approver,
-            role=Review.ROLES.approver,
-            document=self.document,
-            revision=self.revision,
-            due_date=self.review_due_date,
-            docclass=self.docclass,
-        )
+        # Approver is not mandatory
+        if self.approver_id:
+            Review.objects.create(
+                reviewer=self.approver,
+                role=Review.ROLES.approver,
+                document=self.document,
+                revision=self.revision,
+                due_date=self.review_due_date,
+                docclass=self.docclass,
+            )
+
+        today = datetime.date.today()
+        duration = settings.REVIEW_DURATION
+        self.review_start_date = today
+        self.review_due_date = today + datetime.timedelta(days=duration)
+
+        # If no reviewers, close reviewers step immediatly
+        if len(reviewers) == 0:
+            self.reviewers_step_closed = today
+
+        self.save(update_document=True)
 
     @transaction.atomic
     def cancel_review(self):
@@ -225,6 +231,7 @@ class ReviewMixin(models.Model):
         if save:
             self.save(update_document=True)
 
+    @transaction.atomic
     def end_leader_step(self, save=True):
         """Ends the second step of the review.
 
@@ -242,9 +249,13 @@ class ReviewMixin(models.Model):
             .filter(role=Review.ROLES.leader) \
             .update(closed=True)
 
+        if not self.approver_id:
+            self.review_end_date = datetime.date.today()
+
         if save:
             self.save(update_document=True)
 
+    @transaction.atomic
     def end_review(self, save=True):
         """Ends the review.
 
