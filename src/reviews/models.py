@@ -132,16 +132,13 @@ class ReviewMixin(models.Model):
     def can_be_reviewed(self):
         """Is this revision ready to be reviewed.
 
-        A revision can only be reviewed if all roles have been filled
-        (leader, approver and at least one reviewer).
+        A revision can only be reviewed if at least a leader was defined.
 
         Also, a revision can only be reviewed once.
 
         """
         return all((
             self.leader_id,
-            self.approver_id,
-            self.reviewers.count(),
             not self.review_start_date
         ))
 

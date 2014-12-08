@@ -34,17 +34,21 @@ class ReviewMixinTests(TestCase):
         doc = DocumentFactory(category=self.category)
         self.assertFalse(doc.latest_revision.can_be_reviewed)
 
-    def test_doc_without_reviewers_cannot_be_reviewed(self):
+    def test_doc_without_leader_cannot_be_reviewed(self):
         doc = DocumentFactory(category=self.category)
         revision = doc.latest_revision
-        revision.leader = self.user
         revision.approver = self.user
+        revision.reviewers = [self.user]
         revision.save()
 
         self.assertFalse(revision.can_be_reviewed)
 
-    def test_doc_can_be_reviewed(self):
-        revision = self.create_reviewable_document()
+    def test_doc_with_leader_can_be_reviewed(self):
+        doc = DocumentFactory(category=self.category)
+        revision = doc.latest_revision
+        revision.leader = self.user
+        revision.save()
+
         self.assertTrue(revision.can_be_reviewed)
 
     def test_doc_can_only_be_reviewed_once(self):
