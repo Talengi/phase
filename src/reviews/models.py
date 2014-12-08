@@ -249,6 +249,9 @@ class ReviewMixin(models.Model):
             .filter(role=Review.ROLES.leader) \
             .update(closed=True)
 
+        if not self.approver_id:
+            self.review_end_date = datetime.date.today()
+
         if save:
             self.save(update_document=True)
 

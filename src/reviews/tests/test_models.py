@@ -147,13 +147,19 @@ class ReviewMixinTests(TestCase):
         revision = self.create_reviewable_document()
         today = datetime.date.today()
         yesterday = today - datetime.timedelta(days=1)
-
         revision.review_start_date = yesterday
-
         revision.end_leader_step()
 
         self.assertEqual(revision.reviewers_step_closed, today)
         self.assertEqual(revision.leader_step_closed, today)
+
+    def test_end_leader_step_with_no_approver(self):
+        revision = self.create_leader_only_document()
+        today = datetime.date.today()
+        revision.start_review()
+        revision.end_leader_step()
+        self.assertEqual(revision.leader_step_closed, today)
+        self.assertEqual(revision.review_end_date, today)
 
     def test_end_review_process(self):
         revision = self.create_reviewable_document()
