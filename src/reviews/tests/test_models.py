@@ -202,3 +202,13 @@ class ReviewMixinTests(TestCase):
         revision.start_review()
         reviews = revision.get_reviews()
         self.assertEqual(len(reviews), 8)
+
+    def test_start_review_with_leader_only(self):
+        doc = DocumentFactory(category=self.category)
+        revision = doc.latest_revision
+        revision.leader = self.user
+        revision.save()
+
+        revision.start_review()
+        reviews = revision.get_reviews()
+        self.assertEqual(len(reviews), 1)

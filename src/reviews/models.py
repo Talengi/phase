@@ -167,6 +167,7 @@ class ReviewMixin(models.Model):
                 docclass=self.docclass,
             )
 
+        # Leader is mandatory, no need to test it
         Review.objects.create(
             reviewer=self.leader,
             role=Review.ROLES.leader,
@@ -176,14 +177,16 @@ class ReviewMixin(models.Model):
             docclass=self.docclass,
         )
 
-        Review.objects.create(
-            reviewer=self.approver,
-            role=Review.ROLES.approver,
-            document=self.document,
-            revision=self.revision,
-            due_date=self.review_due_date,
-            docclass=self.docclass,
-        )
+        # Approver is not mandatory
+        if self.approver_id:
+            Review.objects.create(
+                reviewer=self.approver,
+                role=Review.ROLES.approver,
+                document=self.document,
+                revision=self.revision,
+                due_date=self.review_due_date,
+                docclass=self.docclass,
+            )
 
     @transaction.atomic
     def cancel_review(self):
