@@ -225,6 +225,7 @@ class ReviewMixin(models.Model):
         if save:
             self.save(update_document=True)
 
+    @transaction.atomic
     def end_leader_step(self, save=True):
         """Ends the second step of the review.
 
@@ -245,6 +246,7 @@ class ReviewMixin(models.Model):
         if save:
             self.save(update_document=True)
 
+    @transaction.atomic
     def end_review(self, save=True):
         """Ends the review.
 
