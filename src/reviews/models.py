@@ -152,15 +152,10 @@ class ReviewMixin(models.Model):
         calling this method.
 
         """
-        today = datetime.date.today()
-        duration = settings.REVIEW_DURATION
-        self.review_start_date = today
-        self.review_due_date = today + datetime.timedelta(days=duration)
-        self.save(update_document=True)
-
-        for user in self.reviewers.all():
+        reviewers = self.reviewers.all()
+        for reviewer in reviewers:
             Review.objects.create(
-                reviewer=user,
+                reviewer=reviewer,
                 document=self.document,
                 revision=self.revision,
                 due_date=self.review_due_date,
@@ -187,6 +182,17 @@ class ReviewMixin(models.Model):
                 due_date=self.review_due_date,
                 docclass=self.docclass,
             )
+
+        today = datetime.date.today()
+        duration = settings.REVIEW_DURATION
+        self.review_start_date = today
+        self.review_due_date = today + datetime.timedelta(days=duration)
+
+        # If no reviewers, close reviewers step immediatly
+        if len(reviewers) == 0:
+            self.reviewers_step_closed = today
+
+        self.save(update_document=True)
 
     @transaction.atomic
     def cancel_review(self):

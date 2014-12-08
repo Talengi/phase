@@ -79,6 +79,33 @@ class ReviewMixinTests(TestCase):
         self.assertEqual(revision.review_start_date, today)
         self.assertEqual(revision.review_due_date, in_two_weeks)
 
+    def test_start_review_creates_review_objects(self):
+        revision = self.create_reviewable_document()
+        revision.reviewers.add(
+            UserFactory(),
+            UserFactory(),
+            UserFactory(),
+            UserFactory(),
+            UserFactory(),
+        )
+
+        reviews = revision.get_reviews()
+        self.assertEqual(len(reviews), 0)
+
+        revision.start_review()
+        reviews = revision.get_reviews()
+        self.assertEqual(len(reviews), 8)
+
+    def test_start_leader_only_review(self):
+        revision = self.create_leader_only_document()
+
+        revision.start_review()
+        self.assertIsNotNone(revision.reviewers_step_closed)
+        self.assertIsNone(revision.leader_step_closed)
+
+        reviews = revision.get_reviews()
+        self.assertEqual(len(reviews), 1)
+
     def test_cancel_review(self):
         revision = self.create_reviewable_document()
         revision.start_review()
@@ -191,27 +218,3 @@ class ReviewMixinTests(TestCase):
 
         revision.end_review()
         self.assertEqual(revision.current_review_step(), 'closed')
-
-    def test_start_review_creates_review_objects(self):
-        revision = self.create_reviewable_document()
-        revision.reviewers.add(
-            UserFactory(),
-            UserFactory(),
-            UserFactory(),
-            UserFactory(),
-            UserFactory(),
-        )
-
-        reviews = revision.get_reviews()
-        self.assertEqual(len(reviews), 0)
-
-        revision.start_review()
-        reviews = revision.get_reviews()
-        self.assertEqual(len(reviews), 8)
-
-    def test_start_review_with_leader_only(self):
-        revision = self.create_leader_only_document()
-
-        revision.start_review()
-        reviews = revision.get_reviews()
-        self.assertEqual(len(reviews), 1)
