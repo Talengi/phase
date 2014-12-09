@@ -53,7 +53,7 @@ class DiscussionViewSet(viewsets.ModelViewSet):
         return Note.objects \
             .filter(document=self.document) \
             .filter(revision=self.revision) \
-            .order_by('-created_on')
+            .order_by('created_on')
 
     def pre_save(self, obj):
         obj.document = self.document

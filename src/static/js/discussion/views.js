@@ -12,6 +12,7 @@ var Phase = Phase || {};
         initialize: function() {
             _.bindAll(this, 'addNote');
             this.listenTo(this.collection, 'reset', this.render);
+            this.listenTo(this.collection, 'add', this.addNote);
         },
         render: function() {
             this.collection.each(this.addNote);
@@ -19,7 +20,7 @@ var Phase = Phase || {};
         },
         addNote: function(note) {
             var view = new Phase.Views.NoteView({ model: note });
-            this.$el.append(view.render().el);
+            this.$el.prepend(view.render().el);
         }
     });
 
@@ -37,8 +38,15 @@ var Phase = Phase || {};
         events: {
             'submit': 'onSubmit'
         },
+        initialize: function() {
+            this.textarea = this.$el.find('textarea');
+        },
         onSubmit: function(event) {
             event.preventDefault();
+
+            var body = this.textarea.val();
+            this.collection.create({body: body}, {wait: true});
+            this.textarea.val('');
         }
     });
 

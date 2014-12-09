@@ -19,7 +19,9 @@ var Phase = Phase || {};
             this.discussionView = new Phase.Views.DiscussionView({
                 collection: this.noteCollection
             });
-            this.discussionFormView = new Phase.Views.DiscussionFormView();
+            this.discussionFormView = new Phase.Views.DiscussionFormView({
+                collection: this.noteCollection
+            });
             this.noteCollection.fetch({ reset: true });
         }
     });

@@ -11,8 +11,8 @@ from discussion.models import Note
 class NoteSerializer(serializers.ModelSerializer):
     document = serializers.Field()
     author = serializers.Field(source='author.email')
-    created_on = serializers.DateTimeField()
-    formatted_created_on = serializers.DateTimeField(source='created_on')
+    created_on = serializers.DateTimeField(read_only=True)
+    formatted_created_on = serializers.DateTimeField(read_only=True, source='created_on')
 
     class Meta:
         model = Note
