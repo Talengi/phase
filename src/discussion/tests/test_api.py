@@ -5,6 +5,8 @@ from __future__ import unicode_literals
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 
+from rest_framework.test import APIClient
+
 from categories.factories import CategoryFactory
 from documents.factories import DocumentFactory
 from accounts.factories import UserFactory
@@ -21,6 +23,7 @@ class DiscussionApiAclTests(TestCase):
             is_superuser=True,
             category=self.category
         )
+        self.client = APIClient()
         self.client.login(email=self.user1.email, password='pass')
         self.user2 = UserFactory(
             email='otheruser@phase.fr',
@@ -81,7 +84,10 @@ class DiscussionApiAclTests(TestCase):
             author=self.user2
         )
         url = reverse('note-detail', args=[self.doc.document_key, 1, note.id])
-        res = self.client.put(url, {'body': 'Update message'})
+        res = self.client.put(
+            url,
+            {'body': 'Update message'},
+            content_type='application/json')
         self.assertEqual(res.status_code, 403)
 
     def test_delete_existing_message_accepted(self):
