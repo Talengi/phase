@@ -313,6 +313,7 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
 
         context.update({
             'document': self.object.document,
+            'document_key': self.object.document.document_key,
             'revision': self.object,
             'reviews': self.object.get_reviews(),
             'is_leader': is_leader,

@@ -225,6 +225,7 @@ LOCAL_APPS = (
     'imports',
     'search',
     'bookmarks',
+    'discussion',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -338,13 +339,18 @@ PIPELINE_JS = {
         ),
         'output_filename': 'js/base.js',
     },
-    'list': {
+    'backbone': {
         'source_filenames': (
             'js/vendor/underscore.js',
             'js/vendor/backbone.js',
-            'js/vendor/jquery.inview.js',
             'js/backbone-config.js',
             'js/events.js',
+        ),
+        'output_filename': 'js/backbone.js',
+    },
+    'list': {
+        'source_filenames': (
+            'js/vendor/jquery.inview.js',
             'js/querystring.js',
             'js/documents/models.js',
             'js/favorites/models.js',
@@ -377,7 +383,11 @@ PIPELINE_JS = {
     },
     'review': {
         'source_filenames': (
-            'js/review.js',
+            'js/discussion/models.js',
+            'js/discussion/collections.js',
+            'js/discussion/views.js',
+            'js/discussion/routers.js',
+            'js/reviews/app.js',
         ),
         'output_filename': 'js/review.js',
     }

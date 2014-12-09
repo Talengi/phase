@@ -148,12 +148,21 @@
 
     </form>
 </div>
+
+{% include 'discussion/discussion_modal.html' %}
 {% endblock %}
 
 {% block extra_js %}
 <script>
     var with_file_label = "{{ _('Finish review — with comments') }}";
     var without_file_label = "{{ _('Finish review – without comments') }}";
+    Phase.Config = {
+        userId: {% if request.user.is_authenticated %}{{ request.user.id }}{% else %}undefined{% endif %},
+        csrfToken: "{{ csrf_token }}",
+        currentUrl: "{% url "review_document" document_key %}",
+        noteListUrl: "{% url "note-list" document_key revision.revision %}"
+    };
 </script>
+{% compressed_js "backbone" %}
 {% compressed_js "review" %}
 {% endblock extra_js %}

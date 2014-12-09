@@ -17,4 +17,5 @@ router.register('bookmarks', bookmarks_views.BookmarkViewSet)
 urlpatterns = patterns(
     '',
     url(r'^', include(router.urls)),
+    url(r'^discussion/', include('discussion.api.urls')),
 )
