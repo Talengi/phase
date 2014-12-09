@@ -32,4 +32,15 @@ var Phase = Phase || {};
         }
     });
 
+    Phase.Views.DiscussionFormView = Backbone.View.extend({
+        el: 'form#discussion-form',
+        events: {
+            'submit': 'onSubmit'
+        },
+        onSubmit: function(event) {
+            event.preventDefault();
+        }
+    });
+
+
 })(this, Phase, Backbone, _);
