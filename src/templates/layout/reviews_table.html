@@ -21,7 +21,18 @@
         <tr><td colspan="5">{{ _('There are no reviews associated to this revision') }}</td></tr>
     {% endfor %}
 </table>
-<a href="{% url 'download_review_comments' document.document_key revision.revision %}"
-   class="btn btn-default pull-right">
-    {{ _('Download all comments') }}
-</a>
+
+<div class="pull-right">
+    <button type="button"
+            class="btn btn-default"
+            data-toggle="modal"
+            href="#discussion-modal">
+        {{ _('Remarks') }}
+    </button>
+
+    <a href="{% url 'download_review_comments' document.document_key revision.revision %}"
+       class="btn btn-default"
+       type="button">
+        {{ _('Download all comments') }}
+    </a>
+</div>
