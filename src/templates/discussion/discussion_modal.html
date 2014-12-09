@@ -6,8 +6,22 @@
                 <h4 class="modal-title" id="discussion-modal-label">{{ _('Remarks') }}</h4>
             </div>
             <div class="modal-body">
+
+                <form method="post" action="#" class="form">
+                    <div class="form-group">
+                        <textarea class="form-control" name="body">
+                        </textarea>
+                    </div>
+                    <div class="clearfix">
+                        <input type="submit" class="btn btn-primary pull-right" value="{{ _('Add your comment') }}" />
+                    </div>
+                </form>
+
+                <hr />
+
                 <div id="discussion-body">
                 </div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">{{ _('Close') }}</button>
