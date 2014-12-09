@@ -28,3 +28,4 @@ class DiscussionViewSet(viewsets.ModelViewSet):
         revision = self.kwargs['revision']
         obj.document = Document.objects.get(document_key=document_key)
         obj.revision = revision
+        obj.author = self.request.user
