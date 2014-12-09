@@ -7,7 +7,7 @@ var Phase = Phase || {};
 
     Phase.Collections.NoteCollection = Backbone.Collection.extend({
         model: Phase.Models.Note,
-        url: Phase.Config.notesUrl
+        url: Phase.Config.noteListUrl
     });
 
 })(this, Phase, Backbone, _);

@@ -157,7 +157,8 @@
     Phase.Config = {
         userId: {% if request.user.is_authenticated %}{{ request.user.id }}{% else %}undefined{% endif %},
         csrfToken: "{{ csrf_token }}",
-        currentUrl: "{% url "review_document" revision.document.document_key %}",
+        currentUrl: "{% url "review_document" document_key %}",
+        noteListUrl: "{% url "note-list" document_key revision.revision %}"
     };
 </script>
 {% compressed_js "backbone" %}
