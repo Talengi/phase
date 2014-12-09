@@ -15,6 +15,11 @@ var Phase = Phase || {};
             '': 'reviewForm'
         },
         reviewForm: function() {
+            this.noteCollection = new Phase.Collections.NoteCollection();
+            this.discussionView = new Phase.Views.DiscussionView({
+                collection: this.noteCollection
+            });
+            this.noteCollection.fetch({ reset: true });
         }
     });
 })(this, Phase, Backbone, _);
