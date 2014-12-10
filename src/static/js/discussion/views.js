@@ -38,10 +38,17 @@ var Phase = Phase || {};
         },
         render: function() {
             this.$el.html(this.template(this.model.attributes));
+
             this.readonly = this.$el.find('div.discussion-readonly');
             this.body = this.$el.find('div.discussion-body');
             this.editForm = this.$el.find('form.edit-form');
             this.textarea = this.$el.find('textarea');
+            this.actions = this.$el.find('div.discussion-item-actions');
+
+            if (Phase.Config.userId === this.model.get('author')) {
+                this.actions.show();
+            }
+
             return this;
         },
         updateBody: function() {
