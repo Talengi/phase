@@ -31,9 +31,14 @@
 
 <script type="text/template" id="tpl-discussion-item">
     <b> <%= author %> </b>
-    <span class="pull-right text-muted"> <%= formatted_created_on %> </span>
-    <div class="panel panel-default">
-        <div class="panel-body"> <%= body %> </div>
+    <div class="discussion-body">
+        <%= body %>
     </div>
-</div>
+    <div class="small">
+        <span class="text-muted"> <%= formatted_created_on %> </span>
+        <div class="pull-right">
+            <a class="text-muted" href="#">Edit</a> -
+            <a class="text-muted" href="#">Delete</a>
+        </div>
+    </div>
 </script>
