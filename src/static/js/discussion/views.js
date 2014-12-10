@@ -26,6 +26,7 @@ var Phase = Phase || {};
 
     Phase.Views.NoteView = Backbone.View.extend({
         tagName: 'div',
+        className: 'note',
         template: _.template($('#tpl-discussion-item').html()),
         render: function() {
             this.$el.html(this.template(this.model.attributes));
