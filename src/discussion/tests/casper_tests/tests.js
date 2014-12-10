@@ -40,3 +40,27 @@ casper.test.begin('Discussion is loaded upon page load', 0, function suite(test)
         test.done();
     });
 });
+
+casper.test.begin('Submitting a comment adds it to the list', 0, function suite(test) {
+    casper.start(review_url, function() {
+        casper.viewport(1024, 768);
+        casper.click('button#remarks-button');
+        casper.wait(500);
+    });
+
+    casper.then(function() {
+        casper.fill('#discussion-form', {
+            'body': 'This is a new message.'
+        }, true);
+        casper.wait(500);
+    });
+
+    casper.then(function() {
+        test.assertElementCount('div.note', 11);
+        test.assertTextExists('This is a new message');
+    });
+
+    casper.run(function() {
+        test.done();
+    });
+});
