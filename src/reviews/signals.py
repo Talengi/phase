@@ -2,10 +2,14 @@
 
 from __future__ import unicode_literals
 
+from django.dispatch import Signal
 from django.db.models.signals import post_save, post_delete
 from django.core.cache import cache
 
 from reviews.models import Review
+
+
+review_canceled = Signal()
 
 
 def delete_review_count_cache(sender, instance, **kwargs):
