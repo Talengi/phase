@@ -31,14 +31,26 @@
 
 <script type="text/template" id="tpl-discussion-item">
     <b> <%= author %> </b>
-    <div class="discussion-body">
-        <%= body %>
-    </div>
-    <div class="small">
-        <span class="text-muted"> <%= formatted_created_on %> </span>
-        <div class="pull-right">
-            <a class="text-muted" href="#">Edit</a> -
-            <a class="text-muted" href="#">Delete</a>
+
+    <div class="discussion-readonly">
+        <div class="discussion-body">
+            <%= formatted_body %>
+        </div>
+        <div class="small">
+            <span class="text-muted"> <%= formatted_created_on %> </span>
+            <div class="pull-right">
+                <a class="edit-link text-muted" href="#">Edit</a> -
+                <a class="delete-link text-muted" href="#">Delete</a>
+            </div>
         </div>
     </div>
+
+    <form class="edit-form" style="display: none">
+        <div class="form-group">
+            <textarea name="body" class="form-control"><%= body %></textarea>
+        </div>
+        <input type="submit" class="btn btn-success" value="{{ _('Save') }}" />
+        <a href="#" class="cancel-link">{{ _('Cancel') }}</a>
+    </form>
+
 </script>
