@@ -51,5 +51,23 @@ var Phase = Phase || {};
         }
     });
 
+    Phase.Views.RemarksButtonview = Backbone.View.extend({
+        el: '#remarks-button',
+        initialize: function() {
+            this.listenTo(this.collection, 'reset', this.render);
+            this.listenTo(this.collection, 'add', this.render);
+            this.listenTo(this.collection, 'remove', this.render);
+        },
+        render: function() {
+            var badge = this.$el.find('span.badge');
+            if (badge.length === 0) {
+                badge = $('<span class="badge"></span>');
+                this.$el.append(badge);
+            }
+
+            badge.html(this.collection.length);
+            return this;
+        }
+    });
 
 })(this, Phase, Backbone, _);

@@ -20,6 +20,22 @@ function inject_cookies() {
 inject_cookies();
 
 
+casper.test.begin('The remark button displays the message count', 0, function suite(test) {
+    casper.start(review_url, function() {
+        casper.viewport(1024, 768);
+        casper.wait(500);
+    });
+
+    casper.then(function() {
+        test.assertSelectorHasText('#remarks-button', '10');
+    });
+
+    casper.run(function() {
+        test.done();
+    });
+});
+
+
 casper.test.begin('Discussion is loaded upon page load', 0, function suite(test) {
     casper.start(review_url, function() {
         casper.viewport(1024, 768);
