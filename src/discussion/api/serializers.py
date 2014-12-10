@@ -13,16 +13,17 @@ class NoteSerializer(serializers.ModelSerializer):
     author = serializers.Field(source='author.email')
     created_on = serializers.DateTimeField(read_only=True)
     formatted_created_on = serializers.DateTimeField(read_only=True, source='created_on')
+    formatted_body = serializers.Field(source='body')
 
     class Meta:
         model = Note
-        fields = ('id', 'document', 'author', 'body', 'created_on',
-                  'formatted_created_on')
+        fields = ('id', 'document', 'author', 'body', 'formatted_body',
+                  'created_on', 'formatted_created_on')
 
     def transform_formatted_created_on(self, obj, value):
         formatted = filters.date(value, 'SHORT_DATETIME_FORMAT')
         return formatted
 
-    def transform_body(self, obj, value):
+    def transform_formatted_body(self, obj, value):
         formatted = filters.linebreaksbr(value)
         return formatted
