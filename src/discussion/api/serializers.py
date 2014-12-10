@@ -22,3 +22,7 @@ class NoteSerializer(serializers.ModelSerializer):
     def transform_formatted_created_on(self, obj, value):
         formatted = filters.date(value, 'SHORT_DATETIME_FORMAT')
         return formatted
+
+    def transform_body(self, obj, value):
+        formatted = filters.linebreaksbr(value)
+        return formatted
