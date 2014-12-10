@@ -217,6 +217,9 @@ class ReviewMixin(models.Model):
         self.leader_step_closed = None
         self.save(update_document=True)
 
+        from reviews.signals import review_canceled
+        review_canceled.send(sender=self.__class__, instance=self)
+
     @transaction.atomic
     def end_reviewers_step(self, save=True):
         """Ends the first step of the review."""

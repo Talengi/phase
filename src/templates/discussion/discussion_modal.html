@@ -30,10 +30,27 @@
 </div>
 
 <script type="text/template" id="tpl-discussion-item">
-    <b> <%= author %> </b>
-    <span class="pull-right text-muted"> <%= formatted_created_on %> </span>
-    <div class="panel panel-default">
-        <div class="panel-body"> <%= body %> </div>
+    <b> <%= author_email %> </b>
+
+    <div class="discussion-readonly">
+        <div class="discussion-body">
+            <%= formatted_body %>
+        </div>
+        <div class="small">
+            <span class="text-muted"> <%= formatted_created_on %> </span>
+            <div class="discussion-item-actions pull-right" style="display: none">
+                <a class="edit-link text-muted" href="#">Edit</a> -
+                <a class="delete-link text-muted" href="#">Delete</a>
+            </div>
+        </div>
     </div>
-</div>
+
+    <form class="edit-form" style="display: none">
+        <div class="form-group">
+            <textarea name="body" class="form-control"><%= body %></textarea>
+        </div>
+        <input type="submit" class="btn btn-success" value="{{ _('Save') }}" />
+        <a href="#" class="cancel-link">{{ _('Cancel') }}</a>
+    </form>
+
 </script>
