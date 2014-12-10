@@ -30,7 +30,8 @@ var Phase = Phase || {};
         events: {
             'click a.edit-link': 'startEdition',
             'submit form.edit-form': 'editFormSubmit',
-            'click a.cancel-link': 'stopEdition'
+            'click a.cancel-link': 'stopEdition',
+            'click a.delete-link': 'removeNote'
         },
         template: _.template($('#tpl-discussion-item').html()),
         initialize: function() {
@@ -45,7 +46,7 @@ var Phase = Phase || {};
             this.textarea = this.$el.find('textarea');
             this.actions = this.$el.find('div.discussion-item-actions');
 
-            if (Phase.Config.userId === this.model.get('author')) {
+            if (Phase.Config.userId === this.model.get('author_id')) {
                 this.actions.show();
             }
 
@@ -70,6 +71,11 @@ var Phase = Phase || {};
             event.preventDefault();
             this.editForm.hide();
             this.readonly.show();
+        },
+        removeNote: function(event) {
+            event.preventDefault();
+            this.model.destroy();
+            this.remove();
         }
     });
 
