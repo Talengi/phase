@@ -23,9 +23,9 @@
 </table>
 
 <div class="pull-right">
-    <button id="remarks-button"
+    <button id="remarks-button-{{ revision.revision }}"
             type="button"
-            class="btn btn-default"
+            class="remarks-button btn btn-default"
             data-toggle="modal"
             data-apiurl="{% url 'note-list' document.document_key revision.revision %}"
             href="#discussion-modal">

@@ -34,7 +34,7 @@
     Phase.Config = {
         userId: {% if request.user.is_authenticated %}{{ request.user.id }}{% else %}undefined{% endif %},
         csrfToken: "{{ csrf_token }}",
-        currentUrl: "{% url "document_detail" category_slug organisation_slug document.document_key %}"
+        currentUrl: "{% url "document_detail" organisation_slug category_slug document.document_key %}"
     };
 </script>
 {% compressed_js "backbone" %}
