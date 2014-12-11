@@ -181,4 +181,17 @@ var Phase = Phase || {};
             dispatcher.trigger('onUrlChange', querystring);
         }
     });
+
+    /**
+     * Initialize models, collections and views for the
+     * document detail page.
+     */
+    Phase.Routers.DocumentDetailRouter = Backbone.Router.extend({
+        routes: {
+            '': 'documentDetail'
+        },
+        documentDetail: function() {
+            this.discussionAppView = new Phase.Views.DiscussionAppView();
+        }
+    });
 })(this, Phase, Backbone, _);

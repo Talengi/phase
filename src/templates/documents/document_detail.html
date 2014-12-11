@@ -24,8 +24,19 @@
 
         {% include 'documents/document_detail_modals.html' %}
     </div>
+</div>
+
+{% include 'discussion/discussion_modal.html' %}
 {% endblock content %}
 
 {% block extra_js %}
-    {% compressed_js "detail" %}
+<script>
+    Phase.Config = {
+        userId: {% if request.user.is_authenticated %}{{ request.user.id }}{% else %}undefined{% endif %},
+        csrfToken: "{{ csrf_token }}",
+        currentUrl: "{% url "document_detail" organisation_slug category_slug document.document_key %}"
+    };
+</script>
+{% compressed_js "backbone" %}
+{% compressed_js "document_detail" %}
 {% endblock extra_js %}

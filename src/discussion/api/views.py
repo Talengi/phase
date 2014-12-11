@@ -14,20 +14,28 @@ from discussion.api.serializers import NoteSerializer
 class DiscussionPermission(permissions.BasePermission):
     """Custom discussion permission.
 
-    Only members of the distribution list can participate to the discussion
-    related to a given revision's review.
-
-    Only the author of a message can update or delete it.
+      * All the category members can access the discussion.
+      * All distribution list members can post a new messages
+      * Only the author of a message can update or delete it.
 
     """
 
     def has_permission(self, request, view):
         """Is the user a member of the distribution list?."""
-        reviews = Review.objects \
-            .filter(document__document_key=view.document_key) \
-            .filter(reviewer=request.user) \
-            .filter(revision=view.revision)
-        return reviews.count() > 0
+
+        # Read only method, allow all category members
+        if request.method in permissions.SAFE_METHODS:
+            authorized = request.user in view.document.category.users.all()
+
+        # Write methods, only distribution list members
+        else:
+            reviews = Review.objects \
+                .filter(document__document_key=view.document_key) \
+                .filter(reviewer=request.user) \
+                .filter(revision=view.revision)
+            authorized = (reviews.count() > 0)
+
+        return authorized
 
     def has_object_permission(self, request, view, obj):
         return obj.author == request.user

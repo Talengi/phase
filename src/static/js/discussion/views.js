@@ -7,7 +7,7 @@ var Phase = Phase || {};
 
     Phase.Views = Phase.Views || {};
 
-    Phase.Views.DiscussionView = Backbone.View.extend({
+    Phase.Views.DiscussionThreadView = Backbone.View.extend({
         el: '#discussion-body',
         initialize: function() {
             _.bindAll(this, 'addNote');
@@ -15,6 +15,7 @@ var Phase = Phase || {};
             this.listenTo(this.collection, 'add', this.addNote);
         },
         render: function() {
+            this.$el.html('');
             this.collection.each(this.addNote);
             return this;
         },
@@ -64,7 +65,7 @@ var Phase = Phase || {};
         editFormSubmit: function(event) {
             event.preventDefault();
             var body = this.textarea.val();
-            this.model.save({body: body});
+            this.model.save({body: body}, {wait: true});
             this.stopEdition(event);
         },
         stopEdition: function(event) {
@@ -96,12 +97,19 @@ var Phase = Phase || {};
         }
     });
 
-    Phase.Views.RemarksButtonview = Backbone.View.extend({
-        el: '#remarks-button',
-        initialize: function() {
+    Phase.Views.RemarksButtonView = Backbone.View.extend({
+        events: {
+            'click': 'loadDiscussion'
+        },
+        initialize: function(options) {
+            this.setElement(options.element);
+
             this.listenTo(this.collection, 'reset', this.render);
             this.listenTo(this.collection, 'add', this.render);
             this.listenTo(this.collection, 'remove', this.render);
+        },
+        loadDiscussion: function() {
+            this.collection.fetch({ reset: true });
         },
         render: function() {
             var badge = this.$el.find('span.badge');
@@ -112,6 +120,46 @@ var Phase = Phase || {};
 
             badge.html(this.collection.length);
             return this;
+        }
+    });
+
+    Phase.Views.DiscussionView = Backbone.View.extend({
+        initialize: function(options) {
+            var buttonElt = options.button;
+            var apiUrl = $(buttonElt).data('apiurl');
+
+            this.collection = new Phase.Collections.NoteCollection([], { apiUrl: apiUrl });
+            this.remarksButtonView = new Phase.Views.RemarksButtonView({
+                element: buttonElt,
+                collection: this.collection
+            });
+
+            this.listenTo(this.collection, 'reset', this.displayDiscussion);
+        },
+        displayDiscussion: function() {
+            this.discussionThreadView = new Phase.Views.DiscussionThreadView({
+                collection: this.collection
+            });
+            this.discussionThreadView.render();
+
+            this.discussionFormView = new Phase.Views.DiscussionFormView({
+                collection: this.collection
+            });
+        }
+    });
+
+    /**
+     * The global view to bootsrap the whole discussion feature.
+     */
+    Phase.Views.DiscussionAppView = Backbone.View.extend({
+        initialize: function() {
+            var buttons = $('button.remarks-button');
+            var views = _.map(buttons, function(button) {
+                var discussionView = new Phase.Views.DiscussionView({
+                    button: button
+                });
+                return discussionView;
+            });
         }
     });
 

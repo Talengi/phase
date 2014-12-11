@@ -7,7 +7,12 @@ var Phase = Phase || {};
 
     Phase.Collections.NoteCollection = Backbone.Collection.extend({
         model: Phase.Models.Note,
-        url: Phase.Config.noteListUrl
+        url: function() {
+            return this.apiUrl;
+        },
+        initialize: function(models, options) {
+            this.apiUrl = options.apiUrl;
+        }
     });
 
 })(this, Phase, Backbone, _);
