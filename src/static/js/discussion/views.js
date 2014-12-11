@@ -65,7 +65,7 @@ var Phase = Phase || {};
         editFormSubmit: function(event) {
             event.preventDefault();
             var body = this.textarea.val();
-            this.model.save({body: body});
+            this.model.save({body: body}, {wait: true});
             this.stopEdition(event);
         },
         stopEdition: function(event) {
