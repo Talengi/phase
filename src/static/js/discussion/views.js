@@ -15,6 +15,7 @@ var Phase = Phase || {};
             this.listenTo(this.collection, 'add', this.addNote);
         },
         render: function() {
+            this.$el.html('');
             this.collection.each(this.addNote);
             return this;
         },
