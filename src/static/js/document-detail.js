@@ -1,3 +1,5 @@
+// TODO Use backbone to backbort this old behavior
+
 jQuery(function($) {
 
     "use strict";

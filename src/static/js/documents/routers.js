@@ -181,4 +181,12 @@ var Phase = Phase || {};
             dispatcher.trigger('onUrlChange', querystring);
         }
     });
+
+    Phase.Routers.DocumentDetailRouter = Backbone.Router.extend({
+        routes: {
+            '': 'documentDetail'
+        },
+        documentDetail: function() {
+        }
+    });
 })(this, Phase, Backbone, _);
