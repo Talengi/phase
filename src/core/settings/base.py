@@ -365,7 +365,7 @@ PIPELINE_JS = {
         ),
         'output_filename': 'js/list.js',
     },
-    'detail': {
+    'document_detail': {
         'source_filenames': (
             'js/vendor/jquery.multiselect.js',
             'js/vendor/jquery.multiselect.filter.js',
