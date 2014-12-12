@@ -9,7 +9,7 @@ from bookmarks.api import views as bookmarks_views
 
 router = routers.DefaultRouter()
 router.register('users', accounts_views.UserViewSet)
-router.register('notifications', notifications_views.MessageViewSet)
+router.register('notifications', notifications_views.NotificationViewSet)
 router.register('favorites', favorites_views.FavoriteViewSet)
 router.register('bookmarks', bookmarks_views.BookmarkViewSet)
 

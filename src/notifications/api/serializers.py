@@ -1,11 +1,11 @@
 from rest_framework import serializers
 
-from notifications.models import Message
+from notifications.models import Notification
 
 
-class MessageSerializer(serializers.ModelSerializer):
+class NotificationSerializer(serializers.ModelSerializer):
     user = serializers.Field(source='user.email')
 
     class Meta:
-        model = Message
+        model = Notification
         fields = ('id', 'user', 'body', 'created_on', 'seen')

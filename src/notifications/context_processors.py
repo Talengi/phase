@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AnonymousUser
 
-from notifications.models import Message
+from notifications.models import Notification
 
 
 def notifications(request):
@@ -14,7 +14,7 @@ def notifications(request):
     context = {}
 
     if not isinstance(user, AnonymousUser):
-        notifications = Message.objects \
+        notifications = Notification.objects \
             .filter(user=user) \
             .filter(seen=False) \
             .order_by('-created_on')
