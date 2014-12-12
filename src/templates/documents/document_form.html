@@ -45,13 +45,6 @@
 {% endblock content %}
 
 {% block extra_js %}
-<script>
-    Phase.Config = {
-        userId: {% if request.user.is_authenticated %}{{ request.user.id }}{% else %}undefined{% endif %},
-        csrfToken: "{{ csrf_token }}",
-        currentUrl: "{% url "document_edit" organisation_slug category_slug document.document_key %}"
-    };
-</script>
-{% compressed_js "document_edit" %}
+    {% compressed_js "document_edit" %}
 {% endblock extra_js %}
 
