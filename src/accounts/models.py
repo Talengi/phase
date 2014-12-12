@@ -17,23 +17,25 @@ logger = logging.getLogger(__name__)
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, name, password=None, **extra_fields):
+    def create_user(self, email, name, username=None, password=None, **extra_fields):
         now = timezone.now()
         if not email:
             raise ValueError('Oups, you forgot to give me an email')
         if not name:
             raise ValueError('I shall not be a horse with no name')
 
-        user = self.model(email=email, name=name, is_staff=False,
-                          is_active=True, is_superuser=False,
-                          last_login=now, date_joined=now,
-                          **extra_fields)
+        if not username:
+            username = email.split('@')[0]
+
+        user = self.model(email=email, name=name, username=username,
+                          is_staff=False, is_active=True, is_superuser=False,
+                          last_login=now, date_joined=now, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, name, password=None, **extra_fields):
-        user = self.create_user(email, name, password, **extra_fields)
+    def create_superuser(self, email, name, username=None, password=None, **extra_fields):
+        user = self.create_user(email, name, username, password, **extra_fields)
         user.is_staff = True
         user.is_active = True
         user.is_superuser = True
@@ -50,6 +52,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         db_index=True)
     name = models.CharField(
         _('Name'),
+        max_length=64)
+    username = models.SlugField(
+        _('Username'),
+        unique=True,
+        db_index=True,
         max_length=64)
     position = models.CharField(
         _('Position'),
@@ -70,7 +77,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         default=timezone.now)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name']
+    REQUIRED_FIELDS = ['name', 'username']
 
     class Meta:
         verbose_name = 'User'

@@ -18,6 +18,7 @@
   "fields": {
     "name": "Admin",
     "email": "admin@phase.fr",
+    "username": "admin",
     "position": "Big boss",
     "is_active": true,
     "is_superuser": true,
@@ -35,6 +36,7 @@
   "fields": {
     "name": "User",
     "email": "user@phase.fr",
+    "username": "user",
     "position": "Simple user",
     "is_active": true,
     "is_superuser": false,
@@ -52,6 +54,7 @@
   "fields": {
     "name": "Document Controller",
     "email": "dc@phase.fr",
+    "username": "dc",
     "position": "Document controller",
     "is_active": true,
     "is_superuser": false,

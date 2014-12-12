@@ -11,6 +11,77 @@ from discussion.factories import NoteFactory
 from discussion.models import Note
 
 
+class NoteTests(TestCase):
+
+    def setUp(self):
+        self.category = CategoryFactory()
+        self.user1 = UserFactory(
+            username='user1',
+            category=self.category
+        )
+        self.user2 = UserFactory(
+            username='user2',
+            category=self.category
+        )
+        self.user3 = UserFactory(
+            username='user-3_username',
+            category=self.category
+        )
+        self.doc = DocumentFactory(
+            revision={
+                'reviewers': [self.user1],
+                'leader': self.user1,
+                'approver': self.user1,
+            }
+        )
+        self.revision = self.doc.latest_revision
+        self.revision.start_review()
+
+    def create_note(self, body):
+        return NoteFactory(
+            body=body,
+            document=self.doc,
+            author=self.user1,
+            revision=1
+        )
+
+    def test_parse_single_mention(self):
+        note = self.create_note('bla bla bla @user1 bla bla')
+        self.assertEqual(note.parse_mentions(), [self.user1])
+
+    def test_parse_single_mention_beginning(self):
+        note = self.create_note('@user1 bla bla bla bla')
+        self.assertEqual(note.parse_mentions(), [self.user1])
+
+    def test_parse_multiple_mentions(self):
+        note = self.create_note('bla bla @user1 bla bla @user2 bla bla')
+        self.assertEqual(note.parse_mentions(), [self.user1, self.user2])
+
+    def test_parse_duplicate_mentions(self):
+        note = self.create_note('bla bla @user1 bla bla @user2 bla bla @user2')
+        self.assertEqual(note.parse_mentions(), [self.user1, self.user2])
+
+    def test_parse_mentions_with_hyphens(self):
+        note = self.create_note('bla bla @user-3_username bla bla')
+        self.assertEqual(note.parse_mentions(), [self.user3])
+
+    def test_parse_no_mentions(self):
+        note = self.create_note('bal bla bla bla bla')
+        self.assertEqual(note.parse_mentions(), [])
+
+    def test_parse_wrong_mentions(self):
+        note = self.create_note('bal bla bla bla bla @user42 bla bla')
+        self.assertEqual(note.parse_mentions(), [])
+
+    def test_parse_wrong_mentions_2(self):
+        note = self.create_note('bal bla bla bla bla @user111 bla bla')
+        self.assertEqual(note.parse_mentions(), [])
+
+    def test_parse_incomplete_mention(self):
+        note = self.create_note('bal bla bla bla bla @use bla bla')
+        self.assertEqual(note.parse_mentions(), [])
+
+
 class ReviewTests(TestCase):
 
     def setUp(self):

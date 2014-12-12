@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 
-class Message(models.Model):
+class Notification(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         verbose_name=_('User'))
@@ -25,10 +25,10 @@ class Message(models.Model):
         default=False)
 
     class Meta:
-        verbose_name = _('Message')
-        verbose_name_plural = _('Messages')
+        verbose_name = _('Notification')
+        verbose_name_plural = _('Notifications')
 
 
 def notify(user, message):
-    message = Message.objects.create(user=user, body=message)
-    return message
+    notification = Notification.objects.create(user=user, body=message)
+    return notification

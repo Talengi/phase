@@ -27,10 +27,10 @@ class UserAdmin(django_UserAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
-    list_display = ('email', 'name', 'position', 'is_superuser')
+    list_display = ('email', 'name', 'username', 'position', 'is_superuser')
     list_filter = ('is_superuser',)
     fieldsets = (
-        (None, {'fields': ('email', 'password')}),
+        (None, {'fields': ('email', 'username', 'password')}),
         ('Personal info', {'fields': ('name', 'position',)}),
         ('Permissions', {'fields': ('is_superuser',)}),
         ('Important dates', {'fields': ('date_joined', 'last_login',)}),
@@ -41,7 +41,7 @@ class UserAdmin(django_UserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'name', 'password1', 'password2')}),
+            'fields': ('email', 'name', 'username', 'password1', 'password2')}),
     )
     search_fields = ('email', 'name', 'position')
     ordering = ('email',)
