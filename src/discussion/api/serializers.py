@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 from django.template import defaultfilters as filters
 from rest_framework import serializers
 
-from discussion.models import Note
+from discussion.models import Note, mentions_re
 
 
 class NoteSerializer(serializers.ModelSerializer):
@@ -28,5 +28,8 @@ class NoteSerializer(serializers.ModelSerializer):
         return formatted
 
     def transform_formatted_body(self, obj, value):
-        formatted = filters.linebreaksbr(value)
+        replace = r'<span class="mention">@\1</span>'
+        formatted = mentions_re.sub(replace, value)
+        formatted = filters.linebreaksbr(formatted)
+
         return formatted
