@@ -433,6 +433,13 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
 
         if 'back_to_leader_step' in request.POST and request.user == self.object.approver:
             self.object.send_back_to_leader_step()
+            body = request.POST.get('body', None)
+            if body:
+                Note.objects.create(
+                    author=request.user,
+                    document=self.object.document,
+                    revision=self.object.revision,
+                    body=body)
 
         url = self.get_success_url() if 'review' in request.POST else ''
         return HttpResponseRedirect(url)
