@@ -396,6 +396,7 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
           - The leader is closing the reviewer step
           - The approver is closing the reviewer step
           - The approver is closing the leader step
+          - The approver is sending the review back to leader step
 
         """
         self.object = self.get_object()
@@ -429,6 +430,9 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
 
         if 'close_leader_step' in request.POST and request.user == self.object.approver:
             self.object.end_leader_step()
+
+        if 'back_to_leader_step' in request.POST and request.user == self.object.approver:
+            self.object.send_back_to_leader_step()
 
         url = self.get_success_url() if 'review' in request.POST else ''
         return HttpResponseRedirect(url)
