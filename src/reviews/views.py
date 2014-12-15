@@ -379,14 +379,32 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
         return revision
 
     def get_success_url(self):
-        if self.request.user == self.object.approver:
-            url = 'approver_review_document_list'
-        elif self.request.user == self.object.leader:
-            url = 'leader_review_document_list'
-        else:
-            url = 'reviewers_review_document_list'
+        """Generate correct url after form submission.
 
-        return reverse(url)
+        There are a few different cases:
+
+            * If a review was submitted, go back to the review list.
+            * If an approver sends the document back, go back to the review list.
+            * In any other cases, stay on the page.
+
+        """
+        if (any((
+                'review' in self.request.POST,
+                'back_to_leader_step' in self.request.POST,))):
+            # Send back to the correct list
+            if self.request.user == self.object.approver:
+                url = 'approver_review_document_list'
+            elif self.request.user == self.object.leader:
+                url = 'leader_review_document_list'
+            else:
+                url = 'reviewers_review_document_list'
+
+            url = reverse(url)
+
+        else:
+            url = ''
+
+        return url
 
     def post(self, request, *args, **kwargs):
         """Process the submitted file and form.
@@ -441,7 +459,7 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
                     revision=self.object.revision,
                     body=body)
 
-        url = self.get_success_url() if 'review' in request.POST else ''
+        url = self.get_success_url()
         return HttpResponseRedirect(url)
 
     @transaction.atomic
