@@ -146,10 +146,21 @@
                    value="{{ _('Close leader step') }}" />
         {% endif %}
 
+        {% if back_to_leader_button %}
+            <button class="btn btn-warning"
+                    type="button"
+                    name="back_to_leader"
+                    data-toggle="modal"
+                    href="#back-to-leader-modal">
+                    {{ _('Send back to Leader') }}
+            </button>
+        {% endif %}
+
     </form>
 </div>
 
 {% include 'discussion/discussion_modal.html' %}
+{% include 'reviews/review_modals.html' %}
 {% endblock %}
 
 {% block extra_js %}
