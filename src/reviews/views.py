@@ -18,6 +18,7 @@ from zipview.views import BaseZipView
 from documents.utils import get_all_revision_classes
 from documents.models import Document
 from documents.views import DocumentListMixin, BaseDocumentList
+from discussion.models import Note
 from reviews.models import ReviewMixin, Review
 from notifications.models import notify
 
@@ -51,6 +52,16 @@ class StartReview(PermissionRequiredMixin,
 
         if revision.can_be_reviewed:
             revision.start_review()
+
+            # If a non empty message body was submitted...
+            body = self.request.POST.get('body', None)
+            if body:
+                Note.objects.create(
+                    author=self.request.user,
+                    document=document,
+                    revision=revision.revision,
+                    body=body)
+
             message_text = '''You started the review on revision %(rev)s of
                            the document <a href="%(url)s">%(key)s (%(title)s)</a>'''
             message_data = {
