@@ -41,7 +41,7 @@ class Note(models.Model):
     def notify_mentionned_users(self):
         """Parse @mentions and create according notifications."""
         message = _('%(user)s mentionned you on document '
-                    '<a href="%(url)s">%(doc)s</a> (revision %(revision)s)') % {
+                    '<a href="%(url)s">%(doc)s</a> (revision %(revision)02d)') % {
             'user': self.author.name,
             'url': self.document.get_absolute_url(),
             'doc': self.document.document_key,

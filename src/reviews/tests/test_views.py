@@ -646,3 +646,56 @@ class ReviewFormTests(TestCase):
         revision.end_review()
         res = self.client.get(self.url)
         self.assertEqual(res.status_code, 404)
+
+
+class StartReviewTests(TestCase):
+
+    def setUp(self):
+        self.category = CategoryFactory()
+        self.user = UserFactory(
+            email='testadmin@phase.fr',
+            password='pass',
+            is_superuser=True,
+            category=self.category
+        )
+        self.doc = DocumentFactory(
+            document_key='test_document',
+            category=self.category,
+            revision={
+                'reviewers': [self.user],
+                'leader': self.user,
+                'approver': self.user,
+            }
+        )
+        self.client.login(email=self.user.email, password='pass')
+        self.start_review_url = reverse('document_start_review', args=[
+            self.category.organisation.slug,
+            self.category.slug,
+            'test_document'])
+
+    def test_start_review_with_remarks(self):
+        self.assertEqual(self.doc.note_set.all().count(), 0)
+
+        res = self.client.post(
+            self.start_review_url,
+            {'body': 'This is a notification!'},
+            follow=True)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(self.doc.note_set.all().count(), 1)
+
+    def test_start_review_with_empty_remark(self):
+        self.assertEqual(self.doc.note_set.all().count(), 0)
+
+        res = self.client.post(
+            self.start_review_url,
+            {'body': ''},
+            follow=True)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(self.doc.note_set.all().count(), 0)
+
+    def test_start_review_with_no_remark(self):
+        self.assertEqual(self.doc.note_set.all().count(), 0)
+
+        res = self.client.post(self.start_review_url, follow=True)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(self.doc.note_set.all().count(), 0)

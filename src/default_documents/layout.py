@@ -141,7 +141,6 @@ class PropertyLayout(LayoutObject):
         else:
             template = self.html
             value = prop
-            print value
 
         context.update({
             'name': name,
