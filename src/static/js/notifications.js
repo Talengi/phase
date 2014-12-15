@@ -11,7 +11,8 @@ jQuery(function($) {
     // it could be done in the template, but that would require
     // an additional query to count the notification number
     if(notifList.length > 0) {
-        notifButton.removeClass('disabled');
+        notifButton.removeClass('btn-primary');
+        notifButton.addClass('btn-danger');
     }
 
     notifButton.one('click', function() {
