@@ -312,6 +312,7 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
 
         user = self.request.user
 
+        reviews = self.object.get_reviews()
         can_comment = any((
             (self.object.is_at_review_step('approver') and user == self.object.approver),
             (self.object.is_at_review_step('leader') and user == self.object.leader),
@@ -327,7 +328,8 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
             'document': self.object.document,
             'document_key': self.object.document.document_key,
             'revision': self.object,
-            'reviews': self.object.get_reviews(),
+            'reviews': reviews,
+            'leader': self.object.leader,
             'is_leader': is_leader,
             'is_approver': is_approver,
             'can_comment': can_comment,

@@ -9,7 +9,7 @@
             </div>
             <p class="alert alert-warning">
             {% blocktrans %}
-                The document {{ document_key }} will be send back to the Leader for review.
+                The document {{ document_key }} will be send back to the Leader ({{ leader }}) for review.
             {% endblocktrans %}
             </p>
             <form action="" method="post">
@@ -17,7 +17,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="input-body">{{ _('Add a message:') }}</label>
-                        <textarea autocomplete="off" id="input-body" class="form-control" name="body">@leader </textarea>
+                        <textarea autocomplete="off" id="input-body" class="form-control" name="body">@{{ leader.username }} </textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
