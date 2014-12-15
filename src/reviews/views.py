@@ -312,6 +312,7 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
 
         user = self.request.user
 
+        reviews = self.object.get_reviews()
         can_comment = any((
             (self.object.is_at_review_step('approver') and user == self.object.approver),
             (self.object.is_at_review_step('leader') and user == self.object.leader),
@@ -321,17 +322,20 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
         is_approver = self.object.approver
         close_reviewers_button = self.object.is_at_review_step('reviewer') and (is_leader or is_approver)
         close_leader_button = self.object.is_at_review_step('leader') and is_approver
+        back_to_leader_button = self.object.is_at_review_step('approver') and is_approver
 
         context.update({
             'document': self.object.document,
             'document_key': self.object.document.document_key,
             'revision': self.object,
-            'reviews': self.object.get_reviews(),
+            'reviews': reviews,
+            'leader': self.object.leader,
             'is_leader': is_leader,
             'is_approver': is_approver,
             'can_comment': can_comment,
             'close_reviewers_button': close_reviewers_button,
             'close_leader_button': close_leader_button,
+            'back_to_leader_button': back_to_leader_button,
         })
         return context
 
@@ -375,14 +379,32 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
         return revision
 
     def get_success_url(self):
-        if self.request.user == self.object.approver:
-            url = 'approver_review_document_list'
-        elif self.request.user == self.object.leader:
-            url = 'leader_review_document_list'
-        else:
-            url = 'reviewers_review_document_list'
+        """Generate correct url after form submission.
 
-        return reverse(url)
+        There are a few different cases:
+
+            * If a review was submitted, go back to the review list.
+            * If an approver sends the document back, go back to the review list.
+            * In any other cases, stay on the page.
+
+        """
+        if (any((
+                'review' in self.request.POST,
+                'back_to_leader_step' in self.request.POST,))):
+            # Send back to the correct list
+            if self.request.user == self.object.approver:
+                url = 'approver_review_document_list'
+            elif self.request.user == self.object.leader:
+                url = 'leader_review_document_list'
+            else:
+                url = 'reviewers_review_document_list'
+
+            url = reverse(url)
+
+        else:
+            url = ''
+
+        return url
 
     def post(self, request, *args, **kwargs):
         """Process the submitted file and form.
@@ -392,6 +414,7 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
           - The leader is closing the reviewer step
           - The approver is closing the reviewer step
           - The approver is closing the leader step
+          - The approver is sending the review back to leader step
 
         """
         self.object = self.get_object()
@@ -426,7 +449,17 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
         if 'close_leader_step' in request.POST and request.user == self.object.approver:
             self.object.end_leader_step()
 
-        url = self.get_success_url() if 'review' in request.POST else ''
+        if 'back_to_leader_step' in request.POST and request.user == self.object.approver:
+            self.object.send_back_to_leader_step()
+            body = request.POST.get('body', None)
+            if body:
+                Note.objects.create(
+                    author=request.user,
+                    document=self.object.document,
+                    revision=self.object.revision,
+                    body=body)
+
+        url = self.get_success_url()
         return HttpResponseRedirect(url)
 
     @transaction.atomic

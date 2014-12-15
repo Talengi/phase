@@ -1,0 +1,31 @@
+{% load i18n %}
+
+<div class="modal fade" id="back-to-leader-modal" tabindex="-1" role="dialog" aria-labelledby="back-to-leader-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="back-to-leader-label">{{ _('Send back to Leader') }}</h4>
+            </div>
+            <p class="alert alert-warning">
+            {% blocktrans %}
+                The document {{ document_key }} will be send back to the Leader ({{ leader }}) for review.
+            {% endblocktrans %}
+            </p>
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="input-body">{{ _('Add a message:') }}</label>
+                        <textarea autocomplete="off" id="input-body" class="form-control" name="body">@{{ leader.username }} </textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="back_to_leader_step" value="back_to_leader_step" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{ _('Back to the review form') }}</button>
+                    <button type="submit" class="btn btn-primary">{{ _('Send back to leader') }}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

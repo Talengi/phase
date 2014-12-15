@@ -161,6 +161,16 @@ class ReviewMixinTests(TestCase):
         self.assertEqual(revision.leader_step_closed, today)
         self.assertEqual(revision.review_end_date, today)
 
+    def test_send_back_to_leader_step(self):
+        revision = self.create_reviewable_document()
+        revision.start_review()
+        revision.end_leader_step()
+        revision.send_back_to_leader_step()
+
+        self.assertIsNone(revision.leader_step_closed)
+        review = revision.get_review(self.user, 'leader')
+        self.assertFalse(review.closed)
+
     def test_end_review_process(self):
         revision = self.create_reviewable_document()
 
