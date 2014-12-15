@@ -12,6 +12,7 @@ from .models import (
     DemoMetadata, DemoMetadataRevision
 )
 from reviews.layout import ReviewsLayout
+from reviews.forms import ReviewFormMixin
 from .layout import (
     DocumentFieldset, ScheduleLayout, ScheduleStatusLayout,
     PropertyLayout, YesNoLayout
@@ -56,7 +57,7 @@ class ContractorDeliverableForm(BaseDocumentForm):
         exclude = ('document', 'latest_revision')
 
 
-class ContractorDeliverableRevisionForm(BaseDocumentForm):
+class ContractorDeliverableRevisionForm(ReviewFormMixin, BaseDocumentForm):
     leader = UserChoiceField(label=_('Leader'), required=False)
     approver = UserChoiceField(label=_('Approver'), required=False)
     reviewers = UserMultipleChoiceField(label=_('Reviewers'), required=False)

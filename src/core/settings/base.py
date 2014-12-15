@@ -378,7 +378,17 @@ PIPELINE_JS = {
             'js/documents/detail_app.js',
             'js/document-detail.js',
         ),
-        'output_filename': 'js/detail.js',
+        'output_filename': 'js/document_detail.js',
+    },
+    'document_edit': {
+        'source_filenames': (
+            'js/vendor/jquery.multiselect.js',
+            'js/vendor/jquery.multiselect.filter.js',
+            'js/vendor/selectize.js',
+            'js/autocomplete.js',
+            'js/document-detail.js',
+        ),
+        'output_filename': 'js/document_edit.js',
     },
     'review_list': {
         'source_filenames': (
