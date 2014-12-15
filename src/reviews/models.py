@@ -259,6 +259,20 @@ class ReviewMixin(models.Model):
             self.save(update_document=True)
 
     @transaction.atomic
+    def send_back_to_leader_step(self, save=True):
+        """Send the review back to the leader step."""
+        self.leader_step_closed = None
+
+        Review.objects \
+            .filter(document=self.document) \
+            .filter(revision=self.revision) \
+            .filter(role=Review.ROLES.leader) \
+            .update(closed=False)
+
+        if save:
+            self.save(update_document=True)
+
+    @transaction.atomic
     def end_review(self, save=True):
         """Ends the review.
 
