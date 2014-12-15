@@ -86,14 +86,23 @@ var Phase = Phase || {};
             'submit': 'onSubmit'
         },
         initialize: function() {
+            _.bindAll(this, 'onSubmitError');
+
             this.textarea = this.$el.find('textarea');
+            this.alert = this.$el.find('div.alert');
         },
         onSubmit: function(event) {
             event.preventDefault();
 
             var body = this.textarea.val();
-            this.collection.create({body: body}, {wait: true});
+            this.collection.create({body: body}, {
+                wait: true,
+                error: this.onSubmitError
+            });
             this.textarea.val('');
+        },
+        onSubmitError: function(event) {
+            this.alert.show();
         }
     });
 
