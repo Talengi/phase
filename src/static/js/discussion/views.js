@@ -81,13 +81,16 @@ var Phase = Phase || {};
     });
 
     Phase.Views.DiscussionFormView = Backbone.View.extend({
-        el: 'form#discussion-form',
+        el: '#discussion-form',
+        template: _.template($('#tpl-discussion-form').html()),
         events: {
-            'submit': 'onSubmit'
+            'submit form': 'onSubmit'
         },
         initialize: function() {
             _.bindAll(this, 'onSubmitError');
-
+        },
+        render: function() {
+            this.$el.html(this.template());
             this.textarea = this.$el.find('textarea');
             this.alert = this.$el.find('div.alert');
         },
@@ -154,6 +157,7 @@ var Phase = Phase || {};
             this.discussionFormView = new Phase.Views.DiscussionFormView({
                 collection: this.collection
             });
+            this.discussionFormView.render();
         }
     });
 
@@ -163,7 +167,7 @@ var Phase = Phase || {};
     Phase.Views.DiscussionAppView = Backbone.View.extend({
         initialize: function() {
             var buttons = $('button.remarks-button');
-            var views = _.map(buttons, function(button) {
+            _.each(buttons, function(button) {
                 var discussionView = new Phase.Views.DiscussionView({
                     button: button
                 });
