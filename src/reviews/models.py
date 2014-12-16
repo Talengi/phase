@@ -164,7 +164,7 @@ class ReviewMixin(models.Model):
 
         # Leader is mandatory, no need to test it
         Review.objects.create(
-            reviewer=self.leader,
+            reviewer_id=self.leader_id,
             role=Review.ROLES.leader,
             document=self.document,
             revision=self.revision,
@@ -175,7 +175,7 @@ class ReviewMixin(models.Model):
         # Approver is not mandatory
         if self.approver_id:
             Review.objects.create(
-                reviewer=self.approver,
+                reviewer_id=self.approver_id,
                 role=Review.ROLES.approver,
                 document=self.document,
                 revision=self.revision,
