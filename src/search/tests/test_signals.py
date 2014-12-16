@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 
 from django.test import TestCase
 from django.core.management import call_command
+from django.test.utils import override_settings
 
 from mock import patch
 
@@ -13,6 +14,7 @@ from documents.factories import DocumentFactory
 from search.signals import connect_signals
 
 
+@override_settings(ELASTIC_AUTOINDEX=True)
 class SignalTests(TestCase):
     def setUp(self):
         self.category = CategoryFactory()
