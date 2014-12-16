@@ -19,8 +19,9 @@ from documents.utils import get_all_revision_classes
 from documents.models import Document
 from documents.views import DocumentListMixin, BaseDocumentList
 from discussion.models import Note
-from reviews.models import ReviewMixin, Review
 from notifications.models import notify
+from reviews.models import ReviewMixin, Review
+from reviews.signals import pre_batch_review, post_batch_review, batch_item_indexed
 
 
 class ReviewHome(LoginRequiredMixin, TemplateView):
@@ -128,8 +129,17 @@ class CancelReview(PermissionRequiredMixin,
 
 
 class BatchReview(BaseDocumentList):
-    """Starts the review process more multiple documents at once."""
+    """Starts the review process more multiple documents at once.
 
+    This operation can be quite time consuming when many documents are reviewed
+    at once, and this is expected to be normal by the users. We display a nice
+    progress bar while the user waits.
+
+    Since the user is already waiting, we also perform elasticsearch indexing
+    synchronously, so at the end of the operation, the document list displayed
+    is in sync.
+
+    """
     def get_redirect_url(self, *args, **kwargs):
         """Redirects to document list after that."""
         return reverse('category_document_list', args=[
@@ -139,17 +149,21 @@ class BatchReview(BaseDocumentList):
     def post(self, request, *args, **kwargs):
         ids = request.POST.getlist('document_ids')
         docs = self.get_document_class().objects \
+            .select_related() \
             .filter(document_id__in=ids) \
-            .select_related('document', 'latest_revision')
 
         ok = []
         nok = []
+
+        pre_batch_review.send(sender=self.__class__)
         for doc in docs:
             if doc.latest_revision.can_be_reviewed:
                 doc.latest_revision.start_review()
+                batch_item_indexed.send(sender=self.__class__, metadata=doc)
                 ok.append(doc)
             else:
                 nok.append(doc)
+        post_batch_review.send(sender=self.__class__)
 
         if len(ok) > 0:
             ok_message = ugettext('The review started for the following documents:')
