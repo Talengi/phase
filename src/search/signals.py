@@ -72,16 +72,17 @@ def on_batch_item_indexed(sender, metadata, **kwargs):
 
 
 def connect_signals():
-    post_save.connect(update_index, sender=Document, dispatch_uid='update_index')
-    pre_delete.connect(remove_from_index, sender=Document, dispatch_uid='remove_from_index')
-    post_save.connect(save_mapping, sender=Category, dispatch_uid='put_category_mapping')
+    if settings.ELASTIC_AUTOINDEX:
+        post_save.connect(update_index, sender=Document, dispatch_uid='update_index')
+        pre_delete.connect(remove_from_index, sender=Document, dispatch_uid='remove_from_index')
+        post_save.connect(save_mapping, sender=Category, dispatch_uid='put_category_mapping')
 
 
 def disconnect_signals():
-    post_save.disconnect(update_index, sender=Document, dispatch_uid='update_index')
-    pre_delete.disconnect(remove_from_index, sender=Document, dispatch_uid='remove_from_index')
-    post_save.disconnect(save_mapping, sender=Category, dispatch_uid='put_category_mapping')
+    if settings.ELASTIC_AUTOINDEX:
+        post_save.disconnect(update_index, sender=Document, dispatch_uid='update_index')
+        pre_delete.disconnect(remove_from_index, sender=Document, dispatch_uid='remove_from_index')
+        post_save.disconnect(save_mapping, sender=Category, dispatch_uid='put_category_mapping')
 
 
-if settings.ELASTIC_AUTOINDEX:
-    connect_signals()
+connect_signals()
