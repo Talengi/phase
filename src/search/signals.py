@@ -52,7 +52,7 @@ def on_batch_item_indexed(sender, metadata, **kwargs):
     index_document(
         metadata.document_id,
         metadata.document.document_type(),
-        metadata.document.to_json())
+        metadata.jsonified())
 
 
 def connect_signals():
