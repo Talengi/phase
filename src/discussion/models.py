@@ -45,7 +45,7 @@ class Note(models.Model):
             'user': self.author.name,
             'url': self.document.get_absolute_url(),
             'doc': self.document.document_key,
-            'revision': self.revision
+            'revision': int(self.revision)
         }
         users = self.parse_mentions()
         for user in users:
