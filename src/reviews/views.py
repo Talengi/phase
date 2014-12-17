@@ -21,7 +21,7 @@ from documents.views import DocumentListMixin, BaseDocumentList
 from discussion.models import Note
 from notifications.models import notify
 from reviews.models import ReviewMixin, Review
-from reviews.signals import pre_batch_review, post_batch_review, batch_item_indexed
+from reviews.tasks import do_batch_import
 
 
 class ReviewHome(LoginRequiredMixin, TemplateView):
@@ -147,41 +147,14 @@ class BatchReview(BaseDocumentList):
             self.kwargs.get('category')])
 
     def post(self, request, *args, **kwargs):
-        ids = request.POST.getlist('document_ids')
-        docs = self.get_document_class().objects \
-            .select_related() \
-            .filter(document_id__in=ids) \
+        document_ids = request.POST.getlist('document_ids')
+        document_class = self.get_document_class()
+        contenttype = ContentType.objects.get_for_model(document_class)
 
-        ok = []
-        nok = []
+        job = do_batch_import.delay(request.user.id, contenttype.id, document_ids)
 
-        pre_batch_review.send(sender=self.__class__)
-        for doc in docs:
-            if doc.latest_revision.can_be_reviewed:
-                doc.latest_revision.start_review()
-                batch_item_indexed.send(sender=self.__class__, metadata=doc)
-                ok.append(doc)
-            else:
-                nok.append(doc)
-        post_batch_review.send(sender=self.__class__)
-
-        if len(ok) > 0:
-            ok_message = ugettext('The review started for the following documents:')
-            ok_list = '</li><li>'.join('<a href="%s">%s</a>' % (doc.get_absolute_url(), doc) for doc in ok)
-            notify(request.user, '{} <ul><li>{}</li></ul>'.format(
-                ok_message,
-                ok_list
-            ))
-
-        if len(nok) > 0:
-            nok_message = ugettext("We failed to start the review for the following documents:")
-            nok_list = '</li><li>'.join('<a href="%s">%s</a>' % (doc.get_absolute_url(), doc) for doc in nok)
-            notify(request.user, '{} <ul><li>{}</li></ul>'.format(
-                nok_message,
-                nok_list
-            ))
-
-        return HttpResponseRedirect(self.get_redirect_url())
+        redirect_url = reverse('batch_review_poll', args=[job.id])
+        return HttpResponseRedirect(redirect_url)
 
 
 class BaseReviewDocumentList(LoginRequiredMixin, ListView):
