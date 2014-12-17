@@ -25,6 +25,14 @@ def do_batch_import(user_id, contenttype_id, document_ids):
     count = 0
     total_docs = docs.count()
 
+    # We compute the progress as the proportion of documents for which the
+    # review has started.
+    # However, after all documents are treated, there is still the
+    # index + refresh step which takes quite some time. So we artificially
+    # increase the document count as a hackish way to never display a 100%
+    # progress bar as long as the task is not truly finished.
+    total_docs += 30
+
     pre_batch_review.send(sender=do_batch_import)
 
     for doc in docs:
