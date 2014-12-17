@@ -7,9 +7,6 @@ from itertools import groupby
 from reviews.models import Review
 
 
-__REVIEWS__ = None
-
-
 def get_cached_reviews(revision):
     """Get all reviews for the given revision.
 
@@ -19,19 +16,22 @@ def get_cached_reviews(revision):
     All the reviews will be fetched in a single query and cached.
 
     """
-    global __REVIEWS__
-    if __REVIEWS__ is None:
-        all_reviews = Review.objects \
-            .filter(document=revision.document) \
-            .order_by('revision', 'id') \
-            .select_related('reviewer')
-
-        __REVIEWS__ = {}
-        for revision_id, reviews in groupby(all_reviews, lambda obj: obj.revision):
-            __REVIEWS__[revision_id] = list(reviews)
-
-    if revision.revision in __REVIEWS__:
-        reviews = __REVIEWS__[revision.revision]
+    reviews = get_all_reviews(revision)
+    if revision.revision in reviews:
+        revision_reviews = reviews[revision.revision]
     else:
-        reviews = []
-    return reviews
+        revision_reviews = []
+    return revision_reviews
+
+
+def get_all_reviews(revision):
+    """Return a dictionnary of revision indexed reviews."""
+    qs = Review.objects \
+        .filter(document=revision.document) \
+        .order_by('revision', 'id') \
+        .select_related('reviewer')
+
+    all_reviews = {}
+    for revision_id, reviews in groupby(qs, lambda obj: obj.revision):
+        all_reviews[revision_id] = list(reviews)
+    return all_reviews
