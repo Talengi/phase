@@ -1,16 +1,19 @@
 # -*- coding: utf-8 -*-
 
 import datetime
+import json
 
 from django.db import transaction
 from django.views.generic import View, ListView, DetailView, TemplateView
 from django.views.generic.detail import SingleObjectMixin
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.core.urlresolvers import reverse
-from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _
+from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 from django.utils import timezone
+from celery.result import AsyncResult
 
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 from zipview.views import BaseZipView
@@ -155,6 +158,36 @@ class BatchReview(BaseDocumentList):
 
         redirect_url = reverse('batch_review_poll', args=[job.id])
         return HttpResponseRedirect(redirect_url)
+
+
+class BatchReviewPoll(View):
+    """Display information about the ongoing batch review task.
+
+    This view is intended to be polled with ajax.
+
+    Since the displayed information is not critical, and the job id is
+    auto-generated, we don't perform any acl verification.
+
+    """
+
+    def get(self, request, job_id):
+        """Return json data to describe the task."""
+        job = AsyncResult(job_id)
+
+        done = job.ready()
+        result = job.result
+        if isinstance(result, dict):
+            current = result['current']
+            total = result['total']
+            percent = float(current) / total * 100
+        else:
+            percent = 100.0 if done else 0.0
+
+        data = {
+            'done': done,
+            'percent': percent
+        }
+        return HttpResponse(json.dumps(data), mimetype='application/json')
 
 
 class BaseReviewDocumentList(LoginRequiredMixin, ListView):
