@@ -180,13 +180,13 @@ class BatchReviewPoll(View):
         if isinstance(result, dict):
             current = result['current']
             total = result['total']
-            percent = float(current) / total * 100
+            progress = float(current) / total * 100
         else:
-            percent = 100.0 if done else 0.0
+            progress = 100.0 if done else 0.0
 
         data = {
             'done': done,
-            'percent': percent
+            'progress': progress
         }
         return HttpResponse(json.dumps(data), mimetype='application/json')
 
