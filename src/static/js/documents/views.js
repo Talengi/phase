@@ -176,17 +176,23 @@ var Phase = Phase || {};
         }
     });
 
+    /**
+     * Handle the different navbar buttons and form.
+     */
     Phase.Views.NavbarView = Backbone.View.extend({
         el: '#table-controls',
         events: {
-            'click #toggle-filters-button': 'showSearchForm'
+            'click #toggle-filters-button': 'showSearchForm',
+            'click #review-button': 'batchReview'
         },
-        initialize: function() {
+        initialize: function(options) {
+            _.bindAll(this, 'batchReviewSuccess', 'batchReviewPoll', 'batchReviewPollSuccess');
             this.actionForm = this.$el.find('#document-list-form form').first();
             this.actionButtons = this.actionForm.find('.navbar-action');
             this.dropdown = this.actionForm.find('.dropdown-form');
             this.closeBtn = this.dropdown.find('button[data-toggle=dropdown]');
             this.resultsP = this.$el.find('p#display-results');
+            this.batchProgress = options.progress;
 
             this.configureForm();
             this.listenToOnce(dispatcher, 'onRowSelected', this.activateButtons);
@@ -241,6 +247,52 @@ var Phase = Phase || {};
                 results = '' + data.displayed + ' documents on ' + data.total;
             }
             this.resultsP.html(results);
+        },
+        /**
+         * Handles the batch review button.
+         *
+         * We submit the form and get the task status poll url.
+         * We then poll the status regularly to update the progress bar.
+         * When the task is done, reload the page.
+         */
+        batchReview: function(event) {
+            event.preventDefault();
+
+            var data = this.actionForm.serialize();
+            var url = this.actionForm.attr('action');
+            $.post(url, data, this.batchReviewSuccess);
+        },
+        batchReviewSuccess: function(data) {
+            var poll_url = data.poll_url;
+            this.pollId = setInterval(this.batchReviewPoll, 1000, poll_url);
+        },
+        batchReviewPoll: function(poll_url) {
+            $.get(poll_url, this.batchReviewPollSuccess);
+        },
+        batchReviewPollSuccess: function(data) {
+            this.batchProgress.set('progress', data.progress);
+            if (data.done) {
+                clearInterval(this.pollId);
+                location.reload();
+            }
+        }
+    });
+
+    /**
+     * A simple progress bar view, updated through a Progress model.
+     */
+    Phase.Views.ProgressView = Backbone.View.extend({
+        el: '#progress-modal',
+        initialize: function() {
+            this.listenTo(this.model, 'change', this.render);
+            this.progressBar = this.$el.find('.progress-bar');
+            this.successMsg = this.$el.find('.alert-success');
+        },
+        render: function() {
+            var progress = this.model.get('progress');
+            this.progressBar.attr('aria-valuenow', progress);
+            this.progressBar.css('width', progress + '%');
+            return this;
         }
     });
 

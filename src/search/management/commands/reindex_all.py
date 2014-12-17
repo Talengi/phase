@@ -78,14 +78,7 @@ Type 'yes' to continue, or 'no' to cancel: """)
             document_type = category.document_type()
             DocumentClass = category.category_template.metadata_model.model_class()
             documents = DocumentClass.objects \
-                .select_related(
-                    'latest_revision',
-                    'latest_revision__leader',
-                    'latest_revision__approver',
-                    'document',
-                    'document__category',
-                    'document__category__category_template',
-                    'document__category__organisation') \
+                .select_related() \
                 .filter(document__category=category)
 
             for metadata in documents:

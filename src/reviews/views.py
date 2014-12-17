@@ -1,16 +1,19 @@
 # -*- coding: utf-8 -*-
 
 import datetime
+import json
 
 from django.db import transaction
 from django.views.generic import View, ListView, DetailView, TemplateView
 from django.views.generic.detail import SingleObjectMixin
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.core.urlresolvers import reverse
-from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _
+from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 from django.utils import timezone
+from celery.result import AsyncResult
 
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 from zipview.views import BaseZipView
@@ -19,8 +22,9 @@ from documents.utils import get_all_revision_classes
 from documents.models import Document
 from documents.views import DocumentListMixin, BaseDocumentList
 from discussion.models import Note
-from reviews.models import ReviewMixin, Review
 from notifications.models import notify
+from reviews.models import ReviewMixin, Review
+from reviews.tasks import do_batch_import
 
 
 class ReviewHome(LoginRequiredMixin, TemplateView):
@@ -128,8 +132,17 @@ class CancelReview(PermissionRequiredMixin,
 
 
 class BatchReview(BaseDocumentList):
-    """Starts the review process more multiple documents at once."""
+    """Starts the review process more multiple documents at once.
 
+    This operation can be quite time consuming when many documents are reviewed
+    at once, and this is expected to be normal by the users. We display a nice
+    progress bar while the user waits.
+
+    Since the user is already waiting, we also perform elasticsearch indexing
+    synchronously, so at the end of the operation, the document list displayed
+    is in sync.
+
+    """
     def get_redirect_url(self, *args, **kwargs):
         """Redirects to document list after that."""
         return reverse('category_document_list', args=[
@@ -137,37 +150,45 @@ class BatchReview(BaseDocumentList):
             self.kwargs.get('category')])
 
     def post(self, request, *args, **kwargs):
-        ids = request.POST.getlist('document_ids')
-        docs = self.get_document_class().objects \
-            .filter(document_id__in=ids) \
-            .select_related('document', 'latest_revision')
+        document_ids = request.POST.getlist('document_ids')
+        document_class = self.get_document_class()
+        contenttype = ContentType.objects.get_for_model(document_class)
 
-        ok = []
-        nok = []
-        for doc in docs:
-            if doc.latest_revision.can_be_reviewed:
-                doc.latest_revision.start_review()
-                ok.append(doc)
-            else:
-                nok.append(doc)
+        job = do_batch_import.delay(request.user.id, contenttype.id, document_ids)
 
-        if len(ok) > 0:
-            ok_message = ugettext('The review started for the following documents:')
-            ok_list = '</li><li>'.join('<a href="%s">%s</a>' % (doc.get_absolute_url(), doc) for doc in ok)
-            notify(request.user, '{} <ul><li>{}</li></ul>'.format(
-                ok_message,
-                ok_list
-            ))
+        poll_url = reverse('batch_review_poll', args=[job.id])
+        data = {'poll_url': poll_url}
+        return HttpResponse(json.dumps(data), mimetype='application/json')
 
-        if len(nok) > 0:
-            nok_message = ugettext("We failed to start the review for the following documents:")
-            nok_list = '</li><li>'.join('<a href="%s">%s</a>' % (doc.get_absolute_url(), doc) for doc in nok)
-            notify(request.user, '{} <ul><li>{}</li></ul>'.format(
-                nok_message,
-                nok_list
-            ))
 
-        return HttpResponseRedirect(self.get_redirect_url())
+class BatchReviewPoll(View):
+    """Display information about the ongoing batch review task.
+
+    This view is intended to be polled with ajax.
+
+    Since the displayed information is not critical, and the job id is
+    auto-generated, we don't perform any acl verification.
+
+    """
+
+    def get(self, request, job_id):
+        """Return json data to describe the task."""
+        job = AsyncResult(job_id)
+
+        done = job.ready()
+        result = job.result
+        if isinstance(result, dict):
+            current = result['current']
+            total = result['total']
+            progress = float(current) / total * 100
+        else:
+            progress = 100.0 if done else 0.0
+
+        data = {
+            'done': done,
+            'progress': progress
+        }
+        return HttpResponse(json.dumps(data), mimetype='application/json')
 
 
 class BaseReviewDocumentList(LoginRequiredMixin, ListView):
