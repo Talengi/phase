@@ -24,6 +24,7 @@ def get_cached_reviews(revision):
     return revision_reviews
 
 
+# TODO memoize this once we ugrade to django 1.7, with lru_cache
 def get_all_reviews(revision):
     """Return a dictionnary of revision indexed reviews."""
     qs = Review.objects \
