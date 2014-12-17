@@ -1,7 +1,13 @@
+# -*- coding: utf-8 -*-
+
+from __future__ import unicode_literals
+
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+
+from accounts.models import User
 
 
 class Notification(models.Model):
@@ -30,5 +36,12 @@ class Notification(models.Model):
 
 
 def notify(user, message):
-    notification = Notification.objects.create(user=user, body=message)
+    """Helper to notify a user.
+
+    :arg user: can be a User instance or an user id
+
+    """
+    if isinstance(user, User):
+        user = user.id
+    notification = Notification.objects.create(user_id=user, body=message)
     return notification
