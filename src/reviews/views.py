@@ -156,8 +156,9 @@ class BatchReview(BaseDocumentList):
 
         job = do_batch_import.delay(request.user.id, contenttype.id, document_ids)
 
-        redirect_url = reverse('batch_review_poll', args=[job.id])
-        return HttpResponseRedirect(redirect_url)
+        poll_url = reverse('batch_review_poll', args=[job.id])
+        data = {'poll_url': poll_url}
+        return HttpResponse(json.dumps(data), mimetype='application/json')
 
 
 class BatchReviewPoll(View):
