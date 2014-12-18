@@ -30,6 +30,5 @@ def notifications(request):
             'notifications': notifications,
             'has_new_notifications': has_new_notifications,
         })
-        print has_new_notifications
 
     return context
