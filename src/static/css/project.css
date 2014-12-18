@@ -356,7 +356,7 @@ table.reviewers tr td:nth-child(4) {
     bottom: 0;
     background-color: white;
     z-index: 1050;
-    width: 350px;
+    width: 450px;
     padding: 0px;
 }
 #left-sidebar {
@@ -393,7 +393,7 @@ table.reviewers tr td:nth-child(4) {
 #sidebar-nav li li a {
     padding-left: 20px;
 }
-.sidebar #notifications {
+.sidebar .notifications {
     padding: 15px;
     position: fixed;
     overflow-y: auto;
@@ -401,11 +401,17 @@ table.reviewers tr td:nth-child(4) {
     top: 51px;
     bottom: 0;
 }
-.sidebar #notifications ul {
+.notifications .notification {
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+.notifications ul {
     padding-left: 25px;
     list-style-type: square;
 }
-.sidebar #notifications time {
+.notifications time {
+    display: block;
     color: #666;
     font-size: 90%;
 }

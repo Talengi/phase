@@ -335,16 +335,19 @@ PIPELINE_JS = {
             # after jquery-ui js to avoid conflicts
             'js/phase-bootstrap.js',
             'js/vendor/bootstrap-datepicker.js',
-            'js/notifications.js',
+            'js/vendor/underscore.js',
+            'js/vendor/backbone.js',
+            'js/backbone-config.js',
+            'js/events.js',
+            'js/notifications/models.js',
+            'js/notifications/collections.js',
+            'js/notifications/views.js',
+            'js/notifications/app.js',
         ),
         'output_filename': 'js/base.js',
     },
     'backbone': {
         'source_filenames': (
-            'js/vendor/underscore.js',
-            'js/vendor/backbone.js',
-            'js/backbone-config.js',
-            'js/events.js',
         ),
         'output_filename': 'js/backbone.js',
     },
@@ -434,12 +437,14 @@ ELASTIC_AUTOINDEX = True
 
 # ######### CUSTOM CONFIGURATION
 PAGINATE_BY = 50  # Document list pagination
+API_PAGINATE_BY = 5
 CACHE_TIMEOUT_SECONDS = 300  # seconds == 5 minutes
 AUTH_USER_MODEL = 'accounts.User'
 LOGIN_URL = 'login'
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 CRISPY_FAIL_SILENTLY = False
 REVIEW_DURATION = 13
+DISPLAY_NOTIFICATION_COUNT = 5
 
 # Path to private files (must be served with X-SENDFILE)
 PRIVATE_ROOT = SITE_ROOT.child('private')

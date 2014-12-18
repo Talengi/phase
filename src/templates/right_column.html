@@ -9,16 +9,45 @@
             &times;</button>
     </span>
 
-    <div id="notifications">
+    <div class="notifications">
         {% for notification in notifications %}
         <div class="notification">
             {{ notification.body|safe }}
+            <time datetime="{{ notification.created_on|date:"c" }}">{{ notification.created_on|naturaltime }}</time>
         </div>
-        <time datetime="{{ notification.created_on|date:"c" }}">{{ notification.created_on|naturaltime }}</time>
-        <hr />
         {% empty %}
             {{ _('No unread notifications') }}
         {% endfor %}
+
+        <button id='all-notifications-button'
+                type="button"
+                class="btn btn-primary btn-block"
+                data-toggle="modal"
+                href="#notifications-modal">
+            {{ _('See all notifications') }}
+        </button>
     </div>
 </nav>
 </div>
+
+<div class="modal fade" id="notifications-modal" tabindex="-1" role="dialog" aria-labelledby="notifications-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="notifications-label">{{ _('Notifications') }}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="notifications"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-block more">{{ _('See more notifications') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/template" id="tpl-notification">
+    <%= body %>
+    <time datetime="<%= iso_formatted_created_on %>"><%= natural_formatted_created_on %></time>
+</script>
