@@ -437,6 +437,7 @@ ELASTIC_AUTOINDEX = True
 
 # ######### CUSTOM CONFIGURATION
 PAGINATE_BY = 50  # Document list pagination
+API_PAGINATE_BY = 5
 CACHE_TIMEOUT_SECONDS = 300  # seconds == 5 minutes
 AUTH_USER_MODEL = 'accounts.User'
 LOGIN_URL = 'login'
