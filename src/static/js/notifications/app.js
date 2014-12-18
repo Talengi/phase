@@ -10,6 +10,8 @@ jQuery(function($) {
     var markAsReadUrl = '/api/notifications/mark_as_read/';
 
     notifButton.one('click', function() {
+        notifButton.removeClass('btn-danger');
+        notifButton.addClass('btn-primary');
         $.post(markAsReadUrl, {});
     });
 
