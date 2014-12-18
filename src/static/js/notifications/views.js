@@ -10,12 +10,16 @@ var Phase = Phase || {};
     Phase.Views.NotificationsModalView = Backbone.View.extend({
         el: '#notifications-modal',
         events: {
-            'show.bs.modal': 'loadNotifications'
+            'show.bs.modal': 'loadNotifications',
+            'click button.more': 'loadNotifications'
         },
         initialize: function() {
             this.body = this.$el.find('.notifications');
+            this.moreBtn = this.$el.find('button.more');
+
             this.listenTo(this.collection, 'reset', this.render);
             this.listenTo(this.collection, 'add', this.addNotification);
+            this.listenTo(this.collection, 'updateNextUrl', this.updateNextUrl);
         },
         loadNotifications: function(events) {
             this.collection.fetch();
@@ -27,7 +31,11 @@ var Phase = Phase || {};
         addNotification: function(notification) {
             var view = new Phase.Views.NotificationItemView({ model: notification });
             this.body.append(view.render().el);
-
+        },
+        updateNextUrl: function(url) {
+            if (url === null) {
+                this.moreBtn.hide();
+            }
         }
     });
 

@@ -7,7 +7,12 @@ var Phase = Phase || {};
 
     Phase.Collections.NotificationCollection = Backbone.Collection.extend({
         model: Phase.Models.Notification,
-        url: Phase.Config.notificationsUrl
+        url: Phase.Config.notificationsUrl,
+        parse: function(response) {
+            this.url = response.next;
+            this.trigger('updateNextUrl', response.next);
+            return response.results;
+        }
     });
 
 })(this, Phase, Backbone, _);
