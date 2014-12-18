@@ -31,11 +31,11 @@
 
 {% block extra_js %}
 <script>
-    Phase.Config = {
+    _.extend(Phase.Config, {
         userId: {% if request.user.is_authenticated %}{{ request.user.id }}{% else %}undefined{% endif %},
         csrfToken: "{{ csrf_token }}",
         currentUrl: "{% url "document_detail" organisation_slug category_slug document.document_key %}"
-    };
+    });
 </script>
 {% compressed_js "document_detail" %}
 {% endblock extra_js %}

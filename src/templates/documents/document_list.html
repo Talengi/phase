@@ -29,7 +29,7 @@
 
 {% block extra_js %}
     <script>
-    Phase.Config = {
+    _.extend(Phase.Config, {
         userId: {% if request.user.is_authenticated %}{{ request.user.id }}{% else %}undefined{% endif %},
         csrfToken: "{{ csrf_token }}",
         currentUrl: "{% url "category_document_list" organisation_slug category_slug %}",
@@ -44,7 +44,7 @@
 
         bookmarksUrl: "{% url "bookmark-list" %}",
         initialBookmarks: {{ bookmarks|safe }}
-    };
+    });
     </script>
     {% compressed_js "list" %}
 {% endblock extra_js %}
