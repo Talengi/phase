@@ -7,6 +7,16 @@ var Phase = Phase || {};
 
     Phase.Views = Phase.Views || {};
 
+    Phase.Views.NotificationsSidebarView = Backbone.View.extend({
+        el: '#right-sidebar-container',
+        events: {
+            'click #all-notifications-button': 'closeSidebar'
+        },
+        closeSidebar: function() {
+            this.$el.collapse('hide');
+        }
+    });
+
     Phase.Views.NotificationsModalView = Backbone.View.extend({
         el: '#notifications-modal',
         events: {

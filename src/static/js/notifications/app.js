@@ -16,5 +16,6 @@ jQuery(function($) {
     });
 
     var collection = new Phase.Collections.NotificationCollection();
-    var view = new Phase.Views.NotificationsModalView({ collection: collection });
+    var notificationsModalView = new Phase.Views.NotificationsModalView({ collection: collection });
+    var notificationsSidebarView = new Phase.Views.NotificationsSidebarView();
 });
