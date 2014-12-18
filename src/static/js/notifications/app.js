@@ -1,3 +1,5 @@
+var Phase = Phase || {};
+
 jQuery(function($) {
     "use strict";
 

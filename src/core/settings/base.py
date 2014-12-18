@@ -335,7 +335,10 @@ PIPELINE_JS = {
             # after jquery-ui js to avoid conflicts
             'js/phase-bootstrap.js',
             'js/vendor/bootstrap-datepicker.js',
-            'js/notifications.js',
+            'js/notifications/models.js',
+            'js/notifications/collections.js',
+            'js/notifications/views.js',
+            'js/notifications/app.js',
         ),
         'output_filename': 'js/base.js',
     },
