@@ -440,6 +440,7 @@ LOGIN_URL = 'login'
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 CRISPY_FAIL_SILENTLY = False
 REVIEW_DURATION = 13
+DISPLAY_NOTIFICATION_COUNT = 5
 
 # Path to private files (must be served with X-SENDFILE)
 PRIVATE_ROOT = SITE_ROOT.child('private')
