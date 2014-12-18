@@ -5,7 +5,7 @@ var Phase = Phase || {};
 
     Phase.Models = Phase.Models || {};
 
-    Phase.Models.Notification = Backbone.Model.extend(
+    Phase.Models.Notification = Backbone.Model.extend({
         url: function() {
             var origUrl = Backbone.Model.prototype.url.call(this);
             return origUrl + (origUrl.charAt(origUrl.length - 1) === '/' ? '' : '/');

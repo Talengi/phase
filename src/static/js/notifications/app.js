@@ -12,4 +12,7 @@ jQuery(function($) {
     notifButton.one('click', function() {
         $.post(markAsReadUrl, {});
     });
+
+    var collection = new Phase.Collections.NotificationCollection();
+    var view = new Phase.Views.NotificationsModalView({ collection: collection });
 });
