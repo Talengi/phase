@@ -24,7 +24,10 @@ def notifications(request):
             .order_by('-created_on')
         notifications = list(qs[0:settings.DISPLAY_NOTIFICATION_COUNT])
 
-        has_new_notifications = (not notifications[0].seen)
+        if len(notifications) > 0:
+            has_new_notifications = (not notifications[0].seen)
+        else:
+            has_new_notifications = False
 
         context.update({
             'notifications': notifications,
