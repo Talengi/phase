@@ -11,10 +11,12 @@ var Phase = Phase || {};
         el: '#notifications-modal',
         events: {
             'show.bs.modal': 'loadNotifications',
+            'hide.bs.modal': 'unloadView',
             'click button.more': 'loadNotifications'
         },
         initialize: function() {
             this.body = this.$el.find('.notifications');
+            this.body.html('');
             this.moreBtn = this.$el.find('button.more');
 
             this.listenTo(this.collection, 'reset', this.render);
@@ -31,6 +33,10 @@ var Phase = Phase || {};
         addNotification: function(notification) {
             var view = new Phase.Views.NotificationItemView({ model: notification });
             this.body.append(view.render().el);
+        },
+        unloadView: function() {
+            this.body.html('');
+            this.collection.url = Phase.Config.notificationsUrl;
         },
         updateNextUrl: function(url) {
             if (url === null) {
