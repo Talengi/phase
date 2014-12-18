@@ -335,6 +335,10 @@ PIPELINE_JS = {
             # after jquery-ui js to avoid conflicts
             'js/phase-bootstrap.js',
             'js/vendor/bootstrap-datepicker.js',
+            'js/vendor/underscore.js',
+            'js/vendor/backbone.js',
+            'js/backbone-config.js',
+            'js/events.js',
             'js/notifications/models.js',
             'js/notifications/collections.js',
             'js/notifications/views.js',
@@ -344,10 +348,6 @@ PIPELINE_JS = {
     },
     'backbone': {
         'source_filenames': (
-            'js/vendor/underscore.js',
-            'js/vendor/backbone.js',
-            'js/backbone-config.js',
-            'js/events.js',
         ),
         'output_filename': 'js/backbone.js',
     },
