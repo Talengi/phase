@@ -12,8 +12,17 @@ class StringNumberValidator(object):
     code = 'invalid'
 
     def __init__(self, length=4):
+        self.length = length
         self.regex = re.compile(self.base_regex % length)
 
     def __call__(self, value):
         if not self.regex.match(value):
             raise ValidationError(self.message, self.code)
+
+    def deconstruct(self):
+        path = "%s.%s" % (self.__class__.__module__, self.__class__.__name__)
+        args = []
+        kwargs = {
+            'length': self.length
+        }
+        return (path, args, kwargs)

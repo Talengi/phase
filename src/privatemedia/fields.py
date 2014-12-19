@@ -16,6 +16,11 @@ class PrivateFileField(models.FileField):
         })
         return super(PrivateFileField, self).__init__(*args, **kwargs)
 
+    def deconstruct(self):
+        name, path, args, kwargs = super(PrivateFileField, self).deconstruct()
+        kwargs['storage'] = private_storage
+        return name, path, args, kwargs
+
     def formfield(self, **kwargs):
         defaults = {
             'form_class': PhaseClearableFileField,
