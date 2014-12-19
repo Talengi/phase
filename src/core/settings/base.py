@@ -496,3 +496,6 @@ DEBUG_TOOLBAR_PANELS = [
     'debug_toolbar.panels.logger.LoggingPanel',
     'debug_toolbar.panels.profiling.ProfilingDebugPanel',
 ]
+
+# Disable a DJ1.7 warning
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
