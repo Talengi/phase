@@ -3,7 +3,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from django.core.exceptions import ImproperlyConfigured
+from django.core.exceptions import ImproperlyConfigured, AppRegistryNotReady
 from django.db.models.fields import BLANK_CHOICE_DASH
 from django.db.utils import DatabaseError
 from django.core.cache import cache
@@ -26,7 +26,7 @@ def get_choices_from_list(list_index):
             # run manage.py syncdb
             values = [(key, '%s - %s' % (key, value)) for key, value in values]
             cache.set(list_index, values, None)
-        except DatabaseError:
+        except (DatabaseError, AppRegistryNotReady):
             values = None
 
     return values
