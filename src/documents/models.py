@@ -185,7 +185,7 @@ class MetadataBase(ModelBase):
         return super(MetadataBase, cls).__new__(cls, name, bases, attrs)
 
 
-class Metadata(six.with_metaclass(MetadataBase), models.Model):
+class Metadata(six.with_metaclass(MetadataBase, models.Model)):
     document = models.ForeignKey(
         Document,
         unique=True)
