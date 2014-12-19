@@ -22,9 +22,11 @@ var Phase = Phase || {};
         events: {
             'show.bs.modal': 'loadNotifications',
             'hide.bs.modal': 'unloadView',
-            'click button.more': 'loadNotifications'
+            'click button.more': 'loadMoreNotifications'
         },
         initialize: function() {
+            _.bindAll(this, 'addNotification'),
+
             this.body = this.$el.find('.notifications');
             this.body.html('');
             this.moreBtn = this.$el.find('button.more');
@@ -34,6 +36,9 @@ var Phase = Phase || {};
             this.listenTo(this.collection, 'updateNextUrl', this.updateNextUrl);
         },
         loadNotifications: function(events) {
+            this.collection.fetch({ reset: true });
+        },
+        loadMoreNotifications: function(events) {
             this.collection.fetch();
         },
         render: function() {
