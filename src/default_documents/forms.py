@@ -3,7 +3,6 @@ from django.utils.translation import ugettext_lazy as _
 from crispy_forms.layout import Layout, Field
 
 from documents.forms.models import BaseDocumentForm
-from accounts.fields import UserChoiceField, UserMultipleChoiceField
 from .models import (
     ContractorDeliverable, ContractorDeliverableRevision,
     Correspondence, CorrespondenceRevision,
@@ -58,9 +57,6 @@ class ContractorDeliverableForm(BaseDocumentForm):
 
 
 class ContractorDeliverableRevisionForm(ReviewFormMixin, BaseDocumentForm):
-    leader = UserChoiceField(label=_('Leader'), required=False)
-    approver = UserChoiceField(label=_('Approver'), required=False)
-    reviewers = UserMultipleChoiceField(label=_('Reviewers'), required=False)
 
     def build_layout(self):
         if self.read_only:
