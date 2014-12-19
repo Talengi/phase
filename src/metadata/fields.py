@@ -44,6 +44,11 @@ class ConfigurableChoiceField(models.CharField):
         defaults.update(kwargs)
         super(ConfigurableChoiceField, self).__init__(*args, **defaults)
 
+    def deconstruct(self):
+        name, path, args, kwargs = super(ConfigurableChoiceField, self).deconstruct()
+        kwargs['list_index'] = self.list_index
+        return name, path, args, kwargs
+
     def _get_choices(self):
         choices = get_choices_from_list(self.list_index)
         return choices if choices else list(BLANK_CHOICE_DASH)
