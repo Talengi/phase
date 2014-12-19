@@ -48,7 +48,7 @@ def do_batch_import(user_id, contenttype_id, document_ids):
             state='PROGRESS',
             meta={'current': count, 'total': total_docs})
 
-    post_batch_review.send(sender=do_batch_import)
+    post_batch_review.send(sender=do_batch_import, user_id=user_id)
 
     if len(ok) > 0:
         ok_message = ugettext('The review started for the following documents:')
