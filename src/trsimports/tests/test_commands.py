@@ -9,10 +9,20 @@ from django.core.management import call_command
 from django.core.management.base import CommandError
 
 
-IMPORT_COMMAND = 'import_revision_files'
+IMPORT_COMMAND = 'import_transmittals'
 
 
 class ImportCommandTests(TestCase):
+
+    def test_missing_parameter(self):
+        """The command must be called with the ctr as an argument."""
+        f = StringIO()
+
+        with self.assertRaises(CommandError) as cm:
+            call_command(IMPORT_COMMAND, stderr=f)
+
+            error = 'You must provide a contractor id as an argument'
+            self.assertContains(str(cm.exception), error)
 
     def test_directory_does_not_exist(self):
         import_dir = '/i/do/not/exist/'

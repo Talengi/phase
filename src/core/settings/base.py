@@ -201,7 +201,6 @@ DJANGO_APPS = (
 
 THIRD_PARTY_APPS = (
     # Database migration helpers:
-    'south',
     'pipeline',
     'widget_tweaks',
     'crispy_forms',
@@ -226,7 +225,7 @@ LOCAL_APPS = (
     'search',
     'bookmarks',
     'discussion',
-    'fileimports',
+    'trsimports',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
