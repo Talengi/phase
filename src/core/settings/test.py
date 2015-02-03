@@ -35,7 +35,7 @@ LOGGING['loggers']['elasticsearch.trace'] = {
     'propagate': False,
 }
 
-TRS_IMPORTS_ROOT = SITE_ROOT.child('test_ctr_clt')
+TRS_IMPORTS_ROOT = Path('/tmp/test_ctr_clt')
 
 TRS_IMPORTS_PATHS = {
     'test': {
