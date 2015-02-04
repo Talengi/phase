@@ -87,9 +87,3 @@ class ImportCommandTests(TestCase):
 
         call_command(IMPORT_COMMAND, TEST_CTR, stdout=f)
         self.assertEqual(import_dir.call_count, 3)
-
-    def test_successfull_import_single_document(self):
-        f = StringIO()
-        self.prepare_import_dir('single_correct_trs')
-
-        call_command(IMPORT_COMMAND, TEST_CTR, stdout=f)
