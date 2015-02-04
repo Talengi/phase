@@ -39,7 +39,7 @@ class TransmittalsValidationTests(TestCase):
         if os.path.exists(self.tmpdir):
             rmtree(self.tmpdir)
 
-    def prepare_fixtures(self, fixtures_dir):
+    def prepare_fixtures(self, fixtures_dir, trs_dir):
         """Create the fixtures import dir."""
         src = os.path.join(
             os.path.dirname(__file__),
@@ -49,14 +49,19 @@ class TransmittalsValidationTests(TestCase):
         dest = self.config['INCOMING_DIR']
         copytree(src, dest)
 
-    def test_invalid_directory_name(self):
-        self.prepare_fixtures('invalid_trs_dirname')
-        importdir = join(self.config['INCOMING_DIR'], 'I-Love-Bananas')
-
+        trs_fullname = join(self.config['INCOMING_DIR'], trs_dir)
         trsImport = TrsImport(
-            importdir,
+            trs_fullname,
             tobechecked_dir=self.config['TO_BE_CHECKED_DIR'],
             accepted_dir=self.config['ACCEPTED_DIR'],
             rejected_dir=self.config['REJECTED_DIR'],
         )
+        return trsImport
+
+    def test_invalid_directory_name(self):
+        trsImport = self.prepare_fixtures('invalid_trs_dirname', 'I-Love-Bananas')
         self.assertTrue('invalid_dirname' in trsImport.errors)
+
+    def test_missing_csv(self):
+        trsImport = self.prepare_fixtures('missing_csv', 'FAC10005-CTR-CLT-TRS-00001')
+        self.assertTrue('missing_csv' in trsImport.errors)

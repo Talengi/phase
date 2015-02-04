@@ -2,6 +2,7 @@
 
 from __future__ import unicode_literals
 
+import os
 import re
 
 
@@ -40,6 +41,7 @@ class CompositeValidator(Validator):
 
 
 class DirnameValidator(Validator):
+    """Checks the transmittals directory name."""
     error = 'The directory name is incorrect'
     pattern = 'FAC(09001|10005)-\w{3}-\w{3}-TRS-\d{5}'
 
@@ -47,8 +49,18 @@ class DirnameValidator(Validator):
         return re.match(self.pattern, trs_import.basename)
 
 
+class CSVPresenceValidator(Validator):
+    """Checks the existance of the transmittals csv file."""
+    error = 'The csv file is missing'
+
+    def test(self, trs_import):
+        csv_fullname = trs_import.csv_fullname
+        return os.path.exists(csv_fullname)
+
+
 class TrsValidator(CompositeValidator):
     def __init__(self):
         super(TrsValidator, self).__init__({
             'invalid_dirname': DirnameValidator(),
+            'missing_csv': CSVPresenceValidator(),
         })

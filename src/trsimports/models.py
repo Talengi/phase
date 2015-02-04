@@ -29,6 +29,10 @@ class TrsImport(object):
         return os.path.basename(self.trs_dir)
 
     @property
+    def csv_fullname(self):
+        return os.path.join(self.trs_dir, '%s.csv' % self.trs_dir)
+
+    @property
     def errors(self):
         if self._errors is None:
             self.validate()
