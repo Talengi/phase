@@ -2,6 +2,10 @@
 
 from __future__ import unicode_literals
 
+import os
+
+from trsimports.validation import TrsValidator
+
 
 class TrsImport(object):
     """A transmittals import encapsulation."""
@@ -21,6 +25,10 @@ class TrsImport(object):
         return not bool(self.errors)
 
     @property
+    def basename(self):
+        return os.path.basename(self.trs_dir)
+
+    @property
     def errors(self):
         if self._errors is None:
             self.validate()
@@ -28,4 +36,5 @@ class TrsImport(object):
 
     def validate(self):
         """Performs a full automatic validation of the transmittals."""
-        self._errors = list()
+        validator = TrsValidator()
+        self._errors = validator.validate(self)
