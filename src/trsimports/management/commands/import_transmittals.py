@@ -9,7 +9,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.core.exceptions import ImproperlyConfigured
 from django.conf import settings
 
-from trsimports.utils import do_import_trs
+from trsimports.models import TrsImport
 
 
 logger = logging.getLogger(__name__)
@@ -51,4 +51,11 @@ class Command(BaseCommand):
     def import_dir(self, directory, config):
         """Start the import task for a single directory."""
         logger.info('Starting import of trs in %s' % directory)
-        do_import_trs(directory, config)
+
+        trsImport = TrsImport(
+            directory,
+            tobechecked_dir=config['TO_BE_CHECKED_DIR'],
+            accepted_dir=config['ACCEPTED_DIR'],
+            rejected_dir=config['REJECTED_DIR'],
+        )
+        trsImport.do_import()
