@@ -22,7 +22,7 @@ TEST_CTR = 'test'
 class ImportCommandTests(TestCase):
 
     def setUp(self):
-        path_config = settings.TRS_IMPORTS_PATHS
+        path_config = settings.TRS_IMPORTS_CONFIG
         ctr_path_config = path_config.get(TEST_CTR)
         self.import_root = settings.TRS_IMPORTS_ROOT
         self.incoming_dir = ctr_path_config['INCOMING_DIR']
@@ -87,3 +87,9 @@ class ImportCommandTests(TestCase):
 
         call_command(IMPORT_COMMAND, TEST_CTR, stdout=f)
         self.assertEqual(import_dir.call_count, 3)
+
+    def test_successfull_import_single_document(self):
+        f = StringIO()
+        self.prepare_import_dir('single_correct_trs')
+
+        call_command(IMPORT_COMMAND, TEST_CTR, stdout=f)

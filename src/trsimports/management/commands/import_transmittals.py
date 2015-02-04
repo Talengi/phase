@@ -9,6 +9,8 @@ from django.core.management.base import BaseCommand, CommandError
 from django.core.exceptions import ImproperlyConfigured
 from django.conf import settings
 
+from trsimports.utils import do_import_trs
+
 
 logger = logging.getLogger(__name__)
 
@@ -29,22 +31,24 @@ class Command(BaseCommand):
 
         # Get configuration for the given contractor
         contractor_id = args[0]
-        path_config = settings.TRS_IMPORTS_PATHS
-        ctr_path_config = path_config.get(contractor_id, None)
-        if ctr_path_config is None:
+        config = settings.TRS_IMPORTS_CONFIG
+        ctr_config = config.get(contractor_id, None)
+        if ctr_config is None:
             raise ImproperlyConfigured('The "%s" contractor is unknown. '
                                        'Check your configuration.' % contractor_id)
 
         # Check the existence of the incoming directory
-        incoming_dir = ctr_path_config['INCOMING_DIR']
+        incoming_dir = ctr_config['INCOMING_DIR']
         if not os.path.exists(incoming_dir):
             error = 'The incoming dir does not exist. Check your configuration.'
             raise CommandError(error)
 
         dir_content = os.listdir(incoming_dir)
         for incoming in dir_content:
-            self.import_dir(incoming)
+            fullname = os.path.join(incoming_dir, incoming)
+            self.import_dir(fullname, ctr_config)
 
-    def import_dir(self, directory):
+    def import_dir(self, directory, config):
         """Start the import task for a single directory."""
-        pass
+        logger.info('Starting import of trs in %s' % directory)
+        do_import_trs(directory, config)
