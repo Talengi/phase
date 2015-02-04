@@ -14,6 +14,11 @@ logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
+    """Run the transmittals sheet import command.
+
+    This is the entry point to the transmittals import feature.
+
+    """
     args = '<contractor_id>'
     help = 'Import existing transmittals for a given contractor.'
 
@@ -41,4 +46,5 @@ class Command(BaseCommand):
             self.import_dir(incoming)
 
     def import_dir(self, directory):
+        """Start the import task for a single directory."""
         pass
