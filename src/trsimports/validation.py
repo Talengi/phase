@@ -69,10 +69,51 @@ class PdfCountValidator(Validator):
         return len(csv_lines) == len(pdf_names)
 
 
+class CSVContentValidator(CompositeValidator):
+    """Validate the csv content.
+
+    For each csv line, check that:
+     * the data is valid (form validation)
+     * the pdf is present with the correct name
+     * the document already exists in Phase
+     * the revision already exists, or if it's a new revision…
+     * it's number immediatly follows the last revision
+     * the title is the same as in the existing document
+
+     """
+    def __init__(self):
+        super(CSVContentValidator, self).__init__({
+        })
+
+    def validate(self, trs_import):
+        """Run a bunch of validators for each line."""
+        errors = dict()
+        line_nb = 1
+        for line in trs_import.csv_lines():
+            line_errors = self.validate_line(trs_import, line)
+            if line_errors:
+                errors[line_nb] = line_errors
+
+            line_nb += 1
+
+        return errors
+
+    def validate_line(self, trs_import, csv_line):
+        errors = dict()
+        for name, validator in self.validators.items():
+            error = validator.validate(trs_import, csv_line)
+            if error:
+                errors[name] = error
+
+        return errors
+
+
 class TrsValidator(CompositeValidator):
+    """Global validator for the transmittals."""
     def __init__(self):
         super(TrsValidator, self).__init__({
             'invalid_dirname': DirnameValidator(),
             'missing_csv': CSVPresenceValidator(),
             'wrong_pdf_count': PdfCountValidator(),
+            'csv_content': CSVContentValidator(),
         })
