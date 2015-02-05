@@ -31,7 +31,7 @@ class TrsImport(object):
 
     @property
     def csv_fullname(self):
-        return os.path.join(self.trs_dir, '%s.csv' % self.trs_dir)
+        return os.path.join(self.trs_dir, '%s.csv' % self.basename)
 
     def csv_lines(self):
         """Returns a list of lines contained in the csv file."""
