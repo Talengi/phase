@@ -123,3 +123,21 @@ class TrsImportLine(object):
     @property
     def pdf_fullname(self):
         return os.path.join(self.trs_dir, self.pdf_basename)
+
+    def get_document_form_class(self):
+        from default_documents.forms import ContractorDeliverableForm
+        return ContractorDeliverableForm
+
+    def get_revision_form_class(self):
+        from default_documents.forms import ContractorDeliverableRevisionForm
+        return ContractorDeliverableRevisionForm
+
+    def get_forms(self):
+        """Returns the correct forms."""
+        DocumentForm = self.get_document_form_class()
+        document_form = DocumentForm(self.csv_data)
+
+        RevisionForm = self.get_revision_form_class()
+        revision_form = RevisionForm(self.csv_data)
+
+        return document_form, revision_form

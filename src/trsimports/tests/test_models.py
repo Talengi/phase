@@ -9,6 +9,11 @@ from shutil import rmtree, copytree
 
 from django.test import TestCase
 
+from categories.factories import CategoryFactory
+from accounts.factories import UserFactory
+from documents.factories import DocumentFactory
+from default_documents.factories import (
+    ContractorDeliverableFactory, ContractorDeliverableRevisionFactory)
 from trsimports.models import TrsImport
 
 
@@ -33,6 +38,13 @@ class TransmittalsValidationTests(TestCase):
             'TO_BE_CHECKED_DIR': tobechecked,
             'ACCEPTED_DIR': accepted,
         }
+
+        category = CategoryFactory()
+        DocumentFactory(
+            category=category,
+            metadata_factory_class=ContractorDeliverableFactory,
+            revision_factory_class=ContractorDeliverableRevisionFactory,
+        )
 
     def tearDown(self):
         if os.path.exists(self.tmpdir):

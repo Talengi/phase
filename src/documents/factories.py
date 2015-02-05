@@ -22,7 +22,10 @@ class DocumentFactory(factory.DjangoModelFactory):
     @classmethod
     def create(cls, **kwargs):
         """Takes custom args to set metadata and revision fields."""
+        cls.metadata_factory_class = kwargs.pop('metadata_factory_class', MetadataFactory)
         cls.metadata_kwargs = kwargs.pop('metadata', {})
+
+        cls.revision_factory_class = kwargs.pop('revision_factory_class', MetadataRevisionFactory)
         cls.revision_kwargs = kwargs.pop('revision', {})
         return super(DocumentFactory, cls).create(**kwargs)
 
@@ -36,7 +39,7 @@ class DocumentFactory(factory.DjangoModelFactory):
             'updated_on': obj.current_revision_date,
         }
         revision_kwargs.update(cls.revision_kwargs)
-        revision = MetadataRevisionFactory(**revision_kwargs)
+        revision = cls.revision_factory_class(**revision_kwargs)
 
         metadata_kwargs = {
             'document': obj,
@@ -44,7 +47,7 @@ class DocumentFactory(factory.DjangoModelFactory):
             'latest_revision': revision
         }
         metadata_kwargs.update(cls.metadata_kwargs)
-        MetadataFactory(**metadata_kwargs)
+        cls.metadata_factory_class(**metadata_kwargs)
 
         if create and results:
             obj.save()

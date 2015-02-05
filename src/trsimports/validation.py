@@ -78,6 +78,21 @@ class PdfFilenameValidator(Validator):
         return os.path.exists(import_line.pdf_fullname)
 
 
+class FormValidator(Validator):
+    """Checks that the submitted data is correct."""
+    error = 'The data is incorrect.'
+
+    def test(self, import_line):
+        document_form, revision_form = import_line.get_forms()
+        if document_form.is_valid() and revision_form.is_valid():
+            return None
+        else:
+            errors = dict()
+            errors.update(document_form.errors)
+            errors.update(revision_form.errors)
+            return errors
+
+
 class CSVLineValidator(CompositeValidator):
     """Validate the csv content.
 
@@ -92,6 +107,7 @@ class CSVLineValidator(CompositeValidator):
      """
     def __init__(self):
         super(CSVLineValidator, self).__init__({
+            'data_validity': FormValidator(),
             'missing_pdf': PdfFilenameValidator(),
         })
 
