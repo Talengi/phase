@@ -27,6 +27,7 @@ class Validator(object):
 
 
 class CompositeValidator(Validator):
+    """A compound validator."""
     def __init__(self, validators):
         self.validators = validators
 
