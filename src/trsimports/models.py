@@ -18,6 +18,8 @@ class TrsImport(object):
         self.rejected_dir = rejected_dir
 
         self._errors = None
+        self._csv_lines = None
+        self._pdf_names = None
 
     def do_import(self):
         pass
@@ -35,22 +37,26 @@ class TrsImport(object):
 
     def csv_lines(self):
         """Returns a list of lines contained in the csv file."""
-        try:
-            with open(self.csv_fullname, 'rb') as f:
-                csvfile = csv.DictReader(f, dialect='normal')
-                lines = [row for row in csvfile]
-        except IOError:
-            # If no csv file is found, we just return an empty list
-            # The csv existence will raise an error during validation anyway
-            lines = list()
+        if not self._csv_lines:
+            try:
+                with open(self.csv_fullname, 'rb') as f:
+                    csvfile = csv.DictReader(f, dialect='normal')
+                    lines = [row for row in csvfile]
+            except IOError:
+                # If no csv file is found, we just return an empty list
+                # The csv existence will raise an error during validation anyway
+                lines = list()
 
-        return lines
+            self._csv_lines = lines
+        return self._csv_lines
 
     def pdf_names(self):
         """Returns the list of pdf files."""
-        files = os.listdir(self.trs_dir)
-        pdfs = [f for f in files if f.endswith('pdf')]
-        return pdfs
+        if not self._pdf_names:
+            files = os.listdir(self.trs_dir)
+            self._pdf_names = [f for f in files if f.endswith('pdf')]
+
+        return self._pdf_names
 
     @property
     def errors(self):
