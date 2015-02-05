@@ -65,3 +65,11 @@ class TransmittalsValidationTests(TestCase):
     def test_missing_csv(self):
         trsImport = self.prepare_fixtures('missing_csv', 'FAC10005-CTR-CLT-TRS-00001')
         self.assertTrue('missing_csv' in trsImport.errors)
+
+    def test_not_enough_pdfs(self):
+        trsImport = self.prepare_fixtures('not_enough_pdfs', 'FAC10005-CTR-CLT-TRS-00001')
+        self.assertTrue('wrong_pdf_count' in trsImport.errors)
+
+    def test_too_many_pdfs(self):
+        trsImport = self.prepare_fixtures('too_many_pdfs', 'FAC10005-CTR-CLT-TRS-00001')
+        self.assertTrue('wrong_pdf_count' in trsImport.errors)

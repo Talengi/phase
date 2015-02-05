@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 import os
+import csv
 
 from trsimports.validation import TrsValidator
 
@@ -31,6 +32,25 @@ class TrsImport(object):
     @property
     def csv_fullname(self):
         return os.path.join(self.trs_dir, '%s.csv' % self.trs_dir)
+
+    def csv_lines(self):
+        """Returns a list of lines contained in the csv file."""
+        try:
+            with open(self.csv_fullname, 'rb') as f:
+                csvfile = csv.DictReader(f, dialect='normal')
+                lines = [row for row in csvfile]
+        except IOError:
+            # If no csv file is found, we just return an empty list
+            # The csv existence will raise an error during validation anyway
+            lines = list()
+
+        return lines
+
+    def pdf_names(self):
+        """Returns the list of pdf files."""
+        files = os.listdir(self.trs_dir)
+        pdfs = [f for f in files if f.endswith('pdf')]
+        return pdfs
 
     @property
     def errors(self):

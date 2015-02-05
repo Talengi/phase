@@ -58,9 +58,21 @@ class CSVPresenceValidator(Validator):
         return os.path.exists(csv_fullname)
 
 
+class PdfCountValidator(Validator):
+    """Checks the number of pdf documents."""
+    error = 'The number of pdf documents is incorrect'
+
+    def test(self, trs_import):
+        csv_lines = trs_import.csv_lines()
+        pdf_names = trs_import.pdf_names()
+
+        return len(csv_lines) == len(pdf_names)
+
+
 class TrsValidator(CompositeValidator):
     def __init__(self):
         super(TrsValidator, self).__init__({
             'invalid_dirname': DirnameValidator(),
             'missing_csv': CSVPresenceValidator(),
+            'wrong_pdf_count': PdfCountValidator(),
         })
