@@ -16,7 +16,6 @@ TEST_CTR = 'test'
 
 
 class TransmittalsValidationTests(TestCase):
-
     def setUp(self):
         self.tmpdir = tempfile.mkdtemp(prefix='phasetest_', suffix='_trs')
         incoming = join(self.tmpdir, 'incoming')
@@ -58,6 +57,9 @@ class TransmittalsValidationTests(TestCase):
         )
         return trsImport
 
+
+class DirectoryContentTests(TransmittalsValidationTests):
+
     def test_invalid_directory_name(self):
         trsImport = self.prepare_fixtures('invalid_trs_dirname', 'I-Love-Bananas')
         self.assertTrue('invalid_dirname' in trsImport.errors)
@@ -77,3 +79,10 @@ class TransmittalsValidationTests(TestCase):
     def test_too_many_pdfs(self):
         trsImport = self.prepare_fixtures('too_many_pdfs', 'FAC10005-CTR-CLT-TRS-00001')
         self.assertTrue('wrong_pdf_count' in trsImport.errors)
+
+
+class CSVContentTests(TransmittalsValidationTests):
+
+    def test_missing_pdf_file(self):
+        trsImport = self.prepare_fixtures('missing_pdf', 'FAC10005-CTR-CLT-TRS-00001')
+        self.assertTrue('missing_pdf' in trsImport.errors['csv_content'][2])

@@ -13,14 +13,14 @@ class Validator(object):
     def test(self, trs_import):
         raise NotImplementedError()
 
-    def validate(self, trs_import):
+    def validate(self, obj):
         """Performs the validation.
 
         The `validate` method must return None if the validation passed, or
         a string containing the error message if any.
 
         """
-        if self.test(trs_import):
+        if self.test(obj):
             return None
         else:
             return self.error
@@ -69,10 +69,18 @@ class PdfCountValidator(Validator):
         return len(csv_lines) == len(pdf_names)
 
 
-class CSVContentValidator(CompositeValidator):
+class PdfFilenameValidator(Validator):
+    """Checks that the pdf exists."""
+    error = 'The pdf for this document is missing.'
+
+    def test(self, import_line):
+        return os.path.exists(import_line.pdf_fullname)
+
+
+class CSVLineValidator(CompositeValidator):
     """Validate the csv content.
 
-    For each csv line, check that:
+    This validator is designed to be fired on every csv line. Checks that:
      * the data is valid (form validation)
      * the pdf is present with the correct name
      * the document already exists in Phase
@@ -82,30 +90,9 @@ class CSVContentValidator(CompositeValidator):
 
      """
     def __init__(self):
-        super(CSVContentValidator, self).__init__({
+        super(CSVLineValidator, self).__init__({
+            'missing_pdf': PdfFilenameValidator(),
         })
-
-    def validate(self, trs_import):
-        """Run a bunch of validators for each line."""
-        errors = dict()
-        line_nb = 1
-        for line in trs_import.csv_lines():
-            line_errors = self.validate_line(trs_import, line)
-            if line_errors:
-                errors[line_nb] = line_errors
-
-            line_nb += 1
-
-        return errors
-
-    def validate_line(self, trs_import, csv_line):
-        errors = dict()
-        for name, validator in self.validators.items():
-            error = validator.validate(trs_import, csv_line)
-            if error:
-                errors[name] = error
-
-        return errors
 
 
 class TrsValidator(CompositeValidator):
@@ -115,5 +102,4 @@ class TrsValidator(CompositeValidator):
             'invalid_dirname': DirnameValidator(),
             'missing_csv': CSVPresenceValidator(),
             'wrong_pdf_count': PdfCountValidator(),
-            'csv_content': CSVContentValidator(),
         })
