@@ -51,7 +51,7 @@ class DirnameValidator(Validator):
 
 class CSVPresenceValidator(Validator):
     """Checks the existance of the transmittals csv file."""
-    error = 'The csv file is missing'
+    error = 'The csv file is missing, or it\'s name is incorrect'
 
     def test(self, trs_import):
         csv_fullname = trs_import.csv_fullname
