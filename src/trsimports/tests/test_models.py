@@ -86,6 +86,10 @@ class DirectoryContentTests(TransmittalsValidationTests):
         trs_import = self.prepare_fixtures('too_many_pdfs', 'FAC10005-CTR-CLT-TRS-00001')
         self.assertTrue('wrong_pdf_count' in trs_import.errors['global_errors'])
 
+    def test_valid_transmittal(self):
+        trs_import = self.prepare_fixtures('single_correct_trs', 'FAC10005-CTR-CLT-TRS-00001')
+        self.assertEqual(trs_import.errors, {})
+
 
 class CSVContentTests(TransmittalsValidationTests):
 
