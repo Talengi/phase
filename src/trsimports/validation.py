@@ -150,9 +150,9 @@ class CSVLineValidator(AndValidator):
     error_key = 'csv_content'
     VALIDATORS = (
         MissingDataValidator(),
+        PdfFilenameValidator(),
         DocumentExistsValidator(),
         FormValidator(),
-        PdfFilenameValidator(),
     )
 
 

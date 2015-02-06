@@ -8,7 +8,6 @@ import csv
 from annoying.functions import get_object_or_None
 
 from trsimports.validation import TrsValidator, CSVLineValidator
-from documents.models import Document
 
 
 class TrsImport(object):
