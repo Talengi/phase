@@ -122,9 +122,9 @@ class DocumentExistsValidator(Validator):
 class FormValidator(Validator):
     """Checks that the submitted data is correct."""
     error = 'The data is incorrect.'
-    error_key = 'data_validity'
+    error_key = 'data_validation'
 
-    def test(self, import_line):
+    def validate(self, import_line):
         document_form, revision_form = import_line.get_forms()
         if document_form.is_valid() and revision_form.is_valid():
             return None
@@ -132,7 +132,7 @@ class FormValidator(Validator):
             errors = dict()
             errors.update(document_form.errors)
             errors.update(revision_form.errors)
-            return errors
+            return {self.error_key: errors}
 
 
 class CSVLineValidator(AndValidator):

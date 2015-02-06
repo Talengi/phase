@@ -8,13 +8,8 @@ import tempfile
 from shutil import rmtree, copytree
 
 from django.test import TestCase
-from django.contrib.contenttypes.models import ContentType
+from django.core.cache import cache
 
-from categories.factories import CategoryFactory
-from documents.factories import DocumentFactory
-from default_documents.models import ContractorDeliverable
-from default_documents.factories import (
-    ContractorDeliverableFactory, ContractorDeliverableRevisionFactory)
 from trsimports.models import TrsImport
 
 
@@ -22,7 +17,12 @@ TEST_CTR = 'test'
 
 
 class TransmittalsValidationTests(TestCase):
+    fixtures = ['initial_documents']
+
     def setUp(self):
+        # Clear the values list cache
+        cache.clear()
+
         self.tmpdir = tempfile.mkdtemp(prefix='phasetest_', suffix='_trs')
         incoming = join(self.tmpdir, 'incoming')
         tobechecked = join(self.tmpdir, 'tobechecked')
@@ -39,15 +39,6 @@ class TransmittalsValidationTests(TestCase):
             'TO_BE_CHECKED_DIR': tobechecked,
             'ACCEPTED_DIR': accepted,
         }
-
-        ContractorDeliverableModel = ContentType.objects.get_for_model(ContractorDeliverable)
-        category = CategoryFactory(category_template__metadata_model=ContractorDeliverableModel)
-        DocumentFactory(
-            document_key='FAC10005-CTR-000-EXP-LAY-0000',
-            category=category,
-            metadata_factory_class=ContractorDeliverableFactory,
-            revision_factory_class=ContractorDeliverableRevisionFactory,
-        )
 
     def tearDown(self):
         if os.path.exists(self.tmpdir):
@@ -109,3 +100,7 @@ class CSVContentTests(TransmittalsValidationTests):
     def test_missing_pdf_file(self):
         trs_import = self.prepare_fixtures('missing_pdf', 'FAC10005-CTR-CLT-TRS-00001')
         self.assertTrue('missing_pdf' in trs_import.errors['csv_content'][2])
+
+    def test_form_validation_error(self):
+        trs_import = self.prepare_fixtures('form_error', 'FAC10005-CTR-CLT-TRS-00001')
+        self.assertTrue('data_validation' in trs_import.errors['csv_content'][2])
