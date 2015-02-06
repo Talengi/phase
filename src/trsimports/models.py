@@ -5,7 +5,10 @@ from __future__ import unicode_literals
 import os
 import csv
 
+from annoying.functions import get_object_or_None
+
 from trsimports.validation import TrsValidator, CSVLineValidator
+from documents.models import Document
 
 
 class TrsImport(object):
@@ -77,7 +80,8 @@ class TrsImport(object):
 
     def _validate_transmittal(self):
         errors = TrsValidator().validate(self)
-        self._errors.update(errors)
+        if errors:
+            self._errors.update(errors)
 
     def _validate_csv_content(self):
         errors = dict()
@@ -85,10 +89,10 @@ class TrsImport(object):
         for import_line in self:
             line_errors = import_line.errors
             if line_errors:
-                # n + # because we need to take the first line (col definition)
+                # n + 1 because we need to take the first line (col definition)
                 # into account
-                errors[line_nb + 1] = line_errors
-            line_nb += 1
+                errors.update({line_nb + 1: line_errors})
+                line_nb += 1
 
         if errors:
             self._errors['csv_content'] = errors
@@ -102,6 +106,7 @@ class TrsImportLine(object):
         self.trs_dir = trs_dir
 
         self._errors = None
+        self._metadata = None
 
     @property
     def errors(self):
@@ -124,7 +129,21 @@ class TrsImportLine(object):
     def pdf_fullname(self):
         return os.path.join(self.trs_dir, self.pdf_basename)
 
-    def get_document_form_class(self):
+    def get_metadata_class(self):
+        from default_documents.models import ContractorDeliverable
+        return ContractorDeliverable
+
+    def get_metadata(self):
+        if self._metadata is None:
+            qs = self.get_metadata_class().objects \
+                .select_related('document', 'latest_revision')
+            self._metadata = get_object_or_None(
+                qs,
+                document__document_key=self.csv_data['document_key'])
+
+        return self._metadata
+
+    def get_metadata_form_class(self):
         from default_documents.forms import ContractorDeliverableForm
         return ContractorDeliverableForm
 
@@ -133,11 +152,17 @@ class TrsImportLine(object):
         return ContractorDeliverableRevisionForm
 
     def get_forms(self):
-        """Returns the correct forms."""
-        DocumentForm = self.get_document_form_class()
-        document_form = DocumentForm(self.csv_data)
+        """Returns the bound forms.
+
+        The document MUST exist in the database.
+
+        """
+        metadata = self.get_metadata()
+
+        MetadataForm = self.get_metadata_form_class()
+        metadata_form = MetadataForm(self.csv_data, instance=metadata)
 
         RevisionForm = self.get_revision_form_class()
-        revision_form = RevisionForm(self.csv_data)
+        revision_form = RevisionForm(self.csv_data, instance=metadata.latest_revision)
 
-        return document_form, revision_form
+        return metadata_form, revision_form

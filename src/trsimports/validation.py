@@ -9,6 +9,7 @@ import re
 class Validator(object):
     """An object which purpose is to check a single validation point."""
     error = 'Undefined error'
+    error_key = 'undefined_key'
 
     def test(self, trs_import):
         raise NotImplementedError()
@@ -23,28 +24,42 @@ class Validator(object):
         if self.test(obj):
             return None
         else:
-            return self.error
+            return {self.error_key: self.error}
 
 
 class CompositeValidator(Validator):
     """A compound validator."""
-    def __init__(self, validators):
-        self.validators = validators
 
-    def validate(self, trs_import):
+    def validate(self, obj):
         errors = dict()
-        for name, validator in self.validators.items():
-            error = validator.validate(trs_import)
+        for validator in self.VALIDATORS:
+            error = validator.validate(obj)
             if error:
-                errors[name] = error
+                errors.update(error)
 
-        return errors
+        if errors:
+            return {self.error_key: errors}
+        else:
+            return None
+
+
+class AndValidator(Validator):
+    """A validator that stops when a single validation fail."""
+
+    def validate(self, obj):
+        for validator in self.VALIDATORS:
+            error = validator.validate(obj)
+            if error:
+                return error
+
+        return None
 
 
 class DirnameValidator(Validator):
     """Checks the transmittals directory name."""
     error = 'The directory name is incorrect'
     pattern = 'FAC(09001|10005)-\w{3}-\w{3}-TRS-\d{5}'
+    error_key = 'invalid_dirname'
 
     def test(self, trs_import):
         return re.match(self.pattern, trs_import.basename)
@@ -53,6 +68,7 @@ class DirnameValidator(Validator):
 class CSVPresenceValidator(Validator):
     """Checks the existance of the transmittals csv file."""
     error = 'The csv file is missing, or it\'s name is incorrect'
+    error_key = 'missing_csv'
 
     def test(self, trs_import):
         csv_fullname = trs_import.csv_fullname
@@ -62,6 +78,7 @@ class CSVPresenceValidator(Validator):
 class PdfCountValidator(Validator):
     """Checks the number of pdf documents."""
     error = 'The number of pdf documents is incorrect'
+    error_key = 'wrong_pdf_count'
 
     def test(self, trs_import):
         csv_lines = trs_import.csv_lines()
@@ -73,14 +90,39 @@ class PdfCountValidator(Validator):
 class PdfFilenameValidator(Validator):
     """Checks that the pdf exists."""
     error = 'The pdf for this document is missing.'
+    error_key = 'missing_pdf'
 
     def test(self, import_line):
         return os.path.exists(import_line.pdf_fullname)
 
 
+class MissingDataValidator(Validator):
+    """Checks that the csv data has the minimal required fields."""
+    error = 'There are some missing fields in the csv data'
+    error_key = 'missing_data'
+
+    def test(self, import_line):
+        data = import_line.csv_data
+        return all((
+            'document_key' in data,
+            'revision' in data,
+            'status' in data,
+        ))
+
+
+class DocumentExistsValidator(Validator):
+    """Checks that the document already exists in Phase."""
+    error = 'The corresponding document cannot be found.'
+    error_key = 'document_not_found'
+
+    def test(self, import_line):
+        return import_line.get_metadata() is not None
+
+
 class FormValidator(Validator):
     """Checks that the submitted data is correct."""
     error = 'The data is incorrect.'
+    error_key = 'data_validity'
 
     def test(self, import_line):
         document_form, revision_form = import_line.get_forms()
@@ -93,30 +135,32 @@ class FormValidator(Validator):
             return errors
 
 
-class CSVLineValidator(CompositeValidator):
+class CSVLineValidator(AndValidator):
     """Validate the csv content.
 
     This validator is designed to be fired on every csv line. Checks that:
-     * the data is valid (form validation)
-     * the pdf is present with the correct name
-     * the document already exists in Phase
-     * the revision already exists, or if it's a new revision…
-     * it's number immediatly follows the last revision
-     * the title is the same as in the existing document
+      * the data is valid (form validation)
+      * the pdf is present with the correct name
+      * the document already exists in Phase
+      * the revision already exists, or if it's a new revision…
+      * it's number immediatly follows the last revision
+      * the title is the same as in the existing document
 
-     """
-    def __init__(self):
-        super(CSVLineValidator, self).__init__({
-            'data_validity': FormValidator(),
-            'missing_pdf': PdfFilenameValidator(),
-        })
+    """
+    error_key = 'csv_content'
+    VALIDATORS = (
+        MissingDataValidator(),
+        DocumentExistsValidator(),
+        FormValidator(),
+        PdfFilenameValidator(),
+    )
 
 
 class TrsValidator(CompositeValidator):
     """Global validator for the transmittals."""
-    def __init__(self):
-        super(TrsValidator, self).__init__({
-            'invalid_dirname': DirnameValidator(),
-            'missing_csv': CSVPresenceValidator(),
-            'wrong_pdf_count': PdfCountValidator(),
-        })
+    error_key = 'global_errors'
+    VALIDATORS = (
+        DirnameValidator(),
+        CSVPresenceValidator(),
+        PdfCountValidator(),
+    )
