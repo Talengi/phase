@@ -108,3 +108,7 @@ class CSVContentTests(TransmittalsValidationTests):
     def test_form_validation_error(self):
         trs_import = self.prepare_fixtures('form_error', 'FAC10005-CTR-CLT-TRS-00001')
         self.assertTrue('data_validation' in trs_import.errors['csv_content'][2])
+
+    def test_different_title(self):
+        trs_import = self.prepare_fixtures('different_title', 'FAC10005-CTR-CLT-TRS-00001')
+        self.assertTrue('wrong_title' in trs_import.errors['csv_content'][2])

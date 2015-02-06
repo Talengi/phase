@@ -107,6 +107,7 @@ class MissingDataValidator(Validator):
             'document_key' in data,
             'revision' in data,
             'status' in data,
+            'title' in data,
         ))
 
 
@@ -135,6 +136,15 @@ class FormValidator(Validator):
             return {self.error_key: errors}
 
 
+class SameTitleValidator(Validator):
+    """Checks that the title in csv is the same as existing document."""
+    error = 'The document title is incorrect.'
+    error_key = 'wrong_title'
+
+    def test(self, import_line):
+        return import_line.get_metadata().title == import_line.csv_data['title']
+
+
 class CSVLineValidator(AndValidator):
     """Validate the csv content.
 
@@ -152,6 +162,7 @@ class CSVLineValidator(AndValidator):
         MissingDataValidator(),
         PdfFilenameValidator(),
         DocumentExistsValidator(),
+        SameTitleValidator(),
         FormValidator(),
     )
 
