@@ -69,3 +69,17 @@ DEBUG_TOOLBAR_CONFIG = {
 warnings.filterwarnings(
     'error', r"DateTimeField .* received a naive datetime",
     RuntimeWarning, r'django\.db\.models\.fields')
+
+# ######### TRANSMITTALS IMPORT CONFIGURATION
+
+TRS_IMPORTS_ROOT = Path('/tmp/dummy_ctr')
+
+TRS_IMPORTS_CONFIG = {
+    'dummy_ctr': {
+        'INCOMING_DIR': TRS_IMPORTS_ROOT.child('incoming'),
+        'REJECTED_DIR': TRS_IMPORTS_ROOT.child('rejected'),
+        'TO_BE_CHECKED_DIR': TRS_IMPORTS_ROOT.child('tobechecked'),
+        'ACCEPTED_DIR': TRS_IMPORTS_ROOT.child('accepted'),
+        'EMAIL_LIST': ['test@phase.fr'],
+    }
+}

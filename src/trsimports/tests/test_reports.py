@@ -14,7 +14,7 @@ class ErrorReportTests(TestCase):
 
     def setUp(self):
         self.trs_import = TrsImport(
-            trs_dir='/tmp/dummy_dir',
+            trs_dir='/tmp/dummy_dir/FAC10005-CTR-CLT-TRS-00001',
             tobechecked_dir='/tmp/dummy_dir',
             accepted_dir='/tmp/dummy_dir',
             rejected_dir='/tmp/dummy_dir',
@@ -33,5 +33,6 @@ class ErrorReportTests(TestCase):
 
     def test_error_report_content(self):
         body = self.report.body
+        self.assertEqual(body.count('FAC10005-CTR-CLT-TRS-00001'), 1)
         self.assertEqual(body.count('This is error 1'), 1)
         self.assertEqual(body.count('This is error 2'), 1)
