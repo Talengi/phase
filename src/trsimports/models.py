@@ -8,16 +8,18 @@ import csv
 from annoying.functions import get_object_or_None
 
 from trsimports.validation import TrsValidator, CSVLineValidator
+from trsimports.reports import ErrorReport
 
 
 class TrsImport(object):
     """A transmittals import encapsulation."""
 
-    def __init__(self, trs_dir, tobechecked_dir, accepted_dir, rejected_dir):
+    def __init__(self, trs_dir, tobechecked_dir, accepted_dir, rejected_dir, email_list):
         self.trs_dir = trs_dir
         self.tobechecked_dir = tobechecked_dir
         self.accepted_dir = accepted_dir
         self.rejected_dir = rejected_dir
+        self.email_list = email_list
 
         self._errors = None
         self._csv_lines = None
@@ -29,7 +31,9 @@ class TrsImport(object):
             yield import_line
 
     def do_import(self):
-        pass
+        if not self.is_valid():
+            error_report = ErrorReport(self)
+            error_report.send()
 
     def is_valid(self):
         return not bool(self.errors)

@@ -57,5 +57,6 @@ class Command(BaseCommand):
             tobechecked_dir=config['TO_BE_CHECKED_DIR'],
             accepted_dir=config['ACCEPTED_DIR'],
             rejected_dir=config['REJECTED_DIR'],
+            email_list=config['EMAIL_LIST'],
         )
         trsImport.do_import()
