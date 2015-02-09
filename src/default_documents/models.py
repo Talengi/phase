@@ -6,7 +6,6 @@ from metadata.fields import ConfigurableChoiceField
 from accounts.models import User
 from reviews.models import ReviewMixin
 from documents.models import Metadata, MetadataRevision
-from documents.fields import RevisionFileField
 from documents.constants import BOOLEANS
 from .validators import StringNumberValidator
 
@@ -254,12 +253,6 @@ class ContractorDeliverableRevision(ReviewMixin, MetadataRevision):
         choices=BOOLEANS,
         null=True,
         blank=True)
-    native_file = RevisionFileField(
-        verbose_name=u"Native File",
-        null=True, blank=True)
-    pdf_file = RevisionFileField(
-        verbose_name=u"PDF File",
-        null=True, blank=True)
 
 
 class Correspondence(Metadata):
@@ -400,12 +393,6 @@ class CorrespondenceRevision(MetadataRevision):
         _('Status'),
         max_length=20,
         list_index='STATUS_COR_MOM')
-    native_file = RevisionFileField(
-        _('Native File'),
-        null=True, blank=True)
-    pdf_file = RevisionFileField(
-        _('PDF File'),
-        null=True, blank=True)
     under_review = models.NullBooleanField(
         _('Under Review'),
         choices=BOOLEANS,
@@ -536,12 +523,6 @@ class MinutesOfMeetingRevision(MetadataRevision):
         _('Status'),
         max_length=20,
         list_index='STATUS_COR_MOM')
-    native_file = RevisionFileField(
-        _('Native File'),
-        null=True, blank=True)
-    pdf_file = RevisionFileField(
-        _('PDF File'),
-        null=True, blank=True)
 
 
 class Transmittals(Metadata):
@@ -663,12 +644,6 @@ class TransmittalsRevision(MetadataRevision):
         _('Status'),
         max_length=20,
         list_index='STATUS_TRANSMITTALS')
-    native_file = RevisionFileField(
-        _('Native File'),
-        null=True, blank=True)
-    pdf_file = RevisionFileField(
-        _('PDF File'),
-        null=True, blank=True)
 
 
 # Those two classes are dummy document classes, used for demos and tests
@@ -730,12 +705,6 @@ class DemoMetadataRevision(ReviewMixin, MetadataRevision):
         ('ANA', 'Analysis'),
         ('BAS', 'Design Basis'),
     )
-    native_file = RevisionFileField(
-        _('Native File'),
-        null=True, blank=True)
-    pdf_file = RevisionFileField(
-        _('PDF File'),
-        null=True, blank=True)
     status = models.CharField(
         verbose_name=_('Status'),
         default="STD",

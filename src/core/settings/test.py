@@ -34,3 +34,14 @@ LOGGING['loggers']['elasticsearch.trace'] = {
     'level': 'ERROR',
     'propagate': False,
 }
+
+TRS_IMPORTS_ROOT = Path('/tmp/test_ctr_clt')
+
+TRS_IMPORTS_CONFIG = {
+    'test': {
+        'INCOMING_DIR': TRS_IMPORTS_ROOT.child('incoming'),
+        'REJECTED_DIR': TRS_IMPORTS_ROOT.child('rejected'),
+        'TO_BE_CHECKED_DIR': TRS_IMPORTS_ROOT.child('tobechecked'),
+        'ACCEPTED_DIR': TRS_IMPORTS_ROOT.child('accepted'),
+    }
+}

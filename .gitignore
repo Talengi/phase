@@ -33,6 +33,9 @@ public/
 # web server
 private/
 
+# Default file upload directory
+import/
+
 TODO
 
 docs/_build

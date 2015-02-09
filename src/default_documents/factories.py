@@ -1,7 +1,9 @@
 import factory
 from factory import fuzzy
 
-from .models import DemoMetadata, DemoMetadataRevision
+from .models import (
+    DemoMetadata, DemoMetadataRevision, ContractorDeliverable,
+    ContractorDeliverableRevision)
 
 
 TITLES = (
@@ -128,3 +130,11 @@ class MetadataRevisionFactory(factory.DjangoModelFactory):
             # A list of groups were passed in, use them
             for reviewer in extracted:
                 self.reviewers.add(reviewer)
+
+
+class ContractorDeliverableFactory(MetadataFactory):
+    FACTORY_FOR = ContractorDeliverable
+
+
+class ContractorDeliverableRevisionFactory(MetadataRevisionFactory):
+    FACTORY_FOR = ContractorDeliverableRevision
