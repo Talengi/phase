@@ -1,0 +1,9 @@
+TLSEngine                               on
+TLSRequired                             on
+TLSProtocol                             SSLv23
+TLSVerifyClient                         off
+
+TLSRSACertificateFile                   /etc/ssl/certs/proftpd.crt
+TLSRSACertificateKeyFile                /etc/ssl/private/proftpd.key
+
+TLSLog                                  /var/log/proftpd/tls.log
