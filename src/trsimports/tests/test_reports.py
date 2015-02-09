@@ -27,6 +27,11 @@ class ErrorReportTests(TestCase):
         self.report = ErrorReport(self.trs_import)
 
     @patch('trsimports.reports.send_mail')
-    def test_send_report(self, send_mail):
+    def test_report_is_sent(self, send_mail):
         self.report.send()
         self.assertEqual(send_mail.call_count, 1)
+
+    def test_error_report_content(self):
+        body = self.report.body
+        self.assertEqual(body.count('This is error 1'), 1)
+        self.assertEqual(body.count('This is error 2'), 1)

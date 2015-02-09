@@ -33,4 +33,4 @@ class ErrorReport(TrsReport):
 
     @property
     def body(self):
-        return self.trs_import.errors
+        return unicode(self.trs_import.errors)
