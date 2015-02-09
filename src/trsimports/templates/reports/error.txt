@@ -1,0 +1,5 @@
+The transmittal {{ basename }} could no be processed.
+
+Here is the error detail.
+
+{{ errors|safe }}

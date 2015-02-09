@@ -38,6 +38,7 @@ class TransmittalsValidationTests(TestCase):
             'REJECTED_DIR': rejected,
             'TO_BE_CHECKED_DIR': tobechecked,
             'ACCEPTED_DIR': accepted,
+            'EMAIL_LIST': ['test@phase.fr'],
         }
 
     def tearDown(self):
@@ -60,6 +61,7 @@ class TransmittalsValidationTests(TestCase):
             tobechecked_dir=self.config['TO_BE_CHECKED_DIR'],
             accepted_dir=self.config['ACCEPTED_DIR'],
             rejected_dir=self.config['REJECTED_DIR'],
+            email_list=self.config['EMAIL_LIST'],
         )
         return trs_import
 

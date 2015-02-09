@@ -43,5 +43,6 @@ TRS_IMPORTS_CONFIG = {
         'REJECTED_DIR': TRS_IMPORTS_ROOT.child('rejected'),
         'TO_BE_CHECKED_DIR': TRS_IMPORTS_ROOT.child('tobechecked'),
         'ACCEPTED_DIR': TRS_IMPORTS_ROOT.child('accepted'),
+        'EMAIL_LIST': ['test@phase.fr'],
     }
 }
