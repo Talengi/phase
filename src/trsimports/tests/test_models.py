@@ -112,3 +112,13 @@ class CSVContentTests(TransmittalsValidationTests):
     def test_different_title(self):
         trs_import = self.prepare_fixtures('different_title', 'FAC10005-CTR-CLT-TRS-00001')
         self.assertTrue('wrong_title' in trs_import.errors['csv_content'][2])
+
+    def test_incorrect_revision_number(self):
+        trs_import = self.prepare_fixtures('incorrect_revision', 'FAC10005-CTR-CLT-TRS-00001')
+        self.assertTrue('incorrect_revision' in trs_import.errors['csv_content'][2])
+
+    def test_non_following_revision_numbers(self):
+        trs_import = self.prepare_fixtures('non_following_revisions', 'FAC10005-CTR-CLT-TRS-00001')
+        self.assertFalse(2 in trs_import.errors['csv_content'])
+        self.assertFalse(3 in trs_import.errors['csv_content'])
+        self.assertTrue('incorrect_revision' in trs_import.errors['csv_content'][4])

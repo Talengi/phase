@@ -145,6 +145,25 @@ class SameTitleValidator(Validator):
         return import_line.get_metadata().title == import_line.csv_data['title']
 
 
+class RevisionValidator(Validator):
+    """Checks that the document revision is correct."""
+    error = 'The document revision is incorrect.'
+    error_key = 'incorrect_revision'
+
+    def test(self, import_line):
+        """The revision in the csv is correct if:
+
+          * the revision already exists
+          * the revision immediatley follows the existing latest revision
+          * the revision follows a revision that will be created in the csv.
+
+        """
+        latest_revision = import_line.get_metadata().latest_revision.revision
+        csv_revision = import_line.csv_data['revision']
+
+        return csv_revision >= 1 and csv_revision <= latest_revision + 1
+
+
 class CSVLineValidator(AndValidator):
     """Validate the csv content.
 
@@ -164,6 +183,7 @@ class CSVLineValidator(AndValidator):
         DocumentExistsValidator(),
         SameTitleValidator(),
         FormValidator(),
+        RevisionValidator(),
     )
 
 

@@ -5256,7 +5256,7 @@
   "model": "documents.document",
   "fields": {
     "category": 1,
-    "title": "Cause & Effect Chart - Process Fire Zone PFZ 2 - Units 103, 107 and 306",
+    "title": "Cause & Effect Chart",
     "current_revision": 2,
     "current_revision_date": "2013-12-02",
     "created_on": "2013-04-18",
@@ -25101,7 +25101,7 @@
     "discipline": "EXP",
     "status_idc_forecast_date": null,
     "status_ifr_forecast_date": null,
-    "title": "Cause & Effect Chart - Process Fire Zone PFZ 2 - Units 103, 107 and 306",
+    "title": "Cause & Effect Chart",
     "status_ifi_planned_date": null,
     "system": "65",
     "unit": "000",
