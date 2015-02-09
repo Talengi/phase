@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 from django.core.mail import send_mail
+from django.template.loader import render_to_string
 from django.conf import settings
 
 
@@ -33,4 +34,9 @@ class ErrorReport(TrsReport):
 
     @property
     def body(self):
-        return unicode(self.trs_import.errors)
+        context = {
+            'basename': self.trs_import.basename,
+            'errors': self.trs_import.errors,
+        }
+        tpl = render_to_string('reports/error.txt', context)
+        return tpl
