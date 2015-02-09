@@ -76,7 +76,15 @@ Include /etc/proftpd/tls.conf
 # List of authorized users
 Include /etc/proftpd/users.conf
 
-# Prevent files and directories deletion
+# Prevent files and directories rename / deletion
 <Limit DELE>
+DenyAll
+</Limit>
+
+<Limit RNFR>
+DenyAll
+</Limit>
+
+<Limit RNTO>
 DenyAll
 </Limit>
