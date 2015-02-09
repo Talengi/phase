@@ -1,0 +1,4 @@
+<Limit LOGIN>
+AllowUser test_ctr
+DenyALL
+</Limit>

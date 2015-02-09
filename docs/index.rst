@@ -9,5 +9,6 @@ Welcome to Phase's documentation!
    customizing.rst
    deployment.rst
    cron.rst
+   transmittals.rst
    colophon.rst
 
