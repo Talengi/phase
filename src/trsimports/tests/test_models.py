@@ -16,28 +16,31 @@ from trsimports.models import TrsImport
 TEST_CTR = 'test'
 
 
-class TransmittalsValidationTests(TestCase):
-    fixtures = ['initial_documents']
+def touch(path):
+    """Simply creates an empty file."""
+    open(path, 'a').close()
 
+
+class TransmittalsValidationTests(TestCase):
     def setUp(self):
         # Clear the values list cache
         cache.clear()
 
         self.tmpdir = tempfile.mkdtemp(prefix='phasetest_', suffix='_trs')
-        incoming = join(self.tmpdir, 'incoming')
-        tobechecked = join(self.tmpdir, 'tobechecked')
-        accepted = join(self.tmpdir, 'accepted')
-        rejected = join(self.tmpdir, 'rejected')
+        self.incoming = join(self.tmpdir, 'incoming')
+        self.tobechecked = join(self.tmpdir, 'tobechecked')
+        self.accepted = join(self.tmpdir, 'accepted')
+        self.rejected = join(self.tmpdir, 'rejected')
 
-        os.mkdir(accepted)
-        os.mkdir(rejected)
-        os.mkdir(tobechecked)
+        os.mkdir(self.accepted)
+        os.mkdir(self.rejected)
+        os.mkdir(self.tobechecked)
 
         self.config = {
-            'INCOMING_DIR': incoming,
-            'REJECTED_DIR': rejected,
-            'TO_BE_CHECKED_DIR': tobechecked,
-            'ACCEPTED_DIR': accepted,
+            'INCOMING_DIR': self.incoming,
+            'REJECTED_DIR': self.rejected,
+            'TO_BE_CHECKED_DIR': self.tobechecked,
+            'ACCEPTED_DIR': self.accepted,
             'EMAIL_LIST': ['test@phase.fr'],
         }
 
@@ -67,6 +70,7 @@ class TransmittalsValidationTests(TestCase):
 
 
 class DirectoryContentTests(TransmittalsValidationTests):
+    fixtures = ['initial_documents']
 
     def test_invalid_directory_name(self):
         trs_import = self.prepare_fixtures('invalid_trs_dirname', 'I-Love-Bananas')
@@ -94,6 +98,7 @@ class DirectoryContentTests(TransmittalsValidationTests):
 
 
 class CSVContentTests(TransmittalsValidationTests):
+    fixtures = ['initial_documents']
 
     def test_missing_csv_data(self):
         trs_import = self.prepare_fixtures('missing_data', 'FAC10005-CTR-CLT-TRS-00001')
@@ -124,3 +129,31 @@ class CSVContentTests(TransmittalsValidationTests):
         self.assertFalse(2 in trs_import.errors['csv_content'])
         self.assertFalse(3 in trs_import.errors['csv_content'])
         self.assertTrue('incorrect_revision' in trs_import.errors['csv_content'][4])
+
+
+class DirRenameTests(TransmittalsValidationTests):
+
+    def test_trs_is_moved_to_rejected(self):
+        """The trs must be moved to rejected directory"""
+        trs_import = self.prepare_fixtures('missing_csv', 'FAC10005-CTR-CLT-TRS-00001')
+
+        dirpath = join(self.rejected, 'FAC10005-CTR-CLT-TRS-00001')
+
+        trs_import.move_to_rejected()
+        self.assertTrue(os.path.exists(dirpath))
+        self.assertFalse(os.path.exists(trs_import.trs_dir))
+
+    def test_old_dir_exists_in_rejected(self):
+        """When the dir already exists in rejected, it must be overwritten."""
+        trs_import = self.prepare_fixtures('missing_csv', 'FAC10005-CTR-CLT-TRS-00001')
+
+        dirpath = join(self.rejected, 'FAC10005-CTR-CLT-TRS-00001')
+        os.mkdir(dirpath)
+
+        filepath = join(dirpath, 'old_file')
+        touch(filepath)
+        self.assertTrue(os.path.exists(filepath))
+
+        trs_import.move_to_rejected()
+        self.assertTrue(os.path.exists(dirpath))
+        self.assertFalse(os.path.exists(filepath))

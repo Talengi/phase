@@ -4,6 +4,8 @@ from __future__ import unicode_literals
 
 import os
 import csv
+import shutil
+import logging
 
 from annoying.functions import get_object_or_None
 
@@ -11,9 +13,18 @@ from trsimports.validation import TrsValidator, CSVLineValidator
 from trsimports.reports import ErrorReport
 
 
-class TrsImport(object):
-    """A transmittals import encapsulation."""
+logger = logging.getLogger(__name__)
 
+
+class TrsImport(object):
+    """A transmittals import encapsulation.
+
+    We don't perform verifications on the existence and permissions
+    of the different directories.
+
+    Those verifications must be performed upwards, e.g in the management command.
+
+    """
     def __init__(self, trs_dir, tobechecked_dir, accepted_dir, rejected_dir, email_list):
         self.trs_dir = trs_dir
         self.tobechecked_dir = tobechecked_dir
@@ -31,9 +42,56 @@ class TrsImport(object):
             yield import_line
 
     def do_import(self):
+        logger.info('Starting import of transmittals %s' % self.basename)
         if not self.is_valid():
             error_report = ErrorReport(self)
             error_report.send()
+            self.move_to_rejected()
+        else:
+            self.move_to_tobechecked()
+
+    def move_to_rejected(self):
+        """Move the imported transmittals directory to rejected."""
+        new_path = os.path.join(self.rejected_dir, self.basename)
+        logger.info('Moving transmittals from %s to %s' % (
+            self.trs_dir,
+            new_path
+        ))
+
+        # If the dir already exists in rejected, it means it was previously
+        # submitted and rejected, and the directory was not cleaned.
+        # We just erase the old dir.
+        if os.path.exists(new_path):
+            # WARNING !!!
+            # rmtree deletes an entire directory tree. Handle with care.
+            # To make sure we won't delete system dir by mistake, we check
+            # that new_path has a depth of at least 3
+            new_path = os.path.abspath(new_path)
+            if new_path.count('/') < 3:
+                error = "Cannot delete old rejected transmittal %s" % new_path
+                logger.critical(error)
+                raise RuntimeError(error)
+
+            shutil.rmtree(new_path)
+
+        os.rename(self.trs_dir, new_path)
+
+    def move_to_tobechecked(self):
+        """Move the imported transmittals directory to tobechecked."""
+        new_path = os.path.join(self.tobechecked_dir, self.basename)
+        logger.info('Moving transmittals from %s to %s' % (
+            self.trs_dir,
+            new_path
+        ))
+
+        # If the dir already exists in tobechecked, it means we are accepting
+        # the same transmittal twice. It cannot happen.
+        if os.path.exists(new_path):
+            error = "Transmittal %s already exists" % self.basename
+            logger.critical(error)
+            raise RuntimeError(error)
+
+        os.rename(self.trs_dir, new_path)
 
     def is_valid(self):
         return not bool(self.errors)

@@ -37,16 +37,29 @@ class Command(BaseCommand):
             raise ImproperlyConfigured('The "%s" contractor is unknown. '
                                        'Check your configuration.' % contractor_id)
 
-        # Check the existence of the incoming directory
-        incoming_dir = ctr_config['INCOMING_DIR']
-        if not os.path.exists(incoming_dir):
-            error = 'The incoming dir does not exist. Check your configuration.'
-            raise CommandError(error)
+        # Check directories permissions
+        self.assert_permissions(ctr_config['INCOMING_DIR'])
+        self.assert_permissions(ctr_config['REJECTED_DIR'])
+        self.assert_permissions(ctr_config['TO_BE_CHECKED_DIR'])
+        self.assert_permissions(ctr_config['ACCEPTED_DIR'])
 
+        # Start import
+        incoming_dir = ctr_config['INCOMING_DIR']
         dir_content = os.listdir(incoming_dir)
         for incoming in dir_content:
             fullname = os.path.join(incoming_dir, incoming)
             self.import_dir(fullname, ctr_config)
+
+    def assert_permissions(self, path):
+        """Raise an error if the given path is not writeable."""
+        if not os.path.exists(path):
+            error = 'The directory "%s" does not exist.' % path
+            raise CommandError(error)
+
+        permissions = os.R_OK | os.W_OK | os.X_OK
+        if not os.access(path, permissions):
+            error = 'The directory "%s" is not writeable.' % path
+            raise CommandError(error)
 
     def import_dir(self, directory, config):
         """Start the import task for a single directory."""
