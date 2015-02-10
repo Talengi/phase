@@ -139,7 +139,10 @@ class TrsImport(object):
         self._errors = dict()
         self._validate_transmittal()
         self._validate_csv_content()
-        self._validate_revisions()
+
+        # We need a valid transmittals to check revision numbers
+        if not self._errors:
+            self._validate_revisions()
 
     def _validate_transmittal(self):
         errors = TrsValidator().validate(self)
