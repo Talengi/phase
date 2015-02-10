@@ -26,6 +26,9 @@ class ImportCommandTests(TestCase):
         ctr_path_config = path_config.get(TEST_CTR)
         self.import_root = settings.TRS_IMPORTS_ROOT
         self.incoming_dir = ctr_path_config['INCOMING_DIR']
+        self.rejected_dir = ctr_path_config['REJECTED_DIR']
+        self.to_be_checked_dir = ctr_path_config['TO_BE_CHECKED_DIR']
+        self.accepted_dir = ctr_path_config['ACCEPTED_DIR']
 
     def tearDown(self):
         if all((
@@ -76,7 +79,18 @@ class ImportCommandTests(TestCase):
         with self.assertRaises(CommandError) as cm:
             call_command(IMPORT_COMMAND, TEST_CTR, stderr=f)
 
-        error = 'The incoming dir does not exist. Check your configuration.'
+        error = 'The directory "/tmp/test_ctr_clt/incoming" does not exist. Check your configuration.'
+        self.assertEqual(str(cm.exception), error)
+
+    def test_rejected_dir_does_not_exist(self):
+        """An exception must be raised when the error dir does not exist."""
+        f = StringIO()
+        self.prepare_import_dir('empty_dirs')
+
+        with self.assertRaises(CommandError) as cm:
+            call_command(IMPORT_COMMAND, TEST_CTR, stderr=f)
+
+        error = 'The directory "/tmp/test_ctr_clt/rejected" does not exist. Check your configuration.'
         self.assertEqual(str(cm.exception), error)
 
     @patch('trsimports.management.commands.import_transmittals.Command.import_dir')
@@ -84,6 +98,9 @@ class ImportCommandTests(TestCase):
         """When a directory is found, the import method must be fired"""
         f = StringIO()
         self.prepare_import_dir('empty_dirs')
+        os.mkdir(self.rejected_dir)
+        os.mkdir(self.accepted_dir)
+        os.mkdir(self.to_be_checked_dir)
 
         call_command(IMPORT_COMMAND, TEST_CTR, stdout=f)
         self.assertEqual(import_dir.call_count, 3)
