@@ -40,8 +40,8 @@ class Command(BaseCommand):
         # Check directories permissions
         self.assert_permissions(ctr_config['INCOMING_DIR'])
         self.assert_permissions(ctr_config['REJECTED_DIR'])
-        #self.assert_permissions(ctr_config['TO_BE_CHECKED_DIR'])
-        #self.assert_permissions(ctr_config['ACCEPTED_DIR'])
+        self.assert_permissions(ctr_config['TO_BE_CHECKED_DIR'])
+        self.assert_permissions(ctr_config['ACCEPTED_DIR'])
 
         # Start import
         incoming_dir = ctr_config['INCOMING_DIR']
@@ -53,7 +53,12 @@ class Command(BaseCommand):
     def assert_permissions(self, path):
         """Raise an error if the given path is not writeable."""
         if not os.path.exists(path):
-            error = 'The directory "%s" does not exist. Check your configuration.' % path
+            error = 'The directory "%s" does not exist.' % path
+            raise CommandError(error)
+
+        permissions = os.R_OK | os.W_OK | os.X_OK
+        if not os.access(path, permissions):
+            error = 'The directory "%s" is not writeable.' % path
             raise CommandError(error)
 
     def import_dir(self, directory, config):

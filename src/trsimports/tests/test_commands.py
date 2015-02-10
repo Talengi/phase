@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 import os
+import stat
 from io import StringIO
 from shutil import rmtree, copytree
 
@@ -79,7 +80,7 @@ class ImportCommandTests(TestCase):
         with self.assertRaises(CommandError) as cm:
             call_command(IMPORT_COMMAND, TEST_CTR, stderr=f)
 
-        error = 'The directory "/tmp/test_ctr_clt/incoming" does not exist. Check your configuration.'
+        error = 'The directory "/tmp/test_ctr_clt/incoming" does not exist.'
         self.assertEqual(str(cm.exception), error)
 
     def test_rejected_dir_does_not_exist(self):
@@ -90,7 +91,22 @@ class ImportCommandTests(TestCase):
         with self.assertRaises(CommandError) as cm:
             call_command(IMPORT_COMMAND, TEST_CTR, stderr=f)
 
-        error = 'The directory "/tmp/test_ctr_clt/rejected" does not exist. Check your configuration.'
+        error = 'The directory "/tmp/test_ctr_clt/rejected" does not exist.'
+        self.assertEqual(str(cm.exception), error)
+
+    def test_rejected_dir_is_not_writeable(self):
+        """An exception must be raised when the error dir cannot be written."""
+        f = StringIO()
+        self.prepare_import_dir('empty_dirs')
+
+        os.mkdir(self.rejected_dir)
+        wrong_perms = stat.S_IRUSR | stat.S_IXUSR  # No write perm
+        os.chmod(self.rejected_dir, wrong_perms)
+
+        with self.assertRaises(CommandError) as cm:
+            call_command(IMPORT_COMMAND, TEST_CTR, stderr=f)
+
+        error = 'The directory "/tmp/test_ctr_clt/rejected" is not writeable.'
         self.assertEqual(str(cm.exception), error)
 
     @patch('trsimports.management.commands.import_transmittals.Command.import_dir')
