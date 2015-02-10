@@ -12,8 +12,14 @@ from trsimports.reports import ErrorReport
 
 
 class TrsImport(object):
-    """A transmittals import encapsulation."""
+    """A transmittals import encapsulation.
 
+    We don't perform verifications on the existence and permissions
+    the different directories.
+
+    Those verifications must be performed upwards, e.g in the management command.
+
+    """
     def __init__(self, trs_dir, tobechecked_dir, accepted_dir, rejected_dir, email_list):
         self.trs_dir = trs_dir
         self.tobechecked_dir = tobechecked_dir
@@ -34,6 +40,15 @@ class TrsImport(object):
         if not self.is_valid():
             error_report = ErrorReport(self)
             error_report.send()
+            self.move_to_rejected()
+        else:
+            self.move_to_tobechecked()
+
+    def move_to_rejected(self):
+        pass
+
+    def move_to_tobechecked(self):
+        pass
 
     def is_valid(self):
         return not bool(self.errors)
