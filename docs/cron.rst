@@ -22,7 +22,7 @@ to run the tasks. Here is a sample crontab file::
     PYTHON="/home/phase/.virtualenvs/phase/bin/python"
     DJANGO_PATH="/home/phase/phase/src/"
     LOGS_PATH="/home/phase/django_logs/"
-    DJANGO_SETTINGS="core.settings.production"
+    DJANGO_SETTINGS_MODULE="core.settings.production"
 
     # m h  dom mon dow   command
     01 00 * * * cd $DJANGO_PATH && $PYTHON manage.py reindex_all --noinput &>"$LOGS_PATH/reindex.log"
