@@ -9,8 +9,8 @@ import logging
 
 from annoying.functions import get_object_or_None
 
-from documents.models import Document
-from trsimports.validation import TrsValidator, CSVLineValidator
+from trsimports.validation import (
+    TrsValidator, CSVLineValidator, RevisionsValidator)
 from trsimports.reports import ErrorReport
 
 
@@ -161,61 +161,10 @@ class TrsImport(object):
             self._errors['csv_content'] = errors
 
     def _validate_revisions(self):
-        """Check that revision numbers are correct.
-
-        Multiple revisions of the same document can be created
-        in a single csv.
-
-        Because of that, we need to check that all the revisions
-        to create will have following numbers.
-
-        """
-        errors = dict()
-
-        # Let's store the list of revisions for each document
-        revisions = dict()
-        for line in self.csv_lines():
-            document_key = line['document_key']
-            revision = int(line['revision'])
-
-            if document_key not in revisions:
-                revisions[document_key] = list()
-
-            revisions[document_key].append(revision)
-
-        # Get latest revision for each document
-        latest_revisions = Document.objects \
-            .filter(document_key__in=revisions.keys) \
-            .values_list('document_key', 'current_revision')
-        latest_revisions = dict(latest_revisions)
-
-        # Check revisions for each document
-        for document_key in revisions.keys():
-            revision_ids = revisions[document_key]
-            latest_revision = latest_revisions[document_key]
-            revision_errors = self._validate_revision(revision_ids, latest_revision)
-
-            if revision_errors:
-                errors[document_key] = revision_errors
-
+        """Check that revision numbers are correct."""
+        errors = RevisionsValidator().validate(self)
         if errors:
-            self._errors['revisions'] = errors
-
-    def _validate_revision(self, revisions, latest_revision):
-        """Check the revision numbers for a single document."""
-        errors = dict()
-        revisions.sort()
-        previous_revision = latest_revision
-        for revision in revisions:
-            if revision < 1:
-                errors[revision] = '%d is not a valid revision number' % revision
-            elif revision > previous_revision + 1:
-                errors[revision] = '%d is missing some previous revisions' % revision
-
-            if revision > latest_revision:
-                previous_revision = revision
-
-        return errors
+            self._errors.update(errors)
 
 
 class TrsImportLine(object):

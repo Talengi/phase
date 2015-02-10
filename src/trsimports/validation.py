@@ -5,6 +5,8 @@ from __future__ import unicode_literals
 import os
 import re
 
+from documents.models import Document
+
 
 class Validator(object):
     """An object which purpose is to check a single validation point."""
@@ -173,3 +175,67 @@ class TrsValidator(CompositeValidator):
         CSVPresenceValidator(),
         PdfCountValidator(),
     )
+
+
+class RevisionsValidator(Validator):
+    """Global revision number validator."""
+    error_key = 'revisions'
+
+    def validate(self, trs_import):
+        """Validate the revision numbers.
+
+        Multiple revisions of the same document can be created
+        in a single csv.
+
+        Because of that, we need to check that all the revisions
+        to create will have following numbers.
+
+        """
+        errors = dict()
+
+        # Let's store the list of revisions for each document
+        revisions = dict()
+        for line in trs_import.csv_lines():
+            document_key = line['document_key']
+            revision = int(line['revision'])
+
+            if document_key not in revisions:
+                revisions[document_key] = list()
+
+            revisions[document_key].append(revision)
+
+        # Get latest revision for each document
+        latest_revisions = Document.objects \
+            .filter(document_key__in=revisions.keys) \
+            .values_list('document_key', 'current_revision')
+        latest_revisions = dict(latest_revisions)
+
+        # Check revisions for each document
+        for document_key in revisions.keys():
+            revision_ids = revisions[document_key]
+            latest_revision = latest_revisions[document_key]
+            revision_errors = self._validate_revision(revision_ids, latest_revision)
+
+            if revision_errors:
+                errors[document_key] = revision_errors
+
+        if errors:
+            return {self.error_key: errors}
+        else:
+            return errors
+
+    def _validate_revision(self, revisions, latest_revision):
+        """Check the revision numbers for a single document."""
+        errors = dict()
+        revisions.sort()
+        previous_revision = latest_revision
+        for revision in revisions:
+            if revision < 1:
+                errors[revision] = '%d is not a valid revision number' % revision
+            elif revision > previous_revision + 1:
+                errors[revision] = '%d is missing some previous revisions' % revision
+
+            if revision > latest_revision:
+                previous_revision = revision
+
+        return errors
