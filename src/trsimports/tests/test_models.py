@@ -126,9 +126,9 @@ class CSVContentTests(TransmittalsValidationTests):
 
     def test_non_following_revision_numbers(self):
         trs_import = self.prepare_fixtures('non_following_revisions', 'FAC10005-CTR-CLT-TRS-00001')
-        self.assertFalse(2 in trs_import.errors['csv_content'])
-        self.assertFalse(3 in trs_import.errors['csv_content'])
-        self.assertTrue('incorrect_revision' in trs_import.errors['csv_content'][4])
+        self.assertFalse(2 in trs_import.errors['revisions']['FAC10005-CTR-000-EXP-LAY-4891'])
+        self.assertFalse(3 in trs_import.errors['revisions']['FAC10005-CTR-000-EXP-LAY-4891'])
+        self.assertTrue(4 in trs_import.errors['revisions']['FAC10005-CTR-000-EXP-LAY-4891'])
 
 
 class DirRenameTests(TransmittalsValidationTests):
