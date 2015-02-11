@@ -1,4 +1,3 @@
-On {% now "SHORT_DATE_FORMAT" %}, at {% now "TIME_FORMAT" %}, the following
-errors have been detected:
+On {% now "SHORT_DATE_FORMAT" %}, at {% now "TIME_FORMAT" %}, the following errors have been detected:
 
 {{ errors|safe }}
