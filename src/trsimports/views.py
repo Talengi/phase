@@ -17,3 +17,9 @@ class DiffView(TemplateView):
 
 class RevisionDiffView(TemplateView):
     template_name = 'transmittals/revision_diff_view.html'
+
+    def breadcrumb_section(self):
+        return 'Transmittal'
+
+    def breadcrumb_subsection(self):
+        return 'FAC10005-CTR-CLT-TRS-00001'

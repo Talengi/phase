@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load compressed %}
+
+{% block custombodyclass %}fullwidth{% endblock %}
+
+{% block content %}
+
+<h1>FAC10005-CTR-000-EXP-LAY-4891 (05)</h1>
+
+<div id="main-table" class="row">
+    <div class="col-md-8">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Phase</th>
+                    <th>Transmittal</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            <tr>
+                <th>Document number</th>
+                <td>FAC10005-CTR-000-EXP-LAY-4891</td>
+                <td>FAC10005-CTR-000-EXP-LAY-4891</td>
+            </tr>
+            <tr class="warning">
+                <th>Title</th>
+                <td>Cause And Effect Chart</td>
+                <td>Cause &amp; Effect Chart</td>
+            </tr>
+            <tr>
+                <th>Contract number</th>
+                <td>FAC10005</td>
+                <td>FAC10005</td>
+            </tr>
+            <tr class="warning">
+                <th>Revision</th>
+                <td>04</td>
+                <td>05</td>
+            </tr>
+            <tr class="warning">
+                <th>Status</th>
+                <td>IFA</td>
+                <td>STD</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-4">
+        <form class="form-actions">
+            <div class="form-group">
+                <textarea class="form-control" rows="5" placeholder="Leave an optional comment here"></textarea>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <button class="btn btn-lg btn-success btn-block">
+                        <span class="glyphicon glyphicon-ok"></span>
+                        Accept changes
+                    </button>
+                </div>
+
+                <div class="col-md-6">
+                    <button class="btn btn-lg btn-danger btn-block">
+                        <span class="glyphicon glyphicon-remove"></span>
+                        Refuse changes
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
