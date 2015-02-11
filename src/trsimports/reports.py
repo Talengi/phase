@@ -23,15 +23,14 @@ class TrsReport(object):
     def send(self):
         """Send the report to the email list."""
         send_mail(
-            self.subject,
-            self.body,
+            self.get_subject(),
+            self.get_body(),
             settings.DEFAULT_FROM_EMAIL,
             self.email_list
         )
 
 
 class ErrorReport(TrsReport):
-    subject = 'Transmittals error report'
 
     def get_subject(self):
         return 'Error log on transmittal %s' % self.trs_import.basename
