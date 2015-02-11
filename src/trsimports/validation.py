@@ -89,6 +89,34 @@ class PdfCountValidator(Validator):
         return len(csv_lines) == len(pdf_names)
 
 
+class NativeFileValidator(Validator):
+    """Checks that every file correspond to a line in the csv."""
+    error = 'This file should not be there'
+    error_key = 'native_files'
+
+    def validate(self, trs_import):
+        """
+
+        The only thing we have to do to know if the file must be here is to
+        check if the corresponding pdf exists.
+
+        """
+        native_files = trs_import.native_names()
+        pdf_files = trs_import.pdf_names()
+        errors = dict()
+
+        for filename in native_files:
+            name, ext = os.path.splitext(filename)
+            pdf_name = '%s.pdf' % name
+            if pdf_name not in pdf_files:
+                errors[filename] = self.error
+
+        if errors:
+            return {self.error_key: errors}
+        else:
+            return None
+
+
 class PdfFilenameValidator(Validator):
     """Checks that the pdf exists."""
     error = 'The pdf for this document is missing.'
@@ -174,6 +202,7 @@ class TrsValidator(CompositeValidator):
         DirnameValidator(),
         CSVPresenceValidator(),
         PdfCountValidator(),
+        NativeFileValidator()
     )
 
 

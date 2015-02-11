@@ -36,6 +36,7 @@ class TrsImport(object):
         self._errors = None
         self._csv_lines = None
         self._pdf_names = None
+        self._native_names = None
 
     def __iter__(self):
         for line in self.csv_lines():
@@ -105,6 +106,10 @@ class TrsImport(object):
     def csv_fullname(self):
         return os.path.join(self.trs_dir, '%s.csv' % self.basename)
 
+    @property
+    def csv_basename(self):
+        return os.path.basename(self.csv_fullname)
+
     def csv_lines(self):
         """Returns a list of lines contained in the csv file."""
         if not self._csv_lines:
@@ -127,6 +132,14 @@ class TrsImport(object):
             self._pdf_names = [f for f in files if f.endswith('pdf')]
 
         return self._pdf_names
+
+    def native_names(self):
+        """Returns the list of native files."""
+        if not self._native_names:
+            files = os.listdir(self.trs_dir)
+            self._native_names = [f for f in files if (not f.endswith('pdf')) and f != self.csv_basename]
+
+        return self._native_names
 
     @property
     def errors(self):
