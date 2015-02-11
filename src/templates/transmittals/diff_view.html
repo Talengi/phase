@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load compressed %}
+
+{% block breadcrumbs %}
+{{ block.super }}
+<li>Transmittal</li>
+{% endblock %}
+
+{% block custombodyclass %}documentlist fullwidth{% endblock %}
+
+{% block additional_navbar %}
+    {% include 'transmittals/diff_navbar.html' %}
+{% endblock %}
+
+{% block content %}
+<div id="main-table">
+<table class="table table-condensed table-bordered table-hover">
+    <thead>
+        <tr>
+            <th id="columnselect"></th>
+            <th id="columnfavorite"></th>
+            <th id="columndocument_key">Document number</th>
+            <th>Title</th>
+            <th>Revision</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td><span class="glyphicon glyphicon-pencil"></span></td>
+            <td><span class="glyphicon glyphicon-ok"></span></td>
+            <td>FAC10005-CTR-000-EXP-LAY-4891</td>
+            <td>Cause And Effect Chart</td>
+            <td>01</td>
+            <td>STD</td>
+        </tr>
+        <tr>
+            <td><span class="glyphicon glyphicon-pencil"></span></td>
+            <td><span class="glyphicon glyphicon-remove"></span></td>
+            <td>FAC10005-CTR-000-EXP-LAY-4891</td>
+            <td>Cause And Effect Chart</td>
+            <td>02</td>
+            <td>IFA</td>
+        </tr>
+        <tr>
+            <td><span class="glyphicon glyphicon-plus"></span></td>
+            <td><span class="glyphicon glyphicon-ok"></span></td>
+            <td>FAC10005-CTR-000-EXP-LAY-4891</td>
+            <td>Cause And Effect Chart</td>
+            <td>03</td>
+            <td>FIA</td>
+        </tr>
+        <tr>
+            <td><span class="glyphicon glyphicon-plus"></span></td>
+            <td></td>
+            <td>FAC10005-CTR-000-EXP-LAY-4892</td>
+            <td>Cause And Effect Chart</td>
+            <td>05</td>
+            <td>FIN</td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
+{% endblock %}
