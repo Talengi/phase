@@ -9,7 +9,8 @@ import logging
 
 from annoying.functions import get_object_or_None
 
-from trsimports.validation import TrsValidator, CSVLineValidator
+from trsimports.validation import (
+    TrsValidator, CSVLineValidator, RevisionsValidator)
 from trsimports.reports import ErrorReport
 
 
@@ -35,10 +36,11 @@ class TrsImport(object):
         self._errors = None
         self._csv_lines = None
         self._pdf_names = None
+        self._native_names = None
 
     def __iter__(self):
         for line in self.csv_lines():
-            import_line = TrsImportLine(line, self.trs_dir)
+            import_line = TrsImportLine(line, self)
             yield import_line
 
     def do_import(self):
@@ -104,6 +106,10 @@ class TrsImport(object):
     def csv_fullname(self):
         return os.path.join(self.trs_dir, '%s.csv' % self.basename)
 
+    @property
+    def csv_basename(self):
+        return os.path.basename(self.csv_fullname)
+
     def csv_lines(self):
         """Returns a list of lines contained in the csv file."""
         if not self._csv_lines:
@@ -127,6 +133,14 @@ class TrsImport(object):
 
         return self._pdf_names
 
+    def native_names(self):
+        """Returns the list of native files."""
+        if not self._native_names:
+            files = os.listdir(self.trs_dir)
+            self._native_names = [f for f in files if (not f.endswith('pdf')) and f != self.csv_basename]
+
+        return self._native_names
+
     @property
     def errors(self):
         if self._errors is None:
@@ -138,6 +152,10 @@ class TrsImport(object):
         self._errors = dict()
         self._validate_transmittal()
         self._validate_csv_content()
+
+        # We need a valid transmittals to check revision numbers
+        if not self._errors:
+            self._validate_revisions()
 
     def _validate_transmittal(self):
         errors = TrsValidator().validate(self)
@@ -158,13 +176,20 @@ class TrsImport(object):
         if errors:
             self._errors['csv_content'] = errors
 
+    def _validate_revisions(self):
+        """Check that revision numbers are correct."""
+        errors = RevisionsValidator().validate(self)
+        if errors:
+            self._errors.update(errors)
+
 
 class TrsImportLine(object):
     """A single line of the transmittal."""
 
-    def __init__(self, csv_data, trs_dir):
+    def __init__(self, csv_data, trs_import):
         self.csv_data = csv_data
-        self.trs_dir = trs_dir
+        self.trs_import = trs_import
+        self.trs_dir = trs_import.trs_dir
 
         self._errors = None
         self._metadata = None

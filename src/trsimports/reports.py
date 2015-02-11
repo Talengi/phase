@@ -14,26 +14,28 @@ class TrsReport(object):
         self.trs_import = trs_import
         self.email_list = trs_import.email_list
 
-    @property
-    def body(self):
-        """Generates the email body."""
+    def get_subject(self):
+        raise NotImplementedError()
+
+    def get_body(self):
         raise NotImplementedError()
 
     def send(self):
         """Send the report to the email list."""
         send_mail(
-            self.subject,
-            self.body,
+            self.get_subject(),
+            self.get_body(),
             settings.DEFAULT_FROM_EMAIL,
             self.email_list
         )
 
 
 class ErrorReport(TrsReport):
-    subject = 'Transmittals error report'
 
-    @property
-    def body(self):
+    def get_subject(self):
+        return 'Error log on transmittal %s' % self.trs_import.basename
+
+    def get_body(self):
         context = {
             'basename': self.trs_import.basename,
             'errors': self.trs_import.errors,

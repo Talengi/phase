@@ -5,6 +5,8 @@ from __future__ import unicode_literals
 import os
 import re
 
+from documents.models import Document
+
 
 class Validator(object):
     """An object which purpose is to check a single validation point."""
@@ -87,6 +89,34 @@ class PdfCountValidator(Validator):
         return len(csv_lines) == len(pdf_names)
 
 
+class NativeFileValidator(Validator):
+    """Checks that every file correspond to a line in the csv."""
+    error = 'This file should not be there'
+    error_key = 'native_files'
+
+    def validate(self, trs_import):
+        """
+
+        The only thing we have to do to know if the file must be here is to
+        check if the corresponding pdf exists.
+
+        """
+        native_files = trs_import.native_names()
+        pdf_files = trs_import.pdf_names()
+        errors = dict()
+
+        for filename in native_files:
+            name, ext = os.path.splitext(filename)
+            pdf_name = '%s.pdf' % name
+            if pdf_name not in pdf_files:
+                errors[filename] = self.error
+
+        if errors:
+            return {self.error_key: errors}
+        else:
+            return None
+
+
 class PdfFilenameValidator(Validator):
     """Checks that the pdf exists."""
     error = 'The pdf for this document is missing.'
@@ -145,25 +175,6 @@ class SameTitleValidator(Validator):
         return import_line.get_metadata().title == import_line.csv_data['title']
 
 
-class RevisionValidator(Validator):
-    """Checks that the document revision is correct."""
-    error = 'The document revision is incorrect.'
-    error_key = 'incorrect_revision'
-
-    def test(self, import_line):
-        """The revision in the csv is correct if:
-
-          * the revision already exists
-          * the revision immediatley follows the existing latest revision
-          * the revision follows a revision that will be created in the csv.
-
-        """
-        latest_revision = import_line.get_metadata().latest_revision.revision
-        csv_revision = import_line.csv_data['revision']
-
-        return csv_revision >= 1 and csv_revision <= latest_revision + 1
-
-
 class CSVLineValidator(AndValidator):
     """Validate the csv content.
 
@@ -171,8 +182,6 @@ class CSVLineValidator(AndValidator):
       * the data is valid (form validation)
       * the pdf is present with the correct name
       * the document already exists in Phase
-      * the revision already exists, or if it's a new revision…
-      * it's number immediatly follows the last revision
       * the title is the same as in the existing document
 
     """
@@ -183,7 +192,6 @@ class CSVLineValidator(AndValidator):
         DocumentExistsValidator(),
         SameTitleValidator(),
         FormValidator(),
-        RevisionValidator(),
     )
 
 
@@ -194,4 +202,69 @@ class TrsValidator(CompositeValidator):
         DirnameValidator(),
         CSVPresenceValidator(),
         PdfCountValidator(),
+        NativeFileValidator()
     )
+
+
+class RevisionsValidator(Validator):
+    """Global revision number validator."""
+    error_key = 'revisions'
+
+    def validate(self, trs_import):
+        """Validate the revision numbers.
+
+        Multiple revisions of the same document can be created
+        in a single csv.
+
+        Because of that, we need to check that all the revisions
+        to create will have following numbers.
+
+        """
+        errors = dict()
+
+        # Let's store the list of revisions for each document
+        revisions = dict()
+        for line in trs_import.csv_lines():
+            document_key = line['document_key']
+            revision = int(line['revision'])
+
+            if document_key not in revisions:
+                revisions[document_key] = list()
+
+            revisions[document_key].append(revision)
+
+        # Get latest revision for each document
+        latest_revisions = Document.objects \
+            .filter(document_key__in=revisions.keys) \
+            .values_list('document_key', 'current_revision')
+        latest_revisions = dict(latest_revisions)
+
+        # Check revisions for each document
+        for document_key in revisions.keys():
+            revision_ids = revisions[document_key]
+            latest_revision = latest_revisions[document_key]
+            revision_errors = self._validate_revision(revision_ids, latest_revision)
+
+            if revision_errors:
+                errors[document_key] = revision_errors
+
+        if errors:
+            return {self.error_key: errors}
+        else:
+            return errors
+
+    def _validate_revision(self, revisions, latest_revision):
+        """Check the revision numbers for a single document."""
+        errors = dict()
+        revisions.sort()
+        previous_revision = latest_revision
+        for revision in revisions:
+            if revision < 1:
+                errors[revision] = '%d is not a valid revision number' % revision
+            elif revision > previous_revision + 1:
+                errors[revision] = '%d is missing some previous revisions' % revision
+
+            if revision > latest_revision:
+                previous_revision = revision
+
+        return errors

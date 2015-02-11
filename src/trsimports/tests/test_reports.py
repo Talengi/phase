@@ -32,7 +32,9 @@ class ErrorReportTests(TestCase):
         self.assertEqual(send_mail.call_count, 1)
 
     def test_error_report_content(self):
-        body = self.report.body
-        self.assertEqual(body.count('FAC10005-CTR-CLT-TRS-00001'), 1)
+        subject = self.report.get_subject()
+        self.assertEqual(subject.count('FAC10005-CTR-CLT-TRS-00001'), 1)
+
+        body = self.report.get_body()
         self.assertEqual(body.count('This is error 1'), 1)
         self.assertEqual(body.count('This is error 2'), 1)
