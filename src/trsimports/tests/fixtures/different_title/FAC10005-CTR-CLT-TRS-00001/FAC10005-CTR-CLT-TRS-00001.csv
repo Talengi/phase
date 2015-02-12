@@ -1,2 +1,2 @@
-document_key;title;contract_number;originator;unit;discipline;document_type;sequential_number;docclass;status;revision;revision_date;
-FAC10005-CTR-000-EXP-LAY-4891;A completely different name;FAC10005;CTR;000;EXP;LAY;4891;2;IFA;1;2014-09-24;
+Document Number;Title;Contract Number;Originator;Unit;Discipline;Document Type;Sequential Number;Class;Revision;Status;Received Date
+FAC10005-CTR-000-EXP-LAY-4891;A completely different name;FAC10005;CTR;000;EXP;LAY;4891;2;01;IFA;2014-09-24;
