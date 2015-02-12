@@ -34,7 +34,7 @@ LOGGING['loggers']['elasticsearch.trace'] = {
     'propagate': False,
 }
 LOGGING['loggers'][''] = {
-    'handlers': [],
+    'handlers': ['null'],
     'level': 'DEBUG',
     'propagate': False,
 }
