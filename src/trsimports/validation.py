@@ -84,7 +84,7 @@ class CSVColumnsValidator(Validator):
 
     def test(self, trs_import):
         columns = set(trs_import.csv_cols())
-        expected_columns = set(trs_import.expected_columns())
+        expected_columns = set(trs_import.expected_columns().values())
         return columns == expected_columns
 
 

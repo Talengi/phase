@@ -118,9 +118,20 @@ class TrsImport(object):
         but for now it's just a fixed requirement.
 
         """
-        return ('document_key', 'title', 'contract_number', 'originator',
-                'unit', 'discipline', 'document_type', 'sequential_number',
-                'docclass', 'revision', 'status', 'revision_date',)
+        return {
+            'Document Number': 'document_key',
+            'Title': 'title',
+            'Contract Number': 'contract_number',
+            'Originator': 'originator',
+            'Unit': 'unit',
+            'Discipline': 'discipline',
+            'Document Type': 'document_type',
+            'Sequential Number': 'sequential_number',
+            'Class': 'docclass',
+            'Revision': 'revision',
+            'Status': 'status',
+            'Received Date': 'revision_date'
+        }
 
     def csv_cols(self):
         """Returns the coloumns of the csv."""
@@ -134,12 +145,26 @@ class TrsImport(object):
         return self._csv_cols
 
     def csv_lines(self):
-        """Returns a list of lines contained in the csv file."""
+        """Returns a list of lines contained in the csv file.
+
+        The csv columns title are the human version, e.g "Document Number"
+        instead of "document_key".
+
+        We need to do the conversion ourselves.
+
+        """
         if not self._csv_lines:
+            columns = self.expected_columns()
             try:
                 with open(self.csv_fullname, 'rb') as f:
                     csvfile = csv.DictReader(f, dialect='normal')
-                    lines = [row for row in csvfile]
+                    lines = []
+                    for row in csvfile:
+                        line_row = {}
+                        for key, value in row.items():
+                            line_row[columns.get(key, key)] = value
+
+                        lines.append(line_row)
             except IOError:
                 # If no csv file is found, we just return an empty list
                 # The csv existence will raise an error during validation anyway
