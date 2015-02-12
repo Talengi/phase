@@ -77,6 +77,17 @@ class CSVPresenceValidator(Validator):
         return os.path.exists(csv_fullname)
 
 
+class CSVColumnsValidator(Validator):
+    """Checks that the csv columns are correct."""
+    error = 'The csv columns are incorrect.'
+    error_key = 'csv_columns'
+
+    def test(self, trs_import):
+        columns = set(trs_import.csv_cols())
+        expected_columns = set(trs_import.expected_columns())
+        return columns == expected_columns
+
+
 class PdfCountValidator(Validator):
     """Checks the number of pdf documents."""
     error = 'The number of pdf documents is incorrect'
@@ -201,6 +212,7 @@ class TrsValidator(CompositeValidator):
     VALIDATORS = (
         DirnameValidator(),
         CSVPresenceValidator(),
+        CSVColumnsValidator(),
         PdfCountValidator(),
         NativeFileValidator()
     )
