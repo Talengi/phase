@@ -152,6 +152,17 @@ class MissingDataValidator(Validator):
         ))
 
 
+class RevisionFormatValidator(Validator):
+    """Checks that the revision is a two number integer."""
+    pattern = '\d{2}'
+    error = 'The revision must be a two number integer'
+    error_key = 'revision_format'
+
+    def test(self, import_line):
+        revision = import_line.csv_data['revision']
+        return re.match(self.pattern, revision)
+
+
 class DocumentExistsValidator(Validator):
     """Checks that the document already exists in Phase."""
     error = 'The corresponding document cannot be found.'
@@ -199,6 +210,7 @@ class CSVLineValidator(AndValidator):
     error_key = 'csv_content'
     VALIDATORS = (
         MissingDataValidator(),
+        RevisionFormatValidator(),
         PdfFilenameValidator(),
         DocumentExistsValidator(),
         SameTitleValidator(),

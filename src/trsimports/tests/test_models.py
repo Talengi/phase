@@ -132,6 +132,10 @@ class CSVContentTests(TransmittalsValidationTests):
         trs_import = self.prepare_fixtures('incorrect_revision', 'FAC10005-CTR-CLT-TRS-00001')
         self.assertTrue(5 in trs_import.errors['revisions']['FAC10005-CTR-000-EXP-LAY-4891'])
 
+    def test_incorrect_revision_format(self):
+        trs_import = self.prepare_fixtures('revision_format', 'FAC10005-CTR-CLT-TRS-00001')
+        self.assertTrue('revision_format' in trs_import.errors['csv_content'][2])
+
     def test_non_following_revision_numbers(self):
         trs_import = self.prepare_fixtures('non_following_revisions', 'FAC10005-CTR-CLT-TRS-00001')
         self.assertFalse(1 in trs_import.errors['revisions']['FAC10005-CTR-000-EXP-LAY-4891'])
