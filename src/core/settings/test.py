@@ -28,10 +28,14 @@ LOGGING['loggers']['elasticsearch'] = {
     'level': 'ERROR',
     'propagate': False,
 }
-
 LOGGING['loggers']['elasticsearch.trace'] = {
     'handlers': ['console', 'syslog', 'mail_admins'],
     'level': 'ERROR',
+    'propagate': False,
+}
+LOGGING['loggers'][''] = {
+    'handlers': ['null'],
+    'level': 'DEBUG',
     'propagate': False,
 }
 

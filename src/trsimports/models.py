@@ -34,6 +34,7 @@ class TrsImport(object):
         self.email_list = email_list
 
         self._errors = None
+        self._csv_cols = None
         self._csv_lines = None
         self._pdf_names = None
         self._native_names = None
@@ -109,6 +110,28 @@ class TrsImport(object):
     @property
     def csv_basename(self):
         return os.path.basename(self.csv_fullname)
+
+    def expected_columns(self):
+        """Returns the expected csv columns.
+
+        In the end, it should depend on the document category,
+        but for now it's just a fixed requirement.
+
+        """
+        return ('document_key', 'title', 'contract_number', 'originator',
+                'unit', 'discipline', 'document_type', 'sequential_number',
+                'docclass', 'revision', 'status', 'revision_date',)
+
+    def csv_cols(self):
+        """Returns the coloumns of the csv."""
+        if not self._csv_cols:
+            try:
+                line = self.csv_lines()[0]
+                self._csv_cols = line.keys()
+            except:
+                self._csv_cols = []
+
+        return self._csv_cols
 
     def csv_lines(self):
         """Returns a list of lines contained in the csv file."""

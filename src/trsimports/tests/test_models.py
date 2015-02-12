@@ -84,6 +84,10 @@ class DirectoryContentTests(TransmittalsValidationTests):
         trs_import = self.prepare_fixtures('wrong_csv_filename', 'FAC10005-CTR-CLT-TRS-00001')
         self.assertTrue('missing_csv' in trs_import.errors['global_errors'])
 
+    def test_csv_columns(self):
+        trs_import = self.prepare_fixtures('wrong_csv_columns', 'FAC10005-CTR-CLT-TRS-00001')
+        self.assertTrue('csv_columns' in trs_import.errors['global_errors'])
+
     def test_not_enough_pdfs(self):
         trs_import = self.prepare_fixtures('not_enough_pdfs', 'FAC10005-CTR-CLT-TRS-00001')
         self.assertTrue('wrong_pdf_count' in trs_import.errors['global_errors'])
