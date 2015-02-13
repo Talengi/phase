@@ -11,6 +11,7 @@ from model_utils import Choices
 from documents.models import Document
 from reviews.models import CLASSES
 from metadata.fields import ConfigurableChoiceField
+from default_documents.validators import StringNumberValidator
 
 
 class Transmittal(models.Model):
@@ -41,7 +42,7 @@ class Transmittal(models.Model):
     status = models.CharField(
         max_length=20,
         choices=STATUSES,
-        default=STATUSES.new)
+        default=STATUSES.tobechecked)
     created_on = models.DateField(
         _('Created on'),
         default=timezone.now)
@@ -67,9 +68,16 @@ class TrsRevision(models.Model):
         'refused',
     )
 
+    transmittal = models.ForeignKey(
+        Transmittal,
+        verbose_name=_('Transmittal'))
     document = models.ForeignKey(
         Document,
+        null=True, blank=True,
         verbose_name=_('Document'))
+    document_key = models.SlugField(
+        _('Document number'),
+        max_length=250)
     title = models.TextField(
         verbose_name=_('Title'))
     revision = models.PositiveIntegerField(
@@ -84,16 +92,15 @@ class TrsRevision(models.Model):
 
     # Those are fields that will one day be configurable
     # but are static for now.
-    revision_status = ConfigurableChoiceField(
-        verbose_name=_('Status'),
-        default='STD',
+    contract_number = ConfigurableChoiceField(
+        verbose_name='Contract Number',
+        max_length=8,
+        list_index='CONTRACT_NBS')
+    originator = ConfigurableChoiceField(
+        _('Originator'),
+        default='FWF',
         max_length=3,
-        list_index='STATUSES',
-        null=True, blank=True)
-    docclass = models.IntegerField(
-        verbose_name=_('Class'),
-        default=1,
-        choices=CLASSES)
+        list_index='ORIGINATORS')
     unit = ConfigurableChoiceField(
         verbose_name=_('Unit'),
         default='000',
@@ -109,6 +116,22 @@ class TrsRevision(models.Model):
         default='PID',
         max_length=3,
         list_index='DOCUMENT_TYPES')
+    sequential_number = models.CharField(
+        verbose_name=u"sequential Number",
+        help_text=_('Select a four digit number'),
+        default=u"0001",
+        max_length=4,
+        validators=[StringNumberValidator(4)])
+    docclass = models.IntegerField(
+        verbose_name=_('Class'),
+        default=1,
+        choices=CLASSES)
+    revision_status = ConfigurableChoiceField(
+        verbose_name=_('Status'),
+        default='STD',
+        max_length=3,
+        list_index='STATUSES',
+        null=True, blank=True)
 
     class Meta:
         verbose_name = _('Trs Revision')
