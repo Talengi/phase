@@ -9,7 +9,7 @@ from django.utils import timezone
 from model_utils import Choices
 
 from documents.models import Document
-from documents.reviews import CLASSES
+from reviews.models import CLASSES
 from metadata.fields import ConfigurableChoiceField
 
 
