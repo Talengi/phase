@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 from django.test import TestCase
 
-from trsimports.tasks import revfile_re
+from transmittals.tasks import revfile_re
 
 
 class ImportFileTests(TestCase):

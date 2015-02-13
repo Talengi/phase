@@ -109,7 +109,7 @@ class ImportCommandTests(TestCase):
         error = 'The directory "/tmp/test_ctr_clt/rejected" is not writeable.'
         self.assertEqual(str(cm.exception), error)
 
-    @patch('trsimports.management.commands.import_transmittals.Command.import_dir')
+    @patch('transmittals.management.commands.import_transmittals.Command.import_dir')
     def test_calling_import_method(self, import_dir):
         """When a directory is found, the import method must be fired"""
         f = StringIO()

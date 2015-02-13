@@ -9,9 +9,9 @@ import logging
 
 from annoying.functions import get_object_or_None
 
-from trsimports.validation import (
+from transmittals.validation import (
     TrsValidator, CSVLineValidator, RevisionsValidator)
-from trsimports.reports import ErrorReport
+from transmittals.reports import ErrorReport
 
 
 logger = logging.getLogger(__name__)

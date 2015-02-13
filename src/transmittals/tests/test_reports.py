@@ -6,8 +6,8 @@ from django.test import TestCase
 
 from mock import patch
 
-from trsimports.models import TrsImport
-from trsimports.reports import ErrorReport
+from transmittals.models import TrsImport
+from transmittals.reports import ErrorReport
 
 
 class ErrorReportTests(TestCase):
@@ -26,7 +26,7 @@ class ErrorReportTests(TestCase):
         }
         self.report = ErrorReport(self.trs_import)
 
-    @patch('trsimports.reports.send_mail')
+    @patch('transmittals.reports.send_mail')
     def test_report_is_sent(self, send_mail):
         self.report.send()
         self.assertEqual(send_mail.call_count, 1)
