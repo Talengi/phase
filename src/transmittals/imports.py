@@ -7,8 +7,11 @@ import csv
 import shutil
 import logging
 
+from django.db import transaction
+
 from annoying.functions import get_object_or_None
 
+from transmittals.models import Transmittal, TrsRevision
 from transmittals.validation import (
     TrsValidator, CSVLineValidator, RevisionsValidator)
 from transmittals.reports import ErrorReport
@@ -52,6 +55,8 @@ class TrsImport(object):
             self.move_to_rejected()
         else:
             self.move_to_tobechecked()
+
+        self.save()
 
     def move_to_rejected(self):
         """Move the imported transmittals directory to rejected."""
@@ -229,6 +234,65 @@ class TrsImport(object):
         errors = RevisionsValidator().validate(self)
         if errors:
             self._errors.update(errors)
+
+    @property
+    def contract_number(self):
+        return self.basename.split('-')[0]
+
+    @property
+    def originator(self):
+        return self.basename.split('-')[1]
+
+    @property
+    def recipient(self):
+        return self.basename.split('-')[2]
+
+    @property
+    def sequential_number(self):
+        return int(self.basename.split('-')[4])
+
+    @transaction.atomic
+    def save(self):
+        """Save transmittal data in db.
+
+        TODO
+         -
+
+        """
+
+        if self.is_valid():
+            status = Transmittal.STATUSES.tobechecked
+        else:
+            status = Transmittal.STATUSES.rejected
+
+        transmittal = Transmittal.objects.create(
+            contract_number=self.contract_number,
+            originator=self.originator,
+            recipient=self.recipient,
+            sequential_number=self.sequential_number,
+            status=status)
+
+        for line in self:
+            data = line.csv_data
+            metadata = line.get_metadata()
+            document = metadata.document if metadata else None
+
+            is_new_revision = True  # TODO
+
+            TrsRevision.objects.create(
+                transmittal=transmittal,
+                document=document,
+                document_key=data['document_key'],
+                title=data['title'],
+                revision=data['revision'],
+                originator=data['originator'],
+                unit=data['unit'],
+                discipline=data['discipline'],
+                document_type=data['document_type'],
+                sequential_number=data['sequential_number'],
+                docclass=data['docclass'],
+                revision_status=data['status'],
+                is_new_revision=is_new_revision)
 
 
 class TrsImportLine(object):
