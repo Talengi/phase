@@ -6,7 +6,7 @@ from django.test import TestCase
 
 from mock import patch
 
-from transmittals.models import TrsImport
+from transmittals.imports import TrsImport
 from transmittals.reports import ErrorReport
 
 

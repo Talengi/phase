@@ -10,7 +10,7 @@ from shutil import rmtree, copytree
 from django.test import TestCase
 from django.core.cache import cache
 
-from transmittals.models import TrsImport
+from transmittals.imports import TrsImport
 
 
 TEST_CTR = 'test'

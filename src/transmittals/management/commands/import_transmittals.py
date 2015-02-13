@@ -9,7 +9,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.core.exceptions import ImproperlyConfigured
 from django.conf import settings
 
-from transmittals.models import TrsImport
+from transmittals.imports import TrsImport
 
 
 logger = logging.getLogger(__name__)
