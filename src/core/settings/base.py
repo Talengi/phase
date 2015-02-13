@@ -225,7 +225,7 @@ LOCAL_APPS = (
     'search',
     'bookmarks',
     'discussion',
-    'trsimports',
+    'transmittals',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
