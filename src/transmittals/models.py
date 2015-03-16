@@ -79,12 +79,6 @@ class Transmittal(models.Model):
 
 class TrsRevision(models.Model):
     """Stores data imported from a single line in the csv."""
-    STATUSES = Choices(
-        'new',
-        'accepted',
-        'refused',
-    )
-
     transmittal = models.ForeignKey(
         Transmittal,
         verbose_name=_('Transmittal'))
@@ -100,10 +94,8 @@ class TrsRevision(models.Model):
     revision = models.PositiveIntegerField(
         verbose_name=_('Revision'),
         default=1)
-    status = models.CharField(
-        max_length=20,
-        choices=STATUSES,
-        default=STATUSES.new)
+    accepted = models.NullBooleanField(
+        verbose_name=_('Accepted?'))
     is_new_revision = models.BooleanField(
         _('Is new revision?'))
 

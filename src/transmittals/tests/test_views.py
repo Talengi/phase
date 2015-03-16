@@ -54,37 +54,49 @@ class TransmittalDiffViewTests(TestCase):
         self.client.login(email=user.email, password='pass')
         self.url = self.transmittal.get_absolute_url()
 
-    def create_lines(self, nb_existing=1, nb_new=1):
+    def create_lines(self, nb_existing=1, nb_new=1, **kwargs):
         """Create `nb_existing` + `nb_new` lines in the transmittal."""
         doc = DocumentFactory(
             metadata_factory_class=ContractorDeliverableFactory,
             revision_factory_class=ContractorDeliverableRevisionFactory,
             category=self.category)
 
+        arguments = {
+            'transmittal': self.transmittal,
+            'document': doc,
+            'document_key': doc.document_key,
+            'title': doc.title,
+            'is_new_revision': False
+        }
+        arguments.update(kwargs)
+
         # Existing revisions
         for i in range(nb_existing):
             rev = ContractorDeliverableRevisionFactory(
                 document=doc)
 
-            TrsRevisionFactory(
-                transmittal=self.transmittal,
-                document=doc,
-                document_key=doc.document_key,
-                title=doc.title,
-                revision=rev.revision,
-                is_new_revision=False)
+            arguments.update({'revision': rev.revision})
+            TrsRevisionFactory(**arguments)
+
+        arguments.update({'is_new_revision': True})
 
         # New revisions
         for i in range(nb_new):
-            TrsRevisionFactory(
-                transmittal=self.transmittal,
-                document=doc,
-                document_key=doc.document_key,
-                title=doc.title,
-                revision=rev.revision + i,
-                is_new_revision=True)
+            arguments.update({'revision': rev.revision})
+            TrsRevisionFactory(**arguments)
 
     def test_transmittal_detail_view(self):
         self.create_lines(2, 3)
         res = self.client.get(self.url)
         self.assertContains(res, 'tr class="document_row"', 5)
+
+    def test_accepted_icons(self):
+        self.create_lines(1, 1)
+        self.create_lines(2, 2, accepted=True)
+        self.create_lines(3, 3, accepted=False)
+
+        res = self.client.get(self.url)
+        self.assertContains(res, 'glyphicon-empty', 2)
+        # "+ 1" because there are icons elsewhere in the page
+        self.assertContains(res, 'glyphicon-ok', 4 + 1)
+        self.assertContains(res, 'glyphicon-remove', 6 + 1)
