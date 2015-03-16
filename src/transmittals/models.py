@@ -30,7 +30,7 @@ class Transmittal(models.Model):
         list_index='CONTRACT_NBS')
     originator = ConfigurableChoiceField(
         _('Originator'),
-        default='FWF',
+        default='CTR',
         max_length=3,
         list_index='ORIGINATORS')
     recipient = ConfigurableChoiceField(
