@@ -21,7 +21,7 @@ class TransmittalListView(LoginRequiredMixin, ListView):
         return Transmittal.objects.all()
 
 
-class DiffView(TemplateView):
+class TransmittalDiffView(TemplateView):
     template_name = 'transmittals/diff_view.html'
 
     def breadcrumb_section(self):
@@ -31,7 +31,17 @@ class DiffView(TemplateView):
         return 'FAC10005-CTR-CLT-TRS-00001'
 
 
-class RevisionDiffView(TemplateView):
+class DemoDiffView(TemplateView):
+    template_name = 'transmittals/diff_view.html'
+
+    def breadcrumb_section(self):
+        return 'Transmittal'
+
+    def breadcrumb_subsection(self):
+        return 'FAC10005-CTR-CLT-TRS-00001'
+
+
+class DemoRevisionDiffView(TemplateView):
     template_name = 'transmittals/revision_diff_view.html'
 
     def breadcrumb_section(self):

@@ -1,14 +1,25 @@
 {% extends "base.html" %}
 
-{% block custombodyclass %}fullwidth{% endblock %}
+{% block custombodyclass %}documentlist fullwidth{% endblock %}
+
+{% block additional_navbar %}
+<div class="navbar additional-navbar navbar-default navbar-static-top" id="table-controls">
+<div class="container">
+    <span class="navbar-brand">{{ _('Transmittals') }}</span>
+</div>
+</div>
+{% endblock %}
 
 {% block content %}
-{% if favorite_list %}
+{% if transmittal_list %}
 <div id="document-list-row" class="row"> <div id="main-table" class="col-xs-12">
     <table id="main-table" class="table table-striped table-condensed table-bordered table-hover table-centered">
         <thead>
             <tr>
                 <th>Transmittal</th>
+                <th>Originator</th>
+                <th>Recipient</th>
+                <th>Sequential number</th>
                 <th>Reception date</th>
                 <th>Status</th>
             </tr>
@@ -16,10 +27,13 @@
         <tbody>
             {% for transmittal in transmittal_list %}
                 <tr>
-                    <td><a href="#">
-                            {{ transmittal.name }}
+                    <td><a href="{% url 'transmittal_diff_view' transmittal.transmittal_key %}">
+                            {{ transmittal }}
                         </a>
                     </td>
+                    <td>{{ transmittal.originator }}</td>
+                    <td>{{ transmittal.recipient }}</td>
+                    <td>{{ transmittal.sequential_number|stringformat:"05d" }}</td>
                     <td>{{ transmittal.created_on|date }}</td>
                     <td>{{ transmittal.get_status_display }}</td>
                 </tr>
