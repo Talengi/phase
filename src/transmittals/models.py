@@ -53,11 +53,12 @@ class Transmittal(models.Model):
 
     @property
     def name(self):
-        return '{}_{}_{}_TRS_{:0>5d}' % (
+        name = '{}-{}-{}-TRS-{:0>5d}'.format(
             self.contract_number,
             self.originator,
             self.recipient,
             self.sequential_number)
+        return name
 
 
 class TrsRevision(models.Model):
