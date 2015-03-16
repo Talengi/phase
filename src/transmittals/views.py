@@ -11,6 +11,7 @@ from transmittals.models import Transmittal
 
 
 class TransmittalListView(LoginRequiredMixin, ListView):
+    """List all transmittals."""
     context_object_name = 'transmittal_list'
 
     def breadcrumb_section(self):
@@ -35,6 +36,14 @@ class TransmittalDiffView(LoginRequiredMixin, DetailView):
 
     def breadcrumb_object(self):
         return self.object
+
+    def get_context_data(self, **kwargs):
+        context = super(TransmittalDiffView, self).get_context_data(**kwargs)
+        context.update({
+            'revisions': self.object.trsrevision_set.all()
+        })
+
+        return context
 
 
 class DemoDiffView(TemplateView):

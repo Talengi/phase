@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load compressed %}
+
+{% block custombodyclass %}documentlist fullwidth{% endblock %}
+
+{% block additional_navbar %}
+    {% include 'transmittals/diff_navbar.html' %}
+{% endblock %}
+
+{% block content %}
+<div id="main-table">
+<table class="table table-condensed table-bordered table-hover">
+    <thead>
+        <tr>
+            <th id="columnselect"></th>
+            <th id="columnfavorite"></th>
+            <th id="columnfavorite"></th>
+            <th id="columndocument_key">Document number</th>
+            <th id="columntitle">Title</th>
+            <th id="columnrevision">Rev.</th>
+            <th id="columnstatus">Status</th>
+            <th id="columnclass">Class</th>
+            <th id="columnunit">Unit</th>
+            <th id="columndiscipline">Discipline</th>
+            <th id="columndocument_type">Document Type</th>
+            <th id="columnrevision_date">Rev. date</th>
+        </tr>
+    </thead>
+
+    <tbody>
+    {% for revision in revisions %}
+        <tr class="document_row">
+            <td><input type="checkbox" /></td>
+            <td><span class="label label-{{ revision.is_new_revision|yesno:"warning,primary" }}">
+                    {{ revision.is_new_revision|yesno:"New,Updated" }}
+            </span></td>
+            <td><span class="glyphicon glyphicon-ok"></span></td>
+            <td>{{ revision.document_key }}</td>
+            <td class="columntitle">{{ revision.title }}</td>
+            <td>{{ revision.revision|stringformat:"02d" }}</td>
+            <td>{{ revision.revision_status }}</td>
+            <td>{{ revision.docclass }}</td>
+            <td>{{ revision.unit }}</td>
+            <td>{{ revision.discipline }}</td>
+            <td>{{ revision.document_type }}</td>
+            <td></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+
+{% endblock %}
+

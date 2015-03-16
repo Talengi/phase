@@ -10,10 +10,10 @@ from transmittals.models import Transmittal, TrsRevision
 class TransmittalFactory(factory.DjangoModelFactory):
     FACTORY_FOR = Transmittal
 
-    contract_number = factory.Sequence(lambda n: 'FAC10005-CTR-CLT-TRS-{0:05}'.format(n))
+    contract_number = 'FAC10005'
     originator = 'CTR'
     recipient = 'CLT'
-    sequential_number = 1
+    sequential_number = factory.Sequence(lambda n: n)
 
 
 class TrsRevisionFactory(factory.DjangoModelFactory):
