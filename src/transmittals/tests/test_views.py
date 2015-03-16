@@ -90,6 +90,12 @@ class TransmittalDiffViewTests(TestCase):
         res = self.client.get(self.url)
         self.assertContains(res, 'tr class="document_row"', 5)
 
+    def test_new_updated_labels(self):
+        self.create_lines(3, 4)
+        res = self.client.get(self.url)
+        self.assertContains(res, 'span class="label label-warning"', 4)
+        self.assertContains(res, 'span class="label label-primary"', 3)
+
     def test_accepted_icons(self):
         self.create_lines(1, 1)
         self.create_lines(2, 2, accepted=True)
