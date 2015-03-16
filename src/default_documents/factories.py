@@ -110,6 +110,19 @@ TITLES = (
     "Pump Process Data Sheet - HP Flare KO Drum Pumps 305-PA-017 A/B",
 )
 
+CONTRACT_NB_CHOICES = (
+    'FAC09001',
+    'FAC100005'
+)
+
+DISCIPLINE_CHOICES = (
+    'COM', 'CON', 'COR', 'DRI', 'MAI', 'MUL', 'OPE'
+)
+
+DOC_TYPE_CHOICES = (
+    'PID', 'ANA', 'BAS', 'FAT', 'HAZ', 'ISO'
+)
+
 
 class MetadataFactory(factory.DjangoModelFactory):
     FACTORY_FOR = DemoMetadata
@@ -134,6 +147,12 @@ class MetadataRevisionFactory(factory.DjangoModelFactory):
 
 class ContractorDeliverableFactory(MetadataFactory):
     FACTORY_FOR = ContractorDeliverable
+    contract_number = fuzzy.FuzzyChoice(CONTRACT_NB_CHOICES)
+    originator = 'CTR'
+    unit = '000'
+    discipline = fuzzy.FuzzyChoice(DISCIPLINE_CHOICES)
+    document_type = fuzzy.FuzzyChoice(DOC_TYPE_CHOICES)
+    sequential_number = factory.Sequence(lambda n: '{0:04}'.format(n))
 
 
 class ContractorDeliverableRevisionFactory(MetadataRevisionFactory):
