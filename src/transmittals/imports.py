@@ -253,12 +253,7 @@ class TrsImport(object):
 
     @transaction.atomic
     def save(self):
-        """Save transmittal data in db.
-
-        TODO
-         -
-
-        """
+        """Save transmittal data in db."""
 
         if self.is_valid():
             status = Transmittal.STATUSES.tobechecked
