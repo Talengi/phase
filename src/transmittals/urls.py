@@ -5,8 +5,8 @@ from __future__ import unicode_literals
 from django.conf.urls import patterns, url
 
 from transmittals.views import (
-    TransmittalListView, TransmittalDiffView, DemoDiffView,
-    DemoRevisionDiffView)
+    TransmittalListView, TransmittalDiffView, TransmittalRevisionDiffView,
+    DemoDiffView, DemoRevisionDiffView)
 
 urlpatterns = patterns(
     '',
@@ -16,6 +16,9 @@ urlpatterns = patterns(
     url(r'^(?P<transmittal_key>[\w-]+)/$',
         TransmittalDiffView.as_view(),
         name='transmittal_diff'),
+    url(r'^(?P<transmittal_key>[\w-]+)/(?P<document_key>[\w-]+)/(?P<revision>\d+)/$',
+        TransmittalRevisionDiffView.as_view(),
+        name='transmittal_revision_diff'),
 
 
     # Demo views

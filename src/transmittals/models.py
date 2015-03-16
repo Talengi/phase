@@ -145,3 +145,4 @@ class TrsRevision(models.Model):
     class Meta:
         verbose_name = _('Trs Revision')
         verbose_name_plural = _('Trs Revisions')
+        unique_together = ('transmittal', 'document_key', 'revision')

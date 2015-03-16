@@ -5,9 +5,10 @@ from __future__ import unicode_literals
 from django.views.generic import TemplateView, ListView, DetailView
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
+from django.http import Http404
 from braces.views import LoginRequiredMixin
 
-from transmittals.models import Transmittal
+from transmittals.models import Transmittal, TrsRevision
 
 
 class TransmittalListView(LoginRequiredMixin, ListView):
@@ -46,8 +47,36 @@ class TransmittalDiffView(LoginRequiredMixin, DetailView):
         return context
 
 
+class TransmittalRevisionDiffView(LoginRequiredMixin, DetailView):
+    template_name = 'transmittals/revision_diff_view.html'
+
+    def breadcrumb_section(self):
+        return (_('Transmittals'), reverse('transmittal_list'))
+
+    def breadcrumb_subsection(self):
+        trs = self.object.transmittal
+        return trs.get_absolute_url()
+
+    def breadcrumb_object(self):
+        return self.object
+
+    def get_object(self, queryset=None):
+        qs = TrsRevision.objects \
+            .filter(transmittal__transmittal_key=self.kwargs['transmittal_key']) \
+            .filter(document_key=self.kwargs['document_key']) \
+            .filter(revision=self.kwargs['revision']) \
+            .select_related('transmittal', 'document')
+        try:
+            obj = qs.get()
+        except(qs.model.DoesNotExist):
+            raise Http404(_("No %(verbose_name)s found matching the query") %
+                          {'verbose_name': qs.model._meta.verbose_name})
+
+        return obj
+
+
 class DemoDiffView(TemplateView):
-    template_name = 'transmittals/diff_view.html'
+    template_name = 'transmittals/demo_diff_view.html'
 
     def breadcrumb_section(self):
         return 'Transmittal'
@@ -57,7 +86,7 @@ class DemoDiffView(TemplateView):
 
 
 class DemoRevisionDiffView(TemplateView):
-    template_name = 'transmittals/revision_diff_view.html'
+    template_name = 'transmittals/demo_revision_diff_view.html'
 
     def breadcrumb_section(self):
         return 'Transmittal'

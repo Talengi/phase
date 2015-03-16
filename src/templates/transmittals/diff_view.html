@@ -37,7 +37,9 @@
             <td><span class="glyphicon
                 glyphicon-{{ revision.accepted|yesno:"ok,remove,empty" }}
             "></span></td>
-            <td>{{ revision.document_key }}</td>
+            <td><a href="{% url 'transmittal_revision_diff' transmittal.transmittal_key revision.document_key revision.revision  %}">
+                {{ revision.document_key }}
+            </a></td>
             <td class="columntitle">{{ revision.title }}</td>
             <td>{{ revision.revision|stringformat:"02d" }}</td>
             <td>{{ revision.revision_status }}</td>
