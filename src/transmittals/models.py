@@ -17,11 +17,11 @@ from default_documents.validators import StringNumberValidator
 class Transmittal(models.Model):
     """Transmittals are created when a contractor upload documents."""
     STATUSES = Choices(
-        'new',
-        'invalid',
-        'tobechecked',
-        'rejected',
-        'accepted',
+        ('new', _('New')),
+        ('invalid', _('Invalid')),
+        ('tobechecked', _('To be checked')),
+        ('rejected', _('Rejected')),
+        ('accepted', _('Accepted')),
     )
 
     contract_number = ConfigurableChoiceField(
