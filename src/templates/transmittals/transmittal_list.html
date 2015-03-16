@@ -28,7 +28,7 @@
         <tbody>
             {% for transmittal in transmittal_list %}
                 <tr>
-                    <td><a href="{% url 'transmittal_diff' transmittal.transmittal_key %}">
+                    <td class="key_column"><a href="{% url 'transmittal_diff' transmittal.transmittal_key %}">
                             {{ transmittal }}
                         </a>
                     </td>

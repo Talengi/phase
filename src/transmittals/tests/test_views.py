@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 
 from categories.factories import CategoryFactory
 from accounts.factories import UserFactory
+from transmittals.factories import TransmittalFactory
 
 
 class TransmittalListTests(TestCase):
@@ -24,3 +25,11 @@ class TransmittalListTests(TestCase):
     def test_empty_transmittal_list(self):
         res = self.client.get(self.url)
         self.assertContains(res, 'There are no transmittals here')
+
+    def test_transmittal_list(self):
+        TransmittalFactory()
+        TransmittalFactory()
+        TransmittalFactory()
+        res = self.client.get(self.url)
+        self.assertNotContains(res, 'There are no transmittals here')
+        self.assertContains(res, 'td class="key_column"', 3)
