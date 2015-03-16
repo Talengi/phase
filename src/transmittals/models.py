@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
+from django.core.urlresolvers import reverse
 
 from model_utils import Choices
 
@@ -71,6 +72,9 @@ class Transmittal(models.Model):
             self.recipient,
             self.sequential_number)
         return key
+
+    def get_absolute_url(self):
+        return reverse('transmittal_diff', args=[self.transmittal_key])
 
 
 class TrsRevision(models.Model):
