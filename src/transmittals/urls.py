@@ -12,10 +12,10 @@ urlpatterns = patterns(
     '',
     url(r'^$',
         TransmittalListView.as_view(),
-        name="transmittal_list_view"),
+        name="transmittal_list"),
     url(r'^(?P<transmittal_key>[\w-]+)/$',
         TransmittalDiffView.as_view(),
-        name='transmittal_diff_view'),
+        name='transmittal_diff'),
 
 
     # Demo views
