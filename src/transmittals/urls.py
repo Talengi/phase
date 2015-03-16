@@ -4,14 +4,16 @@ from __future__ import unicode_literals
 
 from django.conf.urls import patterns, url
 
-from transmittals.views import DiffView, RevisionDiffView
+from transmittals.views import TransmittalListView, DiffView, RevisionDiffView
 
 urlpatterns = patterns(
     '',
+    url(r'^$',
+        TransmittalListView.as_view(),
+        name="transmittal_list_view"),
     url(r'^transmittal/$',
         DiffView.as_view(),
         name="transmittal_diff_view"),
-
     url(r'^revision/$',
         RevisionDiffView.as_view(),
         name="revision_diff_view"),

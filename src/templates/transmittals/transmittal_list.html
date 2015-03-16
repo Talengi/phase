@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block custombodyclass %}fullwidth{% endblock %}
+
+{% block content %}
+{% if favorite_list %}
+<div id="document-list-row" class="row"> <div id="main-table" class="col-xs-12">
+    <table id="main-table" class="table table-striped table-condensed table-bordered table-hover table-centered">
+        <thead>
+            <tr>
+                <th>Transmittal</th>
+                <th>Reception date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transmittal in transmittal_list %}
+                <tr>
+                    <td><a href="#">
+                            {{ transmittal.name }}
+                        </a>
+                    </td>
+                    <td>{{ transmittal.created_on|date }}</td>
+                    <td>{{ transmittal.get_status_display }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div> </div>
+{% else %}
+    <p>There are no transmittals here.</p>
+{% endif %}
+{% endblock content %}
