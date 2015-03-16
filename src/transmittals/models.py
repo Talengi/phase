@@ -24,6 +24,11 @@ class Transmittal(models.Model):
         ('accepted', _('Accepted')),
     )
 
+    transmittal_key = models.SlugField(
+        _('Transmittal key'),
+        unique=True,
+        db_index=True,
+        max_length=250)
     contract_number = ConfigurableChoiceField(
         verbose_name='Contract Number',
         max_length=8,
@@ -51,14 +56,21 @@ class Transmittal(models.Model):
         verbose_name = _('Transmittal')
         verbose_name_plural = _('Transmittals')
 
-    @property
-    def name(self):
-        name = '{}-{}-{}-TRS-{:0>5d}'.format(
+    def __unicode__(self):
+        return self.transmittal_key
+
+    def save(self, *args, **kwargs):
+        if not self.transmittal_key:
+            self.transmittal_key = self.generate_key()
+        super(Transmittal, self).save(*args, **kwargs)
+
+    def generate_key(self):
+        key = '{}-{}-{}-TRS-{:0>5d}'.format(
             self.contract_number,
             self.originator,
             self.recipient,
             self.sequential_number)
-        return name
+        return key
 
 
 class TrsRevision(models.Model):
