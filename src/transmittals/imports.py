@@ -11,7 +11,6 @@ from django.db import transaction
 
 from annoying.functions import get_object_or_None
 
-from transmittals.models import Transmittal, TrsRevision
 from transmittals.validation import (
     TrsValidator, CSVLineValidator, RevisionsValidator)
 from transmittals.reports import ErrorReport
@@ -254,6 +253,7 @@ class TrsImport(object):
     @transaction.atomic
     def save(self):
         """Save transmittal data in db."""
+        from transmittals.models import Transmittal, TrsRevision
 
         if self.is_valid():
             status = Transmittal.STATUSES.tobechecked
