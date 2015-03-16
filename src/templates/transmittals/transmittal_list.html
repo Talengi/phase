@@ -17,6 +17,7 @@
         <thead>
             <tr>
                 <th>Transmittal</th>
+                <th>Contract nb.</th>
                 <th>Originator</th>
                 <th>Recipient</th>
                 <th>Sequential number</th>
@@ -31,6 +32,7 @@
                             {{ transmittal }}
                         </a>
                     </td>
+                    <td>{{ transmittal.contract_number }}</td>
                     <td>{{ transmittal.originator }}</td>
                     <td>{{ transmittal.recipient }}</td>
                     <td>{{ transmittal.sequential_number|stringformat:"05d" }}</td>
