@@ -11,6 +11,7 @@ from django.http import Http404
 from braces.views import LoginRequiredMixin
 
 from transmittals.models import Transmittal, TrsRevision
+from transmittals.utils import FieldWrapper
 
 
 logger = logging.getLogger(__name__)
@@ -100,11 +101,15 @@ class TransmittalRevisionDiffView(LoginRequiredMixin, DetailView):
 
         # existing revision
         if trs_revision.revision <= latest_revision:
-            revision = metadata.get_revision(trs_revision.revision)
+            revision = FieldWrapper((
+                metadata,
+                metadata.get_revision(trs_revision.revision)))
 
         # next revision creation
         elif trs_revision.revision == latest_revision + 1:
-            revision = metadata.latest_revision
+            revision = FieldWrapper((
+                metadata,
+                metadata.latest_revision))
 
         # previous revision will also be created
         else:
