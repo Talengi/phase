@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.contrib.contenttypes.models import ContentType
+from django.utils.html import escape
 
 from documents.factories import DocumentFactory
 from default_documents.models import ContractorDeliverable
@@ -40,7 +41,7 @@ class TransmittalListTests(TestCase):
         self.assertContains(res, 'tr class="document_row"', 3)
 
 
-class TransmittalDiffViewTests(TestCase):
+class BaseTransmittalDiffViewTests(TestCase):
 
     def setUp(self):
         Model = ContentType.objects.get_for_model(ContractorDeliverable)
@@ -60,6 +61,7 @@ class TransmittalDiffViewTests(TestCase):
             metadata_factory_class=ContractorDeliverableFactory,
             revision_factory_class=ContractorDeliverableRevisionFactory,
             category=self.category)
+        metadata = doc.metadata
 
         arguments = {
             'transmittal': self.transmittal,
@@ -78,12 +80,20 @@ class TransmittalDiffViewTests(TestCase):
             arguments.update({'revision': rev.revision})
             TrsRevisionFactory(**arguments)
 
+        metadata.latest_revision = rev
+        metadata.save()
+
         arguments.update({'is_new_revision': True})
 
         # New revisions
         for i in range(nb_new):
             arguments.update({'revision': rev.revision + i + 1})
             TrsRevisionFactory(**arguments)
+
+        return doc
+
+
+class TransmittalDiffViewTests(BaseTransmittalDiffViewTests):
 
     def test_transmittal_detail_view(self):
         self.create_lines(2, 3)
@@ -106,3 +116,44 @@ class TransmittalDiffViewTests(TestCase):
         # "+ 1" because there are icons elsewhere in the page
         self.assertContains(res, 'glyphicon-ok', 4 + 1)
         self.assertContains(res, 'glyphicon-remove', 6 + 1)
+
+
+class TrsRevisionDiffViewTests(BaseTransmittalDiffViewTests):
+
+    def setUp(self):
+        super(TrsRevisionDiffViewTests, self).setUp()
+        self.doc = self.create_lines(1, 2)
+        self.trs_revisions = self.transmittal.trsrevision_set.all()
+
+    def test_diff_with_existing_revision(self):
+        trs_revision = self.trs_revisions[0]
+        trs_revision.title = 'New title yeah!'
+        trs_revision.save()
+        revision = self.doc.metadata.get_revision(trs_revision.revision)
+
+        res = self.client.get(trs_revision.get_absolute_url())
+        self.assertContains(res, escape(revision.title()))
+        self.assertContains(res, trs_revision.title)
+
+    def test_diff_with_single_new_revision(self):
+        trs_revision = self.trs_revisions[1]
+        trs_revision.title = 'New title yeah!'
+        trs_revision.save()
+        revision = self.doc.metadata.latest_revision
+
+        res = self.client.get(trs_revision.get_absolute_url())
+        self.assertContains(res, escape(revision.title()))
+        self.assertContains(res, trs_revision.title)
+
+    def test_diff_with_new_revisions(self):
+        new_revision = self.trs_revisions[1]
+        new_revision.title = 'Old title yeah!'
+        new_revision.save()
+
+        newest_revision = self.trs_revisions[2]
+        newest_revision.title = 'New title yeah!'
+        newest_revision.save()
+
+        res = self.client.get(newest_revision.get_absolute_url())
+        self.assertContains(res, new_revision.title)
+        self.assertContains(res, newest_revision.title)

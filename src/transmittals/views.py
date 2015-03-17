@@ -2,6 +2,8 @@
 
 from __future__ import unicode_literals
 
+import logging
+
 from django.views.generic import TemplateView, ListView, DetailView
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
@@ -9,6 +11,9 @@ from django.http import Http404
 from braces.views import LoginRequiredMixin
 
 from transmittals.models import Transmittal, TrsRevision
+
+
+logger = logging.getLogger(__name__)
 
 
 class TransmittalListView(LoginRequiredMixin, ListView):
@@ -65,7 +70,9 @@ class TransmittalRevisionDiffView(LoginRequiredMixin, DetailView):
             .filter(transmittal__transmittal_key=self.kwargs['transmittal_key']) \
             .filter(document_key=self.kwargs['document_key']) \
             .filter(revision=self.kwargs['revision']) \
-            .select_related('transmittal', 'document')
+            .select_related('transmittal', 'document', 'document__category',
+                            'document__category__organisation',
+                            'document__category__category_template')
         try:
             obj = qs.get()
         except(qs.model.DoesNotExist):
@@ -73,6 +80,56 @@ class TransmittalRevisionDiffView(LoginRequiredMixin, DetailView):
                           {'verbose_name': qs.model._meta.verbose_name})
 
         return obj
+
+    def get_revision(self):
+        """Get the revision to compare the imported data to.
+
+        Three different cases:
+
+         - if we are modifying an existing revision, get this revision
+         - if we are creating a new revision and the previous revisions exists,
+           get this previous revision.
+         - if we are creating a new revision and the previous revision will
+           also be created, get the corresponding trs line.
+
+        """
+        trs_revision = self.object
+        document = trs_revision.document
+        metadata = document.metadata
+        latest_revision = document.current_revision
+
+        # existing revision
+        if trs_revision.revision <= latest_revision:
+            revision = metadata.get_revision(trs_revision.revision)
+
+        # next revision creation
+        elif trs_revision.revision == latest_revision + 1:
+            revision = metadata.latest_revision
+
+        # previous revision will also be created
+        else:
+            try:
+                revision = TrsRevision.objects \
+                    .filter(transmittal=trs_revision.transmittal) \
+                    .filter(document_key=trs_revision.document_key) \
+                    .filter(revision=trs_revision.revision - 1) \
+                    .get()
+            except TrsRevision.DoesNotExist():
+                logger.error('No revision to compare to {} / {} /  {}'.format(
+                    trs_revision.transmittal.transmittal_key,
+                    trs_revision.document_key,
+                    trs_revision.revision))
+                revision = {}
+
+        return revision
+
+    def get_context_data(self, **kwargs):
+        context = super(TransmittalRevisionDiffView, self).get_context_data(**kwargs)
+        context.update({
+            'revision': self.get_revision(),
+        })
+        import pdb; pdb.set_trace()
+        return context
 
 
 class DemoDiffView(TemplateView):
