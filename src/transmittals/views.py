@@ -49,6 +49,7 @@ class TransmittalDiffView(LoginRequiredMixin, DetailView):
 
 class TransmittalRevisionDiffView(LoginRequiredMixin, DetailView):
     template_name = 'transmittals/revision_diff_view.html'
+    context_object_name = 'trs_revision'
 
     def breadcrumb_section(self):
         return (_('Transmittals'), reverse('transmittal_list'))

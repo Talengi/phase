@@ -5,7 +5,7 @@
 
 {% block content %}
 
-<h1>FAC10005-CTR-000-EXP-LAY-4891 (05)</h1>
+<h1>{{ trs_revision }}</h1>
 
 <div id="main-table" class="row">
     <div class="col-md-8">
@@ -21,38 +21,63 @@
             <tbody>
             <tr>
                 <th>Document number</th>
-                <td>FAC10005-CTR-000-EXP-LAY-4891</td>
-                <td>FAC10005-CTR-000-EXP-LAY-4891</td>
+                <td></td>
+                <td>{{ trs_revision.document_key }}</td>
             </tr>
             <tr class="warning">
                 <th>Title</th>
-                <td>Cause And Effect Chart</td>
-                <td>Cause &amp; Effect Chart</td>
+                <td></td>
+                <td>{{ trs_revision.title }}</td>
             </tr>
             <tr>
                 <th>Contract number</th>
-                <td>FAC10005</td>
-                <td>FAC10005</td>
+                <td></td>
+                <td>{{ trs_revision.contract_number }}</td>
+            </tr>
+            <tr>
+                <th>Originator</th>
+                <td></td>
+                <td>{{ trs_revision.originator }}</td>
+            </tr>
+            <tr>
+                <th>Unit</th>
+                <td></td>
+                <td>{{ trs_revision.unit }}</td>
+            </tr>
+            <tr>
+                <th>Discipline</th>
+                <td></td>
+                <td>{{ trs_revision.discipline }}</td>
+            </tr>
+            <tr>
+                <th>Sequential number</th>
+                <td></td>
+                <td>{{ trs_revision.sequential_number }}</td>
+            </tr>
+            <tr>
+                <th>Class</th>
+                <td></td>
+                <td>{{ trs_revision.docclass }}</td>
             </tr>
             <tr class="warning">
                 <th>Revision</th>
-                <td>04</td>
-                <td>05</td>
+                <td></td>
+                <td>{{ trs_revision.revision|stringformat:"02d" }}</td>
             </tr>
             <tr class="warning">
                 <th>Status</th>
-                <td>IFA</td>
-                <td>STD</td>
+                <td></td>
+                <td>{{ trs_revision.revision_status }}</td>
             </tr>
             <tr class="warning">
                 <th>Pdf file</th>
-                <td><a href="#">FAC10005-CTR-000-EXP-LAY-4891.pdf</a></td>
-                <td><a href="#">FAC10005-CTR-000-EXP-LAY-4891.pdf</a></td>
+                <td></td>
+                <td></td>
             </tr>
             <tr class="warning">
                 <th>Native file</th>
                 <td></td>
-                <td><a href="#">FAC10005-CTR-000-EXP-LAY-4891.zip</a></td>
+                <td></td>
             </tr>
             </tbody>
         </table>
