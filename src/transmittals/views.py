@@ -54,8 +54,7 @@ class TransmittalRevisionDiffView(LoginRequiredMixin, DetailView):
         return (_('Transmittals'), reverse('transmittal_list'))
 
     def breadcrumb_subsection(self):
-        trs = self.object.transmittal
-        return trs.get_absolute_url()
+        return self.object.transmittal
 
     def breadcrumb_object(self):
         return self.object

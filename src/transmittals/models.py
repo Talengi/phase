@@ -146,3 +146,10 @@ class TrsRevision(models.Model):
         verbose_name = _('Trs Revision')
         verbose_name_plural = _('Trs Revisions')
         unique_together = ('transmittal', 'document_key', 'revision')
+
+    def __unicode__(self):
+        return '{} — {:02d}'.format(self.document_key, self.revision)
+
+    def get_absolute_url(self):
+        return reverse('transmittal_revision_diff', args=[
+            self.transmittal.transmittal_key, self.document_key, self.revision])
