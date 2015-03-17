@@ -286,7 +286,8 @@ class TrsImport(object):
                 document_type=data['document_type'],
                 sequential_number=data['sequential_number'],
                 docclass=data['docclass'],
-                revision_status=data['status'],
+                status=data['status'],
+                contract_number=data['contract_number'],
                 is_new_revision=is_new_revision)
 
 
