@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load compressed %}
+{% load compressed transmittals %}
 
 {% block custombodyclass %}fullwidth{% endblock %}
 
@@ -19,62 +19,62 @@
             </thead>
 
             <tbody>
-            <tr>
+            <tr class="{% diffclass 'document_key' %}">
                 <th>Document number</th>
                 <td>{{ revision.document_key }}</td>
                 <td>{{ trs_revision.document_key }}</td>
             </tr>
-            <tr class="warning">
+            <tr class="{% diffclass 'title' %}">
                 <th>Title</th>
                 <td>{{ revision.title }}</td>
                 <td>{{ trs_revision.title }}</td>
             </tr>
-            <tr>
+            <tr class="{% diffclass 'contract_number' %}">
                 <th>Contract number</th>
                 <td>{{ revision.contract_number }}</td>
                 <td>{{ trs_revision.contract_number }}</td>
             </tr>
-            <tr>
+            <tr class="{% diffclass 'originator' %}">
                 <th>Originator</th>
                 <td>{{ revision.originator }}</td>
                 <td>{{ trs_revision.originator }}</td>
             </tr>
-            <tr>
+            <tr class="{% diffclass 'unit' %}">
                 <th>Unit</th>
                 <td>{{ revision.unit }}</td>
                 <td>{{ trs_revision.unit }}</td>
             </tr>
-            <tr>
+            <tr class="{% diffclass 'discipline' %}">
                 <th>Discipline</th>
                 <td>{{ revision.discipline }}</td>
                 <td>{{ trs_revision.discipline }}</td>
             </tr>
-            <tr>
+            <tr class="{% diffclass 'sequential_number' %}">
                 <th>Sequential number</th>
                 <td>{{ revision.sequential_number }}</td>
                 <td>{{ trs_revision.sequential_number }}</td>
             </tr>
-            <tr class="warning">
+            <tr class="{% diffclass 'revision' %}">
                 <th>Revision</th>
                 <td>{{ revision.revision|stringformat:"02d" }}</td>
                 <td>{{ trs_revision.revision|stringformat:"02d" }}</td>
             </tr>
-            <tr>
+            <tr class="{% diffclass 'docclass' %}">
                 <th>Class</th>
                 <td>{{ revision.docclass }}</td>
                 <td>{{ trs_revision.docclass }}</td>
             </tr>
-            <tr class="warning">
+            <tr class="{% diffclass 'status' %}">
                 <th>Status</th>
                 <td>{{ revision.status }}</td>
                 <td>{{ trs_revision.status }}</td>
             </tr>
-            <tr class="warning">
+            <tr>
                 <th>Pdf file</th>
                 <td>{{ revision.pdf_file }}</td>
                 <td></td>
             </tr>
-            <tr class="warning">
+            <tr>
                 <th>Native file</th>
                 <td>{{ revision.native_file }}</td>
                 <td></td>
