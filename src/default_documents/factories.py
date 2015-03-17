@@ -132,6 +132,7 @@ class MetadataFactory(factory.DjangoModelFactory):
 class MetadataRevisionFactory(factory.DjangoModelFactory):
     FACTORY_FOR = DemoMetadataRevision
     docclass = 1
+    revision = factory.sequence(lambda n: n + 1)
 
     @factory.post_generation
     def reviewers(self, create, extracted, **kwargs):

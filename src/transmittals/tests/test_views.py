@@ -82,7 +82,7 @@ class TransmittalDiffViewTests(TestCase):
 
         # New revisions
         for i in range(nb_new):
-            arguments.update({'revision': rev.revision})
+            arguments.update({'revision': rev.revision + i + 1})
             TrsRevisionFactory(**arguments)
 
     def test_transmittal_detail_view(self):
