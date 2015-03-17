@@ -99,4 +99,4 @@ class TestImports(TestCase):
         self.assertEqual(revision.sequential_number, '4891')
         self.assertEqual(revision.docclass, 2)
         self.assertEqual(revision.revision, 1)
-        self.assertEqual(revision.revision_status, 'IFA')
+        self.assertEqual(revision.status, 'IFA')

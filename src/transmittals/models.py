@@ -135,7 +135,7 @@ class TrsRevision(models.Model):
         verbose_name=_('Class'),
         default=1,
         choices=CLASSES)
-    revision_status = ConfigurableChoiceField(
+    status = ConfigurableChoiceField(
         verbose_name=_('Status'),
         default='STD',
         max_length=3,
