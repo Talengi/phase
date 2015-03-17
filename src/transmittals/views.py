@@ -128,7 +128,6 @@ class TransmittalRevisionDiffView(LoginRequiredMixin, DetailView):
         context.update({
             'revision': self.get_revision(),
         })
-        import pdb; pdb.set_trace()
         return context
 
 

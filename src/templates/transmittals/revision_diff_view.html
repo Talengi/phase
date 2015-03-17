@@ -54,15 +54,15 @@
                 <td>{{ revision.sequential_number }}</td>
                 <td>{{ trs_revision.sequential_number }}</td>
             </tr>
-            <tr>
-                <th>Class</th>
-                <td>{{ revision.docclass }}</td>
-                <td>{{ trs_revision.docclass }}</td>
-            </tr>
             <tr class="warning">
                 <th>Revision</th>
                 <td>{{ revision.revision|stringformat:"02d" }}</td>
                 <td>{{ trs_revision.revision|stringformat:"02d" }}</td>
+            </tr>
+            <tr>
+                <th>Class</th>
+                <td>{{ revision.docclass }}</td>
+                <td>{{ trs_revision.docclass }}</td>
             </tr>
             <tr class="warning">
                 <th>Status</th>
