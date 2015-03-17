@@ -54,8 +54,7 @@ class TrsImport(object):
             self.move_to_rejected()
         else:
             self.move_to_tobechecked()
-
-        self.save()
+            self.save()
 
     def move_to_rejected(self):
         """Move the imported transmittals directory to rejected."""
