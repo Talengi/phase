@@ -72,7 +72,7 @@ class TestImports(TestCase):
         trs_import.save()
 
         self.assertEqual(Transmittal.objects.all().count(), 1)
-        self.assertEqual(TrsRevision.objects.all().count(), 1)
+        self.assertEqual(TrsRevision.objects.all().count(), 4)
 
     def test_saved_transmittal_data(self):
         trs_import = self.prepare_fixtures('single_correct_trs', 'FAC10005-CTR-CLT-TRS-00001')
@@ -90,13 +90,13 @@ class TestImports(TestCase):
         self.assertTrue(trs_import.is_valid())
         trs_import.save()
 
-        revision = TrsRevision.objects.all()[0]
+        revision = TrsRevision.objects.order_by('revision').all()[0]
         self.assertEqual(revision.document_key, 'FAC10005-CTR-000-EXP-LAY-4891')
         self.assertEqual(revision.originator, 'CTR')
         self.assertEqual(revision.unit, '000')
         self.assertEqual(revision.discipline, 'EXP')
         self.assertEqual(revision.document_type, 'LAY')
         self.assertEqual(revision.sequential_number, '4891')
-        self.assertEqual(revision.docclass, 2)
+        self.assertEqual(revision.docclass, 1)
         self.assertEqual(revision.revision, 1)
-        self.assertEqual(revision.status, 'IFA')
+        self.assertEqual(revision.status, 'SPD')
