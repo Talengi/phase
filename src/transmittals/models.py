@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 import os
+import logging
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -15,6 +16,9 @@ from documents.models import Document
 from reviews.models import CLASSES
 from metadata.fields import ConfigurableChoiceField
 from default_documents.validators import StringNumberValidator
+
+
+logger = logging.getLogger(__name__)
 
 
 class Transmittal(models.Model):
@@ -114,7 +118,14 @@ class Transmittal(models.Model):
         if self.status != 'tobechecked':
             raise RuntimeError('This transmittal cannot be rejected anymore')
 
+        try:
+            os.rename(self.full_tobechecked_name, self.full_rejected_name)
+        except OSError as e:
+            logger.error('Cannot reject transmittal %s' % self)
+            raise e
+
         self.status = 'rejected'
+        self.save()
 
 
 class TrsRevision(models.Model):

@@ -2,6 +2,11 @@
 
 from __future__ import unicode_literals
 
+import os
+from os.path import join
+import tempfile
+from shutil import rmtree
+
 from django.test import TestCase
 
 from transmittals.factories import TransmittalFactory
@@ -10,7 +15,28 @@ from transmittals.factories import TransmittalFactory
 class TransmittalModelTests(TestCase):
 
     def setUp(self):
-        pass
+        self.tmpdir = tempfile.mkdtemp(prefix='phasetest_', suffix='_trs')
+        self.incoming = join(self.tmpdir, 'incoming')
+        self.tobechecked = join(self.tmpdir, 'tobechecked')
+        self.accepted = join(self.tmpdir, 'accepted')
+        self.rejected = join(self.tmpdir, 'rejected')
+
+        os.mkdir(self.accepted)
+        os.mkdir(self.rejected)
+        os.mkdir(self.tobechecked)
+
+        self.transmittal = TransmittalFactory(
+            transmittal_key='FAC10005-CTR-CLT-TRS-00001',
+            status='tobechecked',
+            tobechecked_dir=self.tobechecked,
+            accepted_dir=self.accepted,
+            rejected_dir=self.rejected,
+            contractor='test')
+        os.mkdir(self.transmittal.full_tobechecked_name)
+
+    def tearDown(self):
+        if os.path.exists(self.tmpdir):
+            rmtree(self.tmpdir)
 
     def test_reject_trs_with_wrong_state(self):
         trs = TransmittalFactory(status='accepted')
@@ -21,20 +47,10 @@ class TransmittalModelTests(TestCase):
         with self.assertRaises(RuntimeError):
             trs.reject()
 
-    def test_directory_properties(self):
-        trs = TransmittalFactory(
-            transmittal_key='FAC10005-CTR-CLT-TRS-00001',
-            status='tobechecked')
-
-        self.assertEqual(
-            trs.full_tobechecked_name,
-            '/tmp/test_ctr_clt/tobechecked/FAC10005-CTR-CLT-TRS-00001')
-        self.assertEqual(
-            trs.full_accepted_name,
-            '/tmp/test_ctr_clt/accepted/FAC10005-CTR-CLT-TRS-00001')
-        self.assertEqual(
-            trs.full_rejected_name,
-            '/tmp/test_ctr_clt/rejected/FAC10005-CTR-CLT-TRS-00001')
-
     def test_reject_moves_trs_to_rejected_directory(self):
-        trs = TransmittalFactory(status='accepted')
+        self.assertTrue(os.path.exists(self.transmittal.full_tobechecked_name))
+        self.assertFalse(os.path.exists(self.transmittal.full_rejected_name))
+
+        self.transmittal.reject()
+        self.assertFalse(os.path.exists(self.transmittal.full_tobechecked_name))
+        self.assertTrue(os.path.exists(self.transmittal.full_rejected_name))
