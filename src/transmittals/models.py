@@ -80,6 +80,17 @@ class Transmittal(models.Model):
     def get_absolute_url(self):
         return reverse('transmittal_diff', args=[self.transmittal_key])
 
+    def refuse(self):
+        """Mark the transmittal as refused.
+
+        Upon refusing the transmittal, we must move the corresponding
+        transmittal files in the correct "refused" directory.
+
+        """
+        # Only transmittals with a pending validation can be refused
+        if self.status != 'tobechecked':
+            raise RuntimeError('This transmittal cannot be refused anymore')
+
 
 class TrsRevision(models.Model):
     """Stores data imported from a single line in the csv."""
