@@ -86,7 +86,8 @@
         <form method="post" action="" class="form-actions">
             {% csrf_token %}
             <div class="form-group">
-                <textarea name="comment" class="form-control" rows="5" placeholder="Leave an optional comment here"></textarea>
+                <textarea name="comment" class="form-control" rows="5" placeholder="Leave an optional comment here"
+                    >{{ trs_revision.comment }}</textarea>
             </div>
 
             <div class="row">
