@@ -53,6 +53,11 @@ class Transmittal(models.Model):
         _('Created on'),
         default=timezone.now)
 
+    contractor = models.CharField(max_length=255)
+    tobechecked_dir = models.CharField(max_length=255)
+    accepted_dir = models.CharField(max_length=255)
+    rejected_dir = models.CharField(max_length=255)
+
     class Meta:
         verbose_name = _('Transmittal')
         verbose_name_plural = _('Transmittals')
@@ -83,13 +88,19 @@ class Transmittal(models.Model):
     def reject(self):
         """Mark the transmittal as rejected.
 
-        Upon rejecting the transmittal, we must move the corresponding
-        transmittal files in the correct "refused" directory.
+        Upon rejecting the transmittal, we must perform the following
+        operations:
+
+          - update the transmittal status in db
+          - move the corresponding files in the correct "refused" directory
+          - send the notifications to the email list.
 
         """
         # Only transmittals with a pending validation can be refused
         if self.status != 'tobechecked':
             raise RuntimeError('This transmittal cannot be rejected anymore')
+
+        self.status = 'rejected'
 
 
 class TrsRevision(models.Model):

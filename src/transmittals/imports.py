@@ -259,6 +259,10 @@ class TrsImport(object):
         status = Transmittal.STATUSES.tobechecked
 
         transmittal = Transmittal.objects.create(
+            contractor=self.contractor,
+            tobechecked_dir=self.tobechecked_dir,
+            accepted_dir=self.accepted_dir,
+            rejected_dir=self.rejected_dir,
             contract_number=self.contract_number,
             originator=self.originator,
             recipient=self.recipient,

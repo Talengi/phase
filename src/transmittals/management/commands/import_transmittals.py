@@ -48,7 +48,7 @@ class Command(BaseCommand):
         dir_content = os.listdir(incoming_dir)
         for incoming in dir_content:
             fullname = os.path.join(incoming_dir, incoming)
-            self.import_dir(fullname, ctr_config)
+            self.import_dir(fullname, ctr_config, contractor_id)
 
     def assert_permissions(self, path):
         """Raise an error if the given path is not writeable."""
@@ -61,7 +61,7 @@ class Command(BaseCommand):
             error = 'The directory "%s" is not writeable.' % path
             raise CommandError(error)
 
-    def import_dir(self, directory, config):
+    def import_dir(self, directory, config, contractor):
         """Start the import task for a single directory."""
         logger.info('Starting import of trs in %s' % directory)
 
@@ -71,5 +71,6 @@ class Command(BaseCommand):
             accepted_dir=config['ACCEPTED_DIR'],
             rejected_dir=config['REJECTED_DIR'],
             email_list=config['EMAIL_LIST'],
+            contractor=contractor,
         )
         trsImport.do_import()
