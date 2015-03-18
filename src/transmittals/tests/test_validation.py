@@ -11,6 +11,7 @@ from django.test import TestCase
 from django.core.cache import cache
 
 from transmittals.imports import TrsImport
+from transmittals.factories import TransmittalFactory
 
 
 TEST_CTR = 'test'
@@ -75,6 +76,13 @@ class DirectoryContentTests(TransmittalsValidationTests):
     def test_invalid_directory_name(self):
         trs_import = self.prepare_fixtures('invalid_trs_dirname', 'I-Love-Bananas')
         self.assertTrue('invalid_dirname' in trs_import.errors['global_errors'])
+
+    def test_already_exists(self):
+        TransmittalFactory(
+            transmittal_key='FAC10005-CTR-CLT-TRS-00001',
+            status='tobechecked')
+        trs_import = self.prepare_fixtures('single_correct_trs', 'FAC10005-CTR-CLT-TRS-00001')
+        self.assertTrue('already_exists' in trs_import.errors['global_errors'])
 
     def test_missing_csv(self):
         trs_import = self.prepare_fixtures('missing_csv', 'FAC10005-CTR-CLT-TRS-00001')

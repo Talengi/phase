@@ -6,6 +6,7 @@ import os
 import re
 
 from documents.models import Document
+from transmittals.models import Transmittal
 
 
 class Validator(object):
@@ -65,6 +66,19 @@ class DirnameValidator(Validator):
 
     def test(self, trs_import):
         return re.match(self.pattern, trs_import.basename)
+
+
+class TrsExistenceValidator(Validator):
+    """Checks that the corresponding trs does not already exist."""
+    error = 'The current transmittal already exist'
+    error_key = 'already_exists'
+
+    def test(self, trs_import):
+        name = trs_import.basename
+        qs = Transmittal.objects \
+            .filter(transmittal_key=name) \
+            .filter(status__in=['new', 'tobechecked', 'accepted'])
+        return qs.count() == 0
 
 
 class CSVPresenceValidator(Validator):
@@ -223,6 +237,7 @@ class TrsValidator(CompositeValidator):
     error_key = 'global_errors'
     VALIDATORS = (
         DirnameValidator(),
+        TrsExistenceValidator(),
         CSVPresenceValidator(),
         CSVColumnsValidator(),
         PdfCountValidator(),
