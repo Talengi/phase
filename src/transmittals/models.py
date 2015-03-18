@@ -2,6 +2,8 @@
 
 from __future__ import unicode_literals
 
+import os
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
@@ -68,6 +70,18 @@ class Transmittal(models.Model):
 
     def __unicode__(self):
         return self.transmittal_key
+
+    @property
+    def full_tobechecked_name(self):
+        return os.path.join(self.tobechecked_dir, self.transmittal_key)
+
+    @property
+    def full_accepted_name(self):
+        return os.path.join(self.accepted_dir, self.transmittal_key)
+
+    @property
+    def full_rejected_name(self):
+        return os.path.join(self.rejected_dir, self.transmittal_key)
 
     def save(self, *args, **kwargs):
         if not self.transmittal_key:

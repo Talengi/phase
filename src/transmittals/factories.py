@@ -10,6 +10,10 @@ from transmittals.models import Transmittal, TrsRevision
 class TransmittalFactory(factory.DjangoModelFactory):
     FACTORY_FOR = Transmittal
 
+    contractor = 'test'
+    tobechecked_dir = '/tmp/test_ctr_clt/tobechecked/'
+    accepted_dir = '/tmp/test_ctr_clt/accepted/'
+    rejected_dir = '/tmp/test_ctr_clt/rejected/'
     contract_number = 'FAC10005'
     originator = 'CTR'
     recipient = 'CLT'
