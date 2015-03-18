@@ -198,9 +198,8 @@ button.ui-multiselect {
 }
 
 /* columns width */
-#columnselect {
-    width: 15px;
-}
+.smallcolumn,
+#columnselect,
 #columnfavorite {
     width: 15px;
 }

@@ -13,8 +13,13 @@
     <thead>
         <tr>
             <th id="columnselect"></th>
-            <th id="columnfavorite"></th>
-            <th id="columnfavorite"></th>
+            <th class="smallcolumn"></th>
+            <th class="smallcolumn">
+                <span class="glyphicon glyphicon-ok"></span>
+            </th>
+            <th class="smallcolumn">
+                <span class="glyphicon glyphicon-comment"></span>
+            </th>
             <th id="columndocument_key">Document number</th>
             <th id="columntitle">Title</th>
             <th id="columnrevision">Rev.</th>
@@ -37,6 +42,11 @@
             <td><span class="glyphicon
                 glyphicon-{{ revision.accepted|yesno:"ok,remove,empty" }}
             "></span></td>
+            <td>{% if revision.comment %}
+                <span class="glyphicon glyphicon-comment"
+                      data-toggle="tooltip"
+                      title="{{ revision.comment|truncatechars:50 }}"></span>
+            {% endif %}</td>
             <td><a href="{% url 'transmittal_revision_diff' transmittal.transmittal_key revision.document_key revision.revision  %}">
                 {{ revision.document_key }}
             </a></td>
@@ -56,3 +66,10 @@
 
 {% endblock %}
 
+{% block extra_js %}
+<script>
+$(function() {
+    $('[data-toggle="tooltip"]').tooltip();
+});
+</script>
+{% endblock %}
