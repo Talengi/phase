@@ -268,7 +268,12 @@ class TrsImport(object):
             metadata = line.get_metadata()
             document = metadata.document if metadata else None
 
-            is_new_revision = True  # TODO
+            # Is this a revision creation or are we editing an existing one?
+            if metadata is None:
+                is_new_revision = True
+            else:
+                latest_revision = metadata.latest_revision.revision
+                is_new_revision = bool(int(data['revision']) > latest_revision)
 
             TrsRevision.objects.create(
                 transmittal=transmittal,
