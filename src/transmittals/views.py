@@ -7,7 +7,7 @@ import logging
 from django.views.generic import TemplateView, ListView, DetailView
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 from braces.views import LoginRequiredMixin
 
 from transmittals.models import Transmittal, TrsRevision
@@ -134,6 +134,16 @@ class TransmittalRevisionDiffView(LoginRequiredMixin, DetailView):
             'revision': self.get_revision(),
         })
         return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.comment = request.POST.get('comment')
+        accept = request.POST.get('accept', False)
+        self.object.accepted = bool(accept)
+        self.object.save()
+        return HttpResponseRedirect(reverse(
+            'transmittal_diff',
+            args=[self.object.transmittal.transmittal_key]))
 
 
 class DemoDiffView(TemplateView):

@@ -96,6 +96,9 @@ class TrsRevision(models.Model):
         default=1)
     accepted = models.NullBooleanField(
         verbose_name=_('Accepted?'))
+    comment = models.TextField(
+        verbose_name=_('Comment'),
+        null=True, blank=True)
     is_new_revision = models.BooleanField(
         _('Is new revision?'))
 

@@ -14,6 +14,7 @@ from default_documents.factories import (
 from categories.factories import CategoryFactory
 from accounts.factories import UserFactory
 from transmittals.factories import TransmittalFactory, TrsRevisionFactory
+from transmittals.models import TrsRevision
 
 
 class TransmittalListTests(TestCase):
@@ -157,3 +158,30 @@ class TrsRevisionDiffViewTests(BaseTransmittalDiffViewTests):
         res = self.client.get(newest_revision.get_absolute_url())
         self.assertContains(res, new_revision.title)
         self.assertContains(res, newest_revision.title)
+
+    def test_accept_changes(self):
+        trs_revision = self.trs_revisions[0]
+        self.assertIsNone(trs_revision.accepted)
+
+        self.client.post(trs_revision.get_absolute_url(), {'accept': 'accept'})
+        trs_revision = TrsRevision.objects.get(pk=trs_revision.pk)
+        self.assertTrue(trs_revision.accepted)
+
+    def test_refuse_changes(self):
+        trs_revision = self.trs_revisions[0]
+        self.assertIsNone(trs_revision.accepted)
+
+        self.client.post(trs_revision.get_absolute_url(), {'refuse': 'refuse'})
+        trs_revision = TrsRevision.objects.get(pk=trs_revision.pk)
+        self.assertFalse(trs_revision.accepted)
+
+    def test_leave_comment(self):
+        trs_revision = self.trs_revisions[0]
+        self.assertIsNone(trs_revision.comment)
+
+        self.client.post(trs_revision.get_absolute_url(), {
+            'accept': 'accept',
+            'comment': 'Gloubiboulga'
+        })
+        trs_revision = TrsRevision.objects.get(pk=trs_revision.pk)
+        self.assertEqual(trs_revision.comment, 'Gloubiboulga')

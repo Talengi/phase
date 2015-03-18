@@ -83,21 +83,22 @@
         </table>
     </div>
     <div class="col-md-4">
-        <form class="form-actions">
+        <form method="post" action="" class="form-actions">
+            {% csrf_token %}
             <div class="form-group">
-                <textarea class="form-control" rows="5" placeholder="Leave an optional comment here"></textarea>
+                <textarea name="comment" class="form-control" rows="5" placeholder="Leave an optional comment here"></textarea>
             </div>
 
             <div class="row">
                 <div class="col-md-6">
-                    <button class="btn btn-lg btn-success btn-block">
+                    <button name="accept" value="accept" class="btn btn-lg btn-success btn-block">
                         <span class="glyphicon glyphicon-ok"></span>
                         Accept changes
                     </button>
                 </div>
 
                 <div class="col-md-6">
-                    <button class="btn btn-lg btn-danger btn-block">
+                    <button name="refuse" value="refuse" class="btn btn-lg btn-danger btn-block">
                         <span class="glyphicon glyphicon-remove"></span>
                         Refuse changes
                     </button>
