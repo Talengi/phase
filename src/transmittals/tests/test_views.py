@@ -114,8 +114,8 @@ class TransmittalDiffViewTests(BaseTransmittalDiffViewTests):
 
         res = self.client.get(self.url)
         self.assertContains(res, 'glyphicon-empty', 2)
-        # "+ 1" because there are icons elsewhere in the page
-        self.assertContains(res, 'glyphicon-ok', 4 + 1)
+        # "+ 2" because there are icons elsewhere in the page
+        self.assertContains(res, 'glyphicon-ok', 4 + 2)
         self.assertContains(res, 'glyphicon-remove', 6 + 1)
 
 
