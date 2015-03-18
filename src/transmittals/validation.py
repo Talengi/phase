@@ -6,7 +6,6 @@ import os
 import re
 
 from documents.models import Document
-from transmittals.models import Transmittal
 
 
 class Validator(object):
@@ -74,6 +73,7 @@ class TrsExistenceValidator(Validator):
     error_key = 'already_exists'
 
     def test(self, trs_import):
+        from transmittals.models import Transmittal
         name = trs_import.basename
         qs = Transmittal.objects \
             .filter(transmittal_key=name) \
@@ -88,6 +88,7 @@ class TrsSequentialNumberValidator(Validator):
 
     def test(self, trs_import):
         """Check that the previous trs exists."""
+        from transmittals.models import Transmittal
         name = trs_import.basename
         split = name.split('-')
 
