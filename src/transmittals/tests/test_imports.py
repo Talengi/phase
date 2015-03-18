@@ -100,3 +100,13 @@ class TestImports(TestCase):
         self.assertEqual(revision.docclass, 1)
         self.assertEqual(revision.revision, 1)
         self.assertEqual(revision.status, 'SPD')
+
+    def test_new_or_updated_revisions(self):
+        trs_import = self.prepare_fixtures('single_correct_trs', 'FAC10005-CTR-CLT-TRS-00001')
+        trs_import.save()
+
+        updated_revisions = TrsRevision.objects.filter(is_new_revision=False)
+        self.assertEqual(updated_revisions.count(), 2)
+
+        new_revisions = TrsRevision.objects.filter(is_new_revision=True)
+        self.assertEqual(new_revisions.count(), 2)
