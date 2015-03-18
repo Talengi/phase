@@ -60,6 +60,7 @@ class TestImports(TestCase):
             accepted_dir=self.config['ACCEPTED_DIR'],
             rejected_dir=self.config['REJECTED_DIR'],
             email_list=self.config['EMAIL_LIST'],
+            contractor=fixtures_dir,
         )
         return trs_import
 

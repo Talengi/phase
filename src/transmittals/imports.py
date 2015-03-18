@@ -28,12 +28,14 @@ class TrsImport(object):
     Those verifications must be performed upwards, e.g in the management command.
 
     """
-    def __init__(self, trs_dir, tobechecked_dir, accepted_dir, rejected_dir, email_list):
+    def __init__(self, trs_dir, tobechecked_dir, accepted_dir, rejected_dir,
+                 email_list, contractor):
         self.trs_dir = trs_dir
         self.tobechecked_dir = tobechecked_dir
         self.accepted_dir = accepted_dir
         self.rejected_dir = rejected_dir
         self.email_list = email_list
+        self.contractor = contractor
 
         self._errors = None
         self._csv_cols = None

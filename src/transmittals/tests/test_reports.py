@@ -18,7 +18,8 @@ class ErrorReportTests(TestCase):
             tobechecked_dir='/tmp/dummy_dir',
             accepted_dir='/tmp/dummy_dir',
             rejected_dir='/tmp/dummy_dir',
-            email_list=['test1@phase.fr', 'test2@phase.fr']
+            email_list=['test1@phase.fr', 'test2@phase.fr'],
+            contractor='dummy_dir',
         )
         self.trs_import._errors = {
             'error1': 'This is error 1',
