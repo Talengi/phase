@@ -254,10 +254,7 @@ class TrsImport(object):
         """Save transmittal data in db."""
         from transmittals.models import Transmittal, TrsRevision
 
-        if self.is_valid():
-            status = Transmittal.STATUSES.tobechecked
-        else:
-            status = Transmittal.STATUSES.rejected
+        status = Transmittal.STATUSES.tobechecked
 
         transmittal = Transmittal.objects.create(
             contract_number=self.contract_number,
