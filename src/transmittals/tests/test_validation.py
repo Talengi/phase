@@ -84,6 +84,18 @@ class DirectoryContentTests(TransmittalsValidationTests):
         trs_import = self.prepare_fixtures('single_correct_trs', 'FAC10005-CTR-CLT-TRS-00001')
         self.assertTrue('already_exists' in trs_import.errors['global_errors'])
 
+    def test_successive_transmittals_numbers(self):
+        TransmittalFactory(
+            transmittal_key='FAC10005-CTR-CLT-TRS-00001',
+            status='accepted',
+            sequential_number=1)
+        TransmittalFactory(
+            transmittal_key='FAC10005-CTR-CLT-TRS-00002',
+            status='accepted',
+            sequential_number=2)
+        trs_import = self.prepare_fixtures('wrong_seq_number', 'FAC10005-CTR-CLT-TRS-00004')
+        self.assertTrue('wrong_sequential_number' in trs_import.errors['global_errors'])
+
     def test_missing_csv(self):
         trs_import = self.prepare_fixtures('missing_csv', 'FAC10005-CTR-CLT-TRS-00001')
         self.assertTrue('missing_csv' in trs_import.errors['global_errors'])

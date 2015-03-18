@@ -56,6 +56,10 @@ class Transmittal(models.Model):
     class Meta:
         verbose_name = _('Transmittal')
         verbose_name_plural = _('Transmittals')
+        index_together = (
+            ('contract_number', 'originator', 'recipient', 'sequential_number',
+             'status'),
+        )
 
     def __unicode__(self):
         return self.transmittal_key

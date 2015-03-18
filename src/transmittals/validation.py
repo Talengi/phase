@@ -81,6 +81,42 @@ class TrsExistenceValidator(Validator):
         return qs.count() == 0
 
 
+class TrsSequentialNumberValidator(Validator):
+    """Checks that the sequential number is correct."""
+    error = 'The sequential number is incorrect'
+    error_key = 'wrong_sequential_number'
+
+    def test(self, trs_import):
+        """Check that the previous trs exists."""
+        name = trs_import.basename
+        split = name.split('-')
+
+        # Directory name is incorrect, let's just ignore this test
+        if len(split) != 5:
+            return True
+
+        contract_number, originator, recipient, _, seq_number = split
+
+        # The sequential error is not an int, ignore this test
+        try:
+            seq_number = int(seq_number)
+        except ValueError:
+            return True
+
+        # If first transmittal of the sequence, there is
+        # no previous transmittal obviously
+        if seq_number == 1:
+            return True
+
+        qs = Transmittal.objects \
+            .filter(contract_number=contract_number) \
+            .filter(originator=originator) \
+            .filter(recipient=recipient) \
+            .filter(sequential_number=seq_number - 1) \
+            .filter(status='accepted')
+        return qs.count() == 1
+
+
 class CSVPresenceValidator(Validator):
     """Checks the existance of the transmittals csv file."""
     error = 'The csv file is missing, or it\'s name is incorrect'
@@ -238,6 +274,7 @@ class TrsValidator(CompositeValidator):
     VALIDATORS = (
         DirnameValidator(),
         TrsExistenceValidator(),
+        TrsSequentialNumberValidator(),
         CSVPresenceValidator(),
         CSVColumnsValidator(),
         PdfCountValidator(),

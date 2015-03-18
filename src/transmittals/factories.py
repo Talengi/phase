@@ -13,7 +13,7 @@ class TransmittalFactory(factory.DjangoModelFactory):
     contract_number = 'FAC10005'
     originator = 'CTR'
     recipient = 'CLT'
-    sequential_number = factory.Sequence(lambda n: n)
+    sequential_number = factory.Sequence(lambda n: n + 1)
 
 
 class TrsRevisionFactory(factory.DjangoModelFactory):
