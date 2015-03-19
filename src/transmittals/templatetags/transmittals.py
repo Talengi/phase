@@ -17,3 +17,16 @@ def diffclass(context, variable):
         return 'warning'
     else:
         return ''
+
+
+@register.simple_tag
+def isnew_label(trs_revision):
+    if trs_revision.is_new_revision:
+        label_class = 'warning'
+        label_text = 'New'
+    else:
+        label_class = 'primary'
+        label_text = 'Updated'
+
+    return '<span class="label label-{}">{}</span>'.format(
+        label_class, label_text)

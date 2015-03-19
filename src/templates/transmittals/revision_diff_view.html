@@ -7,8 +7,18 @@
 
 <h1>{{ trs_revision }}</h1>
 
+
 <div id="main-table" class="row">
     <div class="col-md-8">
+
+        <p class="alert alert-info">
+        {% if trs_revision.is_new_revision %}
+        This revision does not exist and will be <strong>created</strong>.
+        {% else %}
+        This revision already exists and will be <strong>updated</strong>.
+        {% endif %}
+        </p>
+
         <table class="table table-bordered table-hover">
             <thead>
                 <tr>

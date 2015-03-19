@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load compressed %}
+{% load compressed transmittals %}
 
 {% block custombodyclass %}documentlist fullwidth{% endblock %}
 
@@ -36,9 +36,7 @@
     {% for revision in revisions %}
         <tr class="document_row">
             <td><input type="checkbox" /></td>
-            <td><span class="label label-{{ revision.is_new_revision|yesno:"warning,primary" }}">
-                    {{ revision.is_new_revision|yesno:"New,Updated" }}
-            </span></td>
+            <td>{% isnew_label revision %}</td>
             <td><span class="glyphicon
                 glyphicon-{{ revision.accepted|yesno:"ok,remove,empty" }}
             "></span></td>
