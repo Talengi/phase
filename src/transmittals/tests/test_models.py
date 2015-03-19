@@ -5,11 +5,16 @@ from __future__ import unicode_literals
 import os
 from os.path import join
 import tempfile
-from shutil import rmtree
+from shutil import rmtree, copytree
 
 from django.test import TestCase
 
 from transmittals.factories import TransmittalFactory
+
+
+def touch(path):
+    """Simply creates an empty file."""
+    open(path, 'a').close()
 
 
 class TransmittalModelTests(TestCase):
@@ -52,5 +57,19 @@ class TransmittalModelTests(TestCase):
         self.assertFalse(os.path.exists(self.transmittal.full_rejected_name))
 
         self.transmittal.reject()
+        self.assertFalse(os.path.exists(self.transmittal.full_tobechecked_name))
+        self.assertTrue(os.path.exists(self.transmittal.full_rejected_name))
+
+    def test_reject_with_already_existing_rejected_directory(self):
+        touch(join(self.transmittal.full_tobechecked_name, 'toto.csv'))
+
+        copytree(
+            self.transmittal.full_tobechecked_name,
+            self.transmittal.full_rejected_name)
+        self.assertTrue(os.path.exists(self.transmittal.full_tobechecked_name))
+        self.assertTrue(os.path.exists(self.transmittal.full_rejected_name))
+
+        self.transmittal.reject()
+        self.assertEqual(self.transmittal.status, 'rejected')
         self.assertFalse(os.path.exists(self.transmittal.full_tobechecked_name))
         self.assertTrue(os.path.exists(self.transmittal.full_rejected_name))

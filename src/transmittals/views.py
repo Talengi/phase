@@ -10,6 +10,7 @@ from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect
 from braces.views import LoginRequiredMixin
 
+from notifications.models import notify
 from transmittals.models import Transmittal, TrsRevision
 from transmittals.utils import FieldWrapper
 
@@ -51,6 +52,26 @@ class TransmittalDiffView(LoginRequiredMixin, DetailView):
         })
 
         return context
+
+    def post(self, request, *args, **kwargs):
+        """Accept or reject transmittal."""
+        self.object = self.get_object()
+        action = request.POST.get('action', None)
+
+        if action == 'reject':
+            method = getattr(self.object, 'reject')
+            success_msg = 'The transmittal {} was sucessfully rejected'.format(
+                self.object)
+            error_msg = 'We failed to process rejection of transmittal {}. ' \
+                        'Please contact an administrator.'.format(self.object)
+
+        try:
+            method()
+            notify(request.user, success_msg)
+            return HttpResponseRedirect(reverse('transmittal_list'))
+        except:
+            notify(request.user, error_msg)
+            return HttpResponseRedirect(self.object.get_absolute_url())
 
 
 class TransmittalRevisionDiffView(LoginRequiredMixin, DetailView):

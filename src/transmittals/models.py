@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 
 import os
 import logging
+import shutil
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -118,11 +119,25 @@ class Transmittal(models.Model):
         if self.status != 'tobechecked':
             raise RuntimeError('This transmittal cannot be rejected anymore')
 
-        try:
-            os.rename(self.full_tobechecked_name, self.full_rejected_name)
-        except OSError as e:
-            logger.error('Cannot reject transmittal %s' % self)
-            raise e
+        # If an existing version already exists in rejected, we delete it before
+        if os.path.exists(self.full_rejected_name):
+            # Let's hope we got correct data and the process does not run
+            # as root. We would do something that stupid anyway?
+            logger.info('Deleteting directory {}'.format(self.full_rejected_name))
+            shutil.rmtree(self.full_rejected_name)
+
+        # Move to rejected directory
+        if os.path.exists(self.full_tobechecked_name):
+            try:
+                os.rename(self.full_tobechecked_name, self.full_rejected_name)
+            except OSError as e:
+                logger.error('Cannot reject transmittal {} ({})'.format(
+                    self, e))
+                raise e
+        else:
+            # If the directory cannot be found in tobechecked, that's weird but we
+            # won't trigger an error
+            logger.warning('Transmittal {} files are gone'.format(self))
 
         self.status = 'rejected'
         self.save()
