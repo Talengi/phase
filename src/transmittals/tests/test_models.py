@@ -43,7 +43,7 @@ class TransmittalModelTests(TestCase):
         if os.path.exists(self.tmpdir):
             rmtree(self.tmpdir)
 
-    def test_reject_trs_with_wrong_state(self):
+    def test_reject_trs_with_wrong_status(self):
         trs = TransmittalFactory(status='accepted')
         with self.assertRaises(RuntimeError):
             trs.reject()
@@ -73,3 +73,20 @@ class TransmittalModelTests(TestCase):
         self.assertEqual(self.transmittal.status, 'rejected')
         self.assertFalse(os.path.exists(self.transmittal.full_tobechecked_name))
         self.assertTrue(os.path.exists(self.transmittal.full_rejected_name))
+
+    def test_accept_trs_with_wrong_status(self):
+        trs = TransmittalFactory(status='accepted')
+        with self.assertRaises(RuntimeError):
+            trs.accept()
+
+        trs = TransmittalFactory(status='processing')
+        with self.assertRaises(RuntimeError):
+            trs.accept()
+
+        trs = TransmittalFactory(status='rejected')
+        with self.assertRaises(RuntimeError):
+            trs.accept()
+
+    def test_accept(self):
+        self.transmittal.accept()
+        self.assertEqual(self.transmittal.status, 'processing')

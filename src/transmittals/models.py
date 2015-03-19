@@ -17,6 +17,7 @@ from documents.models import Document
 from reviews.models import CLASSES
 from metadata.fields import ConfigurableChoiceField
 from default_documents.validators import StringNumberValidator
+from transmittals.tasks import process_transmittal
 
 
 logger = logging.getLogger(__name__)
@@ -29,13 +30,12 @@ class Transmittal(models.Model):
         ('invalid', _('Invalid')),
         ('tobechecked', _('To be checked')),
         ('rejected', _('Rejected')),
+        ('processing', _('Processing')),
         ('accepted', _('Accepted')),
     )
 
     transmittal_key = models.SlugField(
         _('Transmittal key'),
-        unique=True,
-        db_index=True,
         max_length=250)
     contract_number = ConfigurableChoiceField(
         verbose_name='Contract Number',
@@ -68,6 +68,7 @@ class Transmittal(models.Model):
     class Meta:
         verbose_name = _('Transmittal')
         verbose_name_plural = _('Transmittals')
+        unique_together = ('transmittal_key', 'status')
         index_together = (
             ('contract_number', 'originator', 'recipient', 'sequential_number',
              'status'),
@@ -141,6 +142,20 @@ class Transmittal(models.Model):
 
         self.status = 'rejected'
         self.save()
+
+    def accept(self):
+        """Starts the transmittal import process.
+
+        Since the import can be quite long, we delegate the work to
+        a celery task.
+
+        """
+        if self.status != 'tobechecked':
+            raise RuntimeError('This transmittal cannot be accepted in it\'s current state')
+
+        self.status = 'processing'
+        self.save()
+        process_transmittal.delay(self.pk)
 
 
 class TrsRevision(models.Model):

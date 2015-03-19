@@ -60,9 +60,15 @@ class TransmittalDiffView(LoginRequiredMixin, DetailView):
 
         if action == 'reject':
             method = getattr(self.object, 'reject')
-            success_msg = 'The transmittal {} was sucessfully rejected'.format(
+            success_msg = 'The transmittal {} was sucessfully rejected.'.format(
                 self.object)
             error_msg = 'We failed to process rejection of transmittal {}. ' \
+                        'Please contact an administrator.'.format(self.object)
+        elif action == 'accept':
+            method = getattr(self.object, 'accept')
+            success_msg = 'The transmittal {} is currently being processed.'.format(
+                self.object)
+            error_msg = 'We failed to process the import of transmittal {}. ' \
                         'Please contact an administrator.'.format(self.object)
 
         try:
