@@ -8,15 +8,16 @@
         </button>
     </form>
 
-    <form class="navbar-form navbar-right">
+    <form class="navbar-form navbar-right" action="" method="post">
+        {% csrf_token %}
         <button disabled="disabled" class="btn btn-success">
             <span class="glyphicon glyphicon-ok"></span>
             Import the transmittal
         </button>&nbsp;
 
-        <button disabled="disabled" class="btn btn-danger">
+        <button class="btn btn-danger" name="refuse" value="refuse">
             <span class="glyphicon glyphicon-remove"></span>
-            Refuse import
+            Reject import
         </button>
     </form>
 
