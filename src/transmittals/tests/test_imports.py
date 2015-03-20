@@ -15,7 +15,7 @@ from transmittals.models import Transmittal, TrsRevision
 
 
 class TestImports(TestCase):
-    fixtures = ['initial_documents']
+    fixtures = ['initial_values_lists', 'initial_documents']
 
     def setUp(self):
         # Clear the values list cache
