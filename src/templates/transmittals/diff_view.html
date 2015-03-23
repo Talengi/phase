@@ -45,7 +45,7 @@
                       data-toggle="tooltip"
                       title="{{ revision.comment|truncatechars:50 }}"></span>
             {% endif %}</td>
-            <td><a href="{% url 'transmittal_revision_diff' transmittal.transmittal_key revision.document_key revision.revision  %}">
+            <td><a href="{{ revision.get_absolute_url }}">
                 {{ revision.document_key }}
             </a></td>
             <td class="columntitle">{{ revision.title }}</td>

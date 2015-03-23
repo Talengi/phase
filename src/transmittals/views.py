@@ -100,6 +100,7 @@ class TransmittalRevisionDiffView(LoginRequiredMixin, DetailView):
 
     def get_object(self, queryset=None):
         qs = TrsRevision.objects \
+            .filter(transmittal__pk=self.kwargs['transmittal_pk']) \
             .filter(transmittal__transmittal_key=self.kwargs['transmittal_key']) \
             .filter(document_key=self.kwargs['document_key']) \
             .filter(revision=self.kwargs['revision']) \
