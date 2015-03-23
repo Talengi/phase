@@ -2,6 +2,8 @@
 
 from __future__ import unicode_literals
 
+import os
+
 from documents.fields import PrivateFileField
 
 
@@ -11,13 +13,10 @@ def transmittal_upload_to(trs_revision, filename):
     We keep the original filename since it's been validated
     before.
 
-    `filename` is of Unipath type.
-
     """
-
     return 'transmittals/{transmittal}/{filename}'.format(
         transmittal=trs_revision.transmittal.transmittal_key,
-        filename=filename.name)
+        filename=os.path.basename(filename))
 
 
 class TransmittalFileField(PrivateFileField):
