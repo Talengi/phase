@@ -176,7 +176,8 @@ class TransmittalRevisionDiffView(LoginRequiredMixin, DetailView):
         self.object.save()
         return HttpResponseRedirect(reverse(
             'transmittal_diff',
-            args=[self.object.transmittal.transmittal_key]))
+            args=[self.object.transmittal.pk,
+                  self.object.transmittal.transmittal_key]))
 
 
 class DemoDiffView(TemplateView):
