@@ -68,7 +68,6 @@ class Transmittal(models.Model):
     class Meta:
         verbose_name = _('Transmittal')
         verbose_name_plural = _('Transmittals')
-        unique_together = ('transmittal_key', 'status')
         index_together = (
             ('contract_number', 'originator', 'recipient', 'sequential_number',
              'status'),
@@ -103,7 +102,7 @@ class Transmittal(models.Model):
         return key
 
     def get_absolute_url(self):
-        return reverse('transmittal_diff', args=[self.transmittal_key])
+        return reverse('transmittal_diff', args=[self.pk, self.transmittal_key])
 
     def reject(self):
         """Mark the transmittal as rejected.
