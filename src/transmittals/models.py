@@ -13,11 +13,11 @@ from django.core.urlresolvers import reverse
 
 from model_utils import Choices
 
+from documents.utils import save_document_forms
 from documents.models import Document
 from reviews.models import CLASSES
 from metadata.fields import ConfigurableChoiceField
 from default_documents.validators import StringNumberValidator
-from transmittals.tasks import process_transmittal
 
 
 logger = logging.getLogger(__name__)
@@ -150,11 +150,14 @@ class Transmittal(models.Model):
         a celery task.
 
         """
+        from transmittals.tasks import process_transmittal
+
         if self.status != 'tobechecked':
             raise RuntimeError('This transmittal cannot be accepted in it\'s current state')
 
         self.status = 'processing'
         self.save()
+
         process_transmittal.delay(self.pk)
 
 
@@ -237,3 +240,41 @@ class TrsRevision(models.Model):
     def get_absolute_url(self):
         return reverse('transmittal_revision_diff', args=[
             self.transmittal.transmittal_key, self.document_key, self.revision])
+
+    def get_document_fields(self):
+        """Return a dict of fields that will be passed to the document form.
+
+        For now, this list is fixed.
+
+        """
+        fields = ('title', 'contract_number', 'originator', 'unit',
+                  'discipline', 'document_type', 'sequential_number',
+                  'docclass', 'revision', 'status')
+        return dict([(field, getattr(self, field)) for field in fields])
+
+    def save_to_document(self):
+        """Use self data to create / update the corresponding revision."""
+        from default_documents.forms import (
+            ContractorDeliverableForm, ContractorDeliverableRevisionForm)
+
+        kwargs = {
+            'data': self.get_document_fields()
+        }
+
+        metadata = self.document.metadata
+        kwargs.update({'instance': metadata})
+        metadata_form = ContractorDeliverableForm(**kwargs)
+
+        # If there is no such revision, the method will return None
+        # which is fine.
+        revision = metadata.get_revision(self.revision)
+
+        # Let's make sure we are creating the revisions in the correct order.
+        # This MUST have been enforced during the initial Transmittal validation.
+        if revision is None:
+            assert kwargs['data']['revision'] == metadata.latest_revision.revision + 1
+
+        kwargs.update({'instance': revision})
+        revision_form = ContractorDeliverableRevisionForm(**kwargs)
+
+        save_document_forms(metadata_form, revision_form, self.document.category)
