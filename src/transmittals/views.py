@@ -29,7 +29,7 @@ class TransmittalListView(LoginRequiredMixin, ListView):
         # TODO
         # - Does anyone has the right to view every transmittals?
         # - Configure ACLs
-        return Transmittal.objects.all()
+        return Transmittal.objects.order_by('-id').all()
 
 
 class TransmittalDiffView(LoginRequiredMixin, DetailView):
