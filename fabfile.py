@@ -60,7 +60,7 @@ def deploy(with_data=True):
         with prefix(env.activate):
             collectstatic = 'python src/manage.py collectstatic --noinput'
             syncdb = 'python src/manage.py syncdb --noinput'
-            generate = 'python src/manage.py loaddata initial_documents'
+            generate = 'python src/manage.py loaddata initial_values_lists initial_documents'
             delete_index = 'python src/manage.py delete_index'
             create_index = 'python src/manage.py create_index'
             reindex = 'python src/manage.py reindex_all --noinput'
