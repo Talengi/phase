@@ -244,7 +244,8 @@ class TrsRevision(models.Model):
 
     def get_absolute_url(self):
         return reverse('transmittal_revision_diff', args=[
-            self.transmittal.transmittal_key, self.document_key, self.revision])
+            self.transmittal.pk, self.transmittal.transmittal_key,
+            self.document_key, self.revision])
 
     def get_document_fields(self):
         """Return a dict of fields that will be passed to the document form.
