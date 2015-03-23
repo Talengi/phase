@@ -8,6 +8,7 @@ import shutil
 import logging
 
 from django.db import transaction
+from django.core.files import File
 
 from annoying.functions import get_object_or_None
 
@@ -55,8 +56,8 @@ class TrsImport(object):
             error_report.send()
             self.move_to_rejected()
         else:
-            self.move_to_tobechecked()
             self.save()
+            self.move_to_tobechecked()
 
     def move_to_rejected(self):
         """Move the imported transmittals directory to rejected."""
@@ -281,6 +282,8 @@ class TrsImport(object):
                 latest_revision = metadata.latest_revision.revision
                 is_new_revision = bool(int(data['revision']) > latest_revision)
 
+            pdf_file = File(open(line.pdf_fullname))
+
             TrsRevision.objects.create(
                 transmittal=transmittal,
                 document=document,
@@ -295,7 +298,8 @@ class TrsImport(object):
                 docclass=data['docclass'],
                 status=data['status'],
                 contract_number=data['contract_number'],
-                is_new_revision=is_new_revision)
+                is_new_revision=is_new_revision,
+                pdf_file=pdf_file)
 
 
 class TrsImportLine(object):

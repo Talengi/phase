@@ -18,6 +18,7 @@ from documents.models import Document
 from reviews.models import CLASSES
 from metadata.fields import ConfigurableChoiceField
 from default_documents.validators import StringNumberValidator
+from transmittals.fields import TransmittalFileField
 
 
 logger = logging.getLogger(__name__)
@@ -232,6 +233,11 @@ class TrsRevision(models.Model):
         default='STD',
         max_length=3,
         list_index='STATUSES',
+        null=True, blank=True)
+    pdf_file = TransmittalFileField(
+        verbose_name=_('Pdf file'))
+    native_file = TransmittalFileField(
+        verbose_name=_('Native file'),
         null=True, blank=True)
 
     class Meta:
