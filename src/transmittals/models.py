@@ -118,7 +118,10 @@ class Transmittal(models.Model):
         """
         # Only transmittals with a pending validation can be refused
         if self.status != 'tobechecked':
-            raise RuntimeError('This transmittal cannot be rejected anymore')
+            error_msg = 'The transmittal {} cannot be rejected ' \
+                        'it it\'s current status ({})'.format(
+                            self.transmittal_key, self.status)
+            raise RuntimeError(error_msg)
 
         # If an existing version already exists in rejected, we delete it before
         if os.path.exists(self.full_rejected_name):
@@ -153,7 +156,10 @@ class Transmittal(models.Model):
         from transmittals.tasks import process_transmittal
 
         if self.status != 'tobechecked':
-            raise RuntimeError('This transmittal cannot be accepted in it\'s current state')
+            error_msg = 'The transmittal {} cannot be accepted ' \
+                        'in it\'s current state ({})'.format(
+                            self.transmittal_key, self.get_status_display())
+            raise RuntimeError(error_msg)
 
         self.status = 'processing'
         self.save()

@@ -75,8 +75,10 @@ class TransmittalDiffView(LoginRequiredMixin, DetailView):
             method()
             notify(request.user, success_msg)
             return HttpResponseRedirect(reverse('transmittal_list'))
-        except:
+        except Exception as e:
+            error_msg = '{} ({})'.format(error_msg, e)
             notify(request.user, error_msg)
+            logger.error(e)
             return HttpResponseRedirect(self.object.get_absolute_url())
 
 
