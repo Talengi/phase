@@ -24,10 +24,11 @@ def process_transmittal(transmittal_id):
 
     """
     logger.info('Starting to process transmittal {}'.format(transmittal_id))
+
     transmittal = Transmittal.objects.get(pk=transmittal_id)
     revisions = TrsRevision.objects \
         .filter(transmittal=transmittal) \
-        .order_by('-revision') \
+        .order_by('revision') \
         .select_related('document', 'document__category',
                         'document__category__organisation',
                         'document__category__category_template')
