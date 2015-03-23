@@ -4,6 +4,8 @@ from __future__ import unicode_literals
 
 import logging
 
+from django.db import transaction
+
 from core.celery import app
 from transmittals.models import Transmittal, TrsRevision
 
@@ -33,5 +35,27 @@ def process_transmittal(transmittal_id):
                         'document__category__organisation',
                         'document__category__category_template')
 
-    for trs_revision in revisions:
-        trs_revision.save_to_document()
+    try:
+        with transaction.atomic():
+            for trs_revision in revisions:
+                trs_revision.save_to_document()
+
+            transmittal.status = 'accepted'
+            transmittal.save()
+
+        success_msg = 'Transmittal {} successfully processed'.format(
+            transmittal)
+        logger.info(success_msg)
+    except Exception as e:
+        # There was an error processing one of the revision
+        # This MUST not happen, since all error conditions MUST
+        # have been eliminated during the initial validation phase
+        #
+        # Revert the transmittal status back, and log the error is all
+        # we can do now.
+        error_msg = 'Error processing transmittal {} ({})'.format(
+            transmittal, e)
+        logger.error(error_msg)
+
+        transmittal.status = 'tobechecked'
+        transmittal.save()
