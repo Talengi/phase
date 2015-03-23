@@ -35,15 +35,18 @@ class TransmittalListView(LoginRequiredMixin, ListView):
 class TransmittalDiffView(LoginRequiredMixin, DetailView):
     template_name = 'transmittals/diff_view.html'
     context_object_name = 'transmittal'
-    model = Transmittal
-    slug_field = 'transmittal_key'
-    slug_url_kwarg = 'transmittal_key'
 
     def breadcrumb_section(self):
         return (_('Transmittals'), reverse('transmittal_list'))
 
     def breadcrumb_object(self):
         return self.object
+
+    def get_object(self, queryset=None):
+        qs = Transmittal.objects \
+            .filter(pk=self.kwargs['transmittal_pk']) \
+            .filter(transmittal_key=self.kwargs['transmittal_key'])
+        return qs.get()
 
     def get_context_data(self, **kwargs):
         context = super(TransmittalDiffView, self).get_context_data(**kwargs)
