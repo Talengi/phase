@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 from django.test import TestCase
 from django.contrib.contenttypes.models import ContentType
 from django.core.cache import cache
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 from documents.factories import DocumentFactory
 from categories.factories import CategoryFactory
@@ -54,6 +55,10 @@ class ProcessTransmittalTests(TestCase):
         self.metadata.latest_revision = rev2
         self.metadata.save()
 
+        sample_path = b'documents/tests/'
+        native_doc = b'sample_doc_native.docx'
+        pdf_doc = b'sample_doc_pdf.pdf'
+
         self.transmittal = TransmittalFactory()
         data = {
             'transmittal': self.transmittal,
@@ -67,7 +72,9 @@ class ProcessTransmittalTests(TestCase):
             'sequential_number': '4891',
             'docclass': 1,
             'revision': 1,
-            'status': 'SPD'}
+            'status': 'SPD',
+            'pdf_file': SimpleUploadedFile(pdf_doc, sample_path + pdf_doc),
+        }
         TrsRevisionFactory(**data)
 
         data.update({'revision': 2, 'status': 'IFA'})
@@ -76,7 +83,11 @@ class ProcessTransmittalTests(TestCase):
         data.update({'revision': 3, 'docclass': 2})
         TrsRevisionFactory(**data)
 
-        data.update({'revision': 4, 'status': 'FIN'})
+        data.update({
+            'revision': 4,
+            'status': 'FIN',
+            'native_file': SimpleUploadedFile(native_doc, sample_path + native_doc),
+        })
         TrsRevisionFactory(**data)
 
     def test_process_update_revisions(self):
@@ -100,3 +111,20 @@ class ProcessTransmittalTests(TestCase):
         rev = self.document.metadata.get_revision(4)
         self.assertIsNotNone(rev)
         self.assertEqual(rev.status, 'FIN')
+
+    def test_process_updates_files(self):
+        rev = self.document.metadata.get_revision(1)
+        self.assertFalse(rev.pdf_file)
+
+        process_transmittal(self.transmittal.pk)
+
+        rev = self.document.metadata.get_revision(1)
+        self.assertTrue(rev.pdf_file)
+
+        rev = self.document.metadata.get_revision(3)
+        self.assertTrue(rev.pdf_file)
+        self.assertFalse(rev.native_file)
+
+        rev = self.document.metadata.get_revision(4)
+        self.assertTrue(rev.pdf_file)
+        self.assertTrue(rev.native_file)

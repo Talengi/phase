@@ -262,17 +262,23 @@ class TrsRevision(models.Model):
         fields = ('title', 'contract_number', 'originator', 'unit',
                   'discipline', 'document_type', 'sequential_number',
                   'docclass', 'revision', 'status')
-        return dict([(field, getattr(self, field)) for field in fields])
+        fields_dict = dict([(field, getattr(self, field)) for field in fields])
+
+        files = ('pdf_file', 'native_file')
+        files_dict = dict([(field, getattr(self, field)) for field in files])
+
+        return fields_dict, files_dict
 
     def save_to_document(self):
         """Use self data to create / update the corresponding revision."""
         from default_documents.forms import (
             ContractorDeliverableForm, ContractorDeliverableRevisionForm)
 
+        fields, files = self.get_document_fields()
         kwargs = {
-            'data': self.get_document_fields()
+            'data': fields,
+            'files': files,
         }
-
         metadata = self.document.metadata
         kwargs.update({'instance': metadata})
         metadata_form = ContractorDeliverableForm(**kwargs)
