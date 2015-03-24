@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 import logging
+import os
 
 from django.db import transaction
 
@@ -36,12 +37,25 @@ def process_transmittal(transmittal_id):
                         'document__category__category_template')
 
     try:
+        # Update / create documents in db
         with transaction.atomic():
             for trs_revision in revisions:
                 trs_revision.save_to_document()
 
             transmittal.status = 'accepted'
             transmittal.save()
+
+        # Move to accepted directory
+        if os.path.exists(transmittal.full_tobechecked_name):
+            try:
+                os.rename(transmittal.full_tobechecked_name, transmittal.full_accepted_name)
+            except OSError as e:
+                logger.error('Cannot move transmittal {} ({})'.format(
+                    transmittal, e))
+        else:
+            # If the directory cannot be found in tobechecked, that's weird but we
+            # won't trigger an error
+            logger.warning('Transmittal {} files are gone'.format(transmittal))
 
         success_msg = 'Transmittal {} successfully processed'.format(
             transmittal)

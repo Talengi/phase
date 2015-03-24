@@ -2,6 +2,10 @@
 
 from __future__ import unicode_literals
 
+import os
+from os.path import join
+import tempfile
+
 from django.test import TestCase
 from django.contrib.contenttypes.models import ContentType
 from django.core.cache import cache
@@ -16,12 +20,28 @@ from transmittals.factories import TransmittalFactory, TrsRevisionFactory
 from transmittals.tasks import process_transmittal
 
 
+def touch(path):
+    """Simply creates an empty file."""
+    open(path, 'a').close()
+
+
 class ProcessTransmittalTests(TestCase):
     fixtures = ['initial_values_lists']
 
     def setUp(self):
         # Clear the values list cache
         cache.clear()
+
+        # Filesystem setup
+        self.tmpdir = tempfile.mkdtemp(prefix='phasetest_', suffix='_trs')
+        self.incoming = join(self.tmpdir, 'incoming')
+        self.tobechecked = join(self.tmpdir, 'tobechecked')
+        self.accepted = join(self.tmpdir, 'accepted')
+        self.rejected = join(self.tmpdir, 'rejected')
+
+        os.mkdir(self.accepted)
+        os.mkdir(self.rejected)
+        os.mkdir(self.tobechecked)
 
         Model = ContentType.objects.get_for_model(ContractorDeliverable)
         self.category = CategoryFactory(category_template__metadata_model=Model)
@@ -59,7 +79,15 @@ class ProcessTransmittalTests(TestCase):
         native_doc = b'sample_doc_native.docx'
         pdf_doc = b'sample_doc_pdf.pdf'
 
-        self.transmittal = TransmittalFactory()
+        self.transmittal = TransmittalFactory(
+            transmittal_key='FAC10005-CTR-CLT-TRS-00001',
+            status='tobechecked',
+            tobechecked_dir=self.tobechecked,
+            accepted_dir=self.accepted,
+            rejected_dir=self.rejected,
+            contractor='test')
+        os.mkdir(self.transmittal.full_tobechecked_name)
+
         data = {
             'transmittal': self.transmittal,
             'document': self.document,
@@ -128,3 +156,17 @@ class ProcessTransmittalTests(TestCase):
         rev = self.document.metadata.get_revision(4)
         self.assertTrue(rev.pdf_file)
         self.assertTrue(rev.native_file)
+
+    def test_successfull_process_moves_files_to_accepted_dir(self):
+        tobechecked_file = join(self.transmittal.full_tobechecked_name, 'toto.csv')
+        accepted_file = join(self.transmittal.full_accepted_name, 'toto.csv')
+
+        touch(tobechecked_file)
+
+        self.assertTrue(os.path.exists(tobechecked_file))
+        self.assertFalse(os.path.exists(accepted_file))
+
+        process_transmittal(self.transmittal.pk)
+
+        self.assertFalse(os.path.exists(tobechecked_file))
+        self.assertTrue(os.path.exists(accepted_file))
