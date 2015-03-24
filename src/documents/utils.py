@@ -24,7 +24,7 @@ def save_document_forms(metadata_form, revision_form, category):
     revision = revision_form.save(commit=False)
     metadata = metadata_form.save(commit=False)
 
-    # Thos three functions could be regrouped, but they form
+    # Those three functions could be regrouped, but they form
     # an if / else russian mountain
     if metadata.pk is None:
         return create_document_from_forms(metadata_form, revision_form, category)

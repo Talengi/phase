@@ -294,6 +294,11 @@ class MetadataRevision(models.Model):
         get_latest_by = 'revision'
         unique_together = ('document', 'revision')
 
+    def __unicode__(self):
+        return '{} ({})'.format(
+            self.document.document_key,
+            self.revision)
+
     def save(self, update_document=False, *args, **kwargs):
         super(MetadataRevision, self).save(*args, **kwargs)
 

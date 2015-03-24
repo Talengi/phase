@@ -9,10 +9,12 @@
 
 {% block content %}
 <div id="main-table">
-<table class="table table-condensed table-bordered table-hover">
+<table class="table table-condensed table-bordered table-hover table-list">
     <thead>
         <tr>
-            <th id="columnselect"></th>
+            <th id="columnselect">
+                <input type="checkbox" id="select-all" />
+            </th>
             <th class="smallcolumn"></th>
             <th class="smallcolumn">
                 <span class="glyphicon glyphicon-ok"></span>
@@ -35,7 +37,7 @@
     <tbody>
     {% for revision in revisions %}
         <tr class="document_row">
-            <td><input type="checkbox" /></td>
+            <td><input type="checkbox" name="document" value="{{ revision.id }}" /></td>
             <td>{% isnew_label revision %}</td>
             <td><span class="glyphicon
                 glyphicon-{{ revision.accepted|yesno:"ok,remove,empty" }}
@@ -45,7 +47,7 @@
                       data-toggle="tooltip"
                       title="{{ revision.comment|truncatechars:50 }}"></span>
             {% endif %}</td>
-            <td><a href="{% url 'transmittal_revision_diff' transmittal.transmittal_key revision.document_key revision.revision  %}">
+            <td><a href="{{ revision.get_absolute_url }}">
                 {{ revision.document_key }}
             </a></td>
             <td class="columntitle">{{ revision.title }}</td>
@@ -70,4 +72,5 @@ $(function() {
     $('[data-toggle="tooltip"]').tooltip();
 });
 </script>
+{% compressed_js "transmittal_list" %}
 {% endblock %}

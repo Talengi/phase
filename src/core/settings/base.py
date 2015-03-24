@@ -412,7 +412,14 @@ PIPELINE_JS = {
             'js/reviews/app.js',
         ),
         'output_filename': 'js/review.js',
-    }
+    },
+    'transmittal_list': {
+        'source_filenames': (
+            'js/transmittals/views.js',
+            'js/transmittals/app.js',
+        ),
+        'output_filename': 'js/list.js',
+    },
 }
 # ######### END PIPELINE CONFIGURATION
 
@@ -454,7 +461,7 @@ DISPLAY_NOTIFICATION_COUNT = 5
 PRIVATE_ROOT = SITE_ROOT.child('private')
 PRIVATE_URL = '/private/'
 NGING_X_ACCEL_PREFIX = '/xaccel/'
-USE_X_SENDFILE = DEBUG
+USE_X_SENDFILE = not DEBUG
 
 # Where to look for files to import?
 IMPORT_ROOT = SITE_ROOT.child('import')

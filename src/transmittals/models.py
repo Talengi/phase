@@ -13,11 +13,12 @@ from django.core.urlresolvers import reverse
 
 from model_utils import Choices
 
+from documents.utils import save_document_forms
 from documents.models import Document
 from reviews.models import CLASSES
 from metadata.fields import ConfigurableChoiceField
 from default_documents.validators import StringNumberValidator
-from transmittals.tasks import process_transmittal
+from transmittals.fields import TransmittalFileField
 
 
 logger = logging.getLogger(__name__)
@@ -68,7 +69,6 @@ class Transmittal(models.Model):
     class Meta:
         verbose_name = _('Transmittal')
         verbose_name_plural = _('Transmittals')
-        unique_together = ('transmittal_key', 'status')
         index_together = (
             ('contract_number', 'originator', 'recipient', 'sequential_number',
              'status'),
@@ -103,7 +103,7 @@ class Transmittal(models.Model):
         return key
 
     def get_absolute_url(self):
-        return reverse('transmittal_diff', args=[self.transmittal_key])
+        return reverse('transmittal_diff', args=[self.pk, self.transmittal_key])
 
     def reject(self):
         """Mark the transmittal as rejected.
@@ -118,7 +118,10 @@ class Transmittal(models.Model):
         """
         # Only transmittals with a pending validation can be refused
         if self.status != 'tobechecked':
-            raise RuntimeError('This transmittal cannot be rejected anymore')
+            error_msg = 'The transmittal {} cannot be rejected ' \
+                        'it it\'s current status ({})'.format(
+                            self.transmittal_key, self.status)
+            raise RuntimeError(error_msg)
 
         # If an existing version already exists in rejected, we delete it before
         if os.path.exists(self.full_rejected_name):
@@ -150,11 +153,17 @@ class Transmittal(models.Model):
         a celery task.
 
         """
+        from transmittals.tasks import process_transmittal
+
         if self.status != 'tobechecked':
-            raise RuntimeError('This transmittal cannot be accepted in it\'s current state')
+            error_msg = 'The transmittal {} cannot be accepted ' \
+                        'in it\'s current state ({})'.format(
+                            self.transmittal_key, self.get_status_display())
+            raise RuntimeError(error_msg)
 
         self.status = 'processing'
         self.save()
+
         process_transmittal.delay(self.pk)
 
 
@@ -225,6 +234,11 @@ class TrsRevision(models.Model):
         max_length=3,
         list_index='STATUSES',
         null=True, blank=True)
+    pdf_file = TransmittalFileField(
+        verbose_name=_('Pdf file'))
+    native_file = TransmittalFileField(
+        verbose_name=_('Native file'),
+        null=True, blank=True)
 
     class Meta:
         verbose_name = _('Trs Revision')
@@ -236,4 +250,49 @@ class TrsRevision(models.Model):
 
     def get_absolute_url(self):
         return reverse('transmittal_revision_diff', args=[
-            self.transmittal.transmittal_key, self.document_key, self.revision])
+            self.transmittal.pk, self.transmittal.transmittal_key,
+            self.document_key, self.revision])
+
+    def get_document_fields(self):
+        """Return a dict of fields that will be passed to the document form.
+
+        For now, this list is fixed.
+
+        """
+        fields = ('title', 'contract_number', 'originator', 'unit',
+                  'discipline', 'document_type', 'sequential_number',
+                  'docclass', 'revision', 'status')
+        fields_dict = dict([(field, getattr(self, field)) for field in fields])
+
+        files = ('pdf_file', 'native_file')
+        files_dict = dict([(field, getattr(self, field)) for field in files])
+
+        return fields_dict, files_dict
+
+    def save_to_document(self):
+        """Use self data to create / update the corresponding revision."""
+        from default_documents.forms import (
+            ContractorDeliverableForm, ContractorDeliverableRevisionForm)
+
+        fields, files = self.get_document_fields()
+        kwargs = {
+            'data': fields,
+            'files': files,
+        }
+        metadata = self.document.metadata
+        kwargs.update({'instance': metadata})
+        metadata_form = ContractorDeliverableForm(**kwargs)
+
+        # If there is no such revision, the method will return None
+        # which is fine.
+        revision = metadata.get_revision(self.revision)
+
+        # Let's make sure we are creating the revisions in the correct order.
+        # This MUST have been enforced during the initial Transmittal validation.
+        if revision is None:
+            assert kwargs['data']['revision'] == metadata.latest_revision.revision + 1
+
+        kwargs.update({'instance': revision})
+        revision_form = ContractorDeliverableRevisionForm(**kwargs)
+
+        save_document_forms(metadata_form, revision_form, self.document.category)

@@ -6,8 +6,10 @@ import os
 import csv
 import shutil
 import logging
+import glob
 
 from django.db import transaction
+from django.core.files import File
 
 from annoying.functions import get_object_or_None
 
@@ -55,8 +57,8 @@ class TrsImport(object):
             error_report.send()
             self.move_to_rejected()
         else:
-            self.move_to_tobechecked()
             self.save()
+            self.move_to_tobechecked()
 
     def move_to_rejected(self):
         """Move the imported transmittals directory to rejected."""
@@ -281,6 +283,11 @@ class TrsImport(object):
                 latest_revision = metadata.latest_revision.revision
                 is_new_revision = bool(int(data['revision']) > latest_revision)
 
+            pdf_file = File(open(line.pdf_fullname))
+            native_file = line.native_fullname
+            if native_file:
+                native_file = File(open(native_file))
+
             TrsRevision.objects.create(
                 transmittal=transmittal,
                 document=document,
@@ -295,7 +302,9 @@ class TrsImport(object):
                 docclass=data['docclass'],
                 status=data['status'],
                 contract_number=data['contract_number'],
-                is_new_revision=is_new_revision)
+                is_new_revision=is_new_revision,
+                pdf_file=pdf_file,
+                native_file=native_file)
 
 
 class TrsImportLine(object):
@@ -329,6 +338,29 @@ class TrsImportLine(object):
     @property
     def pdf_fullname(self):
         return os.path.join(self.trs_dir, self.pdf_basename)
+
+    @property
+    def native_fullname(self):
+        """Get the fullname of the native file or None if there isn't one."""
+        # Since we don't know the native file extension, we have to perform
+        # a search using the `glob` module.
+        pdf = self.pdf_fullname
+        stripped_name = pdf[0:-4]
+        natives = glob.glob('{}*'.format(stripped_name))
+
+        assert 1 <= len(natives) and len(natives) <= 2
+
+        if len(natives) == 1:
+            # We found only the pdf itself, there is no native file
+            return None
+
+        if len(natives) == 2:
+            # We found the pdf and the native
+            first_extension = natives[0].split('.')[-1]
+            if first_extension == 'pdf':
+                return natives[1]
+            else:
+                return natives[0]
 
     def get_metadata_class(self):
         from default_documents.models import ContractorDeliverable

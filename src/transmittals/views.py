@@ -4,11 +4,12 @@ from __future__ import unicode_literals
 
 import logging
 
-from django.views.generic import TemplateView, ListView, DetailView
+from django.views.generic import ListView, DetailView
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect
 from braces.views import LoginRequiredMixin
+from zipview.views import BaseZipView
 
 from notifications.models import notify
 from transmittals.models import Transmittal, TrsRevision
@@ -29,21 +30,24 @@ class TransmittalListView(LoginRequiredMixin, ListView):
         # TODO
         # - Does anyone has the right to view every transmittals?
         # - Configure ACLs
-        return Transmittal.objects.all()
+        return Transmittal.objects.order_by('-id').all()
 
 
 class TransmittalDiffView(LoginRequiredMixin, DetailView):
     template_name = 'transmittals/diff_view.html'
     context_object_name = 'transmittal'
-    model = Transmittal
-    slug_field = 'transmittal_key'
-    slug_url_kwarg = 'transmittal_key'
 
     def breadcrumb_section(self):
         return (_('Transmittals'), reverse('transmittal_list'))
 
     def breadcrumb_object(self):
         return self.object
+
+    def get_object(self, queryset=None):
+        qs = Transmittal.objects \
+            .filter(pk=self.kwargs['transmittal_pk']) \
+            .filter(transmittal_key=self.kwargs['transmittal_key'])
+        return qs.get()
 
     def get_context_data(self, **kwargs):
         context = super(TransmittalDiffView, self).get_context_data(**kwargs)
@@ -75,8 +79,10 @@ class TransmittalDiffView(LoginRequiredMixin, DetailView):
             method()
             notify(request.user, success_msg)
             return HttpResponseRedirect(reverse('transmittal_list'))
-        except:
+        except Exception as e:
+            error_msg = '{} ({})'.format(error_msg, e)
             notify(request.user, error_msg)
+            logger.error(e)
             return HttpResponseRedirect(self.object.get_absolute_url())
 
 
@@ -95,6 +101,7 @@ class TransmittalRevisionDiffView(LoginRequiredMixin, DetailView):
 
     def get_object(self, queryset=None):
         qs = TrsRevision.objects \
+            .filter(transmittal__pk=self.kwargs['transmittal_pk']) \
             .filter(transmittal__transmittal_key=self.kwargs['transmittal_key']) \
             .filter(document_key=self.kwargs['document_key']) \
             .filter(revision=self.kwargs['revision']) \
@@ -170,24 +177,30 @@ class TransmittalRevisionDiffView(LoginRequiredMixin, DetailView):
         self.object.save()
         return HttpResponseRedirect(reverse(
             'transmittal_diff',
-            args=[self.object.transmittal.transmittal_key]))
+            args=[self.object.transmittal.pk,
+                  self.object.transmittal.transmittal_key]))
 
 
-class DemoDiffView(TemplateView):
-    template_name = 'transmittals/demo_diff_view.html'
+class TransmittalDownloadView(LoginRequiredMixin, BaseZipView):
+    zipfile_name = 'transmittal_documents.zip'
 
-    def breadcrumb_section(self):
-        return 'Transmittal'
+    def get_files(self):
+        transmittal_pk = self.kwargs.get('transmittal_pk')
+        transmittal_key = self.kwargs.get('transmittal_key')
+        revision_ids = self.request.GET.getlist('revision_ids')
+        file_format = self.request.GET.get('format', 'both')
 
-    def breadcrumb_subsection(self):
-        return 'FAC10005-CTR-CLT-TRS-00001'
+        revisions = TrsRevision.objects \
+            .filter(transmittal__id=transmittal_pk) \
+            .filter(transmittal__transmittal_key=transmittal_key) \
+            .filter(id__in=revision_ids)
 
+        files = []
+        for revision in revisions:
+            if file_format in ('pdf', 'both') and revision.pdf_file.name:
+                files.append(revision.pdf_file.file)
 
-class DemoRevisionDiffView(TemplateView):
-    template_name = 'transmittals/demo_revision_diff_view.html'
+            if file_format in ('native', 'both') and revision.native_file.name:
+                files.append(revision.native_file.file)
 
-    def breadcrumb_section(self):
-        return 'Transmittal'
-
-    def breadcrumb_subsection(self):
-        return 'FAC10005-CTR-CLT-TRS-00001'
+        return files
