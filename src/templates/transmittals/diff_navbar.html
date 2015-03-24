@@ -1,11 +1,25 @@
 <div class="navbar additional-navbar navbar-default navbar-static-top" id="table-controls">
 <div class="container-fluid">
 
-    <form class="navbar-form navbar-left">
-        <button class="btn btn-primary" disabled="disabled" style="margin-left: -15px">
-            <span class="glyphicon glyphicon-download"></span>
-            Download
-        </button>
+    <form class="navbar-form navbar-left" style="padding-left: 0">
+        <div class="btn-toolbar">
+            <div class="btn-group" data-toggle="buttons">
+                <label class="btn btn-default active">
+                    <input type="radio" name="format" value="pdf" id="format_pdf" checked>PDF
+                </label>
+                <label class="btn btn-default">
+                    <input type="radio" name="format" value="native" id="format_native">Native
+                </label>
+                <label class="btn btn-default">
+                    <input type="radio" name="format" value="both" id="format_all">Both formats
+                </label>
+            </div>
+
+            <a class="btn btn-primary">
+                <span class="glyphicon glyphicon-download"></span>
+                Download selected documents
+            </a>
+        </div>
     </form>
 
     {% if transmital.status == 'tobechecked' %}
@@ -25,4 +39,3 @@
 
 </div>
 </div>
-
