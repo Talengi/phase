@@ -1,7 +1,7 @@
 /**
 * phase-bootstrap.js v1.0.0 by @fat and @mdo
 * Copyright 2015 Talengi
-* 
+*
 */
 if (!jQuery) { throw new Error("Bootstrap requires jQuery") }
 
@@ -563,7 +563,7 @@ if (!jQuery) { throw new Error("Bootstrap requires jQuery") }
     if (this.transitioning || this.$element.hasClass('in')) return
 
     var activesData
-    var actives = this.$parent && this.$parent.children('.panel').children('.in, .collapsing')
+    var actives = this.$parent && this.$parent.find('.in, .collapsing')
 
     if (actives && actives.length) {
       activesData = actives.data('bs.collapse')
