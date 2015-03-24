@@ -8,6 +8,7 @@
         </button>
     </form>
 
+    {% if transmital.status == 'tobechecked' %}
     <form class="navbar-form navbar-right" action="" method="post">
         {% csrf_token %}
         <button class="btn btn-success" name="action" value="accept">
@@ -20,6 +21,7 @@
             Reject transmittal
         </button>
     </form>
+    {% endif %}
 
 </div>
 </div>
