@@ -9,10 +9,12 @@
 
 {% block content %}
 <div id="main-table">
-<table class="table table-condensed table-bordered table-hover">
+<table class="table table-condensed table-bordered table-hover table-list">
     <thead>
         <tr>
-            <th id="columnselect"></th>
+            <th id="columnselect">
+                <input type="checkbox" id="select-all" />
+            </th>
             <th class="smallcolumn"></th>
             <th class="smallcolumn">
                 <span class="glyphicon glyphicon-ok"></span>
@@ -70,4 +72,5 @@ $(function() {
     $('[data-toggle="tooltip"]').tooltip();
 });
 </script>
+{% compressed_js "transmittal_list" %}
 {% endblock %}

@@ -412,7 +412,14 @@ PIPELINE_JS = {
             'js/reviews/app.js',
         ),
         'output_filename': 'js/review.js',
-    }
+    },
+    'transmittal_list': {
+        'source_filenames': (
+            'js/transmittals/views.js',
+            'js/transmittals/app.js',
+        ),
+        'output_filename': 'js/list.js',
+    },
 }
 # ######### END PIPELINE CONFIGURATION
 
