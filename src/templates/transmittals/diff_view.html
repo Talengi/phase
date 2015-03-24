@@ -37,7 +37,7 @@
     <tbody>
     {% for revision in revisions %}
         <tr class="document_row">
-            <td><input type="checkbox" /></td>
+            <td><input type="checkbox" name="document" value="{{ revision.id }}" /></td>
             <td>{% isnew_label revision %}</td>
             <td><span class="glyphicon
                 glyphicon-{{ revision.accepted|yesno:"ok,remove,empty" }}

@@ -1,7 +1,9 @@
 <div class="navbar additional-navbar navbar-default navbar-static-top" id="table-controls">
 <div class="container-fluid">
 
-    <form class="navbar-form navbar-left" style="padding-left: 0">
+    <form id="download-form" class="navbar-form navbar-left" action="" method="post"
+          style="padding-left: 0">
+        {% csrf_token %}
         <div class="btn-toolbar">
             <div class="btn-group" data-toggle="buttons">
                 <label class="btn btn-default active">
@@ -15,10 +17,10 @@
                 </label>
             </div>
 
-            <a class="btn btn-primary">
+            <button class="btn btn-primary">
                 <span class="glyphicon glyphicon-download"></span>
                 Download selected documents
-            </a>
+            </button>
         </div>
     </form>
 
