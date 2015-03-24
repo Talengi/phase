@@ -1,9 +1,9 @@
 <div class="navbar additional-navbar navbar-default navbar-static-top" id="table-controls">
 <div class="container-fluid">
 
-    <form id="download-form" class="navbar-form navbar-left" action="" method="post"
-          style="padding-left: 0">
-        {% csrf_token %}
+    <form id="download-form" class="navbar-form navbar-left" method="get"
+        action="{% url 'transmittal_download' transmittal.pk transmittal.transmittal_key %}"
+        style="padding-left: 0">
         <div class="btn-toolbar">
             <div class="btn-group" data-toggle="buttons">
                 <label class="btn btn-default active">

@@ -4,11 +4,12 @@ from __future__ import unicode_literals
 
 import logging
 
-from django.views.generic import TemplateView, ListView, DetailView
+from django.views.generic import ListView, DetailView
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect
 from braces.views import LoginRequiredMixin
+from zipview.views import BaseZipView
 
 from notifications.models import notify
 from transmittals.models import Transmittal, TrsRevision
@@ -180,21 +181,26 @@ class TransmittalRevisionDiffView(LoginRequiredMixin, DetailView):
                   self.object.transmittal.transmittal_key]))
 
 
-class DemoDiffView(TemplateView):
-    template_name = 'transmittals/demo_diff_view.html'
+class TransmittalDownloadView(LoginRequiredMixin, BaseZipView):
+    zipfile_name = 'transmittal_documents.zip'
 
-    def breadcrumb_section(self):
-        return 'Transmittal'
+    def get_files(self):
+        transmittal_pk = self.kwargs.get('transmittal_pk')
+        transmittal_key = self.kwargs.get('transmittal_key')
+        revision_ids = self.request.GET.getlist('revision_ids')
+        file_format = self.request.GET.get('format', 'both')
 
-    def breadcrumb_subsection(self):
-        return 'FAC10005-CTR-CLT-TRS-00001'
+        revisions = TrsRevision.objects \
+            .filter(transmittal__id=transmittal_pk) \
+            .filter(transmittal__transmittal_key=transmittal_key) \
+            .filter(id__in=revision_ids)
 
+        files = []
+        for revision in revisions:
+            if file_format in ('pdf', 'both') and revision.pdf_file.name:
+                files.append(revision.pdf_file.file)
 
-class DemoRevisionDiffView(TemplateView):
-    template_name = 'transmittals/demo_revision_diff_view.html'
+            if file_format in ('native', 'both') and revision.native_file.name:
+                files.append(revision.native_file.file)
 
-    def breadcrumb_section(self):
-        return 'Transmittal'
-
-    def breadcrumb_subsection(self):
-        return 'FAC10005-CTR-CLT-TRS-00001'
+        return files
