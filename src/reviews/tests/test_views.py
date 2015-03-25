@@ -1,4 +1,9 @@
+# -*- coding: utf-8 -*-
+
+from __future__ import unicode_literals
+
 import datetime
+import json
 
 from django.test import TestCase
 from django.core.urlresolvers import reverse
@@ -52,16 +57,13 @@ class BatchReviewTests(TestCase):
         self.ok = 'The review started for the following documents'
         self.nok = "We failed to start the review for the following documents"
 
-    def test_batch_review_redirect(self):
-        document_list_url = reverse('category_document_list', args=[
-            self.category.organisation.slug,
-            self.category.slug,
-        ])
+    def test_batch_review_returns_poll_url(self):
         res = self.client.post(
             self.url,
             {'document_ids': [self.doc1.id, self.doc2.id]}
         )
-        self.assertRedirects(res, document_list_url)
+        json_content = json.loads(res.content)
+        self.assertTrue('poll_url' in json_content)
 
     def test_batch_review_documents_success(self):
         res = self.client.post(
