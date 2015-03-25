@@ -370,7 +370,7 @@ PIPELINE_JS = {
             'js/documents/routers.js',
             'js/documents/app.js',
         ),
-        'output_filename': 'js/list.js',
+        'output_filename': 'js/document-list.js',
     },
     'document_detail': {
         'source_filenames': (
@@ -418,7 +418,7 @@ PIPELINE_JS = {
             'js/transmittals/views.js',
             'js/transmittals/app.js',
         ),
-        'output_filename': 'js/list.js',
+        'output_filename': 'js/transmittal-list.js',
     },
 }
 # ######### END PIPELINE CONFIGURATION
