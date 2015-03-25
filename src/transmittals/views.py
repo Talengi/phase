@@ -32,6 +32,13 @@ class TransmittalListView(LoginRequiredMixin, ListView):
         # - Configure ACLs
         return Transmittal.objects.order_by('-id').all()
 
+    def get_context_data(self, **kwargs):
+        context = super(TransmittalListView, self).get_context_data(**kwargs)
+        context.update({
+            'transmittals_active': True,
+        })
+        return context
+
 
 class TransmittalDiffView(LoginRequiredMixin, DetailView):
     template_name = 'transmittals/diff_view.html'
@@ -52,7 +59,8 @@ class TransmittalDiffView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(TransmittalDiffView, self).get_context_data(**kwargs)
         context.update({
-            'revisions': self.object.trsrevision_set.all()
+            'revisions': self.object.trsrevision_set.all(),
+            'transmittals_active': True,
         })
 
         return context
@@ -166,6 +174,7 @@ class TransmittalRevisionDiffView(LoginRequiredMixin, DetailView):
         context = super(TransmittalRevisionDiffView, self).get_context_data(**kwargs)
         context.update({
             'revision': self.get_revision(),
+            'transmittals_active': True,
         })
         return context
 

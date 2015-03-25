@@ -1,0 +1,14 @@
+<li{% if transmittals_active %} class="active"{% endif %}>
+    <a href="#nav-transmittals"
+       id="transmittal-link"
+       data-toggle="collapse"
+       data-parent="#sidebar-nav">
+        <span class="glyphicon glyphicon-refresh"></span>
+        Documents Exchanges <b class="caret"></b>
+    </a>
+
+
+    <ul id="nav-transmittals" class="nav nav-stacked collapse">
+        <li><a href="{% url 'transmittal_list' %}">Incoming transmittals</a></li>
+    </ul>
+</li>
