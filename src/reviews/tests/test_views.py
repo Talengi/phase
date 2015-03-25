@@ -65,33 +65,6 @@ class BatchReviewTests(TestCase):
         json_content = json.loads(res.content)
         self.assertTrue('poll_url' in json_content)
 
-    def test_batch_review_documents_success(self):
-        res = self.client.post(
-            self.url,
-            {'document_ids': [self.doc1.id, self.doc2.id]},
-            follow=True
-        )
-        self.assertContains(res, self.ok)
-        self.assertNotContains(res, self.nok)
-
-    def test_batch_review_errors(self):
-        res = self.client.post(
-            self.url,
-            {'document_ids': [self.doc3.id]},
-            follow=True
-        )
-        self.assertNotContains(res, self.ok)
-        self.assertContains(res, self.nok)
-
-    def test_batch_review_half_success(self):
-        res = self.client.post(
-            self.url,
-            {'document_ids': [self.doc1.id, self.doc3.id]},
-            follow=True
-        )
-        self.assertContains(res, self.ok)
-        self.assertContains(res, self.nok)
-
 
 class PrioritiesDocumentListTests(TestCase):
 

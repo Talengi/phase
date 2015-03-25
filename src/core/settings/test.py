@@ -21,7 +21,12 @@ STATICFILES_STORAGE = 'pipeline.storage.NonPackagingPipelineStorage'
 
 ELASTIC_INDEX = 'test_documents'
 ELASTIC_AUTOINDEX = False
+
+# Makes Celery working synchronously and in memory
 CELERY_ALWAYS_EAGER = True
+BROKER_URL = "memory://"
+CELERY_CACHE_BACKEND = "memory"
+CELERY_RESULT_BACKEND = "cache"
 
 LOGGING['loggers']['elasticsearch'] = {
     'handlers': ['console', 'syslog', 'mail_admins'],
