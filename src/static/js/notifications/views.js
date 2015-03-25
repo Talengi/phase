@@ -25,7 +25,7 @@ var Phase = Phase || {};
             'click button.more': 'loadMoreNotifications'
         },
         initialize: function() {
-            _.bindAll(this, 'addNotification'),
+            _.bindAll(this, 'addNotification');
 
             this.body = this.$el.find('.notifications');
             this.body.html('');
