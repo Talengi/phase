@@ -132,7 +132,7 @@ class CancelReview(PermissionRequiredMixin,
 
 
 class BatchReview(BaseDocumentList):
-    """Starts the review process more multiple documents at once.
+    """Starts the review process for multiple documents at once.
 
     This operation can be quite time consuming when many documents are reviewed
     at once, and this is expected to be normal by the users. We display a nice
