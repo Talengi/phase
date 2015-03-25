@@ -15,6 +15,7 @@ DATABASES = {
 
 # We need a different media root so we can wipe it securely in tests
 MEDIA_ROOT = '/tmp/phase_media/'
+PRIVATE_ROOT = '/tmp/phase_media/'
 
 PIPELINE_ENABLED = False
 STATICFILES_STORAGE = 'pipeline.storage.NonPackagingPipelineStorage'
