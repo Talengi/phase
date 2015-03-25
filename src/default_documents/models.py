@@ -613,7 +613,7 @@ class Transmittals(Metadata):
 
     def generate_document_key(self):
         return slugify(
-            u"{contract_number}-{originator}-{recipient}"
+            u"{contract_number}-{originator}-{recipient}-"
             u"{document_type}-{sequential_number}"
             .format(
                 contract_number=self.contract_number,
