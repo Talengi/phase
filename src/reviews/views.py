@@ -158,7 +158,7 @@ class BatchReview(BaseDocumentList):
 
         poll_url = reverse('batch_review_poll', args=[job.id])
         data = {'poll_url': poll_url}
-        return HttpResponse(json.dumps(data), mimetype='application/json')
+        return HttpResponse(json.dumps(data), content_type='application/json')
 
 
 class BatchReviewPoll(View):
@@ -188,7 +188,7 @@ class BatchReviewPoll(View):
             'done': done,
             'progress': progress
         }
-        return HttpResponse(json.dumps(data), mimetype='application/json')
+        return HttpResponse(json.dumps(data), content_type='application/json')
 
 
 class BaseReviewDocumentList(LoginRequiredMixin, ListView):
