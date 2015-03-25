@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load compressed crispy_forms_tags documents document_forms review_form %}
+{% load pipeline crispy_forms_tags documents document_forms review_form %}
 
 {% block content %}
 <div id="document-sidebar" class="hidden-xs col-sm-4 col-lg-3 col-lg-offset-1">
@@ -173,5 +173,5 @@
         currentUrl: "{% url "review_document" document_key %}",
     });
 </script>
-{% compressed_js "review" %}
+{% javascript "review" %}
 {% endblock extra_js %}

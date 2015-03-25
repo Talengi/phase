@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load compressed documents %}
+{% load pipeline documents %}
 
 {% block custombodyclass %}documentlist fullwidth{% endblock %}
 
@@ -41,7 +41,7 @@
 {% endblock %}
 
 {% block extra_js %}
-    {% compressed_js "review_list" %}
+    {% javascript "review_list" %}
     <script>
     var config = {
         detailUrl: "{% url "review_document" "documentNumber" %}",

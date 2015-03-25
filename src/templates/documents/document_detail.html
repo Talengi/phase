@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-{% load compressed crispy_forms_tags %}
+{% load pipeline crispy_forms_tags %}
 
 {% block extra_css %}
-    {% compressed_css "detail" %}
+    {% stylesheet "detail" %}
 {% endblock extra_css %}
 
 {% block content %}
@@ -37,5 +37,5 @@
         currentUrl: "{% url "document_detail" organisation_slug category_slug document.document_key %}"
     });
 </script>
-{% compressed_js "document_detail" %}
+{% javascript "document_detail" %}
 {% endblock extra_js %}

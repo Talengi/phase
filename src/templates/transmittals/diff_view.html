@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load compressed transmittals %}
+{% load pipeline transmittals %}
 
 {% block custombodyclass %}documentlist fullwidth{% endblock %}
 
@@ -72,5 +72,5 @@ $(function() {
     $('[data-toggle="tooltip"]').tooltip();
 });
 </script>
-{% compressed_js "transmittal_list" %}
+{% javascript "transmittal_list" %}
 {% endblock %}

@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-{% load compressed crispy_forms_tags %}
+{% load pipeline crispy_forms_tags %}
 
 {% block extra_css %}
-    {% compressed_css "detail" %}
+    {% stylesheet "detail" %}
 {% endblock extra_css %}
 
 {% block createdocument %}{% endblock createdocument %}
@@ -45,6 +45,6 @@
 {% endblock content %}
 
 {% block extra_js %}
-    {% compressed_js "document_edit" %}
+    {% javascript "document_edit" %}
 {% endblock extra_js %}
 

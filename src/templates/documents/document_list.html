@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load compressed %}
+{% load pipeline %}
 
 {% block breadcrumbs %}
 {{ block.super }}
@@ -46,5 +46,5 @@
         initialBookmarks: {{ bookmarks|safe }}
     });
     </script>
-    {% compressed_js "list" %}
+    {% javascript "list" %}
 {% endblock extra_js %}
