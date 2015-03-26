@@ -87,6 +87,28 @@ class Transmittal(Metadata):
              'status'),
         )
 
+    class PhaseConfig:
+        filter_fields = (
+            'originator', 'recipient', 'status',
+        )
+        column_fields = (
+            ('Reference', 'document_key'),
+            ('Transmittal date', 'transmittal_date'),
+            ('Ack. of receipt date', 'ack_of_receipt_date'),
+            ('Originator', 'originator'),
+            ('Recipient', 'recipient'),
+            ('Document type', 'document_type'),
+            ('Status', 'status'),
+            ('Created on', 'created_on'),
+        )
+        searchable_fields = (
+            'document_key',
+            'originator',
+            'recipient',
+            'document_type',
+            'status',
+        )
+
     def __unicode__(self):
         return self.document_key
 
@@ -109,6 +131,10 @@ class Transmittal(Metadata):
             self.recipient,
             self.sequential_number)
         return key
+
+    @property
+    def title(self):
+        return self.document_key
 
     def get_absolute_url(self):
         return reverse('transmittal_diff', args=[self.pk, self.document_key])
