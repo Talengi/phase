@@ -74,6 +74,12 @@ class Transmittal(Metadata):
         _('Created on'),
         default=timezone.now)
 
+    # Related documents
+    related_documents = models.ManyToManyField(
+        'documents.Document',
+        related_name='transmittals_related_set',
+        null=True, blank=True)
+
     contractor = models.CharField(max_length=255)
     tobechecked_dir = models.CharField(max_length=255)
     accepted_dir = models.CharField(max_length=255)
@@ -202,10 +208,7 @@ class Transmittal(Metadata):
 
 
 class TransmittalRevision(MetadataRevision):
-    status = ConfigurableChoiceField(
-        _('Status'),
-        max_length=20,
-        list_index='STATUS_TRANSMITTALS')
+    pass
 
 
 class TrsRevision(models.Model):
