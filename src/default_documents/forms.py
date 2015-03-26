@@ -229,8 +229,6 @@ class TransmittalsForm(BaseDocumentForm):
                 'recipient',
                 'document_type',
                 'sequential_number',
-                'frm',
-                'to',
                 self.related_documents,
             )
         )

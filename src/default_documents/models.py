@@ -561,16 +561,6 @@ class Transmittals(Metadata):
         default=u"0001",
         max_length=4,
         validators=[StringNumberValidator(4)])
-    frm = models.ForeignKey(
-        User,
-        verbose_name=_('From'),
-        related_name='sent_transmittals',
-        null=True, blank=True)
-    to = models.ForeignKey(
-        User,
-        verbose_name=_('To'),
-        related_name='received_transmittals',
-        null=True, blank=True)
 
     # Related documents
     related_documents = models.ManyToManyField(
