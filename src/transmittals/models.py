@@ -13,6 +13,7 @@ from django.core.urlresolvers import reverse
 
 from model_utils import Choices
 
+from categories.models import Category
 from documents.utils import save_document_forms
 from documents.models import Document
 from reviews.models import CLASSES
@@ -38,6 +39,10 @@ class Transmittal(models.Model):
     transmittal_key = models.SlugField(
         _('Transmittal key'),
         max_length=250)
+    category = models.ForeignKey(
+        Category,
+        verbose_name=_('Category'),
+        related_name='transmittals')
     contract_number = ConfigurableChoiceField(
         verbose_name='Contract Number',
         max_length=8,
