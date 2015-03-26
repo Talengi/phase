@@ -36,7 +36,7 @@ class Transmittal(Metadata):
     )
 
     latest_revision = models.ForeignKey(
-        'TransmittalsRevision',
+        'TransmittalRevision',
         verbose_name=_('Latest revision'))
 
     # General informations
