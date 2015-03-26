@@ -10,6 +10,8 @@ from shutil import rmtree, copytree
 from django.test import TestCase
 from django.core.cache import cache
 
+from documents.models import Document
+from categories.factories import CategoryFactory
 from transmittals.imports import TrsImport
 from transmittals.factories import TransmittalFactory
 
@@ -26,6 +28,12 @@ class TransmittalsValidationTests(TestCase):
     def setUp(self):
         # Clear the values list cache
         cache.clear()
+
+        try:
+            document = Document.objects.get(document_key='FAC10005-CTR-000-EXP-LAY-4891')
+            self.category = document.category
+        except Document.DoesNotExist:
+            self.category = CategoryFactory()
 
         self.tmpdir = tempfile.mkdtemp(prefix='phasetest_', suffix='_trs')
         self.incoming = join(self.tmpdir, 'incoming')
@@ -67,6 +75,7 @@ class TransmittalsValidationTests(TestCase):
             rejected_dir=self.config['REJECTED_DIR'],
             email_list=self.config['EMAIL_LIST'],
             contractor=fixtures_dir,
+            category=self.category,
         )
         return trs_import
 
@@ -140,6 +149,12 @@ class CSVContentTests(TransmittalsValidationTests):
     def test_missing_pdf_file(self):
         trs_import = self.prepare_fixtures('missing_pdf', 'FAC10005-CTR-CLT-TRS-00001')
         self.assertTrue('missing_pdf' in trs_import.errors['csv_content'][2])
+
+    def test_wrong_category_error(self):
+        trs_import = self.prepare_fixtures('single_correct_trs', 'FAC10005-CTR-CLT-TRS-00001')
+        trs_import.category = CategoryFactory()
+
+        self.assertTrue('wrong_category' in trs_import.errors['csv_content'][2])
 
     def test_form_validation_error(self):
         trs_import = self.prepare_fixtures('form_error', 'FAC10005-CTR-CLT-TRS-00001')
