@@ -281,6 +281,9 @@ class MetadataRevision(models.Model):
     pdf_file = RevisionFileField(
         verbose_name=u"PDF File",
         null=True, blank=True)
+    received_date = models.DateField(
+        _('Received date'),
+        null=True, blank=True)
     created_on = models.DateField(
         _('Created on'),
         default=timezone.now)

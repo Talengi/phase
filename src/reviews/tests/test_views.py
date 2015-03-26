@@ -1,4 +1,9 @@
+# -*- coding: utf-8 -*-
+
+from __future__ import unicode_literals
+
 import datetime
+import json
 
 from django.test import TestCase
 from django.core.urlresolvers import reverse
@@ -33,6 +38,7 @@ class BatchReviewTests(TestCase):
                 'reviewers': [self.user],
                 'leader': self.user,
                 'approver': self.user,
+                'received_date': datetime.date.today(),
             }
         )
         self.doc2 = DocumentFactory(
@@ -40,6 +46,7 @@ class BatchReviewTests(TestCase):
                 'reviewers': [self.user],
                 'leader': self.user,
                 'approver': self.user,
+                'received_date': datetime.date.today(),
             }
         )
         self.doc3 = DocumentFactory(
@@ -47,48 +54,19 @@ class BatchReviewTests(TestCase):
                 'reviewers': [],
                 'leader': None,
                 'approver': None,
+                'received_date': datetime.date.today(),
             }
         )
         self.ok = 'The review started for the following documents'
         self.nok = "We failed to start the review for the following documents"
 
-    def test_batch_review_redirect(self):
-        document_list_url = reverse('category_document_list', args=[
-            self.category.organisation.slug,
-            self.category.slug,
-        ])
+    def test_batch_review_returns_poll_url(self):
         res = self.client.post(
             self.url,
             {'document_ids': [self.doc1.id, self.doc2.id]}
         )
-        self.assertRedirects(res, document_list_url)
-
-    def test_batch_review_documents_success(self):
-        res = self.client.post(
-            self.url,
-            {'document_ids': [self.doc1.id, self.doc2.id]},
-            follow=True
-        )
-        self.assertContains(res, self.ok)
-        self.assertNotContains(res, self.nok)
-
-    def test_batch_review_errors(self):
-        res = self.client.post(
-            self.url,
-            {'document_ids': [self.doc3.id]},
-            follow=True
-        )
-        self.assertNotContains(res, self.ok)
-        self.assertContains(res, self.nok)
-
-    def test_batch_review_half_success(self):
-        res = self.client.post(
-            self.url,
-            {'document_ids': [self.doc1.id, self.doc3.id]},
-            follow=True
-        )
-        self.assertContains(res, self.ok)
-        self.assertContains(res, self.nok)
+        json_content = json.loads(res.content)
+        self.assertTrue('poll_url' in json_content)
 
 
 class PrioritiesDocumentListTests(TestCase):
@@ -120,6 +98,7 @@ class PrioritiesDocumentListTests(TestCase):
                 'leader': self.other_user,
                 'approver': self.other_user,
                 'docclass': 1,
+                'received_date': datetime.date.today(),
             }
         )
         doc.latest_revision.start_review()
@@ -134,6 +113,7 @@ class PrioritiesDocumentListTests(TestCase):
                 'leader': self.user,
                 'approver': self.other_user,
                 'docclass': 1,
+                'received_date': datetime.date.today(),
             }
         )
         revision = doc.latest_revision
@@ -151,6 +131,7 @@ class PrioritiesDocumentListTests(TestCase):
                 'leader': self.user,
                 'approver': self.other_user,
                 'docclass': 3,
+                'received_date': datetime.date.today(),
             }
         )
         revision = doc.latest_revision
@@ -167,6 +148,7 @@ class PrioritiesDocumentListTests(TestCase):
                 'leader': self.user,
                 'approver': self.other_user,
                 'docclass': 1,
+                'received_date': datetime.date.today(),
             }
         )
         revision = doc.latest_revision
@@ -206,6 +188,7 @@ class ReviewersDocumentListTests(TestCase):
                 'reviewers': [self.user],
                 'leader': self.other_user,
                 'approver': self.other_user,
+                'received_date': datetime.date.today(),
             }
         )
         self.assertFalse(doc.latest_revision.is_under_review())
@@ -218,6 +201,7 @@ class ReviewersDocumentListTests(TestCase):
                 'reviewers': [self.user],
                 'leader': self.user,
                 'approver': self.user,
+                'received_date': datetime.date.today(),
             }
         )
         doc.latest_revision.start_review()
@@ -231,6 +215,7 @@ class ReviewersDocumentListTests(TestCase):
                 'reviewers': [self.user],
                 'leader': self.user,
                 'approver': self.user,
+                'received_date': datetime.date.today(),
             }
         )
         doc.latest_revision.start_review()
@@ -245,6 +230,7 @@ class ReviewersDocumentListTests(TestCase):
                 'reviewers': [self.user],
                 'leader': self.user,
                 'approver': self.user,
+                'received_date': datetime.date.today(),
             }
         )
         doc.latest_revision.start_review()
@@ -259,6 +245,7 @@ class ReviewersDocumentListTests(TestCase):
                 'reviewers': [self.user],
                 'leader': self.user,
                 'approver': self.user,
+                'received_date': datetime.date.today(),
             }
         )
         doc.latest_revision.start_review()
@@ -301,6 +288,7 @@ class LeaderDocumentListTests(TestCase):
                 'reviewers': [self.other_user],
                 'leader': self.user,
                 'approver': self.other_user,
+                'received_date': datetime.date.today(),
             }
         )
         self.assertFalse(doc.latest_revision.is_under_review())
@@ -313,6 +301,7 @@ class LeaderDocumentListTests(TestCase):
                 'reviewers': [self.other_user],
                 'leader': self.user,
                 'approver': self.other_user,
+                'received_date': datetime.date.today(),
             }
         )
         doc.latest_revision.start_review()
@@ -325,6 +314,7 @@ class LeaderDocumentListTests(TestCase):
                 'reviewers': [self.other_user],
                 'leader': self.user,
                 'approver': self.other_user,
+                'received_date': datetime.date.today(),
             }
         )
         doc.latest_revision.start_review()
@@ -338,6 +328,7 @@ class LeaderDocumentListTests(TestCase):
                 'reviewers': [self.other_user],
                 'leader': self.user,
                 'approver': self.other_user,
+                'received_date': datetime.date.today(),
             }
         )
         doc.latest_revision.start_review()
@@ -369,6 +360,7 @@ class ApproverDocumentListTests(TestCase):
                 'reviewers': [self.other_user],
                 'leader': self.other_user,
                 'approver': self.user,
+                'received_date': datetime.date.today(),
             }
         )
         doc.latest_revision.start_review()
@@ -385,6 +377,7 @@ class ApproverDocumentListTests(TestCase):
                 'reviewers': [self.other_user],
                 'leader': self.other_user,
                 'approver': self.user,
+                'received_date': datetime.date.today(),
             }
         )
         doc.latest_revision.start_review()
@@ -398,6 +391,7 @@ class ApproverDocumentListTests(TestCase):
                 'reviewers': [self.other_user],
                 'leader': self.other_user,
                 'approver': self.user,
+                'received_date': datetime.date.today(),
             }
         )
         doc.latest_revision.start_review()
@@ -433,6 +427,7 @@ class ReviewFormTests(TestCase):
                 'reviewers': [self.user],
                 'leader': self.other_user,
                 'approver': self.other_user,
+                'received_date': datetime.date.today(),
             }
         )
         revision = doc.latest_revision
@@ -454,6 +449,7 @@ class ReviewFormTests(TestCase):
                 'reviewers': [self.user],
                 'leader': self.other_user,
                 'approver': self.other_user,
+                'received_date': datetime.date.today(),
             }
         )
         revision = doc.latest_revision
@@ -473,6 +469,7 @@ class ReviewFormTests(TestCase):
                 'reviewers': [self.user],
                 'leader': self.other_user,
                 'approver': self.other_user,
+                'received_date': datetime.date.today(),
             }
         )
         revision = doc.latest_revision
@@ -492,6 +489,7 @@ class ReviewFormTests(TestCase):
                 'reviewers': [self.other_user],
                 'leader': self.other_user,
                 'approver': self.other_user,
+                'received_date': datetime.date.today(),
             }
         )
         revision = doc.latest_revision
@@ -507,6 +505,7 @@ class ReviewFormTests(TestCase):
                 'reviewers': [self.user],
                 'leader': self.other_user,
                 'approver': self.other_user,
+                'received_date': datetime.date.today(),
             }
         )
         revision = doc.latest_revision
@@ -523,6 +522,7 @@ class ReviewFormTests(TestCase):
                 'reviewers': [self.user],
                 'leader': self.other_user,
                 'approver': self.other_user,
+                'received_date': datetime.date.today(),
             }
         )
         revision = doc.latest_revision
@@ -545,6 +545,7 @@ class ReviewFormTests(TestCase):
                 'reviewers': [self.other_user],
                 'leader': self.user,
                 'approver': self.other_user,
+                'received_date': datetime.date.today(),
             }
         )
         revision = doc.latest_revision
@@ -565,6 +566,7 @@ class ReviewFormTests(TestCase):
                 'reviewers': [self.other_user],
                 'leader': self.user,
                 'approver': self.other_user,
+                'received_date': datetime.date.today(),
             }
         )
         revision = doc.latest_revision
@@ -584,6 +586,7 @@ class ReviewFormTests(TestCase):
                 'reviewers': [self.other_user],
                 'leader': self.user,
                 'approver': self.other_user,
+                'received_date': datetime.date.today(),
             }
         )
         revision = doc.latest_revision
@@ -600,6 +603,7 @@ class ReviewFormTests(TestCase):
                 'reviewers': [self.other_user],
                 'leader': self.other_user,
                 'approver': self.user,
+                'received_date': datetime.date.today(),
             }
         )
         revision = doc.latest_revision
@@ -620,6 +624,7 @@ class ReviewFormTests(TestCase):
                 'reviewers': [self.other_user],
                 'leader': self.other_user,
                 'approver': self.user,
+                'received_date': datetime.date.today(),
             }
         )
         revision = doc.latest_revision
@@ -639,6 +644,7 @@ class ReviewFormTests(TestCase):
                 'reviewers': [self.other_user],
                 'leader': self.other_user,
                 'approver': self.user,
+                'received_date': datetime.date.today(),
             }
         )
         revision = doc.latest_revision
@@ -665,6 +671,7 @@ class StartReviewTests(TestCase):
                 'reviewers': [self.user],
                 'leader': self.user,
                 'approver': self.user,
+                'received_date': datetime.date.today(),
             }
         )
         self.client.login(email=self.user.email, password='pass')

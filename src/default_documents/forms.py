@@ -63,6 +63,7 @@ class ContractorDeliverableRevisionForm(ReviewFormMixin, BaseDocumentForm):
             review_layout = (
                 DocumentFieldset(
                     _('Review'),
+                    Field('received_date', readonly='readonly'),
                     Field('review_start_date', readonly='readonly'),
                     Field('review_due_date', readonly='readonly'),
                     PropertyLayout('current_review_step'),
@@ -78,6 +79,7 @@ class ContractorDeliverableRevisionForm(ReviewFormMixin, BaseDocumentForm):
             review_layout = (
                 DocumentFieldset(
                     _('Review'),
+                    'received_date',
                     Field('review_start_date', readonly='readonly'),
                     Field('review_due_date', readonly='readonly'),
                     PropertyLayout('current_review_step'),

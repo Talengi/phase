@@ -2,6 +2,8 @@
 
 from __future__ import unicode_literals
 
+import datetime
+
 from django.test import TestCase
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
@@ -44,6 +46,7 @@ class ContextProcessorTests(TestCase):
                 'reviewers': [self.user, self.other_user],
                 'leader': self.user,
                 'approver': self.user,
+                'received_date': datetime.date.today(),
             }
         )
         doc.latest_revision.start_review()
@@ -52,6 +55,7 @@ class ContextProcessorTests(TestCase):
                 'reviewers': [self.user, self.other_user],
                 'leader': self.other_user,
                 'approver': self.user,
+                'received_date': datetime.date.today(),
             }
         )
         doc.latest_revision.start_review()
@@ -67,6 +71,7 @@ class ContextProcessorTests(TestCase):
                 'reviewers': [self.user, self.other_user],
                 'leader': self.user,
                 'approver': self.user,
+                'received_date': datetime.date.today(),
             }
         )
         doc.latest_revision.start_review()
@@ -75,6 +80,7 @@ class ContextProcessorTests(TestCase):
                 'reviewers': [self.user, self.other_user],
                 'leader': self.other_user,
                 'approver': self.user,
+                'received_date': datetime.date.today(),
             }
         )
         doc.latest_revision.start_review()
@@ -93,6 +99,7 @@ class ContextProcessorTests(TestCase):
                 'leader': self.user,
                 'approver': self.other_user,
                 'docclass': 1,
+                'received_date': datetime.date.today(),
             }
         )
         revision = doc.latest_revision

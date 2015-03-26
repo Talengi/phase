@@ -15,13 +15,19 @@ DATABASES = {
 
 # We need a different media root so we can wipe it securely in tests
 MEDIA_ROOT = '/tmp/phase_media/'
+PRIVATE_ROOT = '/tmp/phase_media/'
 
 PIPELINE_ENABLED = False
 STATICFILES_STORAGE = 'pipeline.storage.NonPackagingPipelineStorage'
 
 ELASTIC_INDEX = 'test_documents'
 ELASTIC_AUTOINDEX = False
+
+# Makes Celery working synchronously and in memory
 CELERY_ALWAYS_EAGER = True
+BROKER_URL = "memory://"
+CELERY_CACHE_BACKEND = "memory"
+CELERY_RESULT_BACKEND = "cache"
 
 LOGGING['loggers']['elasticsearch'] = {
     'handlers': ['console', 'syslog', 'mail_admins'],

@@ -1,4 +1,9 @@
+# -*- coding: utf-8 -*-
+
+from __future__ import unicode_literals
+
 import os
+from shutil import rmtree
 
 from django.test import TestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -28,16 +33,13 @@ class FieldTests(TestCase):
     def tearDown(self):
         """Wipe the media root directory after each test."""
         media_root = settings.MEDIA_ROOT
-        if os.path.exists(media_root):
-            for f in os.listdir(media_root):
-                file_path = os.path.join(media_root, f)
-                if os.path.isfile(file_path) and file_path.startswith('/tmp/'):
-                    os.unlink(file_path)
+        if os.path.exists(media_root) and media_root.startswith('/tmp/'):
+            rmtree(media_root)
 
     def test_reviewer_comment_file_name(self):
         """Test that comment files are renamed correctly."""
-        sample_path = 'documents/tests/'
-        sample_file = 'sample_doc_zip.zip'
+        sample_path = b'documents/tests/'
+        sample_file = b'sample_doc_zip.zip'
 
         review = Review.objects.create(
             reviewer=self.user,
@@ -49,13 +51,13 @@ class FieldTests(TestCase):
 
         self.assertEqual(
             review.comments.name,
-            u'HAZOP-related_01_4_comments.zip'
+            'reviews/HAZOP-related_01_4_comments.zip'
         )
 
     def test_leader_comment_file_name(self):
         """Test that comment files are renamed correctly."""
-        sample_path = 'documents/tests/'
-        sample_file = 'sample_doc_zip.zip'
+        sample_path = b'documents/tests/'
+        sample_file = b'sample_doc_zip.zip'
 
         review = Review.objects.create(
             reviewer=self.user,
@@ -67,13 +69,13 @@ class FieldTests(TestCase):
 
         self.assertEqual(
             review.comments.name,
-            u'HAZOP-related_01_leader_comments.zip'
+            'reviews/HAZOP-related_01_leader_comments.zip'
         )
 
     def test_approver_comment_file_name(self):
         """Test that comment files are renamed correctly."""
-        sample_path = 'documents/tests/'
-        sample_file = 'sample_doc_zip.zip'
+        sample_path = b'documents/tests/'
+        sample_file = b'sample_doc_zip.zip'
 
         review = Review.objects.create(
             reviewer=self.user,
@@ -85,5 +87,5 @@ class FieldTests(TestCase):
 
         self.assertEqual(
             review.comments.name,
-            u'HAZOP-related_01_GTG_comments.zip'
+            'reviews/HAZOP-related_01_GTG_comments.zip'
         )

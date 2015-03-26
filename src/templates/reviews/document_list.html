@@ -13,6 +13,7 @@
                     <th>{{ _('Title') }}</th>
                     <th>{{ _('Revision') }}</th>
                     <th>{{ _('Status') }}</th>
+                    <th>{{ _('Received date') }}</th>
                     <th>{{ _('Start date') }}</th>
                     <th>{{ _('Due date') }}</th>
                     <th>{{ _('Step') }}</th>
@@ -29,6 +30,7 @@
                 </td>
                 <td class="columncurrent_revision">{{ rev.name }}</td>
                 <td class="columnstatus">{{ rev.status }}</td>
+                <td class="columnreview_received_date">{{ rev.received_date|stringify }}</td>
                 <td class="columnreview_start_date">{{ rev.review_start_date|stringify }}</td>
                 <td class="columnreview_due_date">{{ rev.review_due_date|stringify }}</td>
                 <td>{{ rev.current_review_step }}</td>
