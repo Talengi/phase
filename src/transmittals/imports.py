@@ -13,6 +13,7 @@ from django.core.files import File
 
 from annoying.functions import get_object_or_None
 
+from documents.utils import save_document_forms
 from transmittals.validation import (
     TrsValidator, CSVLineValidator, RevisionsValidator)
 from transmittals.reports import ErrorReport
@@ -257,21 +258,28 @@ class TrsImport(object):
     @transaction.atomic
     def save(self):
         """Save transmittal data in db."""
-        from transmittals.models import Transmittal, TrsRevision
 
-        status = Transmittal.STATUSES.tobechecked
+        # We import those here because we need to make sure that
+        # the values_lists have already been populated
+        from transmittals.models import TrsRevision
+        from transmittals.forms import TransmittalForm, TransmittalRevisionForm
 
-        transmittal = Transmittal.objects.create(
-            contractor=self.contractor,
-            tobechecked_dir=self.tobechecked_dir,
-            accepted_dir=self.accepted_dir,
-            rejected_dir=self.rejected_dir,
-            contract_number=self.contract_number,
-            originator=self.originator,
-            recipient=self.recipient,
-            sequential_number=self.sequential_number,
-            status=status,
-            category=self.category)
+        # TODO save the csv_file as native_file
+        data = {
+            'contractor': self.contractor,
+            'tobechecked_dir': self.tobechecked_dir,
+            'accepted_dir': self.accepted_dir,
+            'rejected_dir': self.rejected_dir,
+            'contract_number': self.contract_number,
+            'originator': self.originator,
+            'recipient': self.recipient,
+            'sequential_number': self.sequential_number,
+            'status': 'tobechecked',
+        }
+        form = TransmittalForm(data=data)
+        revision_form = TransmittalRevisionForm(data=data)
+        doc, transmittal, revision = save_document_forms(
+            form, revision_form, self.category)
 
         for line in self:
             data = line.csv_data
