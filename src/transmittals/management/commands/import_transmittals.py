@@ -9,6 +9,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.core.exceptions import ImproperlyConfigured
 from django.conf import settings
 
+from categories.models import Category
 from transmittals.imports import TrsImport
 
 
@@ -21,12 +22,12 @@ class Command(BaseCommand):
     This is the entry point to the transmittals import feature.
 
     """
-    args = '<contractor_id>'
+    args = '<contractor_id> <organisation_slug> <category_slug>'
     help = 'Import existing transmittals for a given contractor.'
 
     def handle(self, *args, **options):
-        if len(args) != 1:
-            error = 'You must provide a contractor id as an argument'
+        if len(args) != 3:
+            error = 'Usage: python manage.py import_transmittals {}'.format(self.args)
             raise CommandError(error)
 
         # Get configuration for the given contractor
@@ -36,6 +37,18 @@ class Command(BaseCommand):
         if ctr_config is None:
             raise ImproperlyConfigured('The "%s" contractor is unknown. '
                                        'Check your configuration.' % contractor_id)
+
+        # Get category
+        organisation_slug = args[1]
+        category_slug = args[2]
+        try:
+            category = Category.objects \
+                .filter(organisation__slug=organisation_slug) \
+                .filter(category_template__slug=category_slug) \
+                .get()
+        except Category.DoesNotExist:
+            error = 'This category is unknown. Check your configuration.'
+            raise CommandError(error)
 
         # Check directories permissions
         self.assert_permissions(ctr_config['INCOMING_DIR'])
@@ -48,7 +61,7 @@ class Command(BaseCommand):
         dir_content = os.listdir(incoming_dir)
         for incoming in dir_content:
             fullname = os.path.join(incoming_dir, incoming)
-            self.import_dir(fullname, ctr_config, contractor_id)
+            self.import_dir(fullname, ctr_config, contractor_id, category)
 
     def assert_permissions(self, path):
         """Raise an error if the given path is not writeable."""
@@ -61,7 +74,7 @@ class Command(BaseCommand):
             error = 'The directory "%s" is not writeable.' % path
             raise CommandError(error)
 
-    def import_dir(self, directory, config, contractor):
+    def import_dir(self, directory, config, contractor, category):
         """Start the import task for a single directory."""
         logger.info('Starting import of trs in %s' % directory)
 
@@ -72,5 +85,6 @@ class Command(BaseCommand):
             rejected_dir=config['REJECTED_DIR'],
             email_list=config['EMAIL_LIST'],
             contractor=contractor,
+            category=category,
         )
         trsImport.do_import()
