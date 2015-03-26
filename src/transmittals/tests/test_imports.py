@@ -10,7 +10,7 @@ from shutil import rmtree, copytree
 from django.test import TestCase
 from django.core.cache import cache
 
-from categories.factories import CategoryFactory
+from documents.models import Document
 from transmittals.imports import TrsImport
 from transmittals.models import Transmittal, TrsRevision
 
@@ -22,7 +22,8 @@ class TestImports(TestCase):
         # Clear the values list cache
         cache.clear()
 
-        self.category = CategoryFactory()
+        document = Document.objects.get(document_key='FAC10005-CTR-000-EXP-LAY-4891')
+        self.category = document.category
 
         self.tmpdir = tempfile.mkdtemp(prefix='phasetest_', suffix='_trs')
         self.incoming = join(self.tmpdir, 'incoming')
@@ -85,7 +86,7 @@ class TestImports(TestCase):
         trs_import.save()
 
         transmittal = Transmittal.objects.all()[0]
-        self.assertEqual(transmittal.category, self.category)
+        self.assertEqual(transmittal.document.category, self.category)
         self.assertEqual(transmittal.contract_number, 'FAC10005')
         self.assertEqual(transmittal.originator, 'CTR')
         self.assertEqual(transmittal.recipient, 'CLT')
