@@ -7112,5 +7112,15 @@
     "order": 2,
     "value": "Sent"
   }
+},
+{
+  "pk": 10697,
+  "model": "metadata.listentry",
+  "fields": {
+    "index": "CLT",
+    "values_list": 15,
+    "order": 1,
+    "value": "CLT"
+  }
 }
 ]
