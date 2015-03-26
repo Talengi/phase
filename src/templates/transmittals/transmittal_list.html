@@ -22,6 +22,7 @@
                 <th>Recipient</th>
                 <th>Sequential number</th>
                 <th>Reception date</th>
+                <th>Category</th>
                 <th>Status</th>
             </tr>
         </thead>
@@ -37,6 +38,7 @@
                     <td>{{ transmittal.recipient }}</td>
                     <td>{{ transmittal.sequential_number|stringformat:"05d" }}</td>
                     <td>{{ transmittal.created_on|date }}</td>
+                    <td>{{ transmittal.category }}</td>
                     <td>{{ transmittal.get_status_display }}</td>
                 </tr>
             {% endfor %}

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 from __future__ import unicode_literals
 
 import logging
@@ -30,7 +31,10 @@ class TransmittalListView(LoginRequiredMixin, ListView):
         # TODO
         # - Does anyone has the right to view every transmittals?
         # - Configure ACLs
-        return Transmittal.objects.order_by('-id').all()
+        return Transmittal.objects \
+            .exclude(status='accepted') \
+            .select_related('category__organisation', 'category__category_template') \
+            .order_by('-id')
 
     def get_context_data(self, **kwargs):
         context = super(TransmittalListView, self).get_context_data(**kwargs)
