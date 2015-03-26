@@ -26,6 +26,7 @@ class ReviewMixinTests(TestCase):
                 'leader': self.user,
                 'approver': self.user,
                 'reviewers': [self.user],
+                'received_date': datetime.datetime.today(),
             }
         )
         return doc.latest_revision
@@ -35,6 +36,7 @@ class ReviewMixinTests(TestCase):
             category=self.category,
             revision={
                 'leader': self.user,
+                'received_date': datetime.datetime.today(),
             }
         )
         return doc.latest_revision
@@ -46,6 +48,16 @@ class ReviewMixinTests(TestCase):
     def test_doc_without_leader_cannot_be_reviewed(self):
         doc = DocumentFactory(category=self.category)
         revision = doc.latest_revision
+        revision.approver = self.user
+        revision.reviewers = [self.user]
+        revision.save()
+
+        self.assertFalse(revision.can_be_reviewed)
+
+    def test_doc_without_received_date_cannot_be_reviewed(self):
+        doc = DocumentFactory(category=self.category)
+        revision = doc.latest_revision
+        revision.leader = self.user
         revision.approver = self.user
         revision.reviewers = [self.user]
         revision.save()
@@ -188,6 +200,7 @@ class ReviewMixinTests(TestCase):
         revision.leader = self.user
         revision.approver = self.user
         revision.reviewers.add(self.user)
+        revision.received_date = datetime.datetime.now()
         revision.save()
 
         self.assertFalse(revision.is_under_review())

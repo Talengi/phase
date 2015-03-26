@@ -2,6 +2,8 @@
 
 from __future__ import unicode_literals
 
+import datetime
+
 from django.test import TestCase
 from django.contrib.contenttypes.models import ContentType
 
@@ -28,6 +30,7 @@ class BatchReviewTests(TestCase):
                 'reviewers': [self.user],
                 'leader': self.user,
                 'approver': self.user,
+                'received_date': datetime.date.today(),
             }
         )
         self.doc2 = DocumentFactory(
@@ -35,6 +38,7 @@ class BatchReviewTests(TestCase):
                 'reviewers': [self.user],
                 'leader': self.user,
                 'approver': self.user,
+                'received_date': datetime.date.today(),
             }
         )
         self.doc3 = DocumentFactory(
@@ -42,6 +46,7 @@ class BatchReviewTests(TestCase):
                 'reviewers': [],
                 'leader': None,
                 'approver': None,
+                'received_date': datetime.date.today(),
             }
         )
         self.content_type = ContentType.objects.get_for_model(self.doc3.metadata)
