@@ -31,13 +31,14 @@ class TrsImport(object):
 
     """
     def __init__(self, trs_dir, tobechecked_dir, accepted_dir, rejected_dir,
-                 email_list, contractor):
+                 email_list, contractor, category):
         self.trs_dir = trs_dir
         self.tobechecked_dir = tobechecked_dir
         self.accepted_dir = accepted_dir
         self.rejected_dir = rejected_dir
         self.email_list = email_list
         self.contractor = contractor
+        self.category = category
 
         self._errors = None
         self._csv_cols = None
@@ -269,7 +270,8 @@ class TrsImport(object):
             originator=self.originator,
             recipient=self.recipient,
             sequential_number=self.sequential_number,
-            status=status)
+            status=status,
+            category=self.category)
 
         for line in self:
             data = line.csv_data
