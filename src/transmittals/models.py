@@ -88,19 +88,19 @@ class Transmittal(Metadata):
         )
 
     def __unicode__(self):
-        return self.transmittal_key
+        return self.document_key
 
     @property
     def full_tobechecked_name(self):
-        return os.path.join(self.tobechecked_dir, self.transmittal_key)
+        return os.path.join(self.tobechecked_dir, self.document_key)
 
     @property
     def full_accepted_name(self):
-        return os.path.join(self.accepted_dir, self.transmittal_key)
+        return os.path.join(self.accepted_dir, self.document_key)
 
     @property
     def full_rejected_name(self):
-        return os.path.join(self.rejected_dir, self.transmittal_key)
+        return os.path.join(self.rejected_dir, self.document_key)
 
     def generate_document_key(self):
         key = '{}-{}-{}-TRS-{:0>5d}'.format(
@@ -111,7 +111,7 @@ class Transmittal(Metadata):
         return key
 
     def get_absolute_url(self):
-        return reverse('transmittal_diff', args=[self.pk, self.transmittal_key])
+        return reverse('transmittal_diff', args=[self.pk, self.document_key])
 
     def reject(self):
         """Mark the transmittal as rejected.
@@ -128,7 +128,7 @@ class Transmittal(Metadata):
         if self.status != 'tobechecked':
             error_msg = 'The transmittal {} cannot be rejected ' \
                         'it it\'s current status ({})'.format(
-                            self.transmittal_key, self.status)
+                            self.document_key, self.status)
             raise RuntimeError(error_msg)
 
         # If an existing version already exists in rejected, we delete it before
@@ -166,7 +166,7 @@ class Transmittal(Metadata):
         if self.status != 'tobechecked':
             error_msg = 'The transmittal {} cannot be accepted ' \
                         'in it\'s current state ({})'.format(
-                            self.transmittal_key, self.get_status_display())
+                            self.document_key, self.get_status_display())
             raise RuntimeError(error_msg)
 
         self.status = 'processing'
@@ -265,7 +265,7 @@ class TrsRevision(models.Model):
 
     def get_absolute_url(self):
         return reverse('transmittal_revision_diff', args=[
-            self.transmittal.pk, self.transmittal.transmittal_key,
+            self.transmittal.pk, self.transmittal.document_key,
             self.document_key, self.revision])
 
     def get_document_fields(self):

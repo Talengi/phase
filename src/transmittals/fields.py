@@ -15,7 +15,7 @@ def transmittal_upload_to(trs_revision, filename):
 
     """
     return 'transmittals/{transmittal}/{filename}'.format(
-        transmittal=trs_revision.transmittal.transmittal_key,
+        transmittal=trs_revision.transmittal.document_key,
         filename=os.path.basename(filename))
 
 

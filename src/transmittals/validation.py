@@ -76,7 +76,7 @@ class TrsExistenceValidator(Validator):
         from transmittals.models import Transmittal
         name = trs_import.basename
         qs = Transmittal.objects \
-            .filter(transmittal_key=name) \
+            .filter(document_key=name) \
             .filter(status__in=['new', 'tobechecked', 'accepted'])
         return qs.count() == 0
 

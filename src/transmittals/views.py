@@ -57,7 +57,7 @@ class TransmittalDiffView(LoginRequiredMixin, DetailView):
     def get_object(self, queryset=None):
         qs = Transmittal.objects \
             .filter(pk=self.kwargs['transmittal_pk']) \
-            .filter(transmittal_key=self.kwargs['transmittal_key'])
+            .filter(document_key=self.kwargs['transmittal_key'])
         return qs.get()
 
     def get_context_data(self, **kwargs):
@@ -114,7 +114,7 @@ class TransmittalRevisionDiffView(LoginRequiredMixin, DetailView):
     def get_object(self, queryset=None):
         qs = TrsRevision.objects \
             .filter(transmittal__pk=self.kwargs['transmittal_pk']) \
-            .filter(transmittal__transmittal_key=self.kwargs['transmittal_key']) \
+            .filter(transmittal__document_key=self.kwargs['transmittal_key']) \
             .filter(document_key=self.kwargs['document_key']) \
             .filter(revision=self.kwargs['revision']) \
             .select_related('transmittal', 'document', 'document__category',
@@ -167,7 +167,7 @@ class TransmittalRevisionDiffView(LoginRequiredMixin, DetailView):
                     .get()
             except TrsRevision.DoesNotExist():
                 logger.error('No revision to compare to {} / {} /  {}'.format(
-                    trs_revision.transmittal.transmittal_key,
+                    trs_revision.transmittal.document_key,
                     trs_revision.document_key,
                     trs_revision.revision))
                 revision = {}
@@ -191,7 +191,7 @@ class TransmittalRevisionDiffView(LoginRequiredMixin, DetailView):
         return HttpResponseRedirect(reverse(
             'transmittal_diff',
             args=[self.object.transmittal.pk,
-                  self.object.transmittal.transmittal_key]))
+                  self.object.transmittal.document_key]))
 
 
 class TransmittalDownloadView(LoginRequiredMixin, BaseZipView):
@@ -199,13 +199,13 @@ class TransmittalDownloadView(LoginRequiredMixin, BaseZipView):
 
     def get_files(self):
         transmittal_pk = self.kwargs.get('transmittal_pk')
-        transmittal_key = self.kwargs.get('transmittal_key')
+        document_key = self.kwargs.get('transmittal_key')
         revision_ids = self.request.GET.getlist('revision_ids')
         file_format = self.request.GET.get('format', 'both')
 
         revisions = TrsRevision.objects \
             .filter(transmittal__id=transmittal_pk) \
-            .filter(transmittal__transmittal_key=transmittal_key) \
+            .filter(transmittal__document_key=transmittal_key) \
             .filter(id__in=revision_ids)
 
         files = []
