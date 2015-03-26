@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 
 import factory
 
+from categories.factories import CategoryFactory
 from transmittals.models import Transmittal, TrsRevision
 
 
@@ -18,6 +19,7 @@ class TransmittalFactory(factory.DjangoModelFactory):
     originator = 'CTR'
     recipient = 'CLT'
     sequential_number = factory.Sequence(lambda n: n + 1)
+    category = factory.SubFactory(CategoryFactory)
 
 
 class TrsRevisionFactory(factory.DjangoModelFactory):
