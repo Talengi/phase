@@ -13,9 +13,8 @@ from django.core.urlresolvers import reverse
 
 from model_utils import Choices
 
-from categories.models import Category
 from documents.utils import save_document_forms
-from documents.models import Document
+from documents.models import Document, Metadata, MetadataRevision
 from reviews.models import CLASSES
 from metadata.fields import ConfigurableChoiceField
 from default_documents.validators import StringNumberValidator
@@ -25,7 +24,7 @@ from transmittals.fields import TransmittalFileField
 logger = logging.getLogger(__name__)
 
 
-class Transmittal(models.Model):
+class Transmittal(Metadata):
     """Transmittals are created when a contractor upload documents."""
     STATUSES = Choices(
         ('new', _('New')),
@@ -36,13 +35,17 @@ class Transmittal(models.Model):
         ('accepted', _('Accepted')),
     )
 
-    transmittal_key = models.SlugField(
-        _('Transmittal key'),
-        max_length=250)
-    category = models.ForeignKey(
-        Category,
-        verbose_name=_('Category'),
-        related_name='transmittals')
+    latest_revision = models.ForeignKey(
+        'TransmittalsRevision',
+        verbose_name=_('Latest revision'))
+
+    # General informations
+    transmittal_date = models.DateField(
+        _('Transmittal date'),
+        null=True, blank=True)
+    ack_of_receipt_date = models.DateField(
+        _('Acknowledgment of receipt date'),
+        null=True, blank=True)
     contract_number = ConfigurableChoiceField(
         verbose_name='Contract Number',
         max_length=8,
@@ -58,6 +61,11 @@ class Transmittal(models.Model):
         list_index='RECIPIENTS')
     sequential_number = models.PositiveIntegerField(
         _('sequential number'))
+    document_type = ConfigurableChoiceField(
+        _('Document Type'),
+        default="PID",
+        max_length=3,
+        list_index='DOCUMENT_TYPES')
     status = models.CharField(
         max_length=20,
         choices=STATUSES,
@@ -94,12 +102,7 @@ class Transmittal(models.Model):
     def full_rejected_name(self):
         return os.path.join(self.rejected_dir, self.transmittal_key)
 
-    def save(self, *args, **kwargs):
-        if not self.transmittal_key:
-            self.transmittal_key = self.generate_key()
-        super(Transmittal, self).save(*args, **kwargs)
-
-    def generate_key(self):
+    def generate_document_key(self):
         key = '{}-{}-{}-TRS-{:0>5d}'.format(
             self.contract_number,
             self.originator,
@@ -170,6 +173,13 @@ class Transmittal(models.Model):
         self.save()
 
         process_transmittal.delay(self.pk)
+
+
+class TransmittalRevision(MetadataRevision):
+    status = ConfigurableChoiceField(
+        _('Status'),
+        max_length=20,
+        list_index='STATUS_TRANSMITTALS')
 
 
 class TrsRevision(models.Model):
