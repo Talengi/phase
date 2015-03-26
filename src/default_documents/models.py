@@ -565,7 +565,7 @@ class Transmittals(Metadata):
     # Related documents
     related_documents = models.ManyToManyField(
         'documents.Document',
-        related_name='transmittals_related_set',
+        related_name='old_transmittals_related_set',
         null=True, blank=True)
 
     class Meta:
