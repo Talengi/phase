@@ -153,6 +153,11 @@ class ReviewMixin(models.Model):
         calling this method.
 
         """
+        today = datetime.date.today()
+        duration = settings.REVIEW_DURATION
+        self.review_start_date = today
+        self.review_due_date = self.received_date + datetime.timedelta(days=duration)
+
         reviewers = self.reviewers.all()
         for reviewer in reviewers:
             Review.objects.create(
@@ -183,11 +188,6 @@ class ReviewMixin(models.Model):
                 due_date=self.review_due_date,
                 docclass=self.docclass,
             )
-
-        today = datetime.date.today()
-        duration = settings.REVIEW_DURATION
-        self.review_start_date = today
-        self.review_due_date = today + datetime.timedelta(days=duration)
 
         # If no reviewers, close reviewers step immediatly
         if len(reviewers) == 0:
