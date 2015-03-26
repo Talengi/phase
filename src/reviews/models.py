@@ -138,6 +138,7 @@ class ReviewMixin(models.Model):
 
         """
         return all((
+            self.received_date,
             self.leader_id,
             not self.review_start_date
         ))
