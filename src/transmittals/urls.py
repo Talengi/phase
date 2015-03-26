@@ -19,7 +19,7 @@ urlpatterns = patterns(
     url(r'^(?P<transmittal_pk>\d+)/(?P<document_key>[\w-]+)/download/$',
         TransmittalDownloadView.as_view(),
         name='transmittal_download'),
-    url(r'^(?P<transmittal_pk>\d+)/(?P<document_key>[\w-]+)/(?P<document_key>[\w-]+)/(?P<revision>\d+)/$',
+    url(r'^(?P<transmittal_pk>\d+)/(?P<document_key>[\w-]+)/(?P<revision_document_key>[\w-]+)/(?P<revision>\d+)/$',
         TransmittalRevisionDiffView.as_view(),
         name='transmittal_revision_diff'),
 )

@@ -115,7 +115,7 @@ class TransmittalRevisionDiffView(LoginRequiredMixin, DetailView):
         qs = TrsRevision.objects \
             .filter(transmittal__pk=self.kwargs['transmittal_pk']) \
             .filter(transmittal__document_key=self.kwargs['transmittal_key']) \
-            .filter(document_key=self.kwargs['document_key']) \
+            .filter(document_key=self.kwargs['revision_document_key']) \
             .filter(revision=self.kwargs['revision']) \
             .select_related('transmittal', 'document', 'document__category',
                             'document__category__organisation',
@@ -199,13 +199,13 @@ class TransmittalDownloadView(LoginRequiredMixin, BaseZipView):
 
     def get_files(self):
         transmittal_pk = self.kwargs.get('transmittal_pk')
-        document_key = self.kwargs.get('transmittal_key')
+        document_key = self.kwargs.get('document_key')
         revision_ids = self.request.GET.getlist('revision_ids')
         file_format = self.request.GET.get('format', 'both')
 
         revisions = TrsRevision.objects \
             .filter(transmittal__id=transmittal_pk) \
-            .filter(transmittal__document_key=transmittal_key) \
+            .filter(transmittal__document_key=document_key) \
             .filter(id__in=revision_ids)
 
         files = []
