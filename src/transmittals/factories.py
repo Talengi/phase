@@ -4,7 +4,12 @@ from __future__ import unicode_literals
 
 import factory
 
+from documents.factories import DocumentFactory
 from transmittals.models import Transmittal, TransmittalRevision, TrsRevision
+
+
+class TransmittalRevisionFactory(factory.DjangoModelFactory):
+    FACTORY_FOR = TransmittalRevision
 
 
 class TransmittalFactory(factory.DjangoModelFactory):
@@ -18,10 +23,12 @@ class TransmittalFactory(factory.DjangoModelFactory):
     originator = 'CTR'
     recipient = 'CLT'
     sequential_number = factory.Sequence(lambda n: n + 1)
-
-
-class TransmittalRevisionFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = TransmittalRevision
+    document = factory.SubFactory(
+        DocumentFactory,
+        document_key=factory.SelfAttribute('..document_key'))
+    latest_revision = factory.SubFactory(
+        TransmittalRevisionFactory,
+        document=factory.SelfAttribute('..document'))
 
 
 class TrsRevisionFactory(factory.DjangoModelFactory):
