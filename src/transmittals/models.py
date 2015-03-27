@@ -156,9 +156,6 @@ class Transmittal(Metadata):
     def title(self):
         return self.document_key
 
-    def get_absolute_url(self):
-        return reverse('transmittal_diff', args=[self.pk, self.document_key])
-
     @transaction.atomic
     def reject(self):
         """Mark the transmittal as rejected.

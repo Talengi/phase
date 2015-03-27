@@ -95,7 +95,10 @@ class TransmittalDiffView(LoginRequiredMixin, DetailView):
             error_msg = '{} ({})'.format(error_msg, e)
             notify(request.user, error_msg)
             logger.error(e)
-            return HttpResponseRedirect(self.object.get_absolute_url())
+            return HttpResponseRedirect(reverse(
+                'transmittal_diff',
+                args=[self.object.pk,
+                      self.object.document_key]))
 
 
 class TransmittalRevisionDiffView(LoginRequiredMixin, DetailView):

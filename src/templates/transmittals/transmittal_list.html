@@ -29,7 +29,7 @@
         <tbody>
             {% for transmittal in transmittal_list %}
                 <tr class="document_row">
-                    <td class="key_column"><a href="{{ transmittal.get_absolute_url }}">
+                    <td class="key_column"><a href="{% url 'transmittal_diff' transmittal.pk transmittal.document_key %}">
                             {{ transmittal }}
                         </a>
                     </td>
