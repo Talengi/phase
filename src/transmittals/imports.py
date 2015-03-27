@@ -32,14 +32,15 @@ class TrsImport(object):
 
     """
     def __init__(self, trs_dir, tobechecked_dir, accepted_dir, rejected_dir,
-                 email_list, contractor, category):
+                 email_list, contractor, doc_category, trs_category):
         self.trs_dir = trs_dir
         self.tobechecked_dir = tobechecked_dir
         self.accepted_dir = accepted_dir
         self.rejected_dir = rejected_dir
         self.email_list = email_list
         self.contractor = contractor
-        self.category = category
+        self.doc_category = doc_category
+        self.trs_category = trs_category
 
         self._errors = None
         self._csv_cols = None
@@ -279,7 +280,7 @@ class TrsImport(object):
         form = TransmittalForm(data=data)
         revision_form = TransmittalRevisionForm(data=data)
         doc, transmittal, revision = save_document_forms(
-            form, revision_form, self.category)
+            form, revision_form, self.trs_category)
 
         for line in self:
             data = line.csv_data

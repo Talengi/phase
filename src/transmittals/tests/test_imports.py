@@ -9,8 +9,10 @@ from shutil import rmtree, copytree
 
 from django.test import TestCase
 from django.core.cache import cache
+from django.contrib.contenttypes.models import ContentType
 
 from documents.models import Document
+from categories.factories import CategoryFactory
 from transmittals.imports import TrsImport
 from transmittals.models import Transmittal, TrsRevision
 
@@ -23,7 +25,10 @@ class TestImports(TestCase):
         cache.clear()
 
         document = Document.objects.get(document_key='FAC10005-CTR-000-EXP-LAY-4891')
-        self.category = document.category
+        self.doc_category = document.category
+
+        trs_content_type = ContentType.objects.get_for_model(Transmittal)
+        self.trs_category = CategoryFactory(category_template__metadata_model=trs_content_type)
 
         self.tmpdir = tempfile.mkdtemp(prefix='phasetest_', suffix='_trs')
         self.incoming = join(self.tmpdir, 'incoming')
@@ -65,7 +70,8 @@ class TestImports(TestCase):
             rejected_dir=self.config['REJECTED_DIR'],
             email_list=self.config['EMAIL_LIST'],
             contractor=fixtures_dir,
-            category=self.category,
+            doc_category=self.doc_category,
+            trs_category=self.trs_category,
         )
         return trs_import
 
@@ -86,7 +92,7 @@ class TestImports(TestCase):
         trs_import.save()
 
         transmittal = Transmittal.objects.all()[0]
-        self.assertEqual(transmittal.document.category, self.category)
+        self.assertEqual(transmittal.document.category, self.trs_category)
         self.assertEqual(transmittal.contract_number, 'FAC10005')
         self.assertEqual(transmittal.originator, 'CTR')
         self.assertEqual(transmittal.recipient, 'CLT')

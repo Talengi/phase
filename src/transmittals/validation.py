@@ -235,7 +235,7 @@ class DocumentCategoryValidator(Validator):
         if metadata is None:
             return True
 
-        return metadata.document.category == import_line.trs_import.category
+        return metadata.document.category == import_line.trs_import.doc_category
 
 
 class FormValidator(Validator):
