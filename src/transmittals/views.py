@@ -29,10 +29,8 @@ class TransmittalListView(LoginRequiredMixin, PermissionRequiredMixin, ListView)
         return (_('Transmittals'), reverse('transmittal_list'))
 
     def get_queryset(self):
-        # TODO
-        # - Does anyone has the right to view every transmittals?
-        # - Configure ACLs
         return Transmittal.objects \
+            .filter(document__category__users=self.request.user) \
             .exclude(status='accepted') \
             .select_related('category__organisation', 'category__category_template') \
             .order_by('-id')
@@ -58,6 +56,7 @@ class TransmittalDiffView(LoginRequiredMixin, PermissionRequiredMixin, DetailVie
 
     def get_object(self, queryset=None):
         qs = Transmittal.objects \
+            .filter(document__category__users=self.request.user) \
             .filter(pk=self.kwargs['transmittal_pk']) \
             .filter(document_key=self.kwargs['document_key'])
         return qs.get()
@@ -119,6 +118,7 @@ class TransmittalRevisionDiffView(LoginRequiredMixin, PermissionRequiredMixin, D
 
     def get_object(self, queryset=None):
         qs = TrsRevision.objects \
+            .filter(transmittal__document__category__users=self.request.user) \
             .filter(transmittal__pk=self.kwargs['transmittal_pk']) \
             .filter(transmittal__document_key=self.kwargs['document_key']) \
             .filter(document_key=self.kwargs['revision_document_key']) \
@@ -211,6 +211,7 @@ class TransmittalDownloadView(LoginRequiredMixin, PermissionRequiredMixin, BaseZ
         file_format = self.request.GET.get('format', 'both')
 
         revisions = TrsRevision.objects \
+            .filter(transmittal__document__category__users=self.request.user) \
             .filter(transmittal__id=transmittal_pk) \
             .filter(transmittal__document_key=document_key) \
             .filter(id__in=revision_ids)
