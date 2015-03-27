@@ -42,6 +42,9 @@ class Document(models.Model):
         User,
         through='favorites.Favorite',
         null=True, blank=True)
+    is_indexable = models.BooleanField(
+        _('Indexable'),
+        default=True)
     current_revision = models.PositiveIntegerField(
         verbose_name=u"Revision")
     current_revision_date = models.DateField(
