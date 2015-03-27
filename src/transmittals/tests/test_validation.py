@@ -9,11 +9,13 @@ from shutil import rmtree, copytree
 
 from django.test import TestCase
 from django.core.cache import cache
+from django.contrib.contenttypes.models import ContentType
 
 from documents.models import Document
 from categories.factories import CategoryFactory
 from transmittals.imports import TrsImport
 from transmittals.factories import TransmittalFactory
+from transmittals.models import Transmittal
 
 
 TEST_CTR = 'test'
@@ -31,9 +33,12 @@ class TransmittalsValidationTests(TestCase):
 
         try:
             document = Document.objects.get(document_key='FAC10005-CTR-000-EXP-LAY-4891')
-            self.category = document.category
+            self.doc_category = document.category
         except Document.DoesNotExist:
-            self.category = CategoryFactory()
+            self.doc_category = CategoryFactory()
+
+        trs_content_type = ContentType.objects.get_for_model(Transmittal)
+        self.trs_category = CategoryFactory(category_template__metadata_model=trs_content_type)
 
         self.tmpdir = tempfile.mkdtemp(prefix='phasetest_', suffix='_trs')
         self.incoming = join(self.tmpdir, 'incoming')
@@ -75,7 +80,8 @@ class TransmittalsValidationTests(TestCase):
             rejected_dir=self.config['REJECTED_DIR'],
             email_list=self.config['EMAIL_LIST'],
             contractor=fixtures_dir,
-            category=self.category,
+            doc_category=self.doc_category,
+            trs_category=self.trs_category,
         )
         return trs_import
 
@@ -152,7 +158,7 @@ class CSVContentTests(TransmittalsValidationTests):
 
     def test_wrong_category_error(self):
         trs_import = self.prepare_fixtures('single_correct_trs', 'FAC10005-CTR-CLT-TRS-00001')
-        trs_import.category = CategoryFactory()
+        trs_import.doc_category = CategoryFactory()
 
         self.assertTrue('wrong_category' in trs_import.errors['csv_content'][2])
 
