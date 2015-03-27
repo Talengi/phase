@@ -266,7 +266,6 @@ class TrsImport(object):
         from transmittals.models import TrsRevision
         from transmittals.forms import TransmittalForm, TransmittalRevisionForm
 
-        # TODO save the csv_file as native_file
         data = {
             'contractor': self.contractor,
             'tobechecked_dir': self.tobechecked_dir,
@@ -279,8 +278,14 @@ class TrsImport(object):
             'status': 'tobechecked',
             'revision_date': datetime.date.today(),
         }
+
+        native_file = File(open(self.csv_fullname))
+        files = {
+            'native_file': native_file,
+        }
+
         form = TransmittalForm(data=data)
-        revision_form = TransmittalRevisionForm(data=data)
+        revision_form = TransmittalRevisionForm(data=data, files=files)
         doc, transmittal, revision = save_document_forms(
             form, revision_form, self.trs_category, is_indexable=False)
 
