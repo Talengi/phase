@@ -9,7 +9,7 @@ from django.views.generic import ListView, DetailView
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect
-from braces.views import LoginRequiredMixin
+from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 from zipview.views import BaseZipView
 
 from notifications.models import notify
@@ -20,9 +20,10 @@ from transmittals.utils import FieldWrapper
 logger = logging.getLogger(__name__)
 
 
-class TransmittalListView(LoginRequiredMixin, ListView):
+class TransmittalListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     """List all transmittals."""
     context_object_name = 'transmittal_list'
+    permission_required = 'documents.can_control_document'
 
     def breadcrumb_section(self):
         return (_('Transmittals'), reverse('transmittal_list'))
@@ -44,9 +45,10 @@ class TransmittalListView(LoginRequiredMixin, ListView):
         return context
 
 
-class TransmittalDiffView(LoginRequiredMixin, DetailView):
+class TransmittalDiffView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     template_name = 'transmittals/diff_view.html'
     context_object_name = 'transmittal'
+    permission_required = 'documents.can_control_document'
 
     def breadcrumb_section(self):
         return (_('Transmittals'), reverse('transmittal_list'))
@@ -101,9 +103,10 @@ class TransmittalDiffView(LoginRequiredMixin, DetailView):
                       self.object.document_key]))
 
 
-class TransmittalRevisionDiffView(LoginRequiredMixin, DetailView):
+class TransmittalRevisionDiffView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     template_name = 'transmittals/revision_diff_view.html'
     context_object_name = 'trs_revision'
+    permission_required = 'documents.can_control_document'
 
     def breadcrumb_section(self):
         return (_('Transmittals'), reverse('transmittal_list'))
@@ -197,8 +200,9 @@ class TransmittalRevisionDiffView(LoginRequiredMixin, DetailView):
                   self.object.transmittal.document_key]))
 
 
-class TransmittalDownloadView(LoginRequiredMixin, BaseZipView):
+class TransmittalDownloadView(LoginRequiredMixin, PermissionRequiredMixin, BaseZipView):
     zipfile_name = 'transmittal_documents.zip'
+    permission_required = 'documents.can_control_document'
 
     def get_files(self):
         transmittal_pk = self.kwargs.get('transmittal_pk')
