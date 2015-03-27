@@ -11,10 +11,12 @@ from django.test import TestCase
 from django.core.management import call_command
 from django.core.management.base import CommandError
 from django.core.exceptions import ImproperlyConfigured
+from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
 
 from mock import patch
 
+from transmittals.models import Transmittal
 from categories.factories import CategoryFactory
 
 
@@ -25,7 +27,16 @@ TEST_CTR = 'test'
 class ImportCommandTests(TestCase):
 
     def setUp(self):
-        self.category = CategoryFactory()
+        doc_category = CategoryFactory()
+        self.doc_category_path = '{}/{}'.format(
+            doc_category.organisation.slug,
+            doc_category.category_template.slug)
+
+        trs_content_type = ContentType.objects.get_for_model(Transmittal)
+        trs_category = CategoryFactory(category_template__metadata_model=trs_content_type)
+        self.trs_category_path = '{}/{}'.format(
+            trs_category.organisation.slug,
+            trs_category.category_template.slug)
 
         path_config = settings.TRS_IMPORTS_CONFIG
         ctr_path_config = path_config.get(TEST_CTR)
@@ -64,7 +75,7 @@ class ImportCommandTests(TestCase):
         with self.assertRaises(CommandError) as cm:
             call_command(IMPORT_COMMAND, stderr=f)
 
-        error = 'Usage: python manage.py import_transmittals <contractor_id> <organisation_slug> <category_slug>'
+        error = 'Usage: python manage.py import_transmittals <contractor_id> <doc_category> <trs_category>'
         self.assertEqual(str(cm.exception), error)
 
     def test_incorrect_ctr_parameter(self):
@@ -75,8 +86,8 @@ class ImportCommandTests(TestCase):
             call_command(
                 IMPORT_COMMAND,
                 'wrong_ctr',
-                self.category.organisation.slug,
-                self.category.category_template.slug,
+                self.doc_category_path,
+                self.trs_category_path,
                 stderr=f)
 
         error = 'The "wrong_ctr" contractor is unknown. Check your configuration.'
@@ -87,9 +98,24 @@ class ImportCommandTests(TestCase):
         f = StringIO()
 
         with self.assertRaises(CommandError) as cm:
-            call_command(IMPORT_COMMAND, TEST_CTR, 'wrong_org', 'wrong_cat', stderr=f)
+            call_command(IMPORT_COMMAND, TEST_CTR, 'wrong_cat', 'wrong_cat', stderr=f)
 
-        error = 'This category is unknown. Check your configuration.'
+        error = 'The document category is unknown. Check your configuration.'
+        self.assertEqual(str(cm.exception), error)
+
+    def test_wrong_transmittal_category(self):
+        """An exception must be raised when the transmittal category does not host Transmittals documents."""
+        f = StringIO()
+
+        with self.assertRaises(CommandError) as cm:
+            call_command(
+                IMPORT_COMMAND,
+                TEST_CTR,
+                self.doc_category_path,
+                self.doc_category_path,
+                stderr=f)
+
+        error = 'The transmittal category should host Transmittal documents.'
         self.assertEqual(str(cm.exception), error)
 
     def test_incoming_dir_does_not_exist(self):
@@ -100,8 +126,8 @@ class ImportCommandTests(TestCase):
             call_command(
                 IMPORT_COMMAND,
                 TEST_CTR,
-                self.category.organisation.slug,
-                self.category.category_template.slug,
+                self.doc_category_path,
+                self.trs_category_path,
                 stderr=f)
 
         error = 'The directory "/tmp/test_ctr_clt/incoming" does not exist.'
@@ -116,8 +142,8 @@ class ImportCommandTests(TestCase):
             call_command(
                 IMPORT_COMMAND,
                 TEST_CTR,
-                self.category.organisation.slug,
-                self.category.category_template.slug,
+                self.doc_category_path,
+                self.trs_category_path,
                 stderr=f)
 
         error = 'The directory "/tmp/test_ctr_clt/rejected" does not exist.'
@@ -136,8 +162,8 @@ class ImportCommandTests(TestCase):
             call_command(
                 IMPORT_COMMAND,
                 TEST_CTR,
-                self.category.organisation.slug,
-                self.category.category_template.slug,
+                self.doc_category_path,
+                self.trs_category_path,
                 stderr=f)
 
         error = 'The directory "/tmp/test_ctr_clt/rejected" is not writeable.'
@@ -155,7 +181,7 @@ class ImportCommandTests(TestCase):
         call_command(
             IMPORT_COMMAND,
             TEST_CTR,
-            self.category.organisation.slug,
-            self.category.category_template.slug,
+            self.doc_category_path,
+            self.trs_category_path,
             stderr=f)
         self.assertEqual(import_dir.call_count, 3)
