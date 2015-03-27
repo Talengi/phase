@@ -282,7 +282,7 @@ class TrsImport(object):
         form = TransmittalForm(data=data)
         revision_form = TransmittalRevisionForm(data=data)
         doc, transmittal, revision = save_document_forms(
-            form, revision_form, self.trs_category)
+            form, revision_form, self.trs_category, is_indexable=False)
 
         for line in self:
             data = line.csv_data

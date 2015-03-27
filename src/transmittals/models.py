@@ -194,13 +194,12 @@ class Transmittal(Metadata):
             self.document_key,
             uuid.uuid4())
 
-        self.document.document_key = new_key
-        self.document.is_indexable = False
-        self.document.save()
-
         self.document_key = new_key
         self.status = 'rejected'
         self.save()
+
+        self.document.document_key = new_key
+        self.document.save()
 
     def accept(self):
         """Starts the transmittal import process.
