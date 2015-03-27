@@ -22,7 +22,6 @@ class TransmittalForm(BaseDocumentForm):
                 'contract_number',
                 'originator',
                 'recipient',
-                'document_type',
                 'sequential_number',
                 self.related_documents,
             )
@@ -30,7 +29,7 @@ class TransmittalForm(BaseDocumentForm):
 
     class Meta:
         model = Transmittal
-        exclude = ('document', 'latest_revision', 'created_on', 'document_type')
+        exclude = ('document', 'latest_revision', 'created_on')
 
 
 class TransmittalRevisionForm(BaseDocumentForm):
@@ -38,9 +37,7 @@ class TransmittalRevisionForm(BaseDocumentForm):
         return Layout(
             DocumentFieldset(
                 _('Revision'),
-                'status',
                 'revision_date',
-                'created_on',
                 'native_file',
                 'pdf_file',
             ),
@@ -48,5 +45,4 @@ class TransmittalRevisionForm(BaseDocumentForm):
 
     class Meta:
         model = TransmittalRevision
-        exclude = ('document', 'revision', 'revision_date', 'created_on',
-                   'updated_on')
+        exclude = ('document', 'revision', 'created_on', 'updated_on')

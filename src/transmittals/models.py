@@ -86,6 +86,7 @@ class Transmittal(Metadata):
     rejected_dir = models.CharField(max_length=255)
 
     class Meta:
+        ordering = ('document_key',)
         verbose_name = _('Transmittal')
         verbose_name_plural = _('Transmittals')
         index_together = (
