@@ -37,7 +37,6 @@ class TransmittalRevisionForm(BaseDocumentForm):
         return Layout(
             DocumentFieldset(
                 _('Revision'),
-                'trs_status',
                 'revision_date',
                 'native_file',
                 'pdf_file',
