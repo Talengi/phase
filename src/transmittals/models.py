@@ -41,6 +41,10 @@ class Transmittal(Metadata):
         'TransmittalRevision',
         verbose_name=_('Latest revision'))
 
+    transmittal_key = models.CharField(
+        _('Transmittal key'),
+        max_length=250)
+
     # General informations
     transmittal_date = models.DateField(
         _('Transmittal date'),
@@ -121,17 +125,24 @@ class Transmittal(Metadata):
     def __unicode__(self):
         return self.document_key
 
+    def save(self, *args, **kwargs):
+        if not self.transmittal_key:
+            if not self.document_key:
+                self.document_key = self.generate_document_key()
+            self.transmittal_key = self.document_key
+        super(Transmittal, self).save(*args, **kwargs)
+
     @property
     def full_tobechecked_name(self):
-        return os.path.join(self.tobechecked_dir, self.document_key)
+        return os.path.join(self.tobechecked_dir, self.transmittal_key)
 
     @property
     def full_accepted_name(self):
-        return os.path.join(self.accepted_dir, self.document_key)
+        return os.path.join(self.accepted_dir, self.transmittal_key)
 
     @property
     def full_rejected_name(self):
-        return os.path.join(self.rejected_dir, self.document_key)
+        return os.path.join(self.rejected_dir, self.transmittal_key)
 
     def generate_document_key(self):
         key = '{}-{}-{}-TRS-{:0>5d}'.format(

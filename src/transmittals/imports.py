@@ -14,6 +14,7 @@ from django.core.files import File
 
 from annoying.functions import get_object_or_None
 
+from documents.models import Document
 from documents.utils import save_document_forms
 from transmittals.validation import (
     TrsValidator, CSVLineValidator, RevisionsValidator)
@@ -266,6 +267,16 @@ class TrsImport(object):
         from transmittals.models import TrsRevision
         from transmittals.forms import TransmittalForm, TransmittalRevisionForm
 
+        # Build the list of related documents
+        keys = []
+        for line in self:
+            key = line.csv_data['document_key']
+            if key not in keys:
+                keys.append(key)
+        related_documents = Document.objects \
+            .filter(document_key__in=keys) \
+            .values_list('id', flat=True)
+
         data = {
             'contractor': self.contractor,
             'tobechecked_dir': self.tobechecked_dir,
@@ -277,13 +288,16 @@ class TrsImport(object):
             'sequential_number': self.sequential_number,
             'status': 'tobechecked',
             'revision_date': datetime.date.today(),
+            'related_documents': list(related_documents),
         }
 
+        # The csv file is linked in the "native_file" field
         native_file = File(open(self.csv_fullname))
         files = {
             'native_file': native_file,
         }
 
+        # Use document forms to create the Transmittal
         form = TransmittalForm(data=data)
         revision_form = TransmittalRevisionForm(data=data, files=files)
         doc, transmittal, revision = save_document_forms(

@@ -29,7 +29,8 @@ class TransmittalForm(BaseDocumentForm):
 
     class Meta:
         model = Transmittal
-        exclude = ('document', 'latest_revision', 'created_on', 'document_type')
+        exclude = ('document', 'latest_revision', 'created_on',
+                   'transmittal_key', 'document_type')
 
 
 class TransmittalRevisionForm(BaseDocumentForm):
