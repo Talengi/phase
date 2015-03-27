@@ -57,7 +57,7 @@ class TransmittalDiffView(LoginRequiredMixin, DetailView):
     def get_object(self, queryset=None):
         qs = Transmittal.objects \
             .filter(pk=self.kwargs['transmittal_pk']) \
-            .filter(document_key=self.kwargs['transmittal_key'])
+            .filter(document_key=self.kwargs['document_key'])
         return qs.get()
 
     def get_context_data(self, **kwargs):
@@ -114,7 +114,7 @@ class TransmittalRevisionDiffView(LoginRequiredMixin, DetailView):
     def get_object(self, queryset=None):
         qs = TrsRevision.objects \
             .filter(transmittal__pk=self.kwargs['transmittal_pk']) \
-            .filter(transmittal__document_key=self.kwargs['transmittal_key']) \
+            .filter(transmittal__document_key=self.kwargs['document_key']) \
             .filter(document_key=self.kwargs['revision_document_key']) \
             .filter(revision=self.kwargs['revision']) \
             .select_related('transmittal', 'document', 'document__category',
