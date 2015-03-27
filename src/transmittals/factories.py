@@ -23,6 +23,7 @@ class TransmittalFactory(factory.DjangoModelFactory):
     originator = 'CTR'
     recipient = 'CLT'
     sequential_number = factory.Sequence(lambda n: n + 1)
+    document_key = factory.Sequence(lambda n: 'transmittal-{}'.format(n))
     document = factory.SubFactory(
         DocumentFactory,
         document_key=factory.SelfAttribute('..document_key'))
