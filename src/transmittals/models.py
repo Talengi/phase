@@ -5,11 +5,13 @@ from __future__ import unicode_literals
 import os
 import logging
 import shutil
+import uuid
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from django.core.urlresolvers import reverse
+from django.db import transaction
 
 from model_utils import Choices
 
@@ -146,6 +148,7 @@ class Transmittal(Metadata):
     def get_absolute_url(self):
         return reverse('transmittal_diff', args=[self.pk, self.document_key])
 
+    @transaction.atomic
     def reject(self):
         """Mark the transmittal as rejected.
 
@@ -184,6 +187,18 @@ class Transmittal(Metadata):
             # won't trigger an error
             logger.warning('Transmittal {} files are gone'.format(self))
 
+        # Since the document_key "unique" constraint is enforced in the parent
+        # class (Metadata), we need to update this object's key to allow a
+        # new transmittal submission with the same transmittal key.
+        new_key = '{}-{}'.format(
+            self.document_key,
+            uuid.uuid4())
+
+        self.document.document_key = new_key
+        self.document.is_indexable = False
+        self.document.save()
+
+        self.document_key = new_key
         self.status = 'rejected'
         self.save()
 
