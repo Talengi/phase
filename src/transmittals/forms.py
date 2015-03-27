@@ -29,8 +29,9 @@ class TransmittalForm(BaseDocumentForm):
 
     class Meta:
         model = Transmittal
-        exclude = ('document', 'latest_revision', 'created_on',
-                   'transmittal_key', 'document_type')
+        exclude = ('document', 'latest_revision', 'status', 'created_on',
+                   'transmittal_key', 'document_type', 'contractor',
+                   'tobechecked_dir', 'accepted_dir', 'rejected_dir')
 
 
 class TransmittalRevisionForm(BaseDocumentForm):
@@ -39,6 +40,7 @@ class TransmittalRevisionForm(BaseDocumentForm):
             DocumentFieldset(
                 _('Revision'),
                 'revision_date',
+                'trs_status',
                 'native_file',
                 'pdf_file',
             ),
@@ -46,4 +48,4 @@ class TransmittalRevisionForm(BaseDocumentForm):
 
     class Meta:
         model = TransmittalRevision
-        exclude = ('document', 'revision', 'trs_status', 'created_on', 'updated_on')
+        exclude = ('document', 'revision', 'created_on', 'updated_on')
