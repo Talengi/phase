@@ -461,7 +461,7 @@ DISPLAY_NOTIFICATION_COUNT = 5
 PRIVATE_ROOT = SITE_ROOT.child('private')
 PRIVATE_URL = '/private/'
 NGING_X_ACCEL_PREFIX = '/xaccel/'
-USE_X_SENDFILE = not DEBUG
+USE_X_SENDFILE = False
 
 # Where to look for files to import?
 IMPORT_ROOT = SITE_ROOT.child('import')
