@@ -209,7 +209,11 @@ class Transmittal(Metadata):
 
 
 class TransmittalRevision(MetadataRevision):
-    pass
+    trs_status = ConfigurableChoiceField(
+        _('Status'),
+        max_length=20,
+        default='opened',
+        list_index='STATUS_TRANSMITTALS')
 
 
 class TrsRevision(models.Model):

@@ -7,6 +7,7 @@ import csv
 import shutil
 import logging
 import glob
+import datetime
 
 from django.db import transaction
 from django.core.files import File
@@ -276,6 +277,7 @@ class TrsImport(object):
             'recipient': self.recipient,
             'sequential_number': self.sequential_number,
             'status': 'tobechecked',
+            'revision_date': datetime.date.today(),
         }
         form = TransmittalForm(data=data)
         revision_form = TransmittalRevisionForm(data=data)
