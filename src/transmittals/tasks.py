@@ -45,6 +45,9 @@ def process_transmittal(transmittal_id):
             transmittal.status = 'accepted'
             transmittal.save()
 
+            transmittal.document.is_indexable = True
+            transmittal.document.save()
+
         # Move to accepted directory
         if os.path.exists(transmittal.full_tobechecked_name):
             try:

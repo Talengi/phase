@@ -5,16 +5,18 @@ from __future__ import unicode_literals
 import os
 import logging
 import shutil
+import uuid
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from django.core.urlresolvers import reverse
+from django.db import transaction
 
 from model_utils import Choices
 
 from documents.utils import save_document_forms
-from documents.models import Document
+from documents.models import Document, Metadata, MetadataRevision
 from reviews.models import CLASSES
 from metadata.fields import ConfigurableChoiceField
 from default_documents.validators import StringNumberValidator
@@ -24,7 +26,7 @@ from transmittals.fields import TransmittalFileField
 logger = logging.getLogger(__name__)
 
 
-class Transmittal(models.Model):
+class Transmittal(Metadata):
     """Transmittals are created when a contractor upload documents."""
     STATUSES = Choices(
         ('new', _('New')),
@@ -35,9 +37,21 @@ class Transmittal(models.Model):
         ('accepted', _('Accepted')),
     )
 
-    transmittal_key = models.SlugField(
+    latest_revision = models.ForeignKey(
+        'TransmittalRevision',
+        verbose_name=_('Latest revision'))
+
+    transmittal_key = models.CharField(
         _('Transmittal key'),
         max_length=250)
+
+    # General informations
+    transmittal_date = models.DateField(
+        _('Transmittal date'),
+        null=True, blank=True)
+    ack_of_receipt_date = models.DateField(
+        _('Acknowledgment of receipt date'),
+        null=True, blank=True)
     contract_number = ConfigurableChoiceField(
         verbose_name='Contract Number',
         max_length=8,
@@ -53,6 +67,11 @@ class Transmittal(models.Model):
         list_index='RECIPIENTS')
     sequential_number = models.PositiveIntegerField(
         _('sequential number'))
+    document_type = ConfigurableChoiceField(
+        _('Document Type'),
+        default="PID",
+        max_length=3,
+        list_index='DOCUMENT_TYPES')
     status = models.CharField(
         max_length=20,
         choices=STATUSES,
@@ -61,12 +80,19 @@ class Transmittal(models.Model):
         _('Created on'),
         default=timezone.now)
 
+    # Related documents
+    related_documents = models.ManyToManyField(
+        'documents.Document',
+        related_name='transmittals_related_set',
+        null=True, blank=True)
+
     contractor = models.CharField(max_length=255)
     tobechecked_dir = models.CharField(max_length=255)
     accepted_dir = models.CharField(max_length=255)
     rejected_dir = models.CharField(max_length=255)
 
     class Meta:
+        ordering = ('document_key',)
         verbose_name = _('Transmittal')
         verbose_name_plural = _('Transmittals')
         index_together = (
@@ -74,8 +100,37 @@ class Transmittal(models.Model):
              'status'),
         )
 
+    class PhaseConfig:
+        filter_fields = (
+            'originator', 'recipient', 'status',
+        )
+        column_fields = (
+            ('Reference', 'document_key'),
+            ('Transmittal date', 'transmittal_date'),
+            ('Ack. of receipt date', 'ack_of_receipt_date'),
+            ('Originator', 'originator'),
+            ('Recipient', 'recipient'),
+            ('Document type', 'document_type'),
+            ('Status', 'status'),
+            ('Created on', 'created_on'),
+        )
+        searchable_fields = (
+            'document_key',
+            'originator',
+            'recipient',
+            'document_type',
+            'status',
+        )
+
     def __unicode__(self):
-        return self.transmittal_key
+        return self.document_key
+
+    def save(self, *args, **kwargs):
+        if not self.transmittal_key:
+            if not self.document_key:
+                self.document_key = self.generate_document_key()
+            self.transmittal_key = self.document_key
+        super(Transmittal, self).save(*args, **kwargs)
 
     @property
     def full_tobechecked_name(self):
@@ -89,12 +144,7 @@ class Transmittal(models.Model):
     def full_rejected_name(self):
         return os.path.join(self.rejected_dir, self.transmittal_key)
 
-    def save(self, *args, **kwargs):
-        if not self.transmittal_key:
-            self.transmittal_key = self.generate_key()
-        super(Transmittal, self).save(*args, **kwargs)
-
-    def generate_key(self):
+    def generate_document_key(self):
         key = '{}-{}-{}-TRS-{:0>5d}'.format(
             self.contract_number,
             self.originator,
@@ -102,9 +152,11 @@ class Transmittal(models.Model):
             self.sequential_number)
         return key
 
-    def get_absolute_url(self):
-        return reverse('transmittal_diff', args=[self.pk, self.transmittal_key])
+    @property
+    def title(self):
+        return self.document_key
 
+    @transaction.atomic
     def reject(self):
         """Mark the transmittal as rejected.
 
@@ -120,7 +172,7 @@ class Transmittal(models.Model):
         if self.status != 'tobechecked':
             error_msg = 'The transmittal {} cannot be rejected ' \
                         'it it\'s current status ({})'.format(
-                            self.transmittal_key, self.status)
+                            self.document_key, self.status)
             raise RuntimeError(error_msg)
 
         # If an existing version already exists in rejected, we delete it before
@@ -143,8 +195,19 @@ class Transmittal(models.Model):
             # won't trigger an error
             logger.warning('Transmittal {} files are gone'.format(self))
 
+        # Since the document_key "unique" constraint is enforced in the parent
+        # class (Metadata), we need to update this object's key to allow a
+        # new transmittal submission with the same transmittal key.
+        new_key = '{}-{}'.format(
+            self.document_key,
+            uuid.uuid4())
+
+        self.document_key = new_key
         self.status = 'rejected'
         self.save()
+
+        self.document.document_key = new_key
+        self.document.save()
 
     def accept(self):
         """Starts the transmittal import process.
@@ -158,13 +221,21 @@ class Transmittal(models.Model):
         if self.status != 'tobechecked':
             error_msg = 'The transmittal {} cannot be accepted ' \
                         'in it\'s current state ({})'.format(
-                            self.transmittal_key, self.get_status_display())
+                            self.document_key, self.get_status_display())
             raise RuntimeError(error_msg)
 
         self.status = 'processing'
         self.save()
 
         process_transmittal.delay(self.pk)
+
+
+class TransmittalRevision(MetadataRevision):
+    trs_status = ConfigurableChoiceField(
+        _('Status'),
+        max_length=20,
+        default='opened',
+        list_index='STATUS_TRANSMITTALS')
 
 
 class TrsRevision(models.Model):
@@ -250,7 +321,7 @@ class TrsRevision(models.Model):
 
     def get_absolute_url(self):
         return reverse('transmittal_revision_diff', args=[
-            self.transmittal.pk, self.transmittal.transmittal_key,
+            self.transmittal.pk, self.transmittal.document_key,
             self.document_key, self.revision])
 
     def get_document_fields(self):

@@ -6,7 +6,7 @@ from django.db import transaction
 
 
 @transaction.atomic
-def save_document_forms(metadata_form, revision_form, category):
+def save_document_forms(metadata_form, revision_form, category, **doc_kwargs):
     """Creates or updates a document from it's different forms.
 
     Two forms are necessary to edit a document : the metadata and revision forms.
@@ -27,14 +27,14 @@ def save_document_forms(metadata_form, revision_form, category):
     # Those three functions could be regrouped, but they form
     # an if / else russian mountain
     if metadata.pk is None:
-        return create_document_from_forms(metadata_form, revision_form, category)
+        return create_document_from_forms(metadata_form, revision_form, category, **doc_kwargs)
     elif revision.pk is None:
         return create_revision_from_forms(metadata_form, revision_form, category)
     else:
         return update_revision_from_forms(metadata_form, revision_form, category)
 
 
-def create_document_from_forms(metadata_form, revision_form, category):
+def create_document_from_forms(metadata_form, revision_form, category, **doc_kwargs):
     """Creates a brand new document"""
     from documents.models import Document
 
@@ -46,7 +46,8 @@ def create_document_from_forms(metadata_form, revision_form, category):
         document_key=key,
         category=category,
         current_revision=revision.revision,
-        current_revision_date=revision.revision_date)
+        current_revision_date=revision.revision_date,
+        **doc_kwargs)
 
     revision.document = document
     revision.save()

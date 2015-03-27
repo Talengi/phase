@@ -7,7 +7,6 @@ from .models import (
     ContractorDeliverable, ContractorDeliverableRevision,
     Correspondence, CorrespondenceRevision,
     MinutesOfMeeting, MinutesOfMeetingRevision,
-    Transmittals, TransmittalsRevision,
     DemoMetadata, DemoMetadataRevision
 )
 from reviews.layout import ReviewsLayout
@@ -213,48 +212,6 @@ class MinutesOfMeetingRevisionForm(BaseDocumentForm):
 
     class Meta:
         model = MinutesOfMeetingRevision
-        exclude = ('document', 'revision', 'updated_on')
-
-
-class TransmittalsForm(BaseDocumentForm):
-    def build_layout(self):
-        return Layout(
-            DocumentFieldset(
-                _('General information'),
-                'document_key',
-                'transmittal_date',
-                'ack_of_receipt_date',
-                'contract_number',
-                'originator',
-                'recipient',
-                'document_type',
-                'sequential_number',
-                'frm',
-                'to',
-                self.related_documents,
-            )
-        )
-
-    class Meta:
-        model = Transmittals
-        exclude = ('document', 'latest_revision')
-
-
-class TransmittalsRevisionForm(BaseDocumentForm):
-    def build_layout(self):
-        return Layout(
-            DocumentFieldset(
-                _('Revision'),
-                'status',
-                'revision_date',
-                'created_on',
-                'native_file',
-                'pdf_file',
-            ),
-        )
-
-    class Meta:
-        model = TransmittalsRevision
         exclude = ('document', 'revision', 'updated_on')
 
 

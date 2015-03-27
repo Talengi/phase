@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 from __future__ import unicode_literals
 
 import logging
@@ -8,7 +9,7 @@ from django.views.generic import ListView, DetailView
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect
-from braces.views import LoginRequiredMixin
+from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 from zipview.views import BaseZipView
 
 from notifications.models import notify
@@ -19,18 +20,20 @@ from transmittals.utils import FieldWrapper
 logger = logging.getLogger(__name__)
 
 
-class TransmittalListView(LoginRequiredMixin, ListView):
+class TransmittalListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     """List all transmittals."""
     context_object_name = 'transmittal_list'
+    permission_required = 'documents.can_control_document'
 
     def breadcrumb_section(self):
         return (_('Transmittals'), reverse('transmittal_list'))
 
     def get_queryset(self):
-        # TODO
-        # - Does anyone has the right to view every transmittals?
-        # - Configure ACLs
-        return Transmittal.objects.order_by('-id').all()
+        return Transmittal.objects \
+            .filter(document__category__users=self.request.user) \
+            .exclude(status='accepted') \
+            .select_related('category__organisation', 'category__category_template') \
+            .order_by('-id')
 
     def get_context_data(self, **kwargs):
         context = super(TransmittalListView, self).get_context_data(**kwargs)
@@ -40,9 +43,10 @@ class TransmittalListView(LoginRequiredMixin, ListView):
         return context
 
 
-class TransmittalDiffView(LoginRequiredMixin, DetailView):
+class TransmittalDiffView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     template_name = 'transmittals/diff_view.html'
     context_object_name = 'transmittal'
+    permission_required = 'documents.can_control_document'
 
     def breadcrumb_section(self):
         return (_('Transmittals'), reverse('transmittal_list'))
@@ -52,8 +56,9 @@ class TransmittalDiffView(LoginRequiredMixin, DetailView):
 
     def get_object(self, queryset=None):
         qs = Transmittal.objects \
+            .filter(document__category__users=self.request.user) \
             .filter(pk=self.kwargs['transmittal_pk']) \
-            .filter(transmittal_key=self.kwargs['transmittal_key'])
+            .filter(document_key=self.kwargs['document_key'])
         return qs.get()
 
     def get_context_data(self, **kwargs):
@@ -91,12 +96,16 @@ class TransmittalDiffView(LoginRequiredMixin, DetailView):
             error_msg = '{} ({})'.format(error_msg, e)
             notify(request.user, error_msg)
             logger.error(e)
-            return HttpResponseRedirect(self.object.get_absolute_url())
+            return HttpResponseRedirect(reverse(
+                'transmittal_diff',
+                args=[self.object.pk,
+                      self.object.document_key]))
 
 
-class TransmittalRevisionDiffView(LoginRequiredMixin, DetailView):
+class TransmittalRevisionDiffView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     template_name = 'transmittals/revision_diff_view.html'
     context_object_name = 'trs_revision'
+    permission_required = 'documents.can_control_document'
 
     def breadcrumb_section(self):
         return (_('Transmittals'), reverse('transmittal_list'))
@@ -109,9 +118,10 @@ class TransmittalRevisionDiffView(LoginRequiredMixin, DetailView):
 
     def get_object(self, queryset=None):
         qs = TrsRevision.objects \
+            .filter(transmittal__document__category__users=self.request.user) \
             .filter(transmittal__pk=self.kwargs['transmittal_pk']) \
-            .filter(transmittal__transmittal_key=self.kwargs['transmittal_key']) \
-            .filter(document_key=self.kwargs['document_key']) \
+            .filter(transmittal__document_key=self.kwargs['document_key']) \
+            .filter(document_key=self.kwargs['revision_document_key']) \
             .filter(revision=self.kwargs['revision']) \
             .select_related('transmittal', 'document', 'document__category',
                             'document__category__organisation',
@@ -163,7 +173,7 @@ class TransmittalRevisionDiffView(LoginRequiredMixin, DetailView):
                     .get()
             except TrsRevision.DoesNotExist():
                 logger.error('No revision to compare to {} / {} /  {}'.format(
-                    trs_revision.transmittal.transmittal_key,
+                    trs_revision.transmittal.document_key,
                     trs_revision.document_key,
                     trs_revision.revision))
                 revision = {}
@@ -187,21 +197,23 @@ class TransmittalRevisionDiffView(LoginRequiredMixin, DetailView):
         return HttpResponseRedirect(reverse(
             'transmittal_diff',
             args=[self.object.transmittal.pk,
-                  self.object.transmittal.transmittal_key]))
+                  self.object.transmittal.document_key]))
 
 
-class TransmittalDownloadView(LoginRequiredMixin, BaseZipView):
+class TransmittalDownloadView(LoginRequiredMixin, PermissionRequiredMixin, BaseZipView):
     zipfile_name = 'transmittal_documents.zip'
+    permission_required = 'documents.can_control_document'
 
     def get_files(self):
         transmittal_pk = self.kwargs.get('transmittal_pk')
-        transmittal_key = self.kwargs.get('transmittal_key')
+        document_key = self.kwargs.get('document_key')
         revision_ids = self.request.GET.getlist('revision_ids')
         file_format = self.request.GET.get('format', 'both')
 
         revisions = TrsRevision.objects \
+            .filter(transmittal__document__category__users=self.request.user) \
             .filter(transmittal__id=transmittal_pk) \
-            .filter(transmittal__transmittal_key=transmittal_key) \
+            .filter(transmittal__document_key=document_key) \
             .filter(id__in=revision_ids)
 
         files = []

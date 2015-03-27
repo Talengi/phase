@@ -80,7 +80,7 @@ class ProcessTransmittalTests(TestCase):
         pdf_doc = b'sample_doc_pdf.pdf'
 
         self.transmittal = TransmittalFactory(
-            transmittal_key='FAC10005-CTR-CLT-TRS-00001',
+            document_key='FAC10005-CTR-CLT-TRS-00001',
             status='tobechecked',
             tobechecked_dir=self.tobechecked,
             accepted_dir=self.accepted,

@@ -11,9 +11,13 @@ from django.test import TestCase
 from django.core.management import call_command
 from django.core.management.base import CommandError
 from django.core.exceptions import ImproperlyConfigured
+from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
 
 from mock import patch
+
+from transmittals.models import Transmittal
+from categories.factories import CategoryFactory
 
 
 IMPORT_COMMAND = 'import_transmittals'
@@ -23,6 +27,17 @@ TEST_CTR = 'test'
 class ImportCommandTests(TestCase):
 
     def setUp(self):
+        doc_category = CategoryFactory()
+        self.doc_category_path = '{}/{}'.format(
+            doc_category.organisation.slug,
+            doc_category.category_template.slug)
+
+        trs_content_type = ContentType.objects.get_for_model(Transmittal)
+        trs_category = CategoryFactory(category_template__metadata_model=trs_content_type)
+        self.trs_category_path = '{}/{}'.format(
+            trs_category.organisation.slug,
+            trs_category.category_template.slug)
+
         path_config = settings.TRS_IMPORTS_CONFIG
         ctr_path_config = path_config.get(TEST_CTR)
         self.import_root = settings.TRS_IMPORTS_ROOT
@@ -53,14 +68,14 @@ class ImportCommandTests(TestCase):
         else:
             os.mkdir(self.incoming_dir)
 
-    def test_missing_ctr_parameter(self):
+    def test_missing_paramateres(self):
         """The command must be called with the ctr as an argument."""
         f = StringIO()
 
         with self.assertRaises(CommandError) as cm:
             call_command(IMPORT_COMMAND, stderr=f)
 
-        error = 'You must provide a contractor id as an argument'
+        error = 'Usage: python manage.py import_transmittals <contractor_id> <doc_category> <trs_category>'
         self.assertEqual(str(cm.exception), error)
 
     def test_incorrect_ctr_parameter(self):
@@ -68,9 +83,39 @@ class ImportCommandTests(TestCase):
         f = StringIO()
 
         with self.assertRaises(ImproperlyConfigured) as cm:
-            call_command(IMPORT_COMMAND, 'wrong_ctr', stderr=f)
+            call_command(
+                IMPORT_COMMAND,
+                'wrong_ctr',
+                self.doc_category_path,
+                self.trs_category_path,
+                stderr=f)
 
         error = 'The "wrong_ctr" contractor is unknown. Check your configuration.'
+        self.assertEqual(str(cm.exception), error)
+
+    def test_incorrect_category_parameters(self):
+        """An exception must be raised when the category does not exist."""
+        f = StringIO()
+
+        with self.assertRaises(CommandError) as cm:
+            call_command(IMPORT_COMMAND, TEST_CTR, 'wrong_cat', 'wrong_cat', stderr=f)
+
+        error = 'The document category is unknown. Check your configuration.'
+        self.assertEqual(str(cm.exception), error)
+
+    def test_wrong_transmittal_category(self):
+        """An exception must be raised when the transmittal category does not host Transmittals documents."""
+        f = StringIO()
+
+        with self.assertRaises(CommandError) as cm:
+            call_command(
+                IMPORT_COMMAND,
+                TEST_CTR,
+                self.doc_category_path,
+                self.doc_category_path,
+                stderr=f)
+
+        error = 'The transmittal category should host Transmittal documents.'
         self.assertEqual(str(cm.exception), error)
 
     def test_incoming_dir_does_not_exist(self):
@@ -78,7 +123,12 @@ class ImportCommandTests(TestCase):
         f = StringIO()
 
         with self.assertRaises(CommandError) as cm:
-            call_command(IMPORT_COMMAND, TEST_CTR, stderr=f)
+            call_command(
+                IMPORT_COMMAND,
+                TEST_CTR,
+                self.doc_category_path,
+                self.trs_category_path,
+                stderr=f)
 
         error = 'The directory "/tmp/test_ctr_clt/incoming" does not exist.'
         self.assertEqual(str(cm.exception), error)
@@ -89,7 +139,12 @@ class ImportCommandTests(TestCase):
         self.prepare_import_dir('empty_dirs')
 
         with self.assertRaises(CommandError) as cm:
-            call_command(IMPORT_COMMAND, TEST_CTR, stderr=f)
+            call_command(
+                IMPORT_COMMAND,
+                TEST_CTR,
+                self.doc_category_path,
+                self.trs_category_path,
+                stderr=f)
 
         error = 'The directory "/tmp/test_ctr_clt/rejected" does not exist.'
         self.assertEqual(str(cm.exception), error)
@@ -104,7 +159,12 @@ class ImportCommandTests(TestCase):
         os.chmod(self.rejected_dir, wrong_perms)
 
         with self.assertRaises(CommandError) as cm:
-            call_command(IMPORT_COMMAND, TEST_CTR, stderr=f)
+            call_command(
+                IMPORT_COMMAND,
+                TEST_CTR,
+                self.doc_category_path,
+                self.trs_category_path,
+                stderr=f)
 
         error = 'The directory "/tmp/test_ctr_clt/rejected" is not writeable.'
         self.assertEqual(str(cm.exception), error)
@@ -118,5 +178,10 @@ class ImportCommandTests(TestCase):
         os.mkdir(self.accepted_dir)
         os.mkdir(self.to_be_checked_dir)
 
-        call_command(IMPORT_COMMAND, TEST_CTR, stdout=f)
+        call_command(
+            IMPORT_COMMAND,
+            TEST_CTR,
+            self.doc_category_path,
+            self.trs_category_path,
+            stderr=f)
         self.assertEqual(import_dir.call_count, 3)

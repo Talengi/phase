@@ -22,13 +22,14 @@
                 <th>Recipient</th>
                 <th>Sequential number</th>
                 <th>Reception date</th>
+                <th>Category</th>
                 <th>Status</th>
             </tr>
         </thead>
         <tbody>
             {% for transmittal in transmittal_list %}
                 <tr class="document_row">
-                    <td class="key_column"><a href="{{ transmittal.get_absolute_url }}">
+                    <td class="key_column"><a href="{% url 'transmittal_diff' transmittal.pk transmittal.document_key %}">
                             {{ transmittal }}
                         </a>
                     </td>
@@ -37,6 +38,7 @@
                     <td>{{ transmittal.recipient }}</td>
                     <td>{{ transmittal.sequential_number|stringformat:"05d" }}</td>
                     <td>{{ transmittal.created_on|date }}</td>
+                    <td>{{ transmittal.category }}</td>
                     <td>{{ transmittal.get_status_display }}</td>
                 </tr>
             {% endfor %}

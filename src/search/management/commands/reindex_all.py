@@ -83,7 +83,8 @@ Type 'yes' to continue, or 'no' to cancel: """)
 
             for metadata in documents:
                 document = metadata.document
-                index_document.delay(document.id, document_type, metadata.jsonified())
+                if document.is_indexable:
+                    index_document.delay(document.id, document_type, metadata.jsonified())
 
         end_reindex = datetime.datetime.now()
         logger.info('Reindex ending at %s' % end_reindex)

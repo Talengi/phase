@@ -6,6 +6,7 @@ from django.test import TestCase
 
 from mock import patch
 
+from categories.factories import CategoryFactory
 from transmittals.imports import TrsImport
 from transmittals.reports import ErrorReport
 
@@ -20,6 +21,8 @@ class ErrorReportTests(TestCase):
             rejected_dir='/tmp/dummy_dir',
             email_list=['test1@phase.fr', 'test2@phase.fr'],
             contractor='dummy_dir',
+            doc_category=CategoryFactory(),
+            trs_category=CategoryFactory(),
         )
         self.trs_import._errors = {
             'error1': 'This is error 1',

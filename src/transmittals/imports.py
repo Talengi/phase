@@ -7,12 +7,15 @@ import csv
 import shutil
 import logging
 import glob
+import datetime
 
 from django.db import transaction
 from django.core.files import File
 
 from annoying.functions import get_object_or_None
 
+from documents.models import Document
+from documents.utils import save_document_forms
 from transmittals.validation import (
     TrsValidator, CSVLineValidator, RevisionsValidator)
 from transmittals.reports import ErrorReport
@@ -31,13 +34,15 @@ class TrsImport(object):
 
     """
     def __init__(self, trs_dir, tobechecked_dir, accepted_dir, rejected_dir,
-                 email_list, contractor):
+                 email_list, contractor, doc_category, trs_category):
         self.trs_dir = trs_dir
         self.tobechecked_dir = tobechecked_dir
         self.accepted_dir = accepted_dir
         self.rejected_dir = rejected_dir
         self.email_list = email_list
         self.contractor = contractor
+        self.doc_category = doc_category
+        self.trs_category = trs_category
 
         self._errors = None
         self._csv_cols = None
@@ -256,20 +261,47 @@ class TrsImport(object):
     @transaction.atomic
     def save(self):
         """Save transmittal data in db."""
-        from transmittals.models import Transmittal, TrsRevision
 
-        status = Transmittal.STATUSES.tobechecked
+        # We import those here because we need to make sure that
+        # the values_lists have already been populated
+        from transmittals.models import TrsRevision
+        from transmittals.forms import TransmittalForm, TransmittalRevisionForm
 
-        transmittal = Transmittal.objects.create(
-            contractor=self.contractor,
-            tobechecked_dir=self.tobechecked_dir,
-            accepted_dir=self.accepted_dir,
-            rejected_dir=self.rejected_dir,
-            contract_number=self.contract_number,
-            originator=self.originator,
-            recipient=self.recipient,
-            sequential_number=self.sequential_number,
-            status=status)
+        # Build the list of related documents
+        keys = []
+        for line in self:
+            key = line.csv_data['document_key']
+            if key not in keys:
+                keys.append(key)
+        related_documents = Document.objects \
+            .filter(document_key__in=keys) \
+            .values_list('id', flat=True)
+
+        data = {
+            'contractor': self.contractor,
+            'tobechecked_dir': self.tobechecked_dir,
+            'accepted_dir': self.accepted_dir,
+            'rejected_dir': self.rejected_dir,
+            'contract_number': self.contract_number,
+            'originator': self.originator,
+            'recipient': self.recipient,
+            'sequential_number': self.sequential_number,
+            'status': 'tobechecked',
+            'revision_date': datetime.date.today(),
+            'related_documents': list(related_documents),
+        }
+
+        # The csv file is linked in the "native_file" field
+        native_file = File(open(self.csv_fullname))
+        files = {
+            'native_file': native_file,
+        }
+
+        # Use document forms to create the Transmittal
+        form = TransmittalForm(data=data)
+        revision_form = TransmittalRevisionForm(data=data, files=files)
+        doc, transmittal, revision = save_document_forms(
+            form, revision_form, self.trs_category, is_indexable=False)
 
         for line in self:
             data = line.csv_data

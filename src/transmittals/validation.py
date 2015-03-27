@@ -76,7 +76,7 @@ class TrsExistenceValidator(Validator):
         from transmittals.models import Transmittal
         name = trs_import.basename
         qs = Transmittal.objects \
-            .filter(transmittal_key=name) \
+            .filter(document_key=name) \
             .filter(status__in=['new', 'tobechecked', 'accepted'])
         return qs.count() == 0
 
@@ -223,6 +223,21 @@ class DocumentExistsValidator(Validator):
         return import_line.get_metadata() is not None
 
 
+class DocumentCategoryValidator(Validator):
+    """Checks that the document belongs to the same category as the transmittal."""
+    error = 'The transmittal and document categories do not match.'
+    error_key = 'wrong_category'
+
+    def test(self, import_line):
+        metadata = import_line.get_metadata()
+
+        # If the document does not exist, we cannot perform this test
+        if metadata is None:
+            return True
+
+        return metadata.document.category == import_line.trs_import.doc_category
+
+
 class FormValidator(Validator):
     """Checks that the submitted data is correct."""
     error = 'The data is incorrect.'
@@ -264,6 +279,7 @@ class CSVLineValidator(AndValidator):
         RevisionFormatValidator(),
         PdfFilenameValidator(),
         DocumentExistsValidator(),
+        DocumentCategoryValidator(),
         SameTitleValidator(),
         FormValidator(),
     )

@@ -40,7 +40,7 @@
   "fields": {
     "name": "Transmittals",
     "slug": "transmittals",
-    "metadata_model": ["default_documents", "transmittals"]
+    "metadata_model": ["transmittals", "transmittal"]
   }
 },
 {

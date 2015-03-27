@@ -9,9 +9,13 @@ from shutil import rmtree, copytree
 
 from django.test import TestCase
 from django.core.cache import cache
+from django.contrib.contenttypes.models import ContentType
 
+from documents.models import Document
+from categories.factories import CategoryFactory
 from transmittals.imports import TrsImport
 from transmittals.factories import TransmittalFactory
+from transmittals.models import Transmittal
 
 
 TEST_CTR = 'test'
@@ -26,6 +30,15 @@ class TransmittalsValidationTests(TestCase):
     def setUp(self):
         # Clear the values list cache
         cache.clear()
+
+        try:
+            document = Document.objects.get(document_key='FAC10005-CTR-000-EXP-LAY-4891')
+            self.doc_category = document.category
+        except Document.DoesNotExist:
+            self.doc_category = CategoryFactory()
+
+        trs_content_type = ContentType.objects.get_for_model(Transmittal)
+        self.trs_category = CategoryFactory(category_template__metadata_model=trs_content_type)
 
         self.tmpdir = tempfile.mkdtemp(prefix='phasetest_', suffix='_trs')
         self.incoming = join(self.tmpdir, 'incoming')
@@ -67,6 +80,8 @@ class TransmittalsValidationTests(TestCase):
             rejected_dir=self.config['REJECTED_DIR'],
             email_list=self.config['EMAIL_LIST'],
             contractor=fixtures_dir,
+            doc_category=self.doc_category,
+            trs_category=self.trs_category,
         )
         return trs_import
 
@@ -80,18 +95,18 @@ class DirectoryContentTests(TransmittalsValidationTests):
 
     def test_already_exists(self):
         TransmittalFactory(
-            transmittal_key='FAC10005-CTR-CLT-TRS-00001',
+            document_key='FAC10005-CTR-CLT-TRS-00001',
             status='tobechecked')
         trs_import = self.prepare_fixtures('single_correct_trs', 'FAC10005-CTR-CLT-TRS-00001')
         self.assertTrue('already_exists' in trs_import.errors['global_errors'])
 
     def test_successive_transmittals_numbers(self):
         TransmittalFactory(
-            transmittal_key='FAC10005-CTR-CLT-TRS-00001',
+            document_key='FAC10005-CTR-CLT-TRS-00001',
             status='accepted',
             sequential_number=1)
         TransmittalFactory(
-            transmittal_key='FAC10005-CTR-CLT-TRS-00002',
+            document_key='FAC10005-CTR-CLT-TRS-00002',
             status='accepted',
             sequential_number=2)
         trs_import = self.prepare_fixtures('wrong_seq_number', 'FAC10005-CTR-CLT-TRS-00004')
@@ -140,6 +155,12 @@ class CSVContentTests(TransmittalsValidationTests):
     def test_missing_pdf_file(self):
         trs_import = self.prepare_fixtures('missing_pdf', 'FAC10005-CTR-CLT-TRS-00001')
         self.assertTrue('missing_pdf' in trs_import.errors['csv_content'][2])
+
+    def test_wrong_category_error(self):
+        trs_import = self.prepare_fixtures('single_correct_trs', 'FAC10005-CTR-CLT-TRS-00001')
+        trs_import.doc_category = CategoryFactory()
+
+        self.assertTrue('wrong_category' in trs_import.errors['csv_content'][2])
 
     def test_form_validation_error(self):
         trs_import = self.prepare_fixtures('form_error', 'FAC10005-CTR-CLT-TRS-00001')
