@@ -38,11 +38,15 @@ class PhaseClearableFileInput(ClearableFileInput):
         if value and hasattr(value, "url"):
             template = self.template_with_initial
             filename = basename(force_text(value))
+            try:
+                filesize = filesizeformat(value.size)
+            except OSError:
+                filesize = 'NA'
             substitutions['initial'] = format_html(
                 self.url_markup_template,
                 value.url,
                 filename,
-                filesizeformat(value.size))
+                filesize)
             if not self.is_required:
                 checkbox_name = self.clear_checkbox_name(name)
                 checkbox_id = self.clear_checkbox_id(checkbox_name)
