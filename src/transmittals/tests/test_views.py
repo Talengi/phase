@@ -34,9 +34,9 @@ class TransmittalListTests(TestCase):
         self.assertContains(res, 'There are no transmittals here')
 
     def test_transmittal_list(self):
-        TransmittalFactory()
-        TransmittalFactory()
-        TransmittalFactory()
+        TransmittalFactory(document__category=self.category)
+        TransmittalFactory(document__category=self.category)
+        TransmittalFactory(document__category=self.category)
         res = self.client.get(self.url)
         self.assertNotContains(res, 'There are no transmittals here')
         self.assertContains(res, 'tr class="document_row"', 3)
@@ -47,14 +47,17 @@ class BaseTransmittalDiffViewTests(TestCase):
     def setUp(self):
         Model = ContentType.objects.get_for_model(ContractorDeliverable)
         self.category = CategoryFactory(category_template__metadata_model=Model)
-        self.transmittal = TransmittalFactory()
+        self.transmittal = TransmittalFactory(
+            document__category=self.category)
         user = UserFactory(
             email='testadmin@phase.fr',
             password='pass',
             is_superuser=True,
             category=self.category)
         self.client.login(email=user.email, password='pass')
-        self.url = self.transmittal.get_absolute_url()
+        self.url = reverse('transmittal_diff', args=[
+            self.transmittal.pk,
+            self.transmittal.document_key])
 
     def create_lines(self, nb_existing=1, nb_new=1, **kwargs):
         """Create `nb_existing` + `nb_new` lines in the transmittal."""
