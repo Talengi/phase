@@ -86,6 +86,10 @@ class Review(models.Model):
 class ReviewMixin(models.Model):
     """A Mixin to use to define reviewable document types."""
 
+    review_sent_date = models.DateField(
+        _('Review Sent Date'),
+        null=True, blank=True
+    )
     review_start_date = models.DateField(
         _('Review start date'),
         null=True, blank=True
