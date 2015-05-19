@@ -260,7 +260,11 @@ class SameTitleValidator(Validator):
     error_key = 'wrong_title'
 
     def test(self, import_line):
-        return import_line.get_metadata().title == import_line.csv_data['title']
+        metadata = import_line.get_metadata()
+        if not metadata:
+            return True
+
+        return metadata.title == import_line.csv_data['title']
 
 
 class CSVLineValidator(AndValidator):
@@ -278,7 +282,6 @@ class CSVLineValidator(AndValidator):
         MissingDataValidator(),
         RevisionFormatValidator(),
         PdfFilenameValidator(),
-        DocumentExistsValidator(),
         DocumentCategoryValidator(),
         SameTitleValidator(),
         FormValidator(),
