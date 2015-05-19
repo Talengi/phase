@@ -124,6 +124,9 @@ class ReviewMixin(models.Model):
         verbose_name=u"Class",
         default=1,
         choices=CLASSES)
+    return_code = models.IntegerField(
+        verbose_name=_('Return code'),
+        null=True, blank=True)
 
     class Meta:
         abstract = True
