@@ -7,6 +7,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
 from django.core.urlresolvers import reverse
 
+from documents.forms.models import documentform_factory
+
 
 class SlugManager(models.Manager):
     def get_by_natural_key(self, slug):
@@ -95,6 +97,15 @@ class Category(models.Model):
     def document_class(self):
         Model = self.category_template.metadata_model
         return Model.model_class()
+
+    def revision_class(self):
+        return self.document_class().get_revision_class()
+
+    def get_metadata_form_class(self):
+        return documentform_factory(self.document_class())
+
+    def get_revision_form_class(self):
+        return documentform_factory(self.revision_class())
 
     def document_type(self):
         Model = self.category_template.metadata_model
