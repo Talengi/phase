@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
@@ -5,7 +8,14 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 
 
+class SlugManager(models.Manager):
+    def get_by_natural_key(self, slug):
+        return self.get(slug=slug)
+
+
 class Organisation(models.Model):
+    objects = SlugManager()
+
     name = models.CharField(
         _('Name'),
         max_length=50)
@@ -22,6 +32,8 @@ class Organisation(models.Model):
 
 
 class CategoryTemplate(models.Model):
+    objects = SlugManager()
+
     name = models.CharField(
         _('Name'),
         max_length=50)
