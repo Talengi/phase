@@ -348,6 +348,7 @@ class TrsImportLine(object):
         self.trs_dir = trs_import.trs_dir
 
         self._errors = None
+        self._document = None
         self._metadata = None
 
     @property
@@ -394,27 +395,29 @@ class TrsImportLine(object):
             else:
                 return natives[0]
 
-    def get_metadata_class(self):
-        from default_documents.models import ContractorDeliverable
-        return ContractorDeliverable
+    def get_document(self):
+        if self._document is None:
+            qs = Document.objects \
+                .select_related('category__category_template')
+            self._document = get_object_or_None(
+                qs,
+                document_key=self.csv_data['document_key'])
+
+        return self._document
 
     def get_metadata(self):
         if self._metadata is None:
-            qs = self.get_metadata_class().objects \
-                .select_related('document', 'latest_revision')
-            self._metadata = get_object_or_None(
-                qs,
-                document__document_key=self.csv_data['document_key'])
+            doc = self.get_document()
+            if doc is not None:
+                self._metadata = doc.metadata
 
         return self._metadata
 
     def get_metadata_form_class(self):
-        from default_documents.forms import ContractorDeliverableForm
-        return ContractorDeliverableForm
+        return self.trs_import.doc_category.get_metadata_form_class()
 
     def get_revision_form_class(self):
-        from default_documents.forms import ContractorDeliverableRevisionForm
-        return ContractorDeliverableRevisionForm
+        return self.trs_import.doc_category.get_revision_form_class()
 
     def get_forms(self):
         """Returns the bound forms.
@@ -428,7 +431,7 @@ class TrsImportLine(object):
         metadata_form = MetadataForm(self.csv_data, instance=metadata)
 
         revision_num = self.csv_data['revision']
-        revision = metadata.get_revision(revision_num)
+        revision = metadata.get_revision(revision_num) if metadata else None
 
         RevisionForm = self.get_revision_form_class()
         revision_form = RevisionForm(self.csv_data, instance=revision)
