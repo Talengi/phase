@@ -349,10 +349,9 @@ class TrsImportLine(object):
 
     @property
     def pdf_basename(self):
-        return '%s_%02d_%s.pdf' % (
+        return '%s_%02d.pdf' % (
             self.csv_data['document_key'],
-            int(self.csv_data['revision']),
-            self.csv_data['status']
+            int(self.csv_data['revision'])
         )
 
     @property
