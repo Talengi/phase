@@ -130,20 +130,7 @@ class TrsImport(object):
         but for now it's just a fixed requirement.
 
         """
-        return {
-            'Document Number': 'document_key',
-            'Title': 'title',
-            'Contract Number': 'contract_number',
-            'Originator': 'originator',
-            'Unit': 'unit',
-            'Discipline': 'discipline',
-            'Document Type': 'document_type',
-            'Sequential Number': 'sequential_number',
-            'Class': 'docclass',
-            'Revision': 'revision',
-            'Status': 'status',
-            'Received Date': 'revision_date'
-        }
+        return self.doc_category.get_transmittal_columns()
 
     def csv_cols(self):
         """Returns the coloumns of the csv."""

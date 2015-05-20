@@ -117,6 +117,10 @@ class Category(models.Model):
             self.category_template.slug))
         return url
 
+    def get_transmittal_columns(self):
+        """Lists columns that must be in the transmittal csv."""
+        return self.document_class().PhaseConfig.transmittal_columns
+
     def get_download_url(self):
         """Gets the url used to download a list of documents."""
         url = reverse('document_download', args=(

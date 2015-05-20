@@ -164,6 +164,20 @@ class ContractorDeliverable(Metadata):
             ('Approver', 'approver'),
             ('Final revision', 'final_revision'),
         )
+        transmittal_columns = {
+            'Document Number': 'document_key',
+            'Title': 'title',
+            'Contract Number': 'contract_number',
+            'Originator': 'originator',
+            'Unit': 'unit',
+            'Discipline': 'discipline',
+            'Document Type': 'document_type',
+            'Sequential Number': 'sequential_number',
+            'Class': 'docclass',
+            'Revision': 'revision',
+            'Status': 'status',
+            'Received Date': 'revision_date'
+        }
 
     class Meta:
         ordering = ('document_key',)
