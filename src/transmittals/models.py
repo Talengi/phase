@@ -19,6 +19,7 @@ from documents.utils import save_document_forms
 from documents.models import Document, Metadata, MetadataRevision
 from reviews.models import CLASSES
 from metadata.fields import ConfigurableChoiceField
+from default_documents.validators import StringNumberValidator
 from transmittals.fields import TransmittalFileField
 
 
@@ -298,6 +299,13 @@ class TrsRevision(models.Model):
         default='PID',
         max_length=3,
         list_index='DOCUMENT_TYPES')
+    sequential_number = models.CharField(
+        verbose_name=u"sequential Number",
+        help_text=_('Select a four digit number'),
+        default=u"0001",
+        max_length=4,
+        validators=[StringNumberValidator(4)],
+        null=True, blank=True)
     system = ConfigurableChoiceField(
         _('System'),
         list_index='SYSTEMS',
