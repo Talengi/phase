@@ -137,8 +137,9 @@ class TransmittalRevisionDiffView(LoginRequiredMixin, PermissionRequiredMixin, D
     def get_revision(self):
         """Get the revision to compare the imported data to.
 
-        Three different cases:
+        Four different cases:
 
+         - if we are creating a new document, we have nothing to compare to
          - if we are modifying an existing revision, get this revision
          - if we are creating a new revision and the previous revisions exists,
            get this previous revision.
@@ -148,35 +149,39 @@ class TransmittalRevisionDiffView(LoginRequiredMixin, PermissionRequiredMixin, D
         """
         trs_revision = self.object
         document = trs_revision.document
-        metadata = document.metadata
-        latest_revision = document.current_revision
 
-        # existing revision
-        if trs_revision.revision <= latest_revision:
-            revision = FieldWrapper((
-                metadata,
-                metadata.get_revision(trs_revision.revision)))
-
-        # next revision creation
-        elif trs_revision.revision == latest_revision + 1:
-            revision = FieldWrapper((
-                metadata,
-                metadata.latest_revision))
-
-        # previous revision will also be created
+        if document is None:
+            revision = trs_revision
         else:
-            try:
-                revision = TrsRevision.objects \
-                    .filter(transmittal=trs_revision.transmittal) \
-                    .filter(document_key=trs_revision.document_key) \
-                    .filter(revision=trs_revision.revision - 1) \
-                    .get()
-            except TrsRevision.DoesNotExist():
-                logger.error('No revision to compare to {} / {} /  {}'.format(
-                    trs_revision.transmittal.document_key,
-                    trs_revision.document_key,
-                    trs_revision.revision))
-                revision = {}
+            metadata = document.metadata
+            latest_revision = document.current_revision
+
+            # existing revision
+            if trs_revision.revision <= latest_revision:
+                revision = FieldWrapper((
+                    metadata,
+                    metadata.get_revision(trs_revision.revision)))
+
+            # next revision creation
+            elif trs_revision.revision == latest_revision + 1:
+                revision = FieldWrapper((
+                    metadata,
+                    metadata.latest_revision))
+
+            # previous revision will also be created
+            else:
+                try:
+                    revision = TrsRevision.objects \
+                        .filter(transmittal=trs_revision.transmittal) \
+                        .filter(document_key=trs_revision.document_key) \
+                        .filter(revision=trs_revision.revision - 1) \
+                        .get()
+                except TrsRevision.DoesNotExist():
+                    logger.error('No revision to compare to {} / {} /  {}'.format(
+                        trs_revision.transmittal.document_key,
+                        trs_revision.document_key,
+                        trs_revision.revision))
+                    revision = {}
 
         return revision
 
