@@ -9,8 +9,10 @@ from django.views.generic import ListView, DetailView
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect
+
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 from zipview.views import BaseZipView
+from annoying.functions import get_object_or_None
 
 from notifications.models import notify
 from transmittals.models import Transmittal, TrsRevision
@@ -149,39 +151,48 @@ class TransmittalRevisionDiffView(LoginRequiredMixin, PermissionRequiredMixin, D
         """
         trs_revision = self.object
         document = trs_revision.document
+        metadata = getattr(document, 'metadata', None)
+        latest_revision = getattr(document, 'current_revision', 0)
 
-        if document is None:
+        # No existing document, document + revision creation
+        if document is None and trs_revision.revision == 0:
             revision = trs_revision
+
+        # No existing document, but the previous revision will be created
+        # before this one
+        elif document is None and trs_revision.revision > 0:
+            qs = TrsRevision.objects \
+                .filter(transmittal=trs_revision.transmittal) \
+                .filter(document_key=trs_revision.document_key) \
+                .filter(revision=trs_revision.revision - 1)
+            revision = get_object_or_None(qs)
+
+        # existing revision
+        elif trs_revision.revision <= latest_revision:
+            revision = FieldWrapper((
+                metadata,
+                metadata.get_revision(trs_revision.revision)))
+
+        # next revision creation
+        elif trs_revision.revision == latest_revision + 1:
+            revision = FieldWrapper((
+                metadata,
+                metadata.latest_revision))
+
+        # previous revision will also be created
         else:
-            metadata = document.metadata
-            latest_revision = document.current_revision
+            qs = TrsRevision.objects \
+                .filter(transmittal=trs_revision.transmittal) \
+                .filter(document_key=trs_revision.document_key) \
+                .filter(revision=trs_revision.revision - 1)
+            revision = get_object_or_None(qs)
 
-            # existing revision
-            if trs_revision.revision <= latest_revision:
-                revision = FieldWrapper((
-                    metadata,
-                    metadata.get_revision(trs_revision.revision)))
-
-            # next revision creation
-            elif trs_revision.revision == latest_revision + 1:
-                revision = FieldWrapper((
-                    metadata,
-                    metadata.latest_revision))
-
-            # previous revision will also be created
-            else:
-                try:
-                    revision = TrsRevision.objects \
-                        .filter(transmittal=trs_revision.transmittal) \
-                        .filter(document_key=trs_revision.document_key) \
-                        .filter(revision=trs_revision.revision - 1) \
-                        .get()
-                except TrsRevision.DoesNotExist():
-                    logger.error('No revision to compare to {} / {} /  {}'.format(
-                        trs_revision.transmittal.document_key,
-                        trs_revision.document_key,
-                        trs_revision.revision))
-                    revision = {}
+        if revision is None:
+            logger.error('No revision to compare to {} / {} /  {}'.format(
+                trs_revision.transmittal.document_key,
+                trs_revision.document_key,
+                trs_revision.revision))
+            revision = {}
 
         return revision
 
