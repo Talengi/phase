@@ -74,6 +74,11 @@
                 <td>{{ revision.revision|stringformat:"02d" }}</td>
                 <td>{{ trs_revision.revision|stringformat:"02d" }}</td>
             </tr>
+            <tr class="{% diffclass 'revision_date' %}">
+                <th>Revision date</th>
+                <td>{{ revision.revision_date }}</td>
+                <td>{{ trs_revision.revision_date }}</td>
+            </tr>
             <tr class="{% diffclass 'docclass' %}">
                 <th>Class</th>
                 <td>{{ revision.docclass }}</td>
