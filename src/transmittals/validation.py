@@ -338,7 +338,7 @@ class RevisionsValidator(Validator):
         # Check revisions for each document
         for document_key in revisions.keys():
             revision_ids = revisions[document_key]
-            latest_revision = latest_revisions.get(document_key, 1)
+            latest_revision = latest_revisions.get(document_key, 0)
             revision_errors = self._validate_revision(revision_ids, latest_revision)
 
             if revision_errors:
@@ -355,7 +355,7 @@ class RevisionsValidator(Validator):
         revisions.sort()
         previous_revision = latest_revision
         for revision in revisions:
-            if revision < 1:
+            if revision < 0:
                 errors[revision] = '%d is not a valid revision number' % revision
             elif revision > previous_revision + 1:
                 errors[revision] = '%d is missing some previous revisions' % revision
