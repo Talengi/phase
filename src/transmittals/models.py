@@ -19,7 +19,6 @@ from documents.utils import save_document_forms
 from documents.models import Document, Metadata, MetadataRevision
 from reviews.models import CLASSES
 from metadata.fields import ConfigurableChoiceField
-from default_documents.validators import StringNumberValidator
 from transmittals.fields import TransmittalFileField
 
 
@@ -66,7 +65,8 @@ class Transmittal(Metadata):
         max_length=50,
         list_index='RECIPIENTS')
     sequential_number = models.PositiveIntegerField(
-        _('sequential number'))
+        _('sequential number'),
+        null=True, blank=True)
     document_type = ConfigurableChoiceField(
         _('Document Type'),
         default="PID",
@@ -254,7 +254,16 @@ class TrsRevision(models.Model):
         verbose_name=_('Title'))
     revision = models.PositiveIntegerField(
         verbose_name=_('Revision'),
-        default=1)
+        default=0)
+    revision_date = models.DateField(
+        _('Revision date'),
+        null=True, blank=True)
+    received_date = models.DateField(
+        _('Received date'),
+        null=True, blank=True)
+    created_on = models.DateField(
+        _('Created on'),
+        null=True, blank=True)
     accepted = models.NullBooleanField(
         verbose_name=_('Accepted?'))
     comment = models.TextField(
@@ -289,12 +298,18 @@ class TrsRevision(models.Model):
         default='PID',
         max_length=3,
         list_index='DOCUMENT_TYPES')
-    sequential_number = models.CharField(
-        verbose_name=u"sequential Number",
-        help_text=_('Select a four digit number'),
-        default=u"0001",
-        max_length=4,
-        validators=[StringNumberValidator(4)])
+    system = ConfigurableChoiceField(
+        _('System'),
+        list_index='SYSTEMS',
+        null=True, blank=True)
+    wbs = ConfigurableChoiceField(
+        _('Wbs'),
+        max_length=20,
+        list_index='WBS',
+        null=True, blank=True)
+    weight = models.IntegerField(
+        _('Weight'),
+        null=True, blank=True)
     docclass = models.IntegerField(
         verbose_name=_('Class'),
         default=1,
@@ -304,6 +319,40 @@ class TrsRevision(models.Model):
         default='STD',
         max_length=3,
         list_index='STATUSES',
+        null=True, blank=True)
+    return_code = models.PositiveIntegerField(
+        _('Return code'),
+        null=True, blank=True)
+    review_sent_date = models.DateField(
+        _('Review sent date'),
+        null=True, blank=True)
+    review_due_date = models.DateField(
+        _('Review due date'),
+        null=True, blank=True)
+    review_leader = models.CharField(
+        _('Review leader'),
+        max_length=150,
+        null=True, blank=True)
+    leader_comment_date = models.DateField(
+        _('Leader comment date'),
+        null=True, blank=True)
+    review_approver = models.CharField(
+        _('Review approver'),
+        max_length=150,
+        null=True, blank=True)
+    approver_comment_date = models.DateField(
+        _('Approver comment date'),
+        null=True, blank=True)
+    outgoing_trs = models.CharField(
+        verbose_name=_('Outgoing transmittal name'),
+        max_length=255,
+        null=True, blank=True)
+    outgoing_trs_status = models.CharField(
+        verbose_name=_('Outgoing transmittal status'),
+        max_length=50,
+        null=True, blank=True)
+    outgoing_trs_sent_date = models.DateField(
+        verbose_name=_('Outgoing transmittal sent date'),
         null=True, blank=True)
     pdf_file = TransmittalFileField(
         verbose_name=_('Pdf file'))

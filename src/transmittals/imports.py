@@ -124,16 +124,11 @@ class TrsImport(object):
         return os.path.basename(self.csv_fullname)
 
     def expected_columns(self):
-        """Returns the expected csv columns.
-
-        In the end, it should depend on the document category,
-        but for now it's just a fixed requirement.
-
-        """
+        """Returns the expected csv columns."""
         return self.doc_category.get_transmittal_columns()
 
     def csv_cols(self):
-        """Returns the coloumns of the csv."""
+        """Returns the colomns of the csv."""
         if not self._csv_cols:
             try:
                 line = self.csv_lines()[0]
@@ -161,7 +156,7 @@ class TrsImport(object):
                     for row in csvfile:
                         line_row = {}
                         for key, value in row.items():
-                            line_row[columns.get(key, key)] = value
+                            line_row[columns.get(key, key)] = value or None
 
                         lines.append(line_row)
             except IOError:
@@ -274,8 +269,8 @@ class TrsImport(object):
             'recipient': self.recipient,
             'sequential_number': self.sequential_number,
             'status': 'tobechecked',
-            'revision_date': datetime.date.today(),
             'related_documents': list(related_documents),
+            'revision_date': datetime.date.today(),
         }
 
         # The csv file is linked in the "native_file" field
@@ -293,7 +288,7 @@ class TrsImport(object):
         for line in self:
             data = line.csv_data
             metadata = line.get_metadata()
-            document = metadata.document if metadata else None
+            document = getattr(metadata, 'document', None)
 
             # Is this a revision creation or are we editing an existing one?
             if metadata is None:
@@ -307,23 +302,15 @@ class TrsImport(object):
             if native_file:
                 native_file = File(open(native_file))
 
-            TrsRevision.objects.create(
-                transmittal=transmittal,
-                document=document,
-                document_key=data['document_key'],
-                title=data['title'],
-                revision=data['revision'],
-                originator=data['originator'],
-                unit=data['unit'],
-                discipline=data['discipline'],
-                document_type=data['document_type'],
-                sequential_number=data['sequential_number'],
-                docclass=data['docclass'],
-                status=data['status'],
-                contract_number=data['contract_number'],
-                is_new_revision=is_new_revision,
-                pdf_file=pdf_file,
-                native_file=native_file)
+            data.update({
+                'transmittal': transmittal,
+                'document': document,
+                'is_new_revision': is_new_revision,
+                'pdf_file': pdf_file,
+                'native_file': native_file,
+            })
+
+            TrsRevision.objects.create(**data)
 
 
 class TrsImportLine(object):
