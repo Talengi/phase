@@ -18,8 +18,13 @@ def save_document_forms(metadata_form, revision_form, category, **doc_kwargs):
       * We are editing an existing revision
 
     """
-    assert metadata_form.is_valid()
-    assert revision_form.is_valid()
+    if not metadata_form.is_valid():
+        raise RuntimeError('Metadata form MUST be valid. \
+                           ({})'.format(metadata_form.errors))
+
+    if not revision_form.is_valid():
+        raise RuntimeError('Revision form MUST be valid. \
+                           ({})'.format(revision_form.errors))
 
     revision = revision_form.save(commit=False)
     metadata = metadata_form.save(commit=False)
