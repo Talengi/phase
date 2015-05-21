@@ -306,10 +306,11 @@ class TrsImport(object):
                 'transmittal': transmittal,
                 'document': document,
                 'is_new_revision': is_new_revision,
+                'category': self.doc_category,
                 'pdf_file': pdf_file,
                 'native_file': native_file,
+                'sequential_number': line.sequential_number,  # XXX Hack
             })
-
             TrsRevision.objects.create(**data)
 
 
@@ -367,6 +368,10 @@ class TrsImportLine(object):
                 return natives[1]
             else:
                 return natives[0]
+
+    @property
+    def sequential_number(self):
+        return self.csv_data['document_key'].split('-')[5]
 
     def get_document(self):
         if self._document is None:
