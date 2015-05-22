@@ -213,7 +213,7 @@ class TrsImport(object):
                 # n + 1 because we need to take the first line (col definition)
                 # into account
                 errors.update({line_nb + 1: line_errors})
-                line_nb += 1
+            line_nb += 1
 
         if errors:
             self._errors['csv_content'] = errors
