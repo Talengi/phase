@@ -8,8 +8,15 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.cache import cache
 
 
+class IndexManager(models.Manager):
+    def get_by_natural_key(self, index):
+        return self.get(index=index)
+
+
 class ValuesList(models.Model):
     """Administrable key / value list to use in Choices fields."""
+    objects = IndexManager()
+
     index = models.CharField(
         _('Index'),
         max_length=50,
