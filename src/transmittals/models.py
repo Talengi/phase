@@ -352,6 +352,14 @@ class TrsRevision(models.Model):
     approver_comment_date = models.DateField(
         _('Approver comment date'),
         null=True, blank=True)
+    review_trs = models.CharField(
+        verbose_name=_('Review transmittal name'),
+        max_length=255,
+        null=True, blank=True)
+    review_trs_status = models.CharField(
+        verbose_name=_('Review transmittal status'),
+        max_length=50,
+        null=True, blank=True)
     outgoing_trs = models.CharField(
         verbose_name=_('Outgoing transmittal name'),
         max_length=255,
