@@ -361,7 +361,8 @@ class TrsImportLine(object):
         stripped_name = pdf[0:-4]
         natives = glob.glob('{}*'.format(stripped_name))
 
-        assert 1 <= len(natives) and len(natives) <= 2
+        if len(natives) < 1 or len(natives) > 2:
+            raise RuntimeError('Oops. Wrong number of files here.')
 
         if len(natives) == 1:
             # We found only the pdf itself, there is no native file
