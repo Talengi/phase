@@ -285,6 +285,8 @@ class TrsImport(object):
         doc, transmittal, revision = save_document_forms(
             form, revision_form, self.trs_category, is_indexable=False)
 
+        native_file.close()
+
         for line in self:
             data = line.csv_data
             metadata = line.get_metadata()
@@ -312,6 +314,10 @@ class TrsImport(object):
                 'sequential_number': line.sequential_number,  # XXX Hack
             })
             TrsRevision.objects.create(**data)
+
+            pdf_file.close()
+            if hasattr(native_file, 'close'):
+                native_file.close()
 
 
 class TrsImportLine(object):
