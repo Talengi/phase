@@ -62,6 +62,10 @@
     {% endfor %}
     </tbody>
 </table>
+
+{% if is_paginated %}
+    {% include 'pagination.html' %}
+{% endif %}
 </div>
 
 {% endblock %}

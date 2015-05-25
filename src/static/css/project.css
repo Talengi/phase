@@ -196,6 +196,9 @@ button.ui-multiselect {
     text-align: center;
     display: none;
 }
+#pagination {
+    text-align: center;
+}
 
 /* columns width */
 .smallcolumn,

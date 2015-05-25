@@ -1,0 +1,16 @@
+{% load i18n %}
+<div id="pagination">
+    <span class="page-links">
+        {% if page_obj.has_previous %}
+        <a href="{{ the_url }}?page={{ page_obj.previous_page_number }}">{{ _('Previous') }}</a>
+        {% endif %}
+        <span class="page-current">
+            {% blocktrans with page_number=page_obj.number num_pages=page_obj.paginator.num_pages %}
+            Page {{ page_number }} of {{ num_pages }}.
+            {% endblocktrans %}
+        </span>
+        {% if page_obj.has_next %}
+        <a href="{{ the_url }}?page={{ page_obj.next_page_number }}">{{ _('Next') }}</a>
+        {% endif %}
+    </span>
+</div>

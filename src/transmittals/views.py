@@ -17,6 +17,7 @@ from annoying.functions import get_object_or_None
 from notifications.models import notify
 from transmittals.models import Transmittal, TrsRevision
 from transmittals.utils import FieldWrapper
+from django.conf import settings
 
 
 logger = logging.getLogger(__name__)
@@ -45,10 +46,11 @@ class TransmittalListView(LoginRequiredMixin, PermissionRequiredMixin, ListView)
         return context
 
 
-class TransmittalDiffView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
+class TransmittalDiffView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'transmittals/diff_view.html'
-    context_object_name = 'transmittal'
     permission_required = 'documents.can_control_document'
+    context_object_name = 'revisions'
+    paginate_by = settings.PAGINATE_BY
 
     def breadcrumb_section(self):
         return (_('Transmittals'), reverse('transmittal_list'))
@@ -63,14 +65,21 @@ class TransmittalDiffView(LoginRequiredMixin, PermissionRequiredMixin, DetailVie
             .filter(document_key=self.kwargs['document_key'])
         return qs.get()
 
+    def get_queryset(self):
+        return self.object.trsrevision_set.all()
+
     def get_context_data(self, **kwargs):
         context = super(TransmittalDiffView, self).get_context_data(**kwargs)
         context.update({
-            'revisions': self.object.trsrevision_set.all(),
+            'transmittal': self.object,
             'transmittals_active': True,
         })
 
         return context
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super(TransmittalDiffView, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         """Accept or reject transmittal."""
