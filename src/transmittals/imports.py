@@ -191,6 +191,8 @@ class TrsImport(object):
 
     def validate(self):
         """Performs a full automatic validation of the transmittals."""
+        logger.info('Starting validation of transmittal %s' % self.basename)
+
         self._errors = dict()
         self._validate_transmittal()
         self._validate_csv_content()
@@ -200,14 +202,21 @@ class TrsImport(object):
             self._validate_revisions()
 
     def _validate_transmittal(self):
+        logger.info('Validating transmittal')
+
         errors = TrsValidator().validate(self)
         if errors:
             self._errors.update(errors)
 
     def _validate_csv_content(self):
+        logger.info('Validating csv content')
+
         errors = dict()
         line_nb = 1
         for import_line in self:
+            if line_nb % 100 == 0:
+                logger.info('Validating line {}'.format(line_nb))
+
             line_errors = import_line.errors
             if line_errors:
                 # n + 1 because we need to take the first line (col definition)
@@ -220,6 +229,8 @@ class TrsImport(object):
 
     def _validate_revisions(self):
         """Check that revision numbers are correct."""
+        logger.info('Validating revisions')
+
         errors = RevisionsValidator().validate(self)
         if errors:
             self._errors.update(errors)
@@ -287,10 +298,15 @@ class TrsImport(object):
 
         native_file.close()
 
+        nb_line = 0
         for line in self:
             data = line.csv_data
             metadata = line.get_metadata()
             document = getattr(metadata, 'document', None)
+
+            if nb_line % 100 == 0:
+                logger.info('Importing line {} ({})'.format(
+                    nb_line + 1, data['document_key']))
 
             # Is this a revision creation or are we editing an existing one?
             if metadata is None:
@@ -314,6 +330,7 @@ class TrsImport(object):
                 'sequential_number': line.sequential_number,  # XXX Hack
             })
             TrsRevision.objects.create(**data)
+            nb_line += 1
 
             pdf_file.close()
             if hasattr(native_file, 'close'):
