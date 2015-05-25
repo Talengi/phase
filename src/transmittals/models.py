@@ -66,7 +66,8 @@ class Transmittal(Metadata):
         max_length=50,
         list_index='RECIPIENTS')
     sequential_number = models.PositiveIntegerField(
-        _('sequential number'))
+        _('sequential number'),
+        null=True, blank=True)
     document_type = ConfigurableChoiceField(
         _('Document Type'),
         default="PID",
@@ -250,11 +251,21 @@ class TrsRevision(models.Model):
     document_key = models.SlugField(
         _('Document number'),
         max_length=250)
+    category = models.ForeignKey('categories.Category')
     title = models.TextField(
         verbose_name=_('Title'))
     revision = models.PositiveIntegerField(
         verbose_name=_('Revision'),
-        default=1)
+        default=0)
+    revision_date = models.DateField(
+        _('Revision date'),
+        null=True, blank=True)
+    received_date = models.DateField(
+        _('Received date'),
+        null=True, blank=True)
+    created_on = models.DateField(
+        _('Created on'),
+        null=True, blank=True)
     accepted = models.NullBooleanField(
         verbose_name=_('Accepted?'))
     comment = models.TextField(
@@ -294,7 +305,20 @@ class TrsRevision(models.Model):
         help_text=_('Select a four digit number'),
         default=u"0001",
         max_length=4,
-        validators=[StringNumberValidator(4)])
+        validators=[StringNumberValidator(4)],
+        null=True, blank=True)
+    system = ConfigurableChoiceField(
+        _('System'),
+        list_index='SYSTEMS',
+        null=True, blank=True)
+    wbs = ConfigurableChoiceField(
+        _('Wbs'),
+        max_length=20,
+        list_index='WBS',
+        null=True, blank=True)
+    weight = models.IntegerField(
+        _('Weight'),
+        null=True, blank=True)
     docclass = models.IntegerField(
         verbose_name=_('Class'),
         default=1,
@@ -304,6 +328,48 @@ class TrsRevision(models.Model):
         default='STD',
         max_length=3,
         list_index='STATUSES',
+        null=True, blank=True)
+    return_code = models.PositiveIntegerField(
+        _('Return code'),
+        null=True, blank=True)
+    review_sent_date = models.DateField(
+        _('Review sent date'),
+        null=True, blank=True)
+    review_due_date = models.DateField(
+        _('Review due date'),
+        null=True, blank=True)
+    review_leader = models.CharField(
+        _('Review leader'),
+        max_length=150,
+        null=True, blank=True)
+    leader_comment_date = models.DateField(
+        _('Leader comment date'),
+        null=True, blank=True)
+    review_approver = models.CharField(
+        _('Review approver'),
+        max_length=150,
+        null=True, blank=True)
+    approver_comment_date = models.DateField(
+        _('Approver comment date'),
+        null=True, blank=True)
+    review_trs = models.CharField(
+        verbose_name=_('Review transmittal name'),
+        max_length=255,
+        null=True, blank=True)
+    review_trs_status = models.CharField(
+        verbose_name=_('Review transmittal status'),
+        max_length=50,
+        null=True, blank=True)
+    outgoing_trs = models.CharField(
+        verbose_name=_('Outgoing transmittal name'),
+        max_length=255,
+        null=True, blank=True)
+    outgoing_trs_status = models.CharField(
+        verbose_name=_('Outgoing transmittal status'),
+        max_length=50,
+        null=True, blank=True)
+    outgoing_trs_sent_date = models.DateField(
+        verbose_name=_('Outgoing transmittal sent date'),
         null=True, blank=True)
     pdf_file = TransmittalFileField(
         verbose_name=_('Pdf file'))
@@ -330,40 +396,46 @@ class TrsRevision(models.Model):
         For now, this list is fixed.
 
         """
-        fields = ('title', 'contract_number', 'originator', 'unit',
-                  'discipline', 'document_type', 'sequential_number',
-                  'docclass', 'revision', 'status')
+        columns = self.category.get_transmittal_columns()
+        fields = columns.values()
         fields_dict = dict([(field, getattr(self, field)) for field in fields])
 
-        files = ('pdf_file', 'native_file')
-        files_dict = dict([(field, getattr(self, field)) for field in files])
+        # XXX
+        # This is a HACK
+        fields_dict.update({
+            'sequential_number': '{:04}'.format(int(self.sequential_number))
+        })
+
+        files_dict = {
+            'native_file': self.native_file,
+            'pdf_file': self.pdf_file}
 
         return fields_dict, files_dict
 
     def save_to_document(self):
         """Use self data to create / update the corresponding revision."""
-        from default_documents.forms import (
-            ContractorDeliverableForm, ContractorDeliverableRevisionForm)
 
         fields, files = self.get_document_fields()
         kwargs = {
             'data': fields,
-            'files': files,
-        }
-        metadata = self.document.metadata
+            'files': files}
+
+        # The document was created earlier during
+        # the batch import
+        if self.document is None and self.revision > 0:
+            self.document = Document.objects.get(document_key=self.document_key)
+
+        metadata = getattr(self.document, 'metadata', None)
         kwargs.update({'instance': metadata})
-        metadata_form = ContractorDeliverableForm(**kwargs)
+        Form = self.category.get_metadata_form_class()
+        metadata_form = Form(**kwargs)
 
         # If there is no such revision, the method will return None
         # which is fine.
-        revision = metadata.get_revision(self.revision)
-
-        # Let's make sure we are creating the revisions in the correct order.
-        # This MUST have been enforced during the initial Transmittal validation.
-        if revision is None:
-            assert kwargs['data']['revision'] == metadata.latest_revision.revision + 1
+        revision = metadata.get_revision(self.revision) if metadata else None
 
         kwargs.update({'instance': revision})
-        revision_form = ContractorDeliverableRevisionForm(**kwargs)
+        RevisionForm = self.category.get_revision_form_class()
+        revision_form = RevisionForm(**kwargs)
 
-        save_document_forms(metadata_form, revision_form, self.document.category)
+        save_document_forms(metadata_form, revision_form, self.category)

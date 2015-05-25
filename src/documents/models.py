@@ -139,6 +139,10 @@ class MetadataBase(ModelBase):
     """
     def __new__(cls, name, bases, attrs):
         if name != 'NewBase' and name != 'Metadata':
+            base_attrs = []
+            for base in bases:
+                base_attrs += base._meta.get_all_field_names()
+
             phase_config = attrs.get('PhaseConfig', None)
             if not phase_config:
                 raise TypeError('You are missing the "PhaseConfig" configuration '
@@ -152,8 +156,7 @@ class MetadataBase(ModelBase):
                 raise TypeError('Your "PhaseConfig" definition is incorrect '
                                 'on %s. Please check the doc' % name)
 
-            title = attrs.get('title', None)
-            if title is None:
+            if 'title' not in attrs and 'title' not in base_attrs:
                 raise TypeError('You must define a title field or property '
                                 'on model %s' % name)
 

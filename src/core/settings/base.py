@@ -213,6 +213,7 @@ LOCAL_APPS = (
     'documents',
     'reviews',
     'default_documents',
+    'epc2_documents',
     'accounts',
     'categories',
     'metadata',

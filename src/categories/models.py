@@ -1,11 +1,23 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
 from django.core.urlresolvers import reverse
 
+from documents.forms.models import documentform_factory
+
+
+class SlugManager(models.Manager):
+    def get_by_natural_key(self, slug):
+        return self.get(slug=slug)
+
 
 class Organisation(models.Model):
+    objects = SlugManager()
+
     name = models.CharField(
         _('Name'),
         max_length=50)
@@ -22,6 +34,8 @@ class Organisation(models.Model):
 
 
 class CategoryTemplate(models.Model):
+    objects = SlugManager()
+
     name = models.CharField(
         _('Name'),
         max_length=50)
@@ -84,6 +98,15 @@ class Category(models.Model):
         Model = self.category_template.metadata_model
         return Model.model_class()
 
+    def revision_class(self):
+        return self.document_class().get_revision_class()
+
+    def get_metadata_form_class(self):
+        return documentform_factory(self.document_class())
+
+    def get_revision_form_class(self):
+        return documentform_factory(self.revision_class())
+
     def document_type(self):
         Model = self.category_template.metadata_model
         return '%s.%s' % (Model.app_label, Model.model)
@@ -93,6 +116,10 @@ class Category(models.Model):
             self.organisation.slug,
             self.category_template.slug))
         return url
+
+    def get_transmittal_columns(self):
+        """Lists columns that must be in the transmittal csv."""
+        return self.document_class().PhaseConfig.transmittal_columns
 
     def get_download_url(self):
         """Gets the url used to download a list of documents."""

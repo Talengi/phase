@@ -260,7 +260,11 @@ class SameTitleValidator(Validator):
     error_key = 'wrong_title'
 
     def test(self, import_line):
-        return import_line.get_metadata().title == import_line.csv_data['title']
+        metadata = import_line.get_metadata()
+        if not metadata:
+            return True
+
+        return metadata.title == import_line.csv_data['title']
 
 
 class CSVLineValidator(AndValidator):
@@ -278,7 +282,6 @@ class CSVLineValidator(AndValidator):
         MissingDataValidator(),
         RevisionFormatValidator(),
         PdfFilenameValidator(),
-        DocumentExistsValidator(),
         DocumentCategoryValidator(),
         SameTitleValidator(),
         FormValidator(),
@@ -335,7 +338,7 @@ class RevisionsValidator(Validator):
         # Check revisions for each document
         for document_key in revisions.keys():
             revision_ids = revisions[document_key]
-            latest_revision = latest_revisions[document_key]
+            latest_revision = latest_revisions.get(document_key, 0)
             revision_errors = self._validate_revision(revision_ids, latest_revision)
 
             if revision_errors:
@@ -352,7 +355,7 @@ class RevisionsValidator(Validator):
         revisions.sort()
         previous_revision = latest_revision
         for revision in revisions:
-            if revision < 1:
+            if revision < 0:
                 errors[revision] = '%d is not a valid revision number' % revision
             elif revision > previous_revision + 1:
                 errors[revision] = '%d is missing some previous revisions' % revision

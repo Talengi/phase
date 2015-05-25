@@ -32,9 +32,7 @@ def process_transmittal(transmittal_id):
     revisions = TrsRevision.objects \
         .filter(transmittal=transmittal) \
         .order_by('revision') \
-        .select_related('document', 'document__category',
-                        'document__category__organisation',
-                        'document__category__category_template')
+        .select_related()
 
     try:
         # Update / create documents in db

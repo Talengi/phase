@@ -148,10 +148,6 @@ class CSVContentTests(TransmittalsValidationTests):
         trs_import = self.prepare_fixtures('missing_data', 'FAC10005-CTR-CLT-TRS-00001')
         self.assertTrue('missing_data' in trs_import.errors['csv_content'][2])
 
-    def test_missing_document(self):
-        trs_import = self.prepare_fixtures('missing_document', 'FAC10005-CTR-CLT-TRS-00001')
-        self.assertTrue('document_not_found' in trs_import.errors['csv_content'][2])
-
     def test_missing_pdf_file(self):
         trs_import = self.prepare_fixtures('missing_pdf', 'FAC10005-CTR-CLT-TRS-00001')
         self.assertTrue('missing_pdf' in trs_import.errors['csv_content'][2])

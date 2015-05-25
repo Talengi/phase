@@ -124,29 +124,11 @@ class TrsImport(object):
         return os.path.basename(self.csv_fullname)
 
     def expected_columns(self):
-        """Returns the expected csv columns.
-
-        In the end, it should depend on the document category,
-        but for now it's just a fixed requirement.
-
-        """
-        return {
-            'Document Number': 'document_key',
-            'Title': 'title',
-            'Contract Number': 'contract_number',
-            'Originator': 'originator',
-            'Unit': 'unit',
-            'Discipline': 'discipline',
-            'Document Type': 'document_type',
-            'Sequential Number': 'sequential_number',
-            'Class': 'docclass',
-            'Revision': 'revision',
-            'Status': 'status',
-            'Received Date': 'revision_date'
-        }
+        """Returns the expected csv columns."""
+        return self.doc_category.get_transmittal_columns()
 
     def csv_cols(self):
-        """Returns the coloumns of the csv."""
+        """Returns the colomns of the csv."""
         if not self._csv_cols:
             try:
                 line = self.csv_lines()[0]
@@ -174,7 +156,7 @@ class TrsImport(object):
                     for row in csvfile:
                         line_row = {}
                         for key, value in row.items():
-                            line_row[columns.get(key, key)] = value
+                            line_row[columns.get(key, key)] = value or None
 
                         lines.append(line_row)
             except IOError:
@@ -209,6 +191,8 @@ class TrsImport(object):
 
     def validate(self):
         """Performs a full automatic validation of the transmittals."""
+        logger.info('Starting validation of transmittal %s' % self.basename)
+
         self._errors = dict()
         self._validate_transmittal()
         self._validate_csv_content()
@@ -218,26 +202,35 @@ class TrsImport(object):
             self._validate_revisions()
 
     def _validate_transmittal(self):
+        logger.info('Validating transmittal')
+
         errors = TrsValidator().validate(self)
         if errors:
             self._errors.update(errors)
 
     def _validate_csv_content(self):
+        logger.info('Validating csv content')
+
         errors = dict()
         line_nb = 1
         for import_line in self:
+            if line_nb % 100 == 0:
+                logger.info('Validating line {}'.format(line_nb))
+
             line_errors = import_line.errors
             if line_errors:
                 # n + 1 because we need to take the first line (col definition)
                 # into account
                 errors.update({line_nb + 1: line_errors})
-                line_nb += 1
+            line_nb += 1
 
         if errors:
             self._errors['csv_content'] = errors
 
     def _validate_revisions(self):
         """Check that revision numbers are correct."""
+        logger.info('Validating revisions')
+
         errors = RevisionsValidator().validate(self)
         if errors:
             self._errors.update(errors)
@@ -287,8 +280,8 @@ class TrsImport(object):
             'recipient': self.recipient,
             'sequential_number': self.sequential_number,
             'status': 'tobechecked',
-            'revision_date': datetime.date.today(),
             'related_documents': list(related_documents),
+            'revision_date': datetime.date.today(),
         }
 
         # The csv file is linked in the "native_file" field
@@ -303,10 +296,17 @@ class TrsImport(object):
         doc, transmittal, revision = save_document_forms(
             form, revision_form, self.trs_category, is_indexable=False)
 
+        native_file.close()
+
+        nb_line = 0
         for line in self:
             data = line.csv_data
             metadata = line.get_metadata()
-            document = metadata.document if metadata else None
+            document = getattr(metadata, 'document', None)
+
+            if nb_line % 100 == 0:
+                logger.info('Importing line {} ({})'.format(
+                    nb_line + 1, data['document_key']))
 
             # Is this a revision creation or are we editing an existing one?
             if metadata is None:
@@ -320,23 +320,21 @@ class TrsImport(object):
             if native_file:
                 native_file = File(open(native_file))
 
-            TrsRevision.objects.create(
-                transmittal=transmittal,
-                document=document,
-                document_key=data['document_key'],
-                title=data['title'],
-                revision=data['revision'],
-                originator=data['originator'],
-                unit=data['unit'],
-                discipline=data['discipline'],
-                document_type=data['document_type'],
-                sequential_number=data['sequential_number'],
-                docclass=data['docclass'],
-                status=data['status'],
-                contract_number=data['contract_number'],
-                is_new_revision=is_new_revision,
-                pdf_file=pdf_file,
-                native_file=native_file)
+            data.update({
+                'transmittal': transmittal,
+                'document': document,
+                'is_new_revision': is_new_revision,
+                'category': self.doc_category,
+                'pdf_file': pdf_file,
+                'native_file': native_file,
+                'sequential_number': line.sequential_number,  # XXX Hack
+            })
+            TrsRevision.objects.create(**data)
+            nb_line += 1
+
+            pdf_file.close()
+            if hasattr(native_file, 'close'):
+                native_file.close()
 
 
 class TrsImportLine(object):
@@ -348,6 +346,7 @@ class TrsImportLine(object):
         self.trs_dir = trs_import.trs_dir
 
         self._errors = None
+        self._document = None
         self._metadata = None
 
     @property
@@ -361,10 +360,9 @@ class TrsImportLine(object):
 
     @property
     def pdf_basename(self):
-        return '%s_%02d_%s.pdf' % (
+        return '%s_%02d.pdf' % (
             self.csv_data['document_key'],
-            int(self.csv_data['revision']),
-            self.csv_data['status']
+            int(self.csv_data['revision'])
         )
 
     @property
@@ -380,7 +378,8 @@ class TrsImportLine(object):
         stripped_name = pdf[0:-4]
         natives = glob.glob('{}*'.format(stripped_name))
 
-        assert 1 <= len(natives) and len(natives) <= 2
+        if len(natives) < 1 or len(natives) > 2:
+            raise RuntimeError('Oops. Wrong number of files here.')
 
         if len(natives) == 1:
             # We found only the pdf itself, there is no native file
@@ -394,27 +393,33 @@ class TrsImportLine(object):
             else:
                 return natives[0]
 
-    def get_metadata_class(self):
-        from default_documents.models import ContractorDeliverable
-        return ContractorDeliverable
+    @property
+    def sequential_number(self):
+        return self.csv_data['document_key'].split('-')[5]
+
+    def get_document(self):
+        if self._document is None:
+            qs = Document.objects \
+                .select_related('category__category_template')
+            self._document = get_object_or_None(
+                qs,
+                document_key=self.csv_data['document_key'])
+
+        return self._document
 
     def get_metadata(self):
         if self._metadata is None:
-            qs = self.get_metadata_class().objects \
-                .select_related('document', 'latest_revision')
-            self._metadata = get_object_or_None(
-                qs,
-                document__document_key=self.csv_data['document_key'])
+            doc = self.get_document()
+            if doc is not None:
+                self._metadata = doc.metadata
 
         return self._metadata
 
     def get_metadata_form_class(self):
-        from default_documents.forms import ContractorDeliverableForm
-        return ContractorDeliverableForm
+        return self.trs_import.doc_category.get_metadata_form_class()
 
     def get_revision_form_class(self):
-        from default_documents.forms import ContractorDeliverableRevisionForm
-        return ContractorDeliverableRevisionForm
+        return self.trs_import.doc_category.get_revision_form_class()
 
     def get_forms(self):
         """Returns the bound forms.
@@ -428,7 +433,7 @@ class TrsImportLine(object):
         metadata_form = MetadataForm(self.csv_data, instance=metadata)
 
         revision_num = self.csv_data['revision']
-        revision = metadata.get_revision(revision_num)
+        revision = metadata.get_revision(revision_num) if metadata else None
 
         RevisionForm = self.get_revision_form_class()
         revision_form = RevisionForm(self.csv_data, instance=revision)

@@ -9,12 +9,15 @@ from django.views.generic import ListView, DetailView
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect
+
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 from zipview.views import BaseZipView
+from annoying.functions import get_object_or_None
 
 from notifications.models import notify
 from transmittals.models import Transmittal, TrsRevision
 from transmittals.utils import FieldWrapper
+from django.conf import settings
 
 
 logger = logging.getLogger(__name__)
@@ -43,10 +46,11 @@ class TransmittalListView(LoginRequiredMixin, PermissionRequiredMixin, ListView)
         return context
 
 
-class TransmittalDiffView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
+class TransmittalDiffView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'transmittals/diff_view.html'
-    context_object_name = 'transmittal'
     permission_required = 'documents.can_control_document'
+    context_object_name = 'revisions'
+    paginate_by = settings.PAGINATE_BY
 
     def breadcrumb_section(self):
         return (_('Transmittals'), reverse('transmittal_list'))
@@ -61,14 +65,21 @@ class TransmittalDiffView(LoginRequiredMixin, PermissionRequiredMixin, DetailVie
             .filter(document_key=self.kwargs['document_key'])
         return qs.get()
 
+    def get_queryset(self):
+        return self.object.trsrevision_set.all()
+
     def get_context_data(self, **kwargs):
         context = super(TransmittalDiffView, self).get_context_data(**kwargs)
         context.update({
-            'revisions': self.object.trsrevision_set.all(),
+            'transmittal': self.object,
             'transmittals_active': True,
         })
 
         return context
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super(TransmittalDiffView, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         """Accept or reject transmittal."""
@@ -137,8 +148,9 @@ class TransmittalRevisionDiffView(LoginRequiredMixin, PermissionRequiredMixin, D
     def get_revision(self):
         """Get the revision to compare the imported data to.
 
-        Three different cases:
+        Four different cases:
 
+         - if we are creating a new document, we have nothing to compare to
          - if we are modifying an existing revision, get this revision
          - if we are creating a new revision and the previous revisions exists,
            get this previous revision.
@@ -148,11 +160,24 @@ class TransmittalRevisionDiffView(LoginRequiredMixin, PermissionRequiredMixin, D
         """
         trs_revision = self.object
         document = trs_revision.document
-        metadata = document.metadata
-        latest_revision = document.current_revision
+        metadata = getattr(document, 'metadata', None)
+        latest_revision = getattr(document, 'current_revision', 0)
+
+        # No existing document, document + revision creation
+        if document is None and trs_revision.revision == 0:
+            revision = trs_revision
+
+        # No existing document, but the previous revision will be created
+        # before this one
+        elif document is None and trs_revision.revision > 0:
+            qs = TrsRevision.objects \
+                .filter(transmittal=trs_revision.transmittal) \
+                .filter(document_key=trs_revision.document_key) \
+                .filter(revision=trs_revision.revision - 1)
+            revision = get_object_or_None(qs)
 
         # existing revision
-        if trs_revision.revision <= latest_revision:
+        elif trs_revision.revision <= latest_revision:
             revision = FieldWrapper((
                 metadata,
                 metadata.get_revision(trs_revision.revision)))
@@ -165,18 +190,18 @@ class TransmittalRevisionDiffView(LoginRequiredMixin, PermissionRequiredMixin, D
 
         # previous revision will also be created
         else:
-            try:
-                revision = TrsRevision.objects \
-                    .filter(transmittal=trs_revision.transmittal) \
-                    .filter(document_key=trs_revision.document_key) \
-                    .filter(revision=trs_revision.revision - 1) \
-                    .get()
-            except TrsRevision.DoesNotExist():
-                logger.error('No revision to compare to {} / {} /  {}'.format(
-                    trs_revision.transmittal.document_key,
-                    trs_revision.document_key,
-                    trs_revision.revision))
-                revision = {}
+            qs = TrsRevision.objects \
+                .filter(transmittal=trs_revision.transmittal) \
+                .filter(document_key=trs_revision.document_key) \
+                .filter(revision=trs_revision.revision - 1)
+            revision = get_object_or_None(qs)
+
+        if revision is None:
+            logger.error('No revision to compare to {} / {} /  {}'.format(
+                trs_revision.transmittal.document_key,
+                trs_revision.document_key,
+                trs_revision.revision))
+            revision = {}
 
         return revision
 

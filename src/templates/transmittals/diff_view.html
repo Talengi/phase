@@ -57,11 +57,15 @@
             <td>{{ revision.unit }}</td>
             <td>{{ revision.discipline }}</td>
             <td>{{ revision.document_type }}</td>
-            <td></td>
+            <td>{{ revision.revision_date }}</td>
         </tr>
     {% endfor %}
     </tbody>
 </table>
+
+{% if is_paginated %}
+    {% include 'pagination.html' %}
+{% endif %}
 </div>
 
 {% endblock %}
