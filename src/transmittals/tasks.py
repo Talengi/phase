@@ -37,8 +37,13 @@ def process_transmittal(transmittal_id):
     try:
         # Update / create documents in db
         with transaction.atomic():
+            line = 1
             for trs_revision in revisions:
                 trs_revision.save_to_document()
+                if line % 100 == 0:
+                    logger.info('Importing line {}'.format(line))
+
+                line += 1
 
             transmittal.status = 'accepted'
             transmittal.save()
@@ -68,8 +73,8 @@ def process_transmittal(transmittal_id):
         #
         # Revert the transmittal status back, and log the error is all
         # we can do now.
-        error_msg = 'Error processing transmittal {} ({})'.format(
-            transmittal, e)
+        error_msg = 'Error processing revision {} of transmittal {} ({})'.format(
+            trs_revision, transmittal, e)
         logger.error(error_msg)
 
         transmittal.status = 'tobechecked'
