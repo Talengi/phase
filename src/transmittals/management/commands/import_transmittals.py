@@ -65,7 +65,7 @@ class Command(BaseCommand):
 
         # Start import
         incoming_dir = ctr_config['INCOMING_DIR']
-        dir_content = os.listdir(incoming_dir)
+        dir_content = sorted(os.listdir(incoming_dir))
         for incoming in dir_content:
             fullname = os.path.join(incoming_dir, incoming)
             self.import_dir(
