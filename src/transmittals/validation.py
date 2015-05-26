@@ -114,7 +114,7 @@ class TrsSequentialNumberValidator(Validator):
             .filter(originator=originator) \
             .filter(recipient=recipient) \
             .filter(sequential_number=seq_number - 1) \
-            .filter(status='accepted')
+            .filter(status__ne='rejected')
         return qs.count() == 1
 
 
