@@ -179,7 +179,7 @@ class Transmittal(Metadata):
         # If an existing version already exists in rejected, we delete it before
         if os.path.exists(self.full_rejected_name):
             # Let's hope we got correct data and the process does not run
-            # as root. We would do something that stupid anyway?
+            # as root. Who would do something that stupid anyway?
             logger.info('Deleteting directory {}'.format(self.full_rejected_name))
             shutil.rmtree(self.full_rejected_name)
 
