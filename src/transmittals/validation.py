@@ -338,7 +338,7 @@ class RevisionsValidator(Validator):
         # Check revisions for each document
         for document_key in revisions.keys():
             revision_ids = revisions[document_key]
-            latest_revision = latest_revisions.get(document_key, 0)
+            latest_revision = latest_revisions.get(document_key, -1)
             revision_errors = self._validate_revision(revision_ids, latest_revision)
 
             if revision_errors:
