@@ -3,7 +3,7 @@
 from __future__ import unicode_literals
 
 from django.utils.translation import ugettext_lazy as _
-from crispy_forms.layout import Layout
+from crispy_forms.layout import Layout, Field
 
 from default_documents.layout import DocumentFieldset
 
@@ -14,6 +14,9 @@ from transmittals.models import Transmittal, TransmittalRevision
 class TransmittalForm(BaseDocumentForm):
     def build_layout(self):
         return Layout(
+            Field('tobechecked_dir', type='hidden'),
+            Field('accepted_dir', type='hidden'),
+            Field('rejected_dir', type='hidden'),
             DocumentFieldset(
                 _('General information'),
                 'document_key',
@@ -30,8 +33,7 @@ class TransmittalForm(BaseDocumentForm):
     class Meta:
         model = Transmittal
         exclude = ('document', 'latest_revision', 'status', 'created_on',
-                   'transmittal_key', 'document_type', 'contractor',
-                   'tobechecked_dir', 'accepted_dir', 'rejected_dir')
+                   'transmittal_key', 'document_type', 'contractor',)
 
 
 class TransmittalRevisionForm(BaseDocumentForm):
