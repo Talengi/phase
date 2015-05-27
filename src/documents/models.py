@@ -279,7 +279,7 @@ class MetadataRevision(models.Model):
         verbose_name=u"Revision",
         default=0)
     revision_date = models.DateField(
-        default=timezone.now,
+        null=True, blank=True,
         verbose_name=u"Revision Date")
     native_file = RevisionFileField(
         verbose_name=u"Native File",

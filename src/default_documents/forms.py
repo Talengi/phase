@@ -93,6 +93,7 @@ class ContractorDeliverableRevisionForm(ReviewFormMixin, BaseDocumentForm):
         return Layout(
             DocumentFieldset(
                 _('Revision'),
+                'revision_date',
                 'docclass',
                 'status',
                 'final_revision',
@@ -104,8 +105,8 @@ class ContractorDeliverableRevisionForm(ReviewFormMixin, BaseDocumentForm):
 
     class Meta:
         model = ContractorDeliverableRevision
-        exclude = ('document', 'revision', 'revision_date', 'created_on',
-                   'updated_on', 'review_end_date', 'reviewers_step_closed',
+        exclude = ('document', 'revision', 'created_on', 'updated_on',
+                   'review_end_date', 'reviewers_step_closed',
                    'leader_step_closed')
 
 
