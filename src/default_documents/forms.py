@@ -62,7 +62,7 @@ class ContractorDeliverableRevisionForm(ReviewFormMixin, BaseDocumentForm):
             review_layout = (
                 DocumentFieldset(
                     _('Review'),
-                    Field('received_date', readonly='readonly'),
+                    'received_date',
                     Field('review_start_date', readonly='readonly'),
                     Field('review_due_date', readonly='readonly'),
                     PropertyLayout('current_review_step'),
@@ -143,14 +143,15 @@ class CorrespondenceRevisionForm(BaseDocumentForm):
         return Layout(
             DocumentFieldset(
                 _('Revision'),
-                'status',
                 'revision_date',
+                'status',
                 'created_on',
                 'native_file',
                 'pdf_file',
             ),
             DocumentFieldset(
                 _('Review'),
+                'received_date',
                 'under_review',
                 'overdue',
                 'leader',
@@ -164,16 +165,10 @@ class CorrespondenceRevisionForm(BaseDocumentForm):
 
 class MinutesOfMeetingForm(BaseDocumentForm):
     def build_layout(self):
-        if self.read_only:
-            response_reference = DocumentFieldset(
-                _('Response reference'),
-                'response_reference',
-            )
-        else:
-            response_reference = DocumentFieldset(
-                _('Response reference'),
-                'response_reference',
-            )
+        response_reference = DocumentFieldset(
+            _('Response reference'),
+            'response_reference',
+        )
 
         return Layout(
             DocumentFieldset(
@@ -203,12 +198,16 @@ class MinutesOfMeetingRevisionForm(BaseDocumentForm):
         return Layout(
             DocumentFieldset(
                 _('Revision'),
-                'status',
                 'revision_date',
+                'status',
                 'created_on',
                 'native_file',
                 'pdf_file',
             ),
+            DocumentFieldset(
+                _('Review'),
+                'received_date',
+            )
         )
 
     class Meta:
@@ -235,19 +234,20 @@ class DemoMetadataForm(BaseDocumentForm):
 class DemoMetadataRevisionForm(BaseDocumentForm):
     class Meta:
         model = DemoMetadataRevision
-        exclude = ('document', 'revision', 'revision_date', 'created_on',
-                   'updated_on')
+        exclude = ('document', 'revision', 'created_on', 'updated_on')
 
     def build_layout(self):
         return Layout(
             DocumentFieldset(
                 _('Revision'),
+                'revision_date',
                 'status',
                 'native_file',
                 'pdf_file',
             ),
             DocumentFieldset(
                 _('Review'),
+                'received_date',
                 Field('review_start_date', readonly='readonly'),
                 Field('review_due_date', readonly='readonly'),
                 PropertyLayout('is_under_review'),

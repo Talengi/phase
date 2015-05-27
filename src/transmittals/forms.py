@@ -45,6 +45,10 @@ class TransmittalRevisionForm(BaseDocumentForm):
                 'native_file',
                 'pdf_file',
             ),
+            DocumentFieldset(
+                _('Review'),
+                'received_date',
+            ),
         )
 
     class Meta:
