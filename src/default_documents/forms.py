@@ -94,6 +94,7 @@ class ContractorDeliverableRevisionForm(ReviewFormMixin, BaseDocumentForm):
             DocumentFieldset(
                 _('Revision'),
                 'revision_date',
+                Field('created_on', readonly='readonly'),
                 'docclass',
                 'status',
                 'final_revision',
@@ -105,9 +106,8 @@ class ContractorDeliverableRevisionForm(ReviewFormMixin, BaseDocumentForm):
 
     class Meta:
         model = ContractorDeliverableRevision
-        exclude = ('document', 'revision', 'created_on', 'updated_on',
-                   'review_end_date', 'reviewers_step_closed',
-                   'leader_step_closed')
+        exclude = ('document', 'revision', 'updated_on', 'review_end_date',
+                   'reviewers_step_closed', 'leader_step_closed')
 
 
 class CorrespondenceForm(BaseDocumentForm):
@@ -144,8 +144,8 @@ class CorrespondenceRevisionForm(BaseDocumentForm):
             DocumentFieldset(
                 _('Revision'),
                 'revision_date',
+                Field('created_on', readonly='readonly'),
                 'status',
-                'created_on',
                 'native_file',
                 'pdf_file',
             ),
@@ -199,8 +199,8 @@ class MinutesOfMeetingRevisionForm(BaseDocumentForm):
             DocumentFieldset(
                 _('Revision'),
                 'revision_date',
+                Field('created_on', readonly='readonly'),
                 'status',
-                'created_on',
                 'native_file',
                 'pdf_file',
             ),
@@ -234,13 +234,14 @@ class DemoMetadataForm(BaseDocumentForm):
 class DemoMetadataRevisionForm(BaseDocumentForm):
     class Meta:
         model = DemoMetadataRevision
-        exclude = ('document', 'revision', 'created_on', 'updated_on')
+        exclude = ('document', 'revision', 'updated_on')
 
     def build_layout(self):
         return Layout(
             DocumentFieldset(
                 _('Revision'),
                 'revision_date',
+                Field('created_on', readonly='readonly'),
                 'status',
                 'native_file',
                 'pdf_file',
