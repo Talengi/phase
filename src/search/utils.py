@@ -109,7 +109,8 @@ def get_mapping(doc_class):
     filter_fields = list(config.filter_fields)
     searchable_fields = list(config.searchable_fields)
     column_fields = [field[1] for field in config.column_fields]
-    fields = filter_fields + column_fields
+    additional_fields = getattr(config, 'indexable_fields', [])
+    fields = filter_fields + searchable_fields + column_fields + additional_fields
 
     for field_name in fields:
         try:
