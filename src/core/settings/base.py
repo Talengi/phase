@@ -445,6 +445,7 @@ CELERY_RESULT_BACKEND = 'amqp'
 # ######### SEARCH CONFIG
 ELASTIC_HOSTS = [{'host': 'localhost', 'port': 9200}]
 ELASTIC_INDEX = 'documents'
+ELASTIC_BULK_SIZE = 150
 ELASTIC_AUTOINDEX = True
 
 # ######### CUSTOM CONFIGURATION

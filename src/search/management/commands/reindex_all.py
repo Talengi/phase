@@ -27,12 +27,15 @@ import datetime
 import sys
 from optparse import make_option
 
+from elasticsearch.helpers import bulk
+
 from django.core.management.base import BaseCommand
 from django.core.management import call_command
 from django.utils.six.moves import input
 
 from categories.models import Category
-from search.utils import index_document
+from search import elastic
+from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
@@ -74,6 +77,8 @@ Type 'yes' to continue, or 'no' to cancel: """)
                 'category_template__metadata_model'
             )
 
+        logger.info('Preparing index data')
+        actions = []
         for category in categories:
             document_type = category.document_type()
             DocumentClass = category.category_template.metadata_model.model_class()
@@ -84,7 +89,19 @@ Type 'yes' to continue, or 'no' to cancel: """)
             for metadata in documents:
                 document = metadata.document
                 if document.is_indexable:
-                    index_document.delay(document.id, document_type, metadata.jsonified())
+                    actions.append({
+                        '_index': settings.ELASTIC_INDEX,
+                        '_type': document_type,
+                        '_id': document.id,
+                        '_source': metadata.jsonified(),
+                    })
+
+        logger.info('Starting bulk index')
+        bulk(
+            elastic,
+            actions,
+            chunk_size=settings.ELASTIC_BULK_SIZE,
+            request_timeout=60)
 
         end_reindex = datetime.datetime.now()
         logger.info('Reindex ending at %s' % end_reindex)
