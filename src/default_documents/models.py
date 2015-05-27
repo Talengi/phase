@@ -176,7 +176,7 @@ class ContractorDeliverable(Metadata):
             'Class': 'docclass',
             'Revision': 'revision',
             'Status': 'status',
-            'Received Date': 'revision_date'
+            'Received Date': 'received_date'
         }
 
     class Meta:
