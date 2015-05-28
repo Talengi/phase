@@ -48,6 +48,7 @@ class Document(models.Model):
     current_revision = models.PositiveIntegerField(
         verbose_name=u"Revision")
     current_revision_date = models.DateField(
+        null=True, blank=True,
         verbose_name=u"Revision Date")
 
     class Meta:
@@ -279,7 +280,7 @@ class MetadataRevision(models.Model):
         verbose_name=u"Revision",
         default=0)
     revision_date = models.DateField(
-        default=timezone.now,
+        null=True, blank=True,
         verbose_name=u"Revision Date")
     native_file = RevisionFileField(
         verbose_name=u"Native File",
@@ -288,10 +289,10 @@ class MetadataRevision(models.Model):
         verbose_name=u"PDF File",
         null=True, blank=True)
     received_date = models.DateField(
-        _('Received date'),
-        null=True, blank=True)
+        _('Received date'))
     created_on = models.DateField(
         _('Created on'),
+        blank=True,
         default=timezone.now)
     updated_on = models.DateTimeField(
         _('Updated on'),

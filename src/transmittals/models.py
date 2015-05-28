@@ -9,7 +9,6 @@ import uuid
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from django.utils import timezone
 from django.core.urlresolvers import reverse
 from django.db import transaction
 
@@ -77,9 +76,6 @@ class Transmittal(Metadata):
         max_length=20,
         choices=STATUSES,
         default=STATUSES.tobechecked)
-    created_on = models.DateField(
-        _('Created on'),
-        default=timezone.now)
 
     # Related documents
     related_documents = models.ManyToManyField(
@@ -113,7 +109,6 @@ class Transmittal(Metadata):
             ('Recipient', 'recipient'),
             ('Document type', 'document_type'),
             ('Status', 'status'),
-            ('Created on', 'created_on'),
         )
         searchable_fields = (
             'document_key',

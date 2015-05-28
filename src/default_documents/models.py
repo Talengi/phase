@@ -176,7 +176,7 @@ class ContractorDeliverable(Metadata):
             'Class': 'docclass',
             'Revision': 'revision',
             'Status': 'status',
-            'Received Date': 'revision_date'
+            'Received Date': 'received_date'
         }
 
     class Meta:
@@ -372,7 +372,7 @@ class Correspondence(Metadata):
 
     def generate_document_key(self):
         return slugify(
-            u"{contract_number}-{originator}-{recipient}"
+            u"{contract_number}-{originator}-{recipient}-"
             u"{document_type}-{sequential_number}"
             .format(
                 contract_number=self.contract_number,

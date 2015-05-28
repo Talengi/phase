@@ -282,6 +282,8 @@ class TrsImport(object):
             'status': 'tobechecked',
             'related_documents': list(related_documents),
             'revision_date': datetime.date.today(),
+            'received_date': datetime.date.today(),
+            'created_on': datetime.date.today(),
         }
 
         # The csv file is linked in the "native_file" field
