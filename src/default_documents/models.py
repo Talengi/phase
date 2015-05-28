@@ -343,9 +343,7 @@ class Correspondence(Metadata):
 
     class PhaseConfig:
         filter_fields = (
-            'originator', 'recipient', 'status', 'under_review',
-            'overdue', 'leader'
-        )
+            'originator', 'recipient', 'status', 'overdue', 'leader')
         column_fields = (
             ('Reference', 'document_key'),
             ('Subject', 'subject'),
@@ -364,7 +362,7 @@ class Correspondence(Metadata):
             'document_key',
             'subject',
             'status',
-            'leader__name',
+            'leader',
             'originator',
             'recipient',
             'document_type',
