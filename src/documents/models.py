@@ -255,9 +255,9 @@ class Metadata(six.with_metaclass(MetadataBase), models.Model):
         config = self.PhaseConfig
         filter_fields = list(config.filter_fields)
         searchable_fields = list(config.searchable_fields)
-        column_fields = [field[1] for field in config.column_fields]
+        column_fields = dict(config.column_fields).values()
         additional_fields = getattr(config, 'indexable_fields', [])
-        fields_to_index = filter_fields + searchable_fields + column_fields + additional_fields
+        fields_to_index = set(filter_fields + searchable_fields + column_fields + additional_fields)
 
         for field in fields_to_index:
             fields += add_to_fields(field)
