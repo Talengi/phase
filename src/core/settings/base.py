@@ -227,6 +227,7 @@ LOCAL_APPS = (
     'bookmarks',
     'discussion',
     'transmittals',
+    'dashboards',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

@@ -108,8 +108,9 @@ def get_mapping(doc_class):
     config = doc_class.PhaseConfig
     filter_fields = list(config.filter_fields)
     searchable_fields = list(config.searchable_fields)
-    column_fields = [field[1] for field in config.column_fields]
-    fields = filter_fields + column_fields
+    column_fields = dict(config.column_fields).values()
+    additional_fields = getattr(config, 'indexable_fields', [])
+    fields = set(filter_fields + searchable_fields + column_fields + additional_fields)
 
     for field_name in fields:
         try:
@@ -118,6 +119,7 @@ def get_mapping(doc_class):
             try:
                 field = revision_class._meta.get_field_by_name(field_name)[0]
             except FieldDoesNotExist:
+                print 'Field {} cannot be found'.format(field_name)
                 field = None
 
         es_type = get_mapping_type(field) if field else 'string'
