@@ -48,6 +48,7 @@ class Document(models.Model):
     current_revision = models.PositiveIntegerField(
         verbose_name=u"Revision")
     current_revision_date = models.DateField(
+        null=True, blank=True,
         verbose_name=u"Revision Date")
 
     class Meta:
