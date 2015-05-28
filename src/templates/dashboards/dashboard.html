@@ -1,5 +1,28 @@
 {% extends 'base.html' %}
 
+{% block custombodyclass %}fullwidth{% endblock %}
+
 {% block content %}
-    {{ aggregations }}
+<div id="main-table">
+    <table class="table table-bordered table-condensed table-hover">
+        <thead>
+            <tr>
+                <th></th>
+                {% for header in dashboard_header %}
+                    <th>{{ header|date:"M Y" }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+        {% for bucket_name, bucket_data in buckets.items %}
+        <tr>
+            <th>{{ bucket_name }}</th>
+            {% for value in bucket_data %}
+                <td>{{ value }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}
