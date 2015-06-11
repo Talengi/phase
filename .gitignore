@@ -1,24 +1,14 @@
-# private configuration file, local to each machine
 prod_private.py
-
-# Python bytecode:
 *.py[co]
-
-# Packaging files:
 *.egg*
-
-# Editor temp files:
 *.swp
 *~
+*.db
+*.log
+*.csv
 
 # Sphinx docs:
 build
-
-# SQLite3 database files:
-*.db
-
-# Logs:
-*.log
 
 # Coverage tests
 .coverage
