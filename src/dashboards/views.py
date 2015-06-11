@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import json
 import datetime
 from collections import OrderedDict
 
@@ -16,13 +15,44 @@ from django.conf import settings
 class BaseDashboardView(TemplateView):
     template_name = 'dashboards/dashboard.html'
     es_date_format = '%Y-%m-%dT%H:%M:%S.%fZ'
+    es_document_type = None
+
+    def _fetch_raw_data(self):
+        raise NotImplemented()
+
+    def fetch_data(self):
+        """Sends a request to ES, and save the response in local variables."""
+        data = self._fetch_raw_data()
+        self.hits = data['hits']['hits']
+        self.total_hits = data['hits']['total']
+        self.took = data['took']
+        self.aggregations = data['aggregations']
+
+    def get_headers(self):
+        raise NotImplemented()
+
+    def get_buckets(self):
+        raise NotImplemented()
+
+    def get_context_data(self, **kwargs):
+        context = super(BaseDashboardView, self).get_context_data(**kwargs)
+        self.fetch_data()
+        headers = self.get_headers()
+        buckets = self.get_buckets()
+
+        context.update({
+            'headers': headers,
+            'buckets': buckets,
+        })
+
+        return context
 
 
 class DashboardView(BaseDashboardView):
+    es_document_type = 'epc2_documents.epc2supplierdeliverable'
 
-    def get_search_data(self):
-        document_type = 'epc2_documents.epc2supplierdeliverable'
-        search = Search(using=elastic, doc_type=document_type) \
+    def _fetch_raw_data(self):
+        search = Search(using=elastic, doc_type=self.es_document_type) \
             .index(settings.ELASTIC_INDEX) \
             .params(search_type='count')
 
@@ -60,15 +90,16 @@ class DashboardView(BaseDashboardView):
             }
         )
 
-        return search.execute().to_dict()
+        res_dict = search.execute().to_dict()
+        return res_dict
 
-    def get_dashboard_header(self, search_data):
-        buckets = search_data['aggregations']['per_month']['buckets']
+    def get_headers(self):
+        buckets = self.aggregations['per_month']['buckets']
         headers = [datetime.datetime.strptime(bucket['key_as_string'], self.es_date_format) for bucket in buckets]
         return headers
 
-    def generate_buckets(self, search_data):
-        raw_buckets = search_data['aggregations']['per_month']['buckets']
+    def get_buckets(self):
+        raw_buckets = self.aggregations['per_month']['buckets']
 
         buckets = OrderedDict()
         buckets['TR Deliverables'] = map(lambda x: x['doc_count'], raw_buckets)
@@ -94,18 +125,3 @@ class DashboardView(BaseDashboardView):
         except:
             res = 'ND'
         return res
-
-    def get_context_data(self, **kwargs):
-        context = super(DashboardView, self).get_context_data(**kwargs)
-        data = self.get_search_data()
-        dashboard_header = self.get_dashboard_header(data)
-        buckets = self.generate_buckets(data)
-
-        pretty_response = json.dumps(data, indent=4)
-        context.update({
-            'dashboard_header': dashboard_header,
-            'pretty_response': pretty_response,
-            'buckets': buckets,
-        })
-
-        return context
