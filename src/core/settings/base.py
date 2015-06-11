@@ -291,7 +291,7 @@ LOGGING = {
             'propagate': False,
         },
         'elasticsearch.trace': {
-            'handlers': ['console', 'syslog', 'mail_admins'],
+            'handlers': ['syslog', 'mail_admins'],
             'level': 'INFO',
             'propagate': False,
         }
