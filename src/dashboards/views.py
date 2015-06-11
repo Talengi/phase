@@ -35,9 +35,16 @@ class BaseDashboardView(TemplateView):
         self.aggregations = data['aggregations']
 
     def get_headers(self):
+        """Must return a list of dates."""
         raise NotImplemented()
 
     def get_buckets(self):
+        """Return an ordered dict of data.
+
+        Each key is a string, and is the name of the row.
+        Each value is a list that contains as many values as there are headers.
+
+        """
         raise NotImplemented()
 
     def get_context_data(self, **kwargs):
@@ -104,7 +111,29 @@ class DashboardView(BaseDashboardView):
             }
         )
 
-        res_dict = search.execute().to_dict()
+        # For each month, select only docs with a `leader_comment_date` field
+        search.aggs['per_month'].bucket(
+            'with_a_leader_comment',
+            'filter',
+            filter={
+                'exists': {
+                    'field': 'leader_step_closed',
+                }
+            })
+
+        # Among those docs, compute the raw number of late documents
+        search.aggs['per_month'].aggs['with_a_leader_comment'].metric(
+            'nb_docs_with_late_leader_review',
+            'filter',
+            filter={
+                'script': {
+                    'script': "doc['leader_step_closed'].value != doc['review_due_date'].value"
+                }
+            }
+        )
+
+        res = search.execute()
+        res_dict = res.to_dict()
         return res_dict
 
     def get_headers(self):
@@ -117,24 +146,44 @@ class DashboardView(BaseDashboardView):
 
         buckets = OrderedDict()
         buckets['TR Deliverables'] = map(lambda x: x['doc_count'], raw_buckets)
-        buckets['Nb of distributed docs'] = map(self.get_distributed_docs, raw_buckets)
-        buckets['Nb of docs distributed late'] = map(self.get_nb_late_docs, raw_buckets)
-        buckets['% of docs reviewed late'] = map(self.get_pc_late_docs, raw_buckets)
+        buckets['Nb of distributed docs'] = map(self.get_nb_distributed_docs, raw_buckets)
+        buckets['Nb of docs distributed late'] = map(self.get_nb_late_distributed_docs, raw_buckets)
+        buckets['% of docs distributed late'] = map(self.get_pc_late_distributed_docs, raw_buckets)
+        buckets['Nb of docs reviewed by leader'] = map(self.get_nb_leader_reviewed_docs, raw_buckets)
+        buckets['Nb of docs reviewed late by leader'] = map(self.get_nb_late_leader_reviewed_docs, raw_buckets)
+        buckets['% of docs reviewed late by leader'] = map(self.get_pc_late_leader_reviewed_docs, raw_buckets)
 
         return buckets
 
-    def get_distributed_docs(self, bucket):
+    def get_nb_distributed_docs(self, bucket):
         return bucket['with_a_sent_date']['doc_count']
 
-    def get_nb_late_docs(self, bucket):
+    def get_nb_late_distributed_docs(self, bucket):
         return bucket['with_a_sent_date']['nb_docs_with_late_distribution']['doc_count']
 
-    def get_pc_late_docs(self, bucket):
+    def get_pc_late_distributed_docs(self, bucket):
         nb_with_sent_date = bucket['with_a_sent_date']['doc_count']
         nb_late_docs = bucket['with_a_sent_date']['nb_docs_with_late_distribution']['doc_count']
 
         try:
             res = 100.0 * float(nb_late_docs) / float(nb_with_sent_date)
+            res = '{:.2f}%'.format(res)
+        except:
+            res = 'ND'
+        return res
+
+    def get_nb_leader_reviewed_docs(self, bucket):
+        return bucket['with_a_leader_comment']['doc_count']
+
+    def get_nb_late_leader_reviewed_docs(self, bucket):
+        return bucket['with_a_leader_comment']['nb_docs_with_late_leader_review']['doc_count']
+
+    def get_pc_late_leader_reviewed_docs(self, bucket):
+        nb_reviewed = bucket['with_a_leader_comment']['doc_count']
+        nb_late_docs = bucket['with_a_leader_comment']['nb_docs_with_late_leader_review']['doc_count']
+
+        try:
+            res = 100.0 * float(nb_late_docs) / float(nb_reviewed)
             res = '{:.2f}%'.format(res)
         except:
             res = 'ND'
