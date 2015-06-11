@@ -18,6 +18,12 @@ class BaseDashboardView(TemplateView):
     es_document_type = None
 
     def _fetch_raw_data(self):
+        """Performs actual query to Elastic Search.
+
+        The method must return a dict, as in the `to_dict` function of the
+        python elastic search api.
+
+        """
         raise NotImplemented()
 
     def fetch_data(self):
@@ -56,8 +62,10 @@ class DashboardView(BaseDashboardView):
             .index(settings.ELASTIC_INDEX) \
             .params(search_type='count')
 
+        # Return only those stored fields
         search = search.fields(['document_key', 'received_date', 'review_sent_date'])
 
+        # Add dynamic fields computed on the fly
         search.update_from_dict({
             'script_fields': {
                 'distribution_delay': {
@@ -66,21 +74,27 @@ class DashboardView(BaseDashboardView):
             }
         })
 
+        # Define aggregations
+        # Group documents by month on the `received_date` field
         search.aggs.bucket(
             'per_month',
             'date_histogram',
             field='received_date',
             interval='month',
-            min_doc_count=0
-        ).bucket(
+            min_doc_count=0)
+
+        # Among each group, select only docs with a `review_sent_date` field
+        search.aggs['per_month'].bucket(
             'with_a_sent_date',
             'filter',
             filter={
                 'exists': {
                     'field': 'review_sent_date',
                 }
-            }
-        ).metric(
+            })
+
+        # Among those docs, compute the raw number of late documents
+        search.aggs['per_month'].aggs['with_a_sent_date'].metric(
             'nb_docs_with_late_distribution',
             'filter',
             filter={
