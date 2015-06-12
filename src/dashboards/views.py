@@ -62,7 +62,7 @@ class BaseDashboardView(TemplateView):
 
 
 class IssuedDocsDashboardView(BaseDashboardView):
-    es_document_type = 'epc2_documents.epc2supplierdeliverable'
+    es_document_type = 'epc2_documents.epc2deliverable'
 
     def _fetch_raw_data(self):
         search = Search(using=elastic, doc_type=self.es_document_type) \
@@ -208,3 +208,80 @@ class IssuedDocsDashboardView(BaseDashboardView):
         except:
             res = 'ND'
         return res
+
+
+class ReturnedDocsDashboardView(BaseDashboardView):
+    es_document_type = 'epc2_documents.epc2deliverable'
+
+    def _fetch_raw_data(self):
+        search = Search(using=elastic, doc_type=self.es_document_type) \
+            .index(settings.ELASTIC_INDEX) \
+            .params(search_type='count')
+
+        # Return only those stored fields
+        search = search.fields(['document_key', 'received_date', 'review_sent_date'])
+
+        # Add dynamic fields computed on the fly
+        search.update_from_dict({
+            'script_fields': {
+                'return_delay': {
+                    'script': "doc['review_sent_date'].value - doc['review_due_date'].value"
+                }
+            }
+        })
+
+        # Group documents by month on the `received_date` field
+        search.aggs.bucket(
+            'per_month',
+            'date_histogram',
+            field='review_sent_date',
+            interval='month',
+            min_doc_count=0)
+
+        # For each month, count docs for each category
+        search.aggs['per_month'].bucket(
+            'per_category',
+            'terms',
+            field='doc_category.raw')
+
+        # Count docs with a return code of 0
+        search.aggs['per_month'].metric(
+            'nb_docs_with_return_code_zero',
+            'filter',
+            filter={
+                'term': {'return_code': 0}
+            })
+
+        res = search.execute()
+        res_dict = res.to_dict()
+        return res_dict
+
+    def get_headers(self):
+        buckets = self.aggregations['per_month']['buckets']
+        headers = [datetime.datetime.strptime(bucket['key_as_string'], self.es_date_format) for bucket in buckets]
+        return headers
+
+    def get_buckets(self):
+        raw_buckets = self.aggregations['per_month']['buckets']
+
+        buckets = OrderedDict()
+        buckets['TR Deliverables'] = map(self.get_nb_tr_deliverables, raw_buckets)
+        buckets['Vendor Deliverables'] = map(self.get_nb_vendor_deliverables, raw_buckets)
+        buckets['TOTAL'] = map(lambda x: x['doc_count'], raw_buckets)
+        buckets['Avg docs returned by day'] = map(lambda x: x['doc_count'] / 20.0, raw_buckets)
+        buckets['Nb of docs with return code 0'] = map(self.get_nb_return_code_zero, raw_buckets)
+
+        return buckets
+
+    def get_nb_tr_deliverables(self, bucket):
+        category_bucket = bucket['per_category']['buckets']
+        data = next((x for x in category_bucket if x['key'] == 'Contractor Deliverable'), None)
+        return data['doc_count'] if data else 0
+
+    def get_nb_vendor_deliverables(self, bucket):
+        category_bucket = bucket['per_category']['buckets']
+        data = next((x for x in category_bucket if x['key'] == 'Supplier Deliverable'), None)
+        return data['doc_count'] if data else 0
+
+    def get_nb_return_code_zero(self, bucket):
+        return bucket['nb_docs_with_return_code_zero']['doc_count']
