@@ -81,7 +81,8 @@ class DashboardView(BaseDashboardView):
             }
         })
 
-        # Define aggregations
+        # Define aggregations and metrics
+
         # Group documents by month on the `received_date` field
         search.aggs.bucket(
             'per_month',
@@ -90,7 +91,13 @@ class DashboardView(BaseDashboardView):
             interval='month',
             min_doc_count=0)
 
-        # Among each group, select only docs with a `review_sent_date` field
+        # For each month, count docs for each category
+        search.aggs['per_month'].bucket(
+            'per_category',
+            'terms',
+            field='doc_category')
+
+        # For each month, select only docs with a `review_sent_date` field
         search.aggs['per_month'].bucket(
             'with_a_sent_date',
             'filter',
@@ -127,7 +134,7 @@ class DashboardView(BaseDashboardView):
             'filter',
             filter={
                 'script': {
-                    'script': "doc['leader_step_closed'].value != doc['review_due_date'].value"
+                    'script': "doc['leader_step_closed'].value > doc['review_due_date'].value"
                 }
             }
         )
@@ -145,7 +152,10 @@ class DashboardView(BaseDashboardView):
         raw_buckets = self.aggregations['per_month']['buckets']
 
         buckets = OrderedDict()
-        buckets['TR Deliverables'] = map(lambda x: x['doc_count'], raw_buckets)
+        buckets['TR Deliverables'] = map(self.get_nb_tr_deliverables, raw_buckets)
+        buckets['Vendor Deliverables'] = map(self.get_nb_vendor_deliverables, raw_buckets)
+        buckets['TOTAL'] = map(lambda x: x['doc_count'], raw_buckets)
+        buckets['Avg docs received by day'] = map(lambda x: x['doc_count'] / 20.0, raw_buckets)
         buckets['Nb of distributed docs'] = map(self.get_nb_distributed_docs, raw_buckets)
         buckets['Nb of docs distributed late'] = map(self.get_nb_late_distributed_docs, raw_buckets)
         buckets['% of docs distributed late'] = map(self.get_pc_late_distributed_docs, raw_buckets)
@@ -154,6 +164,14 @@ class DashboardView(BaseDashboardView):
         buckets['% of docs reviewed late by leader'] = map(self.get_pc_late_leader_reviewed_docs, raw_buckets)
 
         return buckets
+
+    def get_nb_tr_deliverables(self, bucket):
+        # XXX
+        return 0
+
+    def get_nb_vendor_deliverables(self, bucket):
+        # XXX
+        return 0
 
     def get_nb_distributed_docs(self, bucket):
         return bucket['with_a_sent_date']['doc_count']
@@ -179,11 +197,11 @@ class DashboardView(BaseDashboardView):
         return bucket['with_a_leader_comment']['nb_docs_with_late_leader_review']['doc_count']
 
     def get_pc_late_leader_reviewed_docs(self, bucket):
-        nb_reviewed = bucket['with_a_leader_comment']['doc_count']
+        nb_docs = bucket['with_a_sent_date']['doc_count']
         nb_late_docs = bucket['with_a_leader_comment']['nb_docs_with_late_leader_review']['doc_count']
 
         try:
-            res = 100.0 * float(nb_late_docs) / float(nb_reviewed)
+            res = 100.0 * float(nb_late_docs) / float(nb_docs)
             res = '{:.2f}%'.format(res)
         except:
             res = 'ND'
