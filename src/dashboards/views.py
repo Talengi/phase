@@ -61,7 +61,7 @@ class BaseDashboardView(TemplateView):
         return context
 
 
-class DashboardView(BaseDashboardView):
+class IssuedDocsDashboardView(BaseDashboardView):
     es_document_type = 'epc2_documents.epc2supplierdeliverable'
 
     def _fetch_raw_data(self):
