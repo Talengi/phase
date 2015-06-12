@@ -247,7 +247,7 @@ class ReturnedDocsDashboardView(BaseDashboardView):
             field='doc_category.raw')
 
         # For each month, compute the raw number of late documents
-        search.aggs['per_month'].metric(
+        search.aggs['per_month'].bucket(
             'nb_docs_returned_late',
             'filter',
             filter={
@@ -255,6 +255,13 @@ class ReturnedDocsDashboardView(BaseDashboardView):
                     'script': "doc['review_sent_date'].value > doc['review_due_date'].value"
                 }
             }
+        )
+
+        # Bucket those late docs by category
+        search.aggs['per_month'].aggs['nb_docs_returned_late'].bucket(
+            'per_category',
+            'terms',
+            field='doc_category.raw'
         )
 
         # Count docs with a return code of 0
@@ -283,6 +290,7 @@ class ReturnedDocsDashboardView(BaseDashboardView):
         buckets['TOTAL'] = map(lambda x: x['doc_count'], raw_buckets)
         buckets['Avg nb of docs returned by day'] = map(lambda x: x['doc_count'] / 20.0, raw_buckets)
         buckets['% of docs returned late by GTG'] = map(self.get_pc_docs_returned_late_by_gtg, raw_buckets)
+        buckets['% of TR docs returned late by GTG'] = map(self.get_pc_tr_docs_returned_late_by_gtg, raw_buckets)
 
         buckets['Nb of docs with return code 0'] = map(self.get_nb_return_code_zero, raw_buckets)
 
@@ -301,6 +309,20 @@ class ReturnedDocsDashboardView(BaseDashboardView):
     def get_pc_docs_returned_late_by_gtg(self, bucket):
         nb_late = bucket['nb_docs_returned_late']['doc_count']
         nb_docs = bucket['docs_with_return_information']['doc_count']
+        try:
+            res = 100.0 * float(nb_late) / float(nb_docs)
+            res = '{:.2f}%'.format(res)
+        except:
+            res = 'ND'
+        return res
+
+    def get_pc_tr_docs_returned_late_by_gtg(self, bucket):
+        nb_docs = bucket['docs_with_return_information']['doc_count']
+
+        buckets = bucket['nb_docs_returned_late']['per_category']['buckets']
+        data = next((b for b in buckets if b['key'] == 'Contractor Deliverable'), None)
+        nb_late = data['doc_count'] if data else 0
+
         try:
             res = 100.0 * float(nb_late) / float(nb_docs)
             res = '{:.2f}%'.format(res)
