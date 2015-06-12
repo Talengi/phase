@@ -366,6 +366,9 @@ class TrsRevision(models.Model):
     outgoing_trs_sent_date = models.DateField(
         verbose_name=_('Outgoing transmittal sent date'),
         null=True, blank=True)
+    doc_category = models.CharField(
+        max_length=50,
+        verbose_name=_('Doc category'))
     pdf_file = TransmittalFileField(
         verbose_name=_('Pdf file'))
     native_file = TransmittalFileField(
