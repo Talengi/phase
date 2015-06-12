@@ -289,13 +289,13 @@ class ReturnedDocsDashboardView(BaseDashboardView):
         return buckets
 
     def get_nb_tr_deliverables(self, bucket):
-        category_bucket = bucket['per_category']['buckets']
-        data = next((x for x in category_bucket if x['key'] == 'Contractor Deliverable'), None)
+        buckets = bucket['per_category']['buckets']
+        data = next((b for b in buckets if b['key'] == 'Contractor Deliverable'), None)
         return data['doc_count'] if data else 0
 
     def get_nb_vendor_deliverables(self, bucket):
-        category_bucket = bucket['per_category']['buckets']
-        data = next((x for x in category_bucket if x['key'] == 'Supplier Deliverable'), None)
+        buckets = bucket['per_category']['buckets']
+        data = next((b for b in buckets if b['key'] == 'Supplier Deliverable'), None)
         return data['doc_count'] if data else 0
 
     def get_pc_docs_returned_late_by_gtg(self, bucket):
