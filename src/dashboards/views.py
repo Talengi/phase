@@ -291,6 +291,7 @@ class ReturnedDocsDashboardView(BaseDashboardView):
         buckets['Avg nb of docs returned by day'] = map(lambda x: x['doc_count'] / 20.0, raw_buckets)
         buckets['% of docs returned late by GTG'] = map(self.get_pc_docs_returned_late_by_gtg, raw_buckets)
         buckets['% of TR docs returned late by GTG'] = map(self.get_pc_tr_docs_returned_late_by_gtg, raw_buckets)
+        buckets['% of Vendor docs returned late by GTG'] = map(self.get_pc_vendor_docs_returned_late_by_gtg, raw_buckets)
 
         buckets['Nb of docs with return code 0'] = map(self.get_nb_return_code_zero, raw_buckets)
 
@@ -321,6 +322,20 @@ class ReturnedDocsDashboardView(BaseDashboardView):
 
         buckets = bucket['nb_docs_returned_late']['per_category']['buckets']
         data = next((b for b in buckets if b['key'] == 'Contractor Deliverable'), None)
+        nb_late = data['doc_count'] if data else 0
+
+        try:
+            res = 100.0 * float(nb_late) / float(nb_docs)
+            res = '{:.2f}%'.format(res)
+        except:
+            res = 'ND'
+        return res
+
+    def get_pc_vendor_docs_returned_late_by_gtg(self, bucket):
+        nb_docs = bucket['docs_with_return_information']['doc_count']
+
+        buckets = bucket['nb_docs_returned_late']['per_category']['buckets']
+        data = next((b for b in buckets if b['key'] == 'Supplier Deliverable'), None)
         nb_late = data['doc_count'] if data else 0
 
         try:
