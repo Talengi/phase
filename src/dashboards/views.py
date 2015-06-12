@@ -95,7 +95,7 @@ class IssuedDocsDashboardView(BaseDashboardView):
         search.aggs['per_month'].bucket(
             'per_category',
             'terms',
-            field='doc_category')
+            field='doc_category.raw')
 
         # For each month, select only docs with a `review_sent_date` field
         search.aggs['per_month'].bucket(
@@ -166,12 +166,14 @@ class IssuedDocsDashboardView(BaseDashboardView):
         return buckets
 
     def get_nb_tr_deliverables(self, bucket):
-        # XXX
-        return 0
+        category_bucket = bucket['per_category']['buckets']
+        data = next((x for x in category_bucket if x['key'] == 'Contractor Deliverable'), None)
+        return data['doc_count'] if data else 0
 
     def get_nb_vendor_deliverables(self, bucket):
-        # XXX
-        return 0
+        category_bucket = bucket['per_category']['buckets']
+        data = next((x for x in category_bucket if x['key'] == 'Supplier Deliverable'), None)
+        return data['doc_count'] if data else 0
 
     def get_nb_distributed_docs(self, bucket):
         return bucket['with_a_sent_date']['doc_count']
