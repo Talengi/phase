@@ -72,17 +72,6 @@ class IssuedDocsDashboardView(BaseDashboardView):
         # Return only those stored fields
         search = search.fields(['document_key', 'received_date', 'review_sent_date'])
 
-        # Add dynamic fields computed on the fly
-        search.update_from_dict({
-            'script_fields': {
-                'distribution_delay': {
-                    'script': "doc['review_sent_date'].value - doc['received_date'].value"
-                }
-            }
-        })
-
-        # Define aggregations and metrics
-
         # Group documents by month on the `received_date` field
         search.aggs.bucket(
             'per_month',
@@ -238,11 +227,35 @@ class ReturnedDocsDashboardView(BaseDashboardView):
             interval='month',
             min_doc_count=0)
 
+        # For each month, select only docs with a `leader_comment_date` field
+        search.aggs['per_month'].bucket(
+            'docs_with_return_information',
+            'filter',
+            filter={
+                'and': {
+                    'filters': [
+                        {'exists': {'field': 'review_sent_date'}},
+                        {'exists': {'field': 'review_due_date'}}
+                    ]
+                }
+            })
+
         # For each month, count docs for each category
         search.aggs['per_month'].bucket(
             'per_category',
             'terms',
             field='doc_category.raw')
+
+        # For each month, compute the raw number of late documents
+        search.aggs['per_month'].metric(
+            'nb_docs_returned_late',
+            'filter',
+            filter={
+                'script': {
+                    'script': "doc['review_sent_date'].value > doc['review_due_date'].value"
+                }
+            }
+        )
 
         # Count docs with a return code of 0
         search.aggs['per_month'].metric(
@@ -268,7 +281,9 @@ class ReturnedDocsDashboardView(BaseDashboardView):
         buckets['TR Deliverables'] = map(self.get_nb_tr_deliverables, raw_buckets)
         buckets['Vendor Deliverables'] = map(self.get_nb_vendor_deliverables, raw_buckets)
         buckets['TOTAL'] = map(lambda x: x['doc_count'], raw_buckets)
-        buckets['Avg docs returned by day'] = map(lambda x: x['doc_count'] / 20.0, raw_buckets)
+        buckets['Avg nb of docs returned by day'] = map(lambda x: x['doc_count'] / 20.0, raw_buckets)
+        buckets['% of docs returned late by GTG'] = map(self.get_pc_docs_returned_late_by_gtg, raw_buckets)
+
         buckets['Nb of docs with return code 0'] = map(self.get_nb_return_code_zero, raw_buckets)
 
         return buckets
@@ -282,6 +297,16 @@ class ReturnedDocsDashboardView(BaseDashboardView):
         category_bucket = bucket['per_category']['buckets']
         data = next((x for x in category_bucket if x['key'] == 'Supplier Deliverable'), None)
         return data['doc_count'] if data else 0
+
+    def get_pc_docs_returned_late_by_gtg(self, bucket):
+        nb_late = bucket['nb_docs_returned_late']['doc_count']
+        nb_docs = bucket['docs_with_return_information']['doc_count']
+        try:
+            res = 100.0 * float(nb_late) / float(nb_docs)
+            res = '{:.2f}%'.format(res)
+        except:
+            res = 'ND'
+        return res
 
     def get_nb_return_code_zero(self, bucket):
         return bucket['nb_docs_with_return_code_zero']['doc_count']
