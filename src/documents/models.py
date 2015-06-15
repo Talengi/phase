@@ -237,47 +237,6 @@ class Metadata(six.with_metaclass(MetadataBase), models.Model):
         """
         raise NotImplementedError()
 
-    def jsonified(self):
-        """Returns a list of document values ready to be json-encoded.
-
-        The first element of the list is the linkified document number.
-
-        If a value is a Model instance (e.g a foreign key), we return both it's
-        unicode and id values.
-        """
-        fields = tuple()
-
-        def add_to_fields(key):
-            value = getattr(self, key)
-
-            if isinstance(value, models.Model):
-                field = (
-                    (unicode(key), value.__unicode__()),
-                    (u'%s_id' % key, value.pk)
-                )
-            else:
-                field = ((unicode(key), value),)
-
-            return field
-
-        config = self.PhaseConfig
-        filter_fields = list(config.filter_fields)
-        searchable_fields = list(config.searchable_fields)
-        column_fields = dict(config.column_fields).values()
-        additional_fields = getattr(config, 'indexable_fields', [])
-        fields_to_index = set(filter_fields + searchable_fields + column_fields + additional_fields)
-
-        for field in fields_to_index:
-            fields += add_to_fields(field)
-
-        fields_infos = dict(fields)
-        fields_infos.update({
-            u'url': self.document.get_absolute_url(),
-            u'pk': self.pk,
-            u'document_pk': self.document.pk,
-        })
-        return fields_infos
-
     @property
     def current_revision(self):
         return self.latest_revision.name
@@ -335,6 +294,79 @@ class MetadataRevision(models.Model):
         return False
 
     @property
+    def metadata(self):
+        """Get the metadata object.
+
+        TODO refactor to replace with a foreign key in each
+        MetadataRevision subclass.
+
+        """
+        return self.document.get_metadata()
+
+    @property
     def name(self):
         """A revision identifier should be displayed with two digits"""
         return u'%02d' % self.revision
+
+    @property
+    def unique_id(self):
+        return '{}_{}'.format(self.document.document_key, self.name)
+
+    def to_json(self):
+        """Converts the revision to a json representation.
+
+        Suitable for indexing in ES, for example.
+
+        The first element of the list is the linkified document number.
+
+        If a value is a Model instance (e.g a foreign key), we return both it's
+        unicode and id values.
+        """
+        fields = tuple()
+        document = self.document
+        metadata = self.metadata
+
+        def add_to_fields(key):
+            # Search the value of `key` in the revision, metadata and document,
+            # in that order. If not found, raise an exception.
+            try:
+                value = getattr(self, key)
+            except AttributeError:
+                try:
+                    value = getattr(metadata, key)
+                except AttributeError:
+                    try:
+                        value = getattr(document, key)
+                    except AttributeError:
+                        error = 'Cannot find field {} in doc {} ({})'.format(
+                            key, document.document_key, document.document_type())
+                        raise RuntimeError(error)
+
+            if isinstance(value, models.Model):
+                field = (
+                    (unicode(key), value.__unicode__()),
+                    (u'%s_id' % key, value.pk)
+                )
+            else:
+                field = ((unicode(key), value),)
+
+            return field
+
+        config = metadata.PhaseConfig
+        filter_fields = list(config.filter_fields)
+        searchable_fields = list(config.searchable_fields)
+        column_fields = dict(config.column_fields).values()
+        additional_fields = getattr(config, 'indexable_fields', [])
+        fields_to_index = set(filter_fields + searchable_fields + column_fields + additional_fields)
+
+        for field in fields_to_index:
+            fields += add_to_fields(field)
+
+        fields_infos = dict(fields)
+        fields_infos.update({
+            'url': document.get_absolute_url(),
+            'document_pk': document.pk,
+            'metadata_pk': metadata.pk,
+            'pk': self.pk,
+        })
+        return fields_infos
