@@ -40,6 +40,9 @@ def save_mapping(sender, instance, **kwargs):
         put_category_mapping.delay(instance.pk)
 
 
+# XXX TODO
+# This could lead to a race condition
+# Fix this
 _BULK_ACTIONS = None
 
 
