@@ -331,14 +331,6 @@ class ReviewMixin(models.Model):
     def is_at_review_step(self, step):
         return step == self.current_review_step()
 
-    def document_key(self):
-        return self.document.document_key
-    document_key.short_description = _('Document number')
-
-    def title(self):
-        return self.document.title
-    title.short_description = _('Title')
-
     def get_reviews(self):
         """Get all reviews associated with this revision."""
         qs = Review.objects \
