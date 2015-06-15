@@ -95,13 +95,17 @@ class Document(models.Model):
 
     @property
     def metadata(self):
+        """Old property name, kept for compatibility issues."""
+        return self.get_metadata()
+
+    def get_metadata(self):
         """Returns the metadata object.
 
         XXX WARNING XXX
 
-        This method is a useful shortcut that makes tests writing easier.
-        It should not really be used in the application code because it's
-        not optimal, since it generates a new query.
+        This method is a useful shortcut that makes tests writing easier.  It
+        should not be used if it can be avoided because it's not optimal, since
+        it generates a new query.
 
         """
         Model = self.category.category_template.metadata_model
@@ -110,13 +114,17 @@ class Document(models.Model):
 
     @property
     def latest_revision(self):
+        """Old property name, kept for compatibility issues."""
+        return self.get_latest_revision()
+
+    def get_latest_revision(self):
         """Returns the latest revision.
 
         XXX WARNING XXX
 
-        See `metadata`
+        See `get_metadata`
         """
-        return self.metadata.latest_revision
+        return self.metadata().latest_revision
 
     @property
     def current_revision_name(self):
@@ -124,7 +132,7 @@ class Document(models.Model):
         return u'%02d' % self.current_revision
 
     def to_json(self):
-        return self.metadata.jsonified()
+        return self.get_latest_revision.to_json()
 
     def document_type(self):
         return self.category.document_type()
