@@ -119,7 +119,8 @@ def get_mapping(doc_class):
             try:
                 field = revision_class._meta.get_field_by_name(field_name)[0]
             except FieldDoesNotExist:
-                print 'Field {} cannot be found'.format(field_name)
+                warning = 'Field {} cannot be found and will not be indexed'.format(field_name)
+                logger.warning(warning)
                 field = None
 
         es_type = get_mapping_type(field) if field else 'string'
