@@ -124,7 +124,20 @@ class Document(models.Model):
 
         See `get_metadata`
         """
-        return self.metadata().latest_revision
+        return self.get_metadata().latest_revision
+
+    def get_revision_class(self):
+        """Get the MetadataRevision subclass for this document."""
+        return self.category.revision_class()
+
+    def get_all_revisions(self):
+        """Return all revisions data of this document."""
+        RevisionClass = self.get_revision_class()
+        revisions = RevisionClass.objects \
+            .filter(document=self) \
+            .select_related() \
+            .order_by('-id')
+        return revisions
 
     @property
     def current_revision_name(self):
