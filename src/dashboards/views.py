@@ -147,10 +147,10 @@ class IssuedDocsDashboardView(BaseDashboardView):
         buckets['Avg docs received by day'] = map(lambda x: x['doc_count'] / 20.0, raw_buckets)
         buckets['Nb of distributed docs'] = map(self.get_nb_distributed_docs, raw_buckets)
         buckets['Nb of docs distributed late'] = map(self.get_nb_late_distributed_docs, raw_buckets)
-        buckets['% of docs distributed late'] = map(self.get_pc_late_distributed_docs, raw_buckets)
+        buckets['% of docs distributed late by DC'] = map(self.get_pc_late_distributed_docs, raw_buckets)
         buckets['Nb of docs reviewed by leader'] = map(self.get_nb_leader_reviewed_docs, raw_buckets)
         buckets['Nb of docs reviewed late by leader'] = map(self.get_nb_late_leader_reviewed_docs, raw_buckets)
-        buckets['% of docs reviewed late by leader'] = map(self.get_pc_late_leader_reviewed_docs, raw_buckets)
+        buckets['% of docs reviewed late by Leader'] = map(self.get_pc_late_leader_reviewed_docs, raw_buckets)
 
         return buckets
 
