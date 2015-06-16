@@ -341,6 +341,8 @@ class MetadataRevision(models.Model):
         def add_to_fields(key):
             # Search the value of `key` in the revision, metadata and document,
             # in that order. If not found, raise an exception.
+            # Note that the value can be "None" so careful with have to
+            # explicitely catch the AttributeError exception
             try:
                 value = getattr(self, key)
             except AttributeError:
@@ -381,5 +383,6 @@ class MetadataRevision(models.Model):
             'metadata_pk': metadata.pk,
             'pk': self.pk,
             'revision': self.revision,
+            'is_latest_revision': document.current_revision == self.revision,
         })
         return fields_infos
