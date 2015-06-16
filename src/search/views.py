@@ -86,7 +86,8 @@ class SearchDocuments(JSONResponseMixin, BaseDocumentList):
         """Builds an elasticsearch query."""
 
         s = Search(using=elastic, doc_type=document_type) \
-            .index(settings.ELASTIC_INDEX)
+            .index(settings.ELASTIC_INDEX) \
+            .filter('term', is_latest_revision=True)
 
         data = form.cleaned_data
 
