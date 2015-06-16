@@ -437,7 +437,9 @@ class DocumentRevise(DocumentEdit):
 
         # Let's take the complete field list, and build
         # a dict of empty strings from it.
-        initial_data = dict(map(lambda x: (x, None), revision_form.fields.keys()))
+        fields = revision_form.fields.keys()
+        fields.remove('created_on')
+        initial_data = dict(map(lambda x: (x, None), fields))
         revision_form.initial = initial_data
 
         return document_form, revision_form
