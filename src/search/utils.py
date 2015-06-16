@@ -30,6 +30,22 @@ def delete_index():
     elastic.indices.delete(index=index, ignore=404)
 
 
+def index_revision(revision):
+    """Saves a document's revision into ES's index."""
+    document = revision.document
+    es_key = '{}_{}'.format(document.document_key, revision.revision)
+    try:
+        elastic.index(
+            index=settings.ELASTIC_INDEX,
+            doc_type=document.document_type(),
+            id=es_key,
+            body=revision.to_json(),
+        )
+    except ConnectionError:
+        logger.error('Error connecting to ES. The doc %d will no be indexed' %
+                     es_key)
+
+
 @app.task
 def index_document(document_id, document_type, document_json):
     """Stores a document into the ES index."""
