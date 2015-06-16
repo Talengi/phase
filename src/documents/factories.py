@@ -35,6 +35,7 @@ class DocumentFactory(factory.DjangoModelFactory):
             'document': obj,
             'revision': obj.current_revision,
             'revision_date': obj.current_revision_date,
+            'received_date': obj.current_revision_date,
             'created_on': obj.current_revision_date,
             'updated_on': obj.current_revision_date,
         }

@@ -95,13 +95,17 @@ class Document(models.Model):
 
     @property
     def metadata(self):
+        """Old property name, kept for compatibility issues."""
+        return self.get_metadata()
+
+    def get_metadata(self):
         """Returns the metadata object.
 
         XXX WARNING XXX
 
-        This method is a useful shortcut that makes tests writing easier.
-        It should not really be used in the application code because it's
-        not optimal, since it generates a new query.
+        This method is a useful shortcut that makes tests writing easier.  It
+        should not be used if it can be avoided because it's not optimal, since
+        it generates a new query.
 
         """
         Model = self.category.category_template.metadata_model
@@ -110,13 +114,30 @@ class Document(models.Model):
 
     @property
     def latest_revision(self):
+        """Old property name, kept for compatibility issues."""
+        return self.get_latest_revision()
+
+    def get_latest_revision(self):
         """Returns the latest revision.
 
         XXX WARNING XXX
 
-        See `metadata`
+        See `get_metadata`
         """
-        return self.metadata.latest_revision
+        return self.get_metadata().latest_revision
+
+    def get_revision_class(self):
+        """Get the MetadataRevision subclass for this document."""
+        return self.category.revision_class()
+
+    def get_all_revisions(self):
+        """Return all revisions data of this document."""
+        RevisionClass = self.get_revision_class()
+        revisions = RevisionClass.objects \
+            .filter(document=self) \
+            .select_related() \
+            .order_by('-id')
+        return revisions
 
     @property
     def current_revision_name(self):
@@ -124,7 +145,7 @@ class Document(models.Model):
         return u'%02d' % self.current_revision
 
     def to_json(self):
-        return self.metadata.jsonified()
+        return self.get_latest_revision.to_json()
 
     def document_type(self):
         return self.category.document_type()
@@ -229,47 +250,6 @@ class Metadata(six.with_metaclass(MetadataBase), models.Model):
         """
         raise NotImplementedError()
 
-    def jsonified(self):
-        """Returns a list of document values ready to be json-encoded.
-
-        The first element of the list is the linkified document number.
-
-        If a value is a Model instance (e.g a foreign key), we return both it's
-        unicode and id values.
-        """
-        fields = tuple()
-
-        def add_to_fields(key):
-            value = getattr(self, key)
-
-            if isinstance(value, models.Model):
-                field = (
-                    (unicode(key), value.__unicode__()),
-                    (u'%s_id' % key, value.pk)
-                )
-            else:
-                field = ((unicode(key), value),)
-
-            return field
-
-        config = self.PhaseConfig
-        filter_fields = list(config.filter_fields)
-        searchable_fields = list(config.searchable_fields)
-        column_fields = dict(config.column_fields).values()
-        additional_fields = getattr(config, 'indexable_fields', [])
-        fields_to_index = set(filter_fields + searchable_fields + column_fields + additional_fields)
-
-        for field in fields_to_index:
-            fields += add_to_fields(field)
-
-        fields_infos = dict(fields)
-        fields_infos.update({
-            u'url': self.document.get_absolute_url(),
-            u'pk': self.pk,
-            u'document_pk': self.document.pk,
-        })
-        return fields_infos
-
     @property
     def current_revision(self):
         return self.latest_revision.name
@@ -298,7 +278,6 @@ class MetadataRevision(models.Model):
         _('Received date'))
     created_on = models.DateField(
         _('Created on'),
-        blank=True,
         default=timezone.now)
     updated_on = models.DateTimeField(
         _('Updated on'),
@@ -327,6 +306,83 @@ class MetadataRevision(models.Model):
         return False
 
     @property
+    def metadata(self):
+        """Get the metadata object.
+
+        TODO refactor to replace with a foreign key in each
+        MetadataRevision subclass.
+
+        """
+        return self.document.get_metadata()
+
+    @property
     def name(self):
         """A revision identifier should be displayed with two digits"""
         return u'%02d' % self.revision
+
+    @property
+    def unique_id(self):
+        return '{}_{}'.format(self.document.document_key, self.name)
+
+    def to_json(self):
+        """Converts the revision to a json representation.
+
+        Suitable for indexing in ES, for example.
+
+        The first element of the list is the linkified document number.
+
+        If a value is a Model instance (e.g a foreign key), we return both it's
+        unicode and id values.
+        """
+        fields = tuple()
+        document = self.document
+        metadata = self.metadata
+
+        def add_to_fields(key):
+            # Search the value of `key` in the revision, metadata and document,
+            # in that order. If not found, raise an exception.
+            # Note that the value can be "None" so careful with have to
+            # explicitely catch the AttributeError exception
+            try:
+                value = getattr(self, key)
+            except AttributeError:
+                try:
+                    value = getattr(metadata, key)
+                except AttributeError:
+                    try:
+                        value = getattr(document, key)
+                    except AttributeError:
+                        error = 'Cannot find field {} in doc {} ({})'.format(
+                            key, document.document_key, document.document_type())
+                        raise RuntimeError(error)
+
+            if isinstance(value, models.Model):
+                field = (
+                    (unicode(key), value.__unicode__()),
+                    (u'%s_id' % key, value.pk)
+                )
+            else:
+                field = ((unicode(key), value),)
+
+            return field
+
+        config = metadata.PhaseConfig
+        filter_fields = list(config.filter_fields)
+        searchable_fields = list(config.searchable_fields)
+        column_fields = dict(config.column_fields).values()
+        additional_fields = getattr(config, 'indexable_fields', [])
+        fields_to_index = set(filter_fields + searchable_fields + column_fields + additional_fields)
+
+        for field in fields_to_index:
+            fields += add_to_fields(field)
+
+        fields_infos = dict(fields)
+        fields_infos.update({
+            'url': document.get_absolute_url(),
+            'document_pk': document.pk,
+            'metadata_pk': metadata.pk,
+            'pk': self.pk,
+            'revision': self.revision,
+            'is_latest_revision': document.current_revision == self.revision,
+        })
+        return fields_infos

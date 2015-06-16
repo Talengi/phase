@@ -78,30 +78,39 @@ Type 'yes' to continue, or 'no' to cancel: """)
             )
 
         logger.info('Preparing index data')
-        actions = []
         for category in categories:
             document_type = category.document_type()
-            DocumentClass = category.category_template.metadata_model.model_class()
-            documents = DocumentClass.objects \
+            RevisionClass = category.revision_class()
+            revisions = RevisionClass.objects \
                 .select_related() \
                 .filter(document__category=category)
 
-            for metadata in documents:
-                document = metadata.document
-                if document.is_indexable:
+            count = 0
+            actions = []
+            logger.info('Starting bulk index of category {}'.format(category))
+            for revision in revisions:
+                if revision.document.is_indexable:
                     actions.append({
                         '_index': settings.ELASTIC_INDEX,
                         '_type': document_type,
-                        '_id': document.id,
-                        '_source': metadata.jsonified(),
+                        '_id': revision.unique_id,
+                        '_source': revision.to_json(),
                     })
 
-        logger.info('Starting bulk index')
-        bulk(
-            elastic,
-            actions,
-            chunk_size=settings.ELASTIC_BULK_SIZE,
-            request_timeout=60)
+                    count += 1
+                    if count % settings.ELASTIC_BULK_SIZE == 0:
+                        bulk(
+                            elastic,
+                            actions,
+                            chunk_size=settings.ELASTIC_BULK_SIZE,
+                            request_timeout=60)
+                        actions = []
+
+            bulk(
+                elastic,
+                actions,
+                chunk_size=settings.ELASTIC_BULK_SIZE,
+                request_timeout=60)
 
         end_reindex = datetime.datetime.now()
         logger.info('Reindex ending at %s' % end_reindex)

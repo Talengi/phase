@@ -555,17 +555,13 @@ class DemoMetadata(Metadata):
         ordering = ('document_key',)
 
     class PhaseConfig:
-        filter_fields = (
-            'leader',
-        )
+        filter_fields = ('title',)
         searchable_fields = (
             'title', 'document_key', 'title',
         )
         column_fields = (
             ('Document Number', 'document_key'),
             ('Title', 'title'),
-            ('Rev.', 'current_revision'),
-            ('Rev. Date', 'current_revision_date'),
             ('Status', 'status'),
         )
         transmittal_columns = {

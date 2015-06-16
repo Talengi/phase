@@ -7,11 +7,13 @@ import logging
 from django.db.models.fields import FieldDoesNotExist
 from django.db import models
 
+from elasticsearch.helpers import bulk
 from elasticsearch.exceptions import ConnectionError
 
 from core.celery import app
 from categories.models import Category
 from search import elastic, INDEX_SETTINGS
+from documents.models import Document
 from django.conf import settings
 
 
@@ -30,31 +32,62 @@ def delete_index():
     elastic.indices.delete(index=index, ignore=404)
 
 
-@app.task
-def index_document(document_id, document_type, document_json):
-    """Stores a document into the ES index."""
+def index_revision(revision):
+    """Saves a document's revision into ES's index."""
+    document = revision.document
+    es_key = '{}_{}'.format(document.document_key, revision.revision)
     try:
         elastic.index(
             index=settings.ELASTIC_INDEX,
-            doc_type=document_type,
-            id=document_id,
-            body=document_json,
+            doc_type=document.document_type(),
+            id=es_key,
+            body=revision.to_json(),
         )
     except ConnectionError:
-        logger.error('Error connecting to ES. The doc %d will no be indexed' % document_id)
+        logger.error('Error connecting to ES. The doc %d will no be indexed' %
+                     es_key)
 
 
 @app.task
-def unindex_document(document_id, document_type):
-    """Removes the document from the index."""
-    try:
-        elastic.delete(
-            index=settings.ELASTIC_INDEX,
-            doc_type=document_type,
-            id=document_id
-        )
-    except ConnectionError:
-        logger.error('Error connecting to ES. The doc %d will no be un-indexed' % document_id)
+def index_document(document_id):
+    """Index all revisions for a document"""
+    document = Document.objects \
+        .select_related() \
+        .get(pk=document_id)
+    revisions = document.get_all_revisions()
+    actions = map(lambda revision: {
+        '_index': settings.ELASTIC_INDEX,
+        '_type': document.document_type(),
+        '_id': revision.unique_id,
+        '_source': revision.to_json(),
+    }, revisions)
+
+    bulk(
+        elastic,
+        actions,
+        chunk_size=settings.ELASTIC_BULK_SIZE,
+        request_timeout=60)
+
+
+@app.task
+def unindex_document(document_id):
+    """Removes all revisions of a document from the index."""
+    document = Document.objects \
+        .select_related() \
+        .get(pk=document_id)
+    revisions = document.get_all_revisions()
+    actions = map(lambda revision: {
+        '_op_type': 'delete',
+        '_index': settings.ELASTIC_INDEX,
+        '_type': document.document_type(),
+        '_id': revision.unique_id,
+    }, revisions)
+
+    bulk(
+        elastic,
+        actions,
+        chunk_size=settings.ELASTIC_BULK_SIZE,
+        request_timeout=60)
 
 
 TYPE_MAPPING = [
@@ -119,7 +152,8 @@ def get_mapping(doc_class):
             try:
                 field = revision_class._meta.get_field_by_name(field_name)[0]
             except FieldDoesNotExist:
-                print 'Field {} cannot be found'.format(field_name)
+                warning = 'Field {} cannot be found and will not be indexed'.format(field_name)
+                logger.warning(warning)
                 field = None
 
         es_type = get_mapping_type(field) if field else 'string'

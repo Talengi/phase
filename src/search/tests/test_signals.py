@@ -33,6 +33,11 @@ class SignalTests(TestCase):
         call_command('create_index')
         call_command('set_mappings')
 
+    @patch('search.signals.put_category_mapping.delay')
+    def test_new_category_mapping_are_created(self, index_mock):
+        CategoryFactory()
+        self.assertEqual(index_mock.call_count, 1)
+
     @patch('search.signals.index_document.delay')
     def test_created_document_is_indexed(self, index_mock):
         DocumentFactory(

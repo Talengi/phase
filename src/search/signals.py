@@ -8,11 +8,11 @@ from django.conf import settings
 
 from elasticsearch.helpers import bulk
 
-from documents.models import Document
 from categories.models import Category
 from reviews.signals import pre_batch_review, post_batch_review, batch_item_indexed
 from search import elastic
 from search.utils import index_document, unindex_document, put_category_mapping
+from documents.models import Document
 
 
 def update_index(sender, instance, **kwargs):
@@ -24,14 +24,11 @@ def update_index(sender, instance, **kwargs):
     # Thus, we MUST not index the document on the first save, since the
     # metadata and revision does not exist yet
     if not created and instance.is_indexable:
-        index_document.delay(
-            instance.pk,
-            instance.document_type(),
-            instance.to_json())
+        index_document.delay(instance.pk)
 
 
 def remove_from_index(sender, instance, **kwargs):
-    unindex_document.delay(instance.pk, instance.document_type())
+    unindex_document.delay(instance.pk)
 
 
 def save_mapping(sender, instance, **kwargs):
@@ -40,6 +37,9 @@ def save_mapping(sender, instance, **kwargs):
         put_category_mapping.delay(instance.pk)
 
 
+# XXX TODO
+# This could lead to a race condition
+# Fix this
 _BULK_ACTIONS = None
 
 
