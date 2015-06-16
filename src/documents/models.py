@@ -265,7 +265,6 @@ class MetadataRevision(models.Model):
         _('Received date'))
     created_on = models.DateField(
         _('Created on'),
-        blank=True,
         default=timezone.now)
     updated_on = models.DateTimeField(
         _('Updated on'),
