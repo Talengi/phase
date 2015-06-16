@@ -368,5 +368,6 @@ class MetadataRevision(models.Model):
             'document_pk': document.pk,
             'metadata_pk': metadata.pk,
             'pk': self.pk,
+            'revision': self.revision,
         })
         return fields_infos
