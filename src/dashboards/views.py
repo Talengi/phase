@@ -102,7 +102,7 @@ class IssuedDocsDashboardView(BaseDashboardView):
             'filter',
             filter={
                 'script': {
-                    'script': "doc['review_sent_date'].value != doc['received_date'].value"
+                    'script': "doc['review_sent_date'].value > doc['received_date'].value"
                 }
             }
         )
