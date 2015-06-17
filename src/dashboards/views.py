@@ -226,7 +226,7 @@ class ReturnedDocsDashboardView(BaseDashboardView):
         )
 
         # For each month, select only docs with a the return information
-        search.aggs['per_month'].bucket(
+        search.aggs['per_month'].aggs['per_category'].bucket(
             'with_return_info',
             'filter',
             filter={
@@ -238,28 +238,17 @@ class ReturnedDocsDashboardView(BaseDashboardView):
                 }
             })
 
-        # For each month, count docs for each category
-        search.aggs['per_month'].bucket(
-            'per_category',
-            'terms',
-            field='doc_category.raw')
-
         # For each month, compute the raw number of late documents
-        search.aggs['per_month'].aggs['with_return_info'].bucket(
-            'nb_docs_returned_late',
-            'filter',
-            filter={
-                'script': {
-                    'script': "doc['outgoing_trs_sent_date'].value > doc['review_due_date'].value"
+        search.aggs['per_month'] \
+            .aggs['per_category'] \
+            .aggs['with_return_info'].metric(
+                'nb_late_docs',
+                'filter',
+                filter={
+                    'script': {
+                        'script': "doc['outgoing_trs_sent_date'].value > doc['review_due_date'].value"
+                    }
                 }
-            }
-        )
-
-        # Bucket those late docs by category
-        search.aggs['per_month'].aggs['with_return_info'].aggs['nb_docs_returned_late'].bucket(
-            'per_category',
-            'terms',
-            field='doc_category.raw'
         )
 
         # Count docs with a return code of 0
@@ -283,63 +272,70 @@ class ReturnedDocsDashboardView(BaseDashboardView):
         raw_buckets = self.aggregations['per_month']['buckets']
 
         buckets = OrderedDict()
-        buckets['TR Deliverables'] = map(self.get_nb_tr_deliverables, raw_buckets)
-        buckets['Vendor Deliverables'] = map(self.get_nb_vendor_deliverables, raw_buckets)
+        buckets['TR Deliverables'] = map(self.get_nb_tr_docs, raw_buckets)
+        buckets['Vendor Deliverables'] = map(self.get_nb_vendor_docs, raw_buckets)
         buckets['TOTAL'] = map(lambda x: x['doc_count'], raw_buckets)
         buckets['Avg nb of docs returned by day'] = map(lambda x: x['doc_count'] / 20.0, raw_buckets)
         buckets['% of docs returned late by GTG'] = map(self.get_pc_docs_returned_late_by_gtg, raw_buckets)
         buckets['% of TR docs returned late by GTG'] = map(self.get_pc_tr_docs_returned_late_by_gtg, raw_buckets)
         buckets['% of Vendor docs returned late by GTG'] = map(self.get_pc_vendor_docs_returned_late_by_gtg, raw_buckets)
+        # buckets['Average NB of days overdue for TR documents'] = map(self.get_pc_vendor_docs_returned_late_by_gtg, raw_buckets)
 
-        buckets['Nb of docs with return code 0'] = map(self.get_nb_return_code_zero, raw_buckets)
+        # buckets['Nb of docs with return code 0'] = map(self.get_nb_return_code_zero, raw_buckets)
 
         return buckets
 
-    def get_nb_tr_deliverables(self, bucket):
-        buckets = bucket['per_category']['buckets']
-        data = next((b for b in buckets if b['key'] == 'Contractor Deliverable'), None)
-        return data['doc_count'] if data else 0
+    def format_pc(self, num, denum):
+        try:
+            res = 100.0 * float(num) / float(denum)
+            res = '{:.2f}%'.format(res)
+        except:
+            res = 'ND'
+        return res
 
-    def get_nb_vendor_deliverables(self, bucket):
+    def get_tr_bucket(self, bucket):
         buckets = bucket['per_category']['buckets']
-        data = next((b for b in buckets if b['key'] == 'Supplier Deliverable'), None)
-        return data['doc_count'] if data else 0
+        bucket = next((b for b in buckets if b['key'] == 'Contractor Deliverable'), None)
+        return bucket
+
+    def get_vendor_bucket(self, bucket):
+        buckets = bucket['per_category']['buckets']
+        bucket = next((b for b in buckets if b['key'] == 'Supplier Deliverable'), None)
+        return bucket
+
+    def get_nb_tr_docs(self, bucket):
+        bucket = self.get_tr_bucket(bucket)
+        return bucket['doc_count'] if bucket else 0
+
+    def get_nb_vendor_docs(self, bucket):
+        bucket = self.get_vendor_bucket(bucket)
+        return bucket['doc_count'] if bucket else 0
+
+    def get_nb_late_tr_docs(self, bucket):
+        bucket = self.get_tr_bucket(bucket)
+        return bucket['with_return_info']['nb_late_docs']['doc_count'] if bucket else 0
+
+    def get_nb_late_vendor_docs(self, bucket):
+        bucket = self.get_vendor_bucket(bucket)
+        return bucket['with_return_info']['nb_late_docs']['doc_count'] if bucket else 0
+
+    def get_nb_late_docs(self, bucket):
+        return self.get_nb_late_tr_docs(bucket) + self.get_nb_late_vendor_docs(bucket)
 
     def get_pc_docs_returned_late_by_gtg(self, bucket):
-        nb_docs = bucket['with_return_info']['doc_count']
-        nb_late = bucket['with_return_info']['nb_docs_returned_late']['doc_count']
-        try:
-            res = 100.0 * float(nb_late) / float(nb_docs)
-            res = '{:.2f}%'.format(res)
-        except:
-            res = 'ND'
-        return res
+        nb_docs = bucket['doc_count']
+        nb_late = self.get_nb_late_docs(bucket)
+        return self.format_pc(nb_late, nb_docs)
 
     def get_pc_tr_docs_returned_late_by_gtg(self, bucket):
-        nb_docs = bucket['with_return_info']['doc_count']
-        buckets = bucket['with_return_info']['nb_docs_returned_late']['per_category']['buckets']
-        data = next((b for b in buckets if b['key'] == 'Contractor Deliverable'), None)
-        nb_late = data['doc_count'] if data else 0
-
-        try:
-            res = 100.0 * float(nb_late) / float(nb_docs)
-            res = '{:.2f}%'.format(res)
-        except:
-            res = 'ND'
-        return res
+        nb_docs = self.get_nb_tr_docs(bucket)
+        nb_late = self.get_nb_late_tr_docs(bucket)
+        return self.format_pc(nb_late, nb_docs)
 
     def get_pc_vendor_docs_returned_late_by_gtg(self, bucket):
-        nb_docs = bucket['with_return_info']['doc_count']
-        buckets = bucket['with_return_info']['nb_docs_returned_late']['per_category']['buckets']
-        data = next((b for b in buckets if b['key'] == 'Supplier Deliverable'), None)
-        nb_late = data['doc_count'] if data else 0
-
-        try:
-            res = 100.0 * float(nb_late) / float(nb_docs)
-            res = '{:.2f}%'.format(res)
-        except:
-            res = 'ND'
-        return res
+        nb_docs = self.get_nb_vendor_docs(bucket)
+        nb_late = self.get_nb_late_vendor_docs(bucket)
+        return self.format_pc(nb_late, nb_docs)
 
     def get_nb_return_code_zero(self, bucket):
         return bucket['nb_docs_with_return_code_zero']['doc_count']
