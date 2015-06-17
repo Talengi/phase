@@ -218,7 +218,14 @@ class ReturnedDocsDashboardView(BaseDashboardView):
             interval='month',
             min_doc_count=0)
 
-        # For each month, select only docs with a `leader_comment_date` field
+        # Bucket those docs by category
+        search.aggs['per_month'].bucket(
+            'per_category',
+            'terms',
+            field='doc_category.raw'
+        )
+
+        # For each month, select only docs with a the return information
         search.aggs['per_month'].bucket(
             'with_return_info',
             'filter',
