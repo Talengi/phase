@@ -58,6 +58,7 @@ class BaseDashboardView(LoginRequiredMixin, TemplateView):
         buckets = self.get_buckets()
 
         context.update({
+            'dashboard_active': True,
             'headers': headers,
             'buckets': buckets,
         })
