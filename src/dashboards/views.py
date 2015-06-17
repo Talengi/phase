@@ -210,31 +210,22 @@ class ReturnedDocsDashboardView(BaseDashboardView):
         # Return only those stored fields
         search = search.fields(['document_key', 'received_date', 'review_sent_date'])
 
-        # Add dynamic fields computed on the fly
-        search.update_from_dict({
-            'script_fields': {
-                'return_delay': {
-                    'script': "doc['review_sent_date'].value - doc['review_due_date'].value"
-                }
-            }
-        })
-
-        # Group documents by month on the `received_date` field
+        # Group documents by month
         search.aggs.bucket(
             'per_month',
             'date_histogram',
-            field='review_sent_date',
+            field='outgoing_trs_sent_date',
             interval='month',
             min_doc_count=0)
 
         # For each month, select only docs with a `leader_comment_date` field
         search.aggs['per_month'].bucket(
-            'docs_with_return_information',
+            'with_return_info',
             'filter',
             filter={
                 'and': {
                     'filters': [
-                        {'exists': {'field': 'review_sent_date'}},
+                        {'exists': {'field': 'outgoing_trs_sent_date'}},
                         {'exists': {'field': 'review_due_date'}}
                     ]
                 }
@@ -247,18 +238,18 @@ class ReturnedDocsDashboardView(BaseDashboardView):
             field='doc_category.raw')
 
         # For each month, compute the raw number of late documents
-        search.aggs['per_month'].bucket(
+        search.aggs['per_month'].aggs['with_return_info'].bucket(
             'nb_docs_returned_late',
             'filter',
             filter={
                 'script': {
-                    'script': "doc['review_sent_date'].value > doc['review_due_date'].value"
+                    'script': "doc['outgoing_trs_sent_date'].value > doc['review_due_date'].value"
                 }
             }
         )
 
         # Bucket those late docs by category
-        search.aggs['per_month'].aggs['nb_docs_returned_late'].bucket(
+        search.aggs['per_month'].aggs['with_return_info'].aggs['nb_docs_returned_late'].bucket(
             'per_category',
             'terms',
             field='doc_category.raw'
@@ -308,8 +299,8 @@ class ReturnedDocsDashboardView(BaseDashboardView):
         return data['doc_count'] if data else 0
 
     def get_pc_docs_returned_late_by_gtg(self, bucket):
-        nb_late = bucket['nb_docs_returned_late']['doc_count']
-        nb_docs = bucket['docs_with_return_information']['doc_count']
+        nb_docs = bucket['with_return_info']['doc_count']
+        nb_late = bucket['with_return_info']['nb_docs_returned_late']['doc_count']
         try:
             res = 100.0 * float(nb_late) / float(nb_docs)
             res = '{:.2f}%'.format(res)
@@ -318,9 +309,8 @@ class ReturnedDocsDashboardView(BaseDashboardView):
         return res
 
     def get_pc_tr_docs_returned_late_by_gtg(self, bucket):
-        nb_docs = bucket['docs_with_return_information']['doc_count']
-
-        buckets = bucket['nb_docs_returned_late']['per_category']['buckets']
+        nb_docs = bucket['with_return_info']['doc_count']
+        buckets = bucket['with_return_info']['nb_docs_returned_late']['per_category']['buckets']
         data = next((b for b in buckets if b['key'] == 'Contractor Deliverable'), None)
         nb_late = data['doc_count'] if data else 0
 
@@ -332,9 +322,8 @@ class ReturnedDocsDashboardView(BaseDashboardView):
         return res
 
     def get_pc_vendor_docs_returned_late_by_gtg(self, bucket):
-        nb_docs = bucket['docs_with_return_information']['doc_count']
-
-        buckets = bucket['nb_docs_returned_late']['per_category']['buckets']
+        nb_docs = bucket['with_return_info']['doc_count']
+        buckets = bucket['with_return_info']['nb_docs_returned_late']['per_category']['buckets']
         data = next((b for b in buckets if b['key'] == 'Supplier Deliverable'), None)
         nb_late = data['doc_count'] if data else 0
 
