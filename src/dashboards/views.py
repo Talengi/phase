@@ -128,6 +128,20 @@ class IssuedDocsDashboardView(BaseDashboardView):
             }
         )
 
+        # Bucket docs by category
+        search.aggs['per_month'].bucket(
+            'per_category',
+            'terms',
+            field='doc_category.raw'
+        )
+
+        # Count docs with a return code of 0
+        search.aggs['per_month'].aggs['per_category'].bucket(
+            'per_return_code',
+            'terms',
+            field='return_code'
+        )
+
         res = search.execute()
         res_dict = res.to_dict()
         return res_dict
@@ -151,6 +165,13 @@ class IssuedDocsDashboardView(BaseDashboardView):
         buckets['Nb of docs reviewed by leader'] = map(self.get_nb_leader_reviewed_docs, raw_buckets)
         buckets['Nb of docs reviewed late by leader'] = map(self.get_nb_late_leader_reviewed_docs, raw_buckets)
         buckets['% of docs reviewed late by Leader'] = map(self.get_pc_late_leader_reviewed_docs, raw_buckets)
+        buckets['Nb of docs with return code 0'] = map(self.get_nb_return_code_zero, raw_buckets)
+        buckets['Nb of TR docs in RC1'] = map(self.get_nb_tr_docs_in_rc(1), raw_buckets)
+        buckets['Nb of TR docs in RC2'] = map(self.get_nb_tr_docs_in_rc(2), raw_buckets)
+        buckets['Nb of TR docs in RC3'] = map(self.get_nb_tr_docs_in_rc(3), raw_buckets)
+        buckets['Nb of vendor docs in RC1'] = map(self.get_nb_vendor_docs_in_rc(1), raw_buckets)
+        buckets['Nb of vendor docs in RC2'] = map(self.get_nb_vendor_docs_in_rc(2), raw_buckets)
+        buckets['Nb of vendor docs in RC3'] = map(self.get_nb_vendor_docs_in_rc(3), raw_buckets)
 
         return buckets
 
@@ -198,6 +219,42 @@ class IssuedDocsDashboardView(BaseDashboardView):
             res = 'ND'
         return res
 
+    def get_nb_return_code_zero(self, bucket):
+        nb = 0
+        cat_buckets = bucket['per_category']['buckets']
+        for cat_bucket in cat_buckets:
+            code_buckets = cat_bucket['per_return_code']['buckets']
+            zero_bucket = next((b for b in code_buckets if b['key'] == 0), None)
+            nb += zero_bucket['doc_count'] if zero_bucket else 0
+
+        return nb
+
+    def get_tr_bucket(self, bucket):
+        buckets = bucket['per_category']['buckets']
+        bucket = next((b for b in buckets if b['key'] == 'Contractor Deliverable'), None)
+        return bucket
+
+    def get_vendor_bucket(self, bucket):
+        buckets = bucket['per_category']['buckets']
+        bucket = next((b for b in buckets if b['key'] == 'Supplier Deliverable'), None)
+        return bucket
+
+    def get_nb_tr_docs_in_rc(self, code):
+        def do_get_nb_tr_docs_in_rc(bucket):
+            bucket = self.get_tr_bucket(bucket)
+            bucket = bucket['per_return_code']['buckets'] if bucket else []
+            bucket = next((b for b in bucket if b['key'] == code), None)
+            return bucket['doc_count'] if bucket else 0
+        return do_get_nb_tr_docs_in_rc
+
+    def get_nb_vendor_docs_in_rc(self, code):
+        def do_get_nb_vendor_docs_in_rc(bucket):
+            bucket = self.get_vendor_bucket(bucket)
+            bucket = bucket['per_return_code']['buckets'] if bucket else []
+            bucket = next((b for b in bucket if b['key'] == code), None)
+            return bucket['doc_count'] if bucket else 0
+        return do_get_nb_vendor_docs_in_rc
+
 
 class ReturnedDocsDashboardView(BaseDashboardView):
     es_document_type = 'epc2_documents.epc2deliverable'
@@ -241,8 +298,8 @@ class ReturnedDocsDashboardView(BaseDashboardView):
         # For each month, compute the raw number of late documents
         search.aggs['per_month'] \
             .aggs['per_category'] \
-            .aggs['with_return_info'].metric(
-                'nb_late_docs',
+            .aggs['with_return_info'].bucket(
+                'late_docs',
                 'filter',
                 filter={
                     'script': {
@@ -251,13 +308,25 @@ class ReturnedDocsDashboardView(BaseDashboardView):
                 }
         )
 
-        # Count docs with a return code of 0
-        search.aggs['per_month'].metric(
-            'nb_docs_with_return_code_zero',
-            'filter',
-            filter={
-                'term': {'return_code': 0}
-            })
+        # For each bucket, comptue the average overdue
+        search.aggs['per_month'] \
+            .aggs['per_category'] \
+            .aggs['with_return_info'] \
+            .aggs['late_docs'].metric(
+                'avg_overdue',
+                'avg',
+                script="doc['outgoing_trs_sent_date'].value - doc['review_due_date'].value"
+        )
+
+        # For each bucket, comptue the average overdue
+        search.aggs['per_month'] \
+            .aggs['per_category'] \
+            .aggs['with_return_info'] \
+            .aggs['late_docs'].metric(
+                'avg_review_time',
+                'avg',
+                script="doc['outgoing_trs_sent_date'].value - doc['received_date'].value"
+        )
 
         res = search.execute()
         res_dict = res.to_dict()
@@ -278,10 +347,11 @@ class ReturnedDocsDashboardView(BaseDashboardView):
         buckets['Avg nb of docs returned by day'] = map(lambda x: x['doc_count'] / 20.0, raw_buckets)
         buckets['% of docs returned late by GTG'] = map(self.get_pc_docs_returned_late_by_gtg, raw_buckets)
         buckets['% of TR docs returned late by GTG'] = map(self.get_pc_tr_docs_returned_late_by_gtg, raw_buckets)
+        buckets['Average lead time for review for TR documents'] = map(self.get_avg_tr_review_time, raw_buckets)
+        buckets['Average NB of days overdue for TR documents'] = map(self.get_avg_tr_overdue, raw_buckets)
         buckets['% of Vendor docs returned late by GTG'] = map(self.get_pc_vendor_docs_returned_late_by_gtg, raw_buckets)
-        # buckets['Average NB of days overdue for TR documents'] = map(self.get_pc_vendor_docs_returned_late_by_gtg, raw_buckets)
-
-        # buckets['Nb of docs with return code 0'] = map(self.get_nb_return_code_zero, raw_buckets)
+        buckets['Average lead time for review for vendor documents'] = map(self.get_avg_vendor_review_time, raw_buckets)
+        buckets['Average NB of days overdue for vendor documents'] = map(self.get_avg_vendor_overdue, raw_buckets)
 
         return buckets
 
@@ -313,11 +383,11 @@ class ReturnedDocsDashboardView(BaseDashboardView):
 
     def get_nb_late_tr_docs(self, bucket):
         bucket = self.get_tr_bucket(bucket)
-        return bucket['with_return_info']['nb_late_docs']['doc_count'] if bucket else 0
+        return bucket['with_return_info']['late_docs']['doc_count'] if bucket else 0
 
     def get_nb_late_vendor_docs(self, bucket):
         bucket = self.get_vendor_bucket(bucket)
-        return bucket['with_return_info']['nb_late_docs']['doc_count'] if bucket else 0
+        return bucket['with_return_info']['late_docs']['doc_count'] if bucket else 0
 
     def get_nb_late_docs(self, bucket):
         return self.get_nb_late_tr_docs(bucket) + self.get_nb_late_vendor_docs(bucket)
@@ -337,5 +407,22 @@ class ReturnedDocsDashboardView(BaseDashboardView):
         nb_late = self.get_nb_late_vendor_docs(bucket)
         return self.format_pc(nb_late, nb_docs)
 
-    def get_nb_return_code_zero(self, bucket):
-        return bucket['nb_docs_with_return_code_zero']['doc_count']
+    def get_avg_tr_review_time(self, bucket):
+        bucket = self.get_tr_bucket(bucket)
+        avg = bucket['with_return_info']['late_docs']['avg_review_time']['value'] if bucket else 0
+        return int(avg) / 86400000
+
+    def get_avg_vendor_review_time(self, bucket):
+        bucket = self.get_vendor_bucket(bucket)
+        avg = bucket['with_return_info']['late_docs']['avg_review_time']['value'] if bucket else 0
+        return int(avg) / 86400000
+
+    def get_avg_tr_overdue(self, bucket):
+        bucket = self.get_tr_bucket(bucket)
+        avg = bucket['with_return_info']['late_docs']['avg_overdue']['value'] if bucket else 0
+        return int(avg) / 86400000
+
+    def get_avg_vendor_overdue(self, bucket):
+        bucket = self.get_vendor_bucket(bucket)
+        avg = bucket['with_return_info']['late_docs']['avg_overdue']['value'] if bucket else 0
+        return int(avg) / 86400000
