@@ -18,6 +18,9 @@ class BaseDashboardView(LoginRequiredMixin, TemplateView):
     es_date_format = '%Y-%m-%dT%H:%M:%S.%fZ'
     es_document_type = None
 
+    def breadcrumb_section(self):
+        return 'Dashboards'
+
     def _fetch_raw_data(self):
         """Performs actual query to Elastic Search.
 
@@ -64,6 +67,9 @@ class BaseDashboardView(LoginRequiredMixin, TemplateView):
 
 class IssuedDocsDashboardView(BaseDashboardView):
     es_document_type = 'epc2_documents.epc2deliverable'
+
+    def breadcrumb_object(self):
+        return 'Document received from contractor'
 
     def _fetch_raw_data(self):
         search = Search(using=elastic, doc_type=self.es_document_type) \
@@ -259,6 +265,9 @@ class IssuedDocsDashboardView(BaseDashboardView):
 
 class ReturnedDocsDashboardView(BaseDashboardView):
     es_document_type = 'epc2_documents.epc2deliverable'
+
+    def breadcrumb_object(self):
+        return 'Document returned to contractor'
 
     def _fetch_raw_data(self):
         search = Search(using=elastic, doc_type=self.es_document_type) \
