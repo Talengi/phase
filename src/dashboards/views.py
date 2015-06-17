@@ -6,13 +6,14 @@ from collections import OrderedDict
 
 from django.views.generic import TemplateView
 
+from braces.views import LoginRequiredMixin
 from elasticsearch_dsl import Search
 
 from search import elastic
 from django.conf import settings
 
 
-class BaseDashboardView(TemplateView):
+class BaseDashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'dashboards/dashboard.html'
     es_date_format = '%Y-%m-%dT%H:%M:%S.%fZ'
     es_document_type = None
