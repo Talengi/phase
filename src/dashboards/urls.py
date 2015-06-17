@@ -8,10 +8,10 @@ from dashboards.views import IssuedDocsDashboardView, ReturnedDocsDashboardView
 
 urlpatterns = patterns(
     '',
-    url(r'^issued/$',
+    url(r'^received_documents/$',
         IssuedDocsDashboardView.as_view(),
         name="issued_dashboard"),
-    url(r'^returned/$',
+    url(r'^returned_documents/$',
         ReturnedDocsDashboardView.as_view(),
         name="returned_dashboard"),
 )

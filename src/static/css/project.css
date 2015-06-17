@@ -171,7 +171,7 @@ button.ui-multiselect {
 #main-table table th, #main-table table td {
     text-align: center;
 }
-#main-table table td.columntitle {
+#main-table table .columntitle {
     text-align: left;
     overflow: hidden;
     text-overflow: ellipsis;
