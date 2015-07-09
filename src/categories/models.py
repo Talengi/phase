@@ -60,8 +60,16 @@ class CategoryTemplate(models.Model):
         return self.name
 
 
+class CategoryManager(models.Manager):
+    def get_by_natural_key(self, organisation_slug, category_slug):
+        return self.get(organisation__slug=organisation_slug,
+                        category_template__slug=category_slug)
+
+
 class Category(models.Model):
     """Link between organisation / category and users and groups."""
+    objects = CategoryManager()
+
     organisation = models.ForeignKey(
         Organisation,
         related_name='categories',
