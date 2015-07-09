@@ -1,6 +1,5 @@
 [
 {
-  "pk": 1,
   "model": "categories.organisation",
   "fields": {
     "name": "ACME",
@@ -8,7 +7,6 @@
   }
 },
 {
-  "pk": 1,
   "model": "categories.categorytemplate",
   "fields": {
     "name": "Contractor deliverables",
@@ -17,7 +15,6 @@
   }
 },
 {
-  "pk": 2,
   "model": "categories.categorytemplate",
   "fields": {
     "name": "Correspondences",
@@ -26,7 +23,6 @@
   }
 },
 {
-  "pk": 3,
   "model": "categories.categorytemplate",
   "fields": {
     "name": "Minutes of meeting",
@@ -35,7 +31,6 @@
   }
 },
 {
-  "pk": 4,
   "model": "categories.categorytemplate",
   "fields": {
     "name": "Transmittals",
@@ -44,38 +39,34 @@
   }
 },
 {
-  "pk": 1,
   "model": "categories.category",
   "fields": {
-    "organisation": 1,
-    "category_template": 1,
+    "organisation": ["acme"],
+    "category_template": ["contractor-deliverables"],
     "users": [1, 2, 3]
   }
 },
 {
-  "pk": 2,
   "model": "categories.category",
   "fields": {
-    "organisation": 1,
-    "category_template": 2,
+    "organisation": ["acme"],
+    "category_template": ["correspondences"],
     "users": [1, 2, 3]
   }
 },
 {
-  "pk": 3,
   "model": "categories.category",
   "fields": {
-    "organisation": 1,
-    "category_template": 3,
+    "organisation": ["acme"],
+    "category_template": ["minutes-of-meeting"],
     "users": [1, 2, 3]
   }
 },
 {
-  "pk": 4,
   "model": "categories.category",
   "fields": {
-    "organisation": 1,
-    "category_template": 4,
+    "organisation": ["acme"],
+    "category_template": ["transmittals"],
     "users": [1, 2, 3]
   }
 }
