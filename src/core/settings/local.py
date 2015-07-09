@@ -2,7 +2,6 @@
 
 
 import warnings
-from os.path import join, normpath
 
 from base import *  # noqa
 
@@ -26,11 +25,11 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': normpath(join(DJANGO_ROOT, 'phase.db')),
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'phase',
+        'USER': 'phase',
+        'PASSWORD': 'phase',
+        'HOST': 'localhost',
         'PORT': '',
     }
 }
