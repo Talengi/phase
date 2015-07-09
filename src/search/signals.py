@@ -67,7 +67,7 @@ def on_batch_item_indexed(sender, metadata, **kwargs):
         '_index': settings.ELASTIC_INDEX,
         '_type': metadata.document.document_type(),
         '_id': metadata.document_id,
-        '_source': metadata.jsonified(),
+        '_source': metadata.to_json(),
     })
 
 

@@ -18,7 +18,7 @@ def do_batch_import(user_id, contenttype_id, document_ids):
 
     docs = document_class.objects \
         .select_related() \
-        .filter(document_id__in=document_ids) \
+        .filter(document_id__in=document_ids)
 
     ok = []
     nok = []
