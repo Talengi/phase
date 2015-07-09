@@ -4,4 +4,3 @@
 
 raven==3.2.1
 gunicorn==18.0
-psycopg2==2.5.2
