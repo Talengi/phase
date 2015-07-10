@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 import os
 
-from documents.fields import PrivateFileField
+from privatemedia.fields import PrivateFileField
 
 
 def transmittal_upload_to(trs_revision, filename):

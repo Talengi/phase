@@ -8,7 +8,7 @@ from model_utils import Choices
 
 from accounts.models import User
 from documents.models import Document
-from documents.fields import PrivateFileField
+from privatemedia.fields import PrivateFileField
 from reviews.fileutils import review_comments_file_path
 
 
