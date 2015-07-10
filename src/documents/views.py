@@ -183,7 +183,6 @@ class DocumentFormMixin(object):
     def get_forms(self):
         """Returns both the document and revision forms."""
         kwargs = self.get_form_kwargs()
-        kwargs.update({'category': self.category})
 
         document_form_class = self.get_form_class()
         document_form = document_form_class(**kwargs)
@@ -231,6 +230,11 @@ class BaseDocumentFormView(LoginRequiredMixin,
         else:
             return self.form_invalid(document_form, revision_form)
 
+    def get_form_kwargs(self):
+        kwargs = super(BaseDocumentFormView, self).get_form_kwargs()
+        kwargs.update({'category': self.category})
+        return kwargs
+
     def form_valid(self, document_form, revision_form):
         """Saves both the document and it's revision."""
         document, self.object, self.revision = save_document_forms(
@@ -271,12 +275,18 @@ class DocumentDetail(LoginRequiredMixin,
         document = self.object
 
         DocumentForm = self.get_form_class()
-        form = DocumentForm(instance=document, read_only=True)
+        form = DocumentForm(
+            instance=document,
+            category=self.category,
+            read_only=True)
 
         revisions = document.get_all_revisions()
         RevisionForm = self.get_revisionform_class()
         for revision in revisions:
-            revision.form = RevisionForm(instance=revision, read_only=True)
+            revision.form = RevisionForm(
+                instance=revision,
+                category=self.category,
+                read_only=True)
 
         context.update({
             'is_detail': True,
