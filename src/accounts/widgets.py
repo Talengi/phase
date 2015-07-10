@@ -4,26 +4,24 @@ from restapi.widgets import AutocompleteTextInput
 
 
 class BaseUserAutocomplete(AutocompleteTextInput):
-    def __init__(self, attrs=None):
-        if attrs is None:
-            attrs = {}
-        attrs.update({
+
+    def set_category(self, category):
+        self.attrs.update({
             'data-value-field': 'id',
             'data-label-field': 'name',
             'data-search-fields': '["name"]',
-            'data-url': reverse('user-list'),
-        })
-        super(BaseUserAutocomplete, self).__init__(attrs)
+            'data-url': reverse('user-list', args=[
+                category.organisation.slug,
+                category.category_template.slug])})
 
 
 class UserAutocomplete(BaseUserAutocomplete):
-    def __init__(self, attrs=None):
-        if attrs is None:
-            attrs = {}
-        attrs.update({
+
+    def set_category(self, category):
+        super(UserAutocomplete, self).set_category(category)
+        self.attrs.update({
             'data-mode': 'single',
         })
-        super(UserAutocomplete, self).__init__(attrs)
 
     def render(self, name, value, attrs=None):
         if value:
@@ -41,13 +39,11 @@ class UserAutocomplete(BaseUserAutocomplete):
 
 
 class MultipleUserAutocomplete(BaseUserAutocomplete):
-    def __init__(self, attrs=None):
-        if attrs is None:
-            attrs = {}
-        attrs.update({
+    def set_category(self, category):
+        super(MultipleUserAutocomplete, self).set_category(category)
+        self.attrs.update({
             'data-mode': 'multi',
         })
-        super(MultipleUserAutocomplete, self).__init__(attrs)
 
     def render(self, name, value, attrs=None):
         value = value or []

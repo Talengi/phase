@@ -10,12 +10,27 @@ from accounts.fields import UserChoiceField, UserMultipleChoiceField
 
 
 class ReviewFormMixin(forms.ModelForm):
-    leader = UserChoiceField(
-        label=_('Leader'),
-        required=False,
-        help_text=_('The leader is required to start the review'))
-    approver = UserChoiceField(label=_('Approver'), required=False)
-    reviewers = UserMultipleChoiceField(label=_('Reviewers'), required=False)
+    def __init__(self, *args, **kwargs):
+        super(ReviewFormMixin, self).__init__(*args, **kwargs)
+
+        # We declare those fields in __init__ because
+        # we need to pass the `category` attribute, which we
+        # only have at the form instantiation
+        self.fields['leader'] = UserChoiceField(
+            category=self.category,
+            label=_('Leader'),
+            required=False,
+            help_text=_('The leader is required to start the review'))
+
+        self.fields['approver'] = UserChoiceField(
+            category=self.category,
+            label=_('Approver'),
+            required=False)
+
+        self.fields['reviewers'] = UserMultipleChoiceField(
+            category=self.category,
+            label=_('Reviewers'),
+            required=False)
 
     def prepare_form(self, *args, **kwargs):
         if self.instance.id:

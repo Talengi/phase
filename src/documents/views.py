@@ -183,6 +183,7 @@ class DocumentFormMixin(object):
     def get_forms(self):
         """Returns both the document and revision forms."""
         kwargs = self.get_form_kwargs()
+        kwargs.update({'category': self.category})
 
         document_form_class = self.get_form_class()
         document_form = document_form_class(**kwargs)

@@ -41,6 +41,7 @@ def documentform_factory(model):
 class BaseDocumentForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.read_only = kwargs.pop('read_only', False)
+        self.category = kwargs.pop('category')
         super(BaseDocumentForm, self).__init__(*args, **kwargs)
         self.prepare_form(*args, **kwargs)
         self.helper = FormHelper()
