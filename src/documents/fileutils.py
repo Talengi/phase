@@ -1,5 +1,5 @@
-from django.core.files.storage import FileSystemStorage
-from django.conf import settings
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 
 
 def revision_file_path(revision, filename):
@@ -13,8 +13,3 @@ def revision_file_path(revision, filename):
         revision=revision.name,
         extension=filename.split('.')[-1]
     )
-
-
-# Revision documents
-private_storage = FileSystemStorage(location=settings.PRIVATE_ROOT,
-                                    base_url=settings.PRIVATE_URL)

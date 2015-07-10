@@ -1,29 +1,12 @@
-from django.db import models
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from django import forms
-from django.forms import fields
 from django.contrib.contenttypes.models import ContentType
 
-from documents.fileutils import private_storage, revision_file_path
-from documents.widgets import PhaseClearableFileInput
+from documents.fileutils import revision_file_path
 
-
-class PrivateFileField(models.FileField):
-    """Store files in a private dir."""
-    def __init__(self, *args, **kwargs):
-        kwargs.update({
-            'storage': private_storage,
-        })
-        return super(PrivateFileField, self).__init__(*args, **kwargs)
-
-    def formfield(self, **kwargs):
-        defaults = {
-            'form_class': PhaseClearableFileField,
-            'max_length': self.max_length,
-        }
-        if 'initial' in kwargs:
-            defaults['required'] = False
-        defaults.update(kwargs)
-        return super(PrivateFileField, self).formfield(**defaults)
+from privatemedia.fields import PrivateFileField
 
 
 class RevisionFileField(PrivateFileField):
@@ -34,10 +17,6 @@ class RevisionFileField(PrivateFileField):
             'upload_to': revision_file_path,
         })
         return super(RevisionFileField, self).__init__(*args, **kwargs)
-
-
-class PhaseClearableFileField(fields.FileField):
-    widget = PhaseClearableFileInput
 
 
 class MetadataTypeChoiceField(forms.ModelChoiceField):

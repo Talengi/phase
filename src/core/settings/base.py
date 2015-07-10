@@ -228,6 +228,7 @@ LOCAL_APPS = (
     'discussion',
     'transmittals',
     'dashboards',
+    'privatemedia',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
