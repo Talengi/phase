@@ -53,6 +53,14 @@ def restart_webserver():
     sudo('supervisorctl restart celery', shell=False)
 
 
+def reindex_all():
+    with cd(env.directory):
+        with prefix(env.activate):
+            reindex = 'python src/manage.py reindex_all --noinput'
+            with_production_settings = ' --settings=core.settings.production'
+            run(reindex + with_production_settings)
+
+
 def deploy(with_data=True):
     """Deploys the project against staging."""
     with cd(env.directory):
@@ -63,7 +71,6 @@ def deploy(with_data=True):
             generate = 'python src/manage.py loaddata initial_values_lists initial_documents'
             delete_index = 'python src/manage.py delete_index'
             create_index = 'python src/manage.py create_index'
-            reindex = 'python src/manage.py reindex_all --noinput'
             with_production_settings = ' --settings=core.settings.production'
             run('pip install -r requirements/production.txt')
             run(collectstatic + with_production_settings)
@@ -74,7 +81,6 @@ def deploy(with_data=True):
                 run(create_index + with_production_settings)
                 run(syncdb + with_production_settings)
                 run(generate + with_production_settings)
-                run(reindex + with_production_settings)
     restart_webserver()
 
 
