@@ -107,6 +107,7 @@ class ImportBatch(models.Model):
         return form_class
 
     def get_form(self, data=None, **kwargs):
+        kwargs.update({'category': self.category})
         return self.get_form_class()(data, **kwargs)
 
     def get_revisionform_class(self):
@@ -116,6 +117,7 @@ class ImportBatch(models.Model):
         return form_class
 
     def get_revisionform(self, data=None, **kwargs):
+        kwargs.update({'category': self.category})
         return self.get_revisionform_class()(data, **kwargs)
 
     def __iter__(self):

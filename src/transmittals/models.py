@@ -415,8 +415,10 @@ class TrsRevision(models.Model):
 
         fields, files = self.get_document_fields()
         kwargs = {
+            'category': self.category,
             'data': fields,
-            'files': files}
+            'files': files
+        }
 
         # The document was created earlier during
         # the batch import

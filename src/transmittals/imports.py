@@ -293,8 +293,9 @@ class TrsImport(object):
         }
 
         # Use document forms to create the Transmittal
-        form = TransmittalForm(data=data)
-        revision_form = TransmittalRevisionForm(data=data, files=files)
+        form = TransmittalForm(data=data, category=self.trs_category)
+        revision_form = TransmittalRevisionForm(
+            data=data, files=files, category=self.trs_category)
         doc, transmittal, revision = save_document_forms(
             form, revision_form, self.trs_category, is_indexable=False)
 
