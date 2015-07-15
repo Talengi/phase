@@ -61,26 +61,15 @@ def reindex_all():
             run(reindex + with_production_settings)
 
 
-def deploy(with_data=True):
+def deploy():
     """Deploys the project against staging."""
     with cd(env.directory):
         run('git pull')
         with prefix(env.activate):
             collectstatic = 'python src/manage.py collectstatic --noinput'
-            syncdb = 'python src/manage.py syncdb --noinput'
-            generate = 'python src/manage.py loaddata initial_values_lists initial_documents'
-            delete_index = 'python src/manage.py delete_index'
-            create_index = 'python src/manage.py create_index'
             with_production_settings = ' --settings=core.settings.production'
             run('pip install -r requirements/production.txt')
             run(collectstatic + with_production_settings)
-            if with_data:
-                run('rm src/phase.db')
-                run('rm private/* -Rf')
-                run(delete_index + with_production_settings)
-                run(create_index + with_production_settings)
-                run(syncdb + with_production_settings)
-                run(generate + with_production_settings)
     restart_webserver()
 
 
