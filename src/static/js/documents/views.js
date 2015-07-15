@@ -339,7 +339,7 @@ var Phase = Phase || {};
 
             if (field.length !== 0 && field.attr('type') !== 'hidden') {
                 field.val(value);
-                if (field.is('select')) {
+                if (value !== '') {
                     field.siblings('span').css('display', 'inline-block');
                 }
             }
@@ -381,8 +381,8 @@ var Phase = Phase || {};
         },
         removeFilter: function(event) {
             var span = $(event.currentTarget);
-            var select = span.siblings('select');
-            var name = select.attr('name');
+            var input = span.siblings('input,select');
+            var name = input.attr('name');
             this.model.unset(name);
         },
         /**
