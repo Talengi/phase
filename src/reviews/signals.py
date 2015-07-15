@@ -12,7 +12,7 @@ from reviews.models import Review
 review_canceled = Signal()
 pre_batch_review = Signal()
 post_batch_review = Signal(providing_args=['user_id'])
-batch_item_indexed = Signal(providing_args=['metadata'])
+batch_item_indexed = Signal(providing_args=['document_type, document_id, json'])
 
 
 def delete_review_count_cache(sender, instance, **kwargs):

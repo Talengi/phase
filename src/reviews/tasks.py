@@ -38,7 +38,11 @@ def do_batch_import(user_id, contenttype_id, document_ids):
     for doc in docs:
         if doc.latest_revision.can_be_reviewed:
             doc.latest_revision.start_review()
-            batch_item_indexed.send(sender=do_batch_import, metadata=doc)
+            batch_item_indexed.send(
+                sender=do_batch_import,
+                document_type=doc.document.document_type(),
+                document_id=doc.id,
+                json=doc.latest_revision.to_json())
             ok.append(doc)
         else:
             nok.append(doc)
