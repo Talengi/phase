@@ -3,10 +3,12 @@
 from __future__ import unicode_literals
 
 from django.test import TestCase
+from django.core.cache import cache
 
 from categories.factories import CategoryFactory
 from documents.factories import DocumentFactory
 from accounts.factories import UserFactory
+from discussion.utils import get_discussion_length
 from discussion.factories import NoteFactory
 from discussion.models import Note
 
@@ -80,6 +82,60 @@ class NoteTests(TestCase):
     def test_parse_incomplete_mention(self):
         note = self.create_note('bal bla bla bla bla @use bla bla')
         self.assertEqual(note.parse_mentions(), [])
+
+
+class CacheTests(TestCase):
+    def setUp(self):
+        self.category = CategoryFactory()
+        self.user1 = UserFactory(
+            email='testadmin@phase.fr',
+            password='pass',
+            is_superuser=True,
+            category=self.category
+        )
+        self.client.login(email=self.user1.email, password='pass')
+        self.doc = DocumentFactory(
+            revision={
+                'reviewers': [self.user1],
+                'leader': self.user1,
+                'approver': self.user1,
+            }
+        )
+        self.revision = self.doc.latest_revision
+        self.revision.start_review()
+
+        cache.clear()
+
+    def test_empty_discussion(self):
+        self.assertEqual(get_discussion_length(self.revision), 0)
+
+    def test_new_remarks_update_cache(self):
+        for _ in xrange(10):
+            NoteFactory(
+                author=self.user1,
+                document=self.doc,
+                revision=self.revision.revision,
+            )
+        self.assertEqual(get_discussion_length(self.revision), 10)
+
+    def test_delete_remarks_update_cache(self):
+        note = NoteFactory(
+            author=self.user1,
+            document=self.doc,
+            revision=self.revision.revision)
+        self.assertEqual(get_discussion_length(self.revision), 1)
+        note.delete()
+        self.assertEqual(get_discussion_length(self.revision), 0)
+
+    def test_cancel_review_updates_cache(self):
+        for _ in xrange(10):
+            NoteFactory(
+                author=self.user1,
+                document=self.doc,
+                revision=self.revision.revision,
+            )
+        self.revision.cancel_review()
+        self.assertEqual(get_discussion_length(self.revision), 0)
 
 
 class ReviewTests(TestCase):

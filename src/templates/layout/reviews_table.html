@@ -1,4 +1,4 @@
-{% load review_form humanize %}
+{% load review_form discussion humanize %}
 <table class="table table-bordered reviewers">
     {% for review in reviews %}
     <tr class="{{ review.role }}">
@@ -30,6 +30,7 @@
             data-apiurl="{% url 'note-list' document.document_key revision.revision %}"
             href="#discussion-modal">
         {{ _('Remarks') }}
+        {% discussion_length_badge revision %}
     </button>&nbsp;
 
     <a href="{% url 'download_review_comments' document.document_key revision.revision %}"

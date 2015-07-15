@@ -12,7 +12,8 @@ fuzzy_date = FuzzyDate(datetime.date(2012, 1, 1))
 
 
 class DocumentFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = Document
+    class Meta:
+        model = Document
 
     document_key = factory.Sequence(lambda n: 'document-{0}'.format(n))
     current_revision = 1

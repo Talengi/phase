@@ -5,7 +5,8 @@ from .models import User
 
 
 class UserFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = User
+    class Meta:
+        model = User
 
     email = factory.Sequence(lambda n: 'test{0}@phase.fr'.format(n))
     username = factory.Sequence(lambda n: 'test{0}'.format(n))

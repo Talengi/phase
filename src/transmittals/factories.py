@@ -9,11 +9,13 @@ from transmittals.models import Transmittal, TransmittalRevision, TrsRevision
 
 
 class TransmittalRevisionFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = TransmittalRevision
+    class Meta:
+        model = TransmittalRevision
 
 
 class TransmittalFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = Transmittal
+    class Meta:
+        model = Transmittal
 
     contractor = 'test'
     tobechecked_dir = '/tmp/test_ctr_clt/tobechecked/'
@@ -33,7 +35,8 @@ class TransmittalFactory(factory.DjangoModelFactory):
 
 
 class TrsRevisionFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = TrsRevision
+    class Meta:
+        model = TrsRevision
 
     transmittal = factory.SubFactory(TransmittalFactory)
     document_key = 'FAC10005-CTR-000-EXP-LAY-4891'
