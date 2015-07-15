@@ -43,6 +43,17 @@ Let's install it::
     make install
 
 
+Memcache installation
+---------------------
+
+Phase uses Memcached as a cache tool. To install pylibmc, the python memcached
+backend, you need to install the libs first.
+
+::
+
+    aptitude install memcached libmemcached-dev
+
+
 Database creation
 -----------------
 
