@@ -4,7 +4,8 @@ from .models import ValuesList, ListEntry
 
 
 class ValuesListFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = ValuesList
+    class Meta:
+        model = ValuesList
 
     index = factory.Sequence(lambda n: 'list_{0}'.format(n))
     name = factory.Sequence(lambda n: 'List {0}'.format(n))
@@ -26,7 +27,8 @@ class ValuesListFactory(factory.DjangoModelFactory):
 
 
 class ListEntryFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = ListEntry
+    class Meta:
+        model = ListEntry
 
     values_list = factory.SubFactory(ValuesListFactory)
     index = factory.Sequence(lambda n: 'index_{0}'.format(n))

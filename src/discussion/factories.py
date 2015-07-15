@@ -3,11 +3,13 @@
 from __future__ import unicode_literals
 
 import factory
+from factory import fuzzy
 
 from discussion.models import Note
 
 
 class NoteFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = Note
+    class Meta:
+        model = Note
 
-    body = factory.fuzzy.FuzzyText()
+    body = fuzzy.FuzzyText()

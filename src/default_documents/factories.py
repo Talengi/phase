@@ -125,12 +125,16 @@ DOC_TYPE_CHOICES = (
 
 
 class MetadataFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = DemoMetadata
+    class Meta:
+        model = DemoMetadata
+
     title = fuzzy.FuzzyChoice(TITLES)
 
 
 class MetadataRevisionFactory(factory.DjangoModelFactory):
-    FACTORY_FOR = DemoMetadataRevision
+    class Meta:
+        model = DemoMetadataRevision
+
     docclass = 1
     revision = factory.sequence(lambda n: n + 1)
 
@@ -147,7 +151,9 @@ class MetadataRevisionFactory(factory.DjangoModelFactory):
 
 
 class ContractorDeliverableFactory(MetadataFactory):
-    FACTORY_FOR = ContractorDeliverable
+    class Meta:
+        model = ContractorDeliverable
+
     contract_number = fuzzy.FuzzyChoice(CONTRACT_NB_CHOICES)
     originator = 'CTR'
     unit = '000'
@@ -157,4 +163,5 @@ class ContractorDeliverableFactory(MetadataFactory):
 
 
 class ContractorDeliverableRevisionFactory(MetadataRevisionFactory):
-    FACTORY_FOR = ContractorDeliverableRevision
+    class Meta:
+        model = ContractorDeliverableRevision
