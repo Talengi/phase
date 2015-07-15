@@ -6,7 +6,7 @@ var Phase = Phase || {};
     Phase.Models = Phase.Models || {};
 
     Phase.Models.Document = Backbone.Model.extend({
-        idAttribute: 'pk'
+        idAttribute: 'document_pk'
     });
 
     /**
