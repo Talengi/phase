@@ -232,6 +232,12 @@ class BaseDocumentFormView(LoginRequiredMixin,
 
     def get_form_kwargs(self):
         kwargs = super(BaseDocumentFormView, self).get_form_kwargs()
+
+        # If category is not set, the "get_queryset" method was not called
+        # TODO clean this
+        if not hasattr(self, 'category'):
+            _qs = self.get_queryset()  # noqa
+
         kwargs.update({'category': self.category})
         return kwargs
 
