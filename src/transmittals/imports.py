@@ -433,12 +433,18 @@ class TrsImportLine(object):
         metadata = self.get_metadata()
 
         MetadataForm = self.get_metadata_form_class()
-        metadata_form = MetadataForm(self.csv_data, instance=metadata)
+        metadata_form = MetadataForm(
+            self.csv_data,
+            instance=metadata,
+            category=self.trs_import.doc_category)
 
         revision_num = self.csv_data['revision']
         revision = metadata.get_revision(revision_num) if metadata else None
 
         RevisionForm = self.get_revision_form_class()
-        revision_form = RevisionForm(self.csv_data, instance=revision)
+        revision_form = RevisionForm(
+            self.csv_data,
+            instance=revision,
+            category=self.trs_import.doc_category)
 
         return metadata_form, revision_form
