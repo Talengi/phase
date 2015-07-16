@@ -88,12 +88,7 @@ class DocumentListMixin(object):
 
         DocumentClass = self.category.category_template.metadata_model.model_class()
         qs = DocumentClass.objects \
-            .select_related(
-                'latest_revision',
-                'document',
-                'document__category',
-                'document__category__category_template',
-                'document__category__organisation') \
+            .select_related() \
             .filter(document__category=self.category)
 
         return qs
