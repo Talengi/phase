@@ -473,6 +473,14 @@ class DocumentRevise(DocumentEdit):
 
         return HttpResponseRedirect(self.get_success_url())
 
+    def get_context_data(self, **kwargs):
+        context = super(DocumentRevise, self).get_context_data(**kwargs)
+        # Add a context var to make the difference with creation view
+        context.update({
+            'is_revise': True,
+        })
+        return context
+
 
 class DocumentDownload(BaseDocumentList):
 

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load pipeline crispy_forms_tags %}
+{% load pipeline crispy_forms_tags i18n %}
 
 {% block extra_css %}
     {% stylesheet "detail" %}
@@ -14,6 +14,15 @@
         {% if revision.is_under_review %}
             <p class="alert alert-warning">
                 {{ _('You are trying to update a document that is under review. Please handle with care.') }}
+            </p>
+        {% endif %}
+
+        {% if is_edit and not is_revise %}
+            <p class="alert alert-info">
+            {% blocktrans with document_key=document.document_key revision=revision.name %}
+                You are editing rev <strong>{{ revision }}</strong> of the
+                document <strong>{{ document_key }}</strong>.
+            {% endblocktrans %}
             </p>
         {% endif %}
 
