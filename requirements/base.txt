@@ -19,3 +19,4 @@ django-zipview==1.0.0
 elasticsearch==1.5.0
 elasticsearch-dsl==0.0.4
 pylibmc==1.5.0
+librabbitmq==1.6.1
