@@ -20,7 +20,7 @@ def update_index(sender, instance, **kwargs):
     # Thus, we MUST not index the document on the first save, since the
     # metadata and revision does not exist yet
     if not created and instance.is_indexable:
-        index_document.delay(instance.pk)
+        index_document(instance.pk)
 
 
 def remove_from_index(sender, instance, **kwargs):

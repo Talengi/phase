@@ -38,7 +38,7 @@ class SignalTests(TestCase):
         CategoryFactory()
         self.assertEqual(index_mock.call_count, 1)
 
-    @patch('search.signals.index_document.delay')
+    @patch('search.signals.index_document')
     def test_created_document_is_indexed(self, index_mock):
         DocumentFactory(
             category=self.category,
@@ -46,7 +46,7 @@ class SignalTests(TestCase):
         )
         self.assertEqual(index_mock.call_count, 1)
 
-    @patch('search.signals.index_document.delay')
+    @patch('search.signals.index_document')
     @patch('search.signals.unindex_document.delay')
     def test_deleted_document_is_unindexed(self, index_mock, unindex_mock):
         doc = DocumentFactory(
@@ -56,7 +56,7 @@ class SignalTests(TestCase):
         doc.delete()
         self.assertEqual(unindex_mock.call_count, 1)
 
-    @patch('search.signals.index_document.delay')
+    @patch('search.signals.index_document')
     def test_updated_document_is_indexed(self, index_mock):
         doc = DocumentFactory(
             category=self.category,
@@ -66,7 +66,7 @@ class SignalTests(TestCase):
         doc.save()
         self.assertEqual(index_mock.call_count, 2)
 
-    @patch('search.signals.index_document.delay')
+    @patch('search.signals.index_document')
     def test_revised_document_is_indexed(self, index_mock):
         doc = DocumentFactory(
             category=self.category,
