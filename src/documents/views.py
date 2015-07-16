@@ -88,12 +88,7 @@ class DocumentListMixin(object):
 
         DocumentClass = self.category.category_template.metadata_model.model_class()
         qs = DocumentClass.objects \
-            .select_related(
-                'latest_revision',
-                'document',
-                'document__category',
-                'document__category__category_template',
-                'document__category__organisation') \
+            .select_related() \
             .filter(document__category=self.category)
 
         return qs
@@ -446,18 +441,17 @@ class DocumentRevise(DocumentEdit):
     def get_forms(self):
         """Returns both the document and revision forms.
 
-        When we create a new revision, all the revision form
-        fields must be empty.
+        We went the revision fields to be blank, so we need to get rid of
+        default values.
+
+        We also want to keep the previous' revision distribution list.
 
         """
         document_form, revision_form = super(DocumentRevise, self).get_forms()
 
-        # Let's take the complete field list, and build
-        # a dict of empty strings from it.
-        fields = revision_form.fields.keys()
-        fields.remove('created_on')
-        initial_data = dict(map(lambda x: (x, None), fields))
-        revision_form.initial = initial_data
+        latest_revision = self.object.latest_revision
+        initial = latest_revision.get_new_revision_initial(revision_form)
+        revision_form.initial = initial
 
         return document_form, revision_form
 

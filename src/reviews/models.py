@@ -358,3 +358,13 @@ class ReviewMixin(models.Model):
 
     def is_reviewer(self, user):
         return user in self.reviewers.all()
+
+    def get_new_revision_initial(self, form):
+        initial = super(ReviewMixin, self).get_new_revision_initial(form)
+        initial.update({
+            'leader': self.leader_id,
+            'approver': self.approver_id,
+            'reviewers': self.reviewers.values_list('id', flat=True),
+        })
+
+        return initial

@@ -386,3 +386,16 @@ class MetadataRevision(models.Model):
             'is_latest_revision': document.current_revision == self.revision,
         })
         return fields_infos
+
+    def get_new_revision_initial(self, form):
+        """Gets the initial data that must be passed to the new revision form.
+
+        We want all the fields to be blank, so we need to get rid of default
+        values.
+
+        """
+        fields = form.fields.keys()
+        fields.remove('created_on')
+        initial_data = dict(map(lambda x: (x, None), fields))
+
+        return initial_data
