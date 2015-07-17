@@ -387,6 +387,16 @@ class MetadataRevision(models.Model):
         })
         return fields_infos
 
+    def get_initial_ignored_fields(self):
+        """New revision initial data that must stay default."""
+        fields_to_ignore = ('created_on', 'status', 'native_file', 'pdf_file')
+        return fields_to_ignore
+
+    def get_initial_empty(self):
+        """New revision initial data that must be empty."""
+        empty_fields = ('revision_date', 'status', 'final_revision')
+        return empty_fields
+
     def get_new_revision_initial(self, form):
         """Gets the initial data that must be passed to the new revision form.
 
@@ -394,8 +404,16 @@ class MetadataRevision(models.Model):
         values.
 
         """
+        # Build an array of initial data from current fields
         fields = form.fields.keys()
-        fields.remove('created_on')
         initial_data = dict(map(lambda x: (x, getattr(self, x, None)), fields))
+
+        initial_ignored = self.get_initial_ignored_fields()
+        for field in initial_ignored:
+            del initial_data[field]
+
+        initial_empty = self.get_initial_empty()
+        for field in initial_empty:
+            initial_data[field] = None
 
         return initial_data
