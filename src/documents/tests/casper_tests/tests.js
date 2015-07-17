@@ -297,8 +297,8 @@ casper.test.begin('Searching updates the url', 0, function suite(test) {
 
     casper.then(function() {
         casper.fill('#search-sidebar form', {
-            'search_terms': 'toto',
-            'leader': 1,
+            'status': 'FIN',
+            'search_terms': 'toto'
         });
         casper.sendKeys('#id_search_terms', casper.page.event.key.Enter, {keepFocus: true});
         casper.wait(300);
@@ -306,7 +306,7 @@ casper.test.begin('Searching updates the url', 0, function suite(test) {
 
     casper.then(function() {
         test.assertUrlMatches(/search_terms=toto/);
-        test.assertUrlMatches(/leader=1/);
+        test.assertUrlMatches(/status=FIN/);
     });
 
     casper.run(function() {
@@ -315,9 +315,9 @@ casper.test.begin('Searching updates the url', 0, function suite(test) {
 });
 
 casper.test.begin('Search queries can be bookmarked', 0, function suite(test) {
-    casper.start(document_list_url + '?search_terms=gloubi&leader=2', function() {
+    casper.start(document_list_url + '?search_terms=gloubi&status=ASB', function() {
         test.assertField('search_terms', 'gloubi');
-        test.assertField('leader', '2');
+        test.assertField('status', 'ASB');
         test.assertVisible('div.sidebar-offcanvas');
     });
 
