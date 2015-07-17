@@ -54,16 +54,6 @@ class ReviewMixinTests(TestCase):
 
         self.assertFalse(revision.can_be_reviewed)
 
-    def test_doc_without_received_date_cannot_be_reviewed(self):
-        doc = DocumentFactory(category=self.category)
-        revision = doc.latest_revision
-        revision.leader = self.user
-        revision.approver = self.user
-        revision.reviewers = [self.user]
-        revision.save()
-
-        self.assertFalse(revision.can_be_reviewed)
-
     def test_doc_with_leader_can_be_reviewed(self):
         revision = self.create_leader_only_document()
 
