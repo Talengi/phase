@@ -91,6 +91,7 @@ class ProcessTransmittalTests(TestCase):
         data = {
             'transmittal': self.transmittal,
             'document': self.document,
+            'category': self.category,
             'title': 'Cause & Effect Chart',
             'contract_number': 'FAC10005',
             'originator': 'CTR',
@@ -102,6 +103,7 @@ class ProcessTransmittalTests(TestCase):
             'revision': 1,
             'status': 'SPD',
             'pdf_file': SimpleUploadedFile(pdf_doc, sample_path + pdf_doc),
+            'created_on': '2015-10-10',
         }
         TrsRevisionFactory(**data)
 

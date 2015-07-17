@@ -145,7 +145,7 @@ class Document(models.Model):
         return u'%02d' % self.current_revision
 
     def to_json(self):
-        return self.get_latest_revision.to_json()
+        return self.get_latest_revision().to_json()
 
     def document_type(self):
         return self.category.document_type()
@@ -378,12 +378,12 @@ class MetadataRevision(models.Model):
 
         fields_infos = dict(fields)
         fields_infos.update({
-            'url': document.get_absolute_url(),
-            'document_pk': document.pk,
-            'metadata_pk': metadata.pk,
-            'pk': self.pk,
-            'revision': self.revision,
-            'is_latest_revision': document.current_revision == self.revision,
+            u'url': document.get_absolute_url(),
+            u'document_pk': document.pk,
+            u'metadata_pk': metadata.pk,
+            u'pk': self.pk,
+            u'revision': self.revision,
+            u'is_latest_revision': document.current_revision == self.revision,
         })
         return fields_infos
 

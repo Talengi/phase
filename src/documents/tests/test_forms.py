@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import os
 from os.path import join
 
@@ -66,6 +69,8 @@ class DocumentCreateTest(TestCase):
                     'native_file': pdf_file,
                     'pdf_file': native_file,
                     'docclass': 1,
+                    'created_on': '2015-10-10',
+                    'received_date': '2015-10-10',
                 })
                 self.assertEqual(r.status_code, 200)
                 self.assertEqual(r.context['revision_form'].errors, {
@@ -98,6 +103,8 @@ class DocumentCreateTest(TestCase):
         c.post(self.create_url, {
             'title': u'a title',
             'docclass': 1,
+            'created_on': '2015-10-10',
+            'received_date': '2015-10-10',
         }, follow=True)
         doc = Document.objects.all().order_by('-id')[0]
         self.assertEqual(doc.document_key, 'a-title')
@@ -106,6 +113,8 @@ class DocumentCreateTest(TestCase):
             'title': u'another title',
             'document_key': u'gloubiboulga',
             'docclass': 1,
+            'created_on': '2015-10-10',
+            'received_date': '2015-10-10',
         }, follow=True)
         doc = Document.objects.all().order_by('-id')[0]
         self.assertEqual(doc.document_key, 'gloubiboulga')
@@ -141,6 +150,8 @@ class DocumentCreateTest(TestCase):
         r = c.post(self.create_url, {
             'title': u'a title',
             'docclass': 1,
+            'created_on': '2015-10-10',
+            'received_date': '2015-10-10',
             'save-create': None,
         }, follow=True)
         self.assertEqual(
@@ -153,6 +164,8 @@ class DocumentCreateTest(TestCase):
         r = c.post(self.create_url, {
             'title': u'another title',
             'docclass': 1,
+            'created_on': '2015-10-10',
+            'received_date': '2015-10-10',
         }, follow=True)
         self.assertEqual(
             r.redirect_chain,
@@ -189,6 +202,8 @@ class DocumentCreateTest(TestCase):
             'document_key': 'FAC09001-FWF-000-HSE-REP-0006',
             'title': u'HAZOP report',
             'docclass': 1,
+            'created_on': '2015-10-10',
+            'received_date': '2015-10-10',
             'related_documents': [doc.pk for doc in related]
         })
         document = Document.objects.get(document_key='FAC09001-FWF-000-HSE-REP-0006')
@@ -289,6 +304,8 @@ class DocumentEditTest(TestCase):
             'document_key': doc.document_key,
             'title': u'a new title',
             'docclass': 1,
+            'created_on': '2015-10-10',
+            'received_date': '2015-10-10',
             'save-view': 'View',
         }, follow=True)
         self.assertEqual(
@@ -302,6 +319,8 @@ class DocumentEditTest(TestCase):
             'document_key': doc.document_key,
             'title': u'a new new title',
             'docclass': 1,
+            'created_on': '2015-10-10',
+            'received_date': '2015-10-10',
         }, follow=True)
         self.assertEqual(
             r.redirect_chain,
@@ -363,6 +382,9 @@ class DocumentReviseTest(TestCase):
             'title': document.metadata.title,
             'status': 'SPD',
             'docclass': 1,
+            'created_on': '2015-10-10',
+            'revision_date': '2015-10-10',
+            'received_date': '2015-10-10',
         }, follow=True)
         self.assertEqual(res.status_code, 200)
         self.assertContains(res, 'You created revision 02')

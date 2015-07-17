@@ -11,7 +11,8 @@ class ContractorDeliverableTests(TestCase):
         """Tests that a document number is generated regularly."""
         document = DocumentFactory()
         revision = ContractorDeliverableRevision.objects.create(
-            document=document
+            document=document,
+            received_date='2015-10-10',
         )
         metadata = ContractorDeliverable.objects.create(
             document=document,

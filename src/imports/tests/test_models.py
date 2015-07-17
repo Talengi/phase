@@ -37,12 +37,14 @@ class ImportTests(TestCase):
                 'title': 'doc-toto',
                 'status': 'STD',
                 'docclass': '1',
+                'received_date': '2015-10-10',
             },
             {
                 'document_key': 'tata',
                 'title': 'doc-tata',
                 'status': 'FIN',
                 'docclass': '2',
+                'received_date': '2015-10-10',
             }
         ])
 
@@ -52,6 +54,8 @@ class ImportTests(TestCase):
             'title': 'doc-toto',
             'status': 'STD',
             'docclass': '1',
+            'created_on': '2015-10-10',
+            'received_date': '2015-10-10',
         }
         imp = Import(batch=self.batch, data=data)
         imp.do_import(line=1)
@@ -80,6 +84,8 @@ class ImportTests(TestCase):
             'title': 'doc-toto',
             'status': 'STD',
             'docclass': '1',
+            'created_on': '2015-10-10',
+            'received_date': '2015-10-10',
         }
         imp = Import(batch=self.batch, data=data)
         imp.do_import(line=1)
@@ -95,6 +101,8 @@ class ImportTests(TestCase):
             'title': 'doc-toto',
             'status': 'IDC',
             'docclass': '2',
+            'created_on': '2015-10-10',
+            'received_date': '2015-10-10',
         }
         imp = Import(batch=self.batch, data=data)
         imp.do_import(line=2)
@@ -105,6 +113,8 @@ class ImportTests(TestCase):
             'title': 'doc-toto',
             'status': 'IFA',
             'docclass': '3',
+            'created_on': '2015-10-10',
+            'received_date': '2015-10-10',
         }
         imp = Import(batch=self.batch, data=data)
         imp.do_import(line=2)
@@ -120,6 +130,8 @@ class ImportTests(TestCase):
             'title': 'doc-toto',
             'status': 'STD',
             'docclass': '1',
+            'created_on': '2015-10-10',
+            'received_date': '2015-10-10',
         }
         imp = Import(batch=self.batch, data=data)
         imp.do_import(line=1)
@@ -130,6 +142,8 @@ class ImportTests(TestCase):
             'title': 'doc-tata',
             'status': 'IDC',
             'docclass': '1',
+            'created_on': '2015-10-10',
+            'received_date': '2015-10-10',
         }
         imp = Import(batch=self.batch, data=data)
         imp.do_import(line=2)
@@ -144,6 +158,8 @@ class ImportTests(TestCase):
             'title': 'doc-toto',
             'status': 'STD',
             'docclass': '1',
+            'created_on': '2015-10-10',
+            'received_date': '2015-10-10',
         }
         imp = Import(batch=self.batch, data=data)
         imp.do_import(line=1)
@@ -155,6 +171,8 @@ class ImportTests(TestCase):
             'revision': '0',
             'status': 'IDC',
             'docclass': '2',
+            'created_on': '2015-10-10',
+            'received_date': '2015-10-10',
         }
         imp = Import(batch=self.batch, data=data)
         imp.do_import(line=2)
@@ -163,32 +181,6 @@ class ImportTests(TestCase):
         doc = Document.objects.get(document_key='toto')
         self.assertEqual(doc.current_revision, 0)
         self.assertEqual(doc.latest_revision.docclass, 2)
-
-    def test_import_revision_document_under_review(self):
-        """Documents under review cannot be revised"""
-        doc = DocumentFactory(
-            document_key='toto',
-            category=self.category,
-            revision={
-                'reviewers': [self.user],
-                'leader': self.user,
-                'approver': self.user,
-            }
-        )
-        doc.latest_revision.start_review()
-        self.assertTrue(doc.latest_revision.is_under_review())
-
-        data = {
-            'document_key': 'toto',
-            'title': 'New title',
-            'status': 'IDC',
-            'docclass': '1',
-        }
-        imp = Import(batch=self.batch, data=data)
-        imp.do_import(line=2)
-        imp.save()
-
-        self.assertEqual(imp.status, 'error')
 
 
 class ExcelTests(TestCase):

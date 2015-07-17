@@ -1,6 +1,7 @@
 var casper = casper || {};
 var phantom = phantom || {};
 var document_list_url = casper.cli.options['url'];
+var slug = casper.cli.options['slug'];
 
 function inject_cookies() {
     var m = casper.cli.options['url-base'].match(/https?:\/\/([^:]+)(:\d+)?\//);
@@ -27,8 +28,8 @@ casper.test.begin('Bookmarks are loaded upon page load', 0, function suite(test)
 
     casper.then(function() {
         var select = casper.getHTML('select#id_bookmark');
-        test.assertMatch(select, /value="\/organisation_2\/category_5\/\?search_terms=hazop"/);
-        test.assertMatch(select, /value="\/organisation_2\/category_5\/\?sort_by=current_revision"/);
+        test.assertMatch(select, /search_terms=hazop/);
+        test.assertMatch(select, /sort_by=current_revision/);
     });
 
     casper.run(function() {
@@ -86,7 +87,7 @@ casper.test.begin('The bookmark is unselected when the search is refined', 0, fu
     });
 
     casper.then(function() {
-        test.assertField('bookmark', '/organisation_2/category_5/?search_terms=hazop');
+        test.assertField('bookmark', slug + '?search_terms=hazop');
     });
 
     casper.then(function() {

@@ -22,6 +22,7 @@
     </div>
 </div>
 
+{% if latest_revision.is_under_review and perms.documents.can_control_document %}
 <div class="modal fade" id="cancel-review-modal" tabindex="-1" role="dialog" aria-labelledby="cancel-review-modal-label" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -44,6 +45,7 @@
         </div>
     </div>
 </div>
+{% endif %}
 
 <div class="modal fade" id="delete-document-modal" tabindex="-1" role="dialog" aria-labelledby="delete-document-modal-label" aria-hidden="true">
     <div class="modal-dialog">

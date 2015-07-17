@@ -6,7 +6,7 @@ from categories.factories import CategoryFactory
 from documents.factories import DocumentFactory
 
 
-review_button = '<button class="btn btn-warning" type="submit">Start review</button>'
+review_button = '<a href="#" class="dropdown-submit">Start review</a>'
 
 
 class DocumentDetailTests(TestCase):

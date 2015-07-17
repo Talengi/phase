@@ -72,7 +72,8 @@ class BaseTransmittalDiffViewTests(TestCase):
             'document': doc,
             'document_key': doc.document_key,
             'title': doc.title,
-            'is_new_revision': False
+            'is_new_revision': False,
+            'category': self.category,
         }
         arguments.update(kwargs)
 
@@ -133,20 +134,18 @@ class TrsRevisionDiffViewTests(BaseTransmittalDiffViewTests):
         trs_revision = self.trs_revisions[0]
         trs_revision.title = 'New title yeah!'
         trs_revision.save()
-        revision = self.doc.metadata.get_revision(trs_revision.revision)
 
         res = self.client.get(trs_revision.get_absolute_url())
-        self.assertContains(res, escape(revision.title()))
+        self.assertContains(res, escape(self.doc.title))
         self.assertContains(res, trs_revision.title)
 
     def test_diff_with_single_new_revision(self):
         trs_revision = self.trs_revisions[1]
         trs_revision.title = 'New title yeah!'
         trs_revision.save()
-        revision = self.doc.metadata.latest_revision
 
         res = self.client.get(trs_revision.get_absolute_url())
-        self.assertContains(res, escape(revision.title()))
+        self.assertContains(res, escape((self.doc.title)))
         self.assertContains(res, trs_revision.title)
 
     def test_diff_with_new_revisions(self):

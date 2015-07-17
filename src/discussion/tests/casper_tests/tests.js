@@ -27,7 +27,7 @@ casper.test.begin('The remark button displays the message count', 0, function su
     });
 
     casper.then(function() {
-        test.assertSelectorHasText('#remarks-button', '10');
+        test.assertSelectorHasText('.remarks-button', '10');
     });
 
     casper.run(function() {
@@ -43,7 +43,7 @@ casper.test.begin('Discussion is loaded upon page load', 0, function suite(test)
     });
 
     casper.then(function() {
-        casper.click('button#remarks-button');
+        casper.click('button.remarks-button');
         casper.wait(500);
     });
 
@@ -60,12 +60,12 @@ casper.test.begin('Discussion is loaded upon page load', 0, function suite(test)
 casper.test.begin('Submitting a comment adds it to the list', 0, function suite(test) {
     casper.start(review_url, function() {
         casper.viewport(1024, 768);
-        casper.click('button#remarks-button');
+        casper.click('button.remarks-button');
         casper.wait(500);
     });
 
     casper.then(function() {
-        casper.fill('#discussion-form', {
+        casper.fill('#discussion-form form', {
             'body': 'This is a new message.'
         }, true);
         casper.wait(500);
@@ -84,7 +84,7 @@ casper.test.begin('Submitting a comment adds it to the list', 0, function suite(
 casper.test.begin('Clicking on edit button shows the edit form', 0, function suite(test) {
     casper.start(review_url, function() {
         casper.viewport(1024, 768);
-        casper.click('button#remarks-button');
+        casper.click('button.remarks-button');
         casper.wait(500);
     });
 
