@@ -258,6 +258,9 @@ class TrsRevision(models.Model):
     received_date = models.DateField(
         _('Received date'),
         null=True, blank=True)
+    review_start_date = models.DateField(
+        _('Received date'),
+        null=True, blank=True)
     created_on = models.DateField(
         _('Created on'),
         null=True, blank=True)
@@ -389,11 +392,7 @@ class TrsRevision(models.Model):
             self.document_key, self.revision])
 
     def get_document_fields(self):
-        """Return a dict of fields that will be passed to the document form.
-
-        For now, this list is fixed.
-
-        """
+        """Return a dict of fields that will be passed to the document form."""
         columns = self.category.get_transmittal_columns()
         fields = columns.values()
         fields_dict = dict([(field, getattr(self, field)) for field in fields])
