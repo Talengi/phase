@@ -176,7 +176,8 @@ class ContractorDeliverable(Metadata):
             'Class': 'docclass',
             'Revision': 'revision',
             'Status': 'status',
-            'Received Date': 'received_date'
+            'Received Date': 'received_date',
+            'Created': 'created_on',
         }
 
     class Meta:
@@ -576,7 +577,8 @@ class DemoMetadata(Metadata):
             'Class': 'docclass',
             'Revision': 'revision',
             'Status': 'status',
-            'Received Date': 'revision_date'
+            'Received Date': 'revision_date',
+            'Created': 'created_on',
         }
 
     def natural_key(self):

@@ -2,6 +2,8 @@
 
 from __future__ import unicode_literals
 
+import datetime
+
 import factory
 
 from documents.factories import DocumentFactory
@@ -11,6 +13,8 @@ from transmittals.models import Transmittal, TransmittalRevision, TrsRevision
 class TransmittalRevisionFactory(factory.DjangoModelFactory):
     class Meta:
         model = TransmittalRevision
+
+    received_date = datetime.date.today()
 
 
 class TransmittalFactory(factory.DjangoModelFactory):
@@ -43,3 +47,4 @@ class TrsRevisionFactory(factory.DjangoModelFactory):
     title = factory.Sequence(lambda n: 'Trs Revision {0:05}'.format(n))
     revision = factory.Sequence(lambda n: n)
     is_new_revision = True
+    received_date = datetime.date.today()
