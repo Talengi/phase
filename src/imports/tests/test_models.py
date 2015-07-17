@@ -2,7 +2,6 @@ from django.test import TestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 from documents.models import Document
-from documents.factories import DocumentFactory
 from accounts.factories import UserFactory
 from default_documents.models import DemoMetadataRevision
 from categories.factories import CategoryFactory
