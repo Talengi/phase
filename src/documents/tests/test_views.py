@@ -13,7 +13,6 @@ from categories.factories import CategoryFactory
 from default_documents.factories import MetadataRevisionFactory
 from default_documents.models import DemoMetadata, DemoMetadataRevision
 from documents.factories import DocumentFactory
-from documents.tests.utils import generate_random_documents
 from documents.models import Document
 
 
@@ -65,19 +64,6 @@ class GenericViewTest(TestCase):
     def assertRedirect(self, target):
         response = self.client.get(self.url, follow=True)
         self.assertEqual(response.redirect_chain, [(target, 302)])
-
-
-class DocumentListTest(GenericViewTest):
-    fixtures = ['initial_data.json']
-
-    def setUp(self):
-        super(DocumentListTest, self).setUp()
-        self.url = self.document_list_url
-        generate_random_documents(150, self.category)
-
-    def test_document_number(self):
-        self.assertGet()
-        self.assertContext('documents_active', True)
 
 
 class DocumentDetailTest(TestCase):
@@ -166,7 +152,7 @@ class DocumentDownloadTest(TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r._headers, {
             'vary': ('Vary', 'Cookie, Accept-Encoding'),
-            'content-length': ('Content-Length', '326'),
+            'content-length': ('Content-Length', '398'),
             'content-type': ('Content-Type', 'application/zip'),
             'content-disposition': (
                 'Content-Disposition',
@@ -229,7 +215,7 @@ class DocumentDownloadTest(TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r._headers, {
             'vary': ('Vary', 'Cookie, Accept-Encoding'),
-            'content-length': ('Content-Length', '638'),
+            'content-length': ('Content-Length', '782'),
             'content-type': ('Content-Type', 'application/zip'),
             'content-disposition': (
                 'Content-Disposition',
@@ -274,7 +260,7 @@ class DocumentDownloadTest(TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r._headers, {
             'vary': ('Vary', 'Cookie, Accept-Encoding'),
-            'content-length': ('Content-Length', '324'),
+            'content-length': ('Content-Length', '396'),
             'content-type': ('Content-Type', 'application/zip'),
             'content-disposition': (
                 'Content-Disposition',
