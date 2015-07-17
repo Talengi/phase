@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import datetime
 from django.test import TestCase
 from django.utils.timezone import utc
@@ -48,15 +51,16 @@ class DocumentTest(TestCase):
         )
 
         self.assertEqual(
-            document.metadata.jsonified(),
+            document.to_json(),
             {
                 u'status': u'STD',
                 u'title': u'HAZOP report',
-                u'url': '/documents/FAC09001-FWF-000-HSE-REP-0004/',
-                u'current_revision': u'01',
-                u'current_revision_date': datetime.date(2013, 4, 20),
+                u'url': document.get_absolute_url(),
+                u'revision': 1,
+                u'is_latest_revision': True,
                 u'pk': 1,
                 u'document_pk': 1,
-                u'document_key': u'FAC09001-FWF-000-HSE-REP-0004',
+                u'metadata_pk': 1,
+                u'document_key': 'FAC09001-FWF-000-HSE-REP-0004',
             }
         )
