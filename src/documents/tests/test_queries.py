@@ -42,8 +42,6 @@ class QueriesTest(TestCase):
     In the DoD: A page must be limited at 5 queries.
 
     """
-    fixtures = ['initial_data.json']
-
     def assertMaxQueries(self, num, func=None, *args, **kwargs):
         using = kwargs.pop("using", DEFAULT_DB_ALIAS)
         conn = connections[using]
