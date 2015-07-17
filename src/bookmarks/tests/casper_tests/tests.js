@@ -27,8 +27,8 @@ casper.test.begin('Bookmarks are loaded upon page load', 0, function suite(test)
 
     casper.then(function() {
         var select = casper.getHTML('select#id_bookmark');
-        test.assertMatch(select, /value="\/organisation_2\/category_5\/\?search_terms=hazop"/);
-        test.assertMatch(select, /value="\/organisation_2\/category_5\/\?sort_by=current_revision"/);
+        test.assertMatch(select, /value="\/organisation_0\/category_0\/\?search_terms=hazop"/);
+        test.assertMatch(select, /value="\/organisation_0\/category_0\/\?sort_by=current_revision"/);
     });
 
     casper.run(function() {
@@ -86,7 +86,7 @@ casper.test.begin('The bookmark is unselected when the search is refined', 0, fu
     });
 
     casper.then(function() {
-        test.assertField('bookmark', '/organisation_2/category_5/?search_terms=hazop');
+        test.assertField('bookmark', '/organisation_0/category_0/?search_terms=hazop');
     });
 
     casper.then(function() {
