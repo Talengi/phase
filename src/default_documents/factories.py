@@ -1,3 +1,8 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
+import datetime
+
 import factory
 from factory import fuzzy
 
@@ -137,6 +142,7 @@ class MetadataRevisionFactory(factory.DjangoModelFactory):
 
     docclass = 1
     revision = factory.sequence(lambda n: n + 1)
+    received_date = datetime.date.today()
 
     @factory.post_generation
     def reviewers(self, create, extracted, **kwargs):
