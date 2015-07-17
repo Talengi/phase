@@ -396,6 +396,6 @@ class MetadataRevision(models.Model):
         """
         fields = form.fields.keys()
         fields.remove('created_on')
-        initial_data = dict(map(lambda x: (x, None), fields))
+        initial_data = dict(map(lambda x: (x, getattr(self, x, None)), fields))
 
         return initial_data
