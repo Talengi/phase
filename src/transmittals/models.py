@@ -258,6 +258,9 @@ class TrsRevision(models.Model):
     received_date = models.DateField(
         _('Received date'),
         null=True, blank=True)
+    review_start_date = models.DateField(
+        _('Received date'),
+        null=True, blank=True)
     created_on = models.DateField(
         _('Created on'),
         null=True, blank=True)
