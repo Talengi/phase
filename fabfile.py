@@ -66,10 +66,15 @@ def deploy():
     with cd(env.directory):
         run('git pull')
         with prefix(env.activate):
-            collectstatic = 'python src/manage.py collectstatic --noinput'
             with_production_settings = ' --settings=core.settings.production'
+
             run('pip install -r requirements/production.txt')
+
+            collectstatic = 'python src/manage.py collectstatic --noinput'
             run(collectstatic + with_production_settings)
+
+            clearcache = 'python src/manage.py clearcache'
+            run(clearcache + with_production_settings)
     restart_webserver()
 
 
