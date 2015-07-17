@@ -20,6 +20,9 @@ class DocumentListTests(CasperTestCase):
         create_index()
 
         self.category = CategoryFactory()
+        self.slug = '/{}/{}/'.format(
+            self.category.organisation.slug,
+            self.category.category_template.slug)
         put_category_mapping(self.category.id)
         user = UserFactory(email='testadmin@phase.fr', password='pass',
                            is_superuser=True,
@@ -65,5 +68,6 @@ class DocumentListTests(CasperTestCase):
     def test_js(self):
         self.assertTrue(self.casper(
             self.test_file,
-            url=self.url
+            url=self.url,
+            slug=self.slug,
         ))
