@@ -213,7 +213,6 @@ LOCAL_APPS = (
     'documents',
     'reviews',
     'default_documents',
-    'epc2_documents',
     'accounts',
     'categories',
     'metadata',
@@ -232,8 +231,15 @@ LOCAL_APPS = (
     'tools',
 )
 
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
-INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+# Load custom documents
+DOC_APPS = tuple()
+try:
+    import doc_apps
+    DOC_APPS = getattr(doc_apps, 'DOC_APPS')
+except:
+    pass
+
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS + DOC_APPS
 # ######### END APP CONFIGURATION
 
 

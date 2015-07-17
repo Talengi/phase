@@ -1,3 +1,4 @@
+doc_apps.py
 prod_private.py
 *.py[co]
 *.egg*
