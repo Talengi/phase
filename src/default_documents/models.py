@@ -555,7 +555,7 @@ class DemoMetadata(Metadata):
         ordering = ('document_key',)
 
     class PhaseConfig:
-        filter_fields = ('title',)
+        filter_fields = ('status',)
         searchable_fields = (
             'title', 'document_key', 'title',
         )
