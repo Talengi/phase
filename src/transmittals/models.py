@@ -437,4 +437,8 @@ class TrsRevision(models.Model):
         RevisionForm = self.category.get_revision_form_class()
         revision_form = RevisionForm(**kwargs)
 
-        save_document_forms(metadata_form, revision_form, self.category)
+        doc, meta, rev = save_document_forms(
+            metadata_form, revision_form, self.category)
+
+        # Performs custom import action
+        rev.post_trs_import(self)
