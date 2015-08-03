@@ -2,6 +2,8 @@ language: python
 python:
   - "2.7"
   - "3.4"
+addons:
+  - postgresql: "9.3"
 services:
   - elasticsearch
 before_install:
@@ -13,6 +15,10 @@ install:
   - npm install -g casperjs
   - cd src
   - npm install
+before_script:
+  - psql -c 'CREATE USER phase WITH PASSWORD phase;' -U postgres
+  - psql -c 'CREATE DATABASE phase_test;' -U postgres
+  - psql -c 'GRANT ALL PRIVILEGES ON DATABASE phase_test to phase;' -U postgres
 script:
   - export DJANGO_SETTINGS_MODULE=core.settings.test
   - grunt

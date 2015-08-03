@@ -2,7 +2,7 @@ from base import *  # noqa
 
 
 # ######### IN-MEMORY TEST DATABASE
-DATABASES = {
+SQLITE = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": ":memory:",
@@ -12,6 +12,19 @@ DATABASES = {
         "PORT": "",
     },
 }
+
+PG = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'phase',
+        'USER': 'phase',
+        'PASSWORD': 'phase',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
+}
+
+DATABASES = PG
 
 # We need a different media root so we can wipe it securely in tests
 MEDIA_ROOT = '/tmp/phase_media/'
