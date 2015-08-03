@@ -258,9 +258,6 @@ class TrsRevision(models.Model):
     received_date = models.DateField(
         _('Received date'),
         null=True, blank=True)
-    review_start_date = models.DateField(
-        _('Received date'),
-        null=True, blank=True)
     created_on = models.DateField(
         _('Created on'),
         null=True, blank=True)
@@ -330,8 +327,8 @@ class TrsRevision(models.Model):
     return_code = models.PositiveIntegerField(
         _('Return code'),
         null=True, blank=True)
-    review_sent_date = models.DateField(
-        _('Review sent date'),
+    review_start_date = models.DateField(
+        _('Review start date'),
         null=True, blank=True)
     review_due_date = models.DateField(
         _('Review due date'),

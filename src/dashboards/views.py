@@ -78,7 +78,7 @@ class IssuedDocsDashboardView(BaseDashboardView):
             .params(search_type='count')
 
         # Return only those stored fields
-        search = search.fields(['document_key', 'received_date', 'review_sent_date'])
+        search = search.fields(['document_key', 'received_date', 'review_start_date'])
 
         # Group documents by month on the `received_date` field
         search.aggs.bucket(
@@ -94,13 +94,13 @@ class IssuedDocsDashboardView(BaseDashboardView):
             'terms',
             field='doc_category.raw')
 
-        # For each month, select only docs with a `review_sent_date` field
+        # For each month, select only docs with a `review_start_date` field
         search.aggs['per_month'].bucket(
             'with_a_sent_date',
             'filter',
             filter={
                 'exists': {
-                    'field': 'review_sent_date',
+                    'field': 'review_start_date',
                 }
             })
 
@@ -110,7 +110,7 @@ class IssuedDocsDashboardView(BaseDashboardView):
             'filter',
             filter={
                 'script': {
-                    'script': "doc['review_sent_date'].value > doc['received_date'].value"
+                    'script': "doc['review_start_date'].value > doc['received_date'].value"
                 }
             }
         )
@@ -272,7 +272,7 @@ class ReturnedDocsDashboardView(BaseDashboardView):
             .params(search_type='count')
 
         # Return only those stored fields
-        search = search.fields(['document_key', 'received_date', 'review_sent_date'])
+        search = search.fields(['document_key', 'received_date', 'review_start_date'])
 
         # Group documents by month
         search.aggs.bucket(
