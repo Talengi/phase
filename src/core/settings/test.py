@@ -16,7 +16,7 @@ SQLITE = {
 PG = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'phase',
+        'NAME': 'phase_test',
         'USER': 'phase',
         'PASSWORD': 'phase',
         'HOST': 'localhost',
