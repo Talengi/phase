@@ -165,6 +165,16 @@ class ReviewMixin(models.Model):
         self.review_start_date = today
         self.review_due_date = self.received_date + datetime.timedelta(days=duration)
 
+        reviewers = self._create_review_objects()
+
+        # If no reviewers, close reviewers step immediatly
+        if len(reviewers) == 0:
+            self.reviewers_step_closed = today
+
+        self.save(update_document=True)
+
+    def _create_review_objects(self):
+        """Create the `Review` objects."""
         reviewers = self.reviewers.all()
         for reviewer in reviewers:
             Review.objects.create(
@@ -196,11 +206,7 @@ class ReviewMixin(models.Model):
                 docclass=self.docclass,
             )
 
-        # If no reviewers, close reviewers step immediatly
-        if len(reviewers) == 0:
-            self.reviewers_step_closed = today
-
-        self.save(update_document=True)
+        return reviewers
 
     @transaction.atomic
     def cancel_review(self):
