@@ -16,6 +16,7 @@ install:
   - npm install
 before_script:
   - psql -c "CREATE USER phase WITH SUPERUSER PASSWORD 'phase';" -U postgres
+  - psql -c 'CREATE DATABASE phase_test;' -U postgres
 script:
   - export DJANGO_SETTINGS_MODULE=core.settings.test
   - grunt
