@@ -23,7 +23,7 @@ script:
   - grunt
   - flake8 --exclude=migrations,docs,urls.py,bootstrap/bootstrap-src --ignore=E501 .
   - python manage.py collectstatic --noinput
-  - coverage run --source='.' manage.py test
+  - coverage run --source='.' manage.py test --noinput
 after_success:
   - coveralls
 notifications:
