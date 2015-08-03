@@ -49,10 +49,12 @@ class FieldTests(TestCase):
             comments=SimpleUploadedFile(sample_file, sample_path + sample_file),
         )
 
+        filename = 'reviews/HAZOP-related_{:02d}_{}_comments.zip'.format(
+            self.doc.current_revision,
+            self.user.id)
         self.assertEqual(
             review.comments.name,
-            'reviews/HAZOP-related_01_4_comments.zip'
-        )
+            filename)
 
     def test_leader_comment_file_name(self):
         """Test that comment files are renamed correctly."""
