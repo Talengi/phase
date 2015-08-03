@@ -368,3 +368,12 @@ class ReviewMixin(models.Model):
         })
 
         return initial
+
+    def post_trs_import(self, trs_revision):
+        """See `documents.models.MetadataRevision.post_trs_import`
+
+        We need to create `Review` objects if the leader and approver review
+        data is set in the trs_revision object.
+
+        """
+        pass
