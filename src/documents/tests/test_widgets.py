@@ -1,8 +1,8 @@
 from django.test import TestCase
 from django.db.models.fields.files import FieldFile
 
+from privatemedia.widgets import PhaseClearableFileInput
 from documents.fields import RevisionFileField
-from documents.widgets import PhaseClearableFileInput
 from documents.factories import DocumentFactory
 
 
