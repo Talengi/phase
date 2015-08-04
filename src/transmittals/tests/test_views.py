@@ -128,7 +128,7 @@ class TrsRevisionDiffViewTests(BaseTransmittalDiffViewTests):
     def setUp(self):
         super(TrsRevisionDiffViewTests, self).setUp()
         self.doc = self.create_lines(1, 2)
-        self.trs_revisions = self.transmittal.trsrevision_set.all()
+        self.trs_revisions = self.transmittal.trsrevision_set.order_by('revision')
 
     def test_diff_with_existing_revision(self):
         trs_revision = self.trs_revisions[0]
