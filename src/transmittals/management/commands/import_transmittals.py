@@ -4,6 +4,8 @@ from __future__ import unicode_literals
 
 import os
 import logging
+from optparse import make_option
+import importlib
 
 from django.core.management.base import BaseCommand, CommandError
 from django.core.exceptions import ImproperlyConfigured
@@ -12,6 +14,7 @@ from annoying.functions import get_object_or_None
 
 from categories.models import Category
 from transmittals.imports import TrsImport
+from transmittals.validation import Validator
 
 
 logger = logging.getLogger(__name__)
@@ -26,12 +29,37 @@ class Command(BaseCommand):
     args = '<contractor_id> <doc_category> <trs_category>'
     help = 'Import existing transmittals for a given contractor.'
 
+    option_list = BaseCommand.option_list + (
+        make_option(
+            '--trs-validator',
+            action='store',
+            dest='trs_validator',
+            default=False,
+            help='Choose a custom global validator class'),
+        make_option(
+            '--csv-line-validator',
+            action='store',
+            dest='csv_line_validator',
+            default=False,
+            help='Choose a custom single csv line validator class'))
+
     def handle(self, *args, **options):
         from transmittals.models import Transmittal
 
         if len(args) != 3:
             error = 'Usage: python manage.py import_transmittals {}'.format(self.args)
             raise CommandError(error)
+
+        # Import validators
+        TrsValidator = None
+        trs_validator = options['trs_validator']
+        if trs_validator:
+            TrsValidator = self.import_validator(trs_validator)
+
+        CsvLineValidator = None
+        csv_line_validator = options['csv_line_validator']
+        if csv_line_validator:
+            CsvLineValidator = self.import_validator(csv_line_validator)
 
         # Get configuration for the given contractor
         contractor_id = args[0]
@@ -72,7 +100,8 @@ class Command(BaseCommand):
                 fullname,
                 ctr_config,
                 contractor_id,
-                doc_category, trs_category)
+                doc_category, trs_category,
+                TrsValidator, CsvLineValidator)
 
     def get_category(self, path):
         """Takes a string "organisation_slug/category_slug" and returns a category."""
@@ -98,7 +127,7 @@ class Command(BaseCommand):
             raise CommandError(error)
 
     def import_dir(self, directory, config, contractor, doc_category,
-                   trs_category):
+                   trs_category, TrsValidator, CsvLineValidator):
         """Start the import task for a single directory."""
         logger.info('Starting import of trs in %s' % directory)
 
@@ -111,5 +140,24 @@ class Command(BaseCommand):
             contractor=contractor,
             doc_category=doc_category,
             trs_category=trs_category,
+            trs_validator=TrsValidator,
+            csv_line_validator=CsvLineValidator,
         )
         trsImport.do_import()
+
+    def import_validator(self, validator_path):
+        """Import a validator class from it's path."""
+        try:
+            path = validator_path.split('.')
+            module_path = '.'.join(path[0:-1])
+            module = importlib.import_module(module_path)
+            class_name = path[-1]
+            TrsValidator = getattr(module, class_name)
+        except:
+            error = 'The validator {} does not exist.'.format(validator_path)
+            raise CommandError(error)
+
+        if not isinstance(TrsValidator, Validator):
+            error = 'The validator {} is invalid. Must be a Validator subclass.'.format(
+                validator_path)
+            raise CommandError(error)

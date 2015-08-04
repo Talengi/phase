@@ -34,7 +34,8 @@ class TrsImport(object):
 
     """
     def __init__(self, trs_dir, tobechecked_dir, accepted_dir, rejected_dir,
-                 email_list, contractor, doc_category, trs_category):
+                 email_list, contractor, doc_category, trs_category,
+                 trs_validator=None, csv_line_validator=None):
         self.trs_dir = trs_dir
         self.tobechecked_dir = tobechecked_dir
         self.accepted_dir = accepted_dir
@@ -43,6 +44,9 @@ class TrsImport(object):
         self.contractor = contractor
         self.doc_category = doc_category
         self.trs_category = trs_category
+
+        self.TrsValidator = trs_validator or TrsValidator
+        self.CSVLineValidator = csv_line_validator or CSVLineValidator
 
         self._errors = None
         self._csv_cols = None
@@ -204,7 +208,7 @@ class TrsImport(object):
     def _validate_transmittal(self):
         logger.info('Validating transmittal')
 
-        errors = TrsValidator().validate(self)
+        errors = self.TrsValidator().validate(self)
         if errors:
             self._errors.update(errors)
 
@@ -359,10 +363,7 @@ class TrsImportLine(object):
         return self._errors
 
     def validate(self):
-        # TODO maybe
-        # Make this class a parameter so any app can define
-        # custom validators
-        self._errors = CSVLineValidator().validate(self)
+        self._errors = self.CSVLineValidator().validate(self)
 
     @property
     def pdf_basename(self):
