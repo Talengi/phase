@@ -363,7 +363,7 @@ class TrsImportLine(object):
         return self._errors
 
     def validate(self):
-        self._errors = self.CSVLineValidator().validate(self)
+        self._errors = self.trs_import.CSVLineValidator().validate(self)
 
     @property
     def pdf_basename(self):
