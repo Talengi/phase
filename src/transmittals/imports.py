@@ -359,6 +359,9 @@ class TrsImportLine(object):
         return self._errors
 
     def validate(self):
+        # TODO maybe
+        # Make this class a parameter so any app can define
+        # custom validators
         self._errors = CSVLineValidator().validate(self)
 
     @property
