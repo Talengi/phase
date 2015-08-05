@@ -230,7 +230,7 @@ class ReviewMixin(models.Model):
         review_canceled.send(sender=self.__class__, instance=self)
 
     @transaction.atomic
-    def end_reviewers_step(self, save=True, at_date=None):
+    def end_reviewers_step(self, at_date=None, save=True):
         """Ends the first step of the review."""
         self.reviewers_step_closed = at_date or datetime.date.today()
 
@@ -244,7 +244,7 @@ class ReviewMixin(models.Model):
             self.save(update_document=True)
 
     @transaction.atomic
-    def end_leader_step(self, save=True, at_date=None):
+    def end_leader_step(self, at_date=None, save=True):
         """Ends the second step of the review.
 
         Also ends the first step if it wasn't already done.
@@ -284,7 +284,7 @@ class ReviewMixin(models.Model):
             self.save(update_document=True)
 
     @transaction.atomic
-    def end_review(self, save=True, at_date=None):
+    def end_review(self, at_date=None, save=True):
         """Ends the review.
 
         Also ends the steps before.
