@@ -5,6 +5,7 @@ prod_private.py
 *.swp
 *~
 *.db
+*.dump
 *.log
 *.csv
 
