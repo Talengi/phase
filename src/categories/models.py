@@ -7,12 +7,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
 from django.core.urlresolvers import reverse
 
+from tools.models import SlugManager
 from documents.forms.models import documentform_factory
-
-
-class SlugManager(models.Manager):
-    def get_by_natural_key(self, slug):
-        return self.get(slug=slug)
 
 
 class Organisation(models.Model):
