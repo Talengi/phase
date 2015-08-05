@@ -147,7 +147,7 @@ class ReviewMixin(models.Model):
         ))
 
     @transaction.atomic
-    def start_review(self):
+    def start_review(self, at_date=None, due_date=None):
         """Starts the review process.
 
         This methods initiates the review process. We don't check whether the
@@ -156,21 +156,13 @@ class ReviewMixin(models.Model):
         calling this method.
 
         """
-        today = datetime.date.today()
+        start_date = at_date or datetime.date.today()
+        self.review_start_date = start_date
+
         duration = settings.REVIEW_DURATION
-        self.review_start_date = today
-        self.review_due_date = self.received_date + datetime.timedelta(days=duration)
+        self.review_due_date = due_date or \
+            self.received_date + datetime.timedelta(days=duration)
 
-        reviewers = self._create_review_objects()
-
-        # If no reviewers, close reviewers step immediatly
-        if len(reviewers) == 0:
-            self.reviewers_step_closed = today
-
-        self.save(update_document=True)
-
-    def _create_review_objects(self):
-        """Create the `Review` objects."""
         reviewers = self.reviewers.all()
         for reviewer in reviewers:
             Review.objects.create(
@@ -202,7 +194,11 @@ class ReviewMixin(models.Model):
                 docclass=self.docclass,
             )
 
-        return reviewers
+        # If no reviewers, close reviewers step immediatly
+        if len(reviewers) == 0:
+            self.reviewers_step_closed = start_date
+
+        self.save(update_document=True)
 
     @transaction.atomic
     def cancel_review(self):
