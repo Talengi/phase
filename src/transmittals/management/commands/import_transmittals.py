@@ -161,3 +161,5 @@ class Command(BaseCommand):
             error = 'The validator {} is invalid. Must be a Validator subclass.'.format(
                 validator_path)
             raise CommandError(error)
+
+        return TrsValidator
