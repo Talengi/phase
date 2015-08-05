@@ -157,7 +157,7 @@ class Command(BaseCommand):
             error = 'The validator {} does not exist.'.format(validator_path)
             raise CommandError(error)
 
-        if not isinstance(TrsValidator, Validator):
+        if not issubclass(TrsValidator, Validator):
             error = 'The validator {} is invalid. Must be a Validator subclass.'.format(
                 validator_path)
             raise CommandError(error)
