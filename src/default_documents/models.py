@@ -20,7 +20,7 @@ class ContractorDeliverable(Metadata):
         verbose_name=u"Title")
     contract_number = ConfigurableChoiceField(
         verbose_name=u"Contract Number",
-        max_length=8,
+        max_length=15,
         list_index='CONTRACT_NBS')
     originator = ConfigurableChoiceField(
         verbose_name=u"Originator",

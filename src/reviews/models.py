@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import datetime
 
 from django.db import models, transaction
@@ -86,10 +89,6 @@ class Review(models.Model):
 class ReviewMixin(models.Model):
     """A Mixin to use to define reviewable document types."""
 
-    review_sent_date = models.DateField(
-        _('Review Sent Date'),
-        null=True, blank=True
-    )
     review_start_date = models.DateField(
         _('Review start date'),
         null=True, blank=True
@@ -151,7 +150,7 @@ class ReviewMixin(models.Model):
         ))
 
     @transaction.atomic
-    def start_review(self):
+    def start_review(self, at_date=None, due_date=None):
         """Starts the review process.
 
         This methods initiates the review process. We don't check whether the
@@ -160,10 +159,12 @@ class ReviewMixin(models.Model):
         calling this method.
 
         """
-        today = datetime.date.today()
+        start_date = at_date or datetime.date.today()
+        self.review_start_date = start_date
+
         duration = settings.REVIEW_DURATION
-        self.review_start_date = today
-        self.review_due_date = self.received_date + datetime.timedelta(days=duration)
+        self.review_due_date = due_date or \
+            self.received_date + datetime.timedelta(days=duration)
 
         reviewers = self.reviewers.all()
         for reviewer in reviewers:
@@ -198,7 +199,7 @@ class ReviewMixin(models.Model):
 
         # If no reviewers, close reviewers step immediatly
         if len(reviewers) == 0:
-            self.reviewers_step_closed = today
+            self.reviewers_step_closed = start_date
 
         self.save(update_document=True)
 
@@ -229,9 +230,9 @@ class ReviewMixin(models.Model):
         review_canceled.send(sender=self.__class__, instance=self)
 
     @transaction.atomic
-    def end_reviewers_step(self, save=True):
+    def end_reviewers_step(self, at_date=None, save=True):
         """Ends the first step of the review."""
-        self.reviewers_step_closed = datetime.date.today()
+        self.reviewers_step_closed = at_date or datetime.date.today()
 
         Review.objects \
             .filter(document=self.document) \
@@ -243,16 +244,18 @@ class ReviewMixin(models.Model):
             self.save(update_document=True)
 
     @transaction.atomic
-    def end_leader_step(self, save=True):
+    def end_leader_step(self, at_date=None, save=True):
         """Ends the second step of the review.
 
         Also ends the first step if it wasn't already done.
 
         """
         if self.reviewers_step_closed is None:
-            self.end_reviewers_step(save=False)
+            self.end_reviewers_step(save=False, at_date=at_date)
 
-        self.leader_step_closed = datetime.date.today()
+        end_date = at_date or datetime.date.today()
+
+        self.leader_step_closed = end_date
 
         Review.objects \
             .filter(document=self.document) \
@@ -261,7 +264,7 @@ class ReviewMixin(models.Model):
             .update(closed=True)
 
         if not self.approver_id:
-            self.review_end_date = datetime.date.today()
+            self.review_end_date = end_date
 
         if save:
             self.save(update_document=True)
@@ -281,16 +284,16 @@ class ReviewMixin(models.Model):
             self.save(update_document=True)
 
     @transaction.atomic
-    def end_review(self, save=True):
+    def end_review(self, at_date=None, save=True):
         """Ends the review.
 
         Also ends the steps before.
 
         """
         if self.leader_step_closed is None:
-            self.end_leader_step(save=False)
+            self.end_leader_step(save=False, at_date=at_date)
 
-        self.review_end_date = datetime.date.today()
+        self.review_end_date = at_date or datetime.date.today()
 
         Review.objects \
             .filter(document=self.document) \
@@ -368,3 +371,44 @@ class ReviewMixin(models.Model):
         })
 
         return initial
+
+    def post_trs_import(self, trs_revision):
+        """See `documents.models.MetadataRevision.post_trs_import`
+
+        If we are importing a revision with review data, we need to make sure
+        Phase objects are left in a consistent state.
+
+        We need to create `Review` objects if the leader and approver review
+        data is set in the trs_revision object.
+
+        """
+        category = self.document.category
+        user_qs = User.objects.filter(categories=category)
+
+        # Is there a defined leader?
+        if trs_revision.review_leader:
+            self.leader = user_qs.get(name=trs_revision.review_leader)
+
+        # Is there a defined approver
+        if trs_revision.review_approver:
+            self.approver = user_qs.get(name=trs_revision.review_approver)
+
+        # Was the review started?
+        if trs_revision.review_start_date:
+            self.start_review(
+                at_date=trs_revision.review_start_date,
+                due_date=trs_revision.review_due_date)
+
+        # Did the leader already submit a comment?
+        if trs_revision.leader_comment_date:
+            self.end_leader_step(
+                at_date=trs_revision.leader_comment_date,
+                save=False)
+
+        # Is there an approver and did he submit a comment?
+        if self.approver_id and trs_revision.approver_comment_date:
+            self.end_review(
+                at_date=trs_revision.approver_comment_date,
+                save=False)
+
+        self.save()

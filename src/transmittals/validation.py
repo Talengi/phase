@@ -32,9 +32,12 @@ class Validator(object):
 class CompositeValidator(Validator):
     """A compound validator."""
 
+    def get_validators(self):
+        return self.VALIDATORS
+
     def validate(self, obj):
         errors = dict()
-        for validator in self.VALIDATORS:
+        for validator in self.get_validators():
             error = validator.validate(obj)
             if error:
                 errors.update(error)
@@ -48,8 +51,11 @@ class CompositeValidator(Validator):
 class AndValidator(Validator):
     """A validator that stops when a single validation fail."""
 
+    def get_validators(self):
+        return self.VALIDATORS
+
     def validate(self, obj):
-        for validator in self.VALIDATORS:
+        for validator in self.get_validators():
             error = validator.validate(obj)
             if error:
                 return error

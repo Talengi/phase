@@ -185,3 +185,63 @@ class ImportCommandTests(TestCase):
             self.trs_category_path,
             stderr=f)
         self.assertEqual(import_dir.call_count, 3)
+
+    def test_incorrect_trs_validator_option(self):
+        f = StringIO()
+
+        with self.assertRaises(CommandError) as cm:
+            call_command(
+                IMPORT_COMMAND,
+                TEST_CTR,
+                self.doc_category_path,
+                self.trs_category_path,
+                trs_validator='toto',
+                stderr=f)
+
+        error = 'The validator toto does not exist.'
+        self.assertEqual(str(cm.exception), error)
+
+    def test_invalid_trs_validator_option(self):
+        f = StringIO()
+
+        with self.assertRaises(CommandError) as cm:
+            call_command(
+                IMPORT_COMMAND,
+                TEST_CTR,
+                self.doc_category_path,
+                self.trs_category_path,
+                trs_validator='documents.models.Document',
+                stderr=f)
+
+        error = 'The validator documents.models.Document is invalid. Must be a Validator subclass.'
+        self.assertEqual(str(cm.exception), error)
+
+    def test_incorrect_csv_validator_option(self):
+        f = StringIO()
+
+        with self.assertRaises(CommandError) as cm:
+            call_command(
+                IMPORT_COMMAND,
+                TEST_CTR,
+                self.doc_category_path,
+                self.trs_category_path,
+                csv_line_validator='toto',
+                stderr=f)
+
+        error = 'The validator toto does not exist.'
+        self.assertEqual(str(cm.exception), error)
+
+    def test_invalid_csv_validator_option(self):
+        f = StringIO()
+
+        with self.assertRaises(CommandError) as cm:
+            call_command(
+                IMPORT_COMMAND,
+                TEST_CTR,
+                self.doc_category_path,
+                self.trs_category_path,
+                csv_line_validator='documents.models.Metadata',
+                stderr=f)
+
+        error = 'The validator documents.models.Metadata is invalid. Must be a Validator subclass.'
+        self.assertEqual(str(cm.exception), error)

@@ -42,6 +42,9 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+    def get_by_natural_key(self, email):
+        return self.get(email=email)
+
 
 class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()

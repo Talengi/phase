@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import datetime
 
 from django.test import TestCase
@@ -80,6 +83,28 @@ class ReviewMixinTests(TestCase):
 
         self.assertEqual(revision.review_start_date, today)
         self.assertEqual(revision.review_due_date, in_two_weeks)
+
+    def test_start_review_at_custom_date(self):
+        revision = self.create_reviewable_document()
+        self.assertIsNone(revision.review_start_date)
+
+        in_a_month = datetime.date.today() + datetime.timedelta(days=30)
+
+        revision.start_review(at_date=in_a_month)
+
+        self.assertEqual(revision.review_start_date, in_a_month)
+
+    def test_start_review_with_custom_due_date(self):
+        revision = self.create_reviewable_document()
+        self.assertIsNone(revision.review_start_date)
+
+        in_a_month = datetime.date.today() + datetime.timedelta(days=30)
+        two_days_after = in_a_month + datetime.timedelta(days=2)
+
+        revision.start_review(at_date=in_a_month, due_date=two_days_after)
+
+        self.assertEqual(revision.review_start_date, in_a_month)
+        self.assertEqual(revision.review_due_date, two_days_after)
 
     def test_start_review_creates_review_objects(self):
         revision = self.create_reviewable_document()

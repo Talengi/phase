@@ -417,3 +417,15 @@ class MetadataRevision(models.Model):
             initial_data[field] = None
 
         return initial_data
+
+    def post_trs_import(self, trs_revision):
+        """Custom hook called after creation from a Transmittal.
+
+        When a `transmittals.models.Transmittal` is imported, the
+        `transmittals.models.TrsRevision` object creates or updates the
+        document and revisions. Sometimes, we whant to perform additionals
+        actions, e.g creating the `reviews.models.Review` objects. That's why
+        we need this custom hook.
+
+        """
+        pass
