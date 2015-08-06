@@ -109,6 +109,13 @@ var Phase = Phase || {};
         }
     });
 
+    Phase.Views.EmptyDiscussionFormView = Backbone.View.extend({
+        el: '#discussion-form',
+        render: function() {
+            this.$el.html('');
+        }
+    });
+
     Phase.Views.RemarksButtonView = Backbone.View.extend({
         events: {
             'click': 'loadDiscussion'
@@ -140,6 +147,8 @@ var Phase = Phase || {};
             var buttonElt = options.button;
             var apiUrl = $(buttonElt).data('apiurl');
 
+            this.canDiscuss = $(buttonElt).data('candiscuss');
+
             this.collection = new Phase.Collections.NoteCollection([], { apiUrl: apiUrl });
             this.remarksButtonView = new Phase.Views.RemarksButtonView({
                 element: buttonElt,
@@ -154,9 +163,13 @@ var Phase = Phase || {};
             });
             this.discussionThreadView.render();
 
-            this.discussionFormView = new Phase.Views.DiscussionFormView({
-                collection: this.collection
-            });
+            if (this.canDiscuss) {
+                this.discussionFormView = new Phase.Views.DiscussionFormView({
+                    collection: this.collection
+                });
+            } else {
+                this.discussionFormView = new Phase.Views.EmptyDiscussionFormView();
+            }
             this.discussionFormView.render();
         }
     });
