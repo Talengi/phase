@@ -338,6 +338,21 @@ div.control-label {
 form.disabled .asteriskField {
     display: none;
 }
+form.disabled input[disabled],
+form.disabled select[disabled],
+form.disabled textarea[disabled] {
+    background-color: white;
+    cursor: default;
+    color: #555;
+}
+form.disabled select[disabled] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+form.disabled select[disabled]::-ms-expand {
+    display: none;
+}
 td.center {
     text-align: center;
 }
