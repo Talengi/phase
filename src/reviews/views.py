@@ -345,6 +345,10 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
         close_leader_button = self.object.is_at_review_step('leader') and is_approver
         back_to_leader_button = self.object.is_at_review_step('approver') and is_approver
 
+        # Only members of the distrib list can see the review form
+        # so the user is automaticaly allowed to post a remark
+        can_discuss = True
+
         context.update({
             'document': self.object.document,
             'document_key': self.object.document.document_key,
@@ -357,6 +361,7 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
             'close_reviewers_button': close_reviewers_button,
             'close_leader_button': close_leader_button,
             'back_to_leader_button': back_to_leader_button,
+            'can_discuss': can_discuss,
         })
         return context
 
