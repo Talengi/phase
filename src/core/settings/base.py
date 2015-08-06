@@ -357,6 +357,8 @@ PIPELINE_JS = {
             'js/notifications/collections.js',
             'js/notifications/views.js',
             'js/notifications/app.js',
+            'js/ui/views.js',
+            'js/ui/app.js',
         ),
         'output_filename': 'js/base.js',
     },

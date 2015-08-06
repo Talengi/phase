@@ -3,8 +3,7 @@
 
     {% if user.is_authenticated %}
 
-        <button class="btn btn-primary navbar-btn navbar-left"
-                data-toggle="collapse"
+        <button class="btn btn-primary navbar-btn navbar-left toggle-content-button"
                 data-target="#left-sidebar-container"
                 alt="{{ _('Menu') }}">
             <span class="glyphicon glyphicon-align-justify"></span>
@@ -14,8 +13,8 @@
 
         <button type="button"
                 id="notifications-button"
-                class="btn btn-{% if has_new_notifications %}danger{% else %}primary{% endif %} navbar-right navbar-btn last-button"
-                data-toggle="collapse"
+                class="btn btn-{% if has_new_notifications %}danger{% else %}primary{% endif %} navbar-right navbar-btn last-button
+                        toggle-content-button"
                 data-target="#right-sidebar-container">
             <span class="glyphicon glyphicon-bell"></span>
         </button>
