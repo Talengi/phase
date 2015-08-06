@@ -28,6 +28,7 @@
             class="remarks-button btn btn-default"
             data-toggle="modal"
             data-apiurl="{% url 'note-list' document.document_key revision.revision %}"
+            data-candiscuss="{{ can_discuss|yesno:"true,false" }}"
             href="#discussion-modal">
         {{ _('Remarks') }}
         {% discussion_length_badge revision %}

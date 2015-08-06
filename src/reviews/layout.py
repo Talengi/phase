@@ -9,6 +9,7 @@ class ReviewsLayout(LayoutObject):
     def render(self, form, form_style, context, template_pack=None):
         revision = form.instance
         reviews = form.reviews
+        can_discuss = form.can_discuss
 
         return render_to_string(
             self.template,
@@ -17,4 +18,5 @@ class ReviewsLayout(LayoutObject):
                 'revision': revision,
                 'reviews': reviews,
                 'form_style': form_style,
+                'can_discuss': can_discuss,
             }))
