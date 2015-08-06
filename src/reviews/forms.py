@@ -35,4 +35,11 @@ class ReviewFormMixin(forms.ModelForm):
     def prepare_form(self, *args, **kwargs):
         if self.instance.id:
             self.reviews = get_cached_reviews(self.instance)
+
+            # Is the current user a member of the distribution list?
+            self.can_discuss = False
+            if self.request:
+                reviewers = [review.reviewer for review in self.reviews]
+                self.can_discuss = self.request.user in reviewers
+
         super(ReviewFormMixin, self).prepare_form(*args, **kwargs)
