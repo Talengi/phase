@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 from django.utils.translation import ugettext_lazy as _
 from crispy_forms.layout import Layout, Field
 
-from default_documents.layout import DocumentFieldset
+from default_documents.layout import DocumentFieldset, DateField
 
 from documents.forms.models import BaseDocumentForm
 from transmittals.models import Transmittal, TransmittalRevision
@@ -20,8 +20,8 @@ class TransmittalForm(BaseDocumentForm):
             DocumentFieldset(
                 _('General information'),
                 'document_key',
-                'transmittal_date',
-                'ack_of_receipt_date',
+                DateField('transmittal_date'),
+                DateField('ack_of_receipt_date'),
                 'contract_number',
                 'originator',
                 'recipient',
@@ -41,14 +41,14 @@ class TransmittalRevisionForm(BaseDocumentForm):
         return Layout(
             DocumentFieldset(
                 _('Revision'),
-                'revision_date',
+                DateField('revision_date'),
                 Field('created_on', readonly='readonly'),
                 'native_file',
                 'pdf_file',
             ),
             DocumentFieldset(
                 _('Review'),
-                'received_date',
+                DateField('received_date'),
             ),
         )
 

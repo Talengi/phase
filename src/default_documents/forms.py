@@ -13,7 +13,7 @@ from reviews.layout import ReviewsLayout
 from reviews.forms import ReviewFormMixin
 from .layout import (
     DocumentFieldset, ScheduleLayout, ScheduleStatusLayout,
-    PropertyLayout, YesNoLayout
+    PropertyLayout, YesNoLayout, DateField
 )
 
 
@@ -62,7 +62,7 @@ class ContractorDeliverableRevisionForm(ReviewFormMixin, BaseDocumentForm):
             review_layout = (
                 DocumentFieldset(
                     _('Review'),
-                    'received_date',
+                    DateField('received_date'),
                     Field('review_start_date', readonly='readonly'),
                     Field('review_due_date', readonly='readonly'),
                     PropertyLayout('current_review_step'),
@@ -78,7 +78,7 @@ class ContractorDeliverableRevisionForm(ReviewFormMixin, BaseDocumentForm):
             review_layout = (
                 DocumentFieldset(
                     _('Review'),
-                    'received_date',
+                    DateField('received_date'),
                     Field('review_start_date', readonly='readonly'),
                     Field('review_due_date', readonly='readonly'),
                     PropertyLayout('current_review_step'),
@@ -93,7 +93,7 @@ class ContractorDeliverableRevisionForm(ReviewFormMixin, BaseDocumentForm):
         return Layout(
             DocumentFieldset(
                 _('Revision'),
-                'revision_date',
+                DateField('revision_date'),
                 Field('created_on', readonly='readonly'),
                 'docclass',
                 'status',
@@ -117,8 +117,8 @@ class CorrespondenceForm(BaseDocumentForm):
                 _('General information'),
                 'document_key',
                 Field('subject', rows=2),
-                'correspondence_date',
-                'received_sent_date',
+                DateField('correspondence_date'),
+                DateField('received_sent_date'),
                 'contract_number',
                 'originator',
                 'recipient',
@@ -127,7 +127,7 @@ class CorrespondenceForm(BaseDocumentForm):
                 'author',
                 'addresses',
                 'response_required',
-                'due_date',
+                DateField('due_date'),
                 'external_reference',
                 self.related_documents,
             )
@@ -143,7 +143,7 @@ class CorrespondenceRevisionForm(BaseDocumentForm):
         return Layout(
             DocumentFieldset(
                 _('Revision'),
-                'revision_date',
+                DateField('revision_date'),
                 Field('created_on', readonly='readonly'),
                 'status',
                 'native_file',
@@ -151,7 +151,7 @@ class CorrespondenceRevisionForm(BaseDocumentForm):
             ),
             DocumentFieldset(
                 _('Review'),
-                'received_date',
+                DateField('received_date'),
                 'under_review',
                 'overdue',
                 'leader',
@@ -175,8 +175,8 @@ class MinutesOfMeetingForm(BaseDocumentForm):
                 _('General information'),
                 'document_key',
                 Field('subject', rows=2),
-                'meeting_date',
-                'received_sent_date',
+                DateField('meeting_date'),
+                DateField('received_sent_date'),
                 'contract_number',
                 'originator',
                 'recipient',
@@ -198,7 +198,7 @@ class MinutesOfMeetingRevisionForm(BaseDocumentForm):
         return Layout(
             DocumentFieldset(
                 _('Revision'),
-                'revision_date',
+                DateField('revision_date'),
                 Field('created_on', readonly='readonly'),
                 'status',
                 'native_file',
@@ -206,7 +206,7 @@ class MinutesOfMeetingRevisionForm(BaseDocumentForm):
             ),
             DocumentFieldset(
                 _('Review'),
-                'received_date',
+                DateField('received_date'),
             )
         )
 
@@ -240,7 +240,7 @@ class DemoMetadataRevisionForm(BaseDocumentForm):
         return Layout(
             DocumentFieldset(
                 _('Revision'),
-                'revision_date',
+                DateField('revision_date'),
                 Field('created_on', readonly='readonly'),
                 'status',
                 'native_file',
@@ -248,7 +248,7 @@ class DemoMetadataRevisionForm(BaseDocumentForm):
             ),
             DocumentFieldset(
                 _('Review'),
-                'received_date',
+                DateField('received_date'),
                 Field('review_start_date', readonly='readonly'),
                 Field('review_due_date', readonly='readonly'),
                 PropertyLayout('is_under_review'),

@@ -3,12 +3,16 @@
 See https://django-crispy-forms.readthedocs.org/en/d-0/layouts.html
 
 """
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 
 from django.template.loader import render_to_string
 from django.template import Context, Template
 from django.utils.text import slugify
+
 from crispy_forms.compatibility import text_type
-from crispy_forms.layout import LayoutObject, Fieldset
+from crispy_forms.layout import Field, LayoutObject, Fieldset, TEMPLATE_PACK
 from crispy_forms.utils import render_field
 
 
@@ -220,3 +224,23 @@ class DocumentFieldset(Fieldset):
         if self.css_id is None:
             legend = unicode(self.legend)
             self.css_id = 'fieldset-%s' % slugify(legend)
+
+
+class DateField(Field):
+    template = 'layout/date_field.html'
+
+    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
+        if hasattr(self, 'wrapper_class'):
+            context['wrapper_class'] = self.wrapper_class
+
+        if form.read_only:
+            template = "%s/field.html" % TEMPLATE_PACK
+        else:
+            template = self.template
+
+        html = ''
+        for field in self.fields:
+            html += render_field(field, form, form_style, context,
+                                 template=template, attrs=self.attrs,
+                                 template_pack=template_pack)
+        return html
