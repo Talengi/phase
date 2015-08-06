@@ -118,7 +118,7 @@ class CancelReview(PermissionRequiredMixin,
 
         if revision.is_under_review():
             revision.cancel_review()
-            message_text = '''You canceled the review on revision %(rev)s of
+            message_text = '''You cancelled the review on revision %(rev)s of
                            the document <a href="%(url)s">%(key)s (%(title)s)</a>'''
             message_data = {
                 'rev': revision.name,
@@ -451,11 +451,11 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
 
             comments_file = request.FILES.get('comments', None)
             if comments_file:
-                message_text = '''You reviewed document
+                message_text = '''You reviewed the document
                                <a href="%(url)s">%(key)s (%(title)s)</a>
                                in revision %(rev)s with comments.'''
             else:
-                message_text = '''You reviewed document
+                message_text = '''You reviewed the document
                                <a href="%(url)s">%(key)s (%(title)s)</a>
                                in revision %(rev)s without comments.'''
 
