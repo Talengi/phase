@@ -286,6 +286,7 @@ class DocumentDetail(LoginRequiredMixin,
         for revision in revisions:
             revision.form = RevisionForm(
                 instance=revision,
+                request=self.request,
                 category=self.category,
                 read_only=True)
 
