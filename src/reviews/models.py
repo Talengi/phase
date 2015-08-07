@@ -24,6 +24,13 @@ CLASSES = (
 
 
 class Review(models.Model):
+    STATUS = Choices(
+        ('pending', _('Pending')),
+        ('progress', _('In progress')),
+        ('reviewed', _('Reviewed without comments')),
+        ('commented', _('Reviewed with comments')),
+        ('not_reviewed', _('Not reviewed')),
+    )
     STEPS = Choices(
         ('pending', _('Pending')),
         ('reviewer', _('Reviewer')),
