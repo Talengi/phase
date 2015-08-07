@@ -112,7 +112,7 @@ class Category(models.Model):
         return documentform_factory(self.revision_class())
 
     def document_type(self):
-        return '%s.%s'.format(
+        return '{}.{}'.format(
             self.organisation.slug, self.category_template.slug)
 
     def get_absolute_url(self):
