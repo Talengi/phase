@@ -112,8 +112,8 @@ class Category(models.Model):
         return documentform_factory(self.revision_class())
 
     def document_type(self):
-        Model = self.category_template.metadata_model
-        return '%s.%s' % (Model.app_label, Model.model)
+        return '%s.%s'.format(
+            self.organisation.slug, self.category_template.slug)
 
     def get_absolute_url(self):
         url = reverse('category_document_list', args=(
