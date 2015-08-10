@@ -7,7 +7,8 @@ from dashboards.models import Dashboard
 
 
 class DashboardAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('title', 'category', 'data_provider')
+    prepopulated_fields = {'slug': ('title',)}
 
 
 admin.site.register(Dashboard, DashboardAdmin)
