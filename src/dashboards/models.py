@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 
 from categories.models import Category
 from dashboards.fields import DashboardProviderChoiceField
+from accounts.models import User
 
 
 class Dashboard(models.Model):
@@ -15,7 +16,6 @@ class Dashboard(models.Model):
         max_length=50)
     slug = models.SlugField(
         _('Slug'),
-        unique=True,
         db_index=True,
         max_length=250)
     category = models.ForeignKey(
@@ -23,10 +23,16 @@ class Dashboard(models.Model):
         verbose_name=_('Category'))
     data_provider = DashboardProviderChoiceField(
         _('Dashboard data provider'))
+    authorized_users = models.ManyToManyField(
+        User,
+        verbose_name=_('Authorized users'),
+        null=True, blank=True,
+        related_name='dashboards')
 
     class Meta:
         verbose_name = _('Dashboard')
         verbose_name_plural = _('Dashboard provider')
+        unique_together = ('slug', 'category')
 
     def __unicode__(self):
         return self.title

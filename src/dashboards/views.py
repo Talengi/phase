@@ -23,6 +23,16 @@ class DashboardView(LoginRequiredMixin, DetailView):
     def breadcrumb_object(self):
         return self.object
 
+    def get_queryset(self):
+        qs = Dashboard.objects \
+            .filter(category__organisation__slug=self.kwargs['organisation']) \
+            .filter(authorized_users=self.request.user) \
+            .select_related(
+                'category', 'category__category_template',
+                'category__organisation')
+
+        return qs
+
     def get_context_data(self, **kwargs):
         context = super(DashboardView, self).get_context_data(**kwargs)
         self.object.fetch_data()
