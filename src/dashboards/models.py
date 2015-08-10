@@ -9,7 +9,13 @@ from dashboards.fields import DashboardProviderChoiceField
 
 
 class Dashboard(models.Model):
+    slug = models.SlugField(
+        _('Slug'),
+        unique=True,
+        db_index=True,
+        max_length=250)
     category = models.ForeignKey(
         Category,
         verbose_name=_('Category'))
-    data_provider = DashboardProviderChoiceField(_('Dashboard data provider'))
+    data_provider = DashboardProviderChoiceField(
+        _('Dashboard data provider'))
