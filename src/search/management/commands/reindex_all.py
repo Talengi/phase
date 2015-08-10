@@ -103,7 +103,7 @@ Type 'yes' to continue, or 'no' to cancel: """)
                             elastic,
                             actions,
                             chunk_size=settings.ELASTIC_BULK_SIZE,
-                            request_timeout=60)
+                            request_timeout=600)
                         actions = []
 
             bulk(

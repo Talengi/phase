@@ -145,6 +145,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'accounts.context_processors.navigation',
     'notifications.context_processors.notifications',
     'reviews.context_processors.reviews',
+    'dashboards.context_processors.dashboards',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-loaders

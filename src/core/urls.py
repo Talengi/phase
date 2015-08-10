@@ -18,12 +18,12 @@ urlpatterns = patterns(
     url(r'^reviews/', include('reviews.urls')),
     url(r'^imports/', include('imports.urls')),
     url(r'^transmittals/', include('transmittals.urls')),
-    url(r'^dashboards/', include('dashboards.urls')),
     url(r'^search/', include('search.urls')),
     url(r'^private/(?P<file_path>[-\w./]+)?$',
         ProtectedDownload.as_view(),
         name="protected_download"),
     url(r'^', include('categories.urls')),
+    url(r'^', include('dashboards.urls')),
     url(r'^', include('documents.urls')),
     url(r'^robots\.txt$', lambda r: HttpResponse(
         "User-agent: *\nDisallow: /",
