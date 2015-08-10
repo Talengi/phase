@@ -8,5 +8,15 @@
     </a>
 
     <ul id="nav-dashboards" class="nav nav-stacked collapse">
+        {% for organisation, title, url in user_dashboards %}
+        {% ifchanged organisation %}
+        <li class="disabled"><a href="#">{{ organisation }}</a></li>
+        {% endifchanged %}
+        <li>
+            <a href="{{ url }}">
+                {{ title }}
+            </a>
+        </li>
+        {% endfor %}
     </ul>
 </li>
