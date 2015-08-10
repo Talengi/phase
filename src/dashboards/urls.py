@@ -1,17 +1,14 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
+from __future__ import unicode_literals, absolute_import
 
 from django.conf.urls import patterns, url
 
-from dashboards.views import IssuedDocsDashboardView, ReturnedDocsDashboardView
+from dashboards.views import DashboardView
 
 urlpatterns = patterns(
     '',
-    url(r'^received_documents/$',
-        IssuedDocsDashboardView.as_view(),
-        name="issued_dashboard"),
-    url(r'^returned_documents/$',
-        ReturnedDocsDashboardView.as_view(),
-        name="returned_dashboard"),
+    url(r'^(?P<organisation>[\w-]+)/dashboards/(?P<dashboard>[\w-]+)/$',
+        DashboardView.as_view(),
+        name='dashboard_detail'),
 )
