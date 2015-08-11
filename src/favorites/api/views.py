@@ -14,5 +14,5 @@ class FavoriteViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Favorite.objects.filter(user=self.request.user)
 
-    def pre_save(self, obj):
-        obj.user = self.request.user
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
