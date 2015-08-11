@@ -7,9 +7,18 @@ from bookmarks.api import views as bookmarks_views
 
 
 router = routers.DefaultRouter()
-router.register('notifications', notifications_views.NotificationViewSet)
-router.register('favorites', favorites_views.FavoriteViewSet)
-router.register('bookmarks', bookmarks_views.BookmarkViewSet)
+router.register(
+    'notifications',
+    notifications_views.NotificationViewSet,
+    base_name='notification')
+router.register(
+    'favorites',
+    favorites_views.FavoriteViewSet,
+    base_name='favorite')
+router.register(
+    'bookmarks',
+    bookmarks_views.BookmarkViewSet,
+    base_name='bookmark')
 
 
 urlpatterns = patterns(
