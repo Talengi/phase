@@ -80,6 +80,7 @@ class Review(models.Model):
         verbose_name = _('Review')
         verbose_name_plural = _('Reviews')
         index_together = (('reviewer', 'document', 'revision', 'role'),)
+        app_label = 'reviews'
 
     @property
     def revision_name(self):

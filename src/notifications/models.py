@@ -33,6 +33,7 @@ class Notification(models.Model):
     class Meta:
         verbose_name = _('Notification')
         verbose_name_plural = _('Notifications')
+        app_label = 'notifications'
 
 
 def notify(user, message):

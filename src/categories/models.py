@@ -25,6 +25,9 @@ class Organisation(models.Model):
         max_length=200,
         null=True, blank=True)
 
+    class Meta:
+        app_label = 'categories'
+
     def __unicode__(self):
         return self.name
 
@@ -51,6 +54,7 @@ class CategoryTemplate(models.Model):
     class Meta:
         verbose_name = _('Category template')
         verbose_name_plural = _('Category templates')
+        app_label = 'categories'
 
     def __unicode__(self):
         return self.name

@@ -85,6 +85,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = 'User'
         verbose_name_plural = 'Users'
+        app_label = 'accounts'
 
     def __unicode__(self):
         return self.name
