@@ -41,7 +41,7 @@ class Document(models.Model):
     favorited_by = models.ManyToManyField(
         User,
         through='favorites.Favorite',
-        null=True, blank=True)
+        blank=True)
     is_indexable = models.BooleanField(
         _('Indexable'),
         default=True)
@@ -186,9 +186,7 @@ class MetadataBase(ModelBase):
 
 
 class Metadata(six.with_metaclass(MetadataBase, models.Model)):
-    document = models.ForeignKey(
-        Document,
-        unique=True)
+    document = models.OneToOneField(Document)
     document_key = models.SlugField(
         _('Document number'),
         unique=True,

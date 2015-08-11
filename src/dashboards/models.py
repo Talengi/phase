@@ -26,7 +26,7 @@ class Dashboard(models.Model):
     authorized_users = models.ManyToManyField(
         User,
         verbose_name=_('Authorized users'),
-        null=True, blank=True,
+        blank=True,
         related_name='dashboards')
 
     class Meta:

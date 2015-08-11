@@ -100,7 +100,7 @@ class ReviewMixin(models.Model):
     )
     reviewers_step_closed = models.DateField(
         _('Reviewers step closed'),
-        null=True, blank=True
+        blank=True
     )
     leader_step_closed = models.DateField(
         _('Leader step closed'),
@@ -113,7 +113,7 @@ class ReviewMixin(models.Model):
     reviewers = models.ManyToManyField(
         User,
         verbose_name=_('Reviewers'),
-        null=True, blank=True)
+        blank=True)
     leader = models.ForeignKey(
         User,
         verbose_name=_('Leader'),

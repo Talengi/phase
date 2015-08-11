@@ -80,10 +80,10 @@ class Category(models.Model):
     users = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         related_name='categories',
-        null=True, blank=True)
+        blank=True)
     groups = models.ManyToManyField(
         'auth.Group',
-        null=True, blank=True)
+        blank=True)
 
     class Meta:
         unique_together = ('category_template', 'organisation')
