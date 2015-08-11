@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, absolute_import
 
+from importlib import import_module
+
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.six import with_metaclass, string_types
 from django.utils.module_loading import import_by_path
-from django.utils.importlib import import_module
 from django.conf import settings
 
 from dashboards.forms.fields import DashboardTypeChoiceField
