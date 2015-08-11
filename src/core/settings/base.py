@@ -482,20 +482,5 @@ IMPORT_ROOT = SITE_ROOT.child('import')
 
 # ######### END CUSTOM CONFIGURATION
 
-# Debug toolbar DJ 1.7 compatibility problems
-DEBUG_TOOLBAR_PANELS = [
-    'debug_toolbar.panels.version.VersionDebugPanel',
-    'debug_toolbar.panels.timer.TimerDebugPanel',
-    'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
-    'debug_toolbar.panels.headers.HeaderDebugPanel',
-    'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
-    'debug_toolbar.panels.sql.SQLDebugPanel',
-    'debug_toolbar.panels.template.TemplateDebugPanel',
-    'debug_toolbar.panels.cache.CacheDebugPanel',
-    # 'debug_toolbar.panels.signals.SignalDebugPanel',
-    'debug_toolbar.panels.logger.LoggingPanel',
-    'debug_toolbar.panels.profiling.ProfilingDebugPanel',
-]
-
 # Disable a DJ1.7 warning
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
