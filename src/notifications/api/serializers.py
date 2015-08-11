@@ -20,10 +20,13 @@ class NotificationSerializer(serializers.ModelSerializer):
                   'iso_formatted_created_on', 'natural_formatted_created_on',
                   'seen')
 
-    def transform_iso_formatted_created_on(self, obj, value):
-        formatted = filters.date(value, 'c')
-        return formatted
+    def to_representation(self, instance):
+        ret = super(NotificationSerializer, self).to_representation(instance)
 
-    def transform_natural_formatted_created_on(self, obj, value):
-        formatted = naturaltime(value)
-        return formatted
+        ret['iso_formatted_created_on'] = filters.date(
+            ret['iso_formatted_created_on'], 'c')
+
+        ret['natural_formatted_created_on'] = naturaltime(
+            ret['natural_formatted_created_on'])
+
+        return ret

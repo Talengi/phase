@@ -23,13 +23,16 @@ class NoteSerializer(serializers.ModelSerializer):
                   'body', 'formatted_body', 'created_on',
                   'formatted_created_on')
 
-    def transform_formatted_created_on(self, obj, value):
-        formatted = filters.date(value, 'SHORT_DATETIME_FORMAT')
-        return formatted
+    def to_representation(self, instance):
+        ret = super(NoteSerializer, self).to_representation(instance)
+        ret['formatted_created_on'] = filters.date(
+            ret['formatted_created_on'],
+            'SHORT_DATETIME_FORMAT')
 
-    def transform_formatted_body(self, obj, value):
+        formatted = ret['formatted_body']
         replace = r'<span class="mention">@\1</span>'
-        formatted = mentions_re.sub(replace, value)
+        formatted = mentions_re.sub(replace, formatted)
         formatted = filters.linebreaksbr(formatted)
+        ret['formatted_body'] = formatted
 
-        return formatted
+        return ret
