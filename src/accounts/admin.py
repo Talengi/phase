@@ -76,6 +76,7 @@ class GroupAdminForm(forms.ModelForm):
 
     class Meta:
         model = Group
+        exclude = []
 
     def __init__(self, *args, **kwargs):
         instance = kwargs.get('instance', None)
