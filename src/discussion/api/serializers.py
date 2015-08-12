@@ -11,7 +11,7 @@ from discussion.models import Note, mentions_re
 class NoteSerializer(serializers.ModelSerializer):
     document = serializers.Field()
     revision = serializers.Field()
-    author_id = serializers.Field(source='author_id')
+    author_id = serializers.Field()
     author_email = serializers.Field(source='author.email')
     created_on = serializers.DateTimeField(read_only=True)
     formatted_created_on = serializers.DateTimeField(read_only=True, source='created_on')
