@@ -481,6 +481,3 @@ USE_X_SENDFILE = False
 IMPORT_ROOT = SITE_ROOT.child('import')
 
 # ######### END CUSTOM CONFIGURATION
-
-# Disable a DJ1.7 warning
-TEST_RUNNER = 'django.test.runner.DiscoverRunner'
