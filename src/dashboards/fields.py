@@ -6,7 +6,7 @@ from importlib import import_module
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.six import with_metaclass, string_types
-from django.utils.module_loading import import_by_path
+from django.utils.module_loading import import_string
 from django.conf import settings
 
 from dashboards.forms.fields import DashboardTypeChoiceField
@@ -66,7 +66,7 @@ class DashboardProviderChoiceField(with_metaclass(models.SubfieldBase, models.Fi
 
         if isinstance(value, string_types):
             try:
-                value = import_by_path(value)
+                value = import_string(value)
             except:
                 raise ValidationError('The class {} does not exist'.format(
                     value))
