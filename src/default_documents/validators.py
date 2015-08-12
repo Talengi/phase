@@ -1,9 +1,14 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import re
 
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
+from django.utils.deconstruct import deconstructible
 
 
+@deconstructible
 class StringNumberValidator(object):
     """Validate numbers that should be typed in with a fixed length"""
 
@@ -19,10 +24,5 @@ class StringNumberValidator(object):
         if not self.regex.match(value):
             raise ValidationError(self.message, self.code)
 
-    def deconstruct(self):
-        path = "%s.%s" % (self.__class__.__module__, self.__class__.__name__)
-        args = []
-        kwargs = {
-            'length': self.length
-        }
-        return (path, args, kwargs)
+    def __eq__(self, validator):
+        return self.length == validator.length
