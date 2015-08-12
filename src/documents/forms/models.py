@@ -1,6 +1,10 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ImproperlyConfigured
+from django.utils.module_loading import import_string
 
 from crispy_forms.helper import FormHelper
 from default_documents.layout import DocumentFieldset, FlatRelatedDocumentsLayout
@@ -19,15 +23,10 @@ def documentform_factory(model):
     DocumentForm = None
 
     for app in apps:
+        form_path = '{}.forms.{}'.format(
+            app, form_class_name)
         try:
-            _temp = __import__(
-                app + '.forms',
-                globals(),
-                locals(),
-                [form_class_name],
-                -1
-            )
-            DocumentForm = getattr(_temp, form_class_name)
+            DocumentForm = import_string(form_path)
             break
         except (ImportError, AttributeError):
             continue
