@@ -100,7 +100,7 @@ class ReviewMixin(models.Model):
     )
     reviewers_step_closed = models.DateField(
         _('Reviewers step closed'),
-        blank=True
+        null=True, blank=True
     )
     leader_step_closed = models.DateField(
         _('Leader step closed'),
