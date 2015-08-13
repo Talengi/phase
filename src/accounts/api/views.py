@@ -50,7 +50,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         qs = User.objects.filter(categories=self.get_category())
 
-        q = self.request.QUERY_PARAMS.get('q', None)
+        q = self.request.query_params.get('q', None)
         if q:
             q_name = Q(name__icontains=q)
             q_email = Q(email__icontains=q)
