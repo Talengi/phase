@@ -21,7 +21,8 @@ def get_choices_from_list(list_index):
 
     # If the database is ready but the cache was
     # not populate yet
-    if cache_key not in cache and apps.models_ready:
+    app = apps.get_app_config('metadata')
+    if cache_key not in cache and app.db_is_ready:
         populate_values_list_cache()
 
     values = cache.get(cache_key, [])

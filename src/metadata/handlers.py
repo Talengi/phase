@@ -8,6 +8,11 @@ from django.core.cache import cache
 from metadata.models import ListEntry
 
 
+def save_db_state(**kwargs):
+    app = kwargs.get('sender')
+    app.db_is_ready = True
+
+
 def populate_values_list_cache(**kwargs):
     values = ListEntry.objects \
         .select_related('values_list') \
