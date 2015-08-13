@@ -59,7 +59,7 @@ class DashboardProviderChoiceField(models.Field):
             ))
         return providers
 
-    def from_db_value(self, value):
+    def from_db_value(self, value, expression, connection, context):
         return self.to_python(value)
 
     def to_python(self, value):
