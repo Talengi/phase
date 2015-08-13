@@ -8,7 +8,6 @@ import tempfile
 from shutil import rmtree, copytree
 
 from django.test import TestCase
-from django.core.cache import cache
 from django.contrib.contenttypes.models import ContentType
 
 from documents.models import Document
@@ -18,12 +17,9 @@ from transmittals.models import Transmittal, TrsRevision
 
 
 class TestImports(TestCase):
-    fixtures = ['initial_values_lists', 'initial_documents']
+    fixtures = ['initial_data', 'initial_values_lists', 'initial_documents']
 
     def setUp(self):
-        # Clear the values list cache
-        cache.clear()
-
         document = Document.objects.get(document_key='FAC10005-CTR-000-EXP-LAY-4891')
         self.doc_category = document.category
 

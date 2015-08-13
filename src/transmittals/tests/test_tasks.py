@@ -8,7 +8,6 @@ import tempfile
 
 from django.test import TestCase
 from django.contrib.contenttypes.models import ContentType
-from django.core.cache import cache
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 from documents.factories import DocumentFactory
@@ -29,9 +28,6 @@ class ProcessTransmittalTests(TestCase):
     fixtures = ['initial_values_lists']
 
     def setUp(self):
-        # Clear the values list cache
-        cache.clear()
-
         # Filesystem setup
         self.tmpdir = tempfile.mkdtemp(prefix='phasetest_', suffix='_trs')
         self.incoming = join(self.tmpdir, 'incoming')
