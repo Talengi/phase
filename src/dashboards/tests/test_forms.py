@@ -27,14 +27,14 @@ class DashboardFieldTests(TestCase):
             dashboard = Dashboard(
                 category=self.category,
                 data_provider=IAmNotADashboardProvider)
-            dashboard.save()
+            dashboard.full_clean()
 
     def test_provider_class_does_not_exist(self):
         with self.assertRaises(ValidationError):
             dashboard = Dashboard(
                 category=self.category,
                 data_provider='i.do.not.exist')
-            dashboard.save()
+            dashboard.full_clean()
 
     def test_form_field_values(self):
         form = DashboardForm()
