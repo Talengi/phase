@@ -154,7 +154,7 @@ class DocumentDownloadTest(TestCase):
         })
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r._headers, {
-            'vary': ('Vary', 'Cookie'),
+            'vary': ('Vary', 'Cookie, Accept-Encoding'),
             'content-length': ('Content-Length', '398'),
             'content-type': ('Content-Type', 'application/zip'),
             'content-disposition': (
@@ -217,7 +217,7 @@ class DocumentDownloadTest(TestCase):
         })
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r._headers, {
-            'vary': ('Vary', 'Cookie'),
+            'vary': ('Vary', 'Cookie, Accept-Encoding'),
             'content-length': ('Content-Length', '782'),
             'content-type': ('Content-Type', 'application/zip'),
             'content-disposition': (
@@ -262,7 +262,7 @@ class DocumentDownloadTest(TestCase):
         })
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r._headers, {
-            'vary': ('Vary', 'Cookie'),
+            'vary': ('Vary', 'Cookie, Accept-Encoding'),
             'content-length': ('Content-Length', '396'),
             'content-type': ('Content-Type', 'application/zip'),
             'content-disposition': (
