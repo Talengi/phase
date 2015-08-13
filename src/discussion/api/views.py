@@ -63,7 +63,8 @@ class DiscussionViewSet(viewsets.ModelViewSet):
             .filter(revision=self.revision) \
             .order_by('created_on')
 
-    def pre_save(self, obj):
-        obj.document = self.document
-        obj.revision = self.revision
-        obj.author = self.request.user
+    def perform_create(self, serializer):
+        serializer.save(
+            document=self.document,
+            revision=self.revision,
+            author=self.request.user)

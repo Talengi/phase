@@ -9,17 +9,17 @@ from discussion.models import Note, mentions_re
 
 
 class NoteSerializer(serializers.ModelSerializer):
-    document = serializers.Field()
-    revision = serializers.Field()
-    author_id = serializers.Field()
-    author_email = serializers.Field(source='author.email')
+    document_id = serializers.ReadOnlyField(source='document.id')
+    revision = serializers.ReadOnlyField()
+    author_id = serializers.ReadOnlyField(source='author.id')
+    author_email = serializers.ReadOnlyField(source='author.email')
     created_on = serializers.DateTimeField(read_only=True)
     formatted_created_on = serializers.DateTimeField(read_only=True, source='created_on')
-    formatted_body = serializers.Field(source='body')
+    formatted_body = serializers.ReadOnlyField(source='body')
 
     class Meta:
         model = Note
-        fields = ('id', 'document', 'revision', 'author_id', 'author_email',
+        fields = ('id', 'document_id', 'revision', 'author_id', 'author_email',
                   'body', 'formatted_body', 'created_on',
                   'formatted_created_on')
 
