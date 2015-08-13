@@ -3,9 +3,12 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.apps import apps
 from django.core.exceptions import ImproperlyConfigured
 from django.db.models.fields import BLANK_CHOICE_DASH
 from django.core.cache import cache
+
+from metadata.handlers import populate_values_list_cache
 
 
 def get_choices_from_list(list_index):
@@ -15,7 +18,16 @@ def get_choices_from_list(list_index):
 
     """
     cache_key = 'values_list_{}'.format(list_index)
+
+    # If the database is ready but the cache was
+    # not populate yet
+    if cache_key not in cache and apps.models_ready:
+        populate_values_list_cache()
+
     values = cache.get(cache_key, [])
+    if not values:
+        cache.delete(cache_key)
+
     return values
 
 
