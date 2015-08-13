@@ -58,9 +58,9 @@ class DocumentTest(TestCase):
                 u'url': document.get_absolute_url(),
                 u'revision': 1,
                 u'is_latest_revision': True,
-                u'pk': 1,
-                u'document_pk': 1,
-                u'metadata_pk': 1,
+                u'pk': document.metadata.latest_revision.pk,
+                u'document_pk': document.pk,
+                u'metadata_pk': document.metadata.pk,
                 u'document_key': 'FAC09001-FWF-000-HSE-REP-0004',
             }
         )

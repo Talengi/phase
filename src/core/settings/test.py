@@ -1,5 +1,9 @@
 from base import *  # noqa
 
+DEBUG = False
+
+TEMPLATE_DEBUG = False
+
 
 # ######### IN-MEMORY TEST DATABASE
 SQLITE = {

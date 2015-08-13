@@ -65,7 +65,7 @@ class ContractorDeliverable(Metadata):
     related_documents = models.ManyToManyField(
         'documents.Document',
         related_name='cd_related_documents',
-        null=True, blank=True)
+        blank=True)
 
     # Schedule
     status_std_planned_date = models.DateField(
@@ -331,7 +331,7 @@ class Correspondence(Metadata):
     related_documents = models.ManyToManyField(
         'documents.Document',
         related_name='correspondence_related_set',
-        null=True, blank=True)
+        blank=True)
 
     class Meta:
         ordering = ('id',)
@@ -474,7 +474,7 @@ class MinutesOfMeeting(Metadata):
     response_reference = models.ManyToManyField(
         'Correspondence',
         related_name='mom_correspondence_related_set',
-        null=True, blank=True)
+        blank=True)
 
     class Meta:
         ordering = ('document_key',)
@@ -554,7 +554,7 @@ class DemoMetadata(Metadata):
     related_documents = models.ManyToManyField(
         'documents.Document',
         related_name='demometadata_related_set',
-        null=True, blank=True)
+        blank=True)
 
     class Meta:
         ordering = ('document_key',)

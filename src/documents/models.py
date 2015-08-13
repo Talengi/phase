@@ -41,7 +41,7 @@ class Document(models.Model):
     favorited_by = models.ManyToManyField(
         User,
         through='favorites.Favorite',
-        null=True, blank=True)
+        blank=True)
     is_indexable = models.BooleanField(
         _('Indexable'),
         default=True)
@@ -163,7 +163,7 @@ class MetadataBase(ModelBase):
         if name != 'NewBase' and name != 'Metadata':
             base_attrs = []
             for base in bases:
-                base_attrs += base._meta.get_all_field_names()
+                base_attrs += base._meta.fields
 
             phase_config = attrs.get('PhaseConfig', None)
             if not phase_config:
@@ -185,10 +185,8 @@ class MetadataBase(ModelBase):
         return super(MetadataBase, cls).__new__(cls, name, bases, attrs)
 
 
-class Metadata(six.with_metaclass(MetadataBase), models.Model):
-    document = models.ForeignKey(
-        Document,
-        unique=True)
+class Metadata(six.with_metaclass(MetadataBase, models.Model)):
+    document = models.OneToOneField(Document)
     document_key = models.SlugField(
         _('Document number'),
         unique=True,

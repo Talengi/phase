@@ -81,7 +81,7 @@ class Transmittal(Metadata):
     related_documents = models.ManyToManyField(
         'documents.Document',
         related_name='transmittals_related_set',
-        null=True, blank=True)
+        blank=True)
 
     contractor = models.CharField(max_length=255)
     tobechecked_dir = models.CharField(max_length=255)

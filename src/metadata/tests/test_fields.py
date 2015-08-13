@@ -1,7 +1,11 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from django.test import TestCase
 
 from metadata.factories import ValuesListFactory
 from metadata.fields import get_choices_from_list
+from metadata.handlers import populate_values_list_cache
 
 
 class ConfigurableChoiceFieldTest(TestCase):
@@ -13,6 +17,7 @@ class ConfigurableChoiceFieldTest(TestCase):
                 'test3': 'Test 3',
             }
         )
+        populate_values_list_cache()
         choices = get_choices_from_list(values_list.index)
         self.assertItemsEqual(choices, [
             (u'test1', u'test1 - Test 1'),

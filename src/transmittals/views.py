@@ -35,7 +35,8 @@ class TransmittalListView(LoginRequiredMixin, PermissionRequiredMixin, ListView)
         return Transmittal.objects \
             .filter(document__category__users=self.request.user) \
             .exclude(status='accepted') \
-            .select_related('category__organisation', 'category__category_template') \
+            .select_related('document__category__organisation',
+                            'document__category__category_template') \
             .order_by('-id')
 
     def get_context_data(self, **kwargs):

@@ -9,27 +9,30 @@ from discussion.models import Note, mentions_re
 
 
 class NoteSerializer(serializers.ModelSerializer):
-    document = serializers.Field()
-    revision = serializers.Field()
-    author_id = serializers.Field(source='author_id')
-    author_email = serializers.Field(source='author.email')
+    document_id = serializers.ReadOnlyField(source='document.id')
+    revision = serializers.ReadOnlyField()
+    author_id = serializers.ReadOnlyField(source='author.id')
+    author_email = serializers.ReadOnlyField(source='author.email')
     created_on = serializers.DateTimeField(read_only=True)
     formatted_created_on = serializers.DateTimeField(read_only=True, source='created_on')
-    formatted_body = serializers.Field(source='body')
+    formatted_body = serializers.ReadOnlyField(source='body')
 
     class Meta:
         model = Note
-        fields = ('id', 'document', 'revision', 'author_id', 'author_email',
+        fields = ('id', 'document_id', 'revision', 'author_id', 'author_email',
                   'body', 'formatted_body', 'created_on',
                   'formatted_created_on')
 
-    def transform_formatted_created_on(self, obj, value):
-        formatted = filters.date(value, 'SHORT_DATETIME_FORMAT')
-        return formatted
+    def to_representation(self, instance):
+        ret = super(NoteSerializer, self).to_representation(instance)
+        ret['formatted_created_on'] = filters.date(
+            ret['formatted_created_on'],
+            'SHORT_DATETIME_FORMAT')
 
-    def transform_formatted_body(self, obj, value):
+        formatted = ret['formatted_body']
         replace = r'<span class="mention">@\1</span>'
-        formatted = mentions_re.sub(replace, value)
+        formatted = mentions_re.sub(replace, formatted)
         formatted = filters.linebreaksbr(formatted)
+        ret['formatted_body'] = formatted
 
-        return formatted
+        return ret

@@ -3,31 +3,31 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.apps import apps
 from django.core.exceptions import ImproperlyConfigured
 from django.db.models.fields import BLANK_CHOICE_DASH
-from django.db.utils import DatabaseError
 from django.core.cache import cache
+
+from metadata.handlers import populate_values_list_cache
 
 
 def get_choices_from_list(list_index):
-    """Creates a list of values from data in db."""
-    from .models import ListEntry
+    """Load the values list from cache.
 
-    values = cache.get(list_index)
-    if values is None:
-        try:
-            values = ListEntry.objects \
-                .select_related('values_list') \
-                .filter(values_list__index=list_index) \
-                .values_list('index', 'value')
+    Cache is populated post-syncdb
 
-            # Execute query now, so we can catch any database error
-            # For example if db does not exists, and we are trying to
-            # run manage.py syncdb
-            values = [(key, '%s - %s' % (key, value)) for key, value in values]
-            cache.set(list_index, values, None)
-        except DatabaseError:
-            values = None
+    """
+    cache_key = 'values_list_{}'.format(list_index)
+
+    # If the database is ready but the cache was
+    # not populate yet
+    app = apps.get_app_config('metadata')
+    if cache_key not in cache and app.db_is_ready:
+        populate_values_list_cache()
+
+    values = cache.get(cache_key, [])
+    if not values:
+        cache.delete(cache_key)
 
     return values
 
@@ -43,6 +43,11 @@ class ConfigurableChoiceField(models.CharField):
         }
         defaults.update(kwargs)
         super(ConfigurableChoiceField, self).__init__(*args, **defaults)
+
+    def deconstruct(self):
+        name, path, args, kwargs = super(ConfigurableChoiceField, self).deconstruct()
+        kwargs['list_index'] = self.list_index
+        return name, path, args, kwargs
 
     def _get_choices(self):
         choices = get_choices_from_list(self.list_index)

@@ -5,6 +5,7 @@ from django import forms
 
 from dashboards.forms import classpath
 from dashboards.forms.widgets import DashboardSelect
+from django.utils.encoding import force_text
 
 
 class DashboardTypeChoiceField(forms.TypedChoiceField):
@@ -27,6 +28,15 @@ class DashboardTypeChoiceField(forms.TypedChoiceField):
         self.widget.choices = text_choices
 
     choices = property(_get_choices, _set_choices)
+
+    def valid_value(self, value):
+        text_value = force_text(value)
+        for k, v in self.choices:
+            if isinstance(k, type):
+                k = classpath(k)
+            if value == k or text_value == force_text(k):
+                return True
+        return False
 
     def prepare_value(self, value):
         """Fix prepared value.

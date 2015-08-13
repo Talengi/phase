@@ -28,6 +28,7 @@ class ValuesList(models.Model):
     class Meta:
         verbose_name = _('Values list')
         verbose_name_plural = _('Values lists')
+        app_label = 'metadata'
 
     def __unicode__(self):
         return self.name
@@ -55,6 +56,7 @@ class ListEntry(models.Model):
         verbose_name = _('List entry')
         verbose_name_plural = _('List entries')
         ordering = ('order', 'index')
+        app_label = 'metadata'
 
     def __unicode__(self):
         return '%s - %s' % (self.index, self.value)

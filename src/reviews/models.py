@@ -80,6 +80,7 @@ class Review(models.Model):
         verbose_name = _('Review')
         verbose_name_plural = _('Reviews')
         index_together = (('reviewer', 'document', 'revision', 'role'),)
+        app_label = 'reviews'
 
     @property
     def revision_name(self):
@@ -112,7 +113,7 @@ class ReviewMixin(models.Model):
     reviewers = models.ManyToManyField(
         User,
         verbose_name=_('Reviewers'),
-        null=True, blank=True)
+        blank=True)
     leader = models.ForeignKey(
         User,
         verbose_name=_('Leader'),

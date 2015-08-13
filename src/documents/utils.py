@@ -97,16 +97,6 @@ def update_revision_from_forms(metadata_form, revision_form, category):
     return document, metadata, revision
 
 
-# HACK to fix http://hg.python.org/cpython/rev/4f0988e8fcb1/
-class FixedZipFile(zipfile.ZipFile):
-    """Old versions of Python don't have the patch merged."""
-    def __enter__(self):
-        return self
-
-    def __exit__(self, type, value, traceback):
-        self.close()
-
-
 def compress_documents(documents, format='both', revisions='latest'):
     """Compress the given files' documents (or queryset) in a zip file.
 
@@ -117,7 +107,7 @@ def compress_documents(documents, format='both', revisions='latest'):
     """
     temp_file = tempfile.TemporaryFile()
 
-    with FixedZipFile(temp_file, mode='w') as zip_file:
+    with zipfile.ZipFile(temp_file, mode='w') as zip_file:
         files = []
         for document in documents:
             if revisions == 'latest':

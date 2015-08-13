@@ -10,3 +10,4 @@ class CategoryTemplateAdminForm(forms.ModelForm):
 
     class Meta:
         model = CategoryTemplate
+        fields = ('name', 'slug', 'description', 'metadata_model')

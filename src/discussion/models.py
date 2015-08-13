@@ -36,6 +36,7 @@ class Note(models.Model):
     class Meta:
         verbose_name = _('Note')
         verbose_name_plural = _('Notes')
+        app_label = 'discussion'
 
     @transaction.atomic
     def notify_mentionned_users(self):

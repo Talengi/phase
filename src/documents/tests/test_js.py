@@ -1,4 +1,8 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import os.path
+import time
 
 from django.core.urlresolvers import reverse
 from django.test.utils import override_settings
@@ -30,6 +34,9 @@ class DocumentListTests(CasperTestCase):
                 document_key='hazop-report-%d' % doc_id,
                 category=self.category,
             )
+
+        # ES needs some time to finish indexing
+        time.sleep(1)
 
         document_list_url = reverse('category_document_list', args=[
             self.category.organisation.slug,

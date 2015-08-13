@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import os
 from io import BytesIO
 from zipfile import ZipFile
@@ -133,9 +136,9 @@ class DocumentDownloadTest(TestCase):
         """
         Tests that a document download returns a zip file of the latest revision.
         """
-        sample_path = 'documents/tests/'
-        native_doc = 'sample_doc_native.docx'
-        pdf_doc = 'sample_doc_pdf.pdf'
+        sample_path = b'documents/tests/'
+        native_doc = b'sample_doc_native.docx'
+        pdf_doc = b'sample_doc_pdf.pdf'
 
         document = DocumentFactory(
             document_key=u'HAZOP-related',
@@ -185,9 +188,9 @@ class DocumentDownloadTest(TestCase):
         Tests that download returns a zip file of the latest revision
         of all documents.
         """
-        sample_path = 'documents/tests/'
-        native_doc = 'sample_doc_native.docx'
-        pdf_doc = 'sample_doc_pdf.pdf'
+        sample_path = b'documents/tests/'
+        native_doc = b'sample_doc_native.docx'
+        pdf_doc = b'sample_doc_pdf.pdf'
 
         document1 = DocumentFactory(
             document_key=u'HAZOP-related',
@@ -228,9 +231,9 @@ class DocumentDownloadTest(TestCase):
         Tests that download returns a zip file of the latest revision
         of pdf documents.
         """
-        sample_path = 'documents/tests/'
-        native_doc = 'sample_doc_native.docx'
-        pdf_doc = 'sample_doc_pdf.pdf'
+        sample_path = b'documents/tests/'
+        native_doc = b'sample_doc_native.docx'
+        pdf_doc = b'sample_doc_pdf.pdf'
 
         document1 = DocumentFactory(
             document_key=u'HAZOP-related',
@@ -276,9 +279,9 @@ class DocumentDownloadTest(TestCase):
         document = DocumentFactory(
             category=self.category,
         )
-        sample_path = 'documents/tests/'
-        native_doc = 'sample_doc_native.docx'
-        pdf_doc = 'sample_doc_pdf.pdf'
+        sample_path = b'documents/tests/'
+        native_doc = b'sample_doc_native.docx'
+        pdf_doc = b'sample_doc_pdf.pdf'
 
         MetadataRevisionFactory(
             document=document,

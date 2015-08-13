@@ -18,6 +18,11 @@ class RevisionFileField(PrivateFileField):
         })
         return super(RevisionFileField, self).__init__(*args, **kwargs)
 
+    def deconstruct(self):
+        name, path, args, kwargs = super(RevisionFileField, self).deconstruct()
+        kwargs['upload_to'] = revision_file_path
+        return name, path, args, kwargs
+
 
 class MetadataTypeChoiceField(forms.ModelChoiceField):
     """A custom model choice field limited to document classes."""

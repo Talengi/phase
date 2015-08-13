@@ -25,6 +25,9 @@ class Organisation(models.Model):
         max_length=200,
         null=True, blank=True)
 
+    class Meta:
+        app_label = 'categories'
+
     def __unicode__(self):
         return self.name
 
@@ -51,6 +54,7 @@ class CategoryTemplate(models.Model):
     class Meta:
         verbose_name = _('Category template')
         verbose_name_plural = _('Category templates')
+        app_label = 'categories'
 
     def __unicode__(self):
         return self.name
@@ -76,10 +80,10 @@ class Category(models.Model):
     users = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         related_name='categories',
-        null=True, blank=True)
+        blank=True)
     groups = models.ManyToManyField(
         'auth.Group',
-        null=True, blank=True)
+        blank=True)
 
     class Meta:
         unique_together = ('category_template', 'organisation')

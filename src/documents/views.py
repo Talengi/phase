@@ -500,6 +500,7 @@ class DocumentDownload(BaseDocumentList):
             data['format'] or 'both',
             data['revisions'] or 'latest',
         )
+        zip_filename.seek(0)
         wrapper = FileWrapper(zip_filename)
 
         # Returns the zip file for download

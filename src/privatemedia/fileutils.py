@@ -7,5 +7,5 @@ from django.conf import settings
 
 
 # Revision documents
-private_storage = FileSystemStorage(location=settings.PRIVATE_ROOT,
-                                    base_url=settings.PRIVATE_URL)
+private_storage = FileSystemStorage(location='{}'.format(settings.PRIVATE_ROOT),
+                                    base_url='{}'.format(settings.PRIVATE_URL))
