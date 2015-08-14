@@ -7,6 +7,7 @@ from django.db import models, transaction
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.utils.functional import cached_property
+from django.utils import timezone
 from model_utils import Choices
 
 from accounts.models import User
@@ -97,6 +98,19 @@ class Review(models.Model):
     @property
     def revision_name(self):
         return '%02d' % self.revision
+
+    def post_review(self, comments, save=True):
+        self.comments = comments
+        self.reviewed_on = timezone.now()
+        self.closed = True
+
+        if comments:
+            self.status = self.STATUSES.commented
+        else:
+            self.status = self.STATUSES.reviewed
+
+        if save:
+            self.save()
 
 
 class ReviewMixin(models.Model):
