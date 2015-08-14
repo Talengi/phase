@@ -28,6 +28,10 @@ class UserMultipleChoiceField(ModelMultipleChoiceField):
         super(UserMultipleChoiceField, self).__init__(users, *args, **kwargs)
         self.widget.set_category(self.category)
 
+    def bound_data(self, value, initial):
+        value = value.split(',') if value else value
+        return value
+
     def clean(self, value):
         value = value.split(',') if value else value
         return super(UserMultipleChoiceField, self).clean(value)
