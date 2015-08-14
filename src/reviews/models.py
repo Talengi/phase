@@ -15,6 +15,7 @@ from accounts.models import User
 from documents.models import Document
 from privatemedia.fields import PrivateFileField
 from reviews.fileutils import review_comments_file_path
+from metadata.fields import ConfigurableChoiceField
 
 
 CLASSES = (
@@ -89,6 +90,11 @@ class Review(models.Model):
         null=True, blank=True,
         upload_to=review_comments_file_path
     )
+    return_code = ConfigurableChoiceField(
+        _('Return code'),
+        max_length=3,
+        null=True, blank=True,
+        list_index='REVIEW_RETURN_CODES')
 
     class Meta:
         verbose_name = _('Review')
