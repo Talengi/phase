@@ -132,7 +132,7 @@ class ReviewMixinTests(TestCase):
         revision.start_review()
 
         reviewer_review = revision.get_review(self.user, 'reviewer')
-        self.assertEqual(reviewer_review.status, 'in_progress')
+        self.assertEqual(reviewer_review.status, 'progress')
 
         leader_review = revision.get_leader_review()
         self.assertEqual(leader_review.status, 'pending')
@@ -151,7 +151,7 @@ class ReviewMixinTests(TestCase):
         self.assertEqual(len(reviews), 1)
 
         leader_review = revision.get_leader_review()
-        self.assertEqual(leader_review.status, 'in_progress')
+        self.assertEqual(leader_review.status, 'progress')
 
     def test_cancel_review(self):
         revision = self.create_reviewable_document()
@@ -181,7 +181,7 @@ class ReviewMixinTests(TestCase):
         self.assertEqual(reviewer_review.status, 'not_reviewed')
 
         leader_review = revision.get_leader_review()
-        self.assertEqual(leader_review.status, 'in_progress')
+        self.assertEqual(leader_review.status, 'progress')
 
         approver_review = revision.get_approver_review()
         self.assertEqual(approver_review.status, 'pending')
@@ -191,7 +191,7 @@ class ReviewMixinTests(TestCase):
         revision.start_review()
 
         reviewer_review = revision.get_review(self.user, 'reviewer')
-        self.assertEqual(reviewer_review.status, 'in_progress')
+        self.assertEqual(reviewer_review.status, 'progress')
         reviewer_review.post_review(comments=None)
 
         revision.end_reviewers_step()
@@ -200,7 +200,7 @@ class ReviewMixinTests(TestCase):
         self.assertEqual(reviewer_review.status, 'reviewed')
 
         leader_review = revision.get_leader_review()
-        self.assertEqual(leader_review.status, 'in_progress')
+        self.assertEqual(leader_review.status, 'progress')
 
         approver_review = revision.get_approver_review()
         self.assertEqual(approver_review.status, 'pending')
@@ -238,7 +238,7 @@ class ReviewMixinTests(TestCase):
         self.assertEqual(leader_review.status, 'not_reviewed')
 
         approver_review = revision.get_approver_review()
-        self.assertEqual(approver_review.status, 'in_progress')
+        self.assertEqual(approver_review.status, 'progress')
 
     def test_end_leader_step_with_review(self):
         revision = self.create_reviewable_document()
@@ -246,7 +246,7 @@ class ReviewMixinTests(TestCase):
         revision.end_reviewers_step()
 
         leader_review = revision.get_leader_review()
-        self.assertEqual(leader_review.status, 'in_progress')
+        self.assertEqual(leader_review.status, 'progress')
         leader_review.post_review(comments=None)
         self.assertEqual(leader_review.status, 'reviewed')
 
@@ -256,7 +256,7 @@ class ReviewMixinTests(TestCase):
         self.assertEqual(leader_review.status, 'reviewed')
 
         approver_review = revision.get_approver_review()
-        self.assertEqual(approver_review.status, 'in_progress')
+        self.assertEqual(approver_review.status, 'progress')
 
     def test_end_leader_step_with_reviewers_step_open(self):
         revision = self.create_reviewable_document()
@@ -285,7 +285,7 @@ class ReviewMixinTests(TestCase):
         self.assertIsNone(revision.leader_step_closed)
         review = revision.get_review(self.user, 'leader')
         self.assertFalse(review.closed)
-        self.assertEqual(review.status, 'in_progress')
+        self.assertEqual(review.status, 'progress')
 
     def test_end_review_process(self):
         revision = self.create_reviewable_document()

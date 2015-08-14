@@ -212,13 +212,13 @@ class ReviewMixin(models.Model):
                 revision=self.revision,
                 due_date=self.review_due_date,
                 docclass=self.docclass,
-                status='in_progress',
+                status='progress',
             )
 
         # If no reviewers, close reviewers step immediatly
         if len(reviewers) == 0:
             self.reviewers_step_closed = start_date
-            leader_review_status = 'in_progress'
+            leader_review_status = 'progress'
         else:
             leader_review_status = 'pending'
 
@@ -288,7 +288,7 @@ class ReviewMixin(models.Model):
             .filter(document=self.document) \
             .filter(revision=self.revision) \
             .filter(role=Review.ROLES.leader) \
-            .update(status='in_progress')
+            .update(status='progress')
 
         if save:
             self.save(update_document=True)
@@ -318,7 +318,7 @@ class ReviewMixin(models.Model):
             .filter(document=self.document) \
             .filter(revision=self.revision) \
             .filter(role=Review.ROLES.approver) \
-            .update(status='in_progress')
+            .update(status='progress')
 
         if not self.approver_id:
             self.review_end_date = end_date
@@ -335,7 +335,7 @@ class ReviewMixin(models.Model):
             .filter(document=self.document) \
             .filter(revision=self.revision) \
             .filter(role=Review.ROLES.leader) \
-            .update(closed=False, status='in_progress')
+            .update(closed=False, status='progress')
 
         if save:
             self.save(update_document=True)
