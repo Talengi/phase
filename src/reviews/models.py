@@ -8,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.utils.functional import cached_property
 from django.utils import timezone
+from django.core.cache import cache
 from model_utils import Choices
 
 from accounts.models import User
@@ -95,6 +96,11 @@ class Review(models.Model):
         index_together = (('reviewer', 'document', 'revision', 'role'),)
         app_label = 'reviews'
 
+    def save(self, *args, **kwargs):
+        cache_key = 'all_reviews_{}'.format(self.document_id)
+        cache.delete(cache_key)
+        super(Review, self).save(*args, **kwargs)
+
     @property
     def revision_name(self):
         return '%02d' % self.revision
@@ -160,6 +166,11 @@ class ReviewMixin(models.Model):
 
     class Meta:
         abstract = True
+
+    def save(self, *args, **kwargs):
+        cache_key = 'all_reviews_{}'.format(self.document_id)
+        cache.delete(cache_key)
+        super(ReviewMixin, self).save(*args, **kwargs)
 
     @cached_property
     def can_be_reviewed(self):
