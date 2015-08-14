@@ -201,7 +201,15 @@ class ReviewMixin(models.Model):
                 revision=self.revision,
                 due_date=self.review_due_date,
                 docclass=self.docclass,
+                status='in_progress',
             )
+
+        # If no reviewers, close reviewers step immediatly
+        if len(reviewers) == 0:
+            self.reviewers_step_closed = start_date
+            leader_review_status = 'in_progress'
+        else:
+            leader_review_status = 'pending'
 
         # Leader is mandatory, no need to test it
         Review.objects.create(
@@ -211,6 +219,7 @@ class ReviewMixin(models.Model):
             revision=self.revision,
             due_date=self.review_due_date,
             docclass=self.docclass,
+            status=leader_review_status,
         )
 
         # Approver is not mandatory
@@ -223,10 +232,6 @@ class ReviewMixin(models.Model):
                 due_date=self.review_due_date,
                 docclass=self.docclass,
             )
-
-        # If no reviewers, close reviewers step immediatly
-        if len(reviewers) == 0:
-            self.reviewers_step_closed = start_date
 
         self.save(update_document=True)
 
@@ -265,7 +270,14 @@ class ReviewMixin(models.Model):
             .filter(document=self.document) \
             .filter(revision=self.revision) \
             .filter(role=Review.ROLES.reviewer) \
-            .update(closed=True)
+            .filter(closed=False) \
+            .update(closed=True, status='not_reviewed')
+
+        Review.objects \
+            .filter(document=self.document) \
+            .filter(revision=self.revision) \
+            .filter(role=Review.ROLES.leader) \
+            .update(status='in_progress')
 
         if save:
             self.save(update_document=True)
@@ -288,7 +300,14 @@ class ReviewMixin(models.Model):
             .filter(document=self.document) \
             .filter(revision=self.revision) \
             .filter(role=Review.ROLES.leader) \
-            .update(closed=True)
+            .filter(closed=False) \
+            .update(closed=True, status='not_reviewed')
+
+        Review.objects \
+            .filter(document=self.document) \
+            .filter(revision=self.revision) \
+            .filter(role=Review.ROLES.approver) \
+            .update(status='in_progress')
 
         if not self.approver_id:
             self.review_end_date = end_date
@@ -305,7 +324,7 @@ class ReviewMixin(models.Model):
             .filter(document=self.document) \
             .filter(revision=self.revision) \
             .filter(role=Review.ROLES.leader) \
-            .update(closed=False)
+            .update(closed=False, status='in_progress')
 
         if save:
             self.save(update_document=True)
@@ -326,7 +345,8 @@ class ReviewMixin(models.Model):
             .filter(document=self.document) \
             .filter(revision=self.revision) \
             .filter(role=Review.ROLES.approver) \
-            .update(closed=True)
+            .filter(closed=False) \
+            .update(closed=True, status='not_reviewed')
 
         if save:
             self.save(update_document=True)
