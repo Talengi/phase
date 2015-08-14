@@ -386,6 +386,24 @@ class ReviewMixin(models.Model):
             .get(reviewer=user)
         return review
 
+    def get_leader_review(self):
+        review = Review.objects \
+            .filter(document=self.document) \
+            .filter(revision=self.revision) \
+            .filter(role='leader') \
+            .select_related('reviewer') \
+            .get()
+        return review
+
+    def get_approver_review(self):
+        review = Review.objects \
+            .filter(document=self.document) \
+            .filter(revision=self.revision) \
+            .filter(role='approver') \
+            .select_related('reviewer') \
+            .get()
+        return review
+
     def is_reviewer(self, user):
         return user in self.reviewers.all()
 
