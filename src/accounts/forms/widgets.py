@@ -47,6 +47,7 @@ class MultipleUserAutocomplete(BaseUserAutocomplete):
 
     def render(self, name, value, attrs=None):
         value = value or []
+        import pdb; pdb.set_trace()
         objects = self.choices.queryset.filter(pk__in=value)
         attrs.update({
             'data-initial-id': '[%s]' % ','.join(unicode(val) for val in value),

@@ -2,7 +2,10 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.forms import ReadOnlyPasswordHashField, AuthenticationForm
 
-from .models import User
+from accounts.models import User
+
+
+__all__ = ['UserCreationForm', 'UserChangeForm', 'EmailAuthenticationForm']
 
 
 class UserCreationForm(forms.ModelForm):

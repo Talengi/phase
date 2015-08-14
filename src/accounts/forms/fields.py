@@ -1,6 +1,12 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from django.forms.models import ModelChoiceField, ModelMultipleChoiceField
 
-from accounts.widgets import UserAutocomplete, MultipleUserAutocomplete
+from accounts.forms.widgets import UserAutocomplete, MultipleUserAutocomplete
+
+
+__all__ = ['UserChoiceField', 'UserMultipleChoiceField']
 
 
 class UserChoiceField(ModelChoiceField):
