@@ -24,7 +24,7 @@ CLASSES = (
 
 
 class Review(models.Model):
-    STATUS = Choices(
+    STATUSES = Choices(
         ('pending', _('Pending')),
         ('progress', _('In progress')),
         ('reviewed', _('Reviewed without comments')),
@@ -69,6 +69,11 @@ class Review(models.Model):
         verbose_name=u"Class",
         default=1,
         choices=CLASSES)
+    status = models.CharField(
+        _('Status'),
+        max_length=30,
+        choices=STATUSES,
+        default=STATUSES.pending)
     reviewed_on = models.DateTimeField(
         _('Reviewed on'),
         null=True, blank=True
