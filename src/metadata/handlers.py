@@ -28,4 +28,4 @@ def populate_values_list_cache(**kwargs):
 
     for list_index, list_entries in grouped.items():
         cache_key = 'values_list_{}'.format(list_index)
-        cache.set(cache_key, list_entries)
+        cache.set(cache_key, list_entries, None)
