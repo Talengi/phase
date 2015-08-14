@@ -75,6 +75,9 @@ def deploy():
 
             clearcache = 'python src/manage.py clearcache'
             run(clearcache + with_production_settings)
+
+            migrate = 'python src/manage.py migrate'
+            run(migrate + with_production_settings)
     restart_webserver()
 
 
