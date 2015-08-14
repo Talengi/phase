@@ -3,4 +3,4 @@
 -r base.txt
 
 raven==3.2.1
-gunicorn==18.0
+gunicorn==19.3.0
