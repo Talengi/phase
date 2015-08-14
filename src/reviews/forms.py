@@ -6,7 +6,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 
 from reviews.utils import get_cached_reviews
-from accounts.fields import UserChoiceField, UserMultipleChoiceField
+from accounts.forms import UserChoiceField, UserMultipleChoiceField
 
 
 class ReviewFormMixin(forms.ModelForm):

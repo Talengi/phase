@@ -7,6 +7,8 @@ from django.db import models, transaction
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.utils.functional import cached_property
+from django.utils import timezone
+from django.core.cache import cache
 from model_utils import Choices
 
 from accounts.models import User
@@ -24,6 +26,13 @@ CLASSES = (
 
 
 class Review(models.Model):
+    STATUSES = Choices(
+        ('pending', _('Pending')),
+        ('progress', _('In progress')),
+        ('reviewed', _('Reviewed without comments')),
+        ('commented', _('Reviewed with comments')),
+        ('not_reviewed', _('Not reviewed')),
+    )
     STEPS = Choices(
         ('pending', _('Pending')),
         ('reviewer', _('Reviewer')),
@@ -62,6 +71,11 @@ class Review(models.Model):
         verbose_name=u"Class",
         default=1,
         choices=CLASSES)
+    status = models.CharField(
+        _('Status'),
+        max_length=30,
+        choices=STATUSES,
+        default=STATUSES.pending)
     reviewed_on = models.DateTimeField(
         _('Reviewed on'),
         null=True, blank=True
@@ -82,9 +96,27 @@ class Review(models.Model):
         index_together = (('reviewer', 'document', 'revision', 'role'),)
         app_label = 'reviews'
 
+    def save(self, *args, **kwargs):
+        cache_key = 'all_reviews_{}'.format(self.document_id)
+        cache.delete(cache_key)
+        super(Review, self).save(*args, **kwargs)
+
     @property
     def revision_name(self):
         return '%02d' % self.revision
+
+    def post_review(self, comments, save=True):
+        self.comments = comments
+        self.reviewed_on = timezone.now()
+        self.closed = True
+
+        if comments:
+            self.status = self.STATUSES.commented
+        else:
+            self.status = self.STATUSES.reviewed
+
+        if save:
+            self.save()
 
 
 class ReviewMixin(models.Model):
@@ -135,6 +167,11 @@ class ReviewMixin(models.Model):
     class Meta:
         abstract = True
 
+    def save(self, *args, **kwargs):
+        cache_key = 'all_reviews_{}'.format(self.document_id)
+        cache.delete(cache_key)
+        super(ReviewMixin, self).save(*args, **kwargs)
+
     @cached_property
     def can_be_reviewed(self):
         """Is this revision ready to be reviewed.
@@ -175,7 +212,15 @@ class ReviewMixin(models.Model):
                 revision=self.revision,
                 due_date=self.review_due_date,
                 docclass=self.docclass,
+                status='progress',
             )
+
+        # If no reviewers, close reviewers step immediatly
+        if len(reviewers) == 0:
+            self.reviewers_step_closed = start_date
+            leader_review_status = 'progress'
+        else:
+            leader_review_status = 'pending'
 
         # Leader is mandatory, no need to test it
         Review.objects.create(
@@ -185,6 +230,7 @@ class ReviewMixin(models.Model):
             revision=self.revision,
             due_date=self.review_due_date,
             docclass=self.docclass,
+            status=leader_review_status,
         )
 
         # Approver is not mandatory
@@ -197,10 +243,6 @@ class ReviewMixin(models.Model):
                 due_date=self.review_due_date,
                 docclass=self.docclass,
             )
-
-        # If no reviewers, close reviewers step immediatly
-        if len(reviewers) == 0:
-            self.reviewers_step_closed = start_date
 
         self.save(update_document=True)
 
@@ -239,7 +281,14 @@ class ReviewMixin(models.Model):
             .filter(document=self.document) \
             .filter(revision=self.revision) \
             .filter(role=Review.ROLES.reviewer) \
-            .update(closed=True)
+            .filter(closed=False) \
+            .update(closed=True, status='not_reviewed')
+
+        Review.objects \
+            .filter(document=self.document) \
+            .filter(revision=self.revision) \
+            .filter(role=Review.ROLES.leader) \
+            .update(status='progress')
 
         if save:
             self.save(update_document=True)
@@ -262,7 +311,14 @@ class ReviewMixin(models.Model):
             .filter(document=self.document) \
             .filter(revision=self.revision) \
             .filter(role=Review.ROLES.leader) \
-            .update(closed=True)
+            .filter(closed=False) \
+            .update(closed=True, status='not_reviewed')
+
+        Review.objects \
+            .filter(document=self.document) \
+            .filter(revision=self.revision) \
+            .filter(role=Review.ROLES.approver) \
+            .update(status='progress')
 
         if not self.approver_id:
             self.review_end_date = end_date
@@ -279,7 +335,7 @@ class ReviewMixin(models.Model):
             .filter(document=self.document) \
             .filter(revision=self.revision) \
             .filter(role=Review.ROLES.leader) \
-            .update(closed=False)
+            .update(closed=False, status='progress')
 
         if save:
             self.save(update_document=True)
@@ -300,7 +356,8 @@ class ReviewMixin(models.Model):
             .filter(document=self.document) \
             .filter(revision=self.revision) \
             .filter(role=Review.ROLES.approver) \
-            .update(closed=True)
+            .filter(closed=False) \
+            .update(closed=True, status='not_reviewed')
 
         if save:
             self.save(update_document=True)
@@ -358,6 +415,24 @@ class ReviewMixin(models.Model):
             .filter(role=role) \
             .select_related('reviewer') \
             .get(reviewer=user)
+        return review
+
+    def get_leader_review(self):
+        review = Review.objects \
+            .filter(document=self.document) \
+            .filter(revision=self.revision) \
+            .filter(role='leader') \
+            .select_related('reviewer') \
+            .get()
+        return review
+
+    def get_approver_review(self):
+        review = Review.objects \
+            .filter(document=self.document) \
+            .filter(revision=self.revision) \
+            .filter(role='approver') \
+            .select_related('reviewer') \
+            .get()
         return review
 
     def is_reviewer(self, user):

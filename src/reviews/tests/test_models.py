@@ -123,6 +123,23 @@ class ReviewMixinTests(TestCase):
         reviews = revision.get_reviews()
         self.assertEqual(len(reviews), 8)
 
+    def test_new_reviews_statuses(self):
+        revision = self.create_reviewable_document()
+        revision.reviewers.add(
+            UserFactory(),
+            UserFactory())
+
+        revision.start_review()
+
+        reviewer_review = revision.get_review(self.user, 'reviewer')
+        self.assertEqual(reviewer_review.status, 'progress')
+
+        leader_review = revision.get_leader_review()
+        self.assertEqual(leader_review.status, 'pending')
+
+        approver_review = revision.get_approver_review()
+        self.assertEqual(approver_review.status, 'pending')
+
     def test_start_leader_only_review(self):
         revision = self.create_leader_only_document()
 
@@ -132,6 +149,9 @@ class ReviewMixinTests(TestCase):
 
         reviews = revision.get_reviews()
         self.assertEqual(len(reviews), 1)
+
+        leader_review = revision.get_leader_review()
+        self.assertEqual(leader_review.status, 'progress')
 
     def test_cancel_review(self):
         revision = self.create_reviewable_document()
@@ -157,18 +177,86 @@ class ReviewMixinTests(TestCase):
         today = datetime.date.today()
         self.assertEqual(revision.reviewers_step_closed, today)
 
+        reviewer_review = revision.get_review(self.user, 'reviewer')
+        self.assertEqual(reviewer_review.status, 'not_reviewed')
+
+        leader_review = revision.get_leader_review()
+        self.assertEqual(leader_review.status, 'progress')
+
+        approver_review = revision.get_approver_review()
+        self.assertEqual(approver_review.status, 'pending')
+
+    def test_end_reviewers_step_with_reviews(self):
+        revision = self.create_reviewable_document()
+        revision.start_review()
+
+        reviewer_review = revision.get_review(self.user, 'reviewer')
+        self.assertEqual(reviewer_review.status, 'progress')
+        reviewer_review.post_review(comments=None)
+
+        revision.end_reviewers_step()
+
+        reviewer_review = revision.get_review(self.user, 'reviewer')
+        self.assertEqual(reviewer_review.status, 'reviewed')
+
+        leader_review = revision.get_leader_review()
+        self.assertEqual(leader_review.status, 'progress')
+
+        approver_review = revision.get_approver_review()
+        self.assertEqual(approver_review.status, 'pending')
+
+    def test_end_reviewers_step_with_mixed_reviewes(self):
+        user2 = UserFactory()
+        revision = self.create_reviewable_document()
+        revision.reviewers.add(user2)
+        revision.start_review()
+
+        user1_review = revision.get_review(self.user, 'reviewer')
+        user1_review.post_review(None)
+
+        revision.end_reviewers_step()
+
+        user1_review = revision.get_review(self.user, 'reviewer')
+        self.assertEqual(user1_review.status, 'reviewed')
+
+        user2_review = revision.get_review(user2, 'reviewer')
+        self.assertEqual(user2_review.status, 'not_reviewed')
+
     def test_end_leader_step(self):
         revision = self.create_reviewable_document()
-        today = datetime.date.today()
-        yesterday = today - datetime.timedelta(days=1)
+        revision.start_review()
+        revision.end_leader_step()
 
-        revision.review_start_date = yesterday
-        revision.reviewers_step_closed = yesterday
+        today = datetime.date.today()
+        self.assertEqual(revision.reviewers_step_closed, today)
+        self.assertEqual(revision.leader_step_closed, today)
+
+        reviewer_review = revision.get_review(self.user, 'reviewer')
+        self.assertEqual(reviewer_review.status, 'not_reviewed')
+
+        leader_review = revision.get_leader_review()
+        self.assertEqual(leader_review.status, 'not_reviewed')
+
+        approver_review = revision.get_approver_review()
+        self.assertEqual(approver_review.status, 'progress')
+
+    def test_end_leader_step_with_review(self):
+        revision = self.create_reviewable_document()
+        revision.start_review()
+        revision.end_reviewers_step()
+
+        leader_review = revision.get_leader_review()
+        self.assertEqual(leader_review.status, 'progress')
+        leader_review.post_review(comments=None)
+        self.assertEqual(leader_review.status, 'reviewed')
 
         revision.end_leader_step()
 
-        self.assertEqual(revision.reviewers_step_closed, yesterday)
-        self.assertEqual(revision.leader_step_closed, today)
+        leader_review = revision.get_leader_review()
+        self.assertEqual(leader_review.status, 'reviewed')
+
+        approver_review = revision.get_approver_review()
+        self.assertEqual(approver_review.status, 'progress')
 
     def test_end_leader_step_with_reviewers_step_open(self):
         revision = self.create_reviewable_document()
@@ -197,6 +285,7 @@ class ReviewMixinTests(TestCase):
         self.assertIsNone(revision.leader_step_closed)
         review = revision.get_review(self.user, 'leader')
         self.assertFalse(review.closed)
+        self.assertEqual(review.status, 'progress')
 
     def test_end_review_process(self):
         revision = self.create_reviewable_document()
@@ -208,6 +297,15 @@ class ReviewMixinTests(TestCase):
         self.assertEqual(revision.reviewers_step_closed, today)
         self.assertEqual(revision.leader_step_closed, today)
         self.assertEqual(revision.review_end_date, today)
+
+        reviewer_review = revision.get_review(self.user, 'reviewer')
+        self.assertEqual(reviewer_review.status, 'not_reviewed')
+
+        leader_review = revision.get_leader_review()
+        self.assertEqual(leader_review.status, 'not_reviewed')
+
+        approver_review = revision.get_approver_review()
+        self.assertEqual(approver_review.status, 'not_reviewed')
 
     def test_is_under_review(self):
         doc = DocumentFactory(category=self.category)

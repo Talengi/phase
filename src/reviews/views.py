@@ -12,7 +12,6 @@ from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
-from django.utils import timezone
 from celery.result import AsyncResult
 
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
@@ -518,10 +517,7 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
         review = get_object_or_404(qs)
 
         # … and update it
-        review.reviewed_on = timezone.now()
-        review.comments = comments_file
-        review.closed = True
-        review.save()
+        review.post_review(comments_file)
 
         # If every reviewer has posted comments, close the reviewers step
         if self.object.is_at_review_step('reviewer'):

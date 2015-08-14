@@ -1,6 +1,12 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from django.forms.models import ModelChoiceField, ModelMultipleChoiceField
 
-from accounts.widgets import UserAutocomplete, MultipleUserAutocomplete
+from accounts.forms.widgets import UserAutocomplete, MultipleUserAutocomplete
+
+
+__all__ = ['UserChoiceField', 'UserMultipleChoiceField']
 
 
 class UserChoiceField(ModelChoiceField):
@@ -21,6 +27,10 @@ class UserMultipleChoiceField(ModelMultipleChoiceField):
         users = self.category.users.all()
         super(UserMultipleChoiceField, self).__init__(users, *args, **kwargs)
         self.widget.set_category(self.category)
+
+    def bound_data(self, value, initial):
+        value = value.split(',') if value else value
+        return value
 
     def clean(self, value):
         value = value.split(',') if value else value

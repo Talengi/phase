@@ -8,8 +8,8 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib import messages
 
 from categories.admin import UserCategoryInline, GroupCategoryInline
-from .models import User
-from .forms import UserCreationForm, UserChangeForm
+from accounts.models import User
+from accounts.forms import UserCreationForm, UserChangeForm
 
 
 class UserAdmin(django_UserAdmin):
