@@ -438,6 +438,12 @@ class ReviewMixin(models.Model):
     def is_reviewer(self, user):
         return user in self.reviewers.all()
 
+    def get_initial_ignored_fields(self):
+        ignored = (
+            'review_start_date',
+            'review_due_date',)
+        return super(ReviewMixin, self).get_initial_ignored_fields() + ignored
+
     def get_new_revision_initial(self, form):
         initial = super(ReviewMixin, self).get_new_revision_initial(form)
         initial.update({
