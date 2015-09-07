@@ -30,6 +30,16 @@ PG = {
 
 DATABASES = PG
 
+# ######### CACHE CONFIGURATION
+# This is the default value, but we redefine it because
+# explicit is better than implicit.
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+}
+
 # We need a different media root so we can wipe it securely in tests
 MEDIA_ROOT = '/tmp/phase_media/'
 PRIVATE_ROOT = '/tmp/phase_media/'
