@@ -24,7 +24,7 @@ class ScheduleStatusLayout(LayoutObject):
     def __init__(self, name, **kwargs):
         self.name = name
 
-    def render(self, form, form_style, context):
+    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
         planned_field = form['status_%s_planned_date' % self.name]
         forecast_field = form['status_%s_forecast_date' % self.name]
         actual_field = form['status_%s_actual_date' % self.name]
@@ -68,7 +68,7 @@ class ScheduleLayout(LayoutObject):
     def __init__(self, *fields, **kwargs):
         self.fields = list(fields)
 
-    def render(self, form, form_style, context):
+    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
         fields = [render_field(field, form, form_style, context) for field in self.fields]
 
         return render_to_string(
@@ -234,7 +234,7 @@ class DateField(Field):
             context['wrapper_class'] = self.wrapper_class
 
         if form.read_only:
-            template = "%s/field.html" % TEMPLATE_PACK
+            template = "%s/field.html"
         else:
             template = self.template
 
