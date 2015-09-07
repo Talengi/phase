@@ -401,7 +401,7 @@ class Correspondence(Metadata):
         return self.subject
 
     def get_initial_empty(self):
-        empty_fields = ('final_revision')
+        empty_fields = ('final_revision',)
         return super(ContractorDeliverableRevision, self).get_initial_empty() + empty_fields
 
 
