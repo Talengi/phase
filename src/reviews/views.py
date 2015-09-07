@@ -12,8 +12,9 @@ from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
-from celery.result import AsyncResult
+from django.forms.models import modelform_factory
 
+from celery.result import AsyncResult
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 from zipview.views import BaseZipView
 
@@ -357,6 +358,15 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
         # so the user is automaticaly allowed to post a remark
         can_discuss = True
 
+        # Which form fields should we display?
+        fields = ('comments',)
+        if is_leader or is_approver:
+            fields += ('return_code',)
+        form = modelform_factory(Review, fields=fields, labels={
+            'comments': _('Upload your comments'),
+            'return_code': _('Select a return code'),
+        })
+
         context.update({
             'document': self.object.document,
             'document_key': self.object.document.document_key,
@@ -370,6 +380,7 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
             'close_leader_button': close_leader_button,
             'back_to_leader_button': back_to_leader_button,
             'can_discuss': can_discuss,
+            'form': form,
         })
         return context
 
@@ -507,6 +518,7 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
         revision = self.object
         step = self.object.current_review_step()
         comments_file = request.FILES.get('comments', None)
+        return_code = request.POST.get('return_code', None)
 
         # Get the current review being submitted…
         qs = Review.objects \
@@ -517,7 +529,7 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
         review = get_object_or_404(qs)
 
         # … and update it
-        review.post_review(comments_file)
+        review.post_review(comments_file, return_code=return_code)
 
         # If every reviewer has posted comments, close the reviewers step
         if self.object.is_at_review_step('reviewer'):

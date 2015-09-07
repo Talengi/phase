@@ -558,6 +558,25 @@ class ReviewFormTests(TestCase):
         revision = revision.__class__.objects.get(pk=revision.pk)
         self.assertIsNotNone(revision.leader_step_closed)
 
+    def test_leader_submit_review_with_return_code(self):
+        doc = DocumentFactory(
+            document_key='test_key',
+            category=self.category,
+            revision={
+                'reviewers': [self.other_user],
+                'leader': self.user,
+                'approver': self.other_user,
+                'received_date': datetime.date.today(),
+            }
+        )
+        revision = doc.latest_revision
+        revision.start_review()
+        revision.end_reviewers_step()
+
+        self.client.post(self.url, {'review': 'something', 'return_code': '1'})
+        review = revision.get_review(self.user, role='leader')
+        self.assertEqual(review.return_code, '1')
+
     def test_leader_submit_review_with_file(self):
         doc = DocumentFactory(
             document_key='test_key',
@@ -652,6 +671,40 @@ class ReviewFormTests(TestCase):
         revision.end_review()
         res = self.client.get(self.url)
         self.assertEqual(res.status_code, 404)
+
+    def test_simple_reviewer_cannot_see_return_code_field(self):
+        doc = DocumentFactory(
+            document_key='test_key',
+            category=self.category,
+            revision={
+                'reviewers': [self.user],
+                'leader': self.other_user,
+                'approver': self.other_user,
+                'received_date': datetime.date.today(),
+            }
+        )
+        revision = doc.latest_revision
+        revision.start_review()
+
+        res = self.client.get(self.url)
+        self.assertNotContains(res, 'name="return_code"')
+
+    def test_leader_can_see_return_code_field(self):
+        doc = DocumentFactory(
+            document_key='test_key',
+            category=self.category,
+            revision={
+                'reviewers': [self.other_user],
+                'leader': self.user,
+                'approver': self.other_user,
+                'received_date': datetime.date.today(),
+            }
+        )
+        revision = doc.latest_revision
+        revision.start_review()
+
+        res = self.client.get(self.url)
+        self.assertContains(res, 'name="return_code"')
 
 
 class StartReviewTests(TestCase):
