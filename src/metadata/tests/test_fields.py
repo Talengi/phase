@@ -9,8 +9,8 @@ from metadata.handlers import populate_values_list_cache
 
 
 class ConfigurableChoiceFieldTest(TestCase):
-    def test_choices_from_list(self):
-        values_list = ValuesListFactory(
+    def setUp(self):
+        self.values_list = ValuesListFactory(
             values={
                 'test1': 'Test 1',
                 'test2': 'Test 2',
@@ -18,7 +18,9 @@ class ConfigurableChoiceFieldTest(TestCase):
             }
         )
         populate_values_list_cache()
-        choices = get_choices_from_list(values_list.index)
+
+    def test_choices_from_list(self):
+        choices = get_choices_from_list(self.values_list.index)
         self.assertItemsEqual(choices, [
             (u'test1', u'test1 - Test 1'),
             (u'test2', u'test2 - Test 2'),
