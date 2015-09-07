@@ -14,7 +14,11 @@ from metadata.handlers import populate_values_list_cache
 def get_choices_from_list(list_index):
     """Load the values list from cache.
 
-    Cache is populated post-syncdb
+    Cache is populated in multiple places:
+
+     - post-migrate signal handler
+     - when admin form is submitted
+     - using the `reload_metadata_cache` task
 
     """
     cache_key = 'values_list_{}'.format(list_index)
