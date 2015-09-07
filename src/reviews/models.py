@@ -111,8 +111,9 @@ class Review(models.Model):
     def revision_name(self):
         return '%02d' % self.revision
 
-    def post_review(self, comments, save=True):
+    def post_review(self, comments, return_code=None, save=True):
         self.comments = comments
+        self.return_code = return_code
         self.reviewed_on = timezone.now()
         self.closed = True
 
