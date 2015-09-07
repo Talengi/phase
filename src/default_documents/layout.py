@@ -234,7 +234,7 @@ class DateField(Field):
             context['wrapper_class'] = self.wrapper_class
 
         if form.read_only:
-            template = "%s/field.html"
+            template = "%s/field.html" % TEMPLATE_PACK
         else:
             template = self.template
 
