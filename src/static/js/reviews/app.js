@@ -11,7 +11,7 @@ jQuery(function($) {
         pushState: true
     });
 
-    var commentInput = $('#id_comments_input');
+    var commentInput = $('#id_comments');
     var submitButton = $('#review_submit');
 
     submitButton.val(without_file_label);
