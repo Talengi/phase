@@ -17,7 +17,7 @@ def populate_values_list_cache(**kwargs):
     values = ListEntry.objects \
         .select_related('values_list') \
         .annotate(display=Concat(F('index'), V(' - '), F('value'))) \
-        .order_by('values_list__index') \
+        .order_by('values_list__index', 'order') \
         .values_list('values_list__index', 'index', 'display')
 
     grouped = {}
