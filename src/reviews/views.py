@@ -278,8 +278,7 @@ class ReviewersDocumentList(BaseReviewDocumentList):
         if not hasattr(self, '_pending_reviews'):
             reviews = Review.objects \
                 .filter(reviewer=self.request.user) \
-                .filter(reviewed_on=None) \
-                .filter(closed=False)
+                .filter(closed_on=None)
 
             self._pending_reviews = reviews.values_list('document_id', flat=True)
 
@@ -539,7 +538,7 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
                 .filter(document=document) \
                 .filter(revision=revision.revision) \
                 .filter(role='reviewer') \
-                .exclude(reviewed_on=None)
+                .exclude(closed_on=None)
             if qs.count() == self.object.reviewers.count():
                 self.object.end_reviewers_step()
 
