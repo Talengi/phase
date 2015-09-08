@@ -119,12 +119,14 @@
     <form method="post" action="" enctype="multipart/form-data">
         {% csrf_token %}
 
-        <fieldset id="fieldset-your-comments">
-            <legend>{{ _('Your comments') }}</legend>
+        {% if can_comment %}
+            <fieldset id="fieldset-your-comments">
+                <legend>{{ _('Your comments') }}</legend>
 
-            {% include 'form_snippet.html' with form=form %}
+                {% include 'form_snippet.html' with form=form %}
 
-        </fieldset>
+            </fieldset>
+        {% endif %}
 
         <hr />
 
