@@ -123,8 +123,14 @@
             <fieldset id="fieldset-your-comments">
                 <legend>{{ _('Your comments') }}</legend>
 
-                {% include 'form_snippet.html' with form=form %}
-
+                {% for field in form %}
+                    <div class="form-group">
+                        <label for="{{ field.id }}" class="control-label">
+                            {{ field.label }}
+                        </label> <br />
+                        {{ field }}
+                    </div>
+                {% endfor %}
             </fieldset>
         {% endif %}
 

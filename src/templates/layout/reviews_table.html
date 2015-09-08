@@ -15,11 +15,11 @@
             {% endif %}
         </td>
         <td class="center small">
-            {% if review.closed %}
+            {% if review.closed_on %}
             <span class="glyphicon glyphicon-time"
                   rel="tooltip"
                   data-toggle="tooltip"
-                  title="{{ review.reviewed_on|default_if_none:'' }}">
+                  title="{{ review.closed_on }}">
             </span>
             {% endif %}
         </td>

@@ -77,13 +77,9 @@ class Review(models.Model):
         max_length=30,
         choices=STATUSES,
         default=STATUSES.pending)
-    reviewed_on = models.DateTimeField(
-        _('Reviewed on'),
+    closed_on = models.DateTimeField(
+        _('Closed on'),
         null=True, blank=True
-    )
-    closed = models.BooleanField(
-        _('Closed'),
-        default=False,
     )
     comments = PrivateFileField(
         _('Comments'),
@@ -114,8 +110,7 @@ class Review(models.Model):
     def post_review(self, comments, return_code=None, save=True):
         self.comments = comments
         self.return_code = return_code
-        self.reviewed_on = timezone.now()
-        self.closed = True
+        self.closed_on = timezone.now()
 
         if comments:
             self.status = self.STATUSES.commented
@@ -282,14 +277,15 @@ class ReviewMixin(models.Model):
     @transaction.atomic
     def end_reviewers_step(self, at_date=None, save=True):
         """Ends the first step of the review."""
-        self.reviewers_step_closed = at_date or datetime.date.today()
+        end_date = at_date or datetime.date.today()
+        self.reviewers_step_closed = end_date
 
         Review.objects \
             .filter(document=self.document) \
             .filter(revision=self.revision) \
             .filter(role=Review.ROLES.reviewer) \
-            .filter(closed=False) \
-            .update(closed=True, status='not_reviewed')
+            .filter(closed_on=None) \
+            .update(closed_on=end_date, status='not_reviewed')
 
         Review.objects \
             .filter(document=self.document) \
@@ -318,8 +314,8 @@ class ReviewMixin(models.Model):
             .filter(document=self.document) \
             .filter(revision=self.revision) \
             .filter(role=Review.ROLES.leader) \
-            .filter(closed=False) \
-            .update(closed=True, status='not_reviewed')
+            .filter(closed_on=None) \
+            .update(closed_on=end_date, status='not_reviewed')
 
         Review.objects \
             .filter(document=self.document) \
@@ -342,7 +338,7 @@ class ReviewMixin(models.Model):
             .filter(document=self.document) \
             .filter(revision=self.revision) \
             .filter(role=Review.ROLES.leader) \
-            .update(closed=False, status='progress')
+            .update(closed_on=None, status='progress')
 
         if save:
             self.save(update_document=True)
@@ -357,14 +353,15 @@ class ReviewMixin(models.Model):
         if self.leader_step_closed is None:
             self.end_leader_step(save=False, at_date=at_date)
 
-        self.review_end_date = at_date or datetime.date.today()
+        end_date = at_date or datetime.date.today()
+        self.review_end_date = end_date
 
         Review.objects \
             .filter(document=self.document) \
             .filter(revision=self.revision) \
             .filter(role=Review.ROLES.approver) \
-            .filter(closed=False) \
-            .update(closed=True, status='not_reviewed')
+            .filter(closed_on=None) \
+            .update(closed_on=end_date, status='not_reviewed')
 
         if save:
             self.save(update_document=True)
