@@ -341,15 +341,16 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
         context = super(ReviewFormView, self).get_context_data(**kwargs)
 
         user = self.request.user
+        is_reviewer = self.object.is_reviewer(user)
+        is_leader = user == self.object.leader
+        is_approver = user == self.object.approver
 
         reviews = self.object.get_reviews()
         can_comment = any((
-            (self.object.is_at_review_step('approver') and user == self.object.approver),
-            (self.object.is_at_review_step('leader') and user == self.object.leader),
-            (self.object.is_at_review_step('reviewer') and self.object.is_reviewer(user))
+            (self.object.is_at_review_step('approver') and is_approver),
+            (self.object.is_at_review_step('leader') and is_leader),
+            (self.object.is_at_review_step('reviewer') and is_reviewer)
         ))
-        is_leader = user == self.object.leader
-        is_approver = user == self.object.approver
         close_reviewers_button = self.object.is_at_review_step('reviewer') and (is_leader or is_approver)
         close_leader_button = self.object.is_at_review_step('leader') and is_approver
         back_to_leader_button = self.object.is_at_review_step('approver') and is_approver
@@ -373,6 +374,7 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
             'revision': self.object,
             'reviews': reviews,
             'leader': self.object.leader,
+            'is_reviewer': is_reviewer,
             'is_leader': is_leader,
             'is_approver': is_approver,
             'can_comment': can_comment,

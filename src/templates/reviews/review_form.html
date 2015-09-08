@@ -175,6 +175,7 @@
         userId: {% if request.user.is_authenticated %}{{ request.user.id }}{% else %}undefined{% endif %},
         csrfToken: "{{ csrf_token }}",
         currentUrl: "{% url "review_document" document_key %}",
+        isReviewer: "{{ is_reviewer|yesno:'true,false' }}"
     });
 </script>
 {% javascript "review" %}

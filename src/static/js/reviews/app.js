@@ -14,10 +14,12 @@ jQuery(function($) {
     var commentInput = $('#id_comments');
     var submitButton = $('#review_submit');
 
-    submitButton.val(without_file_label);
-    commentInput.change(function() {
-        submitButton.val(with_file_label);
-    });
+    if (Phase.Config.isReviewer) {
+        submitButton.val(without_file_label);
+        commentInput.change(function() {
+            submitButton.val(with_file_label);
+        });
+    }
 
     var tooltips = $('span[rel=tooltip]');
     tooltips.tooltip();
