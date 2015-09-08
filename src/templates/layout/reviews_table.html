@@ -5,7 +5,7 @@
         <td>{{ review.get_role_display }}</td>
         <td>{{ review.reviewer }}</td>
         <td>{{ review.get_status_display }}</td>
-        <td>{% spaceless %}
+        <td class="center small">
             {% if review.return_code %}
             <span rel="tooltip"
                   data-toggle="tooltip"
@@ -13,8 +13,8 @@
                 {{ review.return_code }}
             </span>
             {% endif %}
-        {% endspaceless %}</td>
-        <td>{% spaceless %}
+        </td>
+        <td class="center small">
             {% if review.closed %}
             <span class="glyphicon glyphicon-time"
                   rel="tooltip"
@@ -22,7 +22,7 @@
                   title="{{ review.reviewed_on|default_if_none:'' }}">
             </span>
             {% endif %}
-        {% endspaceless %}</td>
+        </td>
         <td class="center">{% file_link review.comments 'Comments' %}</td>
     </tr>
 
