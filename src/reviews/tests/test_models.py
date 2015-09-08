@@ -284,7 +284,7 @@ class ReviewMixinTests(TestCase):
 
         self.assertIsNone(revision.leader_step_closed)
         review = revision.get_review(self.user, 'leader')
-        self.assertFalse(review.closed)
+        self.assertIsNone(review.closed_on)
         self.assertEqual(review.status, 'progress')
 
     def test_end_review_process(self):

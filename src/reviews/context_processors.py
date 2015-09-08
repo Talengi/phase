@@ -35,7 +35,7 @@ def get_step_count(user, step):
     if count is None:
         count = Review.objects \
             .filter(reviewer=user) \
-            .filter(closed=False) \
+            .filter(closed_on=None) \
             .filter(role=step) \
             .count()
         cache.set(cache_key, count, None)
@@ -51,7 +51,7 @@ def get_priorities_count(user):
         count = Review.objects \
             .filter(reviewer=user) \
             .filter(due_date__lte=delta) \
-            .filter(closed=False) \
+            .filter(closed_on=None) \
             .filter(role__in=['leader', 'approver']) \
             .filter(docclass__lte=2) \
             .count()

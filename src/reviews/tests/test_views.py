@@ -254,7 +254,7 @@ class ReviewersDocumentListTests(TestCase):
             .filter(document=doc) \
             .filter(revision=doc.latest_revision.revision) \
             .filter(reviewer=self.user) \
-            .update(reviewed_on=timezone.now())
+            .update(closed_on=timezone.now())
 
         res = self.client.get(self.url)
         self.assertNotContains(res, '<td class="columndocument_key"')
@@ -434,11 +434,12 @@ class ReviewFormTests(TestCase):
         revision.start_review()
 
         review = revision.get_review(self.user)
-        self.assertIsNone(review.reviewed_on)
+        self.assertEqual(review.status, 'progress')
 
         self.client.post(self.url, {'review': 'something'})
         review = revision.get_review(self.user)
-        self.assertIsNotNone(review.reviewed_on)
+        self.assertIsNotNone(review.closed_on)
+        self.assertEqual(review.status, 'reviewed')
         self.assertFalse(review.comments)
 
     def test_reviewers_submit_review_with_file(self):
@@ -702,6 +703,7 @@ class ReviewFormTests(TestCase):
         )
         revision = doc.latest_revision
         revision.start_review()
+        revision.end_reviewers_step()
 
         res = self.client.get(self.url)
         self.assertContains(res, 'name="return_code"')
