@@ -1,5 +1,15 @@
 {% load review_form discussion humanize %}
 <table class="table table-bordered reviewers">
+    <thead>
+        <tr>
+            <th>Review step</th>
+            <th>User</th>
+            <th>Status</th>
+            <th>Code</th>
+            <th>Date</th>
+            <th>Comment</th>
+        </tr>
+    </thead>
     {% for review in reviews %}
     <tr class="{{ review.role }}">
         <td>{{ review.get_role_display }}</td>

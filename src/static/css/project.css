@@ -121,7 +121,8 @@ body > .container > h2 {
 }
 #main-table {
 }
-#main-table thead th {
+#main-table thead th,
+.reviewers thead th {
     background-color: #f0f0f0;
 }
 #main-table th,
