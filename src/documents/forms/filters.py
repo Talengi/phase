@@ -22,10 +22,11 @@ class BaseDocumentFilterForm(forms.Form):
 # not model fields.
 # TODO Find a better way to do this.
 additional_filter_fields = {
-    'is_obsolete': forms.ChoiceField(
+    'is_existing': forms.ChoiceField(
         choices=(
-            ('false', 'No'),
-            ('', 'Yes'),
+            ('', 'All'),
+            ('true', 'Existing'),
+            ('false', 'Deleted / Superseded'),
         ),
         required=False,
         widget=forms.Select,
