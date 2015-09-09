@@ -16,11 +16,24 @@ var Phase = Phase || {};
      * a new search query is performed.
      */
     Phase.Models.Search = Backbone.Model.extend({
-        defaults: {
-            search_terms: '',
-            sort_by: 'document_key',
-            start: 0,
-            size: Phase.Config.paginateBy
+        defaults: function() {
+            var defaults = {
+                search_terms: '',
+                sort_by: 'document_key',
+                start: 0,
+                size: Phase.Config.paginateBy
+            };
+            var updatedDefault = _.extend(defaults, Phase.Config.filterDefaults);
+
+            // Boolean values must be converted to strings because input
+            // values "true" and "false" are not cast to bools before
+            // comparison
+            return _.mapObject(updatedDefault, function(val, key) {
+                if (typeof(val) == 'boolean') {
+                    val = val.toString();
+                }
+                return val;
+            });
         },
         /**
          * Reset the search parameters to default.
@@ -50,9 +63,10 @@ var Phase = Phase || {};
          * responsible of triggering the actual search query.
          */
         firstPage: function() {
+            var defaults = this.defaults();
             this.set({
-                'start':this.defaults.start,
-                'size': this.defaults.size
+                'start': defaults.start,
+                'size': defaults.size
             }, {silent: true});
         }
     });

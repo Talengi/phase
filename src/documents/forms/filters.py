@@ -22,6 +22,16 @@ class BaseDocumentFilterForm(forms.Form):
 # not model fields.
 # TODO Find a better way to do this.
 additional_filter_fields = {
+    'is_existing': forms.ChoiceField(
+        choices=(
+            ('', 'All'),
+            ('true', 'Existing'),
+            ('false', 'Deleted / Superseded'),
+        ),
+        required=False,
+        widget=forms.Select,
+        label=_('Show Deleted / Superseded'),
+    ),
     'overdue': forms.ChoiceField(
         choices=(
             ('', '---------'),
@@ -41,7 +51,7 @@ additional_filter_fields = {
         required=False,
         widget=forms.Select,
         label=_('Under review'),
-    )
+    ),
 }
 
 

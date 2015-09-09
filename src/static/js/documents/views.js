@@ -349,7 +349,7 @@ var Phase = Phase || {};
          * if it's still in it's default state.
          */
         isDefaultForm: function() {
-            var defaults = this.model.defaults;
+            var defaults = _.result(this.model, 'defaults');
             var attributes = this.model.attributes;
 
             return _.isEqual(defaults, attributes);

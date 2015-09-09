@@ -143,9 +143,12 @@ class ContractorDeliverable(Metadata):
 
     class PhaseConfig:
         filter_fields = (
-            'docclass', 'status', 'unit', 'discipline', 'document_type',
-            'under_review', 'overdue', 'leader', 'approver'
+            'is_existing', 'docclass', 'status', 'unit', 'discipline',
+            'document_type', 'under_review', 'overdue', 'leader', 'approver'
         )
+        filter_defaults = {
+            'is_existing': 'true',
+        }
         searchable_fields = ('document_key', 'title',)
         column_fields = (
             ('Document Number', 'document_key'),
@@ -221,6 +224,10 @@ class ContractorDeliverable(Metadata):
     @property
     def status(self):
         return self.latest_revision.status
+
+    @property
+    def is_existing(self):
+        return self.status not in ('CLD', 'SPD')
 
     @property
     def final_revision(self):

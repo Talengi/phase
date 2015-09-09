@@ -37,6 +37,7 @@
         searchUrl: "{% url "search_documents" organisation_slug category_slug %}",
         paginateBy: {{ paginate_by }},
         sortBy: "{{ sort_by }}",
+        filterDefaults: {{ filter_defaults|safe }},
         documentType: "{{ document_type }}",
 
         favoriteUrl: "{% url "favorite-list" %}",
