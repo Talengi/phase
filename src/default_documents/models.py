@@ -147,7 +147,7 @@ class ContractorDeliverable(Metadata):
             'document_type', 'under_review', 'overdue', 'leader', 'approver'
         )
         filter_defaults = {
-            'is_obsolete': 'false',
+            'is_obsolete': False,
         }
         searchable_fields = ('document_key', 'title',)
         column_fields = (
