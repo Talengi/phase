@@ -1,5 +1,4 @@
 import os
-import json
 try:
     from urllib.parse import unquote
 except ImportError:
@@ -124,14 +123,15 @@ class DocumentList(BaseDocumentList):
         model = context['object_list'].model
         FilterForm = filterform_factory(model)
         filter_defaults = getattr(model.PhaseConfig, 'filter_defaults', {})
+        filter_form = FilterForm(initial=filter_defaults)
 
         qs = self.get_queryset()
         download_form = DocumentDownloadForm(queryset=qs)
 
         context.update({
             'download_form': download_form,
-            'form': FilterForm(),
-            'filter_defaults': json.dumps(filter_defaults),
+            'form': filter_form,
+            'filter_defaults': filter_defaults,
             'documents_active': True,
             'paginate_by': settings.PAGINATE_BY,
             'sort_by': model._meta.ordering[0],
