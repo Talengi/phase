@@ -32,6 +32,7 @@ class NoteSerializer(serializers.ModelSerializer):
         formatted = ret['formatted_body']
         replace = r'<span class="mention">@\1</span>'
         formatted = mentions_re.sub(replace, formatted)
+        formatted = filters.safe(formatted)
         formatted = filters.linebreaksbr(formatted)
         ret['formatted_body'] = formatted
 
