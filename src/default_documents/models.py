@@ -143,13 +143,11 @@ class ContractorDeliverable(Metadata):
 
     class PhaseConfig:
         filter_fields = (
-            'is_existing', 'docclass', 'status', 'unit', 'discipline',
+            'docclass', 'status', 'unit', 'discipline',
             'document_type', 'under_review', 'overdue', 'leader', 'approver'
         )
-        filter_defaults = {
-            'is_existing': 'true',
-        }
         searchable_fields = ('document_key', 'title',)
+        indexable_fields = ('is_existing',)
         column_fields = (
             ('Document Number', 'document_key'),
             ('Title', 'title'),
