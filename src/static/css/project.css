@@ -145,29 +145,6 @@ tr.selected {
     text-align: center;
 }
 
-/* Related documents and multiselect */
-.document-list {
-    width: 100%;
-    margin-left: 0;
-    max-height: 125px;
-    overflow-y: auto;
-}
-button.ui-multiselect {
-    color: #000;
-    font-weight: normal;
-    width: 50%;
-}
-.ui-multiselect-filter, .ui-multiselect-filter input {
-    font-size: 1em;
-}
-.ui-multiselect-checkboxes label {
-    text-align: left;
-}
-.ui-multiselect-checkboxes label input {
-    top: -3px;
-    margin-right: 5px;
-}
-
 /* Datatables custom */
 #main-table table thead th {
     white-space: nowrap;
