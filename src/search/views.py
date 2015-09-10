@@ -93,7 +93,6 @@ class SearchDocuments(JSONResponseMixin, BaseDocumentList):
 
         # Filter fields
         filter_fields = Model.PhaseConfig.filter_fields
-
         for field in filter_fields:
             value = data.get(field, None)
             if value:
@@ -103,6 +102,14 @@ class SearchDocuments(JSONResponseMixin, BaseDocumentList):
                 else:
                     field = '%s.raw' % field
                 s = s.filter({'term': {field: value}})
+
+        # Custom filters
+        custom_filters = getattr(Model.PhaseConfig, 'custom_filters', {})
+        for filter_key, filter_data in custom_filters.items():
+            value = data.get(filter_key, None)
+            f = filter_data['filters'].get(value, None)
+            if f is not None:
+                s = s.filter(f)
 
         # Aggregations (facets)
         # For foreign key fields, we need to organize buckets by primary keys

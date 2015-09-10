@@ -6,6 +6,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
 from django import forms
 
+from elasticsearch_dsl import F
+
 from metadata.fields import ConfigurableChoiceField
 from accounts.models import User
 from reviews.models import ReviewMixin
@@ -188,6 +190,11 @@ class ContractorDeliverable(Metadata):
             'show_cld_spd': {
                 'field': forms.BooleanField,
                 'label': _('Show Cancelled/Superseded documents'),
+                'filters': {
+                    True: None,
+                    False: F('term', is_existing=True),
+                    None: F('term', is_existing=True)
+                }
             }
         }
 
