@@ -87,8 +87,7 @@ class SearchDocuments(JSONResponseMixin, BaseDocumentList):
 
         s = Search(using=elastic, doc_type=document_type) \
             .index(settings.ELASTIC_INDEX) \
-            .filter('term', is_latest_revision=True) \
-            .filter('term', is_existing=True)
+            .filter('term', is_latest_revision=True)
 
         data = form.cleaned_data
 
