@@ -22,16 +22,6 @@ class BaseDocumentFilterForm(forms.Form):
 # not model fields.
 # TODO Find a better way to do this.
 additional_filter_fields = {
-    'is_existing': forms.ChoiceField(
-        choices=(
-            ('', 'All'),
-            ('true', 'Existing'),
-            ('false', 'Deleted / Superseded'),
-        ),
-        required=False,
-        widget=forms.Select,
-        label=_('Show Deleted / Superseded'),
-    ),
     'overdue': forms.ChoiceField(
         choices=(
             ('', '---------'),
@@ -68,13 +58,19 @@ def filterform_factory(model):
 
     # Get the list of all configured fields
     config = getattr(model, 'PhaseConfig')
-    filter_fields = config.filter_fields
-
-    kwargs = {
-        'required': False,
-    }
-
     field_list = []
+    kwargs = {'required': False}
+
+    # Add custom filters to filter form
+    custom_filters = getattr(config, 'custom_filters', {})
+    for field_name, filter_config in custom_filters.items():
+        field = filter_config['field'](**kwargs)
+        field.required = False
+        field.label = filter_config['label']
+        field_list.append((field_name, field))
+
+    # Add all field filters to form
+    filter_fields = config.filter_fields
     for field_name in filter_fields:
         if field_name in all_fields:
             f = all_fields[field_name]

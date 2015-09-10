@@ -1,6 +1,12 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
+from django import forms
+
+from elasticsearch_dsl import F
 
 from metadata.fields import ConfigurableChoiceField
 from accounts.models import User
@@ -143,13 +149,11 @@ class ContractorDeliverable(Metadata):
 
     class PhaseConfig:
         filter_fields = (
-            'is_existing', 'docclass', 'status', 'unit', 'discipline',
+            'docclass', 'status', 'unit', 'discipline',
             'document_type', 'under_review', 'overdue', 'leader', 'approver'
         )
-        filter_defaults = {
-            'is_existing': 'true',
-        }
         searchable_fields = ('document_key', 'title',)
+        indexable_fields = ('is_existing',)
         column_fields = (
             ('Document Number', 'document_key'),
             ('Title', 'title'),
@@ -181,6 +185,17 @@ class ContractorDeliverable(Metadata):
             'Status': 'status',
             'Received Date': 'received_date',
             'Created': 'created_on',
+        }
+        custom_filters = {
+            'show_cld_spd': {
+                'field': forms.BooleanField,
+                'label': _('Show Cancelled/Superseded documents'),
+                'filters': {
+                    True: None,
+                    False: F('term', is_existing=True),
+                    None: F('term', is_existing=True)
+                }
+            }
         }
 
     class Meta:

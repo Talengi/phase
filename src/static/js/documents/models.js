@@ -23,17 +23,7 @@ var Phase = Phase || {};
                 start: 0,
                 size: Phase.Config.paginateBy
             };
-            var updatedDefault = _.extend(defaults, Phase.Config.filterDefaults);
-
-            // Boolean values must be converted to strings because input
-            // values "true" and "false" are not cast to bools before
-            // comparison
-            return _.mapObject(updatedDefault, function(val, key) {
-                if (typeof(val) == 'boolean') {
-                    val = val.toString();
-                }
-                return val;
-            });
+            return _.extend(defaults, Phase.Config.filterDefaults);
         },
         /**
          * Reset the search parameters to default.
