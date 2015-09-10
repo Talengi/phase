@@ -302,6 +302,7 @@ var Phase = Phase || {};
             'click #sidebar-close-btn': 'hideSearchForm',
             'submit form': 'submitForm',
             'keyup input': 'debouncedSetInput',
+            'click input[type=checkbox]': 'setInput',
             'change select.filter': 'setFilter',
             'click span.glyphicon-remove': 'removeFilter',
             'click #resetForm': 'resetForm'
@@ -338,9 +339,14 @@ var Phase = Phase || {};
             var field = this.$el.find(field_id);
 
             if (field.length !== 0 && field.attr('type') !== 'hidden') {
-                field.val(value);
-                if (value !== '') {
-                    field.siblings('span').css('display', 'inline-block');
+
+                if (field.attr('type') === 'checkbox') {
+                    field.prop('checked', value);
+                } else {
+                    field.val(value);
+                    if (value !== '') {
+                        field.siblings('span').css('display', 'inline-block');
+                    }
                 }
             }
         },
@@ -366,8 +372,13 @@ var Phase = Phase || {};
         setInput: function(event) {
             var input = $(event.currentTarget);
             var name = input.attr('name');
-            var val = input.val();
 
+            var val;
+            if (input.attr('type') === 'checkbox') {
+                val = input.prop('checked');
+            } else {
+                val = input.val();
+            }
             this.model.set(name, val);
         },
         debouncedSetInput: _.debounce(function(event) {
