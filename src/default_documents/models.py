@@ -1,6 +1,10 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
+from django import forms
 
 from metadata.fields import ConfigurableChoiceField
 from accounts.models import User
@@ -179,6 +183,12 @@ class ContractorDeliverable(Metadata):
             'Status': 'status',
             'Received Date': 'received_date',
             'Created': 'created_on',
+        }
+        custom_filters = {
+            'show_cld_spd': {
+                'field': forms.BooleanField,
+                'label': _('Show Cancelled/Superseded documents'),
+            }
         }
 
     class Meta:
