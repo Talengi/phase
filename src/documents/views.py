@@ -550,7 +550,7 @@ class ProtectedDownload(LoginRequiredMixin, View):
         # If we are in debug mode, and the module is unavailable, we fallback
         # to the django internal method to serve static files
         if settings.USE_X_SENDFILE:
-            response = HttpResponse(mimetype='application/force-download')
+            response = HttpResponse(content_type='application/force-download')
             response['Content-Disposition'] = 'attachment; filename=%s' % file_name
             response['Content-Type'] = ''  # Apache will guess this
             response['X-Sendfile'] = full_path
