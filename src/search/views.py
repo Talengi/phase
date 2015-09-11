@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 import csv
+from sys import maxint
 from collections import OrderedDict
 
 from django.db import models
@@ -205,35 +206,43 @@ class ExportDocuments(BaseSearchView):
         labels += [(key, '{}'.format(field.label)) for key, field in revision_form.fields.items()]
         return OrderedDict(labels)
 
-    def get_csv_line(self, form, revision_form):
-        values = [(field.name, stringify(field.value())) for field in form]
-        values += [(field.name, stringify(field.value())) for field in revision_form]
+    def get_csv_line(self, revision, form, revision_form):
+        metadata = revision.metadata
+        values = [
+            (field.name, getattr(metadata, field.name)) for field in form]
+
+        values += [
+            (field.name, getattr(revision, field.name)) for field in revision_form]
+
         return dict(values)
 
+    def get_forms(self):
+        Form = self.category.get_metadata_form_class()
+        form = Form(category=self.category)
+
+        RevisionForm = self.category.get_revision_form_class()
+        revision_form = RevisionForm(category=self.category)
+
+        return form, revision_form
+
     def render_to_response(self, context, **response_kwargs):
-        # Initialize response
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(
             self.category.document_type())
-        Form = self.category.get_metadata_form_class()
-        RevisionForm = self.category.get_revision_form_class()
 
-        # Fetch documents from ES + DB
-        revisions = self.get_documents()
+        form, revision_form = self.get_forms()
 
         # Writer row header
-        rev = revisions[0]
-        form = Form(instance=rev.metadata, category=self.category)
-        revision_form = RevisionForm(instance=rev, category=self.category)
         header = self.get_csv_header(form, revision_form)
         writer = csv.DictWriter(response, fieldnames=header.keys())
         writer.writerow(header)
 
-        # Write data to csv
-        for rev in revisions:
-            form = Form(instance=rev.metadata, category=self.category)
-            revision_form = RevisionForm(instance=rev, category=self.category)
-            line = self.get_csv_line(form, revision_form)
-            writer.writerow(line)
+        # Fetch documents from ES + DB
+        revisions = self.get_documents()
+
+        # Write csv data
+        for revision in revisions:
+            row = self.get_csv_line(revision, form, revision_form)
+            writer.writerow(row)
 
         return response
