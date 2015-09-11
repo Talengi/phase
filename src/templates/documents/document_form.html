@@ -24,6 +24,13 @@
                 document <strong>{{ document_key }}</strong>.
             {% endblocktrans %}
             </p>
+        {% elif is_revise %}
+            <p class="alert alert-info">
+            {% blocktrans with document_key=document.document_key revision=next_revision %}
+                You are creating revision <strong>{{ revision }}</strong> of
+                the document <strong>{{ document_key }}</strong>.
+            {% endblocktrans %}
+            </p>
         {% endif %}
 
         <h1>{{ is_edit|yesno:"Edit,New" }} document</h1>

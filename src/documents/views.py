@@ -475,10 +475,12 @@ class DocumentRevise(DocumentEdit):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_context_data(self, **kwargs):
+        """Add a context var to make the difference with creation view"""
+        next_revision = self.object.document.current_revision + 1
         context = super(DocumentRevise, self).get_context_data(**kwargs)
-        # Add a context var to make the difference with creation view
         context.update({
             'is_revise': True,
+            'next_revision': '{:02d}'.format(next_revision)
         })
         return context
 
