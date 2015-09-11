@@ -50,7 +50,7 @@ def get_all_reviews(document):
         for revision_id, reviews in groupby(qs, lambda obj: obj.revision):
             all_reviews[revision_id] = list(reviews)
 
-        cache.set(cache_key, all_reviews, 60)
+        cache.set(cache_key, all_reviews, 5)
 
     return all_reviews
 
@@ -92,6 +92,6 @@ def get_dummy_reviews(revision):
 
             dummy_reviews[revision.revision] = revision_reviews
 
-        cache.set(cache_key, dummy_reviews, 60)
+        cache.set(cache_key, dummy_reviews, 5)
 
     return dummy_reviews
