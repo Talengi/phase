@@ -71,10 +71,12 @@ def get_dummy_reviews(revision):
         dummy_reviews = {}
         for revision in revisions:
             revision_reviews = []
-            revision_reviews.append(Review(
-                role='leader',
-                reviewer=revision.leader,
-                document_id=revision.document_id))
+
+            if revision.leader:
+                revision_reviews.append(Review(
+                    role='leader',
+                    reviewer=revision.leader,
+                    document_id=revision.document_id))
 
             if revision.approver:
                 revision_reviews.append(Review(
