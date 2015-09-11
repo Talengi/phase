@@ -153,7 +153,7 @@ class ContractorDeliverable(Metadata):
             'document_type', 'under_review', 'overdue', 'leader', 'approver'
         )
         searchable_fields = ('document_key', 'title',)
-        indexable_fields = ('is_existing',)
+        indexable_fields = ['is_existing']
         column_fields = (
             ('Document Number', 'document_key'),
             ('Title', 'title'),
