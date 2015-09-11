@@ -2,7 +2,11 @@
 
 from __future__ import unicode_literals
 
+import csv
+from collections import OrderedDict
+
 from django.db import models
+from django.http import HttpResponse
 from django.forms import ModelChoiceField
 
 from elasticsearch_dsl import Search
@@ -11,64 +15,15 @@ from braces.views import JSONResponseMixin
 from search import elastic
 from documents.views import BaseDocumentList
 from documents.forms.filters import filterform_factory
+from documents.utils import stringify_value as stringify
 from django.conf import settings
 
 
-class SearchDocuments(JSONResponseMixin, BaseDocumentList):
-    http_method_names = ['get']
-
-    def render_to_response(self, context, **response_kwargs):
-        return self.render_json_response(context, **response_kwargs)
-
-    def get_context_data(self, **kwargs):
-        response = self.get_queryset()
-        start = int(self.request.GET.get('start', 0))
-        end = start + int(self.request.GET.get('length', settings.PAGINATE_BY))
-        total = response.hits.total
-        display = min(end, total)
-        search_data = [hit._d_ for hit in response.hits]
-        aggregations = self.format_aggregations(response.aggregations)
-
-        return {
-            'total': total,
-            'display': display,
-            'data': search_data,
-            'aggregations': aggregations,
-        }
-
-    def format_aggregations(self, aggregations):
-        """Transfroms the ES "aggregations" response into something we can use.
-
-        aggregations = {
-            'filter_name': {
-                'buckets': [
-                    {'key': 'some_name', 'doc_count': 123},
-                    …
-                ]
-            },
-            …
-        }
-
-        We want :
-
-        aggregations = {
-            'filter_name': [{'some_name': 123}, …],
-            …
-        }
-
-        """
-        def flatten(bucket):
-            key = bucket[0]
-            buckets = bucket[1]['buckets']
-            bucket_values = dict([(b['key'], b['doc_count']) for b in buckets])
-            return (key, bucket_values)
-        buckets = aggregations.to_dict().items()
-        response = dict(map(flatten, buckets))
-        return response
+class BaseSearchView(BaseDocumentList):
 
     def get_queryset(self):
         """Given DataTables' GET parameters, filter the initial queryset."""
-        queryset = super(SearchDocuments, self).get_queryset()
+        queryset = super(BaseSearchView, self).get_queryset()
         FilterForm = filterform_factory(queryset.model)
         form = FilterForm(self.request.GET)
         if form.is_valid():
@@ -150,3 +105,135 @@ class SearchDocuments(JSONResponseMixin, BaseDocumentList):
         )
 
         return s
+
+
+class SearchDocuments(JSONResponseMixin, BaseSearchView):
+    http_method_names = ['get']
+
+    def render_to_response(self, context, **response_kwargs):
+        return self.render_json_response(context, **response_kwargs)
+
+    def get_context_data(self, **kwargs):
+        response = self.get_queryset()
+        start = int(self.request.GET.get('start', 0))
+        end = start + int(self.request.GET.get('length', settings.PAGINATE_BY))
+        total = response.hits.total
+        display = min(end, total)
+        search_data = [hit._d_ for hit in response.hits]
+        aggregations = self.format_aggregations(response.aggregations)
+
+        return {
+            'total': total,
+            'display': display,
+            'data': search_data,
+            'aggregations': aggregations,
+        }
+
+    def format_aggregations(self, aggregations):
+        """Transfroms the ES "aggregations" response into something we can use.
+
+        aggregations = {
+            'filter_name': {
+                'buckets': [
+                    {'key': 'some_name', 'doc_count': 123},
+                    …
+                ]
+            },
+            …
+        }
+
+        We want :
+
+        aggregations = {
+            'filter_name': [{'some_name': 123}, …],
+            …
+        }
+
+        """
+        def flatten(bucket):
+            key = bucket[0]
+            buckets = bucket[1]['buckets']
+            bucket_values = dict([(b['key'], b['doc_count']) for b in buckets])
+            return (key, bucket_values)
+        buckets = aggregations.to_dict().items()
+        response = dict(map(flatten, buckets))
+        return response
+
+
+class ExportDocuments(BaseSearchView):
+    """Query documents and export them to csv.
+
+    There is a technical gotcha here. Since we use the document list filter
+    syntax to retrieve document, the search has to be performed with
+    elasticsearch.
+
+    However, we want to export all the document's' fields, not only the one
+    indexed. Thus, we have to get the data from the db, which necessitates
+    a second query.
+
+    This is not extremely elegant.
+
+    An alternative solution would be to store whole documents in ES. I'm not
+    sure which one is better.
+
+    """
+    def build_search_query(self, Model, document_type, form):
+        """Build the ES query.
+
+        Since actual data will be retrieved from db, we only need to
+        get document ids to pass along.
+
+        """
+        query = super(ExportDocuments, self).build_search_query(
+            Model, document_type, form)
+        query = query.fields(['pk'])
+        return query
+
+    def get_documents(self):
+        query = self.get_queryset()
+        hits = query.hits
+        pks = [hit['pk'][0] for hit in hits]
+
+        Model = self.category.revision_class()
+        qs = Model.objects \
+            .filter(pk__in=pks) \
+            .select_related()
+        return qs
+
+    def get_csv_header(self, form, revision_form):
+        labels = [(key, '{}'.format(field.label)) for key, field in form.fields.items()]
+        labels += [(key, '{}'.format(field.label)) for key, field in revision_form.fields.items()]
+        return OrderedDict(labels)
+
+    def get_csv_line(self, form, revision_form):
+        values = [(field.name, stringify(field.value())) for field in form]
+        values += [(field.name, stringify(field.value())) for field in revision_form]
+        return dict(values)
+
+    def render_to_response(self, context, **response_kwargs):
+        # Initialize response
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(
+            self.category.document_type())
+        Form = self.category.get_metadata_form_class()
+        RevisionForm = self.category.get_revision_form_class()
+
+        # Fetch documents from ES + DB
+        revisions = self.get_documents()
+
+        # Writer row header
+        rev = revisions[0]
+        form = Form(instance=rev.metadata, category=self.category)
+        revision_form = RevisionForm(instance=rev, category=self.category)
+        header = self.get_csv_header(form, revision_form)
+        writer = csv.DictWriter(response, fieldnames=header.keys())
+        writer.writerow(header)
+
+        # Write data to csv
+        for rev in revisions:
+            form = Form(instance=rev.metadata, category=self.category)
+            revision_form = RevisionForm(instance=rev, category=self.category)
+            line = self.get_csv_line(form, revision_form)
+            writer.writerow(line)
+
+        return response

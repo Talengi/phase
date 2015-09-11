@@ -2,7 +2,7 @@ from django.conf.urls import patterns, url
 
 from documents.views import (
     DocumentList, DocumentCreate, DocumentDetail, DocumentEdit,
-    DocumentDownload, DocumentRedirect, DocumentRevise, DocumentDelete
+    DocumentDownload, DocumentRedirect, DocumentRevise, DocumentDelete,
 )
 
 urlpatterns = patterns(
