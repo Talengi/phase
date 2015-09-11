@@ -3,12 +3,12 @@
 from __future__ import unicode_literals
 
 import csv
-from sys import maxint
 from collections import OrderedDict
 
 from django.db import models
 from django.http import HttpResponse
 from django.forms import ModelChoiceField
+from django.utils.encoding import smart_bytes
 
 from elasticsearch_dsl import Search
 from braces.views import JSONResponseMixin
@@ -16,7 +16,6 @@ from braces.views import JSONResponseMixin
 from search import elastic
 from documents.views import BaseDocumentList
 from documents.forms.filters import filterform_factory
-from documents.utils import stringify_value as stringify
 from django.conf import settings
 
 
@@ -207,12 +206,17 @@ class ExportDocuments(BaseSearchView):
         return OrderedDict(labels)
 
     def get_csv_line(self, revision, form, revision_form):
+
+        def val(obj, name):
+            value = getattr(obj, name)
+            return smart_bytes(value)
+
         metadata = revision.metadata
         values = [
-            (field.name, getattr(metadata, field.name)) for field in form]
+            (field.name, val(metadata, field.name)) for field in form]
 
         values += [
-            (field.name, getattr(revision, field.name)) for field in revision_form]
+            (field.name, val(revision, field.name)) for field in revision_form]
 
         return dict(values)
 
