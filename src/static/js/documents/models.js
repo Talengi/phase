@@ -23,7 +23,7 @@ var Phase = Phase || {};
                 start: 0,
                 size: Phase.Config.paginateBy
             };
-            return _.extend(defaults, Phase.Config.filterDefaults);
+            return defaults;
         },
         /**
          * Reset the search parameters to default.

@@ -147,9 +147,6 @@ def stringify_value(val):
     >>> import datetime
     >>> stringify_value(datetime.datetime(2000, 1, 1))
     u'2000-01-01'
-
-    >>> stringify_value(None)
-    u'NC'
     """
     if val is None:
         unicode_val = u'NC'
