@@ -7,6 +7,7 @@ from django.db.models.signals import post_save, post_delete
 from django.core.cache import cache
 
 from reviews.models import Review
+from documents.models import Document
 
 
 review_canceled = Signal()
@@ -35,4 +36,13 @@ def delete_all_review_cache(sender, user_id, **kwargs):
         cache.delete(cache_key)
 
     cache_key = 'review_step_count_%d_priorities' % (user_id)
+    cache.delete(cache_key)
+
+
+@receiver(post_save, sender=Document, dispatch_uid='delete_distrib_list_cache')
+def delete_distribution_list_cache(sender, instance, **kwargs):
+    cache_key = 'all_reviews_{}'.format(instance.id)
+    cache.delete(cache_key)
+
+    cache_key = 'dummy_reviews_{}'.format(instance.id)
     cache.delete(cache_key)

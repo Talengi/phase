@@ -22,6 +22,8 @@ def get_cached_reviews(revision):
 
     See https://trello.com/c/CdZF9eAG/174-afficher-la-liste-de-distribution-d-un-document
 
+    Note that this cache is cleared in a signal of the same module.
+
     """
     reviews = get_all_reviews(revision.document)
     if revision.revision in reviews:
