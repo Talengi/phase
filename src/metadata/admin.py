@@ -13,8 +13,8 @@ class ValuesListAdmin(admin.ModelAdmin):
     list_display = ('index', 'name',)
     inlines = [EntryInline]
 
-    def save_model(self, *args):
-        super(ValuesListAdmin, self).save_model(*args)
+    def save_formset(self, request, form, formset, change):
+        super(ValuesListAdmin, self).save_formset(request, form, formset, change)
         populate_values_list_cache()
 
 
