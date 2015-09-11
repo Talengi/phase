@@ -368,8 +368,8 @@ class MetadataRevision(models.Model):
         filter_fields = list(config.filter_fields)
         searchable_fields = list(config.searchable_fields)
         column_fields = dict(config.column_fields).values()
-        additional_fields = getattr(config, 'indexable_fields', [])
-        fields_to_index = set(filter_fields + searchable_fields + column_fields + additional_fields)
+        indexable_fields = getattr(config, 'indexable_fields', [])
+        fields_to_index = set(filter_fields + searchable_fields + column_fields + indexable_fields)
 
         for field in fields_to_index:
             fields += add_to_fields(field)
