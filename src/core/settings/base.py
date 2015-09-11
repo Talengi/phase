@@ -333,6 +333,8 @@ PIPELINE_CSS = {
     },
     'detail': {
         'source_filenames': (
+            'css/jquery.multiselect.css',
+            'css/jquery.multiselect.filter.css',
             'css/selectize.css',
         ),
         'output_filename': 'css/detail.css',
@@ -343,6 +345,9 @@ PIPELINE_JS = {
     'base': {
         'source_filenames': (
             'js/vendor/jquery.js',
+            'js/vendor/jquery-ui.min.js',
+            # both bootstrap and bootstrap-datepicker must be loaded
+            # after jquery-ui js to avoid conflicts
             'js/phase-bootstrap.js',
             'js/vendor/bootstrap-datepicker.js',
             'js/vendor/underscore.js',
@@ -382,6 +387,8 @@ PIPELINE_JS = {
     },
     'document_detail': {
         'source_filenames': (
+            'js/vendor/jquery.multiselect.js',
+            'js/vendor/jquery.multiselect.filter.js',
             'js/vendor/selectize.js',
             'js/autocomplete.js',
             'js/discussion/models.js',
@@ -395,6 +402,8 @@ PIPELINE_JS = {
     },
     'document_edit': {
         'source_filenames': (
+            'js/vendor/jquery.multiselect.js',
+            'js/vendor/jquery.multiselect.filter.js',
             'js/vendor/selectize.js',
             'js/autocomplete.js',
             'js/document-detail.js',
