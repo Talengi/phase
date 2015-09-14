@@ -41,6 +41,12 @@ var Phase = Phase || {};
         render: function() {
             this.$el.html(this.template(this.model.attributes));
 
+            if (this.model.get('is_deleted')) {
+                this.$el.addClass('deleted');
+            } else {
+                this.$el.removeClass('deleted');
+            }
+
             this.readonly = this.$el.find('div.discussion-readonly');
             this.body = this.$el.find('div.discussion-body');
             this.editForm = this.$el.find('form.edit-form');

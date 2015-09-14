@@ -482,6 +482,9 @@ table.reviewers tr td.small {
 .discussion-item {
     margin-bottom: 20px;
 }
+.discussion-item.deleted .discussion-body {
+    color: #777;
+}
 .discussion-body {
     padding: 10px;
     margin-bottom: 5px;
