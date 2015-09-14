@@ -36,10 +36,16 @@ var Phase = Phase || {};
         },
         template: _.template($('#tpl-discussion-item').html()),
         initialize: function() {
-            this.listenTo(this.model, 'sync', this.updateBody);
+            this.listenTo(this.model, 'sync', this.render);
         },
         render: function() {
             this.$el.html(this.template(this.model.attributes));
+
+            if (this.model.get('is_deleted')) {
+                this.$el.addClass('deleted');
+            } else {
+                this.$el.removeClass('deleted');
+            }
 
             this.readonly = this.$el.find('div.discussion-readonly');
             this.body = this.$el.find('div.discussion-body');
@@ -48,7 +54,9 @@ var Phase = Phase || {};
             this.actions = this.$el.find('div.discussion-item-actions');
 
             if (Phase.Config.userId === this.model.get('author_id')) {
-                this.actions.show();
+                if (!this.model.get('is_deleted')) {
+                    this.actions.show();
+                }
             }
 
             return this;
@@ -75,8 +83,7 @@ var Phase = Phase || {};
         },
         removeNote: function(event) {
             event.preventDefault();
-            this.model.destroy();
-            this.remove();
+            this.model.softDestroy();
         }
     });
 

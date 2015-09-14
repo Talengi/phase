@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 
 from rest_framework import viewsets
 from rest_framework import permissions
+from rest_framework.response import Response
 
 from documents.models import Document
 from reviews.models import Review
@@ -38,7 +39,17 @@ class DiscussionPermission(permissions.BasePermission):
         return authorized
 
     def has_object_permission(self, request, view, obj):
-        return obj.author == request.user
+        """May the user access the object?
+
+        Only the note author can update / delete it.
+        A soft-deleted note can never be updated.
+
+        """
+        if obj.deleted_on:
+            perm = False
+        else:
+            perm = obj.author == request.user
+        return perm
 
 
 class DiscussionViewSet(viewsets.ModelViewSet):
@@ -68,3 +79,19 @@ class DiscussionViewSet(viewsets.ModelViewSet):
             document=self.document,
             revision=self.revision,
             author=self.request.user)
+
+    def destroy(self, request, *args, **kwargs):
+        """Delete instance.
+
+        Since we only soft delete objects, we dont use the 204 (empty) response
+        and return a full 200 http response instead.
+
+        """
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
+    def perform_destroy(self, instance):
+        instance.soft_delete()
+        instance.save()
