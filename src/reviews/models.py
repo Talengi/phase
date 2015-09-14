@@ -28,6 +28,7 @@ CLASSES = (
 
 class Review(models.Model):
     STATUSES = Choices(
+        ('void', ''),
         ('pending', _('Pending')),
         ('progress', _('In progress')),
         ('reviewed', _('Reviewed without comments')),
