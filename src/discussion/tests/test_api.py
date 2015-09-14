@@ -11,6 +11,7 @@ from categories.factories import CategoryFactory
 from documents.factories import DocumentFactory
 from accounts.factories import UserFactory
 from discussion.factories import NoteFactory
+from discussion.models import Note
 
 
 class BaseDiscussionAclTests(TestCase):
@@ -128,9 +129,13 @@ class DiscussionItemDelete(BaseDiscussionAclTests):
             revision=1,
             author=self.user1
         )
+        self.assertIsNone(note.deleted_on)
         url = reverse('note-detail', args=[self.doc.document_key, 1, note.id])
         res = self.client.delete(url)
         self.assertEqual(res.status_code, 204)
+
+        note = Note.objects.get(pk=note.pk)
+        self.assertIsNotNone(note.deleted_on)
 
     def test_other_user(self):
         """One cannot delete someone else's messages."""

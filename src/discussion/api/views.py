@@ -68,3 +68,7 @@ class DiscussionViewSet(viewsets.ModelViewSet):
             document=self.document,
             revision=self.revision,
             author=self.request.user)
+
+    def perform_destroy(self, instance):
+        instance.soft_delete()
+        instance.save()

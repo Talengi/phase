@@ -6,7 +6,7 @@ import re
 
 from django.db import models, transaction
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext, ugettext_lazy as _
 from django.conf import settings
 
 from accounts.models import User
@@ -40,6 +40,19 @@ class Note(models.Model):
         verbose_name = _('Note')
         verbose_name_plural = _('Notes')
         app_label = 'discussion'
+
+    def soft_delete(self):
+        """Mark object as deleted, but keep in db.
+
+        Discussion items should no be really deleted, as it could cause
+        confusion and change the meaning of existing discussion threads.
+
+        Instead, we just mark the item as deleted, and show an empty message.
+
+        """
+        message = ugettext('Deleted')
+        self.body = message
+        self.deleted_on = timezone.now()
 
     @transaction.atomic
     def notify_mentionned_users(self):
