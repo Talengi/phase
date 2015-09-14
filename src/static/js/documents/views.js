@@ -195,7 +195,7 @@ var Phase = Phase || {};
             this.batchProgress = options.progress;
 
             this.configureForm();
-            this.listenToOnce(dispatcher, 'onRowSelected', this.activateButtons);
+            this.listenTo(dispatcher, 'onRowSelected', this.setButtonsState);
             this.listenTo(dispatcher, 'onRowSelected', this.rowSelected);
             this.listenTo(dispatcher, 'onDocumentsFetched', this.renderResults);
         },
@@ -220,8 +220,14 @@ var Phase = Phase || {};
                 dropdown.toggleClass('open');
             });
         },
-        activateButtons: function() {
-            this.actionButtons.removeClass('disabled');
+        // Activate or disactivate the action buttons
+        setButtonsState: function() {
+            var checked = $('#documents tr td input:checked');
+            if (checked.length > 0) {
+                this.actionButtons.removeClass('disabled');
+            } else {
+                this.actionButtons.addClass('disabled');
+            }
         },
         rowSelected: function(document, checked) {
             var input;

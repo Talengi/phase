@@ -89,6 +89,12 @@ casper.test.begin('Buttons are enabled on checkbox click', 0, function suite(tes
         test.assertExists('button#download-button');
     });
 
+    casper.then(function() {
+        casper.click('td.columnselect input[type=checkbox]');
+        test.assertElementCount('#documents input:checked', 0);
+        test.assertExist('button#download-button.disabled');
+    });
+
     casper.run(function() {
         test.done();
     });
