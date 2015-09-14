@@ -14,7 +14,10 @@ class NoteSerializer(serializers.ModelSerializer):
     author_id = serializers.ReadOnlyField(source='author.id')
     author_email = serializers.ReadOnlyField(source='author.email')
     created_on = serializers.DateTimeField(read_only=True)
-    formatted_created_on = serializers.DateTimeField(read_only=True, source='created_on')
+    formatted_created_on = serializers.DateTimeField(
+        read_only=True,
+        source='created_on',
+        format=None)
     formatted_body = serializers.ReadOnlyField(source='body')
 
     class Meta:

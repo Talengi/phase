@@ -4,14 +4,22 @@ from __future__ import unicode_literals
 
 from django.template import defaultfilters as filters
 from django.contrib.humanize.templatetags.humanize import naturaltime
+
 from rest_framework import serializers
 
 from notifications.models import Notification
 
 
 class NotificationSerializer(serializers.ModelSerializer):
-    iso_formatted_created_on = serializers.DateTimeField(read_only=True, source='created_on')
-    natural_formatted_created_on = serializers.DateTimeField(read_only=True, source='created_on')
+    iso_formatted_created_on = serializers.DateTimeField(
+        read_only=True,
+        source='created_on',
+        format=None
+    )
+    natural_formatted_created_on = serializers.DateTimeField(
+        read_only=True,
+        source='created_on',
+        format=None)
 
     class Meta:
         model = Notification
