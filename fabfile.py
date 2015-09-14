@@ -89,3 +89,10 @@ def log(filename="admin/log/access.log", backlog='F'):
 def errors(backlog=200):
     """Displays error.log file from staging."""
     return log("admin/log/error.log", backlog)
+
+
+def bootstrap():
+    sudo('service postgresql start')
+    sudo('service rabbitmq-server start')
+    sudo('service memcached start')
+    sudo('service elasticsearch start')
