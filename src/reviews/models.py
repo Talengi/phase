@@ -200,7 +200,7 @@ class ReviewMixin(models.Model):
         calling this method.
 
         """
-        start_date = at_date or datetime.date.today()
+        start_date = at_date or timezone.now()
         self.review_start_date = start_date
 
         duration = settings.REVIEW_DURATION
@@ -278,7 +278,7 @@ class ReviewMixin(models.Model):
     @transaction.atomic
     def end_reviewers_step(self, at_date=None, save=True):
         """Ends the first step of the review."""
-        end_date = at_date or datetime.date.today()
+        end_date = at_date or timezone.now()
         self.reviewers_step_closed = end_date
 
         Review.objects \
@@ -307,7 +307,7 @@ class ReviewMixin(models.Model):
         if self.reviewers_step_closed is None:
             self.end_reviewers_step(save=False, at_date=at_date)
 
-        end_date = at_date or datetime.date.today()
+        end_date = at_date or timezone.now()
 
         self.leader_step_closed = end_date
 
@@ -354,7 +354,7 @@ class ReviewMixin(models.Model):
         if self.leader_step_closed is None:
             self.end_leader_step(save=False, at_date=at_date)
 
-        end_date = at_date or datetime.date.today()
+        end_date = at_date or timezone.now()
         self.review_end_date = end_date
 
         Review.objects \
@@ -373,7 +373,7 @@ class ReviewMixin(models.Model):
     is_under_review.short_description = _('Under review')
 
     def is_overdue(self):
-        today = datetime.date.today()
+        today = timezone.now().date()
         return bool(self.review_due_date and self.review_due_date < today)
     is_overdue.short_description = _('Overdue')
 

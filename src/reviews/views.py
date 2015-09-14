@@ -13,6 +13,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 from django.forms.models import modelform_factory
+from django.utils import timezone
 
 from celery.result import AsyncResult
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
@@ -258,7 +259,7 @@ class PrioritiesDocumentList(BaseReviewDocumentList):
 
     def step_filter(self, qs):
         role_q = Q(leader=self.request.user) | Q(approver=self.request.user)
-        delta = datetime.date.today() + datetime.timedelta(days=5)
+        delta = timezone.now() + datetime.timedelta(days=5)
 
         qs = qs \
             .filter(role_q) \
