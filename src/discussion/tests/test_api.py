@@ -132,7 +132,7 @@ class DiscussionItemDelete(BaseDiscussionAclTests):
         self.assertIsNone(note.deleted_on)
         url = reverse('note-detail', args=[self.doc.document_key, 1, note.id])
         res = self.client.delete(url)
-        self.assertEqual(res.status_code, 204)
+        self.assertEqual(res.status_code, 200)
 
         note = Note.objects.get(pk=note.pk)
         self.assertIsNotNone(note.deleted_on)
