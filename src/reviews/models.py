@@ -163,9 +163,11 @@ class ReviewMixin(models.Model):
         verbose_name=u"Class",
         default=1,
         choices=CLASSES)
-    return_code = models.IntegerField(
-        verbose_name=_('Return code'),
-        null=True, blank=True)
+    return_code = ConfigurableChoiceField(
+        _('Return code'),
+        max_length=3,
+        null=True, blank=True,
+        list_index='REVIEW_RETURN_CODES')
 
     class Meta:
         abstract = True
