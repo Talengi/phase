@@ -32,6 +32,9 @@ class Note(models.Model):
     created_on = models.DateTimeField(
         _('Created on'),
         default=timezone.now)
+    deleted_on = models.DateTimeField(
+        _('Deleted on'),
+        null=True, blank=True)
 
     class Meta:
         verbose_name = _('Note')
