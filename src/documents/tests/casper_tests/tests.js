@@ -225,7 +225,7 @@ casper.test.begin('Clicking a column sorts stuff', 0, function suite(test) {
 
     casper.then(function() {
         casper.click('#columndocument_key');
-        casper.wait(50);
+        casper.wait(500);
     });
 
     casper.then(function() {
@@ -235,7 +235,7 @@ casper.test.begin('Clicking a column sorts stuff', 0, function suite(test) {
 
     casper.then(function() {
         casper.click('#columndocument_key');
-        casper.wait(50);
+        casper.wait(500);
     });
 
     casper.then(function() {
@@ -245,7 +245,7 @@ casper.test.begin('Clicking a column sorts stuff', 0, function suite(test) {
 
     casper.then(function() {
         casper.click('#columntitle');
-        casper.wait(50);
+        casper.wait(500);
     });
 
     casper.then(function() {
