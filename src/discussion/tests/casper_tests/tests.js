@@ -111,3 +111,15 @@ casper.test.begin('Clicking on edit button shows the edit form', 0, function sui
         test.done();
     });
 });
+
+casper.test.begin('Clicking on edit button shows the edit form', 0, function suite(test) {
+    casper.start(review_url, function() {
+        casper.viewport(1024, 768);
+        casper.click('button.remarks-button');
+        casper.wait(500);
+    });
+
+    casper.run(function() {
+        test.done();
+    });
+});
