@@ -39,7 +39,17 @@ class DiscussionPermission(permissions.BasePermission):
         return authorized
 
     def has_object_permission(self, request, view, obj):
-        return obj.author == request.user
+        """May the user access the object?
+
+        Only the note author can update / delete it.
+        A soft-deleted note can never be updated.
+
+        """
+        if obj.deleted_on:
+            perm = False
+        else:
+            perm = obj.author == request.user
+        return perm
 
 
 class DiscussionViewSet(viewsets.ModelViewSet):

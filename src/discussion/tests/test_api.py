@@ -118,6 +118,19 @@ class DiscussionItemPut(BaseDiscussionAclTests):
             content_type='application/json')
         self.assertEqual(res.status_code, 403)
 
+    def test_update_deleted_message(self):
+        """A soft deleted item cannot be edited."""
+        note = NoteFactory(
+            document=self.doc,
+            revision=1,
+            author=self.user1)
+        note.soft_delete()
+        note.save()
+
+        url = reverse('note-detail', args=[self.doc.document_key, 1, note.id])
+        res = self.client.put(url, {'body': 'Update message'})
+        self.assertEqual(res.status_code, 403)
+
 
 class DiscussionItemDelete(BaseDiscussionAclTests):
     """Test the discussion item delete permission."""
