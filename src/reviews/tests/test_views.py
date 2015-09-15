@@ -578,6 +578,9 @@ class ReviewFormTests(TestCase):
         review = revision.get_review(self.user, role='leader')
         self.assertEqual(review.return_code, '1')
 
+        revision = doc.latest_revision
+        self.assertEqual(revision.return_code, '1')
+
     def test_leader_submit_review_with_file(self):
         doc = DocumentFactory(
             document_key='test_key',
