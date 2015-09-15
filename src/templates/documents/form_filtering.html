@@ -15,7 +15,7 @@
     </legend>
     <div id="controls-rows">
     {% for field in form.visible_fields %}
-        <div class="form-group">
+        <div class="form-group form-group-{{ field.name }}">
             <div class="control-group {% if field.errors %}error{% endif %}">
                 <label class="control-label" for="{{ field.auto_id }}">{{ field.label }}</label>
                 <div class="controls">

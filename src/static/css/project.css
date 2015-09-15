@@ -281,6 +281,14 @@ button.ui-multiselect {
 .sidebar-form select,
 .sidebar-form input[type="text"] {
 }
+.sidebar-form .form-group-show_cld_spd {
+
+}
+.sidebar-form .form-group-show_cld_spd .control-label,
+.sidebar-form .form-group-show_cld_spd .control-group {
+}
+.sidebar-form .form-group-show_cld_spd label {
+}
 
 
 /* document details */
