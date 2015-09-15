@@ -61,14 +61,6 @@ def filterform_factory(model):
     field_list = []
     kwargs = {'required': False}
 
-    # Add custom filters to filter form
-    custom_filters = getattr(config, 'custom_filters', {})
-    for field_name, filter_config in custom_filters.items():
-        field = filter_config['field'](**kwargs)
-        field.required = False
-        field.label = filter_config['label']
-        field_list.append((field_name, field))
-
     # Add all field filters to form
     filter_fields = config.filter_fields
     for field_name in filter_fields:
@@ -86,6 +78,14 @@ def filterform_factory(model):
         else:
             field = additional_filter_fields[field_name]
             field_list.append((field_name, field))
+
+    # Add custom filters to filter form
+    custom_filters = getattr(config, 'custom_filters', {})
+    for field_name, filter_config in custom_filters.items():
+        field = filter_config['field'](**kwargs)
+        field.required = False
+        field.label = filter_config['label']
+        field_list.append((field_name, field))
 
     field_list = dict(field_list)
     field_list.update({

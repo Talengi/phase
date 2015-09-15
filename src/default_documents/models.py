@@ -189,7 +189,7 @@ class ContractorDeliverable(Metadata):
         custom_filters = {
             'show_cld_spd': {
                 'field': forms.BooleanField,
-                'label': _('Show Cancelled/Superseded documents'),
+                'label': _('Show CLD/SPD docs'),
                 'filters': {
                     True: None,
                     False: F('term', is_existing=True),
