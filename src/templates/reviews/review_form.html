@@ -15,15 +15,12 @@
 <div class="col-sm-8">
     <div class="form-actions">
         <a class="btn btn-default" href="{% url "review_home" %}">Close</a>
-        {% if perms.documents.can_control_document %}
-            {% url "document_cancel_review" revision.document.document_key as cancel_review_url %}
-            <form class="inlineform pull-right" method="post" action="{{ cancel_review_url }}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-warning last-button">
-                    {{ _('Cancel review') }}
-                </button>
-            </form>
-        {% endif %}
+        <a href="#"
+            data-toggle="modal"
+            data-target="#cancel-review-modal"
+            class="pull-right btn btn-warning">
+            {{ _('Cancel review') }}
+        </a>
     </div>
     <hr />
 
