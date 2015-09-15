@@ -9,6 +9,8 @@ from django.utils import timezone
 
 from model_utils import Choices
 
+from exports.tasks import process_export
+
 
 class Export(models.Model):
     """Represents a document export request."""
@@ -41,3 +43,25 @@ class Export(models.Model):
         app_label = 'exports'
         verbose_name = _('Export')
         verbose_name_plural = _('Exports')
+
+    def start_export(self):
+        """Asynchronously starts the export"""
+        self.status = self.STATUSES.processing
+        self.save()
+
+        process_export.delay(self.pk)
+
+    def write_file(self):
+        """Generates and write the file."""
+        with self.open_file() as the_file:
+            data_generator = self.get_data_generator()
+            for data_chunk in data_generator:
+                the_file.write(data_chunk)
+
+    def open_file(self):
+        """Opens the file in which data should be dumped."""
+        pass
+
+    def get_data_generator(self):
+        """Returns a generator that yields chunks of data to export."""
+        pass
