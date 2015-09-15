@@ -19,6 +19,7 @@ urlpatterns = patterns(
     url(r'^imports/', include('imports.urls')),
     url(r'^transmittals/', include('transmittals.urls')),
     url(r'^search/', include('search.urls')),
+    url(r'^exports/', include('exports.urls')),
     url(r'^private/(?P<file_path>[-\w./]+)?$',
         ProtectedDownload.as_view(),
         name="protected_download"),

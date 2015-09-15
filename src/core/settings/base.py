@@ -230,6 +230,7 @@ LOCAL_APPS = (
     'dashboards',
     'privatemedia',
     'tools',
+    'exports',
 )
 
 # Load custom documents
