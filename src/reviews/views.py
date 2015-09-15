@@ -318,6 +318,7 @@ class ApproverDocumentList(BaseReviewDocumentList):
         return qs.filter(approver=self.request.user)
 
 
+# TODO Refactor to use UpdateView
 class ReviewFormView(LoginRequiredMixin, DetailView):
     context_object_name = 'revision'
     template_name = 'reviews/review_form.html'
@@ -532,6 +533,8 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
 
         # … and update it
         review.post_review(comments_file, return_code=return_code)
+        if return_code:
+            revision.return_code = return_code
 
         # If every reviewer has posted comments, close the reviewers step
         if self.object.is_at_review_step('reviewer'):
@@ -541,15 +544,17 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
                 .filter(role='reviewer') \
                 .exclude(closed_on=None)
             if qs.count() == self.object.reviewers.count():
-                self.object.end_reviewers_step()
+                self.object.end_reviewers_step(save=False)
 
         # If leader, end leader step
         elif self.object.is_at_review_step('leader'):
-            self.object.end_leader_step()
+            self.object.end_leader_step(save=False)
 
         # If approver, end approver step
         elif self.object.is_at_review_step('approver'):
-            self.object.end_review()
+            self.object.end_review(save=False)
+
+        self.object.save(update_document=True)
 
 
 class CommentsArchiveView(LoginRequiredMixin, BaseZipView):
