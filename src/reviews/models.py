@@ -97,7 +97,6 @@ class Review(models.Model):
         verbose_name = _('Review')
         verbose_name_plural = _('Reviews')
         index_together = (('reviewer', 'document', 'revision', 'role'),)
-        unique_together = ('reviewer', 'document', 'revision')
         app_label = 'reviews'
 
     def save(self, *args, **kwargs):
