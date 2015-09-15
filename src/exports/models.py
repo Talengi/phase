@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import uuid
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
@@ -16,6 +18,7 @@ class Export(models.Model):
         ('processing', _('Processing')),
         ('done', _('Done')),
     )
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     owner = models.ForeignKey(
         'accounts.User',
         verbose_name=_('Owner'))
