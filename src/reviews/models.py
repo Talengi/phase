@@ -38,7 +38,7 @@ class Review(models.Model):
         ('not_reviewed', _('Not reviewed')),
     )
     STEPS = Choices(
-        ('pending', _('Pending')),
+        ('pending', ''),
         ('reviewer', _('Reviewer')),
         ('leader', _('Leader')),
         ('approver', _('Approver')),
@@ -397,6 +397,11 @@ class ReviewMixin(models.Model):
 
         return Review.STEPS.closed
     current_review_step.short_description = _('Current review step')
+
+    def get_current_review_step_display(self):
+        step = self.current_review_step()
+        return dict(Review.STEPS)[step]
+    get_current_review_step_display.short_description = _('Current review step')
 
     def is_at_review_step(self, step):
         return step == self.current_review_step()
