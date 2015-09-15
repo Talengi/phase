@@ -27,12 +27,14 @@ CLASSES = (
 
 
 class Review(models.Model):
+    # Yes, two statuses with the same label.
+    # See Trello#173
     STATUSES = Choices(
         ('void', ''),
         ('pending', _('Pending')),
         ('progress', _('In progress')),
-        ('reviewed', _('Reviewed without comments')),
-        ('commented', _('Reviewed with comments')),
+        ('reviewed', _('Reviewed')),
+        ('commented', _('Reviewed')),
         ('not_reviewed', _('Not reviewed')),
     )
     STEPS = Choices(
