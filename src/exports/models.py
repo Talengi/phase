@@ -5,9 +5,17 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 
+from model_utils import Choices
+
 
 class Export(models.Model):
     """Represents a document export request."""
+
+    STATUSES = Choices(
+        ('new', _('New')),
+        ('processing', _('Processing')),
+        ('done', _('Done')),
+    )
     owner = models.ForeignKey(
         'accounts.User',
         verbose_name=_('Owner'))
@@ -17,6 +25,11 @@ class Export(models.Model):
     querystring = models.TextField(
         _('Querystring'),
         help_text=_('The search filter querystring'))
+    status = models.CharField(
+        _('Status'),
+        max_length=30,
+        choices=STATUSES,
+        default=STATUSES.new)
     created_on = models.DateTimeField(
         _('Created on'),
         default=timezone.now)
