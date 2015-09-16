@@ -44,6 +44,17 @@ class Export(models.Model):
         verbose_name = _('Export')
         verbose_name_plural = _('Exports')
 
+    @property
+    def format(self):
+        """Return the exported file extension."""
+        return 'csv'
+
+    def get_filename(self):
+        return 'export_{time:%Y%m%d}_{uuid}.{exten}'.format(
+            time=self.created_on,
+            uuid=self.id,
+            exten=self.format)
+
     def start_export(self):
         """Asynchronously starts the export"""
         self.status = self.STATUSES.processing
