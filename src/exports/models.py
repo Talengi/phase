@@ -7,6 +7,7 @@ import uuid
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
+from django.utils.module_loading import import_string
 from django.conf import settings
 
 from model_utils import Choices
@@ -83,4 +84,7 @@ class Export(models.Model):
 
     def get_data_generator(self):
         """Returns a generator that yields chunks of data to export."""
-        pass
+        generator_class = 'exports.generators.{}Generator'.format(self.format.upper())
+        Generator = import_string(generator_class)
+        generator = Generator()
+        return generator

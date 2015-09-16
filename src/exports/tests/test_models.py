@@ -10,6 +10,7 @@ from django.utils.timezone import UTC
 from categories.factories import CategoryFactory
 from accounts.factories import UserFactory
 from exports.factories import ExportFactory
+from exports.generators import CSVGenerator
 
 
 class ExportTests(TestCase):
@@ -37,3 +38,8 @@ class ExportTests(TestCase):
         self.assertEqual(
             filename,
             'export_20150101_12345678-1234-5678-1234-567812345678.csv')
+
+    def test_get_data_generator(self):
+        export = self.create_export()
+        generator = export.get_data_generator()
+        self.assertTrue(isinstance(generator, CSVGenerator))
