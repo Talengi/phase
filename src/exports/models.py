@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import os
 import uuid
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
+from django.conf import settings
 
 from model_utils import Choices
 
@@ -54,6 +56,12 @@ class Export(models.Model):
             time=self.created_on,
             uuid=self.id,
             exten=self.format)
+
+    def get_filepath(self):
+        return os.path.join(
+            settings.PRIVATE_ROOT,
+            settings.EXPORTS_SUBDIR,
+            self.get_filename())
 
     def start_export(self):
         """Asynchronously starts the export"""
