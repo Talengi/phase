@@ -86,5 +86,5 @@ class Export(models.Model):
         """Returns a generator that yields chunks of data to export."""
         generator_class = 'exports.generators.{}Generator'.format(self.format.upper())
         Generator = import_string(generator_class)
-        generator = Generator()
+        generator = Generator(self.category, querystring=self.querystring)
         return generator
