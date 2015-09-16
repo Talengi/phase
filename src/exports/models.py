@@ -8,6 +8,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from django.utils.module_loading import import_string
+from django.http import QueryDict
 from django.conf import settings
 
 from model_utils import Choices
@@ -52,6 +53,10 @@ class Export(models.Model):
         """Return the exported file extension."""
         return 'csv'
 
+    def get_filters(self):
+        """Parse querystring and returns a dict."""
+        return QueryDict(self.querystring)
+
     def get_filename(self):
         return 'export_{time:%Y%m%d}_{uuid}.{exten}'.format(
             time=self.created_on,
@@ -86,5 +91,5 @@ class Export(models.Model):
         """Returns a generator that yields chunks of data to export."""
         generator_class = 'exports.generators.{}Generator'.format(self.format.upper())
         Generator = import_string(generator_class)
-        generator = Generator(self.category, querystring=self.querystring)
+        generator = Generator(self.category, filters=self.get_filters())
         return generator

@@ -43,3 +43,11 @@ class ExportTests(TestCase):
         export = self.create_export()
         generator = export.get_data_generator()
         self.assertTrue(isinstance(generator, CSVGenerator))
+
+    def test_get_filters(self):
+        qs = 'toto=riri&tata=fifi&tutu=loulou'
+        export = self.create_export(querystring=qs)
+        filters = export.get_filters()
+        self.assertEqual(filters['toto'], 'riri')
+        self.assertEqual(filters['tata'], 'fifi')
+        self.assertEqual(filters['tutu'], 'loulou')
