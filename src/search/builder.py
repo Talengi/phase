@@ -22,7 +22,7 @@ class SearchBuilder(object):
 
     def __init__(self, category, filters={}):
         self.category = category
-        self.set_filters(filters)
+        self.init_filters(filters)
 
         DocumentModel = self.category.document_class()
         Config = DocumentModel.PhaseConfig
@@ -30,7 +30,7 @@ class SearchBuilder(object):
         self.custom_filters = getattr(Config, 'custom_filters', {})
         self.searchable_fields = Config.searchable_fields
 
-    def set_filters(self, filters):
+    def init_filters(self, filters):
         DocumentModel = self.category.document_class()
         FilterForm = filterform_factory(DocumentModel)
         form = FilterForm(filters)
