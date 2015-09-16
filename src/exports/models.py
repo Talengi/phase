@@ -14,6 +14,7 @@ from django.conf import settings
 from model_utils import Choices
 
 from exports.tasks import process_export
+from exports.generators import ExportGenerator
 
 
 class Export(models.Model):
@@ -79,9 +80,11 @@ class Export(models.Model):
     def write_file(self):
         """Generates and write the file."""
         data_generator = self.get_data_generator()
+        formatter = self.get_data_formatter()
+
         with self.open_file() as the_file:
             for data_chunk in data_generator:
-                the_file.write(data_chunk)
+                the_file.write(formatter.format(data_chunk))
 
     def open_file(self):
         """Opens the file in which data should be dumped."""
@@ -89,7 +92,12 @@ class Export(models.Model):
 
     def get_data_generator(self):
         """Returns a generator that yields chunks of data to export."""
-        generator_class = 'exports.generators.{}Generator'.format(self.format.upper())
-        Generator = import_string(generator_class)
-        generator = Generator(self.category, filters=self.get_filters())
+        generator = ExportGenerator(self.category, filters=self.get_filters())
         return generator
+
+    def get_data_formatter(self):
+        """Returns a formatter instance."""
+        formatter_class = 'exports.formatters.{}Formatter'.format(self.format.upper())
+        Formatter = import_string(formatter_class)
+        formatter = Formatter()
+        return formatter

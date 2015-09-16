@@ -40,10 +40,10 @@ class SearchBuilder(object):
         self.filter_form = form
         self.filters = form.cleaned_data
 
-    def get_results(self):
-        return self.build_query().execute()
+    def get_results(self, *args, **kwargs):
+        return self.build_query(*args, **kwargs).execute()
 
-    def build_query(self):
+    def build_query(self, fields=[]):
         document_type = self.category.document_type()
 
         s = Search(using=elastic, doc_type=document_type) \
@@ -56,6 +56,9 @@ class SearchBuilder(object):
         s = self._add_search_query(s)
         s = self._add_sort(s)
         s = self._add_pagination(s)
+
+        if fields:
+            s = self._limit_fields(s, fields)
 
         return s
 
@@ -127,4 +130,9 @@ class SearchBuilder(object):
             from_=self.filters.get('start', 0),
             size=self.filters.get('size', settings.PAGINATE_BY)
         )
+        return s
+
+    def _limit_fields(self, s, fields):
+        """Set the list of returned fields."""
+        s = s.fields(fields)
         return s
