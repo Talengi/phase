@@ -72,14 +72,14 @@ class Export(models.Model):
 
     def write_file(self):
         """Generates and write the file."""
+        data_generator = self.get_data_generator()
         with self.open_file() as the_file:
-            data_generator = self.get_data_generator()
             for data_chunk in data_generator:
                 the_file.write(data_chunk)
 
     def open_file(self):
         """Opens the file in which data should be dumped."""
-        pass
+        return open(self.get_filepath(), 'wb')
 
     def get_data_generator(self):
         """Returns a generator that yields chunks of data to export."""
