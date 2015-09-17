@@ -34,6 +34,7 @@ class Export(models.Model):
         verbose_name=_('Category'))
     querystring = models.TextField(
         _('Querystring'),
+        blank=True, default='',
         help_text=_('The search filter querystring'))
     status = models.CharField(
         _('Status'),
