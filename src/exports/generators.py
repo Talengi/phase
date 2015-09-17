@@ -66,6 +66,7 @@ class ExportGenerator(object):
         return
 
     def get_chunk(self):
+        """Get a single piece of data."""
         Model = self.category.revision_class()
         pks = self.pks[self.start:self.start + self.chunk_size]
         qs = Model.objects \
