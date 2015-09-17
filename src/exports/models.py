@@ -129,5 +129,5 @@ class Export(models.Model):
             'Title': 'title',
         }
         Model = self.category.document_class()
-        fields = getattr(Model.PhaseConfig, 'csv_fields', default_fields)
+        fields = getattr(Model.PhaseConfig, 'export_fields', default_fields)
         return fields
