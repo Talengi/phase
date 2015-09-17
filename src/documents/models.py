@@ -319,6 +319,10 @@ class MetadataRevision(models.Model):
         return u'%02d' % self.revision
 
     @property
+    def revision_name(self):
+        return self.name
+
+    @property
     def unique_id(self):
         return '{}_{}'.format(self.document.document_key, self.name)
 
