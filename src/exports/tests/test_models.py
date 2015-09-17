@@ -10,7 +10,8 @@ from django.utils.timezone import UTC
 from categories.factories import CategoryFactory
 from accounts.factories import UserFactory
 from exports.factories import ExportFactory
-from exports.generators import CSVGenerator
+from exports.generators import ExportGenerator
+from exports.formatters import CSVFormatter
 
 
 class ExportTests(TestCase):
@@ -42,7 +43,12 @@ class ExportTests(TestCase):
     def test_get_data_generator(self):
         export = self.create_export()
         generator = export.get_data_generator()
-        self.assertTrue(isinstance(generator, CSVGenerator))
+        self.assertTrue(isinstance(generator, ExportGenerator))
+
+    def test_get_data_formatter(self):
+        export = self.create_export()
+        formatter = export.get_data_formatter()
+        self.assertTrue(isinstance(formatter, CSVFormatter))
 
     def test_get_filters(self):
         qs = 'toto=riri&tata=fifi&tutu=loulou'
