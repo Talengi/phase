@@ -56,7 +56,7 @@ class ExportCreate(LoginRequiredMixin, DocumentListMixin, UpdateView):
 class ExportList(LoginRequiredMixin, ListView):
     model = Export
 
-    def breadcrumb_category(self):
+    def breadcrumb_section(self):
         return (_('Exports'), reverse('export_list'))
 
     def get_queryset(self):
