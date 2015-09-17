@@ -19,6 +19,9 @@ class BaseFormatter(object):
         Must return binary data.
 
         """
+        if qs is None:
+            return b''
+
         formatted = []
         for doc in qs:
             formatted.append(self.format_doc(doc))
