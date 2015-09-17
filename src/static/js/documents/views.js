@@ -347,7 +347,9 @@ var Phase = Phase || {};
             if (field.length !== 0 && field.attr('type') !== 'hidden') {
 
                 if (field.attr('type') === 'checkbox') {
-                    if (typeof(value) === 'string') value = (value === 'true');
+                    if (typeof(value) === 'string') {
+                        value = (value === 'true');
+                    }
                     field.prop('checked', value);
                 } else {
                     field.val(value);
