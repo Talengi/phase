@@ -9,6 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from django.utils.module_loading import import_string
 from django.http import QueryDict
+from django.core.urlresolvers import reverse
 from django.conf import settings
 
 from model_utils import Choices
@@ -50,6 +51,9 @@ class Export(models.Model):
         verbose_name = _('Export')
         verbose_name_plural = _('Exports')
 
+    def get_absolute_url(self):
+        return reverse('export_download', args=[self.get_filename()])
+
     @property
     def format(self):
         """Return the exported file extension."""
@@ -64,6 +68,11 @@ class Export(models.Model):
             time=self.created_on,
             uuid=self.id,
             exten=self.format)
+
+    def get_url(self):
+        return os.path.join(
+            settings.EXPORTS_URL.lstrip('/'),
+            self.get_filename())
 
     def get_filepath(self):
         return os.path.join(
