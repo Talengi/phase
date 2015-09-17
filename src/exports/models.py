@@ -64,7 +64,7 @@ class Export(models.Model):
 
     def get_filters(self):
         """Parse querystring and returns a dict."""
-        return QueryDict(self.querystring)
+        return QueryDict(self.querystring, mutable=True)
 
     def get_filename(self):
         return 'export_{time:%Y%m%d}_{uuid}.{exten}'.format(
