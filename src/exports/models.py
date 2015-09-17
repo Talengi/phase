@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 import os
 import uuid
+import logging
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -16,6 +17,9 @@ from model_utils import Choices
 
 from exports.tasks import process_export
 from exports.generators import ExportGenerator
+
+
+logger = logging.getLogger(__name__)
 
 
 class Export(models.Model):
@@ -85,6 +89,7 @@ class Export(models.Model):
 
     def start_export(self):
         """Asynchronously starts the export"""
+        logger.info('Starting import {}'.format(self.id))
         self.status = self.STATUSES.processing
         self.save()
 
@@ -98,6 +103,8 @@ class Export(models.Model):
         with self.open_file() as the_file:
             for data_chunk in data_generator:
                 the_file.write(formatter.format(data_chunk))
+
+        logger.info('Import {} done'.format(self.id))
 
     def open_file(self):
         """Opens the file in which data should be dumped."""
