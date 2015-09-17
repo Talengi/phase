@@ -18,6 +18,9 @@ class ExportGenerator(object):
     def __init__(self, category, filters={}):
         self.category = category
         self.filters = filters
+        self.filters.update({
+            'start': 0,
+            'size': 60000})
 
     def __iter__(self):
         self.pks, self.total = self.get_es_results()
