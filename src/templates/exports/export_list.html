@@ -14,7 +14,13 @@
     <tbody>
     {% for export in object_list %}
         <tr>
-            <td><a href="{{ export.get_absolute_url }}">{{ export.get_filename }}</a></td>
+            <td>
+                {% if export.is_ready %}
+                    <a href="{{ export.get_absolute_url }}">{{ export.get_filename }}</a>
+                {% else %}
+                    {{ export.get_filename }}
+                {% endif %}
+            </td>
             <td>{{ export.created_on|date:"r" }}</td>
             <td>{{ export.category }}</td>
             <td>{{ export.get_status_display }}</td>
