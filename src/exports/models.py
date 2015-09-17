@@ -59,6 +59,9 @@ class Export(models.Model):
         """Return the exported file extension."""
         return 'csv'
 
+    def is_ready(self):
+        return self.status == self.STATUSES.done
+
     def get_filters(self):
         """Parse querystring and returns a dict."""
         return QueryDict(self.querystring)
