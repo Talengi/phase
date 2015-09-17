@@ -10,4 +10,4 @@ def process_export(export_id):
     export = Export.objects.get(id=export_id)
     export.write_file()
     export.status = 'done'
-    export.save
+    export.save()
