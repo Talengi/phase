@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 from django.test import TestCase
 from django.contrib.contenttypes.models import ContentType
 
-from documents.models import Document
 from accounts.factories import UserFactory
 from documents.factories import DocumentFactory
 from categories.factories import CategoryFactory
