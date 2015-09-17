@@ -186,6 +186,10 @@ class ContractorDeliverable(Metadata):
             'Received Date': 'received_date',
             'Created': 'created_on',
         }
+        csv_export_columns = {
+            'Document Number': 'document_key',
+            'Title': 'title',
+        }
         custom_filters = {
             'show_cld_spd': {
                 'field': forms.BooleanField,

@@ -99,5 +99,15 @@ class Export(models.Model):
         """Returns a formatter instance."""
         formatter_class = 'exports.formatters.{}Formatter'.format(self.format.upper())
         Formatter = import_string(formatter_class)
-        formatter = Formatter()
+        formatter = Formatter(self.get_fields())
         return formatter
+
+    def get_fields(self):
+        """Get the list of fields that must be exported."""
+        default_fields = {
+            'Document Number': 'document_key',
+            'Title': 'title',
+        }
+        Model = self.category.document_class()
+        fields = getattr(Model.PhaseConfig, 'csv_fields', default_fields)
+        return fields
