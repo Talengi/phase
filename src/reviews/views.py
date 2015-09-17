@@ -106,11 +106,27 @@ class CancelReview(PermissionRequiredMixin,
         return document.metadata
 
     def get_redirect_url(self, *args, **kwargs):
-        document = self.metadata.document
-        return reverse('document_detail', args=[
-            document.category.organisation.slug,
-            document.category.slug,
-            document.document_key])
+        """Get the url to redirect to.
+
+        Reviews can be canceled from two places:
+          - the review form
+          - the document form
+
+        In the first case, the user should be redirected to review list.
+        In the second, the user should be redirected to the same form.
+
+        """
+        referer = self.request.META.get('HTTP_REFERER', '')
+        if 'reviews' in referer:
+            url = reverse('review_home')
+        else:
+            document = self.metadata.document
+            url = reverse('document_detail', args=[
+                document.category.organisation.slug,
+                document.category.slug,
+                document.document_key])
+
+        return url
 
     def post(self, request, *args, **kwargs):
         self.metadata = self.get_object()
