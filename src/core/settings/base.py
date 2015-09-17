@@ -479,6 +479,7 @@ NGING_X_ACCEL_PREFIX = '/xaccel/'
 USE_X_SENDFILE = False
 
 # Export config
+EXPORTS_URL = '/exports/'
 EXPORTS_SUBDIR = 'exports'
 EXPORTS_CHUNK_SIZE = 150
 
