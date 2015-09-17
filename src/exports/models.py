@@ -85,7 +85,7 @@ class Export(models.Model):
         self.status = self.STATUSES.processing
         self.save()
 
-        process_export.delay(self.pk)
+        process_export.delay(unicode(self.pk))
 
     def write_file(self):
         """Generates and write the file."""
