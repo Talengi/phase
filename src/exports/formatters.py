@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from transmittals.utils import FieldWrapper
+
 
 class BaseFormatter(object):
     """Base class for all formatters.
@@ -23,8 +25,12 @@ class BaseFormatter(object):
             return b''
 
         formatted = []
-        for doc in qs:
-            formatted.append(self.format_doc(doc))
+        for revision in qs:
+            wrapped = FieldWrapper([
+                revision.document,
+                revision,
+                revision.metadata])
+            formatted.append(self.format_doc(wrapped))
 
         return b''.join(formatted)
 
