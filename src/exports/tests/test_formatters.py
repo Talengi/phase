@@ -4,6 +4,8 @@ from __future__ import unicode_literals
 from django.test import TestCase
 from django.contrib.contenttypes.models import ContentType
 
+from documents.models import Document
+from accounts.factories import UserFactory
 from documents.factories import DocumentFactory
 from categories.factories import CategoryFactory
 from default_documents.factories import (
@@ -36,4 +38,19 @@ class FormatterTests(TestCase):
             self.docs[1].document_key,
             self.docs[1].title,
         )
+        self.assertEqual(csv, expected_csv)
+
+    def test_csv_formatter_foreign_key(self):
+        fields = {
+            'Document Number': 'document_key',
+            'Leader': 'leader',
+        }
+        formatter = CSVFormatter(fields)
+        metadata = self.docs[0].metadata
+        revision = metadata.latest_revision
+        revision.leader = UserFactory(name='Grand Schtroumpf')
+        revision.save()
+        metadata = ContractorDeliverable.objects.get(pk=metadata.pk)
+        csv = formatter.format([metadata])
+        expected_csv = b'{};Grand Schtroumpf\n'.format(metadata.document_key)
         self.assertEqual(csv, expected_csv)

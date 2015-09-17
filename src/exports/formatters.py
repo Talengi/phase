@@ -28,12 +28,16 @@ class BaseFormatter(object):
     def format_doc(self, doc):
         raise NotImplementedError()
 
+    def get_field(self, doc, field):
+        data = getattr(doc, field, '')
+        return unicode(data)
+
 
 class CSVFormatter(BaseFormatter):
     """Converts a queryset into csv data."""
 
     def format_doc(self, doc):
         fields = self.fields.values()
-        data = [getattr(doc, field) for field in fields]
+        data = [self.get_field(doc, field) for field in fields]
         csv_data = '{}\n'.format(';'.join(data))
         return csv_data.encode('utf-8')
