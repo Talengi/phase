@@ -35,9 +35,9 @@ class ExportGenerator(object):
 
         """
         builder = SearchBuilder(self.category, self.filters)
-        result = builder.get_results(['metadata_pk'])
+        result = builder.get_results(['pk'])
         hits = result.hits
-        pks = [hit['metadata_pk'][0] for hit in hits]
+        pks = [hit['pk'][0] for hit in hits]
         total = hits.total
         return pks, total
 
@@ -70,7 +70,7 @@ class ExportGenerator(object):
 
     def get_chunk(self):
         """Get a single piece of data."""
-        Model = self.category.document_class()
+        Model = self.category.revision_class()
         pks = self.pks[self.start:self.start + self.chunk_size]
         qs = Model.objects \
             .filter(pk__in=pks) \
