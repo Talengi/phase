@@ -16,7 +16,6 @@ from django.conf import settings
 from model_utils import Choices
 
 from exports.tasks import process_export
-from exports.generators import ExportGenerator
 
 
 logger = logging.getLogger(__name__)
@@ -70,6 +69,16 @@ class Export(models.Model):
         """Parse querystring and returns a dict."""
         return QueryDict(self.querystring, mutable=True)
 
+    def get_fields(self):
+        """Get the list of fields that must be exported."""
+        default_fields = {
+            'Document Number': 'document_key',
+            'Title': 'title',
+        }
+        Model = self.category.document_class()
+        fields = getattr(Model.PhaseConfig, 'export_fields', default_fields)
+        return fields
+
     def get_filename(self):
         return 'export_{time:%Y%m%d}_{uuid}.{exten}'.format(
             time=self.created_on,
@@ -87,13 +96,16 @@ class Export(models.Model):
             settings.EXPORTS_SUBDIR,
             self.get_filename())
 
-    def start_export(self):
+    def start_export(self, async=True):
         """Asynchronously starts the export"""
         logger.info('Starting import {}'.format(self.id))
         self.status = self.STATUSES.processing
         self.save()
 
-        process_export.delay(unicode(self.pk))
+        if async:
+            process_export.delay(unicode(self.pk))
+        else:
+            process_export(unicode(self.pk))
 
     def write_file(self):
         """Generates and write the file."""
@@ -112,7 +124,9 @@ class Export(models.Model):
 
     def get_data_generator(self):
         """Returns a generator that yields chunks of data to export."""
-        generator = ExportGenerator(self.category, filters=self.get_filters())
+        generator_class = 'exports.generators.{}Generator'.format(self.format.upper())
+        Generator = import_string(generator_class)
+        generator = Generator(self.category, self.get_filters(), self.get_fields())
         return generator
 
     def get_data_formatter(self):
@@ -121,13 +135,3 @@ class Export(models.Model):
         Formatter = import_string(formatter_class)
         formatter = Formatter(self.get_fields())
         return formatter
-
-    def get_fields(self):
-        """Get the list of fields that must be exported."""
-        default_fields = {
-            'Document Number': 'document_key',
-            'Title': 'title',
-        }
-        Model = self.category.document_class()
-        fields = getattr(Model.PhaseConfig, 'export_fields', default_fields)
-        return fields

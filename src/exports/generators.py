@@ -81,4 +81,4 @@ class ExportGenerator(object):
 
 class CSVGenerator(ExportGenerator):
     def data_header(self):
-        return self.fields.keys()
+        return [self.fields.keys()]
