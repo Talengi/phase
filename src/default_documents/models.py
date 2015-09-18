@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from collections import OrderedDict
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
@@ -186,6 +188,31 @@ class ContractorDeliverable(Metadata):
             'Received Date': 'received_date',
             'Created': 'created_on',
         }
+        export_fields = OrderedDict((
+            ('Document Number', 'document_key'),
+            ('Title', 'title'),
+            ('Revision', 'revision_name'),
+            ('Revision date', 'revision_date'),
+            ('Status', 'status'),
+            ('Doc category', 'category'),
+            ('Class', 'docclass'),
+            ('Contract Number', 'contract_number'),
+            ('Originator', 'originator'),
+            ('Unit', 'unit'),
+            ('Discipline', 'discipline'),
+            ('Sequential Number', 'sequential_number'),
+            ('System', 'system'),
+            ('WBS', 'wbs'),
+            ('Weight', 'weight'),
+            ('Is final revision', 'final_revision'),
+            ('Received date', 'received_date'),
+            ('Created on', 'created_on'),
+            ('Review start date', 'review_start_date'),
+            ('Review due date', 'review_due_date'),
+            ('Leader', 'leader'),
+            ('Approver', 'approver'),
+            ('Return code', 'return_code'),
+        ))
         custom_filters = {
             'show_cld_spd': {
                 'field': forms.BooleanField,

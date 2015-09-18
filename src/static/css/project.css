@@ -79,6 +79,13 @@ body > .container > .messages li {
     border-top: 3px solid #666;
     color: #666;
 }
+#table-controls .navbar-form {
+    padding: 0;
+    margin-right: 5px;
+}
+#table-controls .navbar-form .form-group {
+    margin-right: 5px;
+}
 
 /* Form rendering */
 .form-horizontal label {

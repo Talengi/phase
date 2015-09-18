@@ -57,6 +57,9 @@ var Phase = Phase || {};
             this.bookmarkListView = new Phase.Views.BookmarkListView({
                 collection: this.bookmarkCollection
             });
+            this.exportFormView = new Phase.Views.ExportFormView({
+                model: this.search
+            });
 
             // Event binding
             this.listenTo(this.search, 'change', this.onSearch);

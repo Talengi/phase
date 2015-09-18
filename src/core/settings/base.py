@@ -230,6 +230,7 @@ LOCAL_APPS = (
     'dashboards',
     'privatemedia',
     'tools',
+    'exports',
 )
 
 # Load custom documents
@@ -476,6 +477,11 @@ PRIVATE_ROOT = SITE_ROOT.child('private')
 PRIVATE_URL = '/private/'
 NGING_X_ACCEL_PREFIX = '/xaccel/'
 USE_X_SENDFILE = False
+
+# Export config
+EXPORTS_URL = '/exports/'
+EXPORTS_SUBDIR = 'exports'
+EXPORTS_CHUNK_SIZE = 150
 
 # Where to look for files to import?
 IMPORT_ROOT = SITE_ROOT.child('import')

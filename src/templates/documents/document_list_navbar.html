@@ -20,7 +20,11 @@
     </button>
 
     <div id="document-list-form" class="collapse navbar-collapse">
-    <form method="post" action="{% url "document_download" organisation_slug category_slug %}" class="navbar-form ">
+
+    <form
+        method="post"
+        action="{% url "document_download" organisation_slug category_slug %}"
+        class="navbar-form navbar-left">
         {% csrf_token %}
 
         <div class="form-group dropdown">
@@ -28,7 +32,7 @@
                 type="button"
                 data-toggle="dropdown"
                 data-form-action="{% url "document_download" organisation_slug category_slug %}"
-                class="btn btn-primary navbar-left navbar-action disabled dropdown-toggle">
+                class="btn btn-primary navbar-action disabled dropdown-toggle">
                 <span class="glyphicon glyphicon-download glyphicon-white"></span> Download
             </button>
             <div id="download-dropdown" class="dropdown-form dropdown-menu">
@@ -43,21 +47,33 @@
                 data-toggle="modal"
                 data-keyboard="false"
                 href="#progress-modal"
-                class="btn btn-primary navbar-action navbar-left disabled">
+                class="btn btn-primary navbar-action disabled">
                 <span class="glyphicon glyphicon-eye-open glyphicon-white"></span> Start review
            </button>
        </div>
 
-        <div class="form-group">
-            {% if perms.documents.add_document %}
-            <div class="hidden-xs hidden-sm navbar-left">
+        {% if perms.documents.add_document %}
+        <div class="form-group hidden-xs hidden-sm">
+            <div class="hidden-xs hidden-sm">
                 <a class="btn btn-primary"
                     href="{% url "document_create" organisation_slug category_slug %}">
                     <span class="glyphicon glyphicon-plus icon-white"></span> New document
                 </a>
             </div>
-            {% endif %}
         </div>
+        {% endif %}
+    </form>
+
+    <form
+        id="export-form"
+        method="post"
+        action="{% url "export_create" organisation_slug category_slug %}"
+        class="navbar-form navbar-left hidden-xs hidden-sm">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">
+            <span class="glyphicon glyphicon-upload glyphicon-inverse"></span>
+            {{ _('Export current list') }}
+        </button>
     </form>
     </div>
 </div>
