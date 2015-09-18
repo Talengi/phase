@@ -36,10 +36,9 @@ class ExportGenerator(object):
 
         """
         builder = SearchBuilder(self.category, self.filters)
-        result = builder.get_results(['pk'])
-        hits = result.hits
-        pks = [hit['pk'][0] for hit in hits]
-        total = hits.total
+        result = builder.scan_results(['pk'])
+        pks = [doc['pk'][0] for doc in result]
+        total = len(pks)
         return pks, total
 
     def __next__(self):

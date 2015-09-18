@@ -18,7 +18,9 @@ class SearchDocuments(JSONResponseMixin, BaseDocumentList):
 
         try:
             builder = SearchBuilder(self.category, self.request.GET)
-            results = builder.get_results()
+            query = builder.build_query()
+            query = builder.add_aggregations(query)
+            results = query.execute()
         except RuntimeError:
             results = []
 

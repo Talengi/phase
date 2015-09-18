@@ -43,6 +43,9 @@ class SearchBuilder(object):
     def get_results(self, *args, **kwargs):
         return self.build_query(*args, **kwargs).execute()
 
+    def scan_results(self, *args, **kwargs):
+        return self.build_query(*args, **kwargs).scan()
+
     def build_query(self, fields=[]):
         document_type = self.category.document_type()
 
@@ -52,7 +55,6 @@ class SearchBuilder(object):
 
         s = self._add_filter_fields(s)
         s = self._add_custom_filters(s)
-        s = self._add_aggregations(s)
         s = self._add_search_query(s)
         s = self._add_sort(s)
         s = self._add_pagination(s)
@@ -84,7 +86,7 @@ class SearchBuilder(object):
 
         return s
 
-    def _add_aggregations(self, s):
+    def add_aggregations(self, s):
         """Add aggregations (facets) to the search query.
 
         For foreign key fields, we need to organize buckets by primary keys
