@@ -8,6 +8,8 @@ from core.celery import app
 def process_export(export_id):
     from exports.models import Export
     export = Export.objects.get(id=export_id)
+    export.status = 'processing'
+    export.save()
     export.write_file()
     export.status = 'done'
     export.save()
