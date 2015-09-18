@@ -59,7 +59,7 @@ class ExportCreate(LoginRequiredMixin, DocumentListMixin, UpdateView):
 
     def form_valid(self, form):
         return_value = super(ExportCreate, self).form_valid(form)
-        self.object.start_export(async=False)
+        self.object.start_export()
         return return_value
 
 
