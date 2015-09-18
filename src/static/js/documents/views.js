@@ -490,4 +490,32 @@ var Phase = Phase || {};
         }
     });
 
+    /**
+     * Navbar export button.
+     *
+     * Updates the form with hidden fields, so the current search filters
+     * are passed on to the export creation view.
+     *
+     */
+    Phase.Views.ExportFormView = Backbone.View.extend({
+        el: '#export-form',
+        initialize: function() {
+            this.listenTo(this.model, 'change', this.render);
+            this.render();
+        },
+        render: function() {
+            var hidden = this.$el.find('input[type=hidden]');
+            hidden.remove();
+
+            console.log(this.model.attributes);
+            _.each(this.model.attributes, this.addFilter, this);
+        },
+        addFilter: function(value, key, list) {
+            var input = $('<input type="hidden" />');
+            input.attr('name', key);
+            input.val(value);
+            this.$el.append(input);
+        }
+    });
+
 })(this, Phase, Backbone, _);
