@@ -2,6 +2,7 @@ import zipfile
 import tempfile
 
 from django.contrib.contenttypes.models import ContentType
+from django.utils.encoding import force_text
 from django.db import transaction
 
 
@@ -153,7 +154,7 @@ def stringify_value(val):
     elif type(val) == bool:
         unicode_val = u'Yes' if val else u'No'
     else:
-        unicode_val = unicode(val)
+        unicode_val = force_text(val)
 
     return unicode_val
 
