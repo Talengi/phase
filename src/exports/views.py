@@ -29,9 +29,23 @@ class ExportCreate(LoginRequiredMixin, DocumentListMixin, UpdateView):
 
     model = Export
     fields = ('querystring',)
+    http_method_names = ['post']
 
     def breadcrumb_section(self):
         return (_('Export'), '#')
+
+    def get_form_kwargs(self):
+        qd = self.request.POST.copy()
+        qd.pop('csrfmiddlewaretoken')
+        qd.pop('start')
+        qd.pop('size')
+        qd.pop('sort_by')
+
+        kwargs = super(ExportCreate, self).get_form_kwargs()
+        kwargs.update({'data': {
+            'querystring': qd.urlencode()
+        }})
+        return kwargs
 
     def get_object(self):
         self.get_queryset()
@@ -40,16 +54,12 @@ class ExportCreate(LoginRequiredMixin, DocumentListMixin, UpdateView):
             category=self.category)
         return export
 
-    def get_initial(self):
-        return {
-            'querystring': ''}
-
     def get_success_url(self):
         return reverse('export_list')
 
     def form_valid(self, form):
         return_value = super(ExportCreate, self).form_valid(form)
-        self.object.start_export()
+        self.object.start_export(async=False)
         return return_value
 
 

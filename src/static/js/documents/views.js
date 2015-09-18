@@ -504,7 +504,7 @@ var Phase = Phase || {};
             this.render();
         },
         render: function() {
-            var hidden = this.$el.find('input[type=hidden]');
+            var hidden = this.$el.find('input[type=hidden].filter');
             hidden.remove();
 
             console.log(this.model.attributes);
@@ -512,6 +512,7 @@ var Phase = Phase || {};
         },
         addFilter: function(value, key, list) {
             var input = $('<input type="hidden" />');
+            input.attr('class', 'filter');
             input.attr('name', key);
             input.val(value);
             this.$el.append(input);
