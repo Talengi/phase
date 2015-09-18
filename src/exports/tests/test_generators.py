@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from collections import OrderedDict
+
 from django.test import TestCase, override_settings
 from django.contrib.contenttypes.models import ContentType
 
@@ -11,7 +13,7 @@ from categories.factories import CategoryFactory
 from default_documents.factories import (
     ContractorDeliverableFactory, ContractorDeliverableRevisionFactory)
 from default_documents.models import ContractorDeliverable
-from exports.generators import ExportGenerator
+from exports.generators import ExportGenerator, CSVGenerator
 
 
 class ExportGeneratorTests(TestCase):
@@ -26,13 +28,13 @@ class ExportGeneratorTests(TestCase):
             for i in range(1, 20))
 
         self.es_mock = MagicMock(return_value=(
-            [doc.pk for doc in self.docs],
+            [doc.latest_revision.pk for doc in self.docs],
             20
         ))
 
     @override_settings(EXPORTS_CHUNK_SIZE=5)
     def test_generator_iterator(self):
-        generator = ExportGenerator(self.category)
+        generator = ExportGenerator(self.category, {}, {})
         generator.get_es_results = self.es_mock
         iterator = iter(generator)
         chunk = iterator.next()  # header
@@ -51,3 +53,12 @@ class ExportGeneratorTests(TestCase):
 
         with self.assertRaises(StopIteration):
             chunk = iterator.next()
+
+    def test_csv_generator_header(self):
+        fields = OrderedDict((
+            ('Title', 'title'),
+            ('Document number', 'document_key')))
+        generator = CSVGenerator(self.category, {}, fields)
+        iterator = iter(generator)
+        chunk = iterator.next()
+        self.assertEqual(chunk, ['Title', 'Document number'])

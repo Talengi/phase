@@ -15,8 +15,9 @@ class ExportGenerator(object):
     Yields data in chunks.
 
     """
-    def __init__(self, category, filters={}):
+    def __init__(self, category, filters, fields):
         self.category = category
+        self.fields = fields
         self.filters = filters
         self.filters.update({
             'start': 0,
@@ -76,3 +77,8 @@ class ExportGenerator(object):
             .filter(pk__in=pks) \
             .select_related()
         return qs
+
+
+class CSVGenerator(ExportGenerator):
+    def data_header(self):
+        return self.fields.keys()
