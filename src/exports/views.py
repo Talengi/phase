@@ -92,7 +92,7 @@ class DownloadView(LoginRequiredMixin, View):
 
         url = export.get_url()
         if settings.USE_X_SENDFILE:
-            url = url.replace('/private/', settings.NGING_X_ACCEL_PREFIX)
+            url = '{}{}'.format(settings.NGING_X_ACCEL_PREFIX, url)
             response = HttpResponse(content_type='application/force-download')
             response['Content-Disposition'] = 'attachment; filename=%s' % filename
             response['X-Accel-Redirect '] = url
