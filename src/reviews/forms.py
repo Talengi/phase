@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 
 from django import forms
 from django.utils.translation import ugettext_lazy as _
+from django.core.exceptions import ValidationError
 
 from reviews.utils import get_cached_reviews
 from accounts.forms import UserChoiceField, UserMultipleChoiceField
@@ -46,4 +47,20 @@ class ReviewFormMixin(forms.ModelForm):
 
     def clean(self):
         data = super(ReviewFormMixin, self).clean()
+
+        distrib_list = []
+        if data['leader'] is not None:
+            distrib_list.append(data['leader'])
+
+        if data['approver'] is not None:
+            distrib_list.append(data['approver'])
+
+        distrib_list += data['reviewers']
+
+        distrib_set = set(distrib_list)
+        if len(distrib_list) != len(distrib_set):
+            msg = _('The same user cannot appear multiple times in the same '
+                    'distribution list.')
+            raise ValidationError(msg, code='duplicate_distrib_list')
+
         return data
