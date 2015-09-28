@@ -3,26 +3,28 @@
 {% block custombodyclass %}fullwidth{% endblock %}
 
 {% block content %}
-<div id="main-table">
-    <table class="table table-bordered table-condensed table-hover">
-        <thead>
+<div class="row wide-table-row">
+    <div id="main-table" class="col-xs-12">
+        <table class="table table-bordered table-condensed table-hover">
+            <thead>
+                <tr>
+                    <th></th>
+                    {% for header in headers %}
+                        <th>{{ header|date:"M Y" }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+            {% for bucket_name, bucket_data in buckets.items %}
             <tr>
-                <th></th>
-                {% for header in headers %}
-                    <th>{{ header|date:"M Y" }}</th>
+                <th class="columntitle">{{ bucket_name }}</th>
+                {% for value in bucket_data %}
+                    <td>{{ value }}</td>
                 {% endfor %}
             </tr>
-        </thead>
-        <tbody>
-        {% for bucket_name, bucket_data in buckets.items %}
-        <tr>
-            <th class="columntitle">{{ bucket_name }}</th>
-            {% for value in bucket_data %}
-                <td>{{ value }}</td>
             {% endfor %}
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endblock %}
