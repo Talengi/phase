@@ -36,7 +36,7 @@ class ExportGenerator(object):
 
         """
         builder = SearchBuilder(self.category, self.filters)
-        result = builder.scan_results(['pk'])
+        result = builder.scan_results(['pk'], only_latest_revisions=False)
         pks = [doc['pk'][0] for doc in result]
         total = len(pks)
         return pks, total

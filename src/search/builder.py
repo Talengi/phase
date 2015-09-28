@@ -46,12 +46,14 @@ class SearchBuilder(object):
     def scan_results(self, *args, **kwargs):
         return self.build_query(*args, **kwargs).scan()
 
-    def build_query(self, fields=[]):
+    def build_query(self, fields=[], only_latest_revisions=True):
         document_type = self.category.document_type()
 
         s = Search(using=elastic, doc_type=document_type) \
-            .index(settings.ELASTIC_INDEX) \
-            .filter('term', is_latest_revision=True)
+            .index(settings.ELASTIC_INDEX)
+
+        if only_latest_revisions:
+            s = s.filter('term', is_latest_revision=True)
 
         s = self._add_filter_fields(s)
         s = self._add_custom_filters(s)
