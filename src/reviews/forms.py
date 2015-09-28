@@ -43,3 +43,7 @@ class ReviewFormMixin(forms.ModelForm):
                 self.can_discuss = self.request.user in reviewers
 
         super(ReviewFormMixin, self).prepare_form(*args, **kwargs)
+
+    def clean(self):
+        data = super(ReviewFormMixin, self).clean()
+        return data
