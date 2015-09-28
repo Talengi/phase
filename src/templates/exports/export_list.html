@@ -16,9 +16,9 @@
         <tr>
             <td>
                 {% if export.is_ready %}
-                    <a href="{{ export.get_absolute_url }}">{{ export.get_filename }}</a>
+                    <a href="{{ export.get_absolute_url }}">{{ export.get_pretty_filename }}</a>
                 {% else %}
-                    {{ export.get_filename }}
+                    {{ export.get_pretty_filename }}
                 {% endif %}
             </td>
             <td>{{ export.created_on|date:"r" }}</td>

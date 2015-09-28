@@ -55,7 +55,7 @@ class Export(models.Model):
         verbose_name_plural = _('Exports')
 
     def get_absolute_url(self):
-        return reverse('export_download', args=[self.get_filename()])
+        return reverse('export_download', args=[self.id])
 
     @property
     def format(self):
@@ -79,10 +79,18 @@ class Export(models.Model):
         fields = getattr(Model.PhaseConfig, 'export_fields', default_fields)
         return fields
 
+    def get_pretty_filename(self):
+        """Return the filename as it should be downloaded."""
+        return 'export_{time:%Y%m%d-%H%M}_{org}_{cat}.{exten}'.format(
+            time=timezone.localtime(self.created_on),
+            org=self.category.organisation.slug,
+            cat=self.category.category_template.slug,
+            exten=self.format)
+
     def get_filename(self):
-        return 'export_{time:%Y%m%d}_{uuid}.{exten}'.format(
+        return 'export_{time:%Y%m%d}_{uid}.{exten}'.format(
             time=self.created_on,
-            uuid=self.id,
+            uid=self.id,
             exten=self.format)
 
     def get_url(self):

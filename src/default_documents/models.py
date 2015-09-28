@@ -189,7 +189,7 @@ class ContractorDeliverable(Metadata):
             'Created': 'created_on',
         }
         export_fields = OrderedDict((
-            ('Document Number', 'document_key'),
+            ('Document number', 'document_key'),
             ('Title', 'title'),
             ('Revision', 'revision_name'),
             ('Revision date', 'revision_date'),
@@ -200,7 +200,8 @@ class ContractorDeliverable(Metadata):
             ('Originator', 'originator'),
             ('Unit', 'unit'),
             ('Discipline', 'discipline'),
-            ('Sequential Number', 'sequential_number'),
+            ('Document type', 'document_type'),
+            ('Sequential number', 'sequential_number'),
             ('System', 'system'),
             ('WBS', 'wbs'),
             ('Weight', 'weight'),

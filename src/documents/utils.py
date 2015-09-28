@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import zipfile
 import tempfile
 
@@ -133,7 +136,7 @@ def compress_documents(documents, format='both', revisions='latest'):
     return temp_file
 
 
-def stringify_value(val):
+def stringify_value(val, none_val='NC'):
     """Returns a value suitable for display in a document list.
 
     >>> stringify_value('toto')
@@ -150,7 +153,7 @@ def stringify_value(val):
     u'2000-01-01'
     """
     if val is None:
-        unicode_val = u'NC'
+        unicode_val = none_val
     elif type(val) == bool:
         unicode_val = u'Yes' if val else u'No'
     else:

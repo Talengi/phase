@@ -482,6 +482,7 @@ USE_X_SENDFILE = False
 EXPORTS_URL = '/exports/'
 EXPORTS_SUBDIR = 'exports'
 EXPORTS_CHUNK_SIZE = 150
+EXPORTS_VALIDITY_DURATION = 2
 
 # Where to look for files to import?
 IMPORT_ROOT = SITE_ROOT.child('import')

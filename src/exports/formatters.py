@@ -55,4 +55,4 @@ class CSVFormatter(BaseFormatter):
 
     def get_field(self, doc, field):
         data = getattr(doc, field, '')
-        return stringify(data)
+        return stringify(data, none_val='')
