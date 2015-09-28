@@ -78,11 +78,7 @@ class ExportList(LoginRequiredMixin, ListView):
 
 class DownloadView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        filename = kwargs.get('filename')
-        name, ext = os.path.splitext(filename)
-
-        _, _, uid = name.split('_')
-
+        uid = kwargs.get('uid')
         qs = Export.objects.filter(owner=self.request.user)
         export = get_object_or_404(qs, id=uid)
 
@@ -91,6 +87,7 @@ class DownloadView(LoginRequiredMixin, View):
             raise Http404()
 
         url = export.get_url()
+        filename = export.get_pretty_filename()
         if settings.USE_X_SENDFILE:
             url = '{}{}'.format(settings.NGING_X_ACCEL_PREFIX, url)
             response = HttpResponse(content_type='application/force-download')

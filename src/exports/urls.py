@@ -15,7 +15,7 @@ urlpatterns = patterns(
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/$',
         ExportCreate.as_view(),
         name="export_create"),
-    url(r'^(?P<filename>[-\w]+\.[\w]{3,4})$',
+    url(r'^(?P<uid>[-\w]+)/$',
         DownloadView.as_view(),
         name='export_download')
 )
