@@ -79,7 +79,7 @@ class ExportList(LoginRequiredMixin, ListView):
 class DownloadView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         uid = kwargs.get('uid')
-        qs = Export.objects.filter(owner=self.request.user)
+        qs = Export.objects.filter(owner=self.request.user).select_related()
         export = get_object_or_404(qs, id=uid)
 
         filepath = export.get_filepath()
