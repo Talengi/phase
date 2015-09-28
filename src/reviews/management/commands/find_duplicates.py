@@ -16,9 +16,12 @@ class Command(BaseCommand):
             .order_by() \
             .filter(id__count__gt=1)
 
-        document_ids = [review['document'] for review in reviews]
-        unique_ids = set(document_ids)
-        documents = Document.objects.filter(id__in=unique_ids)
+        for review in reviews:
+            self.cancel_review(review['document'], review['revision'])
 
-        for doc in documents:
-            self.stdout.write('Found duplicate in {.document_key}'.format(doc))
+    def cancel_review(self, doc_id, revision_id):
+        document = Document.objects.get(pk=doc_id)
+        revision = document.get_metadata().get_revision(revision_id)
+
+        self.stdout.write('Found duplicate in {.document_key}'.format(document))
+        revision.cancel_review()
