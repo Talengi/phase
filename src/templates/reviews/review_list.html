@@ -13,6 +13,9 @@
         <table id="documents" class="table table-bordered table-condensed table-hover">
             <thead>
                 <tr>
+                    {% if review_step == 'reviewer' %}
+                        <th></th>
+                    {% endif %}
                     <th>{{ _('Doc. number') }}</th>
                     <th>{{ _('Title') }}</th>
                     <th>{{ _('Revision') }}</th>
@@ -24,19 +27,24 @@
                 </tr>
             </thead>
             <tbody>
-            {% for rev in revisions %}
+            {% for rev in reviews %}
             <tr data-document-key="{{ rev.document.document_key }}">
+                {% if review_step == 'reviewer' %}
+                    <td class="columnselect">
+                        <input type="checkbox" data-review-id="{{ rev.id }}" />
+                    </td>
+                {% endif %}
                 <td class="columndocument_key">
                     <a href="{% url 'review_document' rev.document.document_key %}">{{ rev.document.document_key }}</a>
                 </td>
                 <td class="columntitle">
                     <a href="{% url 'review_document' rev.document.document_key %}">{{ rev.document.title }}</a>
                 </td>
-                <td class="columncurrent_revision">{{ rev.name }}</td>
-                <td class="columnstatus">{{ rev.status }}</td>
-                <td class="columnreview_received_date">{{ rev.received_date|stringify }}</td>
-                <td class="columnreview_start_date">{{ rev.review_start_date|stringify }}</td>
-                <td class="columnreview_due_date">{{ rev.review_due_date|stringify }}</td>
+                <td class="columncurrent_revision">{{ rev.revision_name }}</td>
+                <td class="columnstatus">{{ rev.status|stringify }}</td>
+                <td class="columnreview_received_date">{{ rev.revision_received_date|stringify }}</td>
+                <td class="columnreview_start_date">{{ rev.start_date|stringify }}</td>
+                <td class="columnreview_due_date">{{ rev.due_date|stringify }}</td>
                 <td>{{ rev.current_review_step }}</td>
             </tr>
             {% endfor %}

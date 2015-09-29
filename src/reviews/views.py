@@ -210,7 +210,7 @@ class BatchReviewPoll(View):
 
 class BaseReviewDocumentList(LoginRequiredMixin, ListView):
     template_name = 'reviews/review_list.html'
-    context_object_name = 'revisions'
+    context_object_name = 'reviews'
 
     def breadcrumb_section(self):
         return _('Reviews'), reverse('review_home')
@@ -219,6 +219,7 @@ class BaseReviewDocumentList(LoginRequiredMixin, ListView):
         context = super(BaseReviewDocumentList, self).get_context_data(**kwargs)
         context.update({
             'reviews_active': True,
+            'review_step': self.review_step,
         })
         return context
 
@@ -226,35 +227,23 @@ class BaseReviewDocumentList(LoginRequiredMixin, ListView):
         """Filter document list to get reviews at the current step."""
         raise NotImplementedError('Implement me in the child class.')
 
-    def order_revisions(self, revisions):
-        """Return an ordered list of revisions.
+    def order_reviews(self, reviews):
+        """Return an ordered list of reviews.
 
         Override in subclasses for a custom sort.
 
         """
-        return revisions
+        return reviews
 
     def get_queryset(self):
-        """Base queryset to fetch all documents under review.
-
-        Since documents can be of differente types, we need to launch a query
-        for every document type that is reviewable.  We assume that the number
-        of reviewable document classes will never be too high, so we don't do
-        anything to optimize performances for now.
-
-        """
-        revisions = []
-        klasses = [klass for klass in get_all_revision_classes() if issubclass(klass, ReviewMixin)]
-
-        for klass in klasses:
-            qs = klass.objects \
-                .exclude(review_start_date=None) \
-                .filter(review_end_date=None) \
-                .select_related('document')
-            qs = self.step_filter(qs)
-            revisions += list(qs)
-
-        return self.order_revisions(revisions)
+        """Base queryset to fetch all waiting reviews."""
+        reviews = Review.objects \
+            .filter(reviewer=self.request.user) \
+            .filter(closed_on=None) \
+            .order_by('due_date') \
+            .select_related()
+        reviews = self.step_filter(reviews)
+        return reviews
 
 
 class PrioritiesDocumentList(BaseReviewDocumentList):
@@ -266,72 +255,53 @@ class PrioritiesDocumentList(BaseReviewDocumentList):
      * Document is of class >= 2
 
     """
+    review_step = 'priorities'
+
     def breadcrumb_subsection(self):
         return _('Priorities')
 
-    def order_revisions(self, revisions):
-        revisions.sort(lambda x, y: cmp(x.review_due_date, y.review_due_date))
-        return revisions
-
     def step_filter(self, qs):
-        role_q = Q(leader=self.request.user) | Q(approver=self.request.user)
+        role_q = Q(role='leader') | Q(role='approver')
         delta = timezone.now() + datetime.timedelta(days=5)
 
         qs = qs \
             .filter(role_q) \
-            .filter(review_due_date__lte=delta) \
+            .filter(due_date__lte=delta) \
             .filter(docclass__lte=2)
         return qs
 
 
 class ReviewersDocumentList(BaseReviewDocumentList):
     """Display the list of documents at the first review step."""
+    review_step = 'reviewer'
 
     def breadcrumb_subsection(self):
         return _('Reviewer')
 
-    def get_pending_reviews(self):
-        """Get all pending reviews for this user."""
-        if not hasattr(self, '_pending_reviews'):
-            reviews = Review.objects \
-                .filter(reviewer=self.request.user) \
-                .filter(closed_on=None)
-
-            self._pending_reviews = reviews.values_list('document_id', flat=True)
-
-        return self._pending_reviews
-
     def step_filter(self, qs):
-        pending_reviews = self.get_pending_reviews()
-
-        # A reviewer can only review a revision once
-        # Once it's reviewed, the document should disappear from the list
-        return qs \
-            .filter(reviewers_step_closed=None) \
-            .filter(reviewers=self.request.user) \
-            .filter(document_id__in=pending_reviews)
+        return qs.filter(role=Review.ROLES.reviewer)
 
 
 class LeaderDocumentList(BaseReviewDocumentList):
     """Display the list of documents at the two first review steps."""
+    review_step = 'leader'
 
     def breadcrumb_subsection(self):
         return _('Leader')
 
     def step_filter(self, qs):
-        return qs \
-            .filter(leader_step_closed=None) \
-            .filter(leader=self.request.user)
+        return qs.filter(role=Review.ROLES.leader)
 
 
 class ApproverDocumentList(BaseReviewDocumentList):
     """Display the list of documents at the third review steps."""
+    review_step = 'approver'
 
     def breadcrumb_subsection(self):
         return _('Approver')
 
     def step_filter(self, qs):
-        return qs.filter(approver=self.request.user)
+        return qs.filter(role=Review.ROLES.approver)
 
 
 # TODO Refactor to use UpdateView
