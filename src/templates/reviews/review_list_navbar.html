@@ -1,0 +1,14 @@
+{% load i18n %}
+
+<div class="navbar additional-navbar navbar-default navbar-static-top">
+<div class="container-fluid">
+    <p class="navbar-text navbar-left hidden-xs hidden-sm">
+    {% blocktrans count nb_revisions=revisions|length %}
+        There is one review waiting
+    {% plural %}
+        There are {{ nb_revisions }} reviews waiting
+    {% endblocktrans %}
+    </p>
+</div>
+</div>
+

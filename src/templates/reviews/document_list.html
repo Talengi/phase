@@ -3,6 +3,10 @@
 
 {% block custombodyclass %}documentlist fullwidth{% endblock %}
 
+{% block additional_navbar %}
+    {% include 'reviews/review_list_navbar.html' %}
+{% endblock %}
+
 {% block content %}
 <div id="review-list-row" class="row wide-table-row">
     <div id="main-table" class="col-xs-12">
