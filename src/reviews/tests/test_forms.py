@@ -73,4 +73,3 @@ class ReviewFormMixinTest(TestCase):
         })
         form = ContractorDeliverableRevisionForm(self.data, category=self.category)
         self.assertFalse(form.is_valid())
-        import pdb; pdb.set_trace()
