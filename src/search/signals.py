@@ -24,7 +24,7 @@ def update_index(sender, instance, **kwargs):
 
 
 def remove_from_index(sender, instance, **kwargs):
-    unindex_document.delay(instance.pk)
+    unindex_document(instance.pk)
 
 
 def save_mapping(sender, instance, **kwargs):
