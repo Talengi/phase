@@ -213,7 +213,7 @@ class BaseReviewDocumentList(LoginRequiredMixin, ListView):
     context_object_name = 'revisions'
 
     def breadcrumb_section(self):
-        return _('Review'), reverse('review_home')
+        return _('Reviews'), reverse('review_home')
 
     def get_context_data(self, **kwargs):
         context = super(BaseReviewDocumentList, self).get_context_data(**kwargs)
