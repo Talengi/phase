@@ -209,7 +209,7 @@ class BatchReviewPoll(View):
 
 
 class BaseReviewDocumentList(LoginRequiredMixin, ListView):
-    template_name = 'reviews/document_list.html'
+    template_name = 'reviews/review_list.html'
     context_object_name = 'revisions'
 
     def breadcrumb_section(self):
