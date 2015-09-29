@@ -41,11 +41,11 @@
                     <a href="{% url 'review_document' rev.document.document_key %}">{{ rev.document.title }}</a>
                 </td>
                 <td class="columncurrent_revision">{{ rev.revision_name }}</td>
-                <td class="columnstatus">{{ rev.status|stringify }}</td>
-                <td class="columnreview_received_date">{{ rev.revision_received_date|stringify }}</td>
+                <td class="columnstatus">{{ rev.revision_status|stringify }}</td>
+                <td class="columnreview_received_date">{{ rev.received_date|stringify }}</td>
                 <td class="columnreview_start_date">{{ rev.start_date|stringify }}</td>
                 <td class="columnreview_due_date">{{ rev.due_date|stringify }}</td>
-                <td>{{ rev.current_review_step }}</td>
+                <td>{{ rev.get_status_display }}</td>
             </tr>
             {% endfor %}
             </tbody>

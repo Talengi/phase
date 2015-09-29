@@ -67,6 +67,14 @@ class Review(models.Model):
     revision = models.PositiveIntegerField(
         _('Revision')
     )
+    received_date = models.DateField(
+        _('Review received date'),
+        null=True, blank=True
+    )
+    start_date = models.DateField(
+        _('Review start date'),
+        null=True, blank=True
+    )
     due_date = models.DateField(
         _('Review due date'),
         null=True, blank=True
@@ -80,6 +88,10 @@ class Review(models.Model):
         max_length=30,
         choices=STATUSES,
         default=STATUSES.pending)
+    revision_status = models.CharField(
+        _('Revision status'),
+        max_length=30,
+        null=True, blank=True)
     closed_on = models.DateTimeField(
         _('Closed on'),
         null=True, blank=True
@@ -218,10 +230,12 @@ class ReviewMixin(models.Model):
                 reviewer=reviewer,
                 document=self.document,
                 revision=self.revision,
+                received_date=self.received_date,
+                start_date=start_date,
                 due_date=self.review_due_date,
                 docclass=self.docclass,
                 status='progress',
-            )
+                revision_status=self.status)
 
         # If no reviewers, close reviewers step immediatly
         if len(reviewers) == 0:
