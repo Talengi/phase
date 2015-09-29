@@ -247,13 +247,17 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS + DOC_APPS
 
 # ######### LOGGING CONFIGURATION
 # See http://www.miximum.fr/bien-developper/876-an-effective-logging-strategy-with-django
+USE_SENTRY = False
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse'
-        }
+        },
+        'require_sentry_activated': {
+            '()': 'core.log.RequireSentryActivated'
+        },
     },
     'formatters': {
         'verbose': {
@@ -282,11 +286,16 @@ LOGGING = {
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler',
         },
+        'sentry': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false', 'require_sentry_activated'],
+            'class': 'raven.contrib.django.handlers.SentryHandler',
+        },
     },
     'loggers': {
         # This is the "catch all" logger
         '': {
-            'handlers': ['console', 'syslog', 'mail_admins'],
+            'handlers': ['console', 'syslog', 'mail_admins', 'sentry'],
             'level': 'DEBUG',
             'propagate': False,
         },
@@ -296,12 +305,12 @@ LOGGING = {
             'propagate': True,
         },
         'elasticsearch': {
-            'handlers': ['console', 'syslog', 'mail_admins'],
+            'handlers': ['console', 'syslog', 'mail_admins', 'sentry'],
             'level': 'INFO',
             'propagate': False,
         },
         'elasticsearch.trace': {
-            'handlers': ['syslog', 'mail_admins'],
+            'handlers': ['syslog', 'mail_admins', 'sentry'],
             'level': 'INFO',
             'propagate': False,
         }
