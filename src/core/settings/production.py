@@ -73,5 +73,5 @@ USE_X_SENDFILE = True
 TRS_IMPORTS_CONFIG = get_prod_setting('TRS_IMPORTS_CONFIG')
 
 # ######### LOGS CONFIG
-RAVEN_CONFIG = get_prod_setting('RAVEN_CONFIG')
 USE_SENTRY = get_prod_setting('USE_SENTRY')
+RAVEN_CONFIG = get_prod_setting('RAVEN_CONFIG')
