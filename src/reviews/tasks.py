@@ -36,7 +36,10 @@ def do_batch_import(user_id, contenttype_id, document_ids):
     pre_batch_review.send(sender=do_batch_import)
 
     for doc in docs:
-        if doc.latest_revision.can_be_reviewed:
+        try:
+            if not doc.latest_revision.can_be_reviewed:
+                raise RuntimeError()
+
             doc.latest_revision.start_review()
             batch_item_indexed.send(
                 sender=do_batch_import,
@@ -44,13 +47,14 @@ def do_batch_import(user_id, contenttype_id, document_ids):
                 document_id=doc.id,
                 json=doc.latest_revision.to_json())
             ok.append(doc)
-        else:
+        except:
             nok.append(doc)
 
         count += 1
+        progress = float(count) / total_docs * 100
         current_task.update_state(
             state='PROGRESS',
-            meta={'current': count, 'total': total_docs})
+            meta={'progress': progress})
 
     post_batch_review.send(sender=do_batch_import, user_id=user_id)
 
