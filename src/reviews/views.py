@@ -23,7 +23,7 @@ from documents.views import DocumentListMixin, BaseDocumentList
 from discussion.models import Note
 from notifications.models import notify
 from reviews.models import Review
-from reviews.tasks import do_batch_import
+from reviews.tasks import do_batch_import, batch_close_reviews
 
 
 class ReviewHome(LoginRequiredMixin, TemplateView):
@@ -249,6 +249,15 @@ class ReviewersDocumentList(BaseReviewDocumentList):
 
     def step_filter(self, qs):
         return qs.filter(role=Review.ROLES.reviewer)
+
+    def post(self, request, *args, **kwargs):
+        review_ids = request.POST.getlist('review_ids')
+
+        job = batch_close_reviews.delay(request.user.id, review_ids)
+
+        poll_url = reverse('task_poll', args=[job.id])
+        data = {'poll_url': poll_url}
+        return HttpResponse(json.dumps(data), content_type='application/json')
 
 
 class LeaderDocumentList(BaseReviewDocumentList):

@@ -2,13 +2,20 @@
 
 from __future__ import unicode_literals
 
+import logging
+
+from django.db import transaction
 from django.utils.translation import ugettext
 from django.contrib.contenttypes.models import ContentType
 from celery import current_task
 
 from core.celery import app
 from reviews.signals import pre_batch_review, post_batch_review, batch_item_indexed
+from reviews.models import Review
 from notifications.models import notify
+
+
+logger = logging.getLogger(__name__)
 
 
 @app.task
@@ -68,6 +75,82 @@ def do_batch_import(user_id, contenttype_id, document_ids):
 
     if len(nok) > 0:
         nok_message = ugettext("We failed to start the review for the following documents:")
+        nok_list = '</li><li>'.join('<a href="%s">%s</a>' % (doc.get_absolute_url(), doc) for doc in nok)
+        notify(user_id, '{} <ul><li>{}</li></ul>'.format(
+            nok_message,
+            nok_list
+        ))
+
+    return 'done'
+
+
+@app.task
+def batch_close_reviews(user_id, review_ids):
+    """Close several reviews at once.
+
+    Only reviewers can do this.
+
+    """
+    logger.info('Closing several reviews at once: {}'.format(
+        ', '.join(review_ids)))
+
+    ok = []
+    nok = []
+    nb_reviews = len(review_ids)
+    reviews = Review.objects \
+        .filter(reviewer_id=user_id) \
+        .filter(role=Review.ROLES.reviewer) \
+        .filter(status=Review.STATUSES.progress) \
+        .filter(id__in=review_ids) \
+        .select_related()
+
+    counter = float(1)
+    comments = None
+    for review in reviews:
+
+        # Update progress counter
+        progress = counter / nb_reviews * 100
+        current_task.update_state(
+            state='PROGRESS',
+            meta={'progress': progress})
+
+        try:
+            with transaction.atomic():
+                # Post an empty review
+                logger.info('Closing review {}'.format(review.id))
+                review.post_review(comments, save=True)
+
+                # Check if the review step has ended
+                # TODO This is highly inefficient. Maybe one day
+                # find another way to do it?
+                document = review.document
+                latest_revision = document.get_latest_revision()
+                waiting_reviews = Review.objects \
+                    .filter(document=document) \
+                    .filter(revision=review.revision) \
+                    .filter(role='reviewer') \
+                    .exclude(closed_on=None)
+                if waiting_reviews.count() == latest_revision.reviewers.count():
+                    logger.info('Closing reviewers step')
+                    latest_revision.end_reviewers_step(save=False)
+
+            ok.append(review.document)
+        except:
+            nok.append(review.document)
+            pass
+
+        counter += 1
+
+    if len(ok) > 0:
+        ok_message = ugettext('You closed the review for the following documents:')
+        ok_list = '</li><li>'.join('<a href="%s">%s</a>' % (doc.get_absolute_url(), doc) for doc in ok)
+        notify(user_id, '{} <ul><li>{}</li></ul>'.format(
+            ok_message,
+            ok_list
+        ))
+
+    if len(nok) > 0:
+        nok_message = ugettext("We failed to close the review for the following documents:")
         nok_list = '</li><li>'.join('<a href="%s">%s</a>' % (doc.get_absolute_url(), doc) for doc in nok)
         notify(user_id, '{} <ul><li>{}</li></ul>'.format(
             nok_message,

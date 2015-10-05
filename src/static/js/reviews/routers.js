@@ -23,7 +23,7 @@ var Phase = Phase || {};
                 progress: this.progress
             });
             this.progressView = new Phase.Views.ProgressView({
-                model: this.batchProgress
+                model: this.progress
             });
         }
     });
