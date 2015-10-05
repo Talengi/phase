@@ -125,7 +125,8 @@ body > .container > h2 {
     max-height: 100%;
     overflow: auto;
 }
-#document-list-row {
+#document-list-row,
+#review-list-row {
     top: 115px; /* Because of the two navbars */
 }
 #main-table thead th,

@@ -89,6 +89,7 @@ class PrioritiesDocumentListTests(TestCase):
     def test_empty_review_list(self):
         res = self.client.get(self.url)
         self.assertNotContains(res, '<td class="columndocument_key"')
+        self.assertNotContains(res, 'Close reviews')
 
     def test_non_prioritary_document(self):
         """User is not approver nor leader."""
@@ -96,7 +97,6 @@ class PrioritiesDocumentListTests(TestCase):
             revision={
                 'reviewers': [self.user],
                 'leader': self.other_user,
-                'approver': self.other_user,
                 'docclass': 1,
                 'received_date': datetime.date.today(),
             }
@@ -109,9 +109,7 @@ class PrioritiesDocumentListTests(TestCase):
         """Due date > 5 days."""
         doc = DocumentFactory(
             revision={
-                'reviewers': [self.user],
                 'leader': self.user,
-                'approver': self.other_user,
                 'docclass': 1,
                 'received_date': datetime.date.today(),
             }
@@ -127,9 +125,7 @@ class PrioritiesDocumentListTests(TestCase):
         """docclass < 2"""
         doc = DocumentFactory(
             revision={
-                'reviewers': [self.user],
                 'leader': self.user,
-                'approver': self.other_user,
                 'docclass': 3,
                 'received_date': datetime.date.today(),
             }
@@ -144,17 +140,14 @@ class PrioritiesDocumentListTests(TestCase):
     def test_prioritary_document(self):
         doc = DocumentFactory(
             revision={
-                'reviewers': [self.user],
                 'leader': self.user,
-                'approver': self.other_user,
                 'docclass': 1,
                 'received_date': datetime.date.today(),
             }
         )
         revision = doc.latest_revision
-        revision.start_review()
-        revision.review_due_date = timezone.now()
-        revision.save()
+        due_date = timezone.now() + datetime.timedelta(days=1)
+        revision.start_review(due_date=due_date)
         self.assertTrue(doc.latest_revision.is_under_review())
         res = self.client.get(self.url)
         self.assertContains(res, '<td class="columndocument_key"')
@@ -180,6 +173,7 @@ class ReviewersDocumentListTests(TestCase):
     def test_empty_review_list(self):
         res = self.client.get(self.url)
         self.assertNotContains(res, '<td class="columndocument_key"')
+        self.assertContains(res, 'Close reviews')
 
     def test_review_not_started_yet(self):
         """If the review is not started yet, the doc does not appear in list."""
@@ -187,7 +181,6 @@ class ReviewersDocumentListTests(TestCase):
             revision={
                 'reviewers': [self.user],
                 'leader': self.other_user,
-                'approver': self.other_user,
                 'received_date': datetime.date.today(),
             }
         )
@@ -199,8 +192,7 @@ class ReviewersDocumentListTests(TestCase):
         doc = DocumentFactory(
             revision={
                 'reviewers': [self.user],
-                'leader': self.user,
-                'approver': self.user,
+                'leader': self.other_user,
                 'received_date': datetime.date.today(),
             }
         )
@@ -213,8 +205,7 @@ class ReviewersDocumentListTests(TestCase):
         doc = DocumentFactory(
             revision={
                 'reviewers': [self.user],
-                'leader': self.user,
-                'approver': self.user,
+                'leader': self.other_user,
                 'received_date': datetime.date.today(),
             }
         )
@@ -228,8 +219,7 @@ class ReviewersDocumentListTests(TestCase):
         doc = DocumentFactory(
             revision={
                 'reviewers': [self.user],
-                'leader': self.user,
-                'approver': self.user,
+                'leader': self.other_user,
                 'received_date': datetime.date.today(),
             }
         )
@@ -243,8 +233,7 @@ class ReviewersDocumentListTests(TestCase):
         doc = DocumentFactory(
             revision={
                 'reviewers': [self.user],
-                'leader': self.user,
-                'approver': self.user,
+                'leader': self.other_user,
                 'received_date': datetime.date.today(),
             }
         )
@@ -280,6 +269,7 @@ class LeaderDocumentListTests(TestCase):
     def test_empty_review_list(self):
         res = self.client.get(self.url)
         self.assertNotContains(res, '<td class="columndocument_key"')
+        self.assertNotContains(res, 'Close reviews')
 
     def test_review_not_started_yet(self):
         """If the review is not started yet, the doc does not appear in list."""
@@ -287,7 +277,6 @@ class LeaderDocumentListTests(TestCase):
             revision={
                 'reviewers': [self.other_user],
                 'leader': self.user,
-                'approver': self.other_user,
                 'received_date': datetime.date.today(),
             }
         )
@@ -300,7 +289,6 @@ class LeaderDocumentListTests(TestCase):
             revision={
                 'reviewers': [self.other_user],
                 'leader': self.user,
-                'approver': self.other_user,
                 'received_date': datetime.date.today(),
             }
         )
@@ -313,7 +301,6 @@ class LeaderDocumentListTests(TestCase):
             revision={
                 'reviewers': [self.other_user],
                 'leader': self.user,
-                'approver': self.other_user,
                 'received_date': datetime.date.today(),
             }
         )
@@ -327,7 +314,6 @@ class LeaderDocumentListTests(TestCase):
             revision={
                 'reviewers': [self.other_user],
                 'leader': self.user,
-                'approver': self.other_user,
                 'received_date': datetime.date.today(),
             }
         )
@@ -354,10 +340,13 @@ class ApproverDocumentListTests(TestCase):
         self.client.login(email=self.user.email, password='pass')
         self.url = reverse('approver_review_document_list')
 
+    def test_empty_review_list(self):
+        res = self.client.get(self.url)
+        self.assertNotContains(res, 'Close reviews')
+
     def test_previous_step(self):
         doc = DocumentFactory(
             revision={
-                'reviewers': [self.other_user],
                 'leader': self.other_user,
                 'approver': self.user,
                 'received_date': datetime.date.today(),
@@ -374,7 +363,6 @@ class ApproverDocumentListTests(TestCase):
     def test_current_step(self):
         doc = DocumentFactory(
             revision={
-                'reviewers': [self.other_user],
                 'leader': self.other_user,
                 'approver': self.user,
                 'received_date': datetime.date.today(),
@@ -388,7 +376,6 @@ class ApproverDocumentListTests(TestCase):
     def test_step_finished(self):
         doc = DocumentFactory(
             revision={
-                'reviewers': [self.other_user],
                 'leader': self.other_user,
                 'approver': self.user,
                 'received_date': datetime.date.today(),
@@ -426,7 +413,6 @@ class ReviewFormTests(TestCase):
             revision={
                 'reviewers': [self.user],
                 'leader': self.other_user,
-                'approver': self.other_user,
                 'received_date': datetime.date.today(),
             }
         )
@@ -449,7 +435,6 @@ class ReviewFormTests(TestCase):
             revision={
                 'reviewers': [self.user],
                 'leader': self.other_user,
-                'approver': self.other_user,
                 'received_date': datetime.date.today(),
             }
         )
@@ -469,7 +454,6 @@ class ReviewFormTests(TestCase):
             revision={
                 'reviewers': [self.user],
                 'leader': self.other_user,
-                'approver': self.other_user,
                 'received_date': datetime.date.today(),
             }
         )
@@ -488,8 +472,7 @@ class ReviewFormTests(TestCase):
             category=self.category,
             revision={
                 'reviewers': [self.other_user],
-                'leader': self.other_user,
-                'approver': self.other_user,
+                'leader': self.user,
                 'received_date': datetime.date.today(),
             }
         )
@@ -505,7 +488,6 @@ class ReviewFormTests(TestCase):
             revision={
                 'reviewers': [self.user],
                 'leader': self.other_user,
-                'approver': self.other_user,
                 'received_date': datetime.date.today(),
             }
         )
@@ -522,7 +504,6 @@ class ReviewFormTests(TestCase):
             revision={
                 'reviewers': [self.user],
                 'leader': self.other_user,
-                'approver': self.other_user,
                 'received_date': datetime.date.today(),
             }
         )
@@ -543,9 +524,7 @@ class ReviewFormTests(TestCase):
             document_key='test_key',
             category=self.category,
             revision={
-                'reviewers': [self.other_user],
                 'leader': self.user,
-                'approver': self.other_user,
                 'received_date': datetime.date.today(),
             }
         )
@@ -564,9 +543,7 @@ class ReviewFormTests(TestCase):
             document_key='test_key',
             category=self.category,
             revision={
-                'reviewers': [self.other_user],
                 'leader': self.user,
-                'approver': self.other_user,
                 'received_date': datetime.date.today(),
             }
         )
@@ -586,9 +563,7 @@ class ReviewFormTests(TestCase):
             document_key='test_key',
             category=self.category,
             revision={
-                'reviewers': [self.other_user],
                 'leader': self.user,
-                'approver': self.other_user,
                 'received_date': datetime.date.today(),
             }
         )
@@ -606,7 +581,6 @@ class ReviewFormTests(TestCase):
             document_key='test_key',
             category=self.category,
             revision={
-                'reviewers': [self.other_user],
                 'leader': self.user,
                 'approver': self.other_user,
                 'received_date': datetime.date.today(),
@@ -623,7 +597,6 @@ class ReviewFormTests(TestCase):
             document_key='test_key',
             category=self.category,
             revision={
-                'reviewers': [self.other_user],
                 'leader': self.other_user,
                 'approver': self.user,
                 'received_date': datetime.date.today(),
@@ -644,7 +617,6 @@ class ReviewFormTests(TestCase):
             document_key='test_key',
             category=self.category,
             revision={
-                'reviewers': [self.other_user],
                 'leader': self.other_user,
                 'approver': self.user,
                 'received_date': datetime.date.today(),
@@ -664,7 +636,6 @@ class ReviewFormTests(TestCase):
             document_key='test_key',
             category=self.category,
             revision={
-                'reviewers': [self.other_user],
                 'leader': self.other_user,
                 'approver': self.user,
                 'received_date': datetime.date.today(),
@@ -683,7 +654,6 @@ class ReviewFormTests(TestCase):
             revision={
                 'reviewers': [self.user],
                 'leader': self.other_user,
-                'approver': self.other_user,
                 'received_date': datetime.date.today(),
             }
         )
@@ -700,7 +670,6 @@ class ReviewFormTests(TestCase):
             revision={
                 'reviewers': [self.other_user],
                 'leader': self.user,
-                'approver': self.other_user,
                 'received_date': datetime.date.today(),
             }
         )
@@ -726,9 +695,7 @@ class StartReviewTests(TestCase):
             document_key='test_document',
             category=self.category,
             revision={
-                'reviewers': [self.user],
                 'leader': self.user,
-                'approver': self.user,
                 'received_date': datetime.date.today(),
             }
         )

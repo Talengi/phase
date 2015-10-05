@@ -368,6 +368,7 @@ PIPELINE_JS = {
             'js/notifications/collections.js',
             'js/notifications/views.js',
             'js/notifications/app.js',
+            'js/ui/models.js',
             'js/ui/views.js',
             'js/ui/app.js',
         ),
@@ -422,6 +423,11 @@ PIPELINE_JS = {
     },
     'review_list': {
         'source_filenames': (
+            'js/reviews/models.js',
+            'js/reviews/collections.js',
+            'js/reviews/views.js',
+            'js/reviews/routers.js',
+            'js/reviews/list_app.js',
             'js/review-list.js',
         ),
         'output_filename': 'js/review-list.js',

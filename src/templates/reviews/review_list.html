@@ -3,12 +3,19 @@
 
 {% block custombodyclass %}documentlist fullwidth{% endblock %}
 
+{% block additional_navbar %}
+    {% include 'reviews/review_list_navbar.html' %}
+{% endblock %}
+
 {% block content %}
 <div id="review-list-row" class="row wide-table-row">
     <div id="main-table" class="col-xs-12">
         <table id="documents" class="table table-bordered table-condensed table-hover">
             <thead>
                 <tr>
+                    {% if review_step == 'reviewer' %}
+                        <th></th>
+                    {% endif %}
                     <th>{{ _('Doc. number') }}</th>
                     <th>{{ _('Title') }}</th>
                     <th>{{ _('Revision') }}</th>
@@ -20,20 +27,28 @@
                 </tr>
             </thead>
             <tbody>
-            {% for rev in revisions %}
+            {% for rev in reviews %}
             <tr data-document-key="{{ rev.document.document_key }}">
+                {% if review_step == 'reviewer' %}
+                    <td class="columnselect">
+                        <input
+                            type="checkbox"
+                            autocomplete="off"
+                            data-review-id="{{ rev.id }}" />
+                    </td>
+                {% endif %}
                 <td class="columndocument_key">
                     <a href="{% url 'review_document' rev.document.document_key %}">{{ rev.document.document_key }}</a>
                 </td>
                 <td class="columntitle">
                     <a href="{% url 'review_document' rev.document.document_key %}">{{ rev.document.title }}</a>
                 </td>
-                <td class="columncurrent_revision">{{ rev.name }}</td>
-                <td class="columnstatus">{{ rev.status }}</td>
+                <td class="columncurrent_revision">{{ rev.revision_name }}</td>
+                <td class="columnstatus">{{ rev.revision_status|stringify }}</td>
                 <td class="columnreview_received_date">{{ rev.received_date|stringify }}</td>
-                <td class="columnreview_start_date">{{ rev.review_start_date|stringify }}</td>
-                <td class="columnreview_due_date">{{ rev.review_due_date|stringify }}</td>
-                <td>{{ rev.current_review_step }}</td>
+                <td class="columnreview_start_date">{{ rev.start_date|stringify }}</td>
+                <td class="columnreview_due_date">{{ rev.due_date|stringify }}</td>
+                <td>{{ rev.get_status_display }}</td>
             </tr>
             {% endfor %}
             </tbody>
@@ -43,10 +58,11 @@
 {% endblock %}
 
 {% block extra_js %}
-    {% javascript "review_list" %}
     <script>
-    var config = {
+    _.extend(Phase.Config, {
+        currentUrl: "{{ current_url }}",
         detailUrl: "{% url "review_document" "documentNumber" %}",
-    };
+    });
     </script>
+    {% javascript "review_list" %}
 {% endblock %}
