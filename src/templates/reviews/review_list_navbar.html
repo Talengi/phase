@@ -14,10 +14,15 @@
     <form
         id="review-batch-action-form"
         method="post"
-        action="#"
+        action=""
         class="navbar-form navbar-left">
         {% csrf_token %}
-        <button type="submit" class="btn btn-primary disabled">
+        <button
+            type="submit"
+            class="btn btn-primary disabled"
+            data-toggle="modal"
+            data-keyboard="false"
+            href="#progress-modal">
             <span class="glyphicon glyphicon-remove"></span>
             {{ _('Close reviews') }}
         </button>
@@ -26,3 +31,4 @@
 </div>
 </div>
 
+{% include 'progress_modal.html' %}

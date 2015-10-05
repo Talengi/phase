@@ -36,9 +36,18 @@ var Phase = Phase || {};
      */
     Phase.Views.ActionForm = Backbone.View.extend({
         el: '#review-batch-action-form',
-        initialize: function() {
+        events: {
+            'submit': 'batchCloseReviews'
+        },
+        initialize: function(options) {
+            _.bindAll(this, 'batchSuccess', 'batchPoll', 'batchPollSuccess');
+
+            this.progress = options.progress;
+            this.button = this.$el.find('button');
+
             this.listenTo(this.collection, 'add', this.addReview);
             this.listenTo(this.collection, 'remove', this.removeReview);
+            this.listenTo(this.collection, 'update', this.showButton);
         },
         addReview: function(model, collection, options) {
             var input = $('<input type="hidden" name="review_ids"></input>');
@@ -50,6 +59,37 @@ var Phase = Phase || {};
             var id ='#review-id-' + model.get('id');
             var input = this.$el.find(id);
             input.remove();
+        },
+        showButton: function(collection, options) {
+            if (collection.length == 0) {
+                this.button.addClass('disabled');
+            } else {
+                this.button.removeClass('disabled');
+            }
+        },
+        /**
+         * Submit the "close review" form as ajax.
+         */
+        batchCloseReviews: function(event) {
+            event.preventDefault();
+
+            var data = this.$el.serialize();
+            var url = this.$el.attr('action');
+            $.post(url, data, this.batchSuccess);
+        },
+        batchSuccess: function(data) {
+            var pollUrl = data.poll_url;
+            this.pollId = setInterval(this.batchPoll, 1000, pollUrl);
+        },
+        batchPoll: function(pollUrl) {
+            $.get(pollUrl, this.batchPollSuccess);
+        },
+        batchPollSuccess: function(data) {
+            this.progress.set('progress', data.progress);
+            if (data.done) {
+                clearInterval(this.pollId);
+                location.reload();
+            }
         }
     });
 
