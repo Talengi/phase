@@ -19,12 +19,11 @@ from celery.result import AsyncResult
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 from zipview.views import BaseZipView
 
-from documents.utils import get_all_revision_classes
 from documents.models import Document
 from documents.views import DocumentListMixin, BaseDocumentList
 from discussion.models import Note
 from notifications.models import notify
-from reviews.models import ReviewMixin, Review
+from reviews.models import Review
 from reviews.tasks import do_batch_import
 
 
