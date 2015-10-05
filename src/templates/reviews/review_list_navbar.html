@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<div class="navbar additional-navbar navbar-default navbar-static-top">
+<div class="navbar additional-navbar navbar-default navbar-static-top" id="table-controls">
 <div class="container-fluid">
     <p class="navbar-text navbar-left hidden-xs hidden-sm">
     {% blocktrans count nb_revisions=reviews|length %}
@@ -9,6 +9,19 @@
         There are {{ nb_revisions }} reviews waiting
     {% endblocktrans %}
     </p>
+
+    {% if review_step == 'reviewer' %}
+    <form
+        method="post"
+        action="#"
+        class="navbar-form navbar-left">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary disabled">
+            <span class="glyphicon glyphicon-remove"></span>
+            {{ _('Close reviews') }}
+        </button>
+    </form>
+    {% endif %}
 </div>
 </div>
 
