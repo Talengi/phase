@@ -220,6 +220,7 @@ class BaseReviewDocumentList(LoginRequiredMixin, ListView):
         context.update({
             'reviews_active': True,
             'review_step': self.review_step,
+            'current_url': self.request.path,
         })
         return context
 

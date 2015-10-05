@@ -55,10 +55,11 @@
 {% endblock %}
 
 {% block extra_js %}
-    {% javascript "review_list" %}
     <script>
-    var config = {
+    _.extend(Phase.Config, {
+        currentUrl: "{{ current_url }}",
         detailUrl: "{% url "review_document" "documentNumber" %}",
-    };
+    });
     </script>
+    {% javascript "review_list" %}
 {% endblock %}
