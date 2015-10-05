@@ -284,24 +284,6 @@ var Phase = Phase || {};
         }
     });
 
-    /**
-     * A simple progress bar view, updated through a Progress model.
-     */
-    Phase.Views.ProgressView = Backbone.View.extend({
-        el: '#progress-modal',
-        initialize: function() {
-            this.listenTo(this.model, 'change', this.render);
-            this.progressBar = this.$el.find('.progress-bar');
-            this.successMsg = this.$el.find('.alert-success');
-        },
-        render: function() {
-            var progress = this.model.get('progress');
-            this.progressBar.attr('aria-valuenow', progress);
-            this.progressBar.css('width', progress + '%');
-            return this;
-        }
-    });
-
     Phase.Views.SearchView = Backbone.View.extend({
         el: '#search-sidebar',
         events: {
