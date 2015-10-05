@@ -31,7 +31,10 @@
             <tr data-document-key="{{ rev.document.document_key }}">
                 {% if review_step == 'reviewer' %}
                     <td class="columnselect">
-                        <input type="checkbox" data-review-id="{{ rev.id }}" />
+                        <input
+                            type="checkbox"
+                            autocomplete="off"
+                            data-review-id="{{ rev.id }}" />
                     </td>
                 {% endif %}
                 <td class="columndocument_key">

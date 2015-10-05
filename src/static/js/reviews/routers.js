@@ -12,6 +12,14 @@ var Phase = Phase || {};
             '': 'reviewList'
         },
         reviewList: function() {
+            this.selectedReviewsCollection = new Phase.Collections.ReviewCollection();
+
+            this.reviewTable = new Phase.Views.TableView({
+                collection: this.selectedReviewsCollection
+            });
+            this.actionForm = new Phase.Views.ActionForm({
+                collection: this.selectedReviewsCollection
+            });
         }
     });
 
