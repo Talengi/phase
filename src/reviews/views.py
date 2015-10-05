@@ -15,7 +15,6 @@ from django.db.models import Q
 from django.forms.models import modelform_factory
 from django.utils import timezone
 
-from celery.result import AsyncResult
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 from zipview.views import BaseZipView
 
@@ -172,38 +171,8 @@ class BatchReview(BaseDocumentList):
 
         job = do_batch_import.delay(request.user.id, contenttype.id, document_ids)
 
-        poll_url = reverse('batch_review_poll', args=[job.id])
+        poll_url = reverse('task_poll', args=[job.id])
         data = {'poll_url': poll_url}
-        return HttpResponse(json.dumps(data), content_type='application/json')
-
-
-class BatchReviewPoll(View):
-    """Display information about the ongoing batch review task.
-
-    This view is intended to be polled with ajax.
-
-    Since the displayed information is not critical, and the job id is
-    auto-generated, we don't perform any acl verification.
-
-    """
-
-    def get(self, request, job_id):
-        """Return json data to describe the task."""
-        job = AsyncResult(job_id)
-
-        done = job.ready()
-        result = job.result
-        if isinstance(result, dict):
-            current = result['current']
-            total = result['total']
-            progress = float(current) / total * 100
-        else:
-            progress = 100.0 if done else 0.0
-
-        data = {
-            'done': done,
-            'progress': progress
-        }
         return HttpResponse(json.dumps(data), content_type='application/json')
 
 

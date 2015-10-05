@@ -2,7 +2,7 @@ from django.conf.urls import patterns, url
 
 from reviews.views import (
     ReviewersDocumentList, LeaderDocumentList, ApproverDocumentList,
-    ReviewFormView, StartReview, CancelReview, BatchReview, BatchReviewPoll,
+    ReviewFormView, StartReview, CancelReview, BatchReview,
     PrioritiesDocumentList, ReviewHome, CommentsArchiveView,
 )
 
@@ -13,12 +13,6 @@ urlpatterns = patterns(
     url(r'^$',
         ReviewHome.as_view(),
         name='review_home'),
-
-    # Poll the batch review status
-    url(r'^poll/(?P<job_id>[\w-]+)/$',
-        BatchReviewPoll.as_view(),
-        name='batch_review_poll'),
-
 
     # Cancel review
     url(r'^(?P<document_key>[\w-]+)/cancel/$',
