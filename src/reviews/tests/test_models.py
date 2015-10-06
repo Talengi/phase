@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 import datetime
 
 from django.test import TestCase
+from django.utils import timezone
 
 from categories.factories import CategoryFactory
 from documents.factories import DocumentFactory
@@ -19,16 +20,35 @@ class ReviewMixinTests(TestCase):
             email='testadmin@phase.fr',
             password='pass',
             is_superuser=True,
-            category=self.category
-        )
+            category=self.category)
+        self.user2 = UserFactory(
+            email='user2@phase.fr',
+            password='pass',
+            category=self.category)
+        self.user3 = UserFactory(
+            email='user3@phase.fr',
+            password='pass',
+            category=self.category)
+
+    def assertSameDay(self, datetime1, datetime2):
+        def toDate(dt):
+            if isinstance(dt, datetime.datetime):
+                res = dt.date()
+            else:
+                res = dt
+            return res
+
+        date1 = toDate(datetime1)
+        date2 = toDate(datetime2)
+        return self.assertEqual(date1, date2)
 
     def create_reviewable_document(self):
         doc = DocumentFactory(
             category=self.category,
             revision={
+                'reviewers': [self.user2],
                 'leader': self.user,
-                'approver': self.user,
-                'reviewers': [self.user],
+                'approver': self.user3,
                 'received_date': datetime.datetime.today(),
             }
         )
@@ -78,11 +98,11 @@ class ReviewMixinTests(TestCase):
         self.assertIsNone(revision.leader_step_closed)
 
         revision.start_review()
-        today = datetime.date.today()
+        today = timezone.now().date()
         in_two_weeks = today + datetime.timedelta(days=13)
 
-        self.assertEqual(revision.review_start_date, today)
-        self.assertEqual(revision.review_due_date, in_two_weeks)
+        self.assertSameDay(revision.review_start_date, today)
+        self.assertSameDay(revision.review_due_date, in_two_weeks)
 
     def test_start_review_at_custom_date(self):
         revision = self.create_reviewable_document()
@@ -131,7 +151,7 @@ class ReviewMixinTests(TestCase):
 
         revision.start_review()
 
-        reviewer_review = revision.get_review(self.user, 'reviewer')
+        reviewer_review = revision.get_review(self.user2, 'reviewer')
         self.assertEqual(reviewer_review.status, 'progress')
 
         leader_review = revision.get_leader_review()
@@ -174,10 +194,10 @@ class ReviewMixinTests(TestCase):
         revision.start_review()
 
         revision.end_reviewers_step()
-        today = datetime.date.today()
-        self.assertEqual(revision.reviewers_step_closed, today)
+        today = timezone.now().date()
+        self.assertSameDay(revision.reviewers_step_closed, today)
 
-        reviewer_review = revision.get_review(self.user, 'reviewer')
+        reviewer_review = revision.get_review(self.user2, 'reviewer')
         self.assertEqual(reviewer_review.status, 'not_reviewed')
 
         leader_review = revision.get_leader_review()
@@ -190,13 +210,13 @@ class ReviewMixinTests(TestCase):
         revision = self.create_reviewable_document()
         revision.start_review()
 
-        reviewer_review = revision.get_review(self.user, 'reviewer')
+        reviewer_review = revision.get_review(self.user2, 'reviewer')
         self.assertEqual(reviewer_review.status, 'progress')
         reviewer_review.post_review(comments=None)
 
         revision.end_reviewers_step()
 
-        reviewer_review = revision.get_review(self.user, 'reviewer')
+        reviewer_review = revision.get_review(self.user2, 'reviewer')
         self.assertEqual(reviewer_review.status, 'reviewed')
 
         leader_review = revision.get_leader_review()
@@ -211,12 +231,12 @@ class ReviewMixinTests(TestCase):
         revision.reviewers.add(user2)
         revision.start_review()
 
-        user1_review = revision.get_review(self.user, 'reviewer')
+        user1_review = revision.get_review(self.user2, 'reviewer')
         user1_review.post_review(None)
 
         revision.end_reviewers_step()
 
-        user1_review = revision.get_review(self.user, 'reviewer')
+        user1_review = revision.get_review(self.user2, 'reviewer')
         self.assertEqual(user1_review.status, 'reviewed')
 
         user2_review = revision.get_review(user2, 'reviewer')
@@ -227,11 +247,11 @@ class ReviewMixinTests(TestCase):
         revision.start_review()
         revision.end_leader_step()
 
-        today = datetime.date.today()
-        self.assertEqual(revision.reviewers_step_closed, today)
-        self.assertEqual(revision.leader_step_closed, today)
+        today = timezone.now().date()
+        self.assertSameDay(revision.reviewers_step_closed, today)
+        self.assertSameDay(revision.leader_step_closed, today)
 
-        reviewer_review = revision.get_review(self.user, 'reviewer')
+        reviewer_review = revision.get_review(self.user2, 'reviewer')
         self.assertEqual(reviewer_review.status, 'not_reviewed')
 
         leader_review = revision.get_leader_review()
@@ -260,21 +280,21 @@ class ReviewMixinTests(TestCase):
 
     def test_end_leader_step_with_reviewers_step_open(self):
         revision = self.create_reviewable_document()
-        today = datetime.date.today()
+        today = timezone.now().date()
         yesterday = today - datetime.timedelta(days=1)
         revision.review_start_date = yesterday
         revision.end_leader_step()
 
-        self.assertEqual(revision.reviewers_step_closed, today)
-        self.assertEqual(revision.leader_step_closed, today)
+        self.assertSameDay(revision.reviewers_step_closed, today)
+        self.assertSameDay(revision.leader_step_closed, today)
 
     def test_end_leader_step_with_no_approver(self):
         revision = self.create_leader_only_document()
-        today = datetime.date.today()
+        today = timezone.now().date()
         revision.start_review()
         revision.end_leader_step()
-        self.assertEqual(revision.leader_step_closed, today)
-        self.assertEqual(revision.review_end_date, today)
+        self.assertSameDay(revision.leader_step_closed, today)
+        self.assertSameDay(revision.review_end_date, today)
 
     def test_send_back_to_leader_step(self):
         revision = self.create_reviewable_document()
@@ -293,12 +313,12 @@ class ReviewMixinTests(TestCase):
         revision.start_review()
         revision.end_review()
 
-        today = datetime.date.today()
-        self.assertEqual(revision.reviewers_step_closed, today)
-        self.assertEqual(revision.leader_step_closed, today)
-        self.assertEqual(revision.review_end_date, today)
+        today = timezone.now().date()
+        self.assertSameDay(revision.reviewers_step_closed, today)
+        self.assertSameDay(revision.leader_step_closed, today)
+        self.assertSameDay(revision.review_end_date, today)
 
-        reviewer_review = revision.get_review(self.user, 'reviewer')
+        reviewer_review = revision.get_review(self.user2, 'reviewer')
         self.assertEqual(reviewer_review.status, 'not_reviewed')
 
         leader_review = revision.get_leader_review()
@@ -311,8 +331,8 @@ class ReviewMixinTests(TestCase):
         doc = DocumentFactory(category=self.category)
         revision = doc.latest_revision
         revision.leader = self.user
-        revision.approver = self.user
-        revision.reviewers.add(self.user)
+        revision.approver = self.user3
+        revision.reviewers.add(self.user2)
         revision.received_date = datetime.datetime.now()
         revision.save()
 
@@ -334,7 +354,7 @@ class ReviewMixinTests(TestCase):
 
         self.assertFalse(revision.is_overdue())
 
-        today = datetime.date.today()
+        today = timezone.now().date()
         revision.review_due_date = today + datetime.timedelta(days=1)
         self.assertFalse(revision.is_overdue())
 
