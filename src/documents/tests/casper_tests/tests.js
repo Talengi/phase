@@ -326,8 +326,8 @@ casper.test.begin('Search queries can be bookmarked', 0, function suite(test) {
     });
 
     casper.waitUntilVisible('div.sidebar-offcanvas', function() {
-        test.assertField('status', 'ASB');
-        test.assertField('search_terms', 'gloubi');
+        test.assertField({type: 'css', path: '#id_search_terms'}, 'gloubi');
+        test.assertField({type: 'css', path: '#id_status'}, 'ASB');
     });
 
     casper.run(function() {
