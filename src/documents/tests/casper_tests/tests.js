@@ -322,9 +322,12 @@ casper.test.begin('Searching updates the url', 0, function suite(test) {
 
 casper.test.begin('Search queries can be bookmarked', 0, function suite(test) {
     casper.start(document_list_url + '?search_terms=gloubi&status=ASB', function() {
-        test.assertField('search_terms', 'gloubi');
+        casper.viewport(1024, 768);
+    });
+
+    casper.waitUntilVisible('div.sidebar-offcanvas', function() {
         test.assertField('status', 'ASB');
-        test.assertVisible('div.sidebar-offcanvas');
+        test.assertField('search_terms', 'gloubi');
     });
 
     casper.run(function() {
