@@ -59,6 +59,7 @@ class ExportGeneratorTests(TestCase):
             ('Title', 'title'),
             ('Document number', 'document_key')))
         generator = CSVGenerator(self.category, {}, fields)
+        generator.get_es_results = self.es_mock
         iterator = iter(generator)
         chunk = iterator.next()
-        self.assertEqual(chunk, ['Title', 'Document number'])
+        self.assertEqual(chunk, [['Title', 'Document number']])
