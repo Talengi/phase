@@ -61,7 +61,7 @@ var Phase = Phase || {};
             input.remove();
         },
         showButton: function(collection, options) {
-            if (collection.length == 0) {
+            if (collection.length === 0) {
                 this.button.addClass('disabled');
             } else {
                 this.button.removeClass('disabled');
