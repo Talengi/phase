@@ -23,7 +23,8 @@ from documents.views import DocumentListMixin, BaseDocumentList
 from discussion.models import Note
 from notifications.models import notify
 from reviews.models import Review
-from reviews.tasks import do_batch_import, batch_close_reviews
+from reviews.tasks import (do_batch_import, batch_close_reviews,
+                           batch_cancel_reviews)
 
 
 class ReviewHome(LoginRequiredMixin, TemplateView):
@@ -146,8 +147,8 @@ class CancelReview(PermissionRequiredMixin,
         return HttpResponseRedirect(self.get_redirect_url())
 
 
-class BatchReview(BaseDocumentList):
-    """Starts the review process for multiple documents at once.
+class BaseBatchView(PermissionRequiredMixin, BaseDocumentList):
+    """Performs a task on several reviews at once.
 
     This operation can be quite time consuming when many documents are reviewed
     at once, and this is expected to be normal by the users. We display a nice
@@ -158,6 +159,8 @@ class BatchReview(BaseDocumentList):
     is in sync.
 
     """
+    permission_required = 'documents.can_control_document'
+
     def get_redirect_url(self, *args, **kwargs):
         """Redirects to document list after that."""
         return reverse('category_document_list', args=[
@@ -169,11 +172,38 @@ class BatchReview(BaseDocumentList):
         document_class = self.get_document_class()
         contenttype = ContentType.objects.get_for_model(document_class)
 
-        job = do_batch_import.delay(request.user.id, contenttype.id, document_ids)
+        job = self.start_job(contenttype, document_ids)
 
         poll_url = reverse('task_poll', args=[job.id])
         data = {'poll_url': poll_url}
         return HttpResponse(json.dumps(data), content_type='application/json')
+
+    def start_job(self, content_type, document_ids):
+        raise NotImplementedError()
+
+
+class BatchStartReviews(BaseBatchView):
+    """Starts the review process for multiple documents at once."""
+
+    def start_job(self, contenttype, document_ids):
+        job = do_batch_import.delay(
+            self.request.user.id,
+            self.category.id,
+            contenttype.id,
+            document_ids)
+        return job
+
+
+class BatchCancelReviews(BaseBatchView):
+    """Cancel several reviews at once."""
+
+    def start_job(self, contenttype, document_ids):
+        job = batch_cancel_reviews.delay(
+            self.request.user.id,
+            self.category.id,
+            contenttype.id,
+            document_ids)
+        return job
 
 
 class BaseReviewDocumentList(LoginRequiredMixin, ListView):
