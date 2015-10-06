@@ -7,7 +7,7 @@ import datetime
 from django.test import TestCase
 from django.contrib.contenttypes.models import ContentType
 
-from reviews.tasks import do_batch_import
+from reviews.tasks import do_batch_import, batch_cancel_reviews
 
 from documents.models import Document
 from categories.factories import CategoryFactory
@@ -26,22 +26,21 @@ class BatchReviewTests(TestCase):
         )
         self.client.login(email=self.user.email, password='pass')
         self.doc1 = DocumentFactory(
+            category=self.category,
             revision={
-                'reviewers': [self.user],
                 'leader': self.user,
-                'approver': self.user,
                 'received_date': datetime.date.today(),
             }
         )
         self.doc2 = DocumentFactory(
+            category=self.category,
             revision={
-                'reviewers': [self.user],
                 'leader': self.user,
-                'approver': self.user,
                 'received_date': datetime.date.today(),
             }
         )
         self.doc3 = DocumentFactory(
+            category=self.category,
             revision={
                 'reviewers': [],
                 'leader': None,
@@ -59,6 +58,7 @@ class BatchReviewTests(TestCase):
 
         do_batch_import.delay(
             self.user.id,
+            self.category.id,
             self.content_type.id,
             [self.doc1.id, self.doc2.id])
 
@@ -73,6 +73,7 @@ class BatchReviewTests(TestCase):
 
         do_batch_import.delay(
             self.user.id,
+            self.category.id,
             self.content_type.id,
             [self.doc3.id])
 
@@ -85,6 +86,7 @@ class BatchReviewTests(TestCase):
 
         do_batch_import.delay(
             self.user.id,
+            self.category.id,
             self.content_type.id,
             [self.doc1.id, self.doc3.id])
 
@@ -93,3 +95,25 @@ class BatchReviewTests(TestCase):
 
         doc3 = Document.objects.get(pk=self.doc3.pk)
         self.assertFalse(doc3.metadata.latest_revision.is_under_review())
+
+    def test_batch_cancel_review(self):
+        self.doc1.get_latest_revision().start_review()
+        self.doc2.get_latest_revision().start_review()
+
+        self.assertTrue(self.doc1.get_latest_revision().is_under_review())
+        self.assertTrue(self.doc2.get_latest_revision().is_under_review())
+        self.assertFalse(self.doc3.get_latest_revision().is_under_review())
+
+        batch_cancel_reviews.delay(
+            self.user.id,
+            self.category.id,
+            self.content_type.id,
+            [self.doc1.id, self.doc2.id, self.doc3.id])
+
+        doc1 = Document.objects.get(pk=self.doc1.pk)
+        doc2 = Document.objects.get(pk=self.doc2.pk)
+        doc3 = Document.objects.get(pk=self.doc3.pk)
+
+        self.assertFalse(doc1.get_latest_revision().is_under_review())
+        self.assertFalse(doc2.get_latest_revision().is_under_review())
+        self.assertFalse(doc3.get_latest_revision().is_under_review())

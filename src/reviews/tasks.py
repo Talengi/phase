@@ -19,12 +19,13 @@ logger = logging.getLogger(__name__)
 
 
 @app.task
-def do_batch_import(user_id, contenttype_id, document_ids):
+def do_batch_import(user_id, category_id, contenttype_id, document_ids):
     contenttype = ContentType.objects.get_for_id(contenttype_id)
     document_class = contenttype.model_class()
 
     docs = document_class.objects \
         .select_related() \
+        .filter(document__category_id=category_id) \
         .filter(document_id__in=document_ids)
 
     ok = []
@@ -151,6 +152,59 @@ def batch_close_reviews(user_id, review_ids):
 
     if len(nok) > 0:
         nok_message = ugettext("We failed to close the review for the following documents:")
+        nok_list = '</li><li>'.join('<a href="%s">%s</a>' % (doc.get_absolute_url(), doc) for doc in nok)
+        notify(user_id, '{} <ul><li>{}</li></ul>'.format(
+            nok_message,
+            nok_list
+        ))
+
+    return 'done'
+
+
+@app.task
+def batch_cancel_reviews(user_id, category_id, contenttype_id, document_ids):
+    contenttype = ContentType.objects.get_for_id(contenttype_id)
+    document_class = contenttype.model_class()
+
+    docs = document_class.objects \
+        .select_related() \
+        .filter(document__category_id=category_id) \
+        .filter(document_id__in=document_ids)
+
+    ok = []
+    nok = []
+    counter = float(1)
+    nb_reviews = docs.count()
+
+    for doc in docs:
+
+        # Update progress counter
+        progress = counter / nb_reviews * 100
+        current_task.update_state(
+            state='PROGRESS',
+            meta={'progress': progress})
+
+        try:
+            if not doc.latest_revision.is_under_review():
+                raise RuntimeError()
+
+            doc.latest_revision.cancel_review()
+            ok.append(doc)
+        except:
+            nok.append(doc)
+
+        counter += 1
+
+    if len(ok) > 0:
+        ok_message = ugettext('You canceled the review for the following documents:')
+        ok_list = '</li><li>'.join('<a href="%s">%s</a>' % (doc.get_absolute_url(), doc) for doc in ok)
+        notify(user_id, '{} <ul><li>{}</li></ul>'.format(
+            ok_message,
+            ok_list
+        ))
+
+    if len(nok) > 0:
+        nok_message = ugettext("We failed to cancel the review for the following documents:")
         nok_list = '</li><li>'.join('<a href="%s">%s</a>' % (doc.get_absolute_url(), doc) for doc in nok)
         notify(user_id, '{} <ul><li>{}</li></ul>'.format(
             nok_message,

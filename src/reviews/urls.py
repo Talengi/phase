@@ -2,8 +2,8 @@ from django.conf.urls import patterns, url
 
 from reviews.views import (
     ReviewersDocumentList, LeaderDocumentList, ApproverDocumentList,
-    ReviewFormView, StartReview, CancelReview, BatchReview,
-    PrioritiesDocumentList, ReviewHome, CommentsArchiveView,
+    ReviewFormView, StartReview, CancelReview, BatchStartReviews,
+    BatchCancelReviews, PrioritiesDocumentList, ReviewHome, CommentsArchiveView,
 )
 
 urlpatterns = patterns(
@@ -18,14 +18,17 @@ urlpatterns = patterns(
     url(r'^(?P<document_key>[\w-]+)/cancel/$',
         CancelReview.as_view(),
         name="document_cancel_review"),
+    url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/batchcancel/$',
+        BatchCancelReviews.as_view(),
+        name="batch_cancel_reviews"),
 
     # Start review
+    url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/batchstart/$',
+        BatchStartReviews.as_view(),
+        name="batch_start_reviews"),
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/(?P<document_key>[\w-]+)/$',
         StartReview.as_view(),
         name="document_start_review"),
-    url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/$',
-        BatchReview.as_view(),
-        name="batch_start_review"),
 
     # Review steps
     url(r'^priorities/$',

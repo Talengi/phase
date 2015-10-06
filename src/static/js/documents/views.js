@@ -183,7 +183,8 @@ var Phase = Phase || {};
         el: '#table-controls',
         events: {
             'click #toggle-filters-button': 'showSearchForm',
-            'click #review-button': 'batchReview'
+            'click #start-review-button': 'batchReview',
+            'click #cancel-review-button': 'batchReview'
         },
         initialize: function(options) {
             _.bindAll(this, 'batchReviewSuccess', 'batchReviewPoll', 'batchReviewPollSuccess');
@@ -265,7 +266,8 @@ var Phase = Phase || {};
             event.preventDefault();
 
             var data = this.actionForm.serialize();
-            var url = this.actionForm.attr('action');
+            var clicked = $(event.target);
+            var url = clicked.data('form-action');
             $.post(url, data, this.batchReviewSuccess);
         },
         batchReviewSuccess: function(data) {
