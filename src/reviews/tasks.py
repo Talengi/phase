@@ -25,6 +25,7 @@ def do_batch_import(user_id, category_id, contenttype_id, document_ids):
 
     docs = document_class.objects \
         .select_related() \
+        .filter(document__category_id=category_id) \
         .filter(document_id__in=document_ids)
 
     ok = []
