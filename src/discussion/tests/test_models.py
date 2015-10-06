@@ -31,9 +31,7 @@ class NoteTests(TestCase):
         )
         self.doc = DocumentFactory(
             revision={
-                'reviewers': [self.user1],
                 'leader': self.user1,
-                'approver': self.user1,
             }
         )
         self.revision = self.doc.latest_revision
@@ -96,9 +94,7 @@ class CacheTests(TestCase):
         self.client.login(email=self.user1.email, password='pass')
         self.doc = DocumentFactory(
             revision={
-                'reviewers': [self.user1],
                 'leader': self.user1,
-                'approver': self.user1,
             }
         )
         self.revision = self.doc.latest_revision
@@ -156,9 +152,7 @@ class ReviewTests(TestCase):
         )
         self.doc = DocumentFactory(
             revision={
-                'reviewers': [self.user1],
                 'leader': self.user1,
-                'approver': self.user1,
             }
         )
         self.revision = self.doc.latest_revision
