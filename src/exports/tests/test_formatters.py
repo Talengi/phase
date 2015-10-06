@@ -23,6 +23,7 @@ class FormatterTests(TestCase):
                 revision_factory_class=ContractorDeliverableRevisionFactory,
                 category=self.category)
             for i in range(1, 20)]
+        self.revisions = [doc.get_latest_revision() for doc in self.docs]
 
     def test_csv_formatter(self):
         fields = {
@@ -30,7 +31,7 @@ class FormatterTests(TestCase):
             'Title': 'title',
         }
         formatter = CSVFormatter(fields)
-        csv = formatter.format(self.docs[0:2])
+        csv = formatter.format(self.revisions[0:2])
         expected_csv = b'{};{}\n{};{}\n'.format(
             self.docs[0].document_key,
             self.docs[0].title,
@@ -49,7 +50,6 @@ class FormatterTests(TestCase):
         revision = metadata.latest_revision
         revision.leader = UserFactory(name='Grand Schtroumpf')
         revision.save()
-        metadata = ContractorDeliverable.objects.get(pk=metadata.pk)
-        csv = formatter.format([metadata])
+        csv = formatter.format([revision])
         expected_csv = b'{};Grand Schtroumpf\n'.format(metadata.document_key)
         self.assertEqual(csv, expected_csv)
