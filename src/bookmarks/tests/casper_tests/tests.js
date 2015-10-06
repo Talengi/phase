@@ -99,7 +99,6 @@ casper.test.begin('The bookmark is unselected when the search is refined', 0, fu
     });
 
     casper.then(function() {
-        casper.capture('/tmp/toto.png');
         test.assertField('bookmark', '');
     });
 
