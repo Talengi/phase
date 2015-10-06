@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 @app.task
-def do_batch_import(user_id, contenttype_id, document_ids):
+def do_batch_import(user_id, category_id, contenttype_id, document_ids):
     contenttype = ContentType.objects.get_for_id(contenttype_id)
     document_class = contenttype.model_class()
 
