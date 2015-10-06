@@ -2,14 +2,10 @@
 from __future__ import unicode_literals
 
 from django.test import TestCase
-from django.utils import timezone
 from django.contrib.contenttypes.models import ContentType
 
-from documents.factories import DocumentFactory
 from accounts.factories import UserFactory
 from categories.factories import CategoryFactory
-from default_documents.factories import (
-    ContractorDeliverableFactory, ContractorDeliverableRevisionFactory)
 from default_documents.models import ContractorDeliverable
 from default_documents.forms import ContractorDeliverableRevisionForm
 
