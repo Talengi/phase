@@ -32,9 +32,7 @@ class BaseDiscussionAclTests(TestCase):
         self.doc = DocumentFactory(
             category=self.category,
             revision={
-                'reviewers': [self.user1],
                 'leader': self.user1,
-                'approver': self.user1,
             }
         )
         self.client = APIClient()
