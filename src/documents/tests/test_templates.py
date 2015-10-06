@@ -22,9 +22,7 @@ class DocumentDetailTests(TestCase):
         self.doc = DocumentFactory(
             category=self.category,
             revision={
-                'reviewers': [self.user],
                 'leader': self.user,
-                'approver': self.user,
             }
         )
         self.url = reverse("document_detail", args=[
@@ -66,9 +64,7 @@ class SimpleUserDocumentDetailTests(TestCase):
         self.doc = DocumentFactory(
             category=self.category,
             revision={
-                'reviewers': [self.user],
                 'leader': self.user,
-                'approver': self.user,
             }
         )
         self.url = reverse("document_detail", args=[
