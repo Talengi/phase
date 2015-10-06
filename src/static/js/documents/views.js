@@ -489,7 +489,6 @@ var Phase = Phase || {};
             var hidden = this.$el.find('input[type=hidden].filter');
             hidden.remove();
 
-            console.log(this.model.attributes);
             _.each(this.model.attributes, this.addFilter, this);
         },
         addFilter: function(value, key, list) {
