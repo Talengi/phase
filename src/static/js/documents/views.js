@@ -183,7 +183,8 @@ var Phase = Phase || {};
         el: '#table-controls',
         events: {
             'click #toggle-filters-button': 'showSearchForm',
-            'click #start-review-button': 'batchReview'
+            'click #start-review-button': 'batchReview',
+            'click #cancel-review-button': 'batchReview'
         },
         initialize: function(options) {
             _.bindAll(this, 'batchReviewSuccess', 'batchReviewPoll', 'batchReviewPollSuccess');

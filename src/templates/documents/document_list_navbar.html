@@ -52,7 +52,7 @@
             <ul class="dropdown-menu">
                 <li>
                     <a id="start-review-button"
-                        data-form-action="{% url "batch_start_review" organisation_slug category_slug %}"
+                        data-form-action="{% url "batch_start_reviews" organisation_slug category_slug %}"
                         data-toggle="modal"
                         data-keyboard="false"
                         href="#progress-modal">
@@ -60,9 +60,17 @@
                         Start review
                     </a>
                 </li>
+                <li>
+                    <a id="cancel-review-button"
+                        data-form-action="{% url "batch_cancel_reviews" organisation_slug category_slug %}"
+                        data-toggle="modal"
+                        data-keyboard="false"
+                        href="#progress-modal">
+                        <span class="glyphicon glyphicon-eye-close glyphicon-white"></span>
+                        Cancel review
+                    </a>
+                </li>
             </ul>
-
-           </button>
        </div>
 
         {% if perms.documents.add_document %}

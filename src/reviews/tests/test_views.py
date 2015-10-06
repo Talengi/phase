@@ -25,7 +25,7 @@ class BatchReviewTests(TestCase):
             category=self.category
         )
         self.client.login(email=self.user.email, password='pass')
-        self.url = reverse('batch_start_review', args=[
+        self.url = reverse('batch_start_reviews', args=[
             self.category.organisation.slug,
             self.category.slug,
         ])
