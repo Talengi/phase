@@ -47,7 +47,7 @@ class SignalTests(TestCase):
         self.assertEqual(index_mock.call_count, 1)
 
     @patch('search.signals.index_document')
-    @patch('search.signals.unindex_document.delay')
+    @patch('search.signals.unindex_document')
     def test_deleted_document_is_unindexed(self, index_mock, unindex_mock):
         doc = DocumentFactory(
             category=self.category,
