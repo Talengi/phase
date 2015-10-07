@@ -94,8 +94,10 @@ class Review(models.Model):
         null=True, blank=True)
     closed_on = models.DateTimeField(
         _('Closed on'),
-        null=True, blank=True
-    )
+        null=True, blank=True)
+    amended_on = models.DateTimeField(
+        _('Amended on'),
+        null=True, blank=True)
     comments = PrivateFileField(
         _('Comments'),
         null=True, blank=True,
