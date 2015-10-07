@@ -380,3 +380,22 @@ class ReviewMixinTests(TestCase):
 
         revision.end_review()
         self.assertEqual(revision.current_review_step(), 'closed')
+
+    def test_amended_review(self):
+        """User can amend their review comments."""
+        revision = self.create_reviewable_document()
+        revision.start_review()
+
+        review = revision.get_review(self.user)
+        review.post_review(comments=None, return_code='1')
+
+        self.assertIsNotNone(review.closed_on)
+        self.assertIsNone(review.amended_on)
+        self.assertEqual(review.return_code, '1')
+
+        reviewed_on = review.closed_on
+
+        review.post_review(comments=None, return_code='2')
+        self.assertEqual(review.closed_on, reviewed_on)
+        self.assertIsNotNone(review.amended_on)
+        self.assertEqual(review.return_code, '2')

@@ -130,7 +130,11 @@ class Review(models.Model):
     def post_review(self, comments, return_code=None, save=True):
         self.comments = comments
         self.return_code = return_code
-        self.closed_on = timezone.now()
+
+        if self.closed_on is None:
+            self.closed_on = timezone.now()
+        else:
+            self.amended_on = timezone.now()
 
         if comments:
             self.status = self.STATUSES.commented
