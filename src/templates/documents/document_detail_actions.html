@@ -55,7 +55,7 @@
                     {% endif %}
                 {% endif %}
 
-                {% if review_closed_on %}
+                {% if latest_revision.is_under_review and review_closed_on %}
                     {% url "review_document" document.document_key as review_url %}
                     <li><a href="{{ review_url }}">{{ _('Modify your comment') }}</a></li>
                 {% endif %}
