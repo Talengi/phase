@@ -431,3 +431,11 @@ class MetadataRevision(models.Model):
 
         """
         pass
+
+    def detail_view_context(self, request):
+        """Return values to inject in the view context.
+
+        Some documents might want to inject additional values in
+        the document detail template context.
+        """
+        return {}

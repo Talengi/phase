@@ -9,7 +9,9 @@ from django.conf import settings
 from django.utils.functional import cached_property
 from django.utils import timezone
 from django.core.cache import cache
+
 from model_utils import Choices
+from annoying.functions import get_object_or_None
 
 from accounts.models import User
 from documents.models import Document
@@ -435,11 +437,12 @@ class ReviewMixin(models.Model):
 
     def get_review(self, user):
         """Get the review from this specific user."""
-        review = Review.objects \
+        qs = Review.objects \
             .filter(document=self.document) \
             .filter(revision=self.revision) \
-            .select_related() \
-            .get(reviewer=user)
+            .select_related()
+
+        review = get_object_or_None(qs, reviewer=user)
         return review
 
     def get_leader_review(self):
@@ -519,3 +522,14 @@ class ReviewMixin(models.Model):
                 save=False)
 
         self.save()
+
+    def detail_view_context(self, request):
+        """@see `MetadataRevision.detail_view_context`"""
+        context = super(ReviewMixin, self).detail_view_context(request)
+        user_review = self.get_review(request.user)
+        review_closed_on = user_review.closed_on if user_review else None
+        context.update({
+            'user_review': user_review,
+            'review_closed_on': review_closed_on
+        })
+        return context

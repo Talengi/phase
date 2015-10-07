@@ -283,6 +283,7 @@ class DocumentDetail(LoginRequiredMixin,
 
         revisions = document.get_all_revisions()
         RevisionForm = self.get_revisionform_class()
+        latest_revision = None
         for revision in revisions:
             revision.form = RevisionForm(
                 instance=revision,
@@ -290,12 +291,17 @@ class DocumentDetail(LoginRequiredMixin,
                 category=self.category,
                 read_only=True)
 
+            # Get latest revision without additional query
+            if latest_revision is None or latest_revision.revision < revision.revision:
+                latest_revision = revision
+
         context.update({
             'is_detail': True,
             'form': form,
             'revisions': revisions,
-            'latest_revision': document.latest_revision,
+            'latest_revision': latest_revision,
         })
+        context.update(latest_revision.detail_view_context(self.request))
         return context
 
 
