@@ -32,7 +32,7 @@ class Review(models.Model):
     # Yes, two statuses with the same label.
     # See Trello#173
     STATUSES = Choices(
-        ('void', ''),
+        ('void', ''),  # Only for dummy review in document form
         ('pending', _('Pending')),
         ('progress', _('In progress')),
         ('reviewed', _('Reviewed')),
