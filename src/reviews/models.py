@@ -433,18 +433,12 @@ class ReviewMixin(models.Model):
 
         return qs
 
-    def get_review(self, user, role='reviewer'):
-        """Get the review from this specific user.
-
-        We have to specify the role because, a same user could be reviewer *and*
-        leader or approver.
-
-        """
+    def get_review(self, user):
+        """Get the review from this specific user."""
         review = Review.objects \
             .filter(document=self.document) \
             .filter(revision=self.revision) \
-            .filter(role=role) \
-            .select_related('reviewer') \
+            .select_related() \
             .get(reviewer=user)
         return review
 
@@ -453,7 +447,7 @@ class ReviewMixin(models.Model):
             .filter(document=self.document) \
             .filter(revision=self.revision) \
             .filter(role='leader') \
-            .select_related('reviewer') \
+            .select_related() \
             .get()
         return review
 
@@ -462,7 +456,7 @@ class ReviewMixin(models.Model):
             .filter(document=self.document) \
             .filter(revision=self.revision) \
             .filter(role='approver') \
-            .select_related('reviewer') \
+            .select_related() \
             .get()
         return review
 

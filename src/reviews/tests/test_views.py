@@ -552,7 +552,7 @@ class ReviewFormTests(TestCase):
         revision.end_reviewers_step()
 
         self.client.post(self.url, {'review': 'something', 'return_code': '1'})
-        review = revision.get_review(self.user, role='leader')
+        review = revision.get_review(self.user)
         self.assertEqual(review.return_code, '1')
 
         revision = doc.latest_revision
