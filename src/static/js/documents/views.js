@@ -184,7 +184,7 @@ var Phase = Phase || {};
         events: {
             'click #toggle-filters-button': 'showSearchForm',
             'click #start-review-button': 'batchReview',
-            'click #cancel-review-button': 'batchReview'
+            // 'click #cancel-review-button': 'confirmBatchReview'
         },
         initialize: function(options) {
             _.bindAll(this, 'batchReviewSuccess', 'batchReviewPoll', 'batchReviewPollSuccess');
@@ -269,6 +269,8 @@ var Phase = Phase || {};
             var clicked = $(event.target);
             var url = clicked.data('form-action');
             $.post(url, data, this.batchReviewSuccess);
+        },
+        confirmBatchReview: function(event) {
         },
         batchReviewSuccess: function(data) {
             var poll_url = data.poll_url;

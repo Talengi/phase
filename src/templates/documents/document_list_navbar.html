@@ -66,7 +66,7 @@
                         data-form-action="{% url "batch_cancel_reviews" organisation_slug category_slug %}"
                         data-toggle="modal"
                         data-keyboard="false"
-                        href="#progress-modal">
+                        href="#cancel-review-modal">
                         <span class="glyphicon glyphicon-eye-close glyphicon-white"></span>
                         Cancel review
                     </a>
@@ -103,3 +103,4 @@
 </div>
 
 {% include 'progress_modal.html' %}
+{% include 'documents/document_list_modals.html' %}

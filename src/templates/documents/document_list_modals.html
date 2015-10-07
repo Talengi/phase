@@ -1,0 +1,24 @@
+{% if perms.documents.can_control_document %}
+<div class="modal fade" id="cancel-review-modal" tabindex="-1" role="dialog" aria-labelledby="cancel-review-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="cancel-review-modal-label">{{ _('Cancel selected reviews') }}</h4>
+            </div>
+            <div class="modal-body">
+                <p>{{ _('Are you sure you want to cancel the selected reviews?') }}</p>
+                <p>{{ _('Comments already submitted <strong>will be deleted definitely</strong>.') }}</p>
+            </div>
+            <div class="modal-footer">
+                <form method="post" action="{{ cancel_review_url }}">
+                    {% csrf_token %}
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{ _('Back to document list') }}</button>
+                    <button type="submit" class="btn btn-danger">{{ _('Cancel selected reviews') }}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
