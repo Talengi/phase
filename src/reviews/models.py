@@ -9,7 +9,9 @@ from django.conf import settings
 from django.utils.functional import cached_property
 from django.utils import timezone
 from django.core.cache import cache
+
 from model_utils import Choices
+from annoying.functions import get_object_or_None
 
 from accounts.models import User
 from documents.models import Document
@@ -30,7 +32,7 @@ class Review(models.Model):
     # Yes, two statuses with the same label.
     # See Trello#173
     STATUSES = Choices(
-        ('void', ''),
+        ('void', ''),  # Only for dummy review in document form
         ('pending', _('Pending')),
         ('progress', _('In progress')),
         ('reviewed', _('Reviewed')),
@@ -94,8 +96,10 @@ class Review(models.Model):
         null=True, blank=True)
     closed_on = models.DateTimeField(
         _('Closed on'),
-        null=True, blank=True
-    )
+        null=True, blank=True)
+    amended_on = models.DateTimeField(
+        _('Amended on'),
+        null=True, blank=True)
     comments = PrivateFileField(
         _('Comments'),
         null=True, blank=True,
@@ -126,7 +130,11 @@ class Review(models.Model):
     def post_review(self, comments, return_code=None, save=True):
         self.comments = comments
         self.return_code = return_code
-        self.closed_on = timezone.now()
+
+        if self.closed_on is None:
+            self.closed_on = timezone.now()
+        else:
+            self.amended_on = timezone.now()
 
         if comments:
             self.status = self.STATUSES.commented
@@ -431,19 +439,14 @@ class ReviewMixin(models.Model):
 
         return qs
 
-    def get_review(self, user, role='reviewer'):
-        """Get the review from this specific user.
-
-        We have to specify the role because, a same user could be reviewer *and*
-        leader or approver.
-
-        """
-        review = Review.objects \
+    def get_review(self, user):
+        """Get the review from this specific user."""
+        qs = Review.objects \
             .filter(document=self.document) \
             .filter(revision=self.revision) \
-            .filter(role=role) \
-            .select_related('reviewer') \
-            .get(reviewer=user)
+            .select_related()
+
+        review = get_object_or_None(qs, reviewer=user)
         return review
 
     def get_leader_review(self):
@@ -451,7 +454,7 @@ class ReviewMixin(models.Model):
             .filter(document=self.document) \
             .filter(revision=self.revision) \
             .filter(role='leader') \
-            .select_related('reviewer') \
+            .select_related() \
             .get()
         return review
 
@@ -460,7 +463,7 @@ class ReviewMixin(models.Model):
             .filter(document=self.document) \
             .filter(revision=self.revision) \
             .filter(role='approver') \
-            .select_related('reviewer') \
+            .select_related() \
             .get()
         return review
 
@@ -523,3 +526,14 @@ class ReviewMixin(models.Model):
                 save=False)
 
         self.save()
+
+    def detail_view_context(self, request):
+        """@see `MetadataRevision.detail_view_context`"""
+        context = super(ReviewMixin, self).detail_view_context(request)
+        user_review = self.get_review(request.user)
+        review_closed_on = user_review.closed_on if user_review else None
+        context.update({
+            'user_review': user_review,
+            'review_closed_on': review_closed_on
+        })
+        return context

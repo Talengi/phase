@@ -44,15 +44,20 @@
 
                 {% if not latest_revision.is_under_review %}
                     {% if latest_revision.can_be_reviewed and perms.documents.can_control_document %}
-                        {% url "document_start_review" organisation_slug category_slug document.document_key as review_url %}
+                        {% url "document_start_review" organisation_slug category_slug document.document_key as start_review_url %}
                         <li>
-                            <form class="" method="post" action="{{ review_url }}">
+                            <form class="" method="post" action="{{ start_review_url }}">
                                 {% csrf_token %}
                             </form>
                             <a href="#" class="dropdown-submit">{{ _('Start review') }}</a>
                         </li>
                         <li><a href="#" data-toggle="modal" data-target="#start-comment-review">{{ _('Start review w/ remarks') }}</a></li>
                     {% endif %}
+                {% endif %}
+
+                {% if latest_revision.is_under_review and review_closed_on %}
+                    {% url "review_document" document.document_key as review_url %}
+                    <li><a href="{{ review_url }}">{{ _('Modify your comment') }}</a></li>
                 {% endif %}
 
                 {% if perms.documents.can_control_document %}

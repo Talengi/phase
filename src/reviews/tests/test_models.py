@@ -151,7 +151,7 @@ class ReviewMixinTests(TestCase):
 
         revision.start_review()
 
-        reviewer_review = revision.get_review(self.user2, 'reviewer')
+        reviewer_review = revision.get_review(self.user2)
         self.assertEqual(reviewer_review.status, 'progress')
 
         leader_review = revision.get_leader_review()
@@ -197,7 +197,7 @@ class ReviewMixinTests(TestCase):
         today = timezone.now().date()
         self.assertSameDay(revision.reviewers_step_closed, today)
 
-        reviewer_review = revision.get_review(self.user2, 'reviewer')
+        reviewer_review = revision.get_review(self.user2)
         self.assertEqual(reviewer_review.status, 'not_reviewed')
 
         leader_review = revision.get_leader_review()
@@ -210,13 +210,13 @@ class ReviewMixinTests(TestCase):
         revision = self.create_reviewable_document()
         revision.start_review()
 
-        reviewer_review = revision.get_review(self.user2, 'reviewer')
+        reviewer_review = revision.get_review(self.user2)
         self.assertEqual(reviewer_review.status, 'progress')
         reviewer_review.post_review(comments=None)
 
         revision.end_reviewers_step()
 
-        reviewer_review = revision.get_review(self.user2, 'reviewer')
+        reviewer_review = revision.get_review(self.user2)
         self.assertEqual(reviewer_review.status, 'reviewed')
 
         leader_review = revision.get_leader_review()
@@ -231,15 +231,15 @@ class ReviewMixinTests(TestCase):
         revision.reviewers.add(user2)
         revision.start_review()
 
-        user1_review = revision.get_review(self.user2, 'reviewer')
+        user1_review = revision.get_review(self.user2)
         user1_review.post_review(None)
 
         revision.end_reviewers_step()
 
-        user1_review = revision.get_review(self.user2, 'reviewer')
+        user1_review = revision.get_review(self.user2)
         self.assertEqual(user1_review.status, 'reviewed')
 
-        user2_review = revision.get_review(user2, 'reviewer')
+        user2_review = revision.get_review(user2)
         self.assertEqual(user2_review.status, 'not_reviewed')
 
     def test_end_leader_step(self):
@@ -251,7 +251,7 @@ class ReviewMixinTests(TestCase):
         self.assertSameDay(revision.reviewers_step_closed, today)
         self.assertSameDay(revision.leader_step_closed, today)
 
-        reviewer_review = revision.get_review(self.user2, 'reviewer')
+        reviewer_review = revision.get_review(self.user2)
         self.assertEqual(reviewer_review.status, 'not_reviewed')
 
         leader_review = revision.get_leader_review()
@@ -303,7 +303,7 @@ class ReviewMixinTests(TestCase):
         revision.send_back_to_leader_step()
 
         self.assertIsNone(revision.leader_step_closed)
-        review = revision.get_review(self.user, 'leader')
+        review = revision.get_review(self.user)
         self.assertIsNone(review.closed_on)
         self.assertEqual(review.status, 'progress')
 
@@ -318,7 +318,7 @@ class ReviewMixinTests(TestCase):
         self.assertSameDay(revision.leader_step_closed, today)
         self.assertSameDay(revision.review_end_date, today)
 
-        reviewer_review = revision.get_review(self.user2, 'reviewer')
+        reviewer_review = revision.get_review(self.user2)
         self.assertEqual(reviewer_review.status, 'not_reviewed')
 
         leader_review = revision.get_leader_review()
@@ -380,3 +380,22 @@ class ReviewMixinTests(TestCase):
 
         revision.end_review()
         self.assertEqual(revision.current_review_step(), 'closed')
+
+    def test_amended_review(self):
+        """User can amend their review comments."""
+        revision = self.create_reviewable_document()
+        revision.start_review()
+
+        review = revision.get_review(self.user)
+        review.post_review(comments=None, return_code='1')
+
+        self.assertIsNotNone(review.closed_on)
+        self.assertIsNone(review.amended_on)
+        self.assertEqual(review.return_code, '1')
+
+        reviewed_on = review.closed_on
+
+        review.post_review(comments=None, return_code='2')
+        self.assertEqual(review.closed_on, reviewed_on)
+        self.assertIsNotNone(review.amended_on)
+        self.assertEqual(review.return_code, '2')
