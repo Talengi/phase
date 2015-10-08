@@ -332,6 +332,35 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
     def breadcrumb_object(self):
         return self.object.document
 
+    def get_object(self, queryset=None):
+        document_key = self.kwargs.get('document_key')
+        qs = Document.objects \
+            .filter(category__users=self.request.user)
+        document = get_object_or_404(qs, document_key=document_key)
+        revision = document.latest_revision
+
+        return revision
+
+    def check_permission(self, user, revision, review):
+        """Test the user permission to access the current step.
+
+        Every member of the distribution list can access the review at any
+        moment.
+
+        Note that commenting permission is tested elsewhere.
+
+        """
+        # Document is not even under review
+        if not revision.is_under_review():
+            raise Http404()
+
+        # User is not a member of the distribution list
+        elif review is None:
+            raise Http404()
+
+        else:
+            pass
+
     def get_context_data(self, **kwargs):
         context = super(ReviewFormView, self).get_context_data(**kwargs)
 
@@ -384,35 +413,6 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
             'form': form,
         })
         return context
-
-    def check_permission(self, user, revision, review):
-        """Test the user permission to access the current step.
-
-        Every member of the distribution list can access the review at any
-        moment.
-
-        Note that commenting permission is tested elsewhere.
-
-        """
-        # Document is not even under review
-        if not revision.is_under_review():
-            raise Http404()
-
-        # User is not a member of the distribution list
-        elif review is None:
-            raise Http404()
-
-        else:
-            pass
-
-    def get_object(self, queryset=None):
-        document_key = self.kwargs.get('document_key')
-        qs = Document.objects \
-            .filter(category__users=self.request.user)
-        document = get_object_or_404(qs, document_key=document_key)
-        revision = document.latest_revision
-
-        return revision
 
     def get_success_url(self):
         """Generate correct url after form submission.
