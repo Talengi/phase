@@ -336,21 +336,24 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
         context = super(ReviewFormView, self).get_context_data(**kwargs)
 
         user = self.request.user
-        is_reviewer = self.object.is_reviewer(user)
-        is_leader = user == self.object.leader
-        is_approver = user == self.object.approver
+        user_review = self.object.get_review(user)
+        all_reviews = self.object.get_reviews()
 
-        reviews = self.object.get_reviews()
-        can_comment = any((
-            (self.object.is_at_review_step('approver') and is_approver),
-            (self.object.is_at_review_step('leader') and is_leader),
-            (self.object.is_at_review_step('reviewer') and is_reviewer)
-        ))
+        self.check_permission(user, self.object, user_review)
+
+        is_reviewer = user_review.role == 'reviewer'
+        is_leader = user_review.role == 'leader'
+        is_approver = user_review.role == 'approver'
+
+        # Users can update their comment even if they already
+        # posted something.
+        can_comment = user_review.status not in ('pending',)
+
         close_reviewers_button = self.object.is_at_review_step('reviewer') and (is_leader or is_approver)
         close_leader_button = self.object.is_at_review_step('leader') and is_approver
         back_to_leader_button = self.object.is_at_review_step('approver') and is_approver
 
-        # Only members of the distrib list can see the review form
+        # every member of the distrib list can see the review form
         # so the user is automaticaly allowed to post a remark
         can_discuss = True
 
@@ -358,16 +361,17 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
         fields = ('comments',)
         if is_leader or is_approver:
             fields += ('return_code',)
-        form = modelform_factory(Review, fields=fields, labels={
+        Form = modelform_factory(Review, fields=fields, labels={
             'comments': _('Upload your comments'),
             'return_code': _('Select a return code'),
         })
+        form = Form(instance=user_review)
 
         context.update({
             'document': self.object.document,
             'document_key': self.object.document.document_key,
             'revision': self.object,
-            'reviews': reviews,
+            'reviews': all_reviews,
             'leader': self.object.leader,
             'is_reviewer': is_reviewer,
             'is_leader': is_leader,
@@ -381,33 +385,25 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
         })
         return context
 
-    def check_permission(self, revision, user):
+    def check_permission(self, user, revision, review):
         """Test the user permission to access the current step.
 
-          - A reviewer can only access the review at the fisrt step
-          - The leader can access the review at the two first steps
-          - The approver can access the review at any step
+        Every member of the distribution list can access the review at any
+        moment.
+
+        Note that commenting permission is tested elsewhere.
+
         """
+        # Document is not event under review
         if not revision.is_under_review():
             raise Http404()
 
-        # Approver can acces all steps
-        elif user == revision.approver:
-            pass
-
-        # Leader can only access steps <= approver step
-        elif user == revision.leader:
-            if revision.leader_step_closed:
-                raise Http404()
-
-        # Reviewers can only access the first step
-        elif revision.is_reviewer(user):
-            if revision.reviewers_step_closed:
-                raise Http404()
-
-        # User is not even part of the review
-        else:
+        # User is not a member of the distribution list
+        elif review is None:
             raise Http404()
+
+        else:
+            pass
 
     def get_object(self, queryset=None):
         document_key = self.kwargs.get('document_key')
@@ -415,8 +411,6 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
             .filter(category__users=self.request.user)
         document = get_object_or_404(qs, document_key=document_key)
         revision = document.latest_revision
-
-        self.check_permission(revision, self.request.user)
 
         return revision
 
@@ -460,6 +454,9 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
 
         """
         self.object = self.get_object()
+        user = self.request.user
+        user_review = self.object.get_review(user)
+        self.check_permission(user, self.object, user_review)
 
         # A review was posted, with or without file
         if 'review' in request.POST:
@@ -513,17 +510,11 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
         """
         document = self.object.document
         revision = self.object
-        step = self.object.current_review_step()
         comments_file = request.FILES.get('comments', None)
         return_code = request.POST.get('return_code', None)
 
-        # Get the current review being submitted…
-        qs = Review.objects \
-            .filter(document=document) \
-            .filter(revision=revision.revision) \
-            .filter(reviewer=request.user) \
-            .filter(role=step)
-        review = get_object_or_404(qs)
+        # Get the current review being edited
+        review = revision.get_review(request.user)
 
         # … and update it
         review.post_review(comments_file, return_code=return_code)
@@ -531,7 +522,7 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
             revision.return_code = return_code
 
         # If every reviewer has posted comments, close the reviewers step
-        if self.object.is_at_review_step('reviewer'):
+        if review.role == 'reviewer':
             qs = Review.objects \
                 .filter(document=document) \
                 .filter(revision=revision.revision) \
@@ -541,11 +532,11 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
                 self.object.end_reviewers_step(save=False)
 
         # If leader, end leader step
-        elif self.object.is_at_review_step('leader'):
+        elif review.role == 'leader':
             self.object.end_leader_step(save=False)
 
         # If approver, end approver step
-        elif self.object.is_at_review_step('approver'):
+        elif review.role == 'approver':
             self.object.end_review(save=False)
 
         self.object.save(update_document=True)
