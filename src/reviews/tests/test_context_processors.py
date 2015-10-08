@@ -43,18 +43,23 @@ class ContextProcessorTests(TestCase):
     def test_review_step_count(self):
         doc = DocumentFactory(
             revision={
-                'reviewers': [self.user, self.other_user],
-                'leader': self.user,
-                'approver': self.user,
+                'reviewers': [self.user],
+                'leader': self.other_user,
                 'received_date': datetime.date.today(),
             }
         )
         doc.latest_revision.start_review()
         doc = DocumentFactory(
             revision={
-                'reviewers': [self.user, self.other_user],
+                'reviewers': [self.user],
                 'leader': self.other_user,
-                'approver': self.user,
+                'received_date': datetime.date.today(),
+            }
+        )
+        doc.latest_revision.start_review()
+        doc = DocumentFactory(
+            revision={
+                'leader': self.user,
                 'received_date': datetime.date.today(),
             }
         )
@@ -63,21 +68,18 @@ class ContextProcessorTests(TestCase):
 
         self.assertContains(res, 'Reviewer (2)')
         self.assertContains(res, 'Leader (1)')
-        self.assertContains(res, 'Approver (2)')
+        self.assertContains(res, 'Approver (0)')
 
     def test_cancel_review_count(self):
         doc = DocumentFactory(
             revision={
-                'reviewers': [self.user, self.other_user],
                 'leader': self.user,
-                'approver': self.user,
                 'received_date': datetime.date.today(),
             }
         )
         doc.latest_revision.start_review()
         doc = DocumentFactory(
             revision={
-                'reviewers': [self.user, self.other_user],
                 'leader': self.other_user,
                 'approver': self.user,
                 'received_date': datetime.date.today(),
@@ -88,16 +90,14 @@ class ContextProcessorTests(TestCase):
 
         res = self.client.get(self.url)
 
-        self.assertContains(res, 'Reviewer (1)')
+        self.assertContains(res, 'Reviewer (0)')
         self.assertContains(res, 'Leader (1)')
-        self.assertContains(res, 'Approver (1)')
+        self.assertContains(res, 'Approver (0)')
 
     def test_prioritary_review_count(self):
         doc = DocumentFactory(
             revision={
-                'reviewers': [self.user],
                 'leader': self.user,
-                'approver': self.other_user,
                 'docclass': 1,
                 'received_date': datetime.date.today(),
             }

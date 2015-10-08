@@ -479,9 +479,9 @@ class ReviewFormTests(TestCase):
         revision = doc.latest_revision
         revision.start_review()
         res = self.client.post(self.url, {'review': 'something'})
-        self.assertEqual(res.status_code, 404)
+        self.assertEqual(res.status_code, 403)
 
-    def test_reviewer_cannot_access_review_when_step_is_closed(self):
+    def test_reviewer_still_can_access_review_after_step_is_closed(self):
         doc = DocumentFactory(
             document_key='test_key',
             category=self.category,
@@ -495,9 +495,9 @@ class ReviewFormTests(TestCase):
         revision.start_review()
         revision.end_reviewers_step()
         res = self.client.get(self.url)
-        self.assertEqual(res.status_code, 404)
+        self.assertEqual(res.status_code, 200)
 
-    def test_reviewer_cannot_do_the_same_review_twice(self):
+    def test_reviewer_can_amend_its_review(self):
         doc = DocumentFactory(
             document_key='test_key',
             category=self.category,
@@ -514,10 +514,10 @@ class ReviewFormTests(TestCase):
         self.assertEqual(res.status_code, 200)
 
         res = self.client.get(self.url)
-        self.assertEqual(res.status_code, 404)
+        self.assertEqual(res.status_code, 200)
 
         res = self.client.post(self.url, {'review': 'something'}, follow=True)
-        self.assertEqual(res.status_code, 404)
+        self.assertEqual(res.status_code, 200)
 
     def test_leader_submit_review_without_file(self):
         doc = DocumentFactory(
@@ -576,7 +576,7 @@ class ReviewFormTests(TestCase):
             revision = revision.__class__.objects.get(pk=revision.pk)
             self.assertIsNotNone(revision.leader_step_closed)
 
-    def test_leader_cannot_access_review_when_step_is_closed(self):
+    def test_leader_can_access_review_when_step_is_closed(self):
         doc = DocumentFactory(
             document_key='test_key',
             category=self.category,
@@ -590,7 +590,7 @@ class ReviewFormTests(TestCase):
         revision.start_review()
         revision.end_leader_step()
         res = self.client.get(self.url)
-        self.assertEqual(res.status_code, 404)
+        self.assertEqual(res.status_code, 200)
 
     def test_approver_submit_review_without_file(self):
         doc = DocumentFactory(
