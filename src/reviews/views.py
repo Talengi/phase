@@ -394,7 +394,7 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
         Note that commenting permission is tested elsewhere.
 
         """
-        # Document is not event under review
+        # Document is not even under review
         if not revision.is_under_review():
             raise Http404()
 
