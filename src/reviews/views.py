@@ -7,7 +7,8 @@ from django.db import transaction
 from django.views.generic import View, ListView, DetailView, TemplateView
 from django.views.generic.detail import SingleObjectMixin
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.http import (HttpResponse, HttpResponseRedirect, Http404,
+                         HttpResponseForbidden)
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
@@ -460,6 +461,12 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
 
         # A review was posted, with or without file
         if 'review' in request.POST:
+
+            # Can the user really comment?
+            can_comment = user_review.status not in ('pending',)
+            if not can_comment:
+                return HttpResponseForbidden()
+
             self.post_review(request, *args, **kwargs)
 
             comments_file = request.FILES.get('comments', None)
