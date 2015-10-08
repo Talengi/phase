@@ -122,6 +122,7 @@ class DocumentDownloadTest(TestCase):
                            is_superuser=True,
                            category=self.category)
         self.client.login(email=user.email, password='pass')
+        self.maxDiff = None
 
     def tearDown(self):
         """Wipe the media root directory after each test."""
