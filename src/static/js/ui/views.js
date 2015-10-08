@@ -3,6 +3,8 @@ var Phase = Phase || {};
 (function(exports, Phase, Backbone, _) {
     "use strict";
 
+    var dispatcher = Phase.Events.dispatcher;
+
     Phase.Views = Phase.Views || {};
 
     Phase.Views.ToggleContentButton = Backbone.View.extend({
@@ -24,6 +26,8 @@ var Phase = Phase || {};
         el: '#progress-modal',
         initialize: function() {
             this.listenTo(this.model, 'change', this.render);
+            this.listenTo(dispatcher, 'onProgressModalShow', this.show);
+
             this.progressBar = this.$el.find('.progress-bar');
             this.successMsg = this.$el.find('.alert-success');
         },
@@ -32,6 +36,9 @@ var Phase = Phase || {};
             this.progressBar.attr('aria-valuenow', progress);
             this.progressBar.css('width', progress + '%');
             return this;
+        },
+        show: function() {
+            this.$el.modal('show');
         }
     });
 

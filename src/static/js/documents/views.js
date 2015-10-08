@@ -177,6 +177,27 @@ var Phase = Phase || {};
     });
 
     /**
+     * Shows the "cancel all reviews" modal.
+     */
+    Phase.Views.CancelReviewModalView = Backbone.View.extend({
+        el: '#cancel-review-modal',
+        events: {
+            'click button.btn-danger': 'submit'
+        },
+        show: function() {
+            this.$el.modal('show');
+        },
+        hide: function() {
+            this.$el.modal('hide');
+        },
+        submit: function(event) {
+            this.hide();
+            dispatcher.trigger('onCancelSeveralReviewsConfirmed', event);
+            dispatcher.trigger('onProgressModalShow');
+        }
+    });
+
+    /**
      * Handle the different navbar buttons and form.
      */
     Phase.Views.NavbarView = Backbone.View.extend({
@@ -184,7 +205,7 @@ var Phase = Phase || {};
         events: {
             'click #toggle-filters-button': 'showSearchForm',
             'click #start-review-button': 'batchReview',
-            'click #cancel-review-button': 'batchReview'
+            'click #cancel-review-button': 'confirmBatchCancelReviews'
         },
         initialize: function(options) {
             _.bindAll(this, 'batchReviewSuccess', 'batchReviewPoll', 'batchReviewPollSuccess');
@@ -194,11 +215,13 @@ var Phase = Phase || {};
             this.closeBtn = this.dropdown.find('button[data-toggle=dropdown]');
             this.resultsP = this.$el.find('p#display-results');
             this.batchProgress = options.progress;
+            this.cancelReviewModal = new Phase.Views.CancelReviewModalView();
 
             this.configureForm();
             this.listenTo(dispatcher, 'onRowSelected', this.setButtonsState);
             this.listenTo(dispatcher, 'onRowSelected', this.rowSelected);
             this.listenTo(dispatcher, 'onDocumentsFetched', this.renderResults);
+            this.listenTo(dispatcher, 'onCancelSeveralReviewsConfirmed', this.batchReview);
         },
         configureForm: function() {
             // We update the form action depending on
@@ -254,6 +277,9 @@ var Phase = Phase || {};
                 results = '' + data.displayed + ' documents on ' + data.total;
             }
             this.resultsP.html(results);
+        },
+        confirmBatchCancelReviews: function(event) {
+            this.cancelReviewModal.show();
         },
         /**
          * Handles the batch review button.

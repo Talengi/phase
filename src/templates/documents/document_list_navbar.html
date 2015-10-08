@@ -40,13 +40,14 @@
             </div>
         </div>
 
+        {% if perms.documents.can_control_docmument %}
         <div class="btn-group form-group">
 
             <button
                 type="button"
                 class="btn btn-primary disabled dropdown-toggle navbar-action"
                 data-toggle="dropdown">
-                Review <span class="caret"></span>
+                Reviews <span class="caret"></span>
             </button>
 
             <ul class="dropdown-menu">
@@ -61,17 +62,14 @@
                     </a>
                 </li>
                 <li>
-                    <a id="cancel-review-button"
-                        data-form-action="{% url "batch_cancel_reviews" organisation_slug category_slug %}"
-                        data-toggle="modal"
-                        data-keyboard="false"
-                        href="#progress-modal">
+                    <a id="cancel-review-button" data-keyboard="false">
                         <span class="glyphicon glyphicon-eye-close glyphicon-white"></span>
                         Cancel review
                     </a>
                 </li>
             </ul>
        </div>
+       {% endif %}
 
         {% if perms.documents.add_document %}
         <div class="form-group hidden-xs hidden-sm">
@@ -101,3 +99,4 @@
 </div>
 
 {% include 'progress_modal.html' %}
+{% include 'documents/document_list_modals.html' %}
