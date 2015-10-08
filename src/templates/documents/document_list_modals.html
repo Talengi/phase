@@ -11,11 +11,13 @@
                 <p>{{ _('Comments already submitted <strong>will be deleted definitely</strong>.') }}</p>
             </div>
             <div class="modal-footer">
-                <form method="post" action="{{ cancel_review_url }}">
-                    {% csrf_token %}
-                    <button type="button" class="btn btn-default" data-dismiss="modal">{{ _('Back to document list') }}</button>
-                    <button type="submit" class="btn btn-danger">{{ _('Cancel selected reviews') }}</button>
-                </form>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ _('Back to document list') }}</button>
+                <button
+                    type="button"
+                    class="btn btn-danger"
+                    data-form-action="{% url "batch_cancel_reviews" organisation_slug category_slug %}">
+                        {{ _('Cancel selected reviews') }}
+                </button>
             </div>
         </div>
     </div>
