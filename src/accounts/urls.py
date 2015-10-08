@@ -17,4 +17,8 @@ urlpatterns = patterns(
     url('^password-reset-complete/$',
         'django.contrib.auth.views.password_reset_complete',
         name='password_reset_complete'),
+    url(r'^password-change/$',
+        'django.contrib.auth.views.password_change',
+        {'post_change_redirect': '/'},
+        name='password_change')
 )
