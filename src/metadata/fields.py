@@ -25,7 +25,13 @@ def get_choices_from_list(list_index):
     cache_key = 'values_list_{}'.format(list_index)
 
     if cache_key not in cache:
-        populate_values_list_cache()
+
+        # The only reason it would fail is because the
+        # db is not ready. So we'll try again later.
+        try:
+            populate_values_list_cache()
+        except:
+            pass
 
     values = cache.get(cache_key, [])
     return values
