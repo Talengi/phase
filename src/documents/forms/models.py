@@ -8,6 +8,7 @@ from django.utils.module_loading import import_string
 
 from crispy_forms.helper import FormHelper
 from default_documents.layout import DocumentFieldset, FlatRelatedDocumentsLayout
+from metadata.fields import ConfigurableChoiceField
 
 from django.conf import settings
 
@@ -57,6 +58,13 @@ class BaseDocumentForm(forms.ModelForm):
 
     def prepare_form(self, *args, **kwargs):
         """Perform some common operations."""
+
+        # Initialize values lists choices
+        # See metadata.fields.ConfigurableChoiceField
+        for field_name, field in self.fields.items():
+            model_field = self._meta.model._meta.get_field(field_name)
+            if isinstance(model_field, ConfigurableChoiceField):
+                self.fields[field_name].choices = model_field.get_choices()
 
         # Init related documents field
         if 'related_documents' in self.fields:
