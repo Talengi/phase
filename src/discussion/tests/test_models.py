@@ -3,7 +3,6 @@
 from __future__ import unicode_literals
 
 from django.test import TestCase
-from django.core.cache import cache
 
 from categories.factories import CategoryFactory
 from documents.factories import DocumentFactory
@@ -99,8 +98,6 @@ class CacheTests(TestCase):
         )
         self.revision = self.doc.latest_revision
         self.revision.start_review()
-
-        cache.clear()
 
     def test_empty_discussion(self):
         self.assertEqual(get_discussion_length(self.revision), 0)

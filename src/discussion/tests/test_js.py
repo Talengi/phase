@@ -26,9 +26,7 @@ class DocumentListTests(CasperTestCase):
             document_key='hazop-report-1',
             category=self.category,
             revision={
-                'reviewers': [user],
                 'leader': user,
-                'approver': user,
             }
 
         )
