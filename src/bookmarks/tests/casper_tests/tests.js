@@ -2,6 +2,8 @@ var casper = casper || {};
 var phantom = phantom || {};
 var document_list_url = casper.cli.options['url'];
 var slug = casper.cli.options['slug'];
+var b1_id = casper.cli.options['b1_id'];
+var b2_id = casper.cli.options['b2_id'];
 
 function inject_cookies() {
     var m = casper.cli.options['url-base'].match(/https?:\/\/([^:]+)(:\d+)?\//);
@@ -45,7 +47,7 @@ casper.test.begin('Search is updated when a bookmark is selected', 0, function s
 
     casper.then(function() {
         casper.evaluate(function() {
-            $('#id_bookmark option#bookmark_1').prop('selected', true);
+            $('#id_bookmark option#bookmark_' + b1_id).prop('selected', true);
             $('#id_bookmark').change();
         });
         casper.wait(50);
@@ -57,7 +59,7 @@ casper.test.begin('Search is updated when a bookmark is selected', 0, function s
 
     casper.then(function() {
         casper.evaluate(function() {
-            $('#id_bookmark option#bookmark_2').prop('selected', true);
+            $('#id_bookmark option#bookmark_' + b2_id).prop('selected', true);
             $('#id_bookmark').change();
         });
         casper.wait(50);

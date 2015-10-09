@@ -40,13 +40,13 @@ class DocumentListTests(CasperTestCase):
             self.category.slug
         ])
 
-        BookmarkFactory(
+        self.b1 = BookmarkFactory(
             user=user,
             category=self.category,
             name='Hazop documents',
             url='%s?search_terms=hazop' % document_list_url
         )
-        BookmarkFactory(
+        self.b2 = BookmarkFactory(
             user=user,
             category=self.category,
             name='Rev ordered documents',
@@ -70,4 +70,6 @@ class DocumentListTests(CasperTestCase):
             self.test_file,
             url=self.url,
             slug=self.slug,
+            b1_id=self.b1.id,
+            b2_id=self.b2.id,
         ))
