@@ -208,9 +208,10 @@ class DocumentCreateTest(TestCase):
         })
         document = Document.objects.get(document_key='FAC09001-FWF-000-HSE-REP-0006')
         metadata = document.metadata
-        self.assertEqual(metadata.related_documents.count(), 2)
-        self.assertEqual(metadata.related_documents.all()[0].metadata.title, "HAZOP related 1")
-        self.assertEqual(metadata.related_documents.all()[1].metadata.title, "HAZOP related 2")
+        related = list(metadata.related_documents.all())
+        self.assertEqual(len(related), 2)
+        self.assertEqual(related[0].metadata.title, "HAZOP related 1")
+        self.assertEqual(related[1].metadata.title, "HAZOP related 2")
 
 
 class DocumentEditTest(TestCase):
