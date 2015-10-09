@@ -46,10 +46,10 @@ casper.test.begin('Search is updated when a bookmark is selected', 0, function s
     });
 
     casper.then(function() {
-        casper.evaluate(function() {
+        casper.evaluate(function(b1_id) {
             $('#id_bookmark option#bookmark_' + b1_id).prop('selected', true);
             $('#id_bookmark').change();
-        });
+        }, b1_id);
         casper.wait(50);
     });
 
@@ -58,10 +58,10 @@ casper.test.begin('Search is updated when a bookmark is selected', 0, function s
     });
 
     casper.then(function() {
-        casper.evaluate(function() {
+        casper.evaluate(function(b2_id) {
             $('#id_bookmark option#bookmark_' + b2_id).prop('selected', true);
             $('#id_bookmark').change();
-        });
+        }, b2_id);
         casper.wait(50);
     });
 
