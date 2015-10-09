@@ -54,7 +54,10 @@ class NoteTests(TestCase):
 
     def test_parse_multiple_mentions(self):
         note = self.create_note('bla bla @user1 bla bla @user2 bla bla')
-        self.assertEqual(note.parse_mentions(), [self.user1, self.user2])
+        mentions = note.parse_mentions()
+        self.assertTrue(self.user1 in mentions)
+        self.assertTrue(self.user2 in mentions)
+        self.assertEqual(len(mentions), 2)
 
     def test_parse_duplicate_mentions(self):
         note = self.create_note('bla bla @user1 bla bla @user2 bla bla @user2')
