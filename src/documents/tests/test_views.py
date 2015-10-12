@@ -154,15 +154,11 @@ class DocumentDownloadTest(TestCase):
             'document_ids': document.metadata.id,
         })
         self.assertEqual(r.status_code, 200)
-        self.assertEqual(r._headers, {
-            'vary': ('Vary', 'Cookie, Accept-Encoding'),
-            'content-length': ('Content-Length', '398'),
-            'content-type': ('Content-Type', 'application/zip'),
-            'content-disposition': (
-                'Content-Disposition',
-                'attachment; filename=download.zip'
-            )
-        })
+        self.assertEqual(r._headers['vary'], ('Vary', 'Cookie, Accept-Encoding'))
+        self.assertEqual(r._headers['content-type'], ('Content-Type', 'application/zip'))
+        self.assertEqual(r._headers['content-disposition'], (
+            'Content-Disposition',
+            'attachment; filename=download.zip'))
 
     def test_empty_document_download(self):
         """

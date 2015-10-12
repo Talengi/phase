@@ -28,23 +28,32 @@ casper.on('remote.message', function(message) {
 casper.test.begin('Documents are fetched on page load', 0, function suite(test) {
     casper.start(document_list_url, function() {
         test.assertTitle('Phase');
-        casper.wait(300);
+
+        // Reduced viewport so the "see more docs" buttons
+        // is not visible until we scroll to bottom
+        casper.viewport(1024, 250);
+    });
+
+    casper.then(function() {
         test.assertElementCount('table#documents tbody tr', 5);
         test.assertSelectorHasText('#display-results', '5 documents on 20');
-        test.assertVisible('#documents-pagination');
 
+        // It's visible, but not inview
+        test.assertVisible('#documents-pagination');
         casper.click('#documents-pagination');
+        casper.wait(300);
     });
 
     casper.then(function() {
         test.assertElementCount('table#documents tbody tr', 10);
         test.assertSelectorHasText('#display-results', '10 documents on 20');
-        test.assertVisible('#documents-pagination');
+    });
 
+    casper.then(function() {
         casper.click('#documents-pagination');
-        casper.wait(300);
+        casper.wait(400);
         casper.click('#documents-pagination');
-        casper.wait(300);
+        casper.wait(400);
     });
 
     casper.then(function() {

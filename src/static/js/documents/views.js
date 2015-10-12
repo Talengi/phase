@@ -464,14 +464,18 @@ var Phase = Phase || {};
 
     /**
      * "Load more documents" button an infinite scrolling.
+     *
+     * We make sure that the "inview" event triggers only one request
+     * for the next round of documents.
      */
     Phase.Views.PaginationView = Backbone.View.extend({
         el: '#documents-pagination',
         events: {
             'click': 'fetchMoreDocuments',
-            'inview': 'onInview'
         },
         initialize: function() {
+            _.bindAll(this, 'bindInviewEvent');
+
             this.listenTo(dispatcher, 'onDocumentsFetched', this.onDocumentsFetched);
         },
         onDocumentsFetched: function(data) {
@@ -480,6 +484,7 @@ var Phase = Phase || {};
 
             if (displayed < total) {
                 this.showPaginationButton();
+                _.delay(this.bindInviewEvent, 300);
             } else {
                 this.hidePaginationButton();
             }
@@ -492,9 +497,17 @@ var Phase = Phase || {};
         },
         fetchMoreDocuments: function() {
             dispatcher.trigger('onMoreDocumentsRequested');
+            this.hidePaginationButton();
+        },
+        bindInviewEvent: function() {
+            this.delegate('inview', '', _.bind(this.onInview, this));
+        },
+        unbindInviewEvent: function() {
+            this.undelegate('inview');
         },
         onInview: function(event, isInView, visiblePartX, visiblePartY) {
             if (isInView) {
+                this.unbindInviewEvent();
                 this.$el.trigger('click');
             }
         }
