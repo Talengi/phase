@@ -45,22 +45,59 @@ class ReviewFormMixin(forms.ModelForm):
 
         super(ReviewFormMixin, self).prepare_form(*args, **kwargs)
 
+    def clean_reviewers(self):
+        reviewers = self.cleaned_data['reviewers']
+
+        # If reviewers step is finished, reviewers cannot be modifies anymore
+        if self.instance.reviewers_step_closed:
+            old_reviewers = self.instance.reviewers.all()
+            if set(reviewers) != set(old_reviewers):
+                error = _('Reviewers step is over, you cannot modify reviewers anymore')
+                raise ValidationError(error, code='reviewers')
+
+        return reviewers
+
+    def clean_leader(self):
+        leader = self.cleaned_data['leader']
+
+        # If leader step is over, leader cannot be changed anymore
+        if self.instance.leader_step_closed:
+            if leader != self.instance.leader:
+                error = _('Leader stop is over, you cannot modify leader anymore.')
+                raise ValidationError(error, code='leader')
+
+        return leader
+
+    def clean_approver(self):
+        approver = self.cleaned_data['approver']
+
+        # If approver step is over, leader cannot be changed anymore
+        if self.instance.review_end_date:
+            if approver != self.instance.approver:
+                error = _('Approver stop is over, you cannot modify approver anymore.')
+                raise ValidationError(error, code='approver')
+
+        return approver
+
     def clean(self):
         data = super(ReviewFormMixin, self).clean()
 
-        distrib_list = []
-        if data['leader'] is not None:
-            distrib_list.append(data['leader'])
+        # Check that no user appears twice in the distrib list
+        keys = ('reviewers', 'leader', 'approver')
+        if not any(key in data for key in keys):
+            distrib_list = []
+            if data['leader'] is not None:
+                distrib_list.append(data['leader'])
 
-        if data['approver'] is not None:
-            distrib_list.append(data['approver'])
+            if data['approver'] is not None:
+                distrib_list.append(data['approver'])
 
-        distrib_list += data['reviewers']
+            distrib_list += data['reviewers']
 
-        distrib_set = set(distrib_list)
-        if len(distrib_list) != len(distrib_set):
-            msg = _('The same user cannot appear multiple times in the same '
-                    'distribution list.')
-            raise ValidationError(msg, code='duplicate_distrib_list')
+            distrib_set = set(distrib_list)
+            if len(distrib_list) != len(distrib_set):
+                msg = _('The same user cannot appear multiple times in the same '
+                        'distribution list.')
+                raise ValidationError(msg, code='duplicate_distrib_list')
 
         return data
