@@ -443,9 +443,20 @@ class ReviewMixin(models.Model):
 
         # Remove Review objects for deleted reviewers
         deleted_reviewers = old_reviewers - current_reviewers
-        for reviewer in deleted_reviewers:
-            review = self.get_review(reviewer)
-            review.delete()
+        if len(deleted_reviewers) > 0:
+            for reviewer in deleted_reviewers:
+                review = self.get_review(reviewer)
+                # Check that we only delete review with no comments
+                # This condition is enforced in the ReviewMixinForm anyway
+                if review.status != 'progress':
+                    raise RuntimeError('Cannot delete a review with comments')
+                review.delete()
+
+            # Should we end the reviewers step?
+            waiting_reviews = self.get_filtered_reviews(
+                lambda rev: rev.id and rev.role == 'reviewer' and rev.status == 'progress')
+            if len(waiting_reviews) == 0:
+                self.end_reviewers_step()
 
         self.reload_reviews()
 
