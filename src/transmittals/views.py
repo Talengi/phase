@@ -28,7 +28,10 @@ class TransmittalListView(LoginRequiredMixin, PermissionRequiredMixin, ListView)
     permission_required = 'documents.can_control_document'
 
     def breadcrumb_section(self):
-        return (_('Transmittals'), reverse('transmittal_list'))
+        return _('Transmittals')
+
+    def breadcrumb_subsection(self):
+        return (_('Incoming'), reverse('transmittal_list'))
 
     def get_queryset(self):
         return Transmittal.objects \
