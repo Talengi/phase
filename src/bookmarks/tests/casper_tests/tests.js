@@ -81,10 +81,10 @@ casper.test.begin('Search is updated when a bookmark is selected', 0, function s
 casper.test.begin('The bookmark is unselected when the search is refined', 0, function suite(test) {
     casper.start(document_list_url, function() {
         casper.click('button#toggle-filters-button');
-        casper.evaluate(function() {
-            $('#id_bookmark option#bookmark_1').prop('selected', true);
+        casper.evaluate(function(b1_id) {
+            $('#id_bookmark option#bookmark_' + b1_id).prop('selected', true);
             $('#id_bookmark').change();
-        });
+        }, b1_id);
         casper.wait(50);
     });
 
