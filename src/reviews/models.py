@@ -431,41 +431,38 @@ class ReviewMixin(models.Model):
 
     def get_reviews(self):
         """Get all reviews associated with this revision."""
-        qs = Review.objects \
-            .filter(document=self.document) \
-            .filter(revision=self.revision) \
-            .order_by('id') \
-            .select_related('reviewer')
+        if not hasattr(self, '_reviews'):
+            qs = Review.objects \
+                .filter(document=self.document) \
+                .filter(revision=self.revision) \
+                .order_by('id') \
+                .select_related('reviewer')
+            self._reviews = qs
+        return self._reviews
 
-        return qs
+    def reload_reviews(self):
+        """Reload the review cache."""
+        del self._reviews
 
     def get_review(self, user):
         """Get the review from this specific user."""
-        qs = Review.objects \
-            .filter(document=self.document) \
-            .filter(revision=self.revision) \
-            .select_related()
+        reviews = self.get_reviews()
+        rev = next((rev for rev in reviews if rev.reviewer == user), None)
+        return rev
 
-        review = get_object_or_None(qs, reviewer=user)
-        return review
+    def get_reviewers_reviews(self):
+        reviews = self.get_reviews()
+        return [rev for rev in reviews if rev.role == 'reviewer']
 
     def get_leader_review(self):
-        review = Review.objects \
-            .filter(document=self.document) \
-            .filter(revision=self.revision) \
-            .filter(role='leader') \
-            .select_related() \
-            .get()
-        return review
+        reviews = self.get_reviews()
+        rev = next((rev for rev in reviews if rev.role == 'leader'), None)
+        return rev
 
     def get_approver_review(self):
-        review = Review.objects \
-            .filter(document=self.document) \
-            .filter(revision=self.revision) \
-            .filter(role='approver') \
-            .select_related() \
-            .get()
-        return review
+        reviews = self.get_reviews()
+        rev = next((rev for rev in reviews if rev.role == 'approver'), None)
+        return rev
 
     def is_reviewer(self, user):
         return user in self.reviewers.all()
