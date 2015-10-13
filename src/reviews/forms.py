@@ -101,3 +101,9 @@ class ReviewFormMixin(forms.ModelForm):
                 raise ValidationError(msg, code='duplicate_distrib_list')
 
         return data
+
+    def save(self, commit=True):
+        saved = super(ReviewFormMixin, self).save(commit)
+        if saved.is_under_review():
+            saved.sync_reviews()
+        return saved

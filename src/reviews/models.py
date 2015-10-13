@@ -394,6 +394,32 @@ class ReviewMixin(models.Model):
         if save:
             self.save(update_document=True)
 
+    @transaction.atomic
+    def sync_reviews(self):
+        """Update Review objects so it's coherent with current object state.
+
+        If the distribution list (reviewers, leader, approver) was modified in
+        the document form, the corresponding Review objects must be created /
+        deleted to stay in sync.
+
+        """
+        # Sync leader
+        leader_review = self.get_leader_review()
+        if leader_review.reviewer_id != self.leader_id:
+            leader_review.reviewer = self.leader
+            leader_review.save()
+
+        # Sync approver
+        approver_review = self.get_approver_review()
+        if approver_review.reviewer_id != self.approver_id:
+            approver_review.reviewer = self.approver
+            approver_review.save()
+
+        # Sync reviewers
+        # reviews = self.get_reviewers_review()
+
+        self.reload_reviews()
+
     def is_under_review(self):
         """It's under review only if review has started but not ended."""
         return bool(self.review_start_date) != bool(self.review_end_date)
