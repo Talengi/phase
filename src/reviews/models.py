@@ -11,7 +11,6 @@ from django.utils import timezone
 from django.core.cache import cache
 
 from model_utils import Choices
-from annoying.functions import get_object_or_None
 
 from accounts.models import User
 from documents.models import Document
@@ -274,6 +273,7 @@ class ReviewMixin(models.Model):
                 docclass=self.docclass,
             )
 
+        self.reload_reviews()
         self.save(update_document=True)
 
     @transaction.atomic
@@ -321,6 +321,7 @@ class ReviewMixin(models.Model):
             .filter(role=Review.ROLES.leader) \
             .update(status='progress')
 
+        self.reload_reviews()
         if save:
             self.save(update_document=True)
 
@@ -354,6 +355,7 @@ class ReviewMixin(models.Model):
         if not self.approver_id:
             self.review_end_date = end_date
 
+        self.reload_reviews()
         if save:
             self.save(update_document=True)
 
@@ -368,6 +370,7 @@ class ReviewMixin(models.Model):
             .filter(role=Review.ROLES.leader) \
             .update(closed_on=None, status='progress')
 
+        self.reload_reviews()
         if save:
             self.save(update_document=True)
 
@@ -391,8 +394,76 @@ class ReviewMixin(models.Model):
             .filter(closed_on=None) \
             .update(closed_on=end_date, status='not_reviewed')
 
+        self.reload_reviews()
         if save:
             self.save(update_document=True)
+
+    @transaction.atomic
+    def sync_reviews(self):
+        """Update Review objects so it's coherent with current object state.
+
+        If the distribution list (reviewers, leader, approver) was modified in
+        the document form, the corresponding Review objects must be created /
+        deleted to stay in sync.
+
+        """
+        # Sync leader
+        leader_review = self.get_leader_review()
+        if leader_review.reviewer_id != self.leader_id:
+            leader_review.reviewer = self.leader
+            leader_review.save()
+
+        # Sync approver
+        approver_review = self.get_approver_review()
+        if approver_review.reviewer_id != self.approver_id:
+            # A new approver was submitted
+            if self.approver:
+                approver_review.reviewer = self.approver
+                approver_review.save()
+            # The approver was deleted
+            else:
+                approver_review.delete()
+                # If we were at the last review step, end the review completely
+                if self.is_at_review_step(Review.STEPS.approver):
+                    self.end_review()
+
+        # Sync reviewers
+        old_reviews = self.get_reviewers_reviews()
+        old_reviewers = set(review.reviewer for review in old_reviews)
+        current_reviewers = set(self.reviewers.all())
+
+        # Create Review objects for new reviewers
+        new_reviewers = current_reviewers - old_reviewers
+        for reviewer in new_reviewers:
+            Review.objects.create(
+                reviewer=reviewer,
+                document=self.document,
+                revision=self.revision,
+                received_date=self.received_date,
+                start_date=self.review_start_date,
+                due_date=self.review_due_date,
+                docclass=self.docclass,
+                status='progress',
+                revision_status=self.status)
+
+        # Remove Review objects for deleted reviewers
+        deleted_reviewers = old_reviewers - current_reviewers
+        if len(deleted_reviewers) > 0:
+            for reviewer in deleted_reviewers:
+                review = self.get_review(reviewer)
+                # Check that we only delete review with no comments
+                # This condition is enforced in the ReviewMixinForm anyway
+                if review.status != 'progress':
+                    raise RuntimeError('Cannot delete a review with comments')
+                review.delete()
+
+            # Should we end the reviewers step?
+            waiting_reviews = self.get_filtered_reviews(
+                lambda rev: rev.id and rev.role == 'reviewer' and rev.status == 'progress')
+            if len(waiting_reviews) == 0:
+                self.end_reviewers_step()
+
+        self.reload_reviews()
 
     def is_under_review(self):
         """It's under review only if review has started but not ended."""
@@ -431,41 +502,44 @@ class ReviewMixin(models.Model):
 
     def get_reviews(self):
         """Get all reviews associated with this revision."""
-        qs = Review.objects \
-            .filter(document=self.document) \
-            .filter(revision=self.revision) \
-            .order_by('id') \
-            .select_related('reviewer')
+        if not hasattr(self, '_reviews'):
+            qs = Review.objects \
+                .filter(document=self.document) \
+                .filter(revision=self.revision) \
+                .order_by('id') \
+                .select_related('reviewer')
+            self._reviews = qs
+        return self._reviews
 
-        return qs
+    def reload_reviews(self):
+        """Reload the review cache."""
+        if hasattr(self, '_reviews'):
+            del self._reviews
 
     def get_review(self, user):
         """Get the review from this specific user."""
-        qs = Review.objects \
-            .filter(document=self.document) \
-            .filter(revision=self.revision) \
-            .select_related()
+        reviews = self.get_reviews()
+        rev = next((rev for rev in reviews if rev.reviewer == user), None)
+        return rev
 
-        review = get_object_or_None(qs, reviewer=user)
-        return review
+    def get_filtered_reviews(self, filter):
+        reviews = self.get_reviews()
+        filtered = [rev for rev in reviews if filter(rev)]
+        return filtered
+
+    def get_reviewers_reviews(self):
+        reviews = self.get_reviews()
+        return [rev for rev in reviews if rev.role == 'reviewer']
 
     def get_leader_review(self):
-        review = Review.objects \
-            .filter(document=self.document) \
-            .filter(revision=self.revision) \
-            .filter(role='leader') \
-            .select_related() \
-            .get()
-        return review
+        reviews = self.get_reviews()
+        rev = next((rev for rev in reviews if rev.role == 'leader'), None)
+        return rev
 
     def get_approver_review(self):
-        review = Review.objects \
-            .filter(document=self.document) \
-            .filter(revision=self.revision) \
-            .filter(role='approver') \
-            .select_related() \
-            .get()
-        return review
+        reviews = self.get_reviews()
+        rev = next((rev for rev in reviews if rev.role == 'approver'), None)
+        return rev
 
     def is_reviewer(self, user):
         return user in self.reviewers.all()
