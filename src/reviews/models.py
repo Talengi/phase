@@ -505,6 +505,11 @@ class ReviewMixin(models.Model):
         rev = next((rev for rev in reviews if rev.reviewer == user), None)
         return rev
 
+    def get_filtered_reviews(self, filter):
+        reviews = self.get_reviews()
+        filtered = [rev for rev in reviews if filter(rev)]
+        return filtered
+
     def get_reviewers_reviews(self):
         reviews = self.get_reviews()
         return [rev for rev in reviews if rev.role == 'reviewer']
