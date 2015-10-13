@@ -320,3 +320,38 @@ class UpdateDistribListTests(BaseReviewFormMixinTests):
 
         review = rev.get_review(self.user4)
         self.assertEqual(review.role, 'approver')
+
+    def test_removing_approver_during_approver_step_ends_review(self):
+        self.rev.start_review()
+        self.rev.end_leader_step()
+
+        self.assertIsNone(self.rev.review_end_date)
+
+        self.data.update({'approver': ''})
+        form = ContractorDeliverableRevisionForm(
+            self.data,
+            instance=self.rev,
+            category=self.category)
+        rev = form.save()
+
+        review = rev.get_review(self.user3)
+        self.assertIsNone(review)
+
+        self.assertIsNotNone(self.rev.review_end_date)
+
+    def test_removing_approver_before_approver_step_doesnt_end_review(self):
+        self.rev.start_review()
+
+        self.assertIsNone(self.rev.review_end_date)
+
+        self.data.update({'approver': ''})
+        form = ContractorDeliverableRevisionForm(
+            self.data,
+            instance=self.rev,
+            category=self.category)
+        rev = form.save()
+
+        review = rev.get_review(self.user3)
+        self.assertIsNone(review)
+
+        self.assertIsNone(self.rev.review_end_date)

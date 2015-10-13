@@ -412,8 +412,16 @@ class ReviewMixin(models.Model):
         # Sync approver
         approver_review = self.get_approver_review()
         if approver_review.reviewer_id != self.approver_id:
-            approver_review.reviewer = self.approver
-            approver_review.save()
+            # A new approver was submitted
+            if self.approver:
+                approver_review.reviewer = self.approver
+                approver_review.save()
+            # The approver was deleted
+            else:
+                approver_review.delete()
+                # If we were at the last review step, end the review completely
+                if self.is_at_review_step(Review.STEPS.approver):
+                    self.end_review()
 
         # Sync reviewers
         # reviews = self.get_reviewers_review()
