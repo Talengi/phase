@@ -236,12 +236,12 @@ class UpdateDistribListTests(BaseReviewFormMixinTests):
             self.data,
             instance=self.rev,
             category=self.category)
-        self.assertFalse(form.is_valid())
+        self.assertTrue(form.is_valid())
         form.save()
 
         # Assert the reviewers step is still open
         self.rev.refresh_from_db()
-        self.assertIsNotNone(self.rev.reviewers_step_closed)
+        self.assertIsNone(self.rev.reviewers_step_closed)
         self.assertEqual(qs.count(), 1)
 
         # Remove second reviewer
@@ -250,13 +250,13 @@ class UpdateDistribListTests(BaseReviewFormMixinTests):
             self.data,
             instance=self.rev,
             category=self.category)
-        self.assertFalse(form.is_valid())
+        self.assertTrue(form.is_valid())
         form.save()
 
         # Assert the reviewers step is closed
         self.rev.refresh_from_db()
-        self.assertIsNone(self.rev.reviewers_step_closed)
         self.assertEqual(qs.count(), 0)
+        self.assertIsNotNone(self.rev.reviewers_step_closed)
 
         leader_review.refresh_from_db()
         self.assertEqual(leader_review.status, 'progress')

@@ -273,6 +273,7 @@ class ReviewMixin(models.Model):
                 docclass=self.docclass,
             )
 
+        self.reload_reviews()
         self.save(update_document=True)
 
     @transaction.atomic
@@ -320,6 +321,7 @@ class ReviewMixin(models.Model):
             .filter(role=Review.ROLES.leader) \
             .update(status='progress')
 
+        self.reload_reviews()
         if save:
             self.save(update_document=True)
 
@@ -353,6 +355,7 @@ class ReviewMixin(models.Model):
         if not self.approver_id:
             self.review_end_date = end_date
 
+        self.reload_reviews()
         if save:
             self.save(update_document=True)
 
@@ -367,6 +370,7 @@ class ReviewMixin(models.Model):
             .filter(role=Review.ROLES.leader) \
             .update(closed_on=None, status='progress')
 
+        self.reload_reviews()
         if save:
             self.save(update_document=True)
 
@@ -390,6 +394,7 @@ class ReviewMixin(models.Model):
             .filter(closed_on=None) \
             .update(closed_on=end_date, status='not_reviewed')
 
+        self.reload_reviews()
         if save:
             self.save(update_document=True)
 
@@ -508,7 +513,8 @@ class ReviewMixin(models.Model):
 
     def reload_reviews(self):
         """Reload the review cache."""
-        del self._reviews
+        if hasattr(self, '_reviews'):
+            del self._reviews
 
     def get_review(self, user):
         """Get the review from this specific user."""

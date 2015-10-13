@@ -53,7 +53,7 @@ class ReviewFormMixin(forms.ModelForm):
 
         """
         reviewers = self.cleaned_data['reviewers']
-        if not self.instance.is_under_review():
+        if self.instance.review_start_date is None:
             return reviewers
 
         old_reviewers = self.instance.reviewers.all()
@@ -86,7 +86,7 @@ class ReviewFormMixin(forms.ModelForm):
 
     def clean_leader(self):
         leader = self.cleaned_data['leader']
-        if not self.instance.is_under_review():
+        if self.instance.review_start_date is None:
             return leader
 
         # If leader step is over, leader cannot be changed anymore
@@ -99,7 +99,7 @@ class ReviewFormMixin(forms.ModelForm):
 
     def clean_approver(self):
         approver = self.cleaned_data['approver']
-        if not self.instance.is_under_review():
+        if self.instance.review_start_date is None:
             return approver
 
         # If approver step is over, leader cannot be changed anymore
@@ -114,22 +114,24 @@ class ReviewFormMixin(forms.ModelForm):
         data = super(ReviewFormMixin, self).clean()
 
         # Check that no user appears twice in the distrib list
-        keys = ('reviewers', 'leader', 'approver')
-        if not any(key in data for key in keys):
-            distrib_list = []
-            if data['leader'] is not None:
-                distrib_list.append(data['leader'])
+        distrib_list = []
 
-            if data['approver'] is not None:
-                distrib_list.append(data['approver'])
+        leader = data.get('leader', None)
+        if leader:
+            distrib_list.append(leader)
 
-            distrib_list += data['reviewers']
+        approver = data.get('approver', None)
+        if approver:
+            distrib_list.append(approver)
 
-            distrib_set = set(distrib_list)
-            if len(distrib_list) != len(distrib_set):
-                msg = _('The same user cannot appear multiple times in the same '
-                        'distribution list.')
-                raise ValidationError(msg, code='duplicate_distrib_list')
+        reviewers = data.get('reviewers', [])
+        distrib_list += reviewers
+
+        distrib_set = set(distrib_list)
+        if len(distrib_list) != len(distrib_set):
+            msg = _('The same user cannot appear multiple times in the same '
+                    'distribution list.')
+            raise ValidationError(msg, code='duplicate_distrib_list')
 
         return data
 

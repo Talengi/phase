@@ -423,6 +423,7 @@ class ReviewFormTests(TestCase):
         self.assertEqual(review.status, 'progress')
 
         self.client.post(self.url, {'review': 'something'})
+        revision.reload_reviews()
         review = revision.get_review(self.user)
         self.assertIsNotNone(review.closed_on)
         self.assertEqual(review.status, 'reviewed')
