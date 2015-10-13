@@ -46,19 +46,48 @@ class ReviewFormMixin(forms.ModelForm):
         super(ReviewFormMixin, self).prepare_form(*args, **kwargs)
 
     def clean_reviewers(self):
-        reviewers = self.cleaned_data['reviewers']
+        """Validate the reviewers
 
-        # If reviewers step is finished, reviewers cannot be modifies anymore
-        if self.instance.reviewers_step_closed:
-            old_reviewers = self.instance.reviewers.all()
-            if set(reviewers) != set(old_reviewers):
+        During review, reviewers can only be modified during the reviewers step.
+        A reviewer that posted a review cannot be deleted anymore.
+
+        """
+        reviewers = self.cleaned_data['reviewers']
+        if not self.instance.is_under_review():
+            return reviewers
+
+        old_reviewers = self.instance.reviewers.all()
+
+        # Reviewers were modified
+        if set(reviewers) != set(old_reviewers):
+
+            # If reviewers step is finished, reviewers cannot be modified anymore
+            if self.instance.reviewers_step_closed:
                 error = _('Reviewers step is over, you cannot modify reviewers anymore')
                 raise ValidationError(error, code='reviewers')
+
+            # if some reviewers were deleted, check that none of the them
+            # actually submitted a review
+            deleted_reviewers = set(old_reviewers) - set(reviewers)
+            deleted_reviews_with_comments = self.instance.get_filtered_reviews(
+                lambda rev: rev.reviewer in deleted_reviewers and
+                rev.status != 'progress')
+            if len(deleted_reviews_with_comments) > 0:
+                errors = []
+                for review in deleted_reviews_with_comments:
+                    errors.append(ValidationError(
+                        _('%(user)s already submitted a review, and cannot be '
+                          'removed from the distribution list.'),
+                        code='reviewers',
+                        params={'user': review.reviewer}))
+                raise ValidationError(errors, code='reviewers')
 
         return reviewers
 
     def clean_leader(self):
         leader = self.cleaned_data['leader']
+        if not self.instance.is_under_review():
+            return leader
 
         # If leader step is over, leader cannot be changed anymore
         if self.instance.leader_step_closed:
@@ -70,6 +99,8 @@ class ReviewFormMixin(forms.ModelForm):
 
     def clean_approver(self):
         approver = self.cleaned_data['approver']
+        if not self.instance.is_under_review():
+            return approver
 
         # If approver step is over, leader cannot be changed anymore
         if self.instance.review_end_date:
