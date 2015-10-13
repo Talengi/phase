@@ -11,7 +11,6 @@ from django.utils import timezone
 from django.core.cache import cache
 
 from model_utils import Choices
-from annoying.functions import get_object_or_None
 
 from accounts.models import User
 from documents.models import Document
@@ -424,7 +423,29 @@ class ReviewMixin(models.Model):
                     self.end_review()
 
         # Sync reviewers
-        # reviews = self.get_reviewers_review()
+        old_reviews = self.get_reviewers_reviews()
+        old_reviewers = set(review.reviewer for review in old_reviews)
+        current_reviewers = set(self.reviewers.all())
+
+        # Create Review objects for new reviewers
+        new_reviewers = current_reviewers - old_reviewers
+        for reviewer in new_reviewers:
+            Review.objects.create(
+                reviewer=reviewer,
+                document=self.document,
+                revision=self.revision,
+                received_date=self.received_date,
+                start_date=self.review_start_date,
+                due_date=self.review_due_date,
+                docclass=self.docclass,
+                status='progress',
+                revision_status=self.status)
+
+        # Remove Review objects for deleted reviewers
+        deleted_reviewers = old_reviewers - current_reviewers
+        for reviewer in deleted_reviewers:
+            review = self.get_review(reviewer)
+            review.delete()
 
         self.reload_reviews()
 
