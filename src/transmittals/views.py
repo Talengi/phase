@@ -256,15 +256,15 @@ class TransmittalDownloadView(LoginRequiredMixin, PermissionRequiredMixin, BaseZ
         return files
 
 
-class WaitingDocumentsListView(LoginRequiredMixin, PermissionRequiredMixin,
-                               ListView):
-    """Lists reviewed documents waiting to be transmitted back to ctr."""
+class OutgoingTransmittalListView(LoginRequiredMixin, PermissionRequiredMixin,
+                                  ListView):
+    """Lists outgoing transmittals documents waiting to be transmitted back to ctr."""
     permission_required = 'documents.can_control_document'
-    template_name = 'transmittals/waiting_documents.html'
+    template_name = 'transmittals/outgoing_transmittal_list.html'
 
     def dispatch(self, request, *args, **kwargs):
         self.extract_category()
-        return super(WaitingDocumentsListView, self).dispatch(request, *args, **kwargs)
+        return super(OutgoingTransmittalListView, self).dispatch(request, *args, **kwargs)
 
     def extract_category(self):
         """Set the `self.category` variable."""
