@@ -205,12 +205,14 @@ var Phase = Phase || {};
         events: {
             'click #toggle-filters-button': 'showSearchForm',
             'click #start-review-button': 'batchReview',
-            'click #cancel-review-button': 'confirmBatchCancelReviews'
+            'click #cancel-review-button': 'confirmBatchCancelReviews',
+            'click #create-outgoing-trs': 'submitActionForm'
         },
         initialize: function(options) {
             _.bindAll(this, 'batchReviewSuccess', 'batchReviewPoll', 'batchReviewPollSuccess');
             this.actionForm = this.$el.find('#document-list-form form').first();
             this.actionButtons = this.actionForm.find('.navbar-action');
+            this.submitButtons = this.actionForm.find('[data-form-action]');
             this.dropdown = this.actionForm.find('.dropdown-form');
             this.closeBtn = this.dropdown.find('button[data-toggle=dropdown]');
             this.resultsP = this.$el.find('p#display-results');
@@ -227,7 +229,7 @@ var Phase = Phase || {};
             // We update the form action depending on
             // the clicked button
             var self = this;
-            this.actionButtons.on('click', function(event) {
+            this.submitButtons.on('click', function(event) {
                 var action = $(this).data('form-action');
                 self.actionForm.attr('action', action);
             });
@@ -309,6 +311,10 @@ var Phase = Phase || {};
                 clearInterval(this.pollId);
                 location.reload();
             }
+        },
+        submitActionForm: function(event) {
+            event.preventDefault();
+            this.actionForm.submit();
         }
     });
 
