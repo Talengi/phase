@@ -42,15 +42,10 @@ class TransmittalRevisionForm(BaseDocumentForm):
             DocumentFieldset(
                 _('Revision'),
                 DateField('revision_date'),
+                DateField('received_date'),
                 Field('created_on', readonly='readonly'),
                 'native_file',
-                'pdf_file',
-            ),
-            DocumentFieldset(
-                _('Review'),
-                DateField('received_date'),
-            ),
-        )
+                'pdf_file'))
 
     class Meta:
         model = TransmittalRevision
