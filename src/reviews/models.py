@@ -192,12 +192,12 @@ class ReviewMixin(models.Model):
         null=True, blank=True,
         list_index='REVIEW_RETURN_CODES')
     dc_return_code = ConfigurableChoiceField(
-        _('DC Return code'),
+        _('DC review return code'),
         max_length=3,
         null=True, blank=True,
         list_index='REVIEW_RETURN_CODES')
     dc_comments = PrivateFileField(
-        _('Comments'),
+        _('DC review comments'),
         null=True, blank=True,
         upload_to=dc_review_comments_file_path)
 
