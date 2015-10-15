@@ -14,3 +14,10 @@ def review_comments_file_path(review, filename):
         role=role_part[review.role],
         extension=filename.split('.')[-1]
     )
+
+
+def dc_review_comments_file_path(revision, filename):
+    return "reviews/{key}_{revision}_dc_comments.{extension}".format(
+        key=revision.document.document_key,
+        revision=revision.revision_name,
+        extension=filename.split('.')[-1])

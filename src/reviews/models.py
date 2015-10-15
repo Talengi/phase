@@ -15,7 +15,8 @@ from model_utils import Choices
 from accounts.models import User
 from documents.models import Document
 from privatemedia.fields import PrivateFileField
-from reviews.fileutils import review_comments_file_path
+from reviews.fileutils import (review_comments_file_path,
+                               dc_review_comments_file_path)
 from metadata.fields import ConfigurableChoiceField
 
 
@@ -190,6 +191,15 @@ class ReviewMixin(models.Model):
         max_length=3,
         null=True, blank=True,
         list_index='REVIEW_RETURN_CODES')
+    dc_return_code = ConfigurableChoiceField(
+        _('DC review return code'),
+        max_length=3,
+        null=True, blank=True,
+        list_index='REVIEW_RETURN_CODES')
+    dc_comments = PrivateFileField(
+        _('DC review comments'),
+        null=True, blank=True,
+        upload_to=dc_review_comments_file_path)
 
     class Meta:
         abstract = True

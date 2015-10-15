@@ -6,8 +6,13 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
 
-from reviews.utils import get_cached_reviews
+from crispy_forms.layout import Field
+
 from accounts.forms import UserChoiceField, UserMultipleChoiceField
+from default_documents.layout import (
+    DocumentFieldset, PropertyLayout, YesNoLayout, DateField)
+from reviews.utils import get_cached_reviews
+from reviews.layout import ReviewsLayout
 
 
 class ReviewFormMixin(forms.ModelForm):
@@ -140,3 +145,40 @@ class ReviewFormMixin(forms.ModelForm):
         if saved.is_under_review():
             saved.sync_reviews()
         return saved
+
+    def get_review_layout(self):
+        """Get layout for the form "Review" section."""
+        if self.read_only:
+            review_layout = (
+                DocumentFieldset(
+                    _('Review'),
+                    DateField('received_date'),
+                    PropertyLayout('return_code'),
+                    Field('review_start_date', readonly='readonly'),
+                    Field('review_due_date', readonly='readonly'),
+                    PropertyLayout('get_current_review_step_display'),
+                    YesNoLayout('is_under_review'),
+                    YesNoLayout('is_overdue'),
+                    'dc_comments',
+                    'dc_return_code'),
+                DocumentFieldset(
+                    _('Distribution list'),
+                    ReviewsLayout()))
+        else:
+            review_layout = (
+                DocumentFieldset(
+                    _('Review'),
+                    DateField('received_date'),
+                    PropertyLayout('return_code'),
+                    Field('review_start_date', readonly='readonly'),
+                    Field('review_due_date', readonly='readonly'),
+                    PropertyLayout('get_current_review_step_display'),
+                    YesNoLayout('is_under_review'),
+                    YesNoLayout('is_overdue'),
+                    'dc_comments',
+                    'dc_return_code',
+                    'reviewers',
+                    'leader',
+                    'approver'))
+
+        return review_layout
