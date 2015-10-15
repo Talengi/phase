@@ -2,9 +2,9 @@
 from __future__ import unicode_literals
 
 from django import forms
-from django.contrib.contenttypes.models import ContentType
 
 from documents.fileutils import revision_file_path
+from documents.utils import get_all_document_qs
 
 from privatemedia.fields import PrivateFileField
 
@@ -33,9 +33,6 @@ class MetadataTypeChoiceField(forms.ModelChoiceField):
         if qs:
             raise ValueError("We don't need a queryset, thank you")
 
-        queryset = ContentType.objects \
-            .filter(app_label__endswith='_documents') \
-            .exclude(model__icontains='revision')
-        kwargs.update({'queryset': queryset})
+        kwargs.update({'queryset': get_all_document_qs()})
 
         super(MetadataTypeChoiceField, self).__init__(*args, **kwargs)

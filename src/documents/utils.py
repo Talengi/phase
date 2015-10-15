@@ -162,21 +162,36 @@ def stringify_value(val, none_val='NC'):
     return unicode_val
 
 
-def get_all_document_classes():
-    """Returns all document classes available."""
-    qs = ContentType.objects \
-        .filter(app_label__endswith='_documents') \
-        .exclude(model__icontains='revision')
+def get_all_document_types():
+    """Return all Metadata content types."""
+    from documents.models import Metadata
+    qs = ContentType.objects.all()
+    types = [ct for ct in qs if issubclass(ct.model_class(), Metadata)]
+    return types
 
-    klasses = [content_type.model_class() for content_type in qs]
-    return klasses
+
+def get_all_document_qs():
+    """Return all Metadata subclasses as a queryset."""
+    types = get_all_document_types()
+    ids = [ct.id for ct in types]
+    return ContentType.objects.filter(id__in=ids)
+
+
+def get_all_document_classes():
+    """Return all Metadata subclasses available."""
+    classes = [ct.model_class() for ct in get_all_document_types()]
+    return classes
+
+
+def get_all_revision_types():
+    """Return all MetadataRevision content types."""
+    from documents.models import MetadataRevision
+    qs = ContentType.objects.all()
+    types = (ct for ct in qs if issubclass(ct.model_class(), MetadataRevision))
+    return types
 
 
 def get_all_revision_classes():
-    """Returns all classes inheriting MetadataRevision."""
-    qs = ContentType.objects \
-        .filter(app_label__endswith='_documents') \
-        .filter(model__icontains='revision')
-
-    klasses = [content_type.model_class() for content_type in qs]
-    return klasses
+    """Return all MetadataRevision subclasses available."""
+    classes = [ct.model_class() for ct in get_all_revision_types()]
+    return classes
