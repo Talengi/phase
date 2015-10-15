@@ -214,6 +214,13 @@ class ReviewMixin(models.Model):
             not self.review_start_date
         ))
 
+    @property
+    def ready_for_outgoing_trs(self):
+        """Is this rev ready to be embedded in an outgoing trs?"""
+        return all((
+            bool(self.review_end_date),
+            self.document.current_revision == self.revision))
+
     @transaction.atomic
     def start_review(self, at_date=None, due_date=None):
         """Starts the review process.

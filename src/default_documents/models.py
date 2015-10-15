@@ -155,7 +155,7 @@ class ContractorDeliverable(Metadata):
             'document_type', 'under_review', 'overdue', 'leader', 'approver'
         )
         searchable_fields = ('document_key', 'title',)
-        indexable_fields = ['is_existing']
+        indexable_fields = ['is_existing', 'ready_for_outgoing_trs']
         column_fields = (
             ('Document Number', 'document_key'),
             ('Title', 'title'),
@@ -214,8 +214,8 @@ class ContractorDeliverable(Metadata):
             ('Approver', 'approver'),
             ('Return code', 'return_code'),
         ))
-        custom_filters = {
-            'show_cld_spd': {
+        custom_filters = OrderedDict((
+            ('show_cld_spd', {
                 'field': forms.BooleanField,
                 'label': _('Show CLD/SPD docs'),
                 'filters': {
@@ -223,8 +223,17 @@ class ContractorDeliverable(Metadata):
                     False: F('term', is_existing=True),
                     None: F('term', is_existing=True)
                 }
-            }
-        }
+            }),
+            ('outgoing_trs', {
+                'field': forms.BooleanField,
+                'label': _('Ready for outgoing Trs'),
+                'filters': {
+                    True: F('term', ready_for_outgoing_trs=True),
+                    False: None,
+                    None: None,
+                }
+            }))
+        )
 
     class Meta:
         ordering = ('document_key',)

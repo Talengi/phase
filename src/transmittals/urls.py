@@ -10,16 +10,16 @@ from transmittals.views import (
 
 urlpatterns = patterns(
     '',
-    url(r'^$',
+    url(r'^incoming/$',
         TransmittalListView.as_view(),
         name="transmittal_list"),
-    url(r'^(?P<transmittal_pk>\d+)/(?P<document_key>[\w-]+)/$',
+    url(r'^incoming/(?P<transmittal_pk>\d+)/(?P<document_key>[\w-]+)/$',
         TransmittalDiffView.as_view(),
         name='transmittal_diff'),
-    url(r'^(?P<transmittal_pk>\d+)/(?P<document_key>[\w-]+)/download/$',
+    url(r'^incoming/(?P<transmittal_pk>\d+)/(?P<document_key>[\w-]+)/download/$',
         TransmittalDownloadView.as_view(),
         name='transmittal_download'),
-    url(r'^(?P<transmittal_pk>\d+)/(?P<document_key>[\w-]+)/(?P<revision_document_key>[\w-]+)/(?P<revision>\d+)/$',
+    url(r'^incoming/(?P<transmittal_pk>\d+)/(?P<document_key>[\w-]+)/(?P<revision_document_key>[\w-]+)/(?P<revision>\d+)/$',
         TransmittalRevisionDiffView.as_view(),
         name='transmittal_revision_diff'),
 )
