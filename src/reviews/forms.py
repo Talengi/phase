@@ -158,7 +158,9 @@ class ReviewFormMixin(forms.ModelForm):
                     Field('review_due_date', readonly='readonly'),
                     PropertyLayout('get_current_review_step_display'),
                     YesNoLayout('is_under_review'),
-                    YesNoLayout('is_overdue')),
+                    YesNoLayout('is_overdue'),
+                    'dc_comments',
+                    'dc_return_code'),
                 DocumentFieldset(
                     _('Distribution list'),
                     ReviewsLayout()))
@@ -173,6 +175,8 @@ class ReviewFormMixin(forms.ModelForm):
                     PropertyLayout('get_current_review_step_display'),
                     YesNoLayout('is_under_review'),
                     YesNoLayout('is_overdue'),
+                    'dc_comments',
+                    'dc_return_code',
                     'reviewers',
                     'leader',
                     'approver'))
