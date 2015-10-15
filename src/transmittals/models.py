@@ -83,10 +83,10 @@ class Transmittal(Metadata):
         related_name='transmittals_related_set',
         blank=True)
 
-    contractor = models.CharField(max_length=255)
-    tobechecked_dir = models.CharField(max_length=255)
-    accepted_dir = models.CharField(max_length=255)
-    rejected_dir = models.CharField(max_length=255)
+    contractor = models.CharField(max_length=255, null=True, blank=True)
+    tobechecked_dir = models.CharField(max_length=255, null=True, blank=True)
+    accepted_dir = models.CharField(max_length=255, null=True, blank=True)
+    rejected_dir = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
         ordering = ('document_key',)
