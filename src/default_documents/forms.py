@@ -9,11 +9,10 @@ from .models import (
     MinutesOfMeeting, MinutesOfMeetingRevision,
     DemoMetadata, DemoMetadataRevision
 )
-from reviews.layout import ReviewsLayout
 from reviews.forms import ReviewFormMixin
 from .layout import (
     DocumentFieldset, ScheduleLayout, ScheduleStatusLayout,
-    PropertyLayout, YesNoLayout, DateField
+    PropertyLayout, DateField
 )
 
 
@@ -58,39 +57,6 @@ class ContractorDeliverableForm(BaseDocumentForm):
 class ContractorDeliverableRevisionForm(ReviewFormMixin, BaseDocumentForm):
 
     def build_layout(self):
-        if self.read_only:
-            review_layout = (
-                DocumentFieldset(
-                    _('Review'),
-                    DateField('received_date'),
-                    PropertyLayout('return_code'),
-                    Field('review_start_date', readonly='readonly'),
-                    Field('review_due_date', readonly='readonly'),
-                    PropertyLayout('get_current_review_step_display'),
-                    YesNoLayout('is_under_review'),
-                    YesNoLayout('is_overdue'),
-                ),
-                DocumentFieldset(
-                    _('Distribution list'),
-                    ReviewsLayout(),
-                )
-            )
-        else:
-            review_layout = (
-                DocumentFieldset(
-                    _('Review'),
-                    DateField('received_date'),
-                    PropertyLayout('return_code'),
-                    Field('review_start_date', readonly='readonly'),
-                    Field('review_due_date', readonly='readonly'),
-                    PropertyLayout('get_current_review_step_display'),
-                    YesNoLayout('is_under_review'),
-                    YesNoLayout('is_overdue'),
-                    'reviewers',
-                    'leader',
-                    'approver',
-                ),
-            )
 
         return Layout(
             DocumentFieldset(
@@ -103,7 +69,7 @@ class ContractorDeliverableRevisionForm(ReviewFormMixin, BaseDocumentForm):
                 'native_file',
                 'pdf_file',
             ),
-            *review_layout
+            *self.get_review_layout()
         )
 
     class Meta:
