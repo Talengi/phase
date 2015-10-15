@@ -13,7 +13,6 @@ from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 from zipview.views import BaseZipView
 from annoying.functions import get_object_or_None
 
-from categories.models import Category
 from notifications.models import notify
 from transmittals.models import Transmittal, TrsRevision
 from transmittals.utils import FieldWrapper
@@ -254,35 +253,3 @@ class TransmittalDownloadView(LoginRequiredMixin, PermissionRequiredMixin, BaseZ
                 files.append(revision.native_file.file)
 
         return files
-
-
-class OutgoingTransmittalListView(LoginRequiredMixin, PermissionRequiredMixin,
-                                  ListView):
-    """Lists outgoing transmittals documents waiting to be transmitted back to ctr."""
-    permission_required = 'documents.can_control_document'
-    template_name = 'transmittals/outgoing_transmittal_list.html'
-
-    def dispatch(self, request, *args, **kwargs):
-        self.extract_category()
-        return super(OutgoingTransmittalListView, self).dispatch(request, *args, **kwargs)
-
-    def extract_category(self):
-        """Set the `self.category` variable."""
-        organisation_slug = self.kwargs['organisation']
-        category_slug = self.kwargs['category']
-
-        qs = Category.objects \
-            .select_related() \
-            .filter(users=self.request.user) \
-            .filter(organisation__slug=organisation_slug) \
-            .filter(category_template__slug=category_slug)
-        self.category = get_object_or_None(qs)
-        if self.category is None:
-            raise Http404('Category not found')
-
-    def get_queryset(self):
-        Revision = self.category.revision_class()
-        revisions = Revision.objects \
-            .filter(category=self.category)
-
-        return revisions

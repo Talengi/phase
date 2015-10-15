@@ -206,7 +206,6 @@ var Phase = Phase || {};
             'click #toggle-filters-button': 'showSearchForm',
             'click #start-review-button': 'batchReview',
             'click #cancel-review-button': 'confirmBatchCancelReviews',
-            'click #create-outgoing-trs': 'submitActionForm'
         },
         initialize: function(options) {
             _.bindAll(this, 'batchReviewSuccess', 'batchReviewPoll', 'batchReviewPollSuccess');

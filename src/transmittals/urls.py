@@ -6,7 +6,7 @@ from django.conf.urls import patterns, url
 
 from transmittals.views import (
     TransmittalListView, TransmittalDiffView, TransmittalRevisionDiffView,
-    TransmittalDownloadView, OutgoingTransmittalListView)
+    TransmittalDownloadView)
 
 urlpatterns = patterns(
     '',
@@ -22,8 +22,4 @@ urlpatterns = patterns(
     url(r'^incoming/(?P<transmittal_pk>\d+)/(?P<document_key>[\w-]+)/(?P<revision_document_key>[\w-]+)/(?P<revision>\d+)/$',
         TransmittalRevisionDiffView.as_view(),
         name='transmittal_revision_diff'),
-
-    url('^outgoing/(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/$',
-        OutgoingTransmittalListView.as_view(),
-        name='outgoing_transmittal_list')
 )
