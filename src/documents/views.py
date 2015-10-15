@@ -27,7 +27,7 @@ from favorites.models import Favorite
 from favorites.api.serializers import FavoriteSerializer
 from bookmarks.models import get_user_bookmarks
 from bookmarks.api.serializers import BookmarkSerializer
-from categories.models import Category
+from categories.views import CategoryMixin
 from documents.models import Document
 from documents.utils import compress_documents, save_document_forms
 from documents.forms.models import documentform_factory
@@ -36,7 +36,7 @@ from documents.forms.filters import filterform_factory
 from notifications.models import notify
 
 
-class DocumentListMixin(object):
+class DocumentListMixin(CategoryMixin):
     """Base class for listing documents.
 
     This is the base class to factorize code fetching documents
@@ -70,22 +70,6 @@ class DocumentListMixin(object):
         We get all Metadata depending on the category.
 
         """
-        organisation_slug = self.kwargs['organisation']
-        category_slug = self.kwargs['category']
-
-        if not hasattr(self, 'category'):
-            try:
-                self.category = Category.objects \
-                    .select_related(
-                        'organisation',
-                        'category_template__metadata_model') \
-                    .get(
-                        users=self.request.user,
-                        organisation__slug=organisation_slug,
-                        category_template__slug=category_slug)
-            except Category.DoesNotExist:
-                raise Http404('Category not found')
-
         DocumentClass = self.category.category_template.metadata_model.model_class()
         qs = DocumentClass.objects \
             .select_related() \
