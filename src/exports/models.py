@@ -29,6 +29,8 @@ class Export(models.Model):
         ('processing', _('Processing')),
         ('done', _('Done')),
     )
+    FORMATS = Choices('csv', 'pdf')
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     owner = models.ForeignKey(
         'accounts.User',
@@ -45,6 +47,11 @@ class Export(models.Model):
         max_length=30,
         choices=STATUSES,
         default=STATUSES.new)
+    format = models.CharField(
+        _('Format'),
+        max_length=5,
+        choices=FORMATS,
+        default=FORMATS.csv)
     created_on = models.DateTimeField(
         _('Created on'),
         default=timezone.now)
@@ -56,11 +63,6 @@ class Export(models.Model):
 
     def get_absolute_url(self):
         return reverse('export_download', args=[self.id])
-
-    @property
-    def format(self):
-        """Return the exported file extension."""
-        return 'csv'
 
     def is_ready(self):
         return self.status == self.STATUSES.done
