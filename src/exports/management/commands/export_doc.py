@@ -39,7 +39,7 @@ class Command(BaseCommand):
 
         fmt = options['format']
 
-        self.stdout.write('Attempting to create export')
+        self.stdout.write('Starting export')
         export = Export.objects.create(
             owner=user,
             category=document.category,
@@ -49,7 +49,12 @@ class Command(BaseCommand):
 
         msg = 'Exporting to {}'.format(export.get_filepath())
         self.stdout.write(msg)
-        export.write_file()
 
-        export.status = Export.STATUSES.done
-        export.save()
+        try:
+            export.write_file()
+            export.status = Export.STATUSES.done
+            export.save()
+        except:
+            self.stderr.write('Error writing file, cleaning stalled export.')
+            export.delete()
+            raise

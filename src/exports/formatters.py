@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from documents.models import MetadataRevision
 from transmittals.utils import FieldWrapper
 from documents.utils import stringify_value as stringify
+from exports.pdf import format_doc_as_pdf
 
 
 class BaseFormatter(object):
@@ -62,4 +63,4 @@ class PDFFormatter(BaseFormatter):
     """Converts a queryset into pdf files."""
 
     def format_doc(self, doc):
-        return b''
+        return format_doc_as_pdf(doc)
