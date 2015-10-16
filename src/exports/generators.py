@@ -81,3 +81,7 @@ class ExportGenerator(object):
 class CSVGenerator(ExportGenerator):
     def data_header(self):
         return [self.fields.keys()]
+
+
+class PDFGenerator(ExportGenerator):
+    pass

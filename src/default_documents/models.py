@@ -226,7 +226,7 @@ class ContractorDeliverable(Metadata):
             }),
             ('outgoing_trs', {
                 'field': forms.BooleanField,
-                'label': _('Ready for outgoing Trs'),
+                'label': _('Ready for outgoing TRS'),
                 'filters': {
                     True: F('term', ready_for_outgoing_trs=True),
                     False: None,
