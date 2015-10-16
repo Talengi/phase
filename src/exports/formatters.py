@@ -56,3 +56,10 @@ class CSVFormatter(BaseFormatter):
     def get_field(self, doc, field):
         data = getattr(doc, field, '')
         return stringify(data, none_val='')
+
+
+class PDFFormatter(BaseFormatter):
+    """Converts a queryset into pdf files."""
+
+    def format_doc(self, doc):
+        return b''
