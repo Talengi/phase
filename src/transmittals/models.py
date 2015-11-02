@@ -19,7 +19,7 @@ from documents.models import Document, Metadata, MetadataRevision
 from reviews.models import CLASSES
 from metadata.fields import ConfigurableChoiceField
 from default_documents.validators import StringNumberValidator
-from transmittals.fields import TransmittalFileField
+from transmittals.fields import TransmittalFileField, ManyDocumentsField
 
 
 logger = logging.getLogger(__name__)
@@ -473,7 +473,7 @@ class OutgoingTransmittal(Metadata):
     sequential_number = models.PositiveIntegerField(
         _('sequential number'),
         null=True, blank=True)
-    related_documents = models.ManyToManyField(
+    related_documents = ManyDocumentsField(
         'documents.Document',
         through='ExportedRevision',
         related_name='outgoing_transmittal_set',

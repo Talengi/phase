@@ -4,6 +4,8 @@ from __future__ import unicode_literals
 
 import os
 
+from django.db.models import ManyToManyField
+
 from privatemedia.fields import PrivateFileField
 
 
@@ -27,3 +29,25 @@ class TransmittalFileField(PrivateFileField):
             'upload_to': transmittal_upload_to,
         })
         return super(TransmittalFileField, self).__init__(*args, **kwargs)
+
+
+class ManyDocumentsField(ManyToManyField):
+    """Custom field to correctly saves `through` data.
+
+    Normal `ManyToManyField` instances cannot directly save data when
+    there is an intermediary model. Hence our own implentatation.
+
+    """
+
+    def save_form_data(self, instance, data):
+        from transmittals.models import ExportedRevision
+        revisions = [
+            ExportedRevision(
+                document=doc,
+                transmittal=instance,
+                revision=doc.current_revision,
+                title=doc.title,
+                status='XXX',
+                return_code='XXX',
+            ) for doc in data]
+        ExportedRevision.objects.bulk_create(revisions)
