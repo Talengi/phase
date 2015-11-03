@@ -95,6 +95,7 @@ class Transmittal(Metadata):
     rejected_dir = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
+        app_label = 'transmittals'
         ordering = ('document_key',)
         verbose_name = _('Transmittal')
         verbose_name_plural = _('Transmittals')
@@ -239,6 +240,9 @@ class TransmittalRevision(MetadataRevision):
         default='opened',
         list_index='STATUS_TRANSMITTALS')
 
+    class Meta:
+        app_label = 'transmittals'
+
 
 class TrsRevision(models.Model):
     """Stores data imported from a single line in the csv."""
@@ -382,6 +386,7 @@ class TrsRevision(models.Model):
         null=True, blank=True)
 
     class Meta:
+        app_label = 'transmittals'
         verbose_name = _('Trs Revision')
         verbose_name_plural = _('Trs Revisions')
         unique_together = ('transmittal', 'document_key', 'revision')
@@ -482,6 +487,7 @@ class OutgoingTransmittal(Metadata):
         blank=True)
 
     class Meta:
+        app_label = 'transmittals'
         ordering = ('document_key',)
         verbose_name = _('Outgoing transmittal')
         verbose_name_plural = _('Outgoing transmittals')
@@ -518,15 +524,8 @@ class OutgoingTransmittal(Metadata):
 
 
 class OutgoingTransmittalRevision(MetadataRevision):
-
-    def save(self, *args, **kwargs):
-        """Generates the pdf when the document is saved."""
-        if self.pdf_file:
-            self.pdf_file.delete(save=False)
-        pdf_file = self.generate_pdf_file()
-        self.pdf_file.save('thiswillbediscarded.pdf', pdf_file, save=False)
-
-        super(OutgoingTransmittalRevision, self).save(*args, **kwargs)
+    class Meta:
+        app_label = 'transmittals'
 
     def generate_pdf_file(self):
         pdf_content = transmittal_to_pdf(self)
