@@ -41,6 +41,13 @@ class ManyDocumentsField(ManyToManyField):
 
     def save_form_data(self, instance, data):
         from transmittals.models import ExportedRevision
+
+        # Delete old data
+        ExportedRevision.objects \
+            .filter(transmittal=instance) \
+            .delete()
+
+        # Saves new data
         revisions = [
             ExportedRevision(
                 document=doc,
