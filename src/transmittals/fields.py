@@ -37,6 +37,9 @@ class ManyDocumentsField(ManyToManyField):
     Normal `ManyToManyField` instances cannot directly save data when
     there is an intermediary model. Hence our own implentatation.
 
+    XXX Caution. Every time the form is saved, this field will be modified and
+    the doc latest revision will be used.
+
     """
 
     def save_form_data(self, instance, data):
