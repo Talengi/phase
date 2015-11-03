@@ -40,19 +40,24 @@ class ManyDocumentsField(ManyToManyField):
     XXX Caution. Every time the form is saved, this field will be modified and
     the doc latest revision will be used.
 
+    XXX This method is sadely inefficient.
+
     """
 
     def save_form_data(self, instance, data):
         from transmittals.models import ExportedRevision
 
         instance.related_documents.clear()
-        revisions = [
-            ExportedRevision(
-                document=doc,
-                transmittal=instance,
-                revision=doc.current_revision,
-                title=doc.title,
-                status='XXX',
-                return_code='XXX',
-            ) for doc in data]
+
+        revisions = []
+        for doc in data:
+            revision = doc.get_latest_revision()
+            revisions.append(
+                ExportedRevision(
+                    document=doc,
+                    transmittal=instance,
+                    revision=doc.current_revision,
+                    title=doc.title,
+                    status=getattr(revision, 'status', ''),
+                    return_code=getattr(revision, 'return_code', '')))
         ExportedRevision.objects.bulk_create(revisions)
