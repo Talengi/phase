@@ -7,6 +7,7 @@ import os
 from django.db.models import ManyToManyField
 
 from privatemedia.fields import PrivateFileField
+from transmittals.signals import related_documents_saved
 
 
 def transmittal_upload_to(trs_revision, filename):
@@ -61,3 +62,7 @@ class ManyDocumentsField(ManyToManyField):
                     status=getattr(revision, 'status', ''),
                     return_code=getattr(revision, 'return_code', '')))
         ExportedRevision.objects.bulk_create(revisions)
+
+        related_documents_saved.send(
+            sender=instance.__class__,
+            instance=instance)
