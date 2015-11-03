@@ -59,8 +59,8 @@ class ManyDocumentsField(ManyToManyField):
                     transmittal=instance,
                     revision=doc.current_revision,
                     title=doc.title,
-                    status=getattr(revision, 'status', ''),
-                    return_code=getattr(revision, 'return_code', '')))
+                    status=revision.status,
+                    return_code=revision.get_review_return_code()))
         ExportedRevision.objects.bulk_create(revisions)
 
         related_documents_saved.send(
