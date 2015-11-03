@@ -11,6 +11,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.db import transaction
+from django.core.files.base import ContentFile
 
 from model_utils import Choices
 
@@ -20,6 +21,7 @@ from reviews.models import CLASSES
 from metadata.fields import ConfigurableChoiceField
 from default_documents.validators import StringNumberValidator
 from transmittals.fields import TransmittalFileField, ManyDocumentsField
+from transmittals.pdf import transmittal_to_pdf
 
 
 logger = logging.getLogger(__name__)
@@ -516,7 +518,20 @@ class OutgoingTransmittal(Metadata):
 
 
 class OutgoingTransmittalRevision(MetadataRevision):
-    pass
+
+    def save(self, *args, **kwargs):
+        """Generates the pdf when the document is saved."""
+        if self.pdf_file:
+            self.pdf_file.delete(save=False)
+        pdf_file = self.generate_pdf_file()
+        self.pdf_file.save('thiswillbediscarded.pdf', pdf_file, save=False)
+
+        super(OutgoingTransmittalRevision, self).save(*args, **kwargs)
+
+    def generate_pdf_file(self):
+        pdf_content = transmittal_to_pdf(self)
+        pdf_file = ContentFile(pdf_content)
+        return pdf_file
 
 
 class ExportedRevision(models.Model):
