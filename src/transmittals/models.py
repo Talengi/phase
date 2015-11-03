@@ -19,14 +19,18 @@ from documents.models import Document, Metadata, MetadataRevision
 from reviews.models import CLASSES
 from metadata.fields import ConfigurableChoiceField
 from default_documents.validators import StringNumberValidator
-from transmittals.fields import TransmittalFileField
+from transmittals.fields import TransmittalFileField, ManyDocumentsField
 
 
 logger = logging.getLogger(__name__)
 
 
 class Transmittal(Metadata):
-    """Transmittals are created when a contractor upload documents."""
+    """Represents and incoming transmittal.
+
+    Transmittals are created when a contractor upload documents.
+
+    """
     STATUSES = Choices(
         ('new', _('New')),
         ('invalid', _('Invalid')),
@@ -439,3 +443,92 @@ class TrsRevision(models.Model):
 
         # Performs custom import action
         rev.post_trs_import(self)
+
+
+class OutgoingTransmittal(Metadata):
+    """Represents an outgoing transmittal.
+
+    In the end, Transmittal and OutgoingTransmittal should be refactored into a
+    single class. However, the incoming trs class contains too much specific
+    code and is kept isolated for now.
+
+    """
+    latest_revision = models.ForeignKey(
+        'OutgoingTransmittalRevision',
+        verbose_name=_('Latest revision'))
+
+    contract_number = ConfigurableChoiceField(
+        verbose_name='Contract Number',
+        max_length=8,
+        list_index='CONTRACT_NBS')
+    originator = ConfigurableChoiceField(
+        _('Originator'),
+        default='CTR',
+        max_length=3,
+        list_index='ORIGINATORS')
+    recipient = ConfigurableChoiceField(
+        _('Recipient'),
+        max_length=50,
+        list_index='RECIPIENTS')
+    sequential_number = models.PositiveIntegerField(
+        _('sequential number'),
+        null=True, blank=True)
+    related_documents = ManyDocumentsField(
+        'documents.Document',
+        through='ExportedRevision',
+        related_name='outgoing_transmittal_set',
+        blank=True)
+
+    class Meta:
+        ordering = ('document_key',)
+        verbose_name = _('Outgoing transmittal')
+        verbose_name_plural = _('Outgoing transmittals')
+
+    class PhaseConfig:
+        filter_fields = (
+            'originator', 'recipient',
+        )
+        column_fields = (
+            ('Reference', 'document_key'),
+            ('Originator', 'originator'),
+            ('Recipient', 'recipient'),
+        )
+        searchable_fields = (
+            'document_key',
+            'originator',
+            'recipient',
+        )
+
+    def __unicode__(self):
+        return self.document_key
+
+    def generate_document_key(self):
+        key = '{}-{}-{}-TRS-{:0>5d}'.format(
+            self.contract_number,
+            self.originator,
+            self.recipient,
+            self.sequential_number)
+        return key
+
+    @property
+    def title(self):
+        return self.document_key
+
+
+class OutgoingTransmittalRevision(MetadataRevision):
+    pass
+
+
+class ExportedRevision(models.Model):
+    """Link between an outgoing transmittal and an exported document."""
+    document = models.ForeignKey(Document)
+    transmittal = models.ForeignKey(OutgoingTransmittal)
+    revision = models.PositiveIntegerField(_('Revision'))
+    title = models.TextField(_('Title'))
+    status = models.CharField(_('Status'), max_length=5)
+    return_code = models.CharField(_('Return code'), max_length=5)
+
+    class Meta:
+        verbose_name = _('Exported revision')
+        verbose_name_plural = _('Exported revisions')
+        app_label = 'transmittals'
