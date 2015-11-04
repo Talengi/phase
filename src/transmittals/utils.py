@@ -42,11 +42,17 @@ class FieldWrapper(object):
 def create_transmittal(from_category, to_category, revisions):
     """Create an outgoing transmittal with the given revisions."""
 
+    # Do we have a list of revisions?
     if not isinstance(revisions, list) or len(revisions) == 0:
         raise errors.MissingRevisionsError(
             'Please provide a valid list of transmittals')
 
+    # Do we have valid revisions?
     for rev in revisions:
         if not isinstance(rev, TransmittableMixin):
             raise errors.InvalidRevisionsError(
                 'At least one of the revisions is invalid.')
+
+        if not rev.can_be_transmitted:
+            raise errors.InvalidRevisionsError(
+                'At least one of the rivisions cannot be transmitted')

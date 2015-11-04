@@ -17,8 +17,6 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
         Model = ContentType.objects.get_for_model(OutgoingTransmittal)
         self.dst_category = CategoryFactory(
             category_template__metadata_model=Model)
-        docs = [self.create_doc() for _ in xrange(10)]
-        self.revisions = [doc.get_metadata().latest_revision for doc in docs]
 
     def test_create_empty_transmittal(self):
         """A trs cannot be created without revisions."""
@@ -31,8 +29,14 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
             revisions = ['toto', 'tata', 'tutu']
             create_transmittal(self.category, self.dst_category, revisions)
 
-    def test_create_transmittal(self):
-        transmittal = create_transmittal(
-            self.category, self.dst_category, self.revisions)
-        self.assertIsNotNone(transmittal)
-        self.assertTrue(isinstance(transmittal, OutgoingTransmittal))
+    def test_create_trs_with_unreviewed_revisions(self):
+        docs = [self.create_doc() for _ in xrange(5)]
+        revisions = [doc.get_metadata().latest_revision for doc in docs]
+        with self.assertRaises(errors.InvalidRevisionsError):
+            create_transmittal(self.category, self.dst_category, revisions)
+
+    # def test_create_transmittal(self):
+    #     transmittal = create_transmittal(
+    #         self.category, self.dst_category, self.revisions)
+    #     self.assertIsNotNone(transmittal)
+    #     self.assertTrue(isinstance(transmittal, OutgoingTransmittal))
