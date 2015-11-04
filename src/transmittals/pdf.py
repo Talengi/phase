@@ -20,10 +20,12 @@ tableStyles = TableStyle([
 styles = getSampleStyleSheet()
 
 
-def format_doc_as_pdf(rev):
+def transmittal_to_pdf(revision):
     buff = BytesIO()
-    doc = rev.document
-    meta = doc.get_metadata()
+    document = revision.document
+    transmittal = revision.metadata
+    category = document.category
+    revisions = transmittal.exportedrevision_set.select_related()
 
     pdf = SimpleDocTemplate(
         buff,
@@ -38,19 +40,19 @@ def format_doc_as_pdf(rev):
     title = 'Phase'
     story.append(Paragraph(title, styles['Heading1']))
 
-    subtitle = '{}'.format(doc.category)
+    subtitle = '{}'.format(category)
     story.append(Paragraph(subtitle, styles['Heading3']))
 
-    subsubtitle = 'Document n° {}'.format(doc.document_key)
+    subsubtitle = 'Document n° {}'.format(document.document_key)
     story.append(Paragraph(subsubtitle, styles['Heading3']))
 
     story.append(Spacer(0, 1 * cm))
 
     data = [
-        ('From', meta.originator),
-        ('To', meta.recipient),
-        ('Contract number', meta.contract_number),
-        ('Created on', rev.created_on),
+        ('From', transmittal.originator),
+        ('To', transmittal.recipient),
+        ('Contract number', transmittal.contract_number),
+        ('Created on', revision.created_on),
 
     ]
     table = Table(data, hAlign='LEFT')
@@ -60,7 +62,7 @@ def format_doc_as_pdf(rev):
     story.append(Spacer(0, 1 * cm))
 
     related_docs_table = Table(
-        build_related_docs_table(rev),
+        build_revisions_table(revisions),
         colWidths=(None, None, 1 * cm, 1 * cm, 1 * cm))
     related_docs_table.setStyle(tableStyles)
     story.append(related_docs_table)
@@ -71,7 +73,7 @@ def format_doc_as_pdf(rev):
     return pdf_binary
 
 
-def build_related_docs_table(rev):
+def build_revisions_table(revisions):
     style = styles['BodyText']
     style.alignment = TA_LEFT
     style.wordWrap = 'LTR'
@@ -83,13 +85,12 @@ def build_related_docs_table(rev):
         'St.',
         'RC')
     data = [header]
-    docs = rev.document.get_metadata().related_documents.all()
-    for doc in docs:
+    for revision in revisions:
         data.append((
-            Paragraph(doc.document_key, style),
-            Paragraph(doc.title, style),
-            Paragraph('42', style),
-            Paragraph('42', style),
-            Paragraph('42', style)))
+            Paragraph(revision.document.document_key, style),
+            Paragraph(revision.title, style),
+            Paragraph('%s' % revision.revision, style),
+            Paragraph(revision.status, style),
+            Paragraph(revision.return_code, style)))
 
     return data

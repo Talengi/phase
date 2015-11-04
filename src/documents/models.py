@@ -412,11 +412,13 @@ class MetadataRevision(models.Model):
 
         initial_ignored = self.get_initial_ignored_fields()
         for field in initial_ignored:
-            del initial_data[field]
+            if field in initial_data:
+                del initial_data[field]
 
         initial_empty = self.get_initial_empty()
         for field in initial_empty:
-            initial_data[field] = None
+            if field in initial_data:
+                initial_data[field] = None
 
         return initial_data
 

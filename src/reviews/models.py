@@ -628,3 +628,11 @@ class ReviewMixin(models.Model):
             'review_closed_on': review_closed_on
         })
         return context
+
+    def get_review_return_code(self):
+        """Returns the latest available return code."""
+        if self.dc_return_code:
+            rc = self.dc_return_code
+        else:
+            rc = self.return_code
+        return rc

@@ -11,6 +11,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.db import transaction
+from django.core.files.base import ContentFile
 
 from model_utils import Choices
 
@@ -20,6 +21,7 @@ from reviews.models import CLASSES
 from metadata.fields import ConfigurableChoiceField
 from default_documents.validators import StringNumberValidator
 from transmittals.fields import TransmittalFileField, ManyDocumentsField
+from transmittals.pdf import transmittal_to_pdf
 
 
 logger = logging.getLogger(__name__)
@@ -93,6 +95,7 @@ class Transmittal(Metadata):
     rejected_dir = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
+        app_label = 'transmittals'
         ordering = ('document_key',)
         verbose_name = _('Transmittal')
         verbose_name_plural = _('Transmittals')
@@ -237,6 +240,9 @@ class TransmittalRevision(MetadataRevision):
         default='opened',
         list_index='STATUS_TRANSMITTALS')
 
+    class Meta:
+        app_label = 'transmittals'
+
 
 class TrsRevision(models.Model):
     """Stores data imported from a single line in the csv."""
@@ -380,6 +386,7 @@ class TrsRevision(models.Model):
         null=True, blank=True)
 
     class Meta:
+        app_label = 'transmittals'
         verbose_name = _('Trs Revision')
         verbose_name_plural = _('Trs Revisions')
         unique_together = ('transmittal', 'document_key', 'revision')
@@ -480,6 +487,7 @@ class OutgoingTransmittal(Metadata):
         blank=True)
 
     class Meta:
+        app_label = 'transmittals'
         ordering = ('document_key',)
         verbose_name = _('Outgoing transmittal')
         verbose_name_plural = _('Outgoing transmittals')
@@ -516,7 +524,13 @@ class OutgoingTransmittal(Metadata):
 
 
 class OutgoingTransmittalRevision(MetadataRevision):
-    pass
+    class Meta:
+        app_label = 'transmittals'
+
+    def generate_pdf_file(self):
+        pdf_content = transmittal_to_pdf(self)
+        pdf_file = ContentFile(pdf_content)
+        return pdf_file
 
 
 class ExportedRevision(models.Model):

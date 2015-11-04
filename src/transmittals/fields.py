@@ -7,6 +7,7 @@ import os
 from django.db.models import ManyToManyField
 
 from privatemedia.fields import PrivateFileField
+from transmittals.signals import related_documents_saved
 
 
 def transmittal_upload_to(trs_revision, filename):
@@ -40,24 +41,28 @@ class ManyDocumentsField(ManyToManyField):
     XXX Caution. Every time the form is saved, this field will be modified and
     the doc latest revision will be used.
 
+    XXX This method is sadely inefficient.
+
     """
 
     def save_form_data(self, instance, data):
         from transmittals.models import ExportedRevision
 
-        # Delete old data
-        ExportedRevision.objects \
-            .filter(transmittal=instance) \
-            .delete()
+        instance.related_documents.clear()
 
-        # Saves new data
-        revisions = [
-            ExportedRevision(
-                document=doc,
-                transmittal=instance,
-                revision=doc.current_revision,
-                title=doc.title,
-                status='XXX',
-                return_code='XXX',
-            ) for doc in data]
+        revisions = []
+        for doc in data:
+            revision = doc.get_latest_revision()
+            revisions.append(
+                ExportedRevision(
+                    document=doc,
+                    transmittal=instance,
+                    revision=doc.current_revision,
+                    title=doc.title,
+                    status=revision.status,
+                    return_code=revision.get_review_return_code()))
         ExportedRevision.objects.bulk_create(revisions)
+
+        related_documents_saved.send(
+            sender=instance.__class__,
+            instance=instance)

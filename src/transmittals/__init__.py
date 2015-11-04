@@ -22,3 +22,4 @@ The import steps are run in this order:
   3) upon DC's validation, create the documents in Phase
 
 """
+default_app_config = 'transmittals.apps.TransmittalsConfig'
