@@ -3,7 +3,9 @@
 from __future__ import unicode_literals
 
 from transmittals import errors
-from transmittals.models import TransmittableMixin
+from transmittals.models import OutgoingTransmittalRevision, TransmittableMixin
+from transmittals.forms import (
+    OutgoingTransmittalForm, OutgoingTransmittalRevisionForm)
 
 
 class FieldWrapper(object):
@@ -46,6 +48,18 @@ def create_transmittal(from_category, to_category, revisions):
     if not isinstance(revisions, list) or len(revisions) == 0:
         raise errors.MissingRevisionsError(
             'Please provide a valid list of transmittals')
+
+    # The "from" category must contain transmittable documents
+    from_type = from_category.revision_class()
+    if not issubclass(from_type, TransmittableMixin):
+        raise errors.InvalidCategoryError(
+            'Source category must contain transmittable documents')
+
+    # The "destination" category must contain transmittals
+    dest_type = to_category.revision_class()
+    if not issubclass(dest_type, OutgoingTransmittalRevision):
+        raise errors.InvalidCategoryError(
+            'Destination category must contain transmittals')
 
     # Do we have valid revisions?
     for rev in revisions:

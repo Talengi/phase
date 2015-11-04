@@ -12,3 +12,7 @@ class MissingRevisionsError(TransmittalError):
 
 class InvalidRevisionsError(TransmittalError):
     pass
+
+
+class InvalidCategoryError(TransmittalError):
+    pass
