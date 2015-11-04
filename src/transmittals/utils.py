@@ -34,3 +34,8 @@ class FieldWrapper(object):
 
     def __getattr__(self, attr):
         return self[attr]
+
+
+def create_transmittal(from_category, to_category, revisions):
+    """Create an outgoing transmittal with the given revisions."""
+    pass
