@@ -13,6 +13,7 @@ from elasticsearch_dsl import F
 from metadata.fields import ConfigurableChoiceField
 from accounts.models import User
 from reviews.models import ReviewMixin
+from transmittals.models import TransmittableMixin
 from documents.models import Metadata, MetadataRevision
 from documents.constants import BOOLEANS
 from .validators import StringNumberValidator
@@ -314,7 +315,9 @@ class ContractorDeliverable(Metadata):
         return self.latest_revision.docclass
 
 
-class ContractorDeliverableRevision(ReviewMixin, MetadataRevision):
+class ContractorDeliverableRevision(ReviewMixin,
+                                    TransmittableMixin,
+                                    MetadataRevision):
     # Revision
     status = ConfigurableChoiceField(
         verbose_name=u"Status",
