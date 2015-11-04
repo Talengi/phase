@@ -2,6 +2,9 @@
 
 from __future__ import unicode_literals
 
+from transmittals import errors
+from transmittals.models import TransmittableMixin
+
 
 class FieldWrapper(object):
     """Utility class to access fields scattered across multiple objects.
@@ -38,4 +41,12 @@ class FieldWrapper(object):
 
 def create_transmittal(from_category, to_category, revisions):
     """Create an outgoing transmittal with the given revisions."""
-    pass
+
+    if not isinstance(revisions, list) or len(revisions) == 0:
+        raise errors.MissingRevisionsError(
+            'Please provide a valid list of transmittals')
+
+    for rev in revisions:
+        if not isinstance(rev, TransmittableMixin):
+            raise errors.InvalidRevisionsError(
+                'At least one of the revisions is invalid.')

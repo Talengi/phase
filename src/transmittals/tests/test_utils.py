@@ -25,6 +25,12 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
         with self.assertRaises(errors.MissingRevisionsError):
             create_transmittal(self.category, self.dst_category, [])
 
+    def test_create_trs_with_invalid_revisions(self):
+        """We must check that the given revisions are valid."""
+        with self.assertRaises(errors.InvalidRevisionsError):
+            revisions = ['toto', 'tata', 'tutu']
+            create_transmittal(self.category, self.dst_category, revisions)
+
     def test_create_transmittal(self):
         transmittal = create_transmittal(
             self.category, self.dst_category, self.revisions)
