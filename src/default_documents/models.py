@@ -156,7 +156,7 @@ class ContractorDeliverable(Metadata):
             'document_type', 'under_review', 'overdue', 'leader', 'approver'
         )
         searchable_fields = ('document_key', 'title',)
-        indexable_fields = ['is_existing', 'ready_for_outgoing_trs']
+        indexable_fields = ['is_existing', 'can_be_transmitted']
         column_fields = (
             ('Document Number', 'document_key'),
             ('Title', 'title'),
@@ -229,7 +229,7 @@ class ContractorDeliverable(Metadata):
                 'field': forms.BooleanField,
                 'label': _('Ready for outgoing TRS'),
                 'filters': {
-                    True: F('term', ready_for_outgoing_trs=True),
+                    True: F('term', can_be_transmitted=True),
                     False: None,
                     None: None,
                 }
@@ -315,9 +315,7 @@ class ContractorDeliverable(Metadata):
         return self.latest_revision.docclass
 
 
-class ContractorDeliverableRevision(ReviewMixin,
-                                    TransmittableMixin,
-                                    MetadataRevision):
+class ContractorDeliverableRevision(TransmittableMixin, MetadataRevision):
     # Revision
     status = ConfigurableChoiceField(
         verbose_name=u"Status",

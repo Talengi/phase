@@ -17,7 +17,7 @@ from model_utils import Choices
 
 from documents.utils import save_document_forms
 from documents.models import Document, Metadata, MetadataRevision
-from reviews.models import CLASSES
+from reviews.models import CLASSES, ReviewMixin
 from metadata.fields import ConfigurableChoiceField
 from default_documents.validators import StringNumberValidator
 from transmittals.fields import TransmittalFileField, ManyDocumentsField
@@ -548,8 +548,13 @@ class ExportedRevision(models.Model):
         app_label = 'transmittals'
 
 
-class TransmittableMixin(models.Model):
-    """Define behavior of revisions that can be embedded in transmittals."""
+class TransmittableMixin(ReviewMixin):
+    """Define behavior of revisions that can be embedded in transmittals.
+
+    Only reviewable documents can be transmitted, hence the mixin
+    inheritance.
+
+    """
 
     already_transmitted = models.BooleanField(
         _('Already embdedded in transmittal?'),
@@ -572,3 +577,11 @@ class TransmittableMixin(models.Model):
         else:
             rc = None
         return rc
+
+    @property
+    def can_be_transmitted(self):
+        """Is this rev ready to be embedded in an outgoing trs?"""
+        return all((
+            bool(self.review_end_date),
+            not self.already_transmitted,
+            self.document.current_revision == self.revision))
