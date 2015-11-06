@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django import forms
+from django.db.utils import ProgrammingError
 
 from documents.fileutils import revision_file_path
 from documents.utils import get_all_document_qs
@@ -33,6 +34,12 @@ class MetadataTypeChoiceField(forms.ModelChoiceField):
         if qs:
             raise ValueError("We don't need a queryset, thank you")
 
-        kwargs.update({'queryset': get_all_document_qs()})
+        try:
+            qs = get_all_document_qs()
+        except ProgrammingError:
+            # This will happen when rebuilding db from schatch, e.g
+            # when running tests, and can be ignored safely
+            qs = []
+        kwargs.update({'queryset': qs})
 
         super(MetadataTypeChoiceField, self).__init__(*args, **kwargs)
