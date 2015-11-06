@@ -468,15 +468,12 @@ class OutgoingTransmittal(Metadata):
         verbose_name='Contract Number',
         max_length=8,
         list_index='CONTRACT_NBS')
-    originator = ConfigurableChoiceField(
+    originator = models.CharField(
         _('Originator'),
-        default='CTR',
-        max_length=3,
-        list_index='ORIGINATORS')
-    recipient = ConfigurableChoiceField(
+        max_length=3)
+    recipient = models.CharField(
         _('Recipient'),
-        max_length=50,
-        list_index='RECIPIENTS')
+        max_length=3)
     sequential_number = models.PositiveIntegerField(
         _('sequential number'),
         null=True, blank=True)
