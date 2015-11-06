@@ -18,6 +18,7 @@ from transmittals import errors
 
 
 class TransmittalCreationTests(ContractorDeliverableTestCase):
+    fixtures = ['initial_values_lists']
 
     def setUp(self):
         super(TransmittalCreationTests, self).setUp()
@@ -43,6 +44,7 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
                 'reviewers': [self.user1],
                 'leader': self.user2,
                 'approver': self.user3,
+                'trs_return_code': '1',
                 'received_date': datetime.datetime.today()}}
 
         docs = [self.create_doc(**doc_kwargs) for _ in xrange(nb_docs)]
@@ -58,40 +60,45 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
     def test_create_empty_transmittal(self):
         """A trs cannot be created without revisions."""
         with self.assertRaises(errors.MissingRevisionsError):
-            create_transmittal(self.category, self.dst_category, [])
+            create_transmittal(
+                self.category, self.dst_category, [], 'FAC10005')
 
     def test_create_trs_with_invalid_revisions(self):
         """We must check that the given revisions are valid."""
         with self.assertRaises(errors.InvalidRevisionsError):
             revisions = ['toto', 'tata', 'tutu']
-            create_transmittal(self.category, self.dst_category, revisions)
+            create_transmittal(
+                self.category, self.dst_category, revisions, 'FAC10005')
 
     def test_create_trs_with_unreviewed_revisions(self):
         """Revisions must have been reviewed to be transmittable."""
         revisions = self.create_docs(transmittable=False)
         with self.assertRaises(errors.InvalidRevisionsError):
-            create_transmittal(self.category, self.dst_category, revisions)
+            create_transmittal(
+                self.category, self.dst_category, revisions, 'FAC10005')
 
     def test_create_trs_with_invalid_from_category(self):
         """Source category must contain transmittable documents."""
         invalid_cat = CategoryFactory()
         revisions = self.create_docs()
         with self.assertRaises(errors.InvalidCategoryError):
-            create_transmittal(invalid_cat, self.dst_category, revisions)
+            create_transmittal(
+                invalid_cat, self.dst_category, revisions, 'FAC10005')
 
     def test_create_trs_with_invalid_dest_category(self):
         """Destination category must contain outgoing transmittals."""
         invalid_cat = CategoryFactory()
         revisions = self.create_docs()
         with self.assertRaises(errors.InvalidCategoryError):
-            create_transmittal(self.category, invalid_cat, revisions)
+            create_transmittal(
+                self.category, invalid_cat, revisions, 'FAC10005')
 
     def test_create_transmittal(self):
         revisions = self.create_docs()
-        transmittal = create_transmittal(
-            self.category, self.dst_category, revisions)
-        self.assertIsNotNone(transmittal)
-        self.assertTrue(isinstance(transmittal, OutgoingTransmittal))
+        doc, trs, rev = create_transmittal(
+            self.category, self.dst_category, revisions, 'FAC10005')
+        self.assertIsNotNone(trs)
+        self.assertTrue(isinstance(trs, OutgoingTransmittal))
 
 
 class TransmittalSequentialNumberTests(TestCase):

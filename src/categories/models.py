@@ -38,6 +38,11 @@ class Organisation(models.Model):
     def __unicode__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        if not self.trigram:
+            self.trigram = self.random_trigram()
+        super(Organisation, self).save(*args, **kwargs)
+
     def random_trigram(self):
         """Returns a word of three random letters."""
         return ''.join(random.choice(string.ascii_lowercase) for _ in range(3))

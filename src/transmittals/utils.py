@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 from django.db.models import Max
+from django.utils import timezone
 
 from documents.utils import save_document_forms
 from transmittals import errors
@@ -80,20 +81,24 @@ def create_transmittal(from_category, to_category, revisions, contract_nb,
             raise errors.InvalidRevisionsError(
                 'Some revisions are not from the correct category')
 
-    originator = from_category.organisation.slug
-    recipient = to_category.organisation.slug
+    originator = from_category.organisation.trigram
+    recipient = to_category.organisation.trigram
     sequential_number = find_next_trs_number(originator, recipient, contract_nb)
     form_data.update({
         'contract_number': contract_nb,
         'originator': originator,
         'recipient': recipient,
         'sequential_number': sequential_number,
+        'created_on': timezone.now(),
+        'received_date': timezone.now(),
     })
 
     # Let's create the transmittal, then
     trs_form = OutgoingTransmittalForm(form_data, category=to_category)
     revision_form = OutgoingTransmittalRevisionForm(form_data, category=to_category)
-    return save_document_forms(trs_form, revision_form, to_category)
+    doc, trs, revision = save_document_forms(trs_form, revision_form, to_category)
+    trs.link_to_revisions(revisions)
+    return doc, trs, revision
 
 
 def find_next_trs_number(originator, recipient, contract_nb):
