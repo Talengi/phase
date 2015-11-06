@@ -22,13 +22,10 @@ class GroupCategoryInline(admin.StackedInline):
 
 
 class OrganisationAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description')
+    list_display = ('name', 'trigram', 'description')
     prepopulated_fields = {'slug': ('name',)}
     inlines = [CategoryInline]
     prepopulated_fields = {'slug': ('name',)}
-    fieldsets = (
-        (None, {'fields': ('name', 'slug', 'description')}),
-    )
 
 
 class CategoryTemplateAdmin(admin.ModelAdmin):
