@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import factory
 from django.contrib.contenttypes.models import ContentType
 
@@ -11,6 +14,7 @@ class OrganisationFactory(factory.DjangoModelFactory):
 
     name = factory.Sequence(lambda n: 'Organisation {0}'.format(n))
     slug = factory.Sequence(lambda n: 'organisation_{0}'.format(n))
+    trigram = factory.fuzzy.FuzzyText(length=3)
 
 
 class CategoryTemplateFactory(factory.DjangoModelFactory):
