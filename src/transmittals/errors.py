@@ -8,3 +8,11 @@ class TransmittalError(Exception):
 
 class MissingRevisionsError(TransmittalError):
     pass
+
+
+class InvalidRevisionsError(TransmittalError):
+    pass
+
+
+class InvalidCategoryError(TransmittalError):
+    pass

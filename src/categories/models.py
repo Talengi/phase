@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import string
+import random
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
@@ -20,6 +23,10 @@ class Organisation(models.Model):
     slug = models.SlugField(
         _('Slug'),
         max_length=50)
+    trigram = models.CharField(
+        _('Trigram'),
+        max_length=3,
+        unique=True)
     description = models.CharField(
         _('Description'),
         max_length=200,
@@ -30,6 +37,15 @@ class Organisation(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.trigram:
+            self.trigram = self.random_trigram()
+        super(Organisation, self).save(*args, **kwargs)
+
+    def random_trigram(self):
+        """Returns a word of three random letters."""
+        return ''.join(random.choice(string.ascii_lowercase) for _ in range(3))
 
 
 class CategoryTemplate(models.Model):

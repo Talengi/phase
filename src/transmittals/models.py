@@ -468,15 +468,12 @@ class OutgoingTransmittal(Metadata):
         verbose_name='Contract Number',
         max_length=8,
         list_index='CONTRACT_NBS')
-    originator = ConfigurableChoiceField(
+    originator = models.CharField(
         _('Originator'),
-        default='CTR',
-        max_length=3,
-        list_index='ORIGINATORS')
-    recipient = ConfigurableChoiceField(
+        max_length=3)
+    recipient = models.CharField(
         _('Recipient'),
-        max_length=50,
-        list_index='RECIPIENTS')
+        max_length=3)
     sequential_number = models.PositiveIntegerField(
         _('sequential number'),
         null=True, blank=True)
@@ -493,9 +490,7 @@ class OutgoingTransmittal(Metadata):
         verbose_name_plural = _('Outgoing transmittals')
 
     class PhaseConfig:
-        filter_fields = (
-            'originator', 'recipient',
-        )
+        filter_fields = ('contract_number',)
         column_fields = (
             ('Reference', 'document_key'),
             ('Originator', 'originator'),
@@ -521,6 +516,26 @@ class OutgoingTransmittal(Metadata):
     @property
     def title(self):
         return self.document_key
+
+    def link_to_revisions(self, revisions):
+        """Set the given revisions as related documents.
+
+        The revisions MUST be valid:
+         - belong to the same category
+         - be transmittable objects
+
+        """
+        trs_revisions = []
+        for revision in revisions:
+            trs_revisions.append(
+                ExportedRevision(
+                    document=revision.document,
+                    transmittal=self,
+                    revision=revision.revision,
+                    title=revision.document.title,
+                    status=revision.status,
+                    return_code=revision.get_final_return_code()))
+        ExportedRevision.objects.bulk_create(trs_revisions)
 
 
 class OutgoingTransmittalRevision(MetadataRevision):
@@ -575,7 +590,7 @@ class TransmittableMixin(ReviewMixin):
         elif hasattr(self, 'return_code'):
             rc = self.return_code
         else:
-            rc = None
+            rc = ''
         return rc
 
     @property

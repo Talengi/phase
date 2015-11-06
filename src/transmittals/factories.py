@@ -7,7 +7,9 @@ import datetime
 import factory
 
 from documents.factories import DocumentFactory
-from transmittals.models import Transmittal, TransmittalRevision, TrsRevision
+from transmittals.models import (
+    Transmittal, TransmittalRevision, TrsRevision, OutgoingTransmittal,
+    OutgoingTransmittalRevision)
 
 
 class TransmittalRevisionFactory(factory.DjangoModelFactory):
@@ -48,3 +50,24 @@ class TrsRevisionFactory(factory.DjangoModelFactory):
     revision = factory.Sequence(lambda n: n)
     is_new_revision = True
     received_date = datetime.date.today()
+
+
+class OutgoingTransmittalRevisionFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = OutgoingTransmittalRevision
+
+
+class OutgoingTransmittalFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = OutgoingTransmittal
+
+    contract_number = 'FAC10005'
+    originator = 'CTR'
+    recipient = 'CLT'
+    sequential_number = factory.Sequence(lambda n: n + 1)
+    document = factory.SubFactory(
+        DocumentFactory,
+        document_key=factory.SelfAttribute('..document_key'))
+    latest_revision = factory.SubFactory(
+        TransmittalRevisionFactory,
+        document=factory.SelfAttribute('..document'))
