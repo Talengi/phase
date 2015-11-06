@@ -4,11 +4,15 @@ from __future__ import unicode_literals
 import datetime
 
 from django.contrib.contenttypes.models import ContentType
+from django.test import TestCase
 
+from documents.factories import DocumentFactory
 from default_documents.tests.test import ContractorDeliverableTestCase
 from categories.factories import CategoryFactory
 from accounts.factories import UserFactory
-from transmittals.utils import create_transmittal
+from transmittals.factories import (
+    OutgoingTransmittalFactory, OutgoingTransmittalRevisionFactory)
+from transmittals.utils import create_transmittal, find_next_trs_number
 from transmittals.models import OutgoingTransmittal
 from transmittals import errors
 
@@ -88,3 +92,54 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
             self.category, self.dst_category, revisions)
         self.assertIsNotNone(transmittal)
         self.assertTrue(isinstance(transmittal, OutgoingTransmittal))
+
+
+class TransmittalSequentialNumberTests(TestCase):
+    def setUp(self):
+        Model = ContentType.objects.get_for_model(OutgoingTransmittal)
+        self.category = CategoryFactory(category_template__metadata_model=Model)
+        self.user = UserFactory(
+            email='testadmin@phase.fr',
+            password='pass',
+            is_superuser=True,
+            category=self.category)
+        self.client.login(email=self.user.email, password='pass')
+
+    def create_transmittal(self, sequential_number, **kwargs):
+        kwargs.update({
+            'category': self.category,
+            'metadata': {
+                'originator': 'CTR',
+                'recipient': 'CLT',
+                'contract_number': 'FAC10005',
+                'sequential_number': sequential_number,
+            },
+            'metadata_factory_class': OutgoingTransmittalFactory,
+            'revision_factory_class': OutgoingTransmittalRevisionFactory,
+        })
+        doc = DocumentFactory(**kwargs)
+        return doc
+
+    def test_seq_nb_with_no_transmittal(self):
+        """If no trs exists, the first available seq nb is 1."""
+        seq_nb = find_next_trs_number('CTR', 'CLT', 'FAC10005')
+        self.assertEqual(seq_nb, 1)
+
+    def test_seq_nb_with_existing_transmittals(self):
+        """If some trs exist, the first available seq nb is the next one."""
+        for nb in range(5):
+            self.create_transmittal(nb + 1)
+
+        seq_nb = find_next_trs_number('CTR', 'CLT', 'FAC10005')
+        self.assertEqual(seq_nb, 6)
+
+    def test_seq_nb_with_hole_in_numbers(self):
+        """If there is a hole in the seq numbers, the first available nb is
+        still the next one."""
+        self.create_transmittal(1)
+        self.create_transmittal(2)
+        self.create_transmittal(5)
+        self.create_transmittal(8)
+
+        seq_nb = find_next_trs_number('CTR', 'CLT', 'FAC10005')
+        self.assertEqual(seq_nb, 9)

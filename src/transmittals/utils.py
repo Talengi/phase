@@ -2,8 +2,12 @@
 
 from __future__ import unicode_literals
 
+from django.db.models import Max
+
+from documents.utils import save_document_forms
 from transmittals import errors
-from transmittals.models import OutgoingTransmittalRevision, TransmittableMixin
+from transmittals.models import (
+    OutgoingTransmittal, OutgoingTransmittalRevision, TransmittableMixin)
 from transmittals.forms import (
     OutgoingTransmittalForm, OutgoingTransmittalRevisionForm)
 
@@ -41,7 +45,8 @@ class FieldWrapper(object):
         return self[attr]
 
 
-def create_transmittal(from_category, to_category, revisions):
+def create_transmittal(from_category, to_category, revisions, contract_nb,
+                       **form_data):
     """Create an outgoing transmittal with the given revisions."""
 
     # Do we have a list of revisions?
@@ -70,3 +75,33 @@ def create_transmittal(from_category, to_category, revisions):
         if not rev.can_be_transmitted:
             raise errors.InvalidRevisionsError(
                 'At least one of the rivisions cannot be transmitted')
+
+        if not rev.document.category == from_category:
+            raise errors.InvalidRevisionsError(
+                'Some revisions are not from the correct category')
+
+    originator = from_category.organisation.slug
+    recipient = to_category.organisation.slug
+    sequential_number = find_next_trs_number(originator, recipient, contract_nb)
+    form_data.update({
+        'contract_number': contract_nb,
+        'originator': originator,
+        'recipient': recipient,
+        'sequential_number': sequential_number,
+    })
+
+    # Let's create the transmittal, then
+    trs_form = OutgoingTransmittalForm(form_data, category=to_category)
+    revision_form = OutgoingTransmittalRevisionForm(form_data, category=to_category)
+    return save_document_forms(trs_form, revision_form, to_category)
+
+
+def find_next_trs_number(originator, recipient, contract_nb):
+    """Returns the first available transmittal sequential number."""
+    qs = OutgoingTransmittal.objects \
+        .filter(originator=originator) \
+        .filter(recipient=recipient) \
+        .filter(contract_number=contract_nb) \
+        .aggregate(Max('sequential_number'))
+    max_nb = qs.get('sequential_number__max')
+    return max_nb + 1 if max_nb else 1
