@@ -207,14 +207,13 @@ var Phase = Phase || {};
             'click #batch-action-buttons a': 'batchActionClick'
         },
         initialize: function(options) {
-            _.bindAll(this, 'batchActionSuccess', 'taskPoll', 'taskPollSuccess');
+            _.bindAll(this, 'batchActionSuccess');
             this.actionForm = this.$el.find('#document-list-form form').first();
             this.actionButtons = this.actionForm.find('.navbar-action');
             this.submitButtons = this.actionForm.find('[data-form-action]');
             this.dropdown = this.actionForm.find('.dropdown-form');
             this.closeBtn = this.dropdown.find('button[data-toggle=dropdown]');
             this.resultsP = this.$el.find('p#display-results');
-            this.batchProgress = options.progress;
             this.cancelReviewModal = new Phase.Views.CancelReviewModalView();
 
             this.configureForm();
@@ -279,17 +278,9 @@ var Phase = Phase || {};
             $.post(action_url, data, this.batchActionSuccess);
         },
         batchActionSuccess: function(data) {
-            var poll_url = data.poll_url;
-            this.pollId = setInterval(this.taskPoll, 1000, poll_url);
-        },
-        taskPoll: function(poll_url) {
-            $.get(poll_url, this.taskPollSuccess);
-        },
-        taskPollSuccess: function(data) {
-            this.batchProgress.set('progress', data.progress);
-            if (data.done) {
-                clearInterval(this.pollId);
-                location.reload();
+            if (data.hasOwnProperty('poll_url')) {
+                var poll_url = data.poll_url;
+                dispatcher.trigger('onPollableTaskStarted', {pollUrl: poll_url});
             }
         }
     });
