@@ -6,6 +6,7 @@ from collections import OrderedDict
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
+from django.core.urlresolvers import reverse
 from django import forms
 
 from elasticsearch_dsl import F
@@ -313,6 +314,24 @@ class ContractorDeliverable(Metadata):
     @property
     def docclass(self):
         return self.latest_revision.docclass
+
+    @classmethod
+    def get_batch_actions(cls, category, user):
+        actions = super(ContractorDeliverable, cls).get_batch_actions(
+            category, user)
+
+        if user.has_perm('documents.can_control_document'):
+            actions['start_review'] = {
+                'id': 'start-review',
+                'label': 'Start review',
+                'action': reverse('batch_start_reviews', args=[
+                    category.organisation.slug,
+                    category.slug]),
+                'modal': '',
+                'progression_modal': True,
+                'icon': 'eye-open',
+            }
+        return actions
 
 
 class ContractorDeliverableRevision(TransmittableMixin, MetadataRevision):
