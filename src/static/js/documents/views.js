@@ -204,11 +204,10 @@ var Phase = Phase || {};
         el: '#table-controls',
         events: {
             'click #toggle-filters-button': 'showSearchForm',
-            'click #start-review-button': 'batchReview',
-            'click #cancel-review-button': 'confirmBatchCancelReviews',
+            'click #batch-action-buttons a': 'batchActionClick'
         },
         initialize: function(options) {
-            _.bindAll(this, 'batchReviewSuccess', 'batchReviewPoll', 'batchReviewPollSuccess');
+            _.bindAll(this, 'batchActionSuccess', 'taskPoll', 'taskPollSuccess');
             this.actionForm = this.$el.find('#document-list-form form').first();
             this.actionButtons = this.actionForm.find('.navbar-action');
             this.submitButtons = this.actionForm.find('[data-form-action]');
@@ -225,14 +224,6 @@ var Phase = Phase || {};
             this.listenTo(dispatcher, 'onCancelSeveralReviewsConfirmed', this.batchReview);
         },
         configureForm: function() {
-            // We update the form action depending on
-            // the clicked button
-            var self = this;
-            this.submitButtons.on('click', function(event) {
-                var action = $(this).data('form-action');
-                self.actionForm.attr('action', action);
-            });
-
             // Prevent closing dropdown on any click
             this.dropdown.parent().on('hide.bs.dropdown', function(e) {
                 e.preventDefault();
@@ -279,41 +270,27 @@ var Phase = Phase || {};
             }
             this.resultsP.html(results);
         },
-        confirmBatchCancelReviews: function(event) {
-            this.cancelReviewModal.show();
-        },
-        /**
-         * Handles the batch review button.
-         *
-         * We submit the form and get the task status poll url.
-         * We then poll the status regularly to update the progress bar.
-         * When the task is done, reload the page.
-         */
-        batchReview: function(event) {
+        // Submit form upon click on a batch action
+        batchActionClick: function(event) {
             event.preventDefault();
-
-            var data = this.actionForm.serialize();
             var clicked = $(event.target);
-            var url = clicked.data('form-action');
-            $.post(url, data, this.batchReviewSuccess);
+            var action_url = clicked.data('form-action');
+            var data = this.actionForm.serialize();
+            $.post(action_url, data, this.batchActionSuccess);
         },
-        batchReviewSuccess: function(data) {
+        batchActionSuccess: function(data) {
             var poll_url = data.poll_url;
-            this.pollId = setInterval(this.batchReviewPoll, 1000, poll_url);
+            this.pollId = setInterval(this.taskPoll, 1000, poll_url);
         },
-        batchReviewPoll: function(poll_url) {
-            $.get(poll_url, this.batchReviewPollSuccess);
+        taskPoll: function(poll_url) {
+            $.get(poll_url, this.taskPollSuccess);
         },
-        batchReviewPollSuccess: function(data) {
+        taskPollSuccess: function(data) {
             this.batchProgress.set('progress', data.progress);
             if (data.done) {
                 clearInterval(this.pollId);
                 location.reload();
             }
-        },
-        submitActionForm: function(event) {
-            event.preventDefault();
-            this.actionForm.submit();
         }
     });
 

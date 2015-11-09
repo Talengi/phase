@@ -1,3 +1,5 @@
+{% load documents %}
+
 <div class="navbar additional-navbar navbar-default navbar-static-top" id="table-controls">
 <div class="container-fluid">
 
@@ -22,54 +24,21 @@
     <div id="document-list-form" class="collapse navbar-collapse">
 
     <form
+        id="batch-action-buttons"
         method="post"
         action="{% url "document_download" organisation_slug category_slug %}"
         class="navbar-form navbar-left">
         {% csrf_token %}
 
-        <div class="form-group dropdown">
-            <button id="download-button"
-                type="button"
-                data-toggle="dropdown"
-                data-form-action="{% url "document_download" organisation_slug category_slug %}"
-                class="btn btn-primary navbar-action disabled dropdown-toggle">
-                <span class="glyphicon glyphicon-download glyphicon-white"></span> Download
-            </button>
-            <div id="download-dropdown" class="dropdown-form dropdown-menu">
-                {% include 'documents/download_modal.html' %}
-            </div>
-        </div>
-
-        {% if perms.documents.can_control_document %}
         <div class="btn-group form-group">
-
             <button
                 type="button"
                 class="btn btn-primary disabled dropdown-toggle navbar-action"
                 data-toggle="dropdown">
                 Actions <span class="caret"></span>
             </button>
-
-            <ul class="dropdown-menu">
-                <li>
-                    <a id="start-review-button"
-                        data-form-action="{% url "batch_start_reviews" organisation_slug category_slug %}"
-                        data-toggle="modal"
-                        data-keyboard="false"
-                        href="#progress-modal">
-                        <span class="glyphicon glyphicon-eye-open glyphicon-white"></span>
-                        Start review
-                    </a>
-                </li>
-                <li>
-                    <a id="cancel-review-button" data-keyboard="false">
-                        <span class="glyphicon glyphicon-eye-close glyphicon-white"></span>
-                        Cancel review
-                    </a>
-                </li>
-            </ul>
+            {% batch_action_menu document_class category user %}
        </div>
-       {% endif %}
 
         {% if perms.documents.add_document %}
         <div class="form-group hidden-xs hidden-sm">
