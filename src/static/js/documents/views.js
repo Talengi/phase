@@ -177,12 +177,17 @@ var Phase = Phase || {};
     });
 
     /**
-     * Shows the "cancel all reviews" modal.
+     * Custom view to handle confirmation modals.
      */
-    Phase.Views.CancelReviewModalView = Backbone.View.extend({
-        el: '#cancel-review-modal',
+    Phase.Views.ModalView = Backbone.View.extend({
+        el: '#document-list-modal',
         events: {
             'click button.btn-danger': 'submit'
+        },
+        initialize: function() {
+            this.listenTo(dispatcher, 'onModalDisplayRequired', this.display);
+
+            this.form = this.$el.find('form');
         },
         show: function() {
             this.$el.modal('show');
@@ -190,10 +195,17 @@ var Phase = Phase || {};
         hide: function() {
             this.$el.modal('hide');
         },
+        display: function(data) {
+            this.formAction = data.formAction;
+            this.formData = data.formData;
+            var modalId = data.modalId;
+            var modalContent = $('#' + modalId).html();
+            this.$el.html(modalContent);
+            this.show();
+        },
         submit: function(event) {
             this.hide();
-            dispatcher.trigger('onCancelSeveralReviewsConfirmed', event);
-            dispatcher.trigger('onProgressModalShow');
+            dispatcher.trigger('onModalFormSubmitted', this.formAction, this.formData);
         }
     });
 
@@ -214,13 +226,12 @@ var Phase = Phase || {};
             this.dropdown = this.actionForm.find('.dropdown-form');
             this.closeBtn = this.dropdown.find('button[data-toggle=dropdown]');
             this.resultsP = this.$el.find('p#display-results');
-            this.cancelReviewModal = new Phase.Views.CancelReviewModalView();
 
             this.configureForm();
             this.listenTo(dispatcher, 'onRowSelected', this.setButtonsState);
             this.listenTo(dispatcher, 'onRowSelected', this.rowSelected);
             this.listenTo(dispatcher, 'onDocumentsFetched', this.renderResults);
-            this.listenTo(dispatcher, 'onCancelSeveralReviewsConfirmed', this.batchReview);
+            this.listenTo(dispatcher, 'onModalFormSubmitted', this.batchActionSubmit);
         },
         configureForm: function() {
             // Prevent closing dropdown on any click
@@ -273,9 +284,22 @@ var Phase = Phase || {};
         batchActionClick: function(event) {
             event.preventDefault();
             var clicked = $(event.target);
-            var action_url = clicked.data('form-action');
+            var actionUrl = clicked.data('form-action');
             var data = this.actionForm.serialize();
-            $.post(action_url, data, this.batchActionSuccess);
+            var modal = clicked.data('modal');
+
+            if (modal !== '') {
+                dispatcher.trigger('onModalDisplayRequired', {
+                    formAction: actionUrl,
+                    formData: data,
+                    modalId: modal
+                });
+            } else {
+                this.batchActionSubmit(actionUrl, data);
+            }
+        },
+        batchActionSubmit: function(formAction, formData) {
+            $.post(formAction, formData, this.batchActionSuccess);
         },
         batchActionSuccess: function(data) {
             if (data.hasOwnProperty('poll_url')) {

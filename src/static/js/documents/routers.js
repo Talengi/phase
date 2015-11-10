@@ -60,6 +60,7 @@ var Phase = Phase || {};
             this.exportFormView = new Phase.Views.ExportFormView({
                 model: this.search
             });
+            this.modalView = new Phase.Views.ModalView();
 
             // Event binding
             this.listenTo(this.search, 'change', this.onSearch);

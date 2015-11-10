@@ -321,7 +321,7 @@ class ContractorDeliverable(Metadata):
             category, user)
 
         if user.has_perm('documents.can_control_document'):
-            actions.append(('start_review', {
+            actions['start_review'] = {
                 'id': 'start-review',
                 'label': 'Start review',
                 'action': reverse('batch_start_reviews', args=[
@@ -330,8 +330,8 @@ class ContractorDeliverable(Metadata):
                 'modal': '',
                 'progression_modal': True,
                 'icon': 'eye-open',
-            }))
-            actions.append(('cancel_review', {
+            }
+            actions['cancel_review'] = {
                 'id': 'cancel-review',
                 'label': 'Cancel review',
                 'action': reverse('batch_cancel_reviews', args=[
@@ -340,7 +340,7 @@ class ContractorDeliverable(Metadata):
                 'modal': 'cancel-review-modal',
                 'progression_modal': True,
                 'icon': 'eye-close',
-            }))
+            }
         return actions
 
 
