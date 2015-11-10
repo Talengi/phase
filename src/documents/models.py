@@ -266,6 +266,16 @@ class Metadata(six.with_metaclass(MetadataBase, models.Model)):
 
         """
         actions = OrderedDict()
+        actions['download'] = {
+            'id': 'download',
+            'label': 'Download',
+            'action': reverse('document_download', args=[
+                category.organisation.slug,
+                category.slug]),
+            'ajax': 'false',
+            'modal': 'documents-download-modal',
+            'icon': 'download',
+        }
         return actions
 
 

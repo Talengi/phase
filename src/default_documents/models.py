@@ -327,6 +327,7 @@ class ContractorDeliverable(Metadata):
                 'action': reverse('batch_start_reviews', args=[
                     category.organisation.slug,
                     category.slug]),
+                'ajax': 'true',
                 'modal': '',
                 'progression_modal': True,
                 'icon': 'eye-open',
@@ -337,6 +338,7 @@ class ContractorDeliverable(Metadata):
                 'action': reverse('batch_cancel_reviews', args=[
                     category.organisation.slug,
                     category.slug]),
+                'ajax': 'true',
                 'modal': 'cancel-review-modal',
                 'progression_modal': True,
                 'icon': 'eye-close',

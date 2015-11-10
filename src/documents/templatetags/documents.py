@@ -68,6 +68,7 @@ def action_menu_item(action_tuple):
     <a id="action-{id}"
         data-form-action="{action}"
         data-keyboard="false"
+        data-ajax="{ajax}"
         data-modal="{modal}"
     >
         <span class="glyphicon glyphicon-{icon} glyphicon-white"></span>

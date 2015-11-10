@@ -182,12 +182,10 @@ var Phase = Phase || {};
     Phase.Views.ModalView = Backbone.View.extend({
         el: '#document-list-modal',
         events: {
-            'click button.btn-danger': 'submit'
+            'submit form': 'submit'
         },
         initialize: function() {
             this.listenTo(dispatcher, 'onModalDisplayRequired', this.display);
-
-            this.form = this.$el.find('form');
         },
         show: function() {
             this.$el.modal('show');
@@ -196,16 +194,27 @@ var Phase = Phase || {};
             this.$el.modal('hide');
         },
         display: function(data) {
+            this.menuItem = data.menuItem;
             this.formAction = data.formAction;
             this.formData = data.formData;
             var modalId = data.modalId;
             var modalContent = $('#' + modalId).html();
             this.$el.html(modalContent);
+            this.form = this.$el.find('form');
             this.show();
         },
         submit: function(event) {
+            event.preventDefault();
+            var form = $(event.currentTarget);
+            var customFormData = form.serializeArray();
+            var finalFormData = this.formData.concat(customFormData);
             this.hide();
-            dispatcher.trigger('onModalFormSubmitted', this.formAction, this.formData);
+            var data = {
+                formAction: this.formAction,
+                formData: finalFormData,
+                menuItem: this.menuItem
+            };
+            dispatcher.trigger('onModalFormSubmitted', data);
         }
     });
 
@@ -231,7 +240,7 @@ var Phase = Phase || {};
             this.listenTo(dispatcher, 'onRowSelected', this.setButtonsState);
             this.listenTo(dispatcher, 'onRowSelected', this.rowSelected);
             this.listenTo(dispatcher, 'onDocumentsFetched', this.renderResults);
-            this.listenTo(dispatcher, 'onModalFormSubmitted', this.batchActionSubmit);
+            this.listenTo(dispatcher, 'onModalFormSubmitted', this.batchActionModalProcess);
         },
         configureForm: function() {
             // Prevent closing dropdown on any click
@@ -283,23 +292,51 @@ var Phase = Phase || {};
         // Submit form upon click on a batch action
         batchActionClick: function(event) {
             event.preventDefault();
-            var clicked = $(event.target);
-            var actionUrl = clicked.data('form-action');
-            var data = this.actionForm.serialize();
-            var modal = clicked.data('modal');
+            var menuItem = $(event.target);
+            var modalId = menuItem.data('modal');
+            var formAction = menuItem.data('form-action');
+            var formData = this.actionForm.serializeArray();
+            var isAjax = menuItem.data('ajax');
 
-            if (modal !== '') {
-                dispatcher.trigger('onModalDisplayRequired', {
-                    formAction: actionUrl,
-                    formData: data,
-                    modalId: modal
-                });
+            /*
+             * If there is no confirmation modal, immediately submit the form.
+             * Otherwise, raise an event to trigger the modal diplay.
+             */
+            if (modalId === '') {
+                this.batchActionSubmit(formAction, formData, isAjax);
             } else {
-                this.batchActionSubmit(actionUrl, data);
+                dispatcher.trigger('onModalDisplayRequired', {
+                    menuItem: menuItem,
+                    formAction: formAction,
+                    formData: formData,
+                    modalId: modalId
+                });
             }
         },
-        batchActionSubmit: function(formAction, formData) {
-            $.post(formAction, formData, this.batchActionSuccess);
+        batchActionModalProcess: function(data) {
+            var menuItem = data.menuItem;
+            this.batchActionSubmit(
+                data.formAction,
+                data.formData,
+                menuItem.data('ajax'));
+        },
+        batchActionSubmit: function(formAction, formData, isAjax) {
+            if (isAjax) {
+                $.post(formAction, formData, this.batchActionSuccess);
+            } else {
+                var form = $('<form />');
+                form.attr('method', 'POST');
+                form.attr('action', formAction);
+                var inputs = _.map(formData, function(data) {
+                    var input = $('<input type="hidden" />');
+                    input.attr('name', data.name);
+                    input.attr('value', data.value);
+                    return input;
+                });
+                form.append(inputs);
+                $('body').append(form);
+                form.submit();
+            }
         },
         batchActionSuccess: function(data) {
             if (data.hasOwnProperty('poll_url')) {
