@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 
 from django.db.models import Max
 from django.utils import timezone
+from django.db import transaction
 
 from documents.utils import save_document_forms
 from transmittals import errors
@@ -96,8 +97,10 @@ def create_transmittal(from_category, to_category, revisions, contract_nb,
     # Let's create the transmittal, then
     trs_form = OutgoingTransmittalForm(form_data, category=to_category)
     revision_form = OutgoingTransmittalRevisionForm(form_data, category=to_category)
-    doc, trs, revision = save_document_forms(trs_form, revision_form, to_category)
-    trs.link_to_revisions(revisions)
+
+    with transaction.atomic():
+        doc, trs, revision = save_document_forms(trs_form, revision_form, to_category)
+        trs.link_to_revisions(revisions)
     return doc, trs, revision
 
 

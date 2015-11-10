@@ -34,7 +34,7 @@ var Phase = Phase || {};
             );
             var searchParams = this.extractSearchParameters();
             this.search = new Phase.Models.Search(searchParams);
-            this.batchProgress = new Phase.Models.Progress();
+            this.taskProgress = new Phase.Models.Progress();
 
             // Views
             var sortField = searchParams.sort_by || Phase.Config.sortBy;
@@ -43,8 +43,8 @@ var Phase = Phase || {};
                 collection: this.documentsCollection,
                 favorites: this.favoriteCollection
             });
-            this.navbarView = new Phase.Views.NavbarView({ progress: this.batchProgress });
-            this.progressView = new Phase.Views.ProgressView({ model: this.batchProgress });
+            this.navbarView = new Phase.Views.NavbarView();
+            this.progressView = new Phase.Views.ProgressView({ model: this.taskProgress });
             this.searchView = new Phase.Views.SearchView({ model: this.search });
             this.paginationView = new Phase.Views.PaginationView();
             this.bookmarkFormView = new Phase.Views.BookmarkFormView({
@@ -60,6 +60,7 @@ var Phase = Phase || {};
             this.exportFormView = new Phase.Views.ExportFormView({
                 model: this.search
             });
+            this.modalView = new Phase.Views.ModalView();
 
             // Event binding
             this.listenTo(this.search, 'change', this.onSearch);

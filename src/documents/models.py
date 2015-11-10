@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from collections import OrderedDict
+
 from django.db import models
 from django.db.models.base import ModelBase
 from django.utils.translation import ugettext_lazy as _
@@ -255,6 +257,26 @@ class Metadata(six.with_metaclass(MetadataBase, models.Model)):
     @property
     def current_revision_date(self):
         return self.latest_revision.created_on
+
+    @classmethod
+    def get_batch_actions(cls, category, user):
+        """Define action that apply on lists of documents.
+
+        This list is used to build the menu in the document list navbar.
+
+        """
+        actions = OrderedDict()
+        actions['download'] = {
+            'id': 'download',
+            'label': 'Download',
+            'action': reverse('document_download', args=[
+                category.organisation.slug,
+                category.slug]),
+            'ajax': 'false',
+            'modal': 'documents-download-modal',
+            'icon': 'download',
+        }
+        return actions
 
 
 class MetadataRevision(models.Model):

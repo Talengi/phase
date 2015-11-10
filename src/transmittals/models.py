@@ -526,6 +526,7 @@ class OutgoingTransmittal(Metadata):
 
         """
         trs_revisions = []
+        ids = []
         for revision in revisions:
             trs_revisions.append(
                 ExportedRevision(
@@ -535,7 +536,16 @@ class OutgoingTransmittal(Metadata):
                     title=revision.document.title,
                     status=revision.status,
                     return_code=revision.get_final_return_code()))
-        ExportedRevision.objects.bulk_create(trs_revisions)
+            ids.append(revision.id)
+
+        with transaction.atomic():
+            ExportedRevision.objects.bulk_create(trs_revisions)
+
+            # Mark revisions as transmitted
+            Revision = type(revisions[0])
+            Revision.objects \
+                .filter(id__in=ids) \
+                .update(already_transmitted=True)
 
 
 class OutgoingTransmittalRevision(MetadataRevision):

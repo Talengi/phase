@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from django import template
 
 from ..utils import stringify_value
@@ -44,3 +47,32 @@ def generate_template_markup(document_class):
 @register.filter
 def stringify(val):
     return stringify_value(val)
+
+
+@register.simple_tag()
+def batch_action_menu(Metadata, category, user):
+    actions = Metadata.get_batch_actions(category, user)
+    menu_items = map(action_menu_item, actions.items())
+    menu = '''
+    <ul class="dropdown-menu">
+        <li>{}</li>
+    </ul>
+    '''.format('</li><li>'.join(menu_items))
+    return menu
+
+
+def action_menu_item(action_tuple):
+    key, action = action_tuple
+
+    menu_entry = '''
+    <a id="action-{id}"
+        data-form-action="{action}"
+        data-keyboard="false"
+        data-ajax="{ajax}"
+        data-modal="{modal}"
+    >
+        <span class="glyphicon glyphicon-{icon} glyphicon-white"></span>
+        {label}
+    </a>
+    '''.format(**action)
+    return menu_entry

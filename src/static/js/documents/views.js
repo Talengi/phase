@@ -177,12 +177,15 @@ var Phase = Phase || {};
     });
 
     /**
-     * Shows the "cancel all reviews" modal.
+     * Custom view to handle confirmation modals.
      */
-    Phase.Views.CancelReviewModalView = Backbone.View.extend({
-        el: '#cancel-review-modal',
+    Phase.Views.ModalView = Backbone.View.extend({
+        el: '#document-list-modal',
         events: {
-            'click button.btn-danger': 'submit'
+            'submit form': 'submit'
+        },
+        initialize: function() {
+            this.listenTo(dispatcher, 'onModalDisplayRequired', this.display);
         },
         show: function() {
             this.$el.modal('show');
@@ -190,10 +193,28 @@ var Phase = Phase || {};
         hide: function() {
             this.$el.modal('hide');
         },
+        display: function(data) {
+            this.menuItem = data.menuItem;
+            this.formAction = data.formAction;
+            this.formData = data.formData;
+            var modalId = data.modalId;
+            var modalContent = $('#' + modalId).html();
+            this.$el.html(modalContent);
+            this.form = this.$el.find('form');
+            this.show();
+        },
         submit: function(event) {
+            event.preventDefault();
+            var form = $(event.currentTarget);
+            var customFormData = form.serializeArray();
+            var finalFormData = this.formData.concat(customFormData);
             this.hide();
-            dispatcher.trigger('onCancelSeveralReviewsConfirmed', event);
-            dispatcher.trigger('onProgressModalShow');
+            var data = {
+                formAction: this.formAction,
+                formData: finalFormData,
+                menuItem: this.menuItem
+            };
+            dispatcher.trigger('onModalFormSubmitted', data);
         }
     });
 
@@ -204,35 +225,24 @@ var Phase = Phase || {};
         el: '#table-controls',
         events: {
             'click #toggle-filters-button': 'showSearchForm',
-            'click #start-review-button': 'batchReview',
-            'click #cancel-review-button': 'confirmBatchCancelReviews',
+            'click #batch-action-buttons a': 'batchActionClick'
         },
         initialize: function(options) {
-            _.bindAll(this, 'batchReviewSuccess', 'batchReviewPoll', 'batchReviewPollSuccess');
+            _.bindAll(this, 'batchActionSuccess');
             this.actionForm = this.$el.find('#document-list-form form').first();
             this.actionButtons = this.actionForm.find('.navbar-action');
             this.submitButtons = this.actionForm.find('[data-form-action]');
             this.dropdown = this.actionForm.find('.dropdown-form');
             this.closeBtn = this.dropdown.find('button[data-toggle=dropdown]');
             this.resultsP = this.$el.find('p#display-results');
-            this.batchProgress = options.progress;
-            this.cancelReviewModal = new Phase.Views.CancelReviewModalView();
 
             this.configureForm();
             this.listenTo(dispatcher, 'onRowSelected', this.setButtonsState);
             this.listenTo(dispatcher, 'onRowSelected', this.rowSelected);
             this.listenTo(dispatcher, 'onDocumentsFetched', this.renderResults);
-            this.listenTo(dispatcher, 'onCancelSeveralReviewsConfirmed', this.batchReview);
+            this.listenTo(dispatcher, 'onModalFormSubmitted', this.batchActionModalProcess);
         },
         configureForm: function() {
-            // We update the form action depending on
-            // the clicked button
-            var self = this;
-            this.submitButtons.on('click', function(event) {
-                var action = $(this).data('form-action');
-                self.actionForm.attr('action', action);
-            });
-
             // Prevent closing dropdown on any click
             this.dropdown.parent().on('hide.bs.dropdown', function(e) {
                 e.preventDefault();
@@ -279,41 +289,60 @@ var Phase = Phase || {};
             }
             this.resultsP.html(results);
         },
-        confirmBatchCancelReviews: function(event) {
-            this.cancelReviewModal.show();
-        },
-        /**
-         * Handles the batch review button.
-         *
-         * We submit the form and get the task status poll url.
-         * We then poll the status regularly to update the progress bar.
-         * When the task is done, reload the page.
-         */
-        batchReview: function(event) {
+        // Submit form upon click on a batch action
+        batchActionClick: function(event) {
             event.preventDefault();
+            var menuItem = $(event.target);
+            var modalId = menuItem.data('modal');
+            var formAction = menuItem.data('form-action');
+            var formData = this.actionForm.serializeArray();
+            var isAjax = menuItem.data('ajax');
 
-            var data = this.actionForm.serialize();
-            var clicked = $(event.target);
-            var url = clicked.data('form-action');
-            $.post(url, data, this.batchReviewSuccess);
-        },
-        batchReviewSuccess: function(data) {
-            var poll_url = data.poll_url;
-            this.pollId = setInterval(this.batchReviewPoll, 1000, poll_url);
-        },
-        batchReviewPoll: function(poll_url) {
-            $.get(poll_url, this.batchReviewPollSuccess);
-        },
-        batchReviewPollSuccess: function(data) {
-            this.batchProgress.set('progress', data.progress);
-            if (data.done) {
-                clearInterval(this.pollId);
-                location.reload();
+            /*
+             * If there is no confirmation modal, immediately submit the form.
+             * Otherwise, raise an event to trigger the modal diplay.
+             */
+            if (modalId === '') {
+                this.batchActionSubmit(formAction, formData, isAjax);
+            } else {
+                dispatcher.trigger('onModalDisplayRequired', {
+                    menuItem: menuItem,
+                    formAction: formAction,
+                    formData: formData,
+                    modalId: modalId
+                });
             }
         },
-        submitActionForm: function(event) {
-            event.preventDefault();
-            this.actionForm.submit();
+        batchActionModalProcess: function(data) {
+            var menuItem = data.menuItem;
+            this.batchActionSubmit(
+                data.formAction,
+                data.formData,
+                menuItem.data('ajax'));
+        },
+        batchActionSubmit: function(formAction, formData, isAjax) {
+            if (isAjax) {
+                $.post(formAction, formData, this.batchActionSuccess);
+            } else {
+                var form = $('<form />');
+                form.attr('method', 'POST');
+                form.attr('action', formAction);
+                var inputs = _.map(formData, function(data) {
+                    var input = $('<input type="hidden" />');
+                    input.attr('name', data.name);
+                    input.attr('value', data.value);
+                    return input;
+                });
+                form.append(inputs);
+                $('body').append(form);
+                form.submit();
+            }
+        },
+        batchActionSuccess: function(data) {
+            if (data.hasOwnProperty('poll_url')) {
+                var poll_url = data.poll_url;
+                dispatcher.trigger('onPollableTaskStarted', {pollUrl: poll_url});
+            }
         }
     });
 

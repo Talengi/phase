@@ -25,8 +25,8 @@ var Phase = Phase || {};
     Phase.Views.ProgressView = Backbone.View.extend({
         el: '#progress-modal',
         initialize: function() {
+            this.listenTo(this.model, 'onPollStarted', this.show);
             this.listenTo(this.model, 'change', this.render);
-            this.listenTo(dispatcher, 'onProgressModalShow', this.show);
 
             this.progressBar = this.$el.find('.progress-bar');
             this.successMsg = this.$el.find('.alert-success');

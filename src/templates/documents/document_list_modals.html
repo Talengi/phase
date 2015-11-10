@@ -1,26 +1,76 @@
-{% if perms.documents.can_control_document %}
-<div class="modal fade" id="cancel-review-modal" tabindex="-1" role="dialog" aria-labelledby="cancel-review-modal-label" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="cancel-review-modal-label">{{ _('Cancel selected reviews') }}</h4>
+<div class="modal fade" id="document-list-modal" tabindex="-1">
+</div>
+
+<script id="documents-download-modal" type="text/x-underscore-template">
+<form method="POST" action="#">
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="documents-download-modal-label">{{ _('Download documents') }}</h4>
+        </div>
+        <div class="modal-body">
+
+            <div class="btn-toolbar">
+                <div class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-default active">
+                        <input type="radio" name="format" value="pdf" id="format_pdf" checked>PDF
+                    </label>
+                    <label class="btn btn-default">
+                        <input type="radio" name="format" value="native" id="format_native">Native
+                    </label>
+                    <label class="btn btn-default">
+                        <input type="radio" name="format" value="both" id="format_all">Both formats
+                    </label>
+                </div>
+                <div class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-default active">
+                        <input type="radio" name="revisions" value="latest" id="revisions_latest" checked>Latest
+                    </label>
+                    <label class="btn btn-default">
+                        <input type="radio" name="revisions" value="all" id="revisions_all">All revisions
+                    </label>
+                </div>
             </div>
-            <div class="modal-body">
-                <p>{{ _('Are you sure you want to cancel the selected reviews?') }}</p>
-                <p>{{ _('Comments already submitted <strong>will be deleted definitely</strong>.') }}</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">{{ _('Back to document list') }}</button>
-                <button
-                    type="button"
-                    class="btn btn-danger"
-                    data-form-action="{% url "batch_cancel_reviews" organisation_slug category_slug %}">
-                        {{ _('Cancel selected reviews') }}
-                </button>
-            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+                {{ _('Cancel') }}
+            </button>
+            <button type="submit" class="btn btn-primary">
+                <span class="glyphicon glyphicon-download glyphicon-white"></span>
+                Download
+            </button>
         </div>
     </div>
 </div>
-{% endif %}
+<form>
+</script>
 
+{% if perms.documents.can_control_document %}
+<script id="cancel-review-modal" type="text/x-underscore-template">
+<form method="POST" action="#">
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="cancel-review-modal-label">{{ _('Cancel selected reviews') }}</h4>
+        </div>
+        <div class="modal-body">
+            <p>{{ _('Are you sure you want to cancel the selected reviews?') }}</p>
+            <p>{{ _('Comments already submitted <strong>will be deleted definitely</strong>.') }}</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">{{ _('Back to document list') }}</button>
+            <button
+                type="submit"
+                class="btn btn-danger"
+                data-form-action="{% url "batch_cancel_reviews" organisation_slug category_slug %}">
+                    {{ _('Cancel selected reviews') }}
+            </button>
+        </div>
+    </div>
+</div>
+<form>
+</script>
+{% endif %}
