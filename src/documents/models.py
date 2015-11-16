@@ -278,6 +278,11 @@ class Metadata(six.with_metaclass(MetadataBase, models.Model)):
         }
         return actions
 
+    @classmethod
+    def get_batch_actions_modals(cls):
+        """Returns a list of templates used in batch actions."""
+        return ['documents/document_list_download_modal.html']
+
 
 class MetadataRevision(models.Model):
     document = models.ForeignKey(Document)

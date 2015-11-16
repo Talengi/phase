@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django import template
+from django.template.loader import get_template
 
 from ..utils import stringify_value
 
@@ -76,3 +77,12 @@ def action_menu_item(action_tuple):
     </a>
     '''.format(**action)
     return menu_entry
+
+
+@register.simple_tag(takes_context=True)
+def include_batch_action_modals(context, Metadata):
+    rendered = []
+    for tpl in Metadata.get_batch_actions_modals():
+        content = get_template(tpl)
+        rendered.append(content.render(context))
+    return '\n'.join(rendered)

@@ -354,6 +354,14 @@ class ContractorDeliverable(Metadata):
             }
         return actions
 
+    @classmethod
+    def get_batch_actions_modals(cls):
+        templates = super(ContractorDeliverable, cls).get_batch_actions_modals()
+        return templates + [
+            'reviews/document_list_cancel_review_modal.html',
+            'transmittals/document_list_create_transmittal_modal.html'
+        ]
+
 
 class ContractorDeliverableRevision(TransmittableMixin, MetadataRevision):
     # Revision

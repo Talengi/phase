@@ -1,0 +1,46 @@
+{% load valueslists %}
+
+{% if perms.documents.can_control_document %}
+<script id="create-transmittal-modal" type="text/x-underscore-template">
+<form method="POST" action="#">
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="create-transmittal-label">{{ _('Create transmittal') }}</h4>
+        </div>
+        <div class="modal-body">
+            <p class="alert alert-info">{{ _('Create a new transmittal with the selected documents.') }}</p>
+            <div class="form-group">
+                <label form="destination-category-select">{{ _('Destination Category') }}</label>
+                <select id="destination-category-select" name="destination-category" class="form-control">
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label form="contract-number-select">{{ _('Contract Number') }}</label>
+
+                {% get_values_list 'CONTRACT_NBS' as values %}
+                <select id="contract-number-select" name="contract-number" class="form-control">
+                    {% for index, value in values %}
+                    <option value="{{ index }}">
+                        {{ value }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">{{ _('Back to document list') }}</button>
+            <button
+                type="submit"
+                class="btn btn-primary">
+                    {{ _('Create transmittal') }}
+            </button>
+        </div>
+    </div>
+</div>
+<form>
+</script>
+{% endif %}
