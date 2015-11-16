@@ -343,6 +343,15 @@ class ContractorDeliverable(Metadata):
                 'progression_modal': True,
                 'icon': 'eye-close',
             }
+            actions['create_transmittal'] = {
+                'id': 'create-transmittal',
+                'label': 'Create transmittal',
+                'action': reverse('transmittal_create'),
+                'ajax': 'true',
+                'modal': 'create-transmittal-modal',
+                'progression_modal': True,
+                'icon': 'refresh',
+            }
         return actions
 
 
