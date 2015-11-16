@@ -1,4 +1,4 @@
-{% load valueslists %}
+{% load valueslists transmittals %}
 
 {% if perms.documents.can_control_document %}
 <script id="create-transmittal-modal" type="text/x-underscore-template">
@@ -13,7 +13,14 @@
             <p class="alert alert-info">{{ _('Create a new transmittal with the selected documents.') }}</p>
             <div class="form-group">
                 <label form="destination-category-select">{{ _('Destination Category') }}</label>
+
+                {% get_outgoing_transmittal_categories as categories %}
                 <select id="destination-category-select" name="destination-category" class="form-control">
+                    {% for category in categories %}
+                    <option value="{{ category.id }}">
+                        {{ category }}
+                    </option>
+                    {% endfor %}
                 </select>
             </div>
 
