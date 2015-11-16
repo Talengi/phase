@@ -9,9 +9,15 @@ from django.db import transaction
 
 from core.celery import app
 from transmittals.models import Transmittal, TrsRevision
+from transmittals.utils import create_transmittal
 
 
 logger = logging.getLogger(__name__)
+
+
+@app.task
+def do_create_transmittal():
+    create_transmittal()
 
 
 @app.task

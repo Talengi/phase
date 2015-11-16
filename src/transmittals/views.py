@@ -14,8 +14,10 @@ from zipview.views import BaseZipView
 from annoying.functions import get_object_or_None
 
 from notifications.models import notify
+from documents.views import BaseDocumentBatchActionView
 from transmittals.models import Transmittal, TrsRevision
 from transmittals.utils import FieldWrapper
+from transmittals.tasks import do_create_transmittal
 from django.conf import settings
 
 
@@ -253,3 +255,11 @@ class TransmittalDownloadView(LoginRequiredMixin, PermissionRequiredMixin, BaseZ
                 files.append(revision.native_file.file)
 
         return files
+
+
+class CreateTransmittalView(BaseDocumentBatchActionView):
+    """Create a transmittal embedding the given documents"""
+
+    def start_job(self, contenttype, document_ids):
+        job = do_create_transmittal()
+        return job
