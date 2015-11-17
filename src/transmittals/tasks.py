@@ -7,11 +7,52 @@ import os
 
 from django.db import transaction
 
+from celery import current_task
+
 from core.celery import app
+from categories.models import Category
+from documents.models import Document
+from notifications.models import notify
 from transmittals.models import Transmittal, TrsRevision
+from transmittals.utils import create_transmittal
+from transmittals.errors import TransmittalError
 
 
 logger = logging.getLogger(__name__)
+
+
+@app.task
+def do_create_transmittal(
+        user_id, from_category_id, to_category_id, document_ids,
+        contract_number):
+
+    # Display a small amount of progression
+    # so the user won't get impatient
+    current_task.update_state(
+        state='PROGRESS',
+        meta={'progress': 10})
+
+    from_category = Category.objects.get(pk=from_category_id)
+    to_category = Category.objects.get(pk=to_category_id)
+    documents = Document.objects \
+        .select_related() \
+        .filter(id__in=document_ids)
+    revisions = []
+    for doc in documents:
+        revisions.append(doc.get_latest_revision())
+
+    try:
+        create_transmittal(
+            from_category,
+            to_category,
+            revisions,
+            contract_number)
+    except TransmittalError as e:
+        msg = '''We failed to create a transmittal for the
+                 following reason: "{}".'''.format(e)
+        notify(user_id, msg)
+
+    return 'done'
 
 
 @app.task

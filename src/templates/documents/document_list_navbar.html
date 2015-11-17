@@ -24,13 +24,12 @@
     <div id="document-list-form" class="collapse navbar-collapse">
 
     <form
-        id="batch-action-buttons"
         method="post"
         action="{% url "document_download" organisation_slug category_slug %}"
         class="navbar-form navbar-left">
         {% csrf_token %}
 
-        <div class="btn-group form-group">
+        <div class="btn-group form-group" id="batch-action-buttons">
             <button
                 type="button"
                 class="btn btn-primary disabled dropdown-toggle navbar-action"
@@ -69,3 +68,4 @@
 
 {% include 'progress_modal.html' %}
 {% include 'documents/document_list_modals.html' %}
+{% include_batch_action_modals document_class %}

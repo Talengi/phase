@@ -11,7 +11,6 @@ from django.http import (HttpResponse, HttpResponseRedirect, Http404,
                          HttpResponseForbidden)
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 from django.forms.models import modelform_factory
 from django.utils import timezone
@@ -20,7 +19,7 @@ from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 from zipview.views import BaseZipView
 
 from documents.models import Document
-from documents.views import DocumentListMixin, BaseDocumentList
+from documents.views import DocumentListMixin, BaseDocumentBatchActionView
 from discussion.models import Note
 from notifications.models import notify
 from reviews.models import Review
@@ -148,42 +147,7 @@ class CancelReview(PermissionRequiredMixin,
         return HttpResponseRedirect(self.get_redirect_url())
 
 
-class BaseBatchView(PermissionRequiredMixin, BaseDocumentList):
-    """Performs a task on several reviews at once.
-
-    This operation can be quite time consuming when many documents are reviewed
-    at once, and this is expected to be normal by the users. We display a nice
-    progress bar while the user waits.
-
-    Since the user is already waiting, we also perform elasticsearch indexing
-    synchronously, so at the end of the operation, the document list displayed
-    is in sync.
-
-    """
-    permission_required = 'documents.can_control_document'
-
-    def get_redirect_url(self, *args, **kwargs):
-        """Redirects to document list after that."""
-        return reverse('category_document_list', args=[
-            self.kwargs.get('organisation'),
-            self.kwargs.get('category')])
-
-    def post(self, request, *args, **kwargs):
-        document_ids = request.POST.getlist('document_ids')
-        document_class = self.get_document_class()
-        contenttype = ContentType.objects.get_for_model(document_class)
-
-        job = self.start_job(contenttype, document_ids)
-
-        poll_url = reverse('task_poll', args=[job.id])
-        data = {'poll_url': poll_url}
-        return HttpResponse(json.dumps(data), content_type='application/json')
-
-    def start_job(self, content_type, document_ids):
-        raise NotImplementedError()
-
-
-class BatchStartReviews(BaseBatchView):
+class BatchStartReviews(BaseDocumentBatchActionView):
     """Starts the review process for multiple documents at once."""
 
     def start_job(self, contenttype, document_ids):
@@ -195,7 +159,7 @@ class BatchStartReviews(BaseBatchView):
         return job
 
 
-class BatchCancelReviews(BaseBatchView):
+class BatchCancelReviews(BaseDocumentBatchActionView):
     """Cancel several reviews at once."""
 
     def start_job(self, contenttype, document_ids):

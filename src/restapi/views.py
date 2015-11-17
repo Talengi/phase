@@ -40,14 +40,21 @@ class TaskPollView(View):
         job = AsyncResult(job_id)
 
         done = job.ready()
+        success = job.successful()
         result = job.result
         if isinstance(result, dict):
-            progress = result['progress']
+            progress = result.get('progress', 0)
         else:
             progress = 100.0 if done else 0.0
 
         data = {
             'done': done,
+            'success': success,
             'progress': progress
         }
+
+        # in case of error
+        if done and not success:
+            data['error_msg'] = result.get('exc_message')
+
         return HttpResponse(json.dumps(data), content_type='application/json')

@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
+from __future__ import unicode_literals, absolute_import
 
 from django import template
+from django.contrib.contenttypes.models import ContentType
+
+from transmittals.models import OutgoingTransmittal
+from categories.models import Category
 
 
 register = template.Library()
@@ -30,3 +34,13 @@ def isnew_label(trs_revision):
 
     return '<span class="label label-{}">{}</span>'.format(
         label_class, label_text)
+
+
+@register.assignment_tag
+def get_outgoing_transmittal_categories():
+    """Return categories with an "OutgoingTransmittal" content type"""
+    ct = ContentType.objects.get_for_model(OutgoingTransmittal)
+    categories = Category.objects \
+        .select_related() \
+        .filter(category_template__metadata_model=ct)
+    return categories
