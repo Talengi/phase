@@ -15,7 +15,7 @@
                 <label form="destination-category-select">{{ _('Destination Category') }}</label>
 
                 {% get_outgoing_transmittal_categories as categories %}
-                <select id="destination-category-select" name="destination-category" class="form-control">
+                <select id="destination-category-select" name="destination_category" class="form-control">
                     {% for category in categories %}
                     <option value="{{ category.id }}">
                         {{ category }}
@@ -28,7 +28,7 @@
                 <label form="contract-number-select">{{ _('Contract Number') }}</label>
 
                 {% get_values_list 'CONTRACT_NBS' as values %}
-                <select id="contract-number-select" name="contract-number" class="form-control">
+                <select id="contract-number-select" name="contract_number" class="form-control">
                     {% for index, value in values %}
                     <option value="{{ index }}">
                         {{ value }}
