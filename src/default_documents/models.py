@@ -346,7 +346,9 @@ class ContractorDeliverable(Metadata):
             actions['create_transmittal'] = {
                 'id': 'create-transmittal',
                 'label': 'Create transmittal',
-                'action': reverse('transmittal_create'),
+                'action': reverse('transmittal_create', args=[
+                    category.organisation.slug,
+                    category.slug]),
                 'ajax': 'true',
                 'modal': 'create-transmittal-modal',
                 'progression_modal': True,

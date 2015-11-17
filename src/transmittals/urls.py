@@ -10,7 +10,7 @@ from transmittals.views import (
 
 urlpatterns = patterns(
     '',
-    url(r'^$',
+    url(r'^create/(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/$',
         CreateTransmittalView.as_view(),
         name="transmittal_create"),
     url(r'^incoming/$',
