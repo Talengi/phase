@@ -8,6 +8,7 @@ from crispy_forms.layout import Layout, Field
 from default_documents.layout import DocumentFieldset, DateField
 
 from documents.forms.models import BaseDocumentForm
+from transmittals.layout import RelatedRevisionsLayout
 from transmittals.models import (
     Transmittal, TransmittalRevision, OutgoingTransmittal,
     OutgoingTransmittalRevision)
@@ -28,7 +29,7 @@ class TransmittalForm(BaseDocumentForm):
                 'originator',
                 'recipient',
                 'sequential_number',
-                self.related_documents,
+                self.get_related_documents_layout(),
             )
         )
 
@@ -60,6 +61,12 @@ class TransmittalRevisionForm(BaseDocumentForm):
 
 
 class OutgoingTransmittalForm(BaseDocumentForm):
+    def get_related_documents_layout(self):
+        related_documents = DocumentFieldset(
+            _('Related documents'),
+            RelatedRevisionsLayout('related_documents'))
+        return related_documents
+
     def build_layout(self):
         return Layout(
             DocumentFieldset(
@@ -69,13 +76,13 @@ class OutgoingTransmittalForm(BaseDocumentForm):
                 'originator',
                 'recipient',
                 'sequential_number',
-                self.related_documents,
+                self.get_related_documents_layout(),
             )
         )
 
     class Meta:
         model = OutgoingTransmittal
-        exclude = ('document', 'latest_revision',)
+        exclude = ('document', 'latest_revision', 'related_documents')
 
 
 class OutgoingTransmittalRevisionForm(BaseDocumentForm):

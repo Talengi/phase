@@ -1,0 +1,11 @@
+<div class="controls controls-row">
+    <div class="form-group {% if form.errors.related_documents %}error{% endif %}">
+        <ul class="document-list">
+            {% for rev in revisions %}
+                <li><a href="{{ rev.document.get_absolute_url }}">{{ rev.document }} ({{ rev.revision }})</a></li>
+            {% empty %}
+                <li>No related revisions</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

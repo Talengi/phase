@@ -63,7 +63,7 @@ def transmittal_to_pdf(revision):
 
     related_docs_table = Table(
         build_revisions_table(revisions),
-        colWidths=(None, None, 1 * cm, 1 * cm, 1 * cm))
+        colWidths=[None, None, 1 * cm, 1 * cm, 1 * cm])
     related_docs_table.setStyle(tableStyles)
     story.append(related_docs_table)
 

@@ -42,11 +42,14 @@ def do_create_transmittal(
         revisions.append(doc.get_latest_revision())
 
     try:
-        create_transmittal(
+        doc, _, _ = create_transmittal(
             from_category,
             to_category,
             revisions,
             contract_number)
+        msg = '''You successfully created transmittal
+                 <a href="{}">{}</a>'''.format(doc.get_absolute_url(), doc)
+        notify(user_id, msg)
     except TransmittalError as e:
         msg = '''We failed to create a transmittal for the
                  following reason: "{}".'''.format(e)

@@ -33,7 +33,7 @@ class ContractorDeliverableForm(BaseDocumentForm):
                 'wbs',
                 'weight',
             ),
-            self.related_documents,
+            self.get_related_documents_layout(),
             DocumentFieldset(
                 _('Schedule'),
                 ScheduleLayout(
@@ -97,7 +97,7 @@ class CorrespondenceForm(BaseDocumentForm):
                 'response_required',
                 DateField('due_date'),
                 'external_reference',
-                self.related_documents,
+                self.get_related_documents_layout(),
             )
         )
 
@@ -194,7 +194,7 @@ class DemoMetadataForm(BaseDocumentForm):
                 _('General information'),
                 'document_key',
                 Field('title', rows=2),
-                self.related_documents,
+                self.get_related_documents_layout(),
             )
         )
 
