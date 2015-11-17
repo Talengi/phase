@@ -82,7 +82,7 @@ class OutgoingTransmittalForm(BaseDocumentForm):
 
     class Meta:
         model = OutgoingTransmittal
-        exclude = ('document', 'latest_revision',)
+        exclude = ('document', 'latest_revision', 'related_documents')
 
 
 class OutgoingTransmittalRevisionForm(BaseDocumentForm):
