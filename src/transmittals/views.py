@@ -260,6 +260,18 @@ class TransmittalDownloadView(LoginRequiredMixin, PermissionRequiredMixin, BaseZ
 class CreateTransmittalView(BaseDocumentBatchActionView):
     """Create a transmittal embedding the given documents"""
 
+    http_method_names = ['post']
+
     def start_job(self, contenttype, document_ids):
-        job = do_create_transmittal()
+
+        from_category_id = self.category.id
+        to_category_id = self.request.POST.get('destination_category')
+        contract_number = self.request.POST.get('contract_number')
+
+        job = do_create_transmittal.delay(
+            self.request.user.id,
+            from_category_id,
+            to_category_id,
+            document_ids,
+            contract_number)
         return job
