@@ -28,7 +28,7 @@ class TransmittalForm(BaseDocumentForm):
                 'originator',
                 'recipient',
                 'sequential_number',
-                self.related_documents,
+                self.get_related_documents_layout(),
             )
         )
 
@@ -69,7 +69,7 @@ class OutgoingTransmittalForm(BaseDocumentForm):
                 'originator',
                 'recipient',
                 'sequential_number',
-                self.related_documents,
+                self.get_related_documents_layout(),
             )
         )
 

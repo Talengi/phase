@@ -66,18 +66,20 @@ class BaseDocumentForm(forms.ModelForm):
             if isinstance(model_field, ConfigurableChoiceField):
                 self.fields[field_name].choices = model_field.get_choices()
 
+    def get_related_documents_layout(self):
         # Init related documents field
         if 'related_documents' in self.fields:
             if self.read_only:
-                self.related_documents = DocumentFieldset(
+                related_documents = DocumentFieldset(
                     _('Related documents'),
                     FlatRelatedDocumentsLayout('related_documents'),
                 )
             else:
-                self.related_documents = DocumentFieldset(
+                related_documents = DocumentFieldset(
                     _('Related documents'),
                     'related_documents',
                 )
+        return related_documents
 
     def clean_native_file(self):
         """Do not allow a PDF file to be uploaded as a native file.
