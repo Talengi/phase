@@ -3,9 +3,11 @@ from __future__ import unicode_literals
 
 from io import BytesIO
 
+from reportlab.pdfgen import canvas
 from reportlab.lib import colors
+from reportlab.lib.units import cm, mm
 from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.lib.pagesizes import A4, cm
+from reportlab.lib.pagesizes import A4
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.platypus.tables import Table, TableStyle
 from reportlab.lib.enums import TA_LEFT
@@ -20,7 +22,7 @@ tableStyles = TableStyle([
 styles = getSampleStyleSheet()
 
 
-def transmittal_to_pdf(revision):
+def transmittal_to_pdf_old(revision):
     buff = BytesIO()
     document = revision.document
     transmittal = revision.metadata
@@ -37,7 +39,7 @@ def transmittal_to_pdf(revision):
     )
     story = []
 
-    title = 'Phase'
+    title = category.organisation.name
     story.append(Paragraph(title, styles['Heading1']))
 
     subtitle = '{}'.format(category)
@@ -94,3 +96,65 @@ def build_revisions_table(revisions):
             Paragraph(revision.return_code, style)))
 
     return data
+
+
+class TransmittalPdf(object):
+    def __init__(self, revision):
+        self.buff = BytesIO()
+        self.c = canvas.Canvas(self.buff, pagesize=A4)
+        self.styles = getSampleStyleSheet()
+        self.width, self.height = A4
+        self.revision = revision
+        self.document = revision.document
+        self.transmittal = revision.metadata
+        self.category = self.document.category
+        self.revisions = self.transmittal.exportedrevision_set.select_related()
+        self.build_document()
+
+    def build_document(self):
+        self._draw_title()
+        self._draw_contract_nb_table()
+
+    def _draw_title(self):
+        title = self.category.organisation.name
+        p = Paragraph(title, self.styles['Title'])
+        p.wrapOn(self.c, 12 * cm, 3 * cm)
+        p.drawOn(self.c, *self.coord(15, 55))
+
+    def _draw_contract_nb_table(self):
+        data = [
+            ('Contract NB', self.transmittal.contract_number),
+            ('Phase', ''),
+        ]
+        table = Table(data, hAlign='LEFT')
+        styles = TableStyle([
+            ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+            ('BOX', (0, 0), (-1, -1), 0.25, colors.black),
+            ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+        ])
+        table.setStyle(styles)
+        table.wrapOn(self.c, 5 * cm, 5 * cm)
+        table.drawOn(self.c, *self.coord(145, 55))
+
+    def coord(self, x, y, unit=mm):
+        """Helper class to computes pdf coordinary
+
+        # http://stackoverflow.com/questions/4726011/wrap-text-in-a-table-reportlab
+
+        """
+        x, y = x * unit, self.height - y * unit
+        return x, y
+
+    def as_binary(self):
+        """Writes the pdf to buffer and returns it as a binary value."""
+        self.c.showPage()
+        self.c.save()
+        pdf_binary = self.buff.getvalue()
+        self.buff.close()
+        return pdf_binary
+
+
+def transmittal_to_pdf(revision):
+    pdf = TransmittalPdf(revision)
+    return pdf.as_binary()
