@@ -47,6 +47,9 @@ class TransmittalPdf(object):
             Spacer(0, 6 * mm),
             self.build_remarks_label(),
             self.build_remarks_field(),
+            Spacer(0, 6 * mm),
+            self.build_ack_label(),
+            self.build_ack_table(),
         ]
         self.doc.build(story, onFirstPage=self.build_header)
 
@@ -159,6 +162,21 @@ class TransmittalPdf(object):
         data = [['\n\n\n']]
         table = Table(data, colWidths=[self.width - 30 * mm])
         table.setStyle(self.get_table_style())
+        return table
+
+    def build_ack_label(self):
+        p = Paragraph('Adressee acknowledgment of receipt', self.styles['Normal'])
+        return p
+
+    def build_ack_table(self):
+        data = [
+            ('Name:', 'Date:'),
+            ('Position:', 'Signature:')
+        ]
+        table = Table(data, hAlign='LEFT', colWidths=[90 * mm, 90 * mm])
+        style = self.get_table_style()
+        style.add('INNERGRID', (0, 0), (-1, -1), 0, colors.white)
+        table.setStyle(style)
         return table
 
     def coord(self, x, y, unit=mm):
