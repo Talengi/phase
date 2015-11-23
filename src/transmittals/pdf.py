@@ -116,6 +116,16 @@ class TransmittalPdf(object):
         self._draw_title()
         self._draw_contract_nb_table()
         self._draw_subtitle()
+        self._draw_trs_meta()
+
+    def get_table_style(self):
+        style = TableStyle([
+            ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+            ('BOX', (0, 0), (-1, -1), 0.25, colors.black),
+            ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+        ])
+        return style
 
     def _draw_title(self):
         title = self.category.organisation.name
@@ -129,13 +139,7 @@ class TransmittalPdf(object):
             ('Phase', ''),
         ]
         table = Table(data, hAlign='LEFT', colWidths=[25 * mm, 25 * mm])
-        styles = TableStyle([
-            ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
-            ('BOX', (0, 0), (-1, -1), 0.25, colors.black),
-            ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
-            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-        ])
-        table.setStyle(styles)
+        table.setStyle(self.get_table_style())
         table.wrapOn(self.c, 50 * mm, 50 * mm)
         table.drawOn(self.c, *self.coord(145, 55))
 
@@ -151,6 +155,16 @@ class TransmittalPdf(object):
         p = Paragraph('Transmittal sheet', style)
         p.wrapOn(self.c, 130 * mm, 20 * mm)
         p.drawOn(self.c, *self.coord(15, 70))
+
+    def _draw_trs_meta(self):
+        data = [
+            ('Transmittal Number', self.document.document_key),
+            ('Issue Date', self.document.created_on),
+        ]
+        table = Table(data, hAlign='LEFT')
+        table.setStyle(self.get_table_style())
+        table.wrapOn(self.c, self.width, 20 * mm)
+        table.drawOn(self.c, *self.coord(15, 88))
 
     def coord(self, x, y, unit=mm):
         """Helper class to computes pdf coordinary
