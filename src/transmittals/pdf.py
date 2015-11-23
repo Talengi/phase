@@ -117,6 +117,7 @@ class TransmittalPdf(object):
         self._draw_contract_nb_table()
         self._draw_subtitle()
         self._draw_trs_meta()
+        self._draw_sender_addressee()
 
     def get_table_style(self):
         style = TableStyle([
@@ -165,6 +166,15 @@ class TransmittalPdf(object):
         table.setStyle(self.get_table_style())
         table.wrapOn(self.c, self.width, 20 * mm)
         table.drawOn(self.c, *self.coord(15, 88))
+
+    def _draw_sender_addressee(self):
+        text = 'Sender: {}<br />Addressee: {}'.format(
+            'XXX Sender name',
+            'YYY Addressee name'
+        )
+        p = Paragraph(text, self.styles['Normal'])
+        p.wrapOn(self.c, self.width, self.height)
+        p.drawOn(self.c, *self.coord(15, 105))
 
     def coord(self, x, y, unit=mm):
         """Helper class to computes pdf coordinary
