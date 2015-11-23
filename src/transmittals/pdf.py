@@ -4,13 +4,14 @@ from __future__ import unicode_literals
 from io import BytesIO
 
 from reportlab.pdfgen import canvas
+from reportlab.lib.colors import black
 from reportlab.lib import colors
 from reportlab.lib.units import cm, mm
-from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.pagesizes import A4
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.platypus.tables import Table, TableStyle
-from reportlab.lib.enums import TA_LEFT
+from reportlab.lib.enums import TA_LEFT, TA_CENTER
 
 
 tableStyles = TableStyle([
@@ -114,11 +115,12 @@ class TransmittalPdf(object):
     def build_document(self):
         self._draw_title()
         self._draw_contract_nb_table()
+        self._draw_subtitle()
 
     def _draw_title(self):
         title = self.category.organisation.name
         p = Paragraph(title, self.styles['Title'])
-        p.wrapOn(self.c, 12 * cm, 3 * cm)
+        p.wrapOn(self.c, 120 * mm, 150 * mm)
         p.drawOn(self.c, *self.coord(15, 55))
 
     def _draw_contract_nb_table(self):
@@ -134,8 +136,21 @@ class TransmittalPdf(object):
             ('VALIGN', (0, 0), (-1, -1), 'TOP'),
         ])
         table.setStyle(styles)
-        table.wrapOn(self.c, 5 * cm, 5 * cm)
+        table.wrapOn(self.c, 50 * mm, 50 * mm)
         table.drawOn(self.c, *self.coord(145, 55))
+
+    def _draw_subtitle(self):
+        style = ParagraphStyle(
+            name='trs_style',
+            parent=self.styles['Heading2'],
+            alignment=TA_CENTER,
+            borderWidth=1,
+            borderColor=black,
+            textTransform='uppercase'
+        )
+        p = Paragraph('Transmittal sheet', style)
+        p.wrapOn(self.c, 130 * mm, 20 * mm)
+        p.drawOn(self.c, *self.coord(15, 70))
 
     def coord(self, x, y, unit=mm):
         """Helper class to computes pdf coordinary
