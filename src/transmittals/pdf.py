@@ -118,6 +118,7 @@ class TransmittalPdf(object):
         self._draw_subtitle()
         self._draw_trs_meta()
         self._draw_sender_addressee()
+        self._draw_way_of_transmission()
 
     def get_table_style(self):
         style = TableStyle([
@@ -162,7 +163,7 @@ class TransmittalPdf(object):
             ('Transmittal Number', self.document.document_key),
             ('Issue Date', self.document.created_on),
         ]
-        table = Table(data, hAlign='LEFT')
+        table = Table(data, hAlign='LEFT', colWidths=[45 * mm, None])
         table.setStyle(self.get_table_style())
         table.wrapOn(self.c, self.width, 20 * mm)
         table.drawOn(self.c, *self.coord(15, 88))
@@ -175,6 +176,24 @@ class TransmittalPdf(object):
         p = Paragraph(text, self.styles['Normal'])
         p.wrapOn(self.c, self.width, self.height)
         p.drawOn(self.c, *self.coord(15, 105))
+
+    def _draw_way_of_transmission(self):
+        data = [
+            ('Way of transmission', ''),
+            ('EDMS', 'X'),
+            ('Email', ''),
+            ('USB Key', ''),
+            ('Post', ''),
+            ('Other', ''),
+        ]
+        table = Table(data, hAlign='LEFT', colWidths=[45 * mm, 20 * mm])
+        style = self.get_table_style()
+        style.add('SPAN', (0, 0), (1, 0))
+        style.add('ALIGN', (0, 0), (0, 0), 'CENTER')
+        style.add('ALIGN', (1, 0), (1, -1), 'CENTER')
+        table.setStyle(style)
+        table.wrapOn(self.c, self.width, self.height)
+        table.drawOn(self.c, *self.coord(15, 150))
 
     def coord(self, x, y, unit=mm):
         """Helper class to computes pdf coordinary
