@@ -44,6 +44,9 @@ class TransmittalPdf(object):
             self.build_way_of_transmission(),
             Spacer(0, 6 * mm),
             self.build_revisions_table(),
+            Spacer(0, 6 * mm),
+            self.build_remarks_label(),
+            self.build_remarks_field(),
         ]
         self.doc.build(story, onFirstPage=self.build_header)
 
@@ -145,6 +148,16 @@ class TransmittalPdf(object):
             data,
             hAlign='LEFT',
             colWidths=[45 * mm, 90 * mm, 15 * mm, 15 * mm, 15 * mm])
+        table.setStyle(self.get_table_style())
+        return table
+
+    def build_remarks_label(self):
+        p = Paragraph('Remarks', self.styles['Normal'])
+        return p
+
+    def build_remarks_field(self):
+        data = [['\n\n\n']]
+        table = Table(data, colWidths=[self.width - 30 * mm])
         table.setStyle(self.get_table_style())
         return table
 
