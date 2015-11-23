@@ -128,7 +128,7 @@ class TransmittalPdf(object):
             ('Contract NB', self.transmittal.contract_number),
             ('Phase', ''),
         ]
-        table = Table(data, hAlign='LEFT')
+        table = Table(data, hAlign='LEFT', colWidths=[25 * mm, 25 * mm])
         styles = TableStyle([
             ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
             ('BOX', (0, 0), (-1, -1), 0.25, colors.black),
