@@ -144,7 +144,7 @@ class TransmittalPdf(object):
             data.append((
                 Paragraph(revision.document.document_key, style),
                 Paragraph(revision.title, style),
-                Paragraph('%s' % revision.revision, style),
+                Paragraph(revision.name, style),
                 Paragraph(revision.status, style),
                 Paragraph(revision.return_code, style)))
         table = Table(
