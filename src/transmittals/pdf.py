@@ -61,7 +61,6 @@ class TransmittalPdf(object):
         style = TableStyle([
             ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
             ('BOX', (0, 0), (-1, -1), 0.25, colors.black),
-            ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
             ('VALIGN', (0, 0), (-1, -1), 'TOP'),
         ])
         return style
@@ -129,9 +128,14 @@ class TransmittalPdf(object):
         return table
 
     def build_revisions_table(self):
-        style = self.styles['BodyText']
-        style.alignment = TA_LEFT
-        style.wordWrap = 'LTR'
+        body_style = self.styles['BodyText']
+
+        self.styles.add(ParagraphStyle(
+            name='BodyCentered',
+            parent=body_style,
+            alignment=TA_CENTER,
+        ))
+        centered = self.styles['BodyCentered']
 
         header = (
             'Document Number',
@@ -142,16 +146,18 @@ class TransmittalPdf(object):
         data = [header]
         for revision in self.revisions:
             data.append((
-                Paragraph(revision.document.document_key, style),
-                Paragraph(revision.title, style),
-                Paragraph(revision.name, style),
-                Paragraph(revision.status, style),
-                Paragraph(revision.return_code, style)))
+                Paragraph(revision.document.document_key, body_style),
+                Paragraph(revision.title, body_style),
+                Paragraph(revision.name, centered),
+                Paragraph(revision.status, centered),
+                Paragraph(revision.return_code, centered)))
         table = Table(
             data,
             hAlign='LEFT',
             colWidths=[70 * mm, 75 * mm, 10 * mm, 15 * mm, 10 * mm])
-        table.setStyle(self.get_table_style())
+        style = self.get_table_style()
+        style.add('ALIGN', (0, 0), (-1, 0), 'CENTER')
+        table.setStyle(style)
         return table
 
     def build_remarks_label(self):
