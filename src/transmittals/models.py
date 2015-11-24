@@ -572,6 +572,11 @@ class ExportedRevision(models.Model):
         verbose_name_plural = _('Exported revisions')
         app_label = 'transmittals'
 
+    @property
+    def name(self):
+        """A revision identifier should be displayed with two digits"""
+        return u'%02d' % self.revision
+
 
 class TransmittableMixin(ReviewMixin):
     """Define behavior of revisions that can be embedded in transmittals.
