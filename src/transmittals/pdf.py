@@ -40,7 +40,7 @@ class NumberedCanvas(canvas.Canvas):
         canvas.Canvas.save(self)
 
     def draw_page_number(self, page_count):
-        # self.setFont("Helvetica", 7)
+        self.setFont("Helvetica", 9)
         self.drawRightString(
             200 * mm,
             10 * mm,
