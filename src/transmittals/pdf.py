@@ -99,7 +99,7 @@ class TransmittalPdf(object):
             ('Transmittal Number', self.document.document_key),
             ('Issue Date', self.document.created_on),
         ]
-        table = Table(data, hAlign='LEFT', colWidths=[45 * mm, None])
+        table = Table(data, hAlign='LEFT', colWidths=[70 * mm, 60 * mm])
         table.setStyle(self.get_table_style())
         return table
 
@@ -120,7 +120,7 @@ class TransmittalPdf(object):
             ('Post', ''),
             ('Other', ''),
         ]
-        table = Table(data, hAlign='LEFT', colWidths=[45 * mm, 20 * mm])
+        table = Table(data, hAlign='LEFT', colWidths=[70 * mm, 20 * mm])
         style = self.get_table_style()
         style.add('SPAN', (0, 0), (1, 0))
         style.add('ALIGN', (0, 0), (0, 0), 'CENTER')
@@ -150,7 +150,7 @@ class TransmittalPdf(object):
         table = Table(
             data,
             hAlign='LEFT',
-            colWidths=[45 * mm, 90 * mm, 15 * mm, 15 * mm, 15 * mm])
+            colWidths=[70 * mm, 75 * mm, 10 * mm, 15 * mm, 10 * mm])
         table.setStyle(self.get_table_style())
         return table
 
