@@ -130,7 +130,7 @@ class TransmittalPdf(object):
 
     def build_trs_meta(self):
         date = dateformat.format(
-            self.document.created_on,
+            self.revision.created_on,
             'd/m/Y')
         data = [
             ('Transmittal Number', self.document.document_key),
