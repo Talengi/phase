@@ -3,6 +3,8 @@ from __future__ import unicode_literals
 
 from io import BytesIO
 
+from django.utils import dateformat
+
 from reportlab.lib import colors
 from reportlab.lib.units import cm, mm
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
@@ -94,9 +96,12 @@ class TransmittalPdf(object):
         return p
 
     def build_trs_meta(self):
+        date = dateformat.format(
+            self.document.created_on,
+            'd/m/Y')
         data = [
             ('Transmittal Number', self.document.document_key),
-            ('Issue Date', self.document.created_on),
+            ('Issue Date', date),
         ]
         table = Table(data, hAlign='LEFT', colWidths=[70 * mm, 60 * mm])
         table.setStyle(self.get_table_style())
