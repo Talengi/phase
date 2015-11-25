@@ -16,3 +16,7 @@ class InvalidRevisionsError(TransmittalError):
 
 class InvalidCategoryError(TransmittalError):
     pass
+
+
+class InvalidRecipientError(TransmittalError):
+    pass
