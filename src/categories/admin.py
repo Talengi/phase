@@ -36,7 +36,9 @@ class CategoryTemplateAdmin(admin.ModelAdmin):
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('organisation', 'category_template')
+    list_display_links = ('category_template',)
     search_fields = ('organisation__name', 'category_template__name')
+    ordering = ('organisation', 'category_template')
     filter_horizontal = ('users', 'groups')
     fieldsets = (
         (None, {'fields': ('organisation', 'category_template')}),
