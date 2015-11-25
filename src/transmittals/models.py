@@ -471,9 +471,9 @@ class OutgoingTransmittal(Metadata):
     originator = models.CharField(
         _('Originator'),
         max_length=3)
-    recipient = models.CharField(
-        _('Recipient'),
-        max_length=3)
+    recipient = models.ForeignKey(
+        'accounts.Entity',
+        verbose_name=_('Recipient'))
     sequential_number = models.PositiveIntegerField(
         _('sequential number'),
         null=True, blank=True)
