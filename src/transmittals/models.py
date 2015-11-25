@@ -509,7 +509,7 @@ class OutgoingTransmittal(Metadata):
         key = '{}-{}-{}-TRS-{:0>5d}'.format(
             self.contract_number,
             self.originator,
-            self.recipient,
+            self.recipient.trigram,
             self.sequential_number)
         return key
 
