@@ -102,9 +102,9 @@ class Category(models.Model):
         blank=True,
         related_name='owner_groups')
     third_parties = models.ManyToManyField(
-        'auth.Group',
+        'accounts.Entity',
         blank=True,
-        related_name='linked_groups')
+        related_name='linked_categories')
 
     class Meta:
         unique_together = ('category_template', 'organisation')

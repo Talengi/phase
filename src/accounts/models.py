@@ -15,6 +15,8 @@ from django.core.mail import send_mail
 from django.contrib.sites.models import Site
 from django.conf import settings
 
+from model_utils import Choices
+
 
 logger = logging.getLogger(__name__)
 
@@ -118,3 +120,36 @@ class User(AbstractBaseUser, PermissionsMixin):
 
         logger.info('Sending welcome email to %s' % self.email)
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [self.email])
+
+
+class Entity(models.Model):
+    """Defines a contractual third party."""
+    TYPES = Choices(
+        ('contractor', _('Contractor')),
+        ('supplier', _('Supplier')),
+        ('other', _('Other')),
+    )
+    name = models.CharField(
+        _('name'),
+        max_length=80,
+        unique=True)
+    trigram = models.CharField(
+        _('Trigram'),
+        max_length=3,
+        unique=True)
+    type = models.CharField(
+        _('Type'),
+        max_length=80,
+        choices=TYPES,
+        default=TYPES.contractor)
+    users = models.ManyToManyField(
+        User,
+        verbose_name=_('Users'),
+        blank=True)
+
+    class Meta:
+        verbose_name = _('Entity')
+        verbose_name_plural = _('Entities')
+
+    def __unicode__(self):
+        return self.name
