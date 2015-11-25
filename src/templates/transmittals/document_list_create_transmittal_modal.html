@@ -12,8 +12,18 @@
         <div class="modal-body">
             <p class="alert alert-info">{{ _('Create a new transmittal with the selected documents.') }}</p>
             <div class="form-group">
-                <label form="destination-category-select">{{ _('Destination Category') }}</label>
+                <label for="recipient-select">{{ _('Recipient') }}</label>
+                <select id="recipient-select" name="recipient" class="form-control">
+                    {% for recipient in category.third_parties.all %}
+                    <option value="{{ recipient.id }}">
+                        {{ recipient }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
 
+            <div class="form-group">
+                <label for="destination-category-select">{{ _('Destination Category') }}</label>
                 {% get_outgoing_transmittal_categories as categories %}
                 <select id="destination-category-select" name="destination_category" class="form-control">
                     {% for category in categories %}
@@ -25,8 +35,7 @@
             </div>
 
             <div class="form-group">
-                <label form="contract-number-select">{{ _('Contract Number') }}</label>
-
+                <label for="contract-number-select">{{ _('Contract Number') }}</label>
                 {% get_values_list 'CONTRACT_NBS' as values %}
                 <select id="contract-number-select" name="contract_number" class="form-control">
                     {% for index, value in values %}
