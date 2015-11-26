@@ -33,7 +33,7 @@ class TransmittalUpdateTests(ContractorDeliverableTestCase):
             document=self.revision.document,
             metadata=metadata,
             revision=self.revision,
-            sender=metadata.__class__)
+            sender=self.revision.__class__)
 
         self.exported_revision.refresh_from_db()
         self.assertEqual('4', self.exported_revision.return_code)
