@@ -143,6 +143,7 @@ class MetadataRevisionFactory(factory.DjangoModelFactory):
     docclass = 1
     revision = factory.sequence(lambda n: n + 1)
     received_date = datetime.date.today()
+    return_code = fuzzy.FuzzyInteger(0, 5)
 
     @factory.post_generation
     def reviewers(self, create, extracted, **kwargs):
