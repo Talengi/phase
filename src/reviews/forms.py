@@ -159,7 +159,8 @@ class ReviewFormMixin(forms.ModelForm):
                     PropertyLayout('get_current_review_step_display'),
                     YesNoLayout('is_under_review'),
                     YesNoLayout('is_overdue'),
-                    'trs_return_code'),
+                    'trs_return_code',
+                    'trs_comments'),
                 DocumentFieldset(
                     _('Distribution list'),
                     ReviewsLayout()))
@@ -175,6 +176,7 @@ class ReviewFormMixin(forms.ModelForm):
                     YesNoLayout('is_under_review'),
                     YesNoLayout('is_overdue'),
                     'trs_return_code',
+                    'trs_comments',
                     'reviewers',
                     'leader',
                     'approver'))

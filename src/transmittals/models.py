@@ -607,7 +607,7 @@ class TransmittableMixin(ReviewMixin):
         null=True, blank=True,
         list_index='REVIEW_RETURN_CODES')
     trs_comments = PrivateFileField(
-        _('Comments'),
+        _('Final comments'),
         null=True, blank=True,
         upload_to=trs_comments_file_path
     )
