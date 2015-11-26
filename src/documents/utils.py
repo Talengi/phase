@@ -8,6 +8,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils.encoding import force_text
 from django.db import transaction
 
+from documents import signals
+
 
 @transaction.atomic
 def save_document_forms(metadata_form, revision_form, category, **doc_kwargs):
@@ -67,6 +69,12 @@ def create_document_from_forms(metadata_form, revision_form, category, **doc_kwa
     metadata.save()
     metadata_form.save_m2m()
 
+    signals.document_created.send(
+        document=document,
+        metadata=metadata,
+        revision=revision,
+        sender=metadata.__class__)
+
     return document, metadata, revision
 
 
@@ -89,6 +97,12 @@ def create_revision_from_forms(metadata_form, revision_form, category):
     document.current_revision_date = revision.revision_date
     document.save()
 
+    signals.document_revised.send(
+        document=document,
+        metadata=metadata,
+        revision=revision,
+        sender=metadata.__class__)
+
     return document, metadata, revision
 
 
@@ -97,6 +111,12 @@ def update_revision_from_forms(metadata_form, revision_form, category):
     revision = revision_form.save()
     metadata = metadata_form.save()
     document = metadata.document
+
+    signals.revision_edited.send(
+        document=document,
+        metadata=metadata,
+        revision=revision,
+        sender=metadata.__class__)
 
     return document, metadata, revision
 
