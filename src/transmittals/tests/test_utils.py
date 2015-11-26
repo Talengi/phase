@@ -142,7 +142,7 @@ class TransmittalSequentialNumberTests(TestCase):
 
     def test_seq_nb_with_no_transmittal(self):
         """If no trs exists, the first available seq nb is 1."""
-        seq_nb = find_next_trs_number('CTR', 'CLT', 'FAC10005')
+        seq_nb = find_next_trs_number('CTR', self.entity, 'FAC10005')
         self.assertEqual(seq_nb, 1)
 
     def test_seq_nb_with_existing_transmittals(self):
@@ -150,7 +150,7 @@ class TransmittalSequentialNumberTests(TestCase):
         for nb in range(5):
             self.create_transmittal(nb + 1)
 
-        seq_nb = find_next_trs_number('CTR', 'CLT', 'FAC10005')
+        seq_nb = find_next_trs_number('CTR', self.entity, 'FAC10005')
         self.assertEqual(seq_nb, 6)
 
     def test_seq_nb_with_hole_in_numbers(self):
@@ -161,5 +161,5 @@ class TransmittalSequentialNumberTests(TestCase):
         self.create_transmittal(5)
         self.create_transmittal(8)
 
-        seq_nb = find_next_trs_number('CTR', 'CLT', 'FAC10005')
+        seq_nb = find_next_trs_number('CTR', self.entity, 'FAC10005')
         self.assertEqual(seq_nb, 9)
