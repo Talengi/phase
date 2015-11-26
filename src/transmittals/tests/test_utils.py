@@ -9,7 +9,7 @@ from django.test import TestCase
 from documents.factories import DocumentFactory
 from default_documents.tests.test import ContractorDeliverableTestCase
 from categories.factories import CategoryFactory
-from accounts.factories import UserFactory
+from accounts.factories import UserFactory, EntityFactory
 from transmittals.factories import (
     OutgoingTransmittalFactory, OutgoingTransmittalRevisionFactory)
 from transmittals.utils import create_transmittal, find_next_trs_number
@@ -61,21 +61,24 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
         """A trs cannot be created without revisions."""
         with self.assertRaises(errors.MissingRevisionsError):
             create_transmittal(
-                self.category, self.dst_category, [], 'FAC10005')
+                self.category, self.dst_category, [], 'FAC10005',
+                self.entity)
 
     def test_create_trs_with_invalid_revisions(self):
         """We must check that the given revisions are valid."""
         with self.assertRaises(errors.InvalidRevisionsError):
             revisions = ['toto', 'tata', 'tutu']
             create_transmittal(
-                self.category, self.dst_category, revisions, 'FAC10005')
+                self.category, self.dst_category, revisions, 'FAC10005',
+                self.entity)
 
     def test_create_trs_with_unreviewed_revisions(self):
         """Revisions must have been reviewed to be transmittable."""
         revisions = self.create_docs(transmittable=False)
         with self.assertRaises(errors.InvalidRevisionsError):
             create_transmittal(
-                self.category, self.dst_category, revisions, 'FAC10005')
+                self.category, self.dst_category, revisions, 'FAC10005',
+                self.entity)
 
     def test_create_trs_with_invalid_from_category(self):
         """Source category must contain transmittable documents."""
@@ -83,7 +86,8 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
         revisions = self.create_docs()
         with self.assertRaises(errors.InvalidCategoryError):
             create_transmittal(
-                invalid_cat, self.dst_category, revisions, 'FAC10005')
+                invalid_cat, self.dst_category, revisions, 'FAC10005',
+                self.entity)
 
     def test_create_trs_with_invalid_dest_category(self):
         """Destination category must contain outgoing transmittals."""
@@ -91,7 +95,8 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
         revisions = self.create_docs()
         with self.assertRaises(errors.InvalidCategoryError):
             create_transmittal(
-                self.category, invalid_cat, revisions, 'FAC10005')
+                self.category, invalid_cat, revisions, 'FAC10005',
+                self.entity)
 
     def test_create_transmittal(self):
         revisions = self.create_docs()
@@ -99,7 +104,8 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
         self.assertFalse(revision.already_transmitted)
 
         doc, trs, trs_rev = create_transmittal(
-            self.category, self.dst_category, revisions, 'FAC10005')
+            self.category, self.dst_category, revisions, 'FAC10005',
+            self.entity)
         self.assertIsNotNone(trs)
         self.assertTrue(isinstance(trs, OutgoingTransmittal))
 
@@ -111,6 +117,7 @@ class TransmittalSequentialNumberTests(TestCase):
     def setUp(self):
         Model = ContentType.objects.get_for_model(OutgoingTransmittal)
         self.category = CategoryFactory(category_template__metadata_model=Model)
+        self.entity = EntityFactory()
         self.user = UserFactory(
             email='testadmin@phase.fr',
             password='pass',
@@ -123,7 +130,7 @@ class TransmittalSequentialNumberTests(TestCase):
             'category': self.category,
             'metadata': {
                 'originator': 'CTR',
-                'recipient': 'CLT',
+                'recipient': self.entity,
                 'contract_number': 'FAC10005',
                 'sequential_number': sequential_number,
             },

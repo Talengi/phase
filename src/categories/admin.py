@@ -36,11 +36,14 @@ class CategoryTemplateAdmin(admin.ModelAdmin):
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('organisation', 'category_template')
+    list_display_links = ('category_template',)
     search_fields = ('organisation__name', 'category_template__name')
-    filter_horizontal = ('users', 'groups')
+    ordering = ('organisation', 'category_template')
+    filter_horizontal = ('users', 'groups', 'third_parties')
     fieldsets = (
         (None, {'fields': ('organisation', 'category_template')}),
         ('Members', {'fields': ('groups', 'users',)}),
+        ('Third parties', {'fields': ('third_parties',)}),
     )
 
 

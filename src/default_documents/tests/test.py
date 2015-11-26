@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django.test import TestCase
 from django.contrib.contenttypes.models import ContentType
 
-from accounts.factories import UserFactory
+from accounts.factories import UserFactory, EntityFactory
 from categories.factories import CategoryFactory
 from documents.factories import DocumentFactory
 from default_documents.models import ContractorDeliverable
@@ -17,7 +17,10 @@ class ContractorDeliverableTestCase(TestCase):
 
     def setUp(self):
         Model = ContentType.objects.get_for_model(ContractorDeliverable)
-        self.category = CategoryFactory(category_template__metadata_model=Model)
+        self.entity = EntityFactory()
+        self.category = CategoryFactory(
+            category_template__metadata_model=Model,
+            third_parties=[self.entity])
         self.user = UserFactory(
             email='testadmin@phase.fr',
             password='pass',

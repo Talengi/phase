@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as django_UserAdmin
@@ -8,7 +11,7 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib import messages
 
 from categories.admin import UserCategoryInline, GroupCategoryInline
-from accounts.models import User
+from accounts.models import User, Entity
 from accounts.forms import UserCreationForm, UserChangeForm
 
 
@@ -106,6 +109,11 @@ class GroupAdmin(django_GroupAdmin):
     inlines = [GroupCategoryInline]
 
 
+class EntityAdmin(admin.ModelAdmin):
+    filter_horizontal = ('users',)
+
+
 admin.site.register(User, UserAdmin)
+admin.site.register(Entity, EntityAdmin)
 admin.site.unregister(Group)
 admin.site.register(Group, GroupAdmin)

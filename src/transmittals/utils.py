@@ -49,7 +49,7 @@ class FieldWrapper(object):
 
 
 def create_transmittal(from_category, to_category, revisions, contract_nb,
-                       **form_data):
+                       recipient, **form_data):
     """Create an outgoing transmittal with the given revisions."""
 
     # Do we have a list of revisions?
@@ -69,6 +69,11 @@ def create_transmittal(from_category, to_category, revisions, contract_nb,
         raise errors.InvalidCategoryError(
             'Destination category must contain transmittals')
 
+    # The recipient must be linked to the "from" category
+    if from_category not in recipient.linked_categories.all():
+        raise errors.InvalidRecipientError(
+            'Recipient is not linked to the document category')
+
     # Do we have valid revisions?
     for rev in revisions:
         if not isinstance(rev, TransmittableMixin):
@@ -84,12 +89,11 @@ def create_transmittal(from_category, to_category, revisions, contract_nb,
                 'Some revisions are not from the correct category')
 
     originator = from_category.organisation.trigram
-    recipient = to_category.organisation.trigram
     sequential_number = find_next_trs_number(originator, recipient, contract_nb)
     form_data.update({
         'contract_number': contract_nb,
         'originator': originator,
-        'recipient': recipient,
+        'recipient': recipient.id,
         'sequential_number': sequential_number,
         'created_on': timezone.now(),
         'received_date': timezone.now(),

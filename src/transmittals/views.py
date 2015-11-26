@@ -266,6 +266,7 @@ class CreateTransmittalView(BaseDocumentBatchActionView):
 
         from_category_id = self.category.id
         to_category_id = self.request.POST.get('destination_category')
+        recipient_id = self.request.POST.get('recipient')
         contract_number = self.request.POST.get('contract_number')
 
         job = do_create_transmittal.delay(
@@ -273,5 +274,6 @@ class CreateTransmittalView(BaseDocumentBatchActionView):
             from_category_id,
             to_category_id,
             document_ids,
-            contract_number)
+            contract_number,
+            recipient_id)
         return job

@@ -1,7 +1,10 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import factory
 
 from categories.factories import CategoryFactory
-from .models import User
+from accounts.models import User, Entity
 
 
 class UserFactory(factory.DjangoModelFactory):
@@ -29,3 +32,11 @@ class UserFactory(factory.DjangoModelFactory):
         category.users.add(user)
 
         return user
+
+
+class EntityFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = Entity
+
+    name = factory.fuzzy.FuzzyText(length=20)
+    trigram = factory.fuzzy.FuzzyText(length=3)

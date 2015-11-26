@@ -471,9 +471,9 @@ class OutgoingTransmittal(Metadata):
     originator = models.CharField(
         _('Originator'),
         max_length=3)
-    recipient = models.CharField(
-        _('Recipient'),
-        max_length=3)
+    recipient = models.ForeignKey(
+        'accounts.Entity',
+        verbose_name=_('Recipient'))
     sequential_number = models.PositiveIntegerField(
         _('sequential number'),
         null=True, blank=True)
@@ -509,7 +509,7 @@ class OutgoingTransmittal(Metadata):
         key = '{}-{}-{}-TRS-{:0>5d}'.format(
             self.contract_number,
             self.originator,
-            self.recipient,
+            self.recipient.trigram,
             self.sequential_number)
         return key
 
