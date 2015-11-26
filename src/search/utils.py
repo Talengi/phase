@@ -55,18 +55,40 @@ def index_document(document_id):
         .select_related() \
         .get(pk=document_id)
     revisions = document.get_all_revisions()
-    actions = map(lambda revision: {
-        '_index': settings.ELASTIC_INDEX,
-        '_type': document.document_type(),
-        '_id': revision.unique_id,
-        '_source': revision.to_json(),
-    }, revisions)
+    actions = map(build_index_data, revisions)
 
     bulk(
         elastic,
         actions,
         chunk_size=settings.ELASTIC_BULK_SIZE,
         request_timeout=60)
+
+
+def index_revisions(revisions):
+    """Index a bunch of revisions."""
+    actions = map(build_index_data, revisions)
+    bulk(
+        elastic,
+        actions,
+        chunk_size=settings.ELASTIC_BULK_SIZE,
+        request_timeout=60)
+
+
+def bulk_actions(actions):
+    bulk(
+        elastic,
+        actions,
+        chunk_size=settings.ELASTIC_BULK_SIZE,
+        request_timeout=60)
+
+
+def build_index_data(revision):
+    return {
+        '_index': settings.ELASTIC_INDEX,
+        '_type': revision.document.document_type(),
+        '_id': revision.unique_id,
+        '_source': revision.to_json(),
+    }
 
 
 @app.task

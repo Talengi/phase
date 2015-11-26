@@ -18,6 +18,7 @@ from model_utils import Choices
 from documents.utils import save_document_forms
 from documents.models import Document, Metadata, MetadataRevision
 from reviews.models import CLASSES, ReviewMixin
+from search.utils import build_index_data, bulk_actions
 from metadata.fields import ConfigurableChoiceField
 from default_documents.validators import StringNumberValidator
 from transmittals.fields import TransmittalFileField
@@ -527,6 +528,7 @@ class OutgoingTransmittal(Metadata):
         """
         trs_revisions = []
         ids = []
+        index_data = []
         for revision in revisions:
             trs_revisions.append(
                 ExportedRevision(
@@ -538,6 +540,12 @@ class OutgoingTransmittal(Metadata):
                     return_code=revision.get_final_return_code()))
             ids.append(revision.id)
 
+            # Update ES index to make sure the "can_be_transmitted"
+            # filter is up to date
+            index_datum = build_index_data(revision)
+            index_datum['_source']['can_be_transmitted'] = False
+            index_data.append(index_datum)
+
         with transaction.atomic():
             ExportedRevision.objects.bulk_create(trs_revisions)
 
@@ -546,6 +554,8 @@ class OutgoingTransmittal(Metadata):
             Revision.objects \
                 .filter(id__in=ids) \
                 .update(already_transmitted=True)
+
+            bulk_actions(index_data)
 
 
 class OutgoingTransmittalRevision(MetadataRevision):
