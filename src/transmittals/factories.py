@@ -4,9 +4,16 @@ from __future__ import unicode_literals
 
 import datetime
 
+from django.contrib.contenttypes.models import ContentType
+
 import factory
 
 from documents.factories import DocumentFactory
+from accounts.factories import EntityFactory
+from categories.factories import CategoryFactory
+from default_documents.models import ContractorDeliverable
+from default_documents.factories import (
+    ContractorDeliverableFactory, ContractorDeliverableRevisionFactory)
 from transmittals.models import (
     Transmittal, TransmittalRevision, TrsRevision, OutgoingTransmittal,
     OutgoingTransmittalRevision)
@@ -71,3 +78,47 @@ class OutgoingTransmittalFactory(factory.DjangoModelFactory):
     latest_revision = factory.SubFactory(
         TransmittalRevisionFactory,
         document=factory.SelfAttribute('..document'))
+
+
+def create_transmittal():
+    """Create a test transmittal with a few documents linked."""
+
+    # Create documents
+    CDModel = ContentType.objects.get_for_model(ContractorDeliverable)
+    entity = EntityFactory()
+    deliverables_category = CategoryFactory(
+        category_template__metadata_model=CDModel,
+        third_parties=[entity])
+
+    data = {
+        'category': deliverables_category,
+        'revision': {
+            'return_code': 1
+        },
+        'metadata_factory_class': ContractorDeliverableFactory,
+        'revision_factory_class': ContractorDeliverableRevisionFactory,
+    }
+    revisions = []
+    for _ in range(10):
+        doc = DocumentFactory(**data)
+        revisions.append(doc.latest_revision)
+
+    # Create the actual transmittal
+    OutgoingTransmittalModel = ContentType.objects.get_for_model(
+        OutgoingTransmittal)
+    transmittal_category = CategoryFactory(
+        category_template__metadata_model=OutgoingTransmittalModel)
+    data = {
+        'category': transmittal_category,
+        'metadata': {
+            'originator': 'CTR',
+            'recipient': entity,
+            'contract_number': 'FAC10005',
+        },
+        'metadata_factory_class': OutgoingTransmittalFactory,
+        'revision_factory_class': OutgoingTransmittalRevisionFactory,
+    }
+    doc = DocumentFactory(**data)
+    transmittal = doc.metadata
+    transmittal.link_to_revisions(revisions)
+    return transmittal

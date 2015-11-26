@@ -2,6 +2,8 @@
 from __future__ import unicode_literals
 
 import factory
+from factory import fuzzy
+
 from django.contrib.contenttypes.models import ContentType
 
 from default_documents.models import DemoMetadata
@@ -14,7 +16,7 @@ class OrganisationFactory(factory.DjangoModelFactory):
 
     name = factory.Sequence(lambda n: 'Organisation {0}'.format(n))
     slug = factory.Sequence(lambda n: 'organisation_{0}'.format(n))
-    trigram = factory.fuzzy.FuzzyText(length=3)
+    trigram = fuzzy.FuzzyText(length=3)
 
 
 class CategoryTemplateFactory(factory.DjangoModelFactory):
