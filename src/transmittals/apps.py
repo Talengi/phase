@@ -20,5 +20,4 @@ class TransmittalsConfig(AppConfig):
             transmittal_post_save,
             sender=OutgoingTransmittal)
         signals.revision_edited.connect(
-            transmittal_revision_update,
-        )
+            transmittal_revision_update)

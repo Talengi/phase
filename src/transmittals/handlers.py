@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from transmittals.models import ExportedRevision
+from transmittals.models import ExportedRevision, TransmittableMixin
 
 
 def transmittal_post_save(document, metadata, revision, **kwargs):
@@ -13,9 +13,11 @@ def transmittal_post_save(document, metadata, revision, **kwargs):
 
 def transmittal_revision_update(document, metadata, revision, **kwargs):
     """When a document revision is edited, we need to update the transmittal."""
-    ExportedRevision.objects \
-        .filter(document=document) \
-        .filter(revision=revision.revision) \
-        .update(
-            status=revision.status,
-            return_code=revision.get_final_return_code())
+    sender = kwargs.get('sender')
+    if issubclass(sender, TransmittableMixin):
+        ExportedRevision.objects \
+            .filter(document=document) \
+            .filter(revision=revision.revision) \
+            .update(
+                status=revision.status,
+                return_code=revision.get_final_return_code())

@@ -116,7 +116,7 @@ def update_revision_from_forms(metadata_form, revision_form, category):
         document=document,
         metadata=metadata,
         revision=revision,
-        sender=metadata.__class__)
+        sender=revision.__class__)
 
     return document, metadata, revision
 
