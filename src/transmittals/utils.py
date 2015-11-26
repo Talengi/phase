@@ -8,7 +8,6 @@ from django.db import transaction
 
 from documents.utils import save_document_forms
 from transmittals import errors
-from transmittals.signals import transmittal_created
 from transmittals.models import (
     OutgoingTransmittal, OutgoingTransmittalRevision, TransmittableMixin)
 from transmittals.forms import (
@@ -106,10 +105,6 @@ def create_transmittal(from_category, to_category, revisions, contract_nb,
     with transaction.atomic():
         doc, trs, revision = save_document_forms(trs_form, revision_form, to_category)
         trs.link_to_revisions(revisions)
-
-        transmittal_created.send(
-            sender=trs.__class__,
-            instance=trs)
     return doc, trs, revision
 
 
