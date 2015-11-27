@@ -74,8 +74,8 @@ Type 'yes' to continue, or 'no' to cancel: """)
             .select_related(
                 'organisation',
                 'category_template',
-                'category_template__metadata_model'
-            )
+                'category_template__metadata_model') \
+            .order_by('organisation__name', 'category_template__name')
 
         logger.info('Preparing index data')
         for category in categories:
