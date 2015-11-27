@@ -42,6 +42,16 @@ additional_filter_fields = {
         widget=forms.Select,
         label=_('Under review'),
     ),
+    'ack_of_receipt': forms.ChoiceField(
+        choices=(
+            ('', '---------'),
+            ('true', 'Yes'),
+            ('false', 'No')
+        ),
+        required=False,
+        widget=forms.Select,
+        label=_('Ack of receipt'),
+    )
 }
 
 

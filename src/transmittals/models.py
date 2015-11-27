@@ -496,11 +496,12 @@ class OutgoingTransmittal(Metadata):
         verbose_name_plural = _('Outgoing transmittals')
 
     class PhaseConfig:
-        filter_fields = ('contract_number',)
+        filter_fields = ('contract_number', 'ack_of_receipt')
         column_fields = (
             ('Reference', 'document_key'),
             ('Originator', 'originator'),
             ('Recipient', 'recipient'),
+            ('Ack of receipt', 'ack_of_receipt'),
         )
         searchable_fields = (
             'document_key',
@@ -510,6 +511,10 @@ class OutgoingTransmittal(Metadata):
 
     def __unicode__(self):
         return self.document_key
+
+    @property
+    def ack_of_receipt(self):
+        return bool(self.ack_of_receipt_date)
 
     def generate_document_key(self):
         key = '{}-{}-{}-TRS-{:0>5d}'.format(
