@@ -39,7 +39,7 @@
             {% batch_action_menu document_class category user %}
        </div>
 
-        {% if perms.documents.add_document %}
+        {% if category.use_creation_form and perms.documents.add_document %}
         <div class="form-group hidden-xs hidden-sm">
             <div class="hidden-xs hidden-sm">
                 <a class="btn btn-primary"

@@ -61,6 +61,9 @@ class CategoryTemplate(models.Model):
         _('Description'),
         max_length=200,
         null=True, blank=True)
+    use_creation_form = models.BooleanField(
+        _('Use document creation form'),
+        default=True)
 
     # We use a generic foreign key to reference
     # the type of document metadata this category
@@ -122,6 +125,10 @@ class Category(models.Model):
     @property
     def slug(self):
         return self.category_template.slug
+
+    @property
+    def use_creation_form(self):
+        return self.category_template.use_creation_form
 
     def document_class(self):
         Model = self.category_template.metadata_model

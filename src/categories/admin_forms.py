@@ -10,4 +10,5 @@ class CategoryTemplateAdminForm(forms.ModelForm):
 
     class Meta:
         model = CategoryTemplate
-        fields = ('name', 'slug', 'description', 'metadata_model')
+        fields = ('name', 'slug', 'description', 'use_creation_form',
+                  'metadata_model')
