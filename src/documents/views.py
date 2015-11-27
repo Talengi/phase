@@ -14,6 +14,7 @@ from django.http import (
     HttpResponse, Http404, HttpResponseForbidden, HttpResponseRedirect
 )
 from django.core.servers.basehttp import FileWrapper
+from django.core.exceptions import PermissionDenied
 from django.views.generic import (
     View, ListView, DetailView, RedirectView, DeleteView)
 from django.views.generic.edit import (
@@ -335,12 +336,19 @@ class DocumentCreate(BaseDocumentFormView):
     context_object_name = 'document'
     template_name = 'documents/document_form.html'
 
+    def check_if_creation_is_available(self):
+        if not self.category.use_creation_form:
+            raise PermissionDenied(
+                'Document creation is disabled for this category')
+
     def get(self, request, *args, **kwargs):
+        self.check_if_creation_is_available()
         self.object = None
         self.revision = None
         return super(DocumentCreate, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+        self.check_if_creation_is_available()
         self.object = None
         self.revision = None
         return super(DocumentCreate, self).post(request, *args, **kwargs)
