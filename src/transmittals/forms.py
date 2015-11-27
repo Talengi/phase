@@ -76,6 +76,7 @@ class OutgoingTransmittalForm(BaseDocumentForm):
                 'originator',
                 'recipient',
                 'sequential_number',
+                DateField('ack_of_receipt_date'),
                 self.get_related_documents_layout(),
             )
         )
