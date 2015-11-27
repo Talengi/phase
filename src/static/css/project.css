@@ -149,6 +149,12 @@ tr.selected {
 .table-centered th, .table-centered td {
     text-align: center;
 }
+#trs-rev-table tbody tr td:first-child {
+    white-space: nowrap;
+}
+#trs-rev-table tbody tr td:nth-child(n+3) {
+    text-align: center;
+}
 
 /* Related documents and multiselect */
 .document-list {

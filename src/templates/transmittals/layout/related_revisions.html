@@ -1,11 +1,32 @@
 <div class="controls controls-row">
     <div class="form-group {% if form.errors.related_documents %}error{% endif %}">
-        <ul class="document-list">
+        <table id="trs-rev-table" class="table table-bordered table-condensed table-hover">
+            <thead>
+                <tr>
+                    <th>{{ _('Document number') }}</th>
+                    <th>{{ _('Title') }}</th>
+                    <th>{{ _('Rev.') }}</th>
+                    <th>{{ _('Status') }}</th>
+                    <th>{{ _('RC.') }}</th>
+                    <th>{{ _('Comments') }}</th>
+                </tr>
+            </thead>
+            <tbody>
             {% for rev in revisions %}
-                <li><a href="{{ rev.document.get_absolute_url }}">{{ rev.document }} ({{ rev.revision }})</a></li>
+            <tr>
+                <td>{{ rev.document.document_key }}</td>
+                <td>{{ rev.document.title }}</td>
+                <td>{{ rev.name }}</td>
+                <td>{{ rev.status }}</td>
+                <td>{{ rev.return_code }}</td>
+                <td></td>
+            </tr>
             {% empty %}
-                <li>No related revisions</li>
+            <tr>
+                <td colspan="6">{{ _('Oddly, there is nothing here.') }}</td>
+            </tr>
             {% endfor %}
-        </ul>
+            </tbody>
+        </table>
     </div>
 </div>
