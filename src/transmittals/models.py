@@ -480,6 +480,9 @@ class OutgoingTransmittal(Metadata):
     sequential_number = models.PositiveIntegerField(
         _('sequential number'),
         null=True, blank=True)
+    ack_of_receipt_date = models.DateField(
+        _('Acknowledgment of receipt date'),
+        null=True, blank=True)
     related_documents = models.ManyToManyField(
         'documents.Document',
         through='ExportedRevision',
