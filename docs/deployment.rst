@@ -21,11 +21,11 @@ Server installation
 If you created an OpenVZ container from the debian wheezy template, you need to
 install the following packages::
 
+    apt-get purge apache2 apache2-doc apache2-mpm-prefork apache2-utils apache2.2-bin apache2.2-common
     apt-get update
     apt-get upgrade
-    apt-get purge apache2
     apt-get install build-essential libpq-dev python-dev
-    apt-get install postgresql postgresql-contrib nginx git supervisor rabbitmq-server
+    apt-get install vim postgresql postgresql-contrib nginx git supervisor rabbitmq-server
 
 NodeJS installation
 -------------------
@@ -34,13 +34,12 @@ Some tools used in Phase require a node.js installation. Get the `latest
 version url on the Node.js site <http://nodejs.org/dist/v0.10.25/node-v0.10.25.tar.gz>`_.
 Let's install it::
 
-    cd /opt/
-    wget http://nodejs.org/dist/latest/node-v0.10.25.tar.gz
-    tar -zvxf node-v0.10.25.tar.gz
-    cd node-v0.10.25
-    ./configure
-    make
-    make install
+    echo 'deb http://http.debian.net/debian wheezy-backports main' > /etc/apt/sources.list.d/wheezy-backports.list
+    apt-get update
+    apt-get -t wheezy-backports install nodejs-legacy
+    apt-get install curl
+    wget https://www.npmjs.org/install.sh
+    bash install.sh
 
 
 Memcache installation
@@ -95,7 +94,7 @@ Add those lines in the ``~/.profile`` file::
 
 Then::
 
-    source ~.profile
+    source ~/.profile
 
 
 Elasticsearch configuration
@@ -103,6 +102,10 @@ Elasticsearch configuration
 
 Phase uses `Elasticsearch <http://www.elasticsearch.org/>`_ to index documents
 and provides search features.
+
+You need to install java for ES to work::
+
+    aptitude install openjdk-7-jre
 
 The default Elasticsearch installation is enough, but remember that ES listens
 on 0.0.0.0 by default, which can be inconveniant.
@@ -177,3 +180,33 @@ Run this thing with::
 
     supervisorctl reread
     supervisorctl reload
+
+
+Troubleshooting
+---------------
+
+RabbitMQ won't start after installation
+.......................................
+
+If RabbitMQ fails to start after being installed, make sure the server hostname
+is set in `/etc/hosts`. You can also check the exact hostname used by RabbitMQ
+by getting the failure detail in `/var/log/rabbitmq/startup_log`.
+
+No public key available
+.......................
+
+If you receive the "No public key available" upon the first `apt-get update`,
+run the following command::
+
+    apt-get install debian-keyring debian-archive-keyring
+
+Then proceed normally.
+
+
+Missing jpeg libs for Pillow
+............................
+
+When you pip install requirements, Pillow might fail to install with an error
+related to jpeg management. To fix this, run this command as root::
+
+    sudo apt-get install libjpeg-dev
