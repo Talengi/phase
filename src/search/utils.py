@@ -108,6 +108,7 @@ def unindex_document(document_id):
     bulk(
         elastic,
         actions,
+        raise_on_error=False,
         chunk_size=settings.ELASTIC_BULK_SIZE,
         request_timeout=60)
 
