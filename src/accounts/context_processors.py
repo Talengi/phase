@@ -17,7 +17,7 @@ def navigation(request):
         user_categories = Category.objects \
             .filter(users=user) \
             .select_related('category_template', 'organisation') \
-            .order_by('organisation__name')
+            .order_by('organisation__name', 'category_template__name')
 
         context.update({
             'user_categories': user_categories,

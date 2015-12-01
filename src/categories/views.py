@@ -13,13 +13,12 @@ from .models import Category
 class CategoryList(LoginRequiredMixin, ListView):
     """Display a list of user categories"""
 
-    def get_queryset(self, **kwargs):
-        qs = Category.objects \
-            .filter(users=self.request.user) \
-            .select_related('category_template', 'organisation') \
-            .order_by('organisation__name')
+    template_name = 'categories/category_list.html'
 
-        return qs
+    def get_queryset(self, **kwargs):
+        # The category list we will use is set un a context processor
+        # See `accounts/context_processors.py`
+        return []
 
 
 class CategoryMixin(object):

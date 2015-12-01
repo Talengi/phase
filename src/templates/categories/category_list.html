@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% regroup user_categories by organisation as organisation_list %}
+{% regroup user_categories by organisation.name as organisation_list %}
 
 <div class="central-form">
 <ul class="nav nav-pills nav-stacked">
