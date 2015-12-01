@@ -527,9 +527,9 @@ class DocumentRevise(DocumentEdit):
 class DocumentDownload(BaseDocumentList):
 
     def post(self, request, *args, **kwargs):
-        # Deals with POST parameters
-        qs = self.get_queryset()
-        form = DocumentDownloadForm(self.request.POST, queryset=qs)
+        form_data = self.request.POST
+        qs = Document.objects.filter(category=self.category)
+        form = DocumentDownloadForm(form_data, queryset=qs)
         if form.is_valid():
             data = form.cleaned_data
         else:
