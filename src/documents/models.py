@@ -287,9 +287,7 @@ class Metadata(six.with_metaclass(MetadataBase, models.Model)):
 class MetadataRevision(models.Model):
     document = models.ForeignKey(Document)
 
-    revision = models.PositiveIntegerField(
-        verbose_name=u"Revision",
-        default=0)
+    revision = models.PositiveIntegerField(_('Revision'))
     revision_date = models.DateField(
         null=True, blank=True,
         verbose_name=u"Revision Date")
