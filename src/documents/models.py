@@ -326,6 +326,19 @@ class MetadataRevision(models.Model):
             self.document.updated_on = timezone.now()
             self.document.save()
 
+    def get_first_revision_number(self):
+        """The default value for the "revision" field.
+
+        This method is called in `documents.utils.create_document_from_forms`
+        to set the value of the first revision number (self.revision).
+
+        We cannot define a default callable directly on the field, because we
+        would not be able to override the default value in MetadataRevision
+        subclasses.
+
+        """
+        return 0
+
     def is_under_review(self):
         """This method is overriden in the ReviewMixin class."""
         return False
