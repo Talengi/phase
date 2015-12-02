@@ -348,20 +348,28 @@ class ReviewMixinTests(TestCase):
         doc = DocumentFactory(category=self.category)
         revision = doc.latest_revision
         revision.leader = self.user
-        revision.approver = self.user
-        revision.reviewers.add(self.user)
         revision.save()
 
+        # Review has not started yet
         self.assertFalse(revision.is_overdue())
 
+        # Due date is in the future
+        revision.start_review()
         today = timezone.now().date()
         revision.review_due_date = today + datetime.timedelta(days=1)
         self.assertFalse(revision.is_overdue())
 
+        # Due date is today
+        revision.review_due_date = today
+        self.assertFalse(revision.is_overdue())
+
+        # Due date is in the past
         revision.review_due_date = today - datetime.timedelta(days=1)
         self.assertTrue(revision.is_overdue())
 
-        revision.review_due_date = today
+        # Review has ended
+        revision.review_due_date = today - datetime.timedelta(days=1)
+        revision.end_review()
         self.assertFalse(revision.is_overdue())
 
     def test_current_step(self):

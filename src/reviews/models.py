@@ -471,8 +471,14 @@ class ReviewMixin(models.Model):
     is_under_review.short_description = _('Under review')
 
     def is_overdue(self):
+        """Tells if the review is overdue.
+
+        A review is overdue only if it's ongoing (ended reviews cannot
+        be overdue) and the due date is past.
+
+        """
         today = timezone.now().date()
-        return bool(self.review_due_date and self.review_due_date < today)
+        return self.is_under_review() and self.review_due_date < today
     is_overdue.short_description = _('Overdue')
 
     def current_review_step(self):
