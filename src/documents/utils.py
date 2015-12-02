@@ -50,6 +50,7 @@ def create_document_from_forms(metadata_form, revision_form, category, **doc_kwa
     from documents.models import Document
 
     revision = revision_form.save(commit=False)
+    revision.revision = revision.get_first_revision_number()
     metadata = metadata_form.save(commit=False)
 
     key = metadata.document_key or metadata.generate_document_key()
