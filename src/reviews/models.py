@@ -257,10 +257,12 @@ class ReviewMixin(models.Model):
             role=Review.ROLES.leader,
             document=self.document,
             revision=self.revision,
+            received_date=self.received_date,
+            start_date=start_date,
             due_date=self.review_due_date,
-            docclass=self.docclass,
             status=leader_review_status,
-        )
+            docclass=self.docclass,
+            revision_status=self.status)
 
         # Approver is not mandatory
         if self.approver_id:
@@ -269,9 +271,12 @@ class ReviewMixin(models.Model):
                 role=Review.ROLES.approver,
                 document=self.document,
                 revision=self.revision,
+                received_date=self.received_date,
+                start_date=start_date,
                 due_date=self.review_due_date,
+                status=leader_review_status,
                 docclass=self.docclass,
-            )
+                revision_status=self.status)
 
         self.reload_reviews()
         self.save(update_document=True)
