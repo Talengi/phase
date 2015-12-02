@@ -1,3 +1,4 @@
+{% if user_dashboards %}
 <li{% if dashboard_active %} class="active"{% endif %}>
     <a href="#nav-dashboards"
        id="dashboard-link"
@@ -20,3 +21,4 @@
         {% endfor %}
     </ul>
 </li>
+{% endif %}
