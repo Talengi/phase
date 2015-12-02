@@ -419,18 +419,36 @@ class ReviewMixin(models.Model):
             leader_review.save()
 
         # Sync approver
+        # Several cases here
+        #  * an existing approver review was deleted
+        #  * an existing approver review was modified
+        #  * an approver review was created
         approver_review = self.get_approver_review()
-        if approver_review.reviewer_id != self.approver_id:
-            # A new approver was submitted
+        if approver_review:
+            if approver_review.reviewer_id != self.approver_id:
+                # A new approver was submitted
+                if self.approver:
+                    approver_review.reviewer = self.approver
+                    approver_review.save()
+                # The approver was deleted
+                else:
+                    approver_review.delete()
+                    # If we were at the last review step, end the review completely
+                    if self.is_at_review_step(Review.STEPS.approver):
+                        self.end_review()
+        else:
             if self.approver:
-                approver_review.reviewer = self.approver
-                approver_review.save()
-            # The approver was deleted
-            else:
-                approver_review.delete()
-                # If we were at the last review step, end the review completely
-                if self.is_at_review_step(Review.STEPS.approver):
-                    self.end_review()
+                Review.objects.create(
+                    reviewer=self.approver,
+                    role=Review.ROLES.approver,
+                    document=self.document,
+                    revision=self.revision,
+                    received_date=self.received_date,
+                    start_date=self.review_start_date,
+                    due_date=self.review_due_date,
+                    docclass=self.docclass,
+                    status='pending',
+                    revision_status=self.status)
 
         # Sync reviewers
         old_reviews = self.get_reviewers_reviews()
