@@ -15,12 +15,14 @@
 <div class="col-sm-8">
     <div class="form-actions">
         <a class="btn btn-default" href="{% url "review_home" %}">Close</a>
+        {% if perms.documents.can_control_document %}
         <a href="#"
             data-toggle="modal"
             data-target="#cancel-review-modal"
             class="pull-right btn btn-warning">
             {{ _('Cancel review') }}
         </a>
+        {% endif %}
     </div>
     <hr />
 
