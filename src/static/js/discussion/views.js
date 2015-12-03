@@ -151,14 +151,16 @@ var Phase = Phase || {};
 
     Phase.Views.DiscussionView = Backbone.View.extend({
         initialize: function(options) {
-            var buttonElt = options.button;
-            var apiUrl = $(buttonElt).data('apiurl');
+            var buttons = $(options.buttons);
+            var apiUrl = buttons.data('apiurl');
+            this.canDiscuss = buttons.data('candiscuss');
 
-            this.canDiscuss = $(buttonElt).data('candiscuss');
+            var discussBtn = buttons.find('button.remarks-button');
+            var downloadButn = buttons.find('button.download-comments-button');
 
             this.collection = new Phase.Collections.NoteCollection([], { apiUrl: apiUrl });
             this.remarksButtonView = new Phase.Views.RemarksButtonView({
-                element: buttonElt,
+                element: discussBtn,
                 collection: this.collection
             });
 
@@ -186,10 +188,10 @@ var Phase = Phase || {};
      */
     Phase.Views.DiscussionAppView = Backbone.View.extend({
         initialize: function() {
-            var buttons = $('button.remarks-button');
-            _.each(buttons, function(button) {
+            var discussionButtons = $('div.discussion-buttons');
+            _.each(discussionButtons, function(buttons) {
                 var discussionView = new Phase.Views.DiscussionView({
-                    button: button
+                    buttons: buttons
                 });
                 return discussionView;
             });
