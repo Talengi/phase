@@ -18,6 +18,7 @@
                     {% endif %}
                     <th>{{ _('Doc. number') }}</th>
                     <th>{{ _('Title') }}</th>
+                    <th>{{ _('Category') }}</th>
                     <th>{{ _('Revision') }}</th>
                     <th>{{ _('Status') }}</th>
                     <th>{{ _('Received date') }}</th>
@@ -42,6 +43,9 @@
                 </td>
                 <td class="columntitle">
                     <a href="{% url 'review_document' rev.document.document_key %}">{{ rev.document.title }}</a>
+                </td>
+                <td class="columncategory">
+                    {{ rev.document.category }}
                 </td>
                 <td class="columncurrent_revision">{{ rev.revision_name }}</td>
                 <td class="columnstatus">{{ rev.revision_status|stringify }}</td>
