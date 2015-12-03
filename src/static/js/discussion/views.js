@@ -153,10 +153,11 @@ var Phase = Phase || {};
         initialize: function(options) {
             var buttons = $(options.buttons);
             var apiUrl = buttons.data('apiurl');
+            var initialDiscussionLength = buttons.data('initial-discussion-length');
             this.canDiscuss = buttons.data('candiscuss');
 
             var discussBtn = buttons.find('button.remarks-button');
-            var downloadButn = buttons.find('button.download-comments-button');
+            var downloadBtn = buttons.find('a.download-comments-button');
 
             this.collection = new Phase.Collections.NoteCollection([], { apiUrl: apiUrl });
             this.remarksButtonView = new Phase.Views.RemarksButtonView({
