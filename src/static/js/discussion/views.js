@@ -123,6 +123,20 @@ var Phase = Phase || {};
         }
     });
 
+    Phase.Views.DownloadDiscussionButtonView = Backbone.View.extend({
+        initialize: function(options) {
+            this.setElement(options.element);
+
+            var nbComments = options.nbComments;
+            if (nbComments === 0) {
+                this.disable();
+            }
+        },
+        disable: function() {
+            this.$el.attr('disabled', 'disabled');
+        }
+    });
+
     Phase.Views.RemarksButtonView = Backbone.View.extend({
         events: {
             'click': 'loadDiscussion'
@@ -154,6 +168,7 @@ var Phase = Phase || {};
             var buttons = $(options.buttons);
             var apiUrl = buttons.data('apiurl');
             var initialDiscussionLength = buttons.data('initial-discussion-length');
+            var nbComments = buttons.data('nb-comments');
             this.canDiscuss = buttons.data('candiscuss');
 
             var discussBtn = buttons.find('button.remarks-button');
@@ -163,6 +178,10 @@ var Phase = Phase || {};
             this.remarksButtonView = new Phase.Views.RemarksButtonView({
                 element: discussBtn,
                 collection: this.collection
+            });
+            this.downloadButtonView = new Phase.Views.DownloadDiscussionButtonView({
+                element: downloadBtn,
+                nbComments: nbComments
             });
 
             this.listenTo(this.collection, 'reset', this.displayDiscussion);
