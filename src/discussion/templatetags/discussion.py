@@ -9,6 +9,12 @@ register = template.Library()
 
 
 @register.simple_tag
+def discussion_length(revision):
+    length = get_discussion_length(revision)
+    return length
+
+
+@register.simple_tag
 def discussion_length_badge(revision):
     length = get_discussion_length(revision)
     return '<span class="badge">{}</span>'.format(length)

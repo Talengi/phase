@@ -48,6 +48,7 @@
             data-toggle="modal"
             data-apiurl="{% url 'note-list' document.document_key revision.revision %}"
             data-candiscuss="{{ can_discuss|yesno:"true,false" }}"
+            data-initial-discussion-length="{% discussion_length revision %}"
             href="#discussion-modal">
         {{ _('Remarks') }}
         {% discussion_length_badge revision %}
