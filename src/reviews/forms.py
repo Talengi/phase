@@ -42,6 +42,11 @@ class ReviewFormMixin(forms.ModelForm):
         if self.instance.id:
             self.reviews = get_cached_reviews(self.instance)
 
+            # Extract non null comments from reviews
+            all_comments = map(lambda x: x.comments or None, self.reviews)
+            comments = filter(lambda x: x, all_comments)
+            self.nb_comments = len(comments)
+
             # Is the current user a member of the distribution list?
             self.can_discuss = False
             if self.request:

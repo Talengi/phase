@@ -42,20 +42,25 @@
 </table>
 
 <div class="pull-right">
-    <button id="remarks-button-{{ revision.revision }}"
-            type="button"
-            class="remarks-button btn btn-default"
-            data-toggle="modal"
-            data-apiurl="{% url 'note-list' document.document_key revision.revision %}"
-            data-candiscuss="{{ can_discuss|yesno:"true,false" }}"
-            href="#discussion-modal">
-        {{ _('Remarks') }}
-        {% discussion_length_badge revision %}
-    </button>&nbsp;
+    <div class="discussion-buttons"
+         data-apiurl="{% url 'note-list' document.document_key revision.revision %}"
+         data-candiscuss="{{ can_discuss|yesno:"true,false" }}"
+         data-initial-discussion-length="{% discussion_length revision %}"
+         data-nb-comments="{{ nb_comments }}">
 
-    <a href="{% url 'download_review_comments' document.document_key revision.revision %}"
-       class="btn btn-default"
-       type="button">
-        {{ _('Download all comments') }}
-    </a>
+        <button id="remarks-button-{{ revision.revision }}"
+                type="button"
+                class="remarks-button btn btn-default"
+                data-toggle="modal"
+                href="#discussion-modal">
+            {{ _('Remarks') }}
+            {% discussion_length_badge revision %}
+        </button>&nbsp;
+
+        <a href="{% url 'download_review_comments' document.document_key revision.revision %}"
+           class="download-comments-button btn btn-default"
+           type="button">
+            {{ _('Download all comments') }}
+        </a>
+    </div>
 </div>

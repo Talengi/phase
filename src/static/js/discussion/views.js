@@ -123,6 +123,20 @@ var Phase = Phase || {};
         }
     });
 
+    Phase.Views.DownloadDiscussionButtonView = Backbone.View.extend({
+        initialize: function(options) {
+            this.setElement(options.element);
+
+            var nbComments = options.nbComments;
+            if (nbComments === 0) {
+                this.disable();
+            }
+        },
+        disable: function() {
+            this.$el.attr('disabled', 'disabled');
+        }
+    });
+
     Phase.Views.RemarksButtonView = Backbone.View.extend({
         events: {
             'click': 'loadDiscussion'
@@ -151,15 +165,23 @@ var Phase = Phase || {};
 
     Phase.Views.DiscussionView = Backbone.View.extend({
         initialize: function(options) {
-            var buttonElt = options.button;
-            var apiUrl = $(buttonElt).data('apiurl');
+            var buttons = $(options.buttons);
+            var apiUrl = buttons.data('apiurl');
+            var initialDiscussionLength = buttons.data('initial-discussion-length');
+            var nbComments = buttons.data('nb-comments');
+            this.canDiscuss = buttons.data('candiscuss');
 
-            this.canDiscuss = $(buttonElt).data('candiscuss');
+            var discussBtn = buttons.find('button.remarks-button');
+            var downloadBtn = buttons.find('a.download-comments-button');
 
             this.collection = new Phase.Collections.NoteCollection([], { apiUrl: apiUrl });
             this.remarksButtonView = new Phase.Views.RemarksButtonView({
-                element: buttonElt,
+                element: discussBtn,
                 collection: this.collection
+            });
+            this.downloadButtonView = new Phase.Views.DownloadDiscussionButtonView({
+                element: downloadBtn,
+                nbComments: nbComments
             });
 
             this.listenTo(this.collection, 'reset', this.displayDiscussion);
@@ -186,10 +208,10 @@ var Phase = Phase || {};
      */
     Phase.Views.DiscussionAppView = Backbone.View.extend({
         initialize: function() {
-            var buttons = $('button.remarks-button');
-            _.each(buttons, function(button) {
+            var discussionButtons = $('div.discussion-buttons');
+            _.each(discussionButtons, function(buttons) {
                 var discussionView = new Phase.Views.DiscussionView({
-                    button: button
+                    buttons: buttons
                 });
                 return discussionView;
             });
