@@ -187,11 +187,17 @@ var Phase = Phase || {};
             this.listenTo(this.collection, 'reset', this.displayDiscussion);
         },
         displayDiscussion: function() {
+            if (this.discussionThreadView !== undefined) {
+                this.discussionThreadView.stopListening();
+            }
             this.discussionThreadView = new Phase.Views.DiscussionThreadView({
                 collection: this.collection
             });
             this.discussionThreadView.render();
 
+            if (this.discussionFormView !== undefined) {
+                this.discussionFormView.stopListening();
+            }
             if (this.canDiscuss) {
                 this.discussionFormView = new Phase.Views.DiscussionFormView({
                     collection: this.collection
