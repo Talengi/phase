@@ -45,7 +45,8 @@
     <div class="discussion-buttons"
          data-apiurl="{% url 'note-list' document.document_key revision.revision %}"
          data-candiscuss="{{ can_discuss|yesno:"true,false" }}"
-         data-initial-discussion-length="{% discussion_length revision %}">
+         data-initial-discussion-length="{% discussion_length revision %}"
+         data-nb-comments="{{ nb_comments }}">
 
         <button id="remarks-button-{{ revision.revision }}"
                 type="button"
