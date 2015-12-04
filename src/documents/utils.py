@@ -67,6 +67,7 @@ def create_document_from_forms(metadata_form, revision_form, category, **doc_kwa
 
     metadata.document = document
     metadata.latest_revision = revision
+    metadata.document_key = key
     metadata.save()
     metadata_form.save_m2m()
 
