@@ -100,10 +100,14 @@ class Export(models.Model):
             settings.EXPORTS_URL.lstrip('/'),
             self.get_filename())
 
-    def get_filepath(self):
+    def get_filedir(self):
         return os.path.join(
             settings.PRIVATE_ROOT,
-            settings.EXPORTS_SUBDIR,
+            settings.EXPORTS_SUBDIR)
+
+    def get_filepath(self):
+        return os.path.join(
+            self.get_filedir(),
             self.get_filename())
 
     def start_export(self, async=True):
@@ -128,6 +132,12 @@ class Export(models.Model):
 
     def open_file(self):
         """Opens the file in which data should be dumped."""
+
+        # Create the export dir if it does not exist
+        export_dir = self.get_filedir()
+        if not os.path.exists(export_dir):
+            os.makedirs(export_dir)
+
         return open(self.get_filepath(), 'wb')
 
     def get_data_generator(self):
