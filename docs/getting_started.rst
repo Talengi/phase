@@ -23,30 +23,26 @@ Phase is intended to be used on projects where:
 Installation
 ------------
 
-Steps to initialize the project on a local machine::
+Check the `deployment` doc to see how to properly intall Phase on a local
+machine.
 
-    $ git clone https://github.com/Talengi/phase.git repository
-    $ virtualenv venv
-    $ source venv/bin/activate
-    $ pip install -r repository/requirements/local.txt
-    $ npm -g install yuglify
-    $ cd repository
-    $ python phase/manage.py syncdb --noinput --settings=core.settings.local
-    $ fab runserver
+Contributing
+------------
+
+To make Phase work on a local environment, you must have the following
+processes running:
+
+ * Phase (django runserver)
+ * Celery (run locally with *DJANGO_SETTINGS_MODULE=core.settings.local celery -A
+   core.celery worker -l info*)
+ * RabbitMQ
+ * Postgres
+ * Elasticsearch
+ * Memcached
 
 
 Available fabric commands
 -------------------------
 
-Check the list of available commands directly in your shell::
-
-    $ fab -l
-    Available commands:
-
-        check      Checks that everything is fine, useful before deploying.
-        deploy     Deploys the project against staging.
-        docs       Generates sphinx documentation for the project.
-        errors     Displays error.log file from staging.
-        log        Displays access.log file from staging.
-        runserver  Runs the local Django server.
-        test       Launches tests for the whole project.
+A fabric script is available to run custom commands. Check `fabfile.py` to have
+an up to date list.

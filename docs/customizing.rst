@@ -3,8 +3,6 @@ Customizing document models
 
 Phase comes with predefined document models. However, it is designed so you can create your own.
 
-
-
 All you need to do is to create a new application with a name ending by *"_documents"*::
 
     mkdir myproject_app
@@ -15,83 +13,27 @@ You need to make sure that this application is accessible in the **PYTHONPATH**.
 
     add2virtualenv myproject_app
 
-Once this is done, add your application to the **INSTALLED_APPS** list and run **syncdb**.
+Once this is done, add your application in the `core/settings/doc_apps.py` file
+and run **migrate**.
+
+Sample `doc_apps.py`::
+
+    # -*- coding: utf-8 -*-
+    from __future__ import unicode_literals
+
+    DOC_APPS = (
+        'epc2_documents',
+        'sileo_documents',
+    )
+
+This file is listed in .gitignore and must not be commited.
 
 Document model definition
 -------------------------
 
 Every document model is made of two classes: a base metadata class and a revision class. The base class must inherit of *documents.models.Metadata* and the revision class must inherit of *documents.models.MetadataRevision*.
 
-Here's a basic sample:
-
-.. code:: python
-
-
-    class DemoMetadata(Metadata):
-
-        # This field with this exact name is required
-        latest_revision = models.ForeignKey(
-            'DemoMetadataRevision',
-            verbose_name=_('Latest revision'),
-            null=True)
-        title = models.CharField(
-            _('Title'),
-            max_length=50)
-        leader = models.ForeignKey(
-            User,
-            verbose_name=_('Leader'),
-            related_name='leading_demo_metadata',
-            null=True, blank=True)
-
-        class Meta:
-            ordering = ('title',)
-
-        # This is a custom class, required to configure the document model
-        class PhaseConfig:
-            # Here are the fields that fill appear in the filter form
-            filter_fields = (
-                'leader',
-            )
-
-            # Those fields will be searchable in the filter form
-            searchable_fields = (
-                'document_key', 'title'
-            )
-            # Column definition
-            column_fields = (
-                ('Document Number', 'document_key'),
-                ('Title', 'title'),
-                ('Rev.', 'current_revision'),
-                ('Rev. Date', 'current_revision_date'),
-                ('Status', 'status'),
-            )
-
-        def natural_key(self):
-            return (self.document_key,)
-
-        def generate_document_key(self):
-            return slugify(self.title)
-
-
-    class DemoMetadataRevision(MetadataRevision):
-        STATUSES = (
-            ('opened', 'Opened'),
-            ('closed', 'Closed'),
-        )
-        native_file = RevisionFileField(
-            _('Native File'),
-            null=True, blank=True)
-        pdf_file = RevisionFileField(
-            _('PDF File'),
-            null=True, blank=True)
-        status = models.CharField(
-            _('Status'),
-            max_length=20,
-            choices=STATUSES,
-            null=True, blank=True)
-
-
-Some fields and methods **must** be defined on the base class.
+Check the `default_documents.models` package for an up to date working example.
 
 Required fields and methods
 ---------------------------
