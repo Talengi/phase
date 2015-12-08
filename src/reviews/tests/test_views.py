@@ -479,7 +479,8 @@ class ReviewFormTests(TestCase):
         )
         revision = doc.latest_revision
         revision.start_review()
-        res = self.client.post(self.url, {'review': 'something'})
+        res = self.client.post(self.url,
+                               {'review': 'something', 'return_code': '0'})
         self.assertEqual(res.status_code, 403)
 
     def test_reviewer_still_can_access_review_after_step_is_closed(self):
@@ -535,7 +536,8 @@ class ReviewFormTests(TestCase):
 
         self.assertIsNone(revision.leader_step_closed)
 
-        self.client.post(self.url, {'review': 'something'})
+        self.client.post(self.url,
+                         {'review': 'something', 'return_code': '0'})
         revision = revision.__class__.objects.get(pk=revision.pk)
         self.assertIsNotNone(revision.leader_step_closed)
 
@@ -559,6 +561,26 @@ class ReviewFormTests(TestCase):
         revision = doc.latest_revision
         self.assertEqual(revision.return_code, '1')
 
+    def test_leader_submit_review_without_return_code(self):
+        doc = DocumentFactory(
+            document_key='test_key',
+            category=self.category,
+            revision={
+                'leader': self.user,
+                'received_date': datetime.date.today(),
+            }
+        )
+        revision = doc.latest_revision
+        revision.start_review()
+        revision.end_reviewers_step()
+
+        res = self.client.post(self.url, {'review': 'something'})
+        self.assertEqual(res.status_code, 200)
+        self.assertFormError(
+            res, 'form', 'return_code', 'This field is required.')
+        review = revision.get_review(self.user)
+        self.assertEqual(review.status, 'progress')
+
     def test_leader_submit_review_with_file(self):
         doc = DocumentFactory(
             document_key='test_key',
@@ -573,7 +595,8 @@ class ReviewFormTests(TestCase):
         revision.end_reviewers_step()
 
         with open(self.filename, 'rb') as fp:
-            self.client.post(self.url, {'review': 'something', 'comments': fp})
+            self.client.post(self.url, {
+                'review': 'something', 'comments': fp, 'return_code': '0'})
             revision = revision.__class__.objects.get(pk=revision.pk)
             self.assertIsNotNone(revision.leader_step_closed)
 
@@ -609,7 +632,8 @@ class ReviewFormTests(TestCase):
 
         self.assertIsNone(revision.review_end_date)
 
-        self.client.post(self.url, {'review': 'something'})
+        self.client.post(self.url, {
+            'review': 'something', 'return_code': '0'})
         revision = revision.__class__.objects.get(pk=revision.pk)
         self.assertIsNotNone(revision.review_end_date)
 
@@ -628,7 +652,8 @@ class ReviewFormTests(TestCase):
         revision.end_leader_step()
 
         with open(self.filename, 'rb') as fp:
-            self.client.post(self.url, {'review': 'something', 'comments': fp})
+            self.client.post(self.url, {
+                'review': 'something', 'comments': fp, 'return_code': '0'})
             revision = revision.__class__.objects.get(pk=revision.pk)
             self.assertIsNotNone(revision.review_end_date)
 
