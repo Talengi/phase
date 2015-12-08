@@ -180,10 +180,6 @@ class MetadataBase(ModelBase):
                 raise TypeError('Your "PhaseConfig" definition is incorrect '
                                 'on %s. Please check the doc' % name)
 
-            if 'title' not in attrs and 'title' not in base_attrs:
-                raise TypeError('You must define a title field or property '
-                                'on model %s' % name)
-
         return super(MetadataBase, cls).__new__(cls, name, bases, attrs)
 
 
