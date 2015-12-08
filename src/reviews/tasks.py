@@ -13,16 +13,19 @@ from core.celery import app
 from reviews.signals import pre_batch_review, post_batch_review, batch_item_indexed
 from reviews.models import Review
 from notifications.models import notify
+from discussion.models import Note
 
 
 logger = logging.getLogger(__name__)
 
 
 @app.task
-def do_batch_import(user_id, category_id, contenttype_id, document_ids):
+def do_batch_import(user_id, category_id, contenttype_id, document_ids,
+                    remark=None):
+
+    # Fetch document list
     contenttype = ContentType.objects.get_for_id(contenttype_id)
     document_class = contenttype.model_class()
-
     docs = document_class.objects \
         .select_related() \
         .filter(document__category_id=category_id) \
@@ -32,6 +35,7 @@ def do_batch_import(user_id, category_id, contenttype_id, document_ids):
     nok = []
     count = 0
     total_docs = docs.count()
+    remarks = []
 
     # We compute the progress as the proportion of documents for which the
     # review has started.
@@ -49,6 +53,16 @@ def do_batch_import(user_id, category_id, contenttype_id, document_ids):
                 raise RuntimeError()
 
             doc.latest_revision.start_review()
+
+            # In case of batch review start with a remark,
+            # the same remark is added for every review.
+            if remark is not None:
+                remarks.append(Note(
+                    author_id=user_id,
+                    document_id=doc.id,
+                    revision=doc.latest_revision.revision,
+                    body=remark))
+
             batch_item_indexed.send(
                 sender=do_batch_import,
                 document_type=doc.document.document_type(),
@@ -63,6 +77,9 @@ def do_batch_import(user_id, category_id, contenttype_id, document_ids):
         current_task.update_state(
             state='PROGRESS',
             meta={'progress': progress})
+
+    if len(remarks) > 0:
+        Note.objects.bulk_create(remarks)
 
     post_batch_review.send(sender=do_batch_import, user_id=user_id)
 

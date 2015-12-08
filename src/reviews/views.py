@@ -152,11 +152,13 @@ class BatchStartReviews(BaseDocumentBatchActionView):
     """Starts the review process for multiple documents at once."""
 
     def start_job(self, contenttype, document_ids):
+        remark = self.request.POST.get('remark', None)
         job = do_batch_import.delay(
             self.request.user.id,
             self.category.id,
             contenttype.id,
-            document_ids)
+            document_ids,
+            remark=remark)
         return job
 
 
