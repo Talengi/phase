@@ -328,7 +328,7 @@ class ContractorDeliverable(Metadata):
                     category.organisation.slug,
                     category.slug]),
                 'ajax': 'true',
-                'modal': '',
+                'modal': 'batch-review-modal',
                 'progression_modal': True,
                 'icon': 'eye-open',
             }
@@ -361,6 +361,7 @@ class ContractorDeliverable(Metadata):
         templates = super(ContractorDeliverable, cls).get_batch_actions_modals()
         return templates + [
             'reviews/document_list_cancel_review_modal.html',
+            'reviews/document_list_batch_review_modal.html',
             'transmittals/document_list_create_transmittal_modal.html'
         ]
 
