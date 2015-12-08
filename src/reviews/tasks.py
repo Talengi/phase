@@ -47,6 +47,7 @@ def do_batch_import(user_id, category_id, contenttype_id, document_ids,
 
     pre_batch_review.send(sender=do_batch_import)
 
+    # Try to start the review for every listed document
     for doc in docs:
         try:
             if not doc.latest_revision.can_be_reviewed:
@@ -72,6 +73,7 @@ def do_batch_import(user_id, category_id, contenttype_id, document_ids,
         except:
             nok.append(doc)
 
+        # Update the task progression bar
         count += 1
         progress = float(count) / total_docs * 100
         current_task.update_state(
@@ -83,6 +85,7 @@ def do_batch_import(user_id, category_id, contenttype_id, document_ids,
 
     post_batch_review.send(sender=do_batch_import, user_id=user_id)
 
+    # Send success and failure notifications
     if len(ok) > 0:
         ok_message = ugettext('The review started for the following documents:')
         ok_list = '</li><li>'.join('<a href="%s">%s</a>' % (doc.get_absolute_url(), doc) for doc in ok)
