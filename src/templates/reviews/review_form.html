@@ -27,7 +27,11 @@
     <hr />
 
     <h1>{{ _('Review document') }}</h1>
-    {{ form.errors }}
+    {% if form.errors %}
+        <div class="alert alert-danger">
+            <p>There was errors processing your data. See below.</p>
+        </div>
+    {% endif %}
 
     <fieldset id="fieldset-general-information">
         <legend>{{ _('General information') }}</legend>
@@ -128,6 +132,12 @@
                             {{ field.label }}
                         </label> <br />
                         {{ field }}
+                        {% if field.errors %}
+                        <p class="alert alert-danger">
+                            <span class="glyphicon glyphicon-arrow-up"></span>
+                            {{ field.errors.0 }}
+                        </p>
+                        {% endif %}
                     </div>
                 {% endfor %}
             </fieldset>
