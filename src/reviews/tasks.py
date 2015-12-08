@@ -35,7 +35,6 @@ def do_batch_import(user_id, category_id, contenttype_id, document_ids,
     nok = []
     count = 0
     total_docs = docs.count()
-    remarks = []
 
     # We compute the progress as the proportion of documents for which the
     # review has started.
@@ -57,12 +56,17 @@ def do_batch_import(user_id, category_id, contenttype_id, document_ids,
 
             # In case of batch review start with a remark,
             # the same remark is added for every review.
+            # Note: using "bulk_create" to create all the discussion
+            # at the end of the task would be much more efficient.
+            # However, by doing so, individual `post_save` signals would not
+            # be fired. Since the request is expected to take some time anyway,
+            # we will let this as is for now.
             if remark is not None:
-                remarks.append(Note(
+                Note.objects.create(
                     author_id=user_id,
                     document_id=doc.id,
                     revision=doc.latest_revision.revision,
-                    body=remark))
+                    body=remark)
 
             batch_item_indexed.send(
                 sender=do_batch_import,
@@ -79,9 +83,6 @@ def do_batch_import(user_id, category_id, contenttype_id, document_ids,
         current_task.update_state(
             state='PROGRESS',
             meta={'progress': progress})
-
-    if len(remarks) > 0:
-        Note.objects.bulk_create(remarks)
 
     post_batch_review.send(sender=do_batch_import, user_id=user_id)
 
