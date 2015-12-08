@@ -6,6 +6,7 @@ server {
     server_name app.url.com;
     access_log /var/log/nginx/phase.access.log;
     error_log /var/log/nginx/phase.error.log;
+    client_max_body_size 1g;
 
     location /static/ {
         alias   /home/phase/phase/public/static/;

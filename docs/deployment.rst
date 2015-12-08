@@ -10,10 +10,13 @@ production).
 Hosting Phase on a dedicated server
 -----------------------------------
 
-If you choose to manage your own dedicated server, you can use
-`OpenVZ containers <http://openvz.org>`_ to contain different Phase installations.
+The recommanded settings is to install Phase in an LXC container on a debian
+stable (currently Jessie) host.
 
-Follow the `OpenVZ installation instructions <http://openvz.org/Installation_on_Debian>`_.
+Also use a jessie container::
+
+    apt-get install lxc
+    lxc-create -n <name> -t debian -- -a amd64 -r jessie
 
 Server installation
 -------------------
@@ -34,10 +37,7 @@ Some tools used in Phase require a node.js installation. Get the `latest
 version url on the Node.js site <http://nodejs.org/dist/v0.10.25/node-v0.10.25.tar.gz>`_.
 Let's install it::
 
-    echo 'deb http://http.debian.net/debian wheezy-backports main' > /etc/apt/sources.list.d/wheezy-backports.list
-    apt-get update
-    apt-get -t wheezy-backports install nodejs-legacy
-    apt-get install curl
+    apt-get install nodejs-legacy wget curl
     wget https://www.npmjs.org/install.sh
     bash install.sh
 
@@ -59,9 +59,8 @@ Database creation
 ::
 
     su - postgres
-    createuser -P
+    createuser -P phase
 
-        Enter name of role to add: phase
         Enter password for new role: phase
         Enter it again: phase
         Shall the new role be a superuser? (y/n) n
@@ -91,6 +90,8 @@ Add those lines in the ``~/.profile`` file::
     export WORKON_HOME=~/.virtualenvs
     mkdir -p $WORKON_HOME
     source `which virtualenvwrapper.sh`
+    workon phase
+    export DJANGO_SETTINGS_MODULE=core.settings.production
 
 Then::
 
@@ -107,6 +108,12 @@ You need to install java for ES to work::
 
     aptitude install openjdk-7-jre
 
+You can install ES by downloading the apt package on the elastic site::
+
+    wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | apt-key add -
+    wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.6.2.deb
+    dpkg -i elasticsearch-1.6.2.deb
+
 The default Elasticsearch installation is enough, but remember that ES listens
 on 0.0.0.0 by default, which can be inconveniant.
 
@@ -119,6 +126,10 @@ To limit ES connections to localhost, one can update the config file
 
 You also need to make sure that your virtual machine has enough memory
 available.
+
+Also, make sure ES starts after boot::
+
+    update-rc.d elasticsearch defaults
 
 Phase installation
 ------------------
@@ -136,7 +147,11 @@ As phase user::
     pip install -r ../requirements/production.txt
     export DJANGO_SETTINGS_MODULE=core.settings.production
     python manage.py collectstatic
-    python manage.py syncdb
+    python manage.py migrate
+
+You can load initial testing data if you need it::
+
+    python manage.py loaddata initial_accounts initial_values_lists initial_categories initial_documents
 
 Web server configuration
 ------------------------
@@ -209,4 +224,4 @@ Missing jpeg libs for Pillow
 When you pip install requirements, Pillow might fail to install with an error
 related to jpeg management. To fix this, run this command as root::
 
-    sudo apt-get install libjpeg-dev
+    apt-get install libjpeg-dev
