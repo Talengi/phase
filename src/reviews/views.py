@@ -373,7 +373,6 @@ class ReviewFormView(LoginRequiredMixin, UpdateView):
 
         context.update({
             'document': self.document,
-            'category': self.document.category,
             'document_key': self.document.document_key,
             'revision': self.revision,
             'reviews': all_reviews,
@@ -386,6 +385,8 @@ class ReviewFormView(LoginRequiredMixin, UpdateView):
             'close_leader_button': close_leader_button,
             'back_to_leader_button': back_to_leader_button,
             'can_discuss': can_discuss,
+            'form': form,
+            'fields': self.revision.get_review_fields(),
         })
         return context
 
