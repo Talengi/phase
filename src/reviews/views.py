@@ -302,7 +302,8 @@ class ReviewFormView(LoginRequiredMixin, UpdateView):
     def get_object(self, queryset=None):
         document_key = self.kwargs.get('document_key')
         qs = Document.objects \
-            .filter(category__users=self.request.user)
+            .filter(category__users=self.request.user) \
+            .select_related()
         document = get_object_or_404(qs, document_key=document_key)
         revision = document.latest_revision
         review = revision.get_review(self.request.user)
@@ -372,6 +373,7 @@ class ReviewFormView(LoginRequiredMixin, UpdateView):
 
         context.update({
             'document': self.document,
+            'category': self.document.category,
             'document_key': self.document.document_key,
             'revision': self.revision,
             'reviews': all_reviews,

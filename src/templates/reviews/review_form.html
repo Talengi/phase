@@ -37,6 +37,13 @@
         <legend>{{ _('General information') }}</legend>
 
         <div class="form-group">
+            <div class="control-label">{{ _('Category') }}</div>
+            <div class="controls">
+                <span class="uneditable-input">{{ category }}</span>
+            </div>
+        </div>
+
+        <div class="form-group">
             <div class="control-label">{{ _('Document number') }}</div>
             <div class="controls">
                 <span class="uneditable-input">{{ revision.document.document_key }}</span>
