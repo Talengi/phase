@@ -9,6 +9,7 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.utils import timezone
 
+from metadata.factories import ValuesListFactory
 from categories.factories import CategoryFactory
 from documents.factories import DocumentFactory
 from accounts.factories import UserFactory
@@ -400,6 +401,14 @@ class ApproverDocumentListTests(TestCase):
 class ReviewFormTests(TestCase):
 
     def setUp(self):
+        ValuesListFactory(
+            index='REVIEW_RETURN_CODES',
+            name='Review return codes',
+            values={
+                '0': '0',
+                '1': '1',
+            }
+        )
         self.category = CategoryFactory()
         self.user = UserFactory(
             email='testadmin@phase.fr',
