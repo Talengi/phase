@@ -385,7 +385,6 @@ class ReviewFormView(LoginRequiredMixin, UpdateView):
             'close_leader_button': close_leader_button,
             'back_to_leader_button': back_to_leader_button,
             'can_discuss': can_discuss,
-            'form': form,
             'fields': self.revision.get_review_fields(),
         })
         return context
