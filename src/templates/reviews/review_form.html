@@ -7,6 +7,7 @@
         class="nav"
         data-spy="affix">
         <li><a href="#fieldset-general-information">General information</a></li>
+        <li><a href="#fieldset-files">Files</a></li>
         <li><a href="#fieldset-review-data">Review data</a></li>
         <li><a href="#fieldset-reviewers">Distribution list</a></li>
         <li><a href="#fieldset-your-comments">Your comments</a></li>
@@ -36,34 +37,18 @@
     <fieldset id="fieldset-general-information">
         <legend>{{ _('General information') }}</legend>
 
-        <div class="form-group">
-            <div class="control-label">{{ _('Document number') }}</div>
-            <div class="controls">
-                <span class="uneditable-input">{{ revision.document.document_key }}</span>
+        {% for label, value in fields %}
+            <div class="form-group">
+                <div class="control-label">{{ label }}</div>
+                <div class="controls">
+                    <span class="uneditable-input">{{ value }}</span>
+                </div>
             </div>
-        </div>
+        {% endfor %}
+    </fieldset>
 
-        <div class="form-group">
-            <div class="control-label">{{ _('Title') }}</div>
-            <div class="controls">
-                <p class="uneditable-input">{{ revision.document.title }}</p>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="control-label">{{ _('Status') }}</div>
-            <div class="controls">
-                <span class="uneditable-input">{{ revision.status }}</span>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="control-label">{{ _('Revision') }}</div>
-            <div class="controls">
-                <span class="uneditable-input">{{ revision.name }}</span>
-            </div>
-        </div>
-
+    <fieldset id="fieldset-files">
+        <legend>{{ _('Files') }}</legend>
         <div class="form-group">
             <div class="control-label">{{ _('Native file') }}</div>
             <div class="controls">

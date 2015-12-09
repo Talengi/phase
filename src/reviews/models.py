@@ -640,3 +640,14 @@ class ReviewMixin(models.Model):
             'review_closed_on': review_closed_on
         })
         return context
+
+    def get_review_fields(self):
+        """Return data to display on the review form."""
+        fields = [
+            (_('Category'), self.document.category),
+            (_('Document number'), self.document.document_key),
+            (_('Title'), self.document.title),
+            (_('Status'), self.status),
+            (_('Revision'), self.name),
+        ]
+        return fields
