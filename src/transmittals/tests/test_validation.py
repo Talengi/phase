@@ -87,7 +87,8 @@ class TransmittalsValidationTests(TestCase):
 
 
 class DirectoryContentTests(TransmittalsValidationTests):
-    fixtures = ['initial_data', 'initial_values_lists', 'initial_documents']
+    fixtures = ['initial_categories', 'initial_values_lists',
+                'initial_accounts', 'initial_documents']
 
     def test_invalid_directory_name(self):
         trs_import = self.prepare_fixtures('invalid_trs_dirname', 'I-Love-Bananas')
@@ -142,7 +143,8 @@ class DirectoryContentTests(TransmittalsValidationTests):
 
 
 class CSVContentTests(TransmittalsValidationTests):
-    fixtures = ['initial_data', 'initial_values_lists', 'initial_documents']
+    fixtures = ['initial_categories', 'initial_values_lists',
+                'initial_accounts', 'initial_documents']
 
     def test_missing_csv_data(self):
         trs_import = self.prepare_fixtures('missing_data', 'FAC10005-CTR-CLT-TRS-00001')
