@@ -17,7 +17,9 @@ from transmittals.models import Transmittal, TrsRevision
 
 
 class TestImports(TestCase):
-    fixtures = ['initial_data', 'initial_values_lists', 'initial_documents']
+    fixtures = [
+        'initial_categories', 'initial_values_lists', 'initial_accounts',
+        'initial_documents']
 
     def setUp(self):
         document = Document.objects.get(document_key='FAC10005-CTR-000-EXP-LAY-4891')

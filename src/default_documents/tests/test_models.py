@@ -1,29 +1,24 @@
-from django.test import TestCase
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 
-from default_documents.models import (
-    ContractorDeliverable, ContractorDeliverableRevision)
-from documents.factories import DocumentFactory
+from default_documents.tests.test import ContractorDeliverableTestCase
 
 
-class ContractorDeliverableTests(TestCase):
+class DocumentKeyTests(ContractorDeliverableTestCase):
 
     def test_document_number(self):
         """Tests that a document number is generated regularly."""
-        document = DocumentFactory()
-        revision = ContractorDeliverableRevision.objects.create(
-            document=document,
-            received_date='2015-10-10',
-        )
-        metadata = ContractorDeliverable.objects.create(
-            document=document,
-            latest_revision=revision,
-            contract_number='FAC09001',
-            title=u'HAZOP report',
-            sequential_number="0004",
-            discipline="HSE",
-            document_type="REP",
-        )
-        self.assertEqual(metadata.document_key,
-                         u'FAC09001-FWF-000-HSE-REP-0004')
-        self.assertEqual(unicode(metadata),
-                         u'FAC09001-FWF-000-HSE-REP-0004')
+        kwargs = {
+            'metadata': {
+                'contract_number': 'FAC09001',
+                'title': 'HAZOP report',
+                'originator': 'FWF',
+                'sequential_number': '0004',
+                'discipline': 'HSE',
+                'document_type': 'REP',
+            }
+        }
+        doc = self.create_doc(**kwargs)
+
+        self.assertEqual(doc.metadata.generate_document_key(),
+                         'FAC09001-FWF-000-HSE-REP-0004')

@@ -89,44 +89,19 @@ casper.test.begin('Clicking on a checkbox add a class to the tr', 0, function su
 
 casper.test.begin('Buttons are enabled on checkbox click', 0, function suite(test) {
     casper.start(document_list_url, function() {
-        test.assertExists('button#download-button.disabled');
+        test.assertExists('#batch-action-buttons>button.disabled');
     });
 
     casper.then(function() {
         casper.click('td.columnselect input[type=checkbox]');
-        test.assertDoesntExist('button#download-button.disabled');
-        test.assertExists('button#download-button');
+        test.assertDoesntExist('#batch-action-buttons>button.disabled');
+        test.assertExists('#batch-action-buttons>button');
     });
 
     casper.then(function() {
         casper.click('td.columnselect input[type=checkbox]');
         test.assertElementCount('#documents input:checked', 0);
-        test.assertExist('button#download-button.disabled');
-    });
-
-    casper.run(function() {
-        test.done();
-    });
-});
-
-casper.test.begin('Dropdown behavior', 0, function suite(test) {
-    casper.start(document_list_url, function() {
-        casper.click('td.columnselect input[type=checkbox]');
-        test.assertDoesntExist('.dropdown.open');
-    });
-
-    casper.then(function() {
-        casper.click('#download-button');
-        test.assertExists('.dropdown.open');
-    });
-
-    casper.then(function() {
-        // A random click does not close the dropdown
-        casper.click('body');
-        test.assertExists('.dropdown.open');
-
-        casper.click('.dropdown-form button[data-toggle=dropdown]');
-        test.assertDoesntExist('.dropdown.open');
+        test.assertExists('#batch-action-buttons>button.disabled');
     });
 
     casper.run(function() {
@@ -290,9 +265,9 @@ casper.test.begin('The search form searches', 0, function suite(test) {
 casper.test.begin('Favorite tests', 0, function suite(test) {
     casper.start(document_list_url, function() {
         test.assertElementCount('td.columnfavorite span.glyphicon-star', 0);
-        casper.click('tbody tr:nth-of-type(1) td.columnfavorite');
-        casper.click('tbody tr:nth-of-type(3) td.columnfavorite');
-        casper.click('tbody tr:nth-of-type(5) td.columnfavorite');
+        casper.click('tbody tr:nth-of-type(1) td.columnfavorite span');
+        casper.click('tbody tr:nth-of-type(3) td.columnfavorite span');
+        casper.click('tbody tr:nth-of-type(5) td.columnfavorite span');
         casper.reload();
     });
 

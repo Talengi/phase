@@ -24,6 +24,7 @@ class TransmittalRevisionFactory(factory.DjangoModelFactory):
         model = TransmittalRevision
 
     received_date = datetime.date.today()
+    revision = factory.sequence(lambda n: n + 1)
 
 
 class TransmittalFactory(factory.DjangoModelFactory):
