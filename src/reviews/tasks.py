@@ -13,16 +13,19 @@ from core.celery import app
 from reviews.signals import pre_batch_review, post_batch_review, batch_item_indexed
 from reviews.models import Review
 from notifications.models import notify
+from discussion.models import Note
 
 
 logger = logging.getLogger(__name__)
 
 
 @app.task
-def do_batch_import(user_id, category_id, contenttype_id, document_ids):
+def do_batch_import(user_id, category_id, contenttype_id, document_ids,
+                    remark=None):
+
+    # Fetch document list
     contenttype = ContentType.objects.get_for_id(contenttype_id)
     document_class = contenttype.model_class()
-
     docs = document_class.objects \
         .select_related() \
         .filter(document__category_id=category_id) \
@@ -43,12 +46,28 @@ def do_batch_import(user_id, category_id, contenttype_id, document_ids):
 
     pre_batch_review.send(sender=do_batch_import)
 
+    # Try to start the review for every listed document
     for doc in docs:
         try:
             if not doc.latest_revision.can_be_reviewed:
                 raise RuntimeError()
 
             doc.latest_revision.start_review()
+
+            # In case of batch review start with a remark,
+            # the same remark is added for every review.
+            # Note: using "bulk_create" to create all the discussion
+            # at the end of the task would be much more efficient.
+            # However, by doing so, individual `post_save` signals would not
+            # be fired. Since the request is expected to take some time anyway,
+            # we will let this as is for now.
+            if remark is not None:
+                Note.objects.create(
+                    author_id=user_id,
+                    document_id=doc.id,
+                    revision=doc.latest_revision.revision,
+                    body=remark)
+
             batch_item_indexed.send(
                 sender=do_batch_import,
                 document_type=doc.document.document_type(),
@@ -58,6 +77,7 @@ def do_batch_import(user_id, category_id, contenttype_id, document_ids):
         except:
             nok.append(doc)
 
+        # Update the task progression bar
         count += 1
         progress = float(count) / total_docs * 100
         current_task.update_state(
@@ -66,6 +86,7 @@ def do_batch_import(user_id, category_id, contenttype_id, document_ids):
 
     post_batch_review.send(sender=do_batch_import, user_id=user_id)
 
+    # Send success and failure notifications
     if len(ok) > 0:
         ok_message = ugettext('The review started for the following documents:')
         ok_list = '</li><li>'.join('<a href="%s">%s</a>' % (doc.get_absolute_url(), doc) for doc in ok)

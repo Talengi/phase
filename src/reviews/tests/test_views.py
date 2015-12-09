@@ -12,6 +12,7 @@ from django.utils import timezone
 from categories.factories import CategoryFactory
 from documents.factories import DocumentFactory
 from accounts.factories import UserFactory
+from discussion.models import Note
 from reviews.models import Review
 
 
@@ -34,22 +35,21 @@ class BatchReviewTests(TestCase):
             self.category.slug,
         ])
         self.doc1 = DocumentFactory(
+            category=self.category,
             revision={
-                'reviewers': [self.user],
                 'leader': self.user,
-                'approver': self.user,
                 'received_date': datetime.date.today(),
             }
         )
         self.doc2 = DocumentFactory(
+            category=self.category,
             revision={
-                'reviewers': [self.user],
                 'leader': self.user,
-                'approver': self.user,
                 'received_date': datetime.date.today(),
             }
         )
         self.doc3 = DocumentFactory(
+            category=self.category,
             revision={
                 'reviewers': [],
                 'leader': None,
@@ -67,6 +67,16 @@ class BatchReviewTests(TestCase):
         )
         json_content = json.loads(res.content)
         self.assertTrue('poll_url' in json_content)
+
+    def test_start_review_with_remarks(self):
+        self.assertEqual(Note.objects.all().count(), 0)
+
+        res = self.client.post(self.url, {
+            'document_ids': [self.doc1.id, self.doc2.id, self.doc3.id],
+            'remark': 'This is a batch remark.'},
+            follow=True)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(Note.objects.all().count(), 2)
 
 
 class PrioritiesDocumentListTests(TestCase):

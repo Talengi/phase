@@ -18,7 +18,12 @@ mentions_re = re.compile('@([\w\-_]+)', re.IGNORECASE)
 
 
 class Note(models.Model):
-    """A single message in a single thread discussion."""
+    """A single message in a discussion thread.
+
+    Discussion threads are for a single revision under review,
+    and limited to the member of the distribution list.
+
+    """
     document = models.ForeignKey(
         Document,
         verbose_name=_('Document'))
