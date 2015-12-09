@@ -13,6 +13,7 @@ from default_documents.layout import (
     DocumentFieldset, PropertyLayout, YesNoLayout, DateField)
 from reviews.utils import get_cached_reviews
 from reviews.layout import ReviewsLayout
+from reviews.models import Review
 
 
 class ReviewFormMixin(forms.ModelForm):
@@ -187,3 +188,30 @@ class ReviewFormMixin(forms.ModelForm):
                     'approver'))
 
         return review_layout
+
+
+class BasePostReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ('comments', 'return_code')
+
+    def clean_return_code(self):
+        """Validate the return code field.
+
+        If the user is a simple reviewer, this field is not in the form
+        so this validation method is not executed.
+
+        If the user is leader or approver, we need to make sure the return
+        code was present in the form BUT we must not raise an error if the
+        form was submitted without posting a review, e.g clicking on the
+        "cancel X step" or "send back to leader" buttons.
+
+        """
+        return_code = self.cleaned_data['return_code']
+        empty_values = self.fields['return_code'].empty_values
+
+        # The user tried to submit a review without a return code
+        if return_code in empty_values and 'review' in self.data:
+            raise forms.ValidationError('This field is required.')
+
+        return return_code

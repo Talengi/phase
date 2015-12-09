@@ -4,7 +4,7 @@ import datetime
 import json
 
 from django.db import transaction
-from django.views.generic import View, ListView, DetailView, TemplateView
+from django.views.generic import View, ListView, UpdateView, TemplateView
 from django.views.generic.detail import SingleObjectMixin
 from django.shortcuts import get_object_or_404
 from django.http import (HttpResponse, HttpResponseRedirect, Http404,
@@ -25,6 +25,7 @@ from notifications.models import notify
 from reviews.models import Review
 from reviews.tasks import (do_batch_import, batch_close_reviews,
                            batch_cancel_reviews)
+from reviews.forms import BasePostReviewForm
 
 
 class ReviewHome(LoginRequiredMixin, TemplateView):
@@ -277,25 +278,24 @@ class ApproverDocumentList(BaseReviewDocumentList):
         return qs.filter(role=Review.ROLES.approver)
 
 
-# TODO Refactor to use UpdateView
-class ReviewFormView(LoginRequiredMixin, DetailView):
-    context_object_name = 'revision'
+class ReviewFormView(LoginRequiredMixin, UpdateView):
+    context_object_name = 'review'
     template_name = 'reviews/review_form.html'
 
     def breadcrumb_section(self):
         return (_('Reviews'), reverse('review_home'))
 
     def breadcrumb_subsection(self):
-        if self.request.user == self.object.approver:
+        if self.request.user == self.revision.approver:
             url = (_('Approver'), reverse('approver_review_document_list'))
-        elif self.request.user == self.object.leader:
+        elif self.request.user == self.revision.leader:
             url = (_('Leader'), reverse('leader_review_document_list'))
         else:
             url = (_('Reviewer'), reverse('reviewers_review_document_list'))
         return url
 
     def breadcrumb_object(self):
-        return self.object.document
+        return self.document
 
     def get_object(self, queryset=None):
         document_key = self.kwargs.get('document_key')
@@ -303,8 +303,13 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
             .filter(category__users=self.request.user)
         document = get_object_or_404(qs, document_key=document_key)
         revision = document.latest_revision
+        review = revision.get_review(self.request.user)
 
-        return revision
+        # For better performance
+        self.document = document
+        self.revision = revision
+
+        return review
 
     def check_permission(self, user, revision, review):
         """Test the user permission to access the current step.
@@ -320,20 +325,32 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
             raise Http404()
 
         # User is not a member of the distribution list
-        elif review is None:
+        if review is None:
             raise Http404()
 
-        else:
-            pass
+    def get_form_class(self):
+        # Which form fields should we display?
+        fields = ('comments',)
+
+        if self.object.role in ('leader', 'approver'):
+            fields += ('return_code',)
+        Form = modelform_factory(
+            Review,
+            fields=fields,
+            form=BasePostReviewForm,
+            labels={
+                'comments': _('Upload your comments'),
+                'return_code': _('Select a return code')})
+        return Form
 
     def get_context_data(self, **kwargs):
         context = super(ReviewFormView, self).get_context_data(**kwargs)
 
         user = self.request.user
-        user_review = self.object.get_review(user)
-        all_reviews = self.object.get_reviews()
+        user_review = self.object
+        all_reviews = self.revision.get_reviews()
 
-        self.check_permission(user, self.object, user_review)
+        self.check_permission(user, self.revision, user_review)
 
         is_reviewer = user_review.role == 'reviewer'
         is_leader = user_review.role == 'leader'
@@ -343,30 +360,20 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
         # posted something.
         can_comment = user_review.status not in ('pending',)
 
-        close_reviewers_button = self.object.is_at_review_step('reviewer') and (is_leader or is_approver)
-        close_leader_button = self.object.is_at_review_step('leader') and is_approver
-        back_to_leader_button = self.object.is_at_review_step('approver') and is_approver
+        close_reviewers_button = self.revision.is_at_review_step('reviewer') and (is_leader or is_approver)
+        close_leader_button = self.revision.is_at_review_step('leader') and is_approver
+        back_to_leader_button = self.revision.is_at_review_step('approver') and is_approver
 
         # every member of the distrib list can see the review form
         # so the user is automaticaly allowed to post a remark
         can_discuss = True
 
-        # Which form fields should we display?
-        fields = ('comments',)
-        if is_leader or is_approver:
-            fields += ('return_code',)
-        Form = modelform_factory(Review, fields=fields, labels={
-            'comments': _('Upload your comments'),
-            'return_code': _('Select a return code'),
-        })
-        form = Form(instance=user_review)
-
         context.update({
-            'document': self.object.document,
-            'document_key': self.object.document.document_key,
-            'revision': self.object,
+            'document': self.document,
+            'document_key': self.document.document_key,
+            'revision': self.revision,
             'reviews': all_reviews,
-            'leader': self.object.leader,
+            'leader': self.revision.leader,
             'is_reviewer': is_reviewer,
             'is_leader': is_leader,
             'is_approver': is_approver,
@@ -375,7 +382,6 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
             'close_leader_button': close_leader_button,
             'back_to_leader_button': back_to_leader_button,
             'can_discuss': can_discuss,
-            'form': form,
         })
         return context
 
@@ -393,9 +399,9 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
                 'review' in self.request.POST,
                 'back_to_leader_step' in self.request.POST,))):
             # Send back to the correct list
-            if self.request.user == self.object.approver:
+            if self.request.user == self.revision.approver:
                 url = 'approver_review_document_list'
-            elif self.request.user == self.object.leader:
+            elif self.request.user == self.revision.leader:
                 url = 'leader_review_document_list'
             else:
                 url = 'reviewers_review_document_list'
@@ -407,7 +413,7 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
 
         return url
 
-    def post(self, request, *args, **kwargs):
+    def form_valid(self, form):
         """Process the submitted file and form.
 
         Multiple cases:
@@ -418,22 +424,20 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
           - The approver is sending the review back to leader step
 
         """
-        self.object = self.get_object()
         user = self.request.user
-        user_review = self.object.get_review(user)
-        self.check_permission(user, self.object, user_review)
+        self.check_permission(user, self.revision, self.object)
 
         # A review was posted, with or without file
-        if 'review' in request.POST:
+        if 'review' in self.request.POST:
 
             # Can the user really comment?
-            can_comment = user_review.status not in ('pending',)
+            can_comment = self.object.status not in ('pending',)
             if not can_comment:
                 return HttpResponseForbidden()
 
-            self.post_review(request, *args, **kwargs)
+            self.post_review(form)
 
-            comments_file = request.FILES.get('comments', None)
+            comments_file = form.cleaned_data.get('comments', None)
             if comments_file:
                 message_text = '''You reviewed the document
                                <a href="%(url)s">%(key)s (%(title)s)</a>
@@ -443,74 +447,68 @@ class ReviewFormView(LoginRequiredMixin, DetailView):
                                <a href="%(url)s">%(key)s (%(title)s)</a>
                                in revision %(rev)s without comments.'''
 
-            document = self.object.document
             message_data = {
-                'rev': self.object.name,
-                'url': document.get_absolute_url(),
-                'key': document.document_key,
-                'title': document.title
+                'rev': self.revision.name,
+                'url': self.document.get_absolute_url(),
+                'key': self.document.document_key,
+                'title': self.document.title
             }
-            notify(request.user, _(message_text) % message_data)
+            notify(user, _(message_text) % message_data)
 
-        if 'close_reviewers_step' in request.POST and request.user in (
-                self.object.leader, self.object.approver):
-            self.object.end_reviewers_step()
+        if 'close_reviewers_step' in self.request.POST and user in (
+                self.revision.leader, self.revision.approver):
+            self.revision.end_reviewers_step()
 
-        if 'close_leader_step' in request.POST and request.user == self.object.approver:
-            self.object.end_leader_step()
+        if 'close_leader_step' in self.request.POST and user == self.revision.approver:
+            self.revision.end_leader_step()
 
-        if 'back_to_leader_step' in request.POST and request.user == self.object.approver:
-            self.object.send_back_to_leader_step()
-            body = request.POST.get('body', None)
+        if 'back_to_leader_step' in self.request.POST and user == self.revision.approver:
+            self.revision.send_back_to_leader_step()
+            body = self.request.POST.get('body', None)
             if body:
                 Note.objects.create(
-                    author=request.user,
-                    document=self.object.document,
-                    revision=self.object.revision,
+                    author=user,
+                    document=self.document,
+                    revision=self.revision,
                     body=body)
 
         url = self.get_success_url()
         return HttpResponseRedirect(url)
 
     @transaction.atomic
-    def post_review(self, request, *args, **kwargs):
+    def post_review(self, form):
         """Update the Review object with posted data.
 
         Also, updates the document if any review step is finished.
 
         """
-        document = self.object.document
-        revision = self.object
-        comments_file = request.FILES.get('comments', None)
-        return_code = request.POST.get('return_code', None)
+        comments_file = form.cleaned_data.get('comments', None)
+        return_code = form.cleaned_data.get('return_code', None)
 
-        # Get the current review being edited
-        review = revision.get_review(request.user)
-
-        # … and update it
-        review.post_review(comments_file, return_code=return_code)
+        # Update the review
+        self.object.post_review(comments_file, return_code=return_code)
         if return_code:
-            revision.return_code = return_code
+            self.revision.return_code = return_code
 
         # If every reviewer has posted comments, close the reviewers step
-        if review.role == 'reviewer':
+        if self.object.role == 'reviewer':
             qs = Review.objects \
-                .filter(document=document) \
-                .filter(revision=revision.revision) \
+                .filter(document=self.document) \
+                .filter(revision=self.revision.revision) \
                 .filter(role='reviewer') \
                 .exclude(closed_on=None)
-            if qs.count() == self.object.reviewers.count():
-                self.object.end_reviewers_step(save=False)
+            if qs.count() == self.revision.reviewers.count():
+                self.revision.end_reviewers_step(save=False)
 
         # If leader, end leader step
-        elif review.role == 'leader':
-            self.object.end_leader_step(save=False)
+        elif self.object.role == 'leader':
+            self.revision.end_leader_step(save=False)
 
         # If approver, end approver step
-        elif review.role == 'approver':
-            self.object.end_review(save=False)
+        elif self.object.role == 'approver':
+            self.revision.end_review(save=False)
 
-        self.object.save(update_document=True)
+        self.revision.save(update_document=True)
 
 
 class CommentsArchiveView(LoginRequiredMixin, BaseZipView):
