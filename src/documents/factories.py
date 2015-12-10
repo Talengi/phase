@@ -16,6 +16,7 @@ class DocumentFactory(factory.DjangoModelFactory):
         model = Document
 
     document_key = factory.Sequence(lambda n: 'document-{0}'.format(n))
+    document_number = factory.SelfAttribute('document_key')
     current_revision = 1
     current_revision_date = fuzzy_date.fuzz()
     category = factory.SubFactory(CategoryFactory)
@@ -46,6 +47,7 @@ class DocumentFactory(factory.DjangoModelFactory):
         metadata_kwargs = {
             'document': obj,
             'document_key': obj.document_key,
+            'document_number': obj.document_number,
             'latest_revision': revision
         }
         metadata_kwargs.update(cls.metadata_kwargs)
