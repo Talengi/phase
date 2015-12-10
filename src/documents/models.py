@@ -65,7 +65,7 @@ class Document(models.Model):
         permissions = (('can_control_document', 'Can control document'),)
 
     def __unicode__(self):
-        return self.document_key
+        return self.document_number
 
     def get_absolute_url(self):
         """Get the document url.
