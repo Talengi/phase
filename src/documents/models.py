@@ -30,7 +30,6 @@ class Document(models.Model):
         max_length=250)
     document_number = models.CharField(
         _('Document number'),
-        null=True,
         max_length=250)
     title = models.TextField(
         verbose_name=u"Title")
