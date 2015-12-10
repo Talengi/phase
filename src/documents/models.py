@@ -202,8 +202,6 @@ class Metadata(six.with_metaclass(MetadataBase, models.Model)):
 
     def save(self, *args, **kwargs):
         """Make sure the document has a document key."""
-        if not self.document_key:
-            self.document_key = self.generate_document_key()
         super(Metadata, self).save(*args, **kwargs)
 
         self.document.updated_on = timezone.now()

@@ -53,7 +53,10 @@ def create_document_from_forms(metadata_form, revision_form, category, **doc_kwa
     revision.revision = revision.get_first_revision_number()
     metadata = metadata_form.save(commit=False)
 
+    # Extract the manually submitted document key, or generate one
+    # if the field was left empty.
     key = metadata.document_key or metadata.generate_document_key()
+
     document = Document.objects.create(
         document_key=key,
         category=category,
