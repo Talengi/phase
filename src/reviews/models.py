@@ -645,7 +645,7 @@ class ReviewMixin(models.Model):
         """Return data to display on the review form."""
         fields = [
             (_('Category'), self.document.category),
-            (_('Document number'), self.document.document_key),
+            (_('Document number'), self.document.document_number),
             (_('Title'), self.document.title),
             (_('Status'), self.status),
             (_('Revision'), self.name),
