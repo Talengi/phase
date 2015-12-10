@@ -50,8 +50,8 @@ class BaseDocumentForm(forms.ModelForm):
         self.helper.layout = self.build_layout()
 
         # Document key is automatically generated, this field should not be required
-        if 'document_key' in self.fields:
-            self.fields['document_key'].required = False
+        if 'document_number' in self.fields:
+            self.fields['document_number'].required = False
 
     def build_layout(self):
         raise NotImplementedError('Missing "build_layout" method')
