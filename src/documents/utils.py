@@ -107,6 +107,8 @@ def create_revision_from_forms(metadata_form, revision_form, category):
 
     document.current_revision = revision.revision
     document.current_revision_date = revision.revision_date
+    document.document_key = metadata.document_key
+    document.document_number = metadata.document_number
     document.save()
 
     signals.document_revised.send(
@@ -122,7 +124,11 @@ def update_revision_from_forms(metadata_form, revision_form, category):
     """Updates and existing document and revision."""
     revision = revision_form.save()
     metadata = metadata_form.save()
+
     document = metadata.document
+    document.document_key = metadata.document_key
+    document.document_number = metadata.document_number
+    document.save()
 
     signals.revision_edited.send(
         document=document,

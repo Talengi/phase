@@ -338,6 +338,35 @@ class DocumentEditTest(TestCase):
             ), 302)]
         )
 
+    def test_edition_updates_document_key(self):
+        doc = DocumentFactory(
+            category=self.category,
+            document_key='FAC09001-FWF-000-HSE-REP-0004',
+            metadata={
+                'title': u'HAZOP related 1',
+            },
+            revision={
+                'status': 'STD',
+            }
+        )
+        c = self.client
+        c.post(doc.get_edit_url(), {
+            'document_number': 'New Document Number',
+            'title': u'a new title',
+            'docclass': 1,
+            'created_on': '2015-10-10',
+            'received_date': '2015-10-10',
+            'save-view': 'View',
+        }, follow=True)
+
+        doc.refresh_from_db()
+        self.assertEqual(doc.document_number, 'New Document Number')
+        self.assertEqual(doc.document_key, 'NEW-DOCUMENT-NUMBER')
+
+        metadata = doc.get_metadata()
+        self.assertEqual(metadata.document_number, 'New Document Number')
+        self.assertEqual(metadata.document_key, 'NEW-DOCUMENT-NUMBER')
+
 
 class DocumentReviseTest(TestCase):
     def setUp(self):
@@ -460,3 +489,34 @@ class DocumentReviseTest(TestCase):
         self.assertTrue(
             revision.pdf_file.name.endswith('.pdf')
         )
+
+    def test_new_revision_can_update_document_key(self):
+        doc = DocumentFactory(
+            category=self.category,
+            document_key='FAC09001-FWF-000-HSE-REP-0004',
+            revision={
+                'status': 'STD',
+            }
+        )
+        url = reverse('document_revise', args=[
+            self.category.organisation.slug,
+            self.category.slug,
+            doc.document_key
+        ])
+        self.client.post(url, {
+            'document_number': 'Another Document Number',
+            'title': doc.metadata.title,
+            'status': 'SPD',
+            'docclass': 1,
+            'created_on': '2015-10-10',
+            'revision_date': '2015-10-10',
+            'received_date': '2015-10-10',
+        }, follow=True)
+
+        doc.refresh_from_db()
+        self.assertEqual(doc.document_number, 'Another Document Number')
+        self.assertEqual(doc.document_key, 'ANOTHER-DOCUMENT-NUMBER')
+
+        metadata = doc.get_metadata()
+        self.assertEqual(metadata.document_number, 'Another Document Number')
+        self.assertEqual(metadata.document_key, 'ANOTHER-DOCUMENT-NUMBER')

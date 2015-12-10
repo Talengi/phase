@@ -108,9 +108,9 @@ class BaseDocumentForm(forms.ModelForm):
         # document number. Project History is the reason this is so complicated.
         # See ticket #145 for more details.
         if 'document_number' in data and 'document_key' in data:
-            if data['document_number'] and not data['document_key']:
-                data['document_key'] = slugify(data['document_number']).upper()
-            elif data['document_key'] and not data['document_number']:
+            if data['document_key'] and not data['document_number']:
                 data['document_number'] = data['document_key']
+            elif data['document_number']:
+                data['document_key'] = slugify(data['document_number']).upper()
 
         return data
