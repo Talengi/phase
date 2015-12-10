@@ -24,9 +24,13 @@ class Document(models.Model):
     objects = DocumentManager()
 
     document_key = models.SlugField(
-        _('Document number'),
+        _('Document key'),
         unique=True,
         db_index=True,
+        max_length=250)
+    document_number = models.CharField(
+        _('Document number'),
+        null=True,
         max_length=250)
     title = models.TextField(
         verbose_name=u"Title")
