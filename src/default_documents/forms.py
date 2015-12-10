@@ -21,6 +21,7 @@ class ContractorDeliverableForm(BaseDocumentForm):
         return Layout(
             DocumentFieldset(
                 _('General information'),
+                Field('document_key', type='hidden'),
                 'document_number',
                 Field('title', rows=2),
                 'contract_number',
@@ -51,7 +52,7 @@ class ContractorDeliverableForm(BaseDocumentForm):
 
     class Meta:
         model = ContractorDeliverable
-        exclude = ('document_key', 'document', 'latest_revision')
+        exclude = ('document', 'latest_revision')
 
 
 class ContractorDeliverableRevisionForm(ReviewFormMixin, BaseDocumentForm):
@@ -83,6 +84,7 @@ class CorrespondenceForm(BaseDocumentForm):
         return Layout(
             DocumentFieldset(
                 _('General information'),
+                Field('document_key', type='hidden'),
                 'document_number',
                 Field('subject', rows=2),
                 DateField('correspondence_date'),
@@ -103,7 +105,7 @@ class CorrespondenceForm(BaseDocumentForm):
 
     class Meta:
         model = Correspondence
-        exclude = ('document_key', 'document', 'latest_revision')
+        exclude = ('document', 'latest_revision')
 
 
 class CorrespondenceRevisionForm(BaseDocumentForm):
@@ -141,6 +143,7 @@ class MinutesOfMeetingForm(BaseDocumentForm):
         return Layout(
             DocumentFieldset(
                 _('General information'),
+                Field('document_key', type='hidden'),
                 'document_number',
                 Field('subject', rows=2),
                 DateField('meeting_date'),
@@ -158,7 +161,7 @@ class MinutesOfMeetingForm(BaseDocumentForm):
 
     class Meta:
         model = MinutesOfMeeting
-        exclude = ('document_key', 'document', 'latest_revision')
+        exclude = ('document', 'latest_revision')
 
 
 class MinutesOfMeetingRevisionForm(BaseDocumentForm):
@@ -186,12 +189,13 @@ class MinutesOfMeetingRevisionForm(BaseDocumentForm):
 class DemoMetadataForm(BaseDocumentForm):
     class Meta:
         model = DemoMetadata
-        exclude = ('document_key', 'document', 'latest_revision')
+        exclude = ('document', 'latest_revision')
 
     def build_layout(self):
         return Layout(
             DocumentFieldset(
                 _('General information'),
+                Field('document_key', type='hidden'),
                 'document_number',
                 Field('title', rows=2),
                 self.get_related_documents_layout(),

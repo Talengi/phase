@@ -6,7 +6,6 @@ import tempfile
 
 from django.contrib.contenttypes.models import ContentType
 from django.utils.encoding import force_text
-from django.utils.text import slugify
 from django.db import transaction
 
 from documents import signals
@@ -58,7 +57,7 @@ def create_document_from_forms(metadata_form, revision_form, category, **doc_kwa
     # if the field was left empty.
     doc_number = metadata.document_number
     if doc_number:
-        doc_key = slugify(doc_number).upper()
+        doc_key = metadata.document_key
     else:
         doc_number = metadata.generate_document_key()
         doc_key = doc_number
