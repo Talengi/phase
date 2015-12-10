@@ -6,6 +6,7 @@ import tempfile
 
 from django.contrib.contenttypes.models import ContentType
 from django.utils.encoding import force_text
+from django.utils.text import slugify
 from django.db import transaction
 
 from documents import signals
@@ -55,10 +56,16 @@ def create_document_from_forms(metadata_form, revision_form, category, **doc_kwa
 
     # Extract the manually submitted document key, or generate one
     # if the field was left empty.
-    key = metadata.document_key or metadata.generate_document_key()
+    doc_number = metadata.document_number
+    if doc_number:
+        doc_key = slugify(doc_number).upper()
+    else:
+        doc_number = metadata.generate_document_key()
+        doc_key = doc_number
 
     document = Document.objects.create(
-        document_key=key,
+        document_key=doc_key,
+        document_number=doc_number,
         category=category,
         current_revision=revision.revision,
         current_revision_date=revision.revision_date,
@@ -70,7 +77,8 @@ def create_document_from_forms(metadata_form, revision_form, category, **doc_kwa
 
     metadata.document = document
     metadata.latest_revision = revision
-    metadata.document_key = key
+    metadata.document_key = doc_key
+    metadata.document_number = doc_number
     metadata.save()
     metadata_form.save_m2m()
 
