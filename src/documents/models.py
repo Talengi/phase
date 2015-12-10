@@ -4,9 +4,10 @@ from collections import OrderedDict
 
 from django.db import models
 from django.db.models.base import ModelBase
-from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone, six
+from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
+
 from annoying.functions import get_object_or_None
 
 from accounts.models import User
@@ -189,9 +190,14 @@ class MetadataBase(ModelBase):
 class Metadata(six.with_metaclass(MetadataBase, models.Model)):
     document = models.OneToOneField(Document)
     document_key = models.SlugField(
-        _('Document number'),
+        _('Document key'),
+        blank=True,
         unique=True,
         db_index=True,
+        max_length=250)
+    document_number = models.CharField(
+        _('Document number'),
+        null=True, blank=True,
         max_length=250)
 
     class Meta:
