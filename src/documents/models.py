@@ -422,6 +422,8 @@ class MetadataRevision(models.Model):
         fields_infos = dict(fields)
         fields_infos.update({
             u'url': document.get_absolute_url(),
+            u'document_key': document.document_key,
+            u'document_number': document.document_number,
             u'document_pk': document.pk,
             u'metadata_pk': metadata.pk,
             u'pk': self.pk,
