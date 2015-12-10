@@ -156,10 +156,10 @@ class ContractorDeliverable(Metadata):
             'docclass', 'status', 'unit', 'discipline',
             'document_type', 'under_review', 'overdue', 'leader', 'approver'
         )
-        searchable_fields = ('document_key', 'title',)
+        searchable_fields = ('document_number', 'title',)
         indexable_fields = ['is_existing', 'can_be_transmitted']
         column_fields = (
-            ('Document Number', 'document_key'),
+            ('Document Number', 'document_number'),
             ('Title', 'title'),
             ('Rev.', 'current_revision'),
             ('Status', 'status'),
@@ -176,7 +176,7 @@ class ContractorDeliverable(Metadata):
             ('Final revision', 'final_revision'),
         )
         transmittal_columns = {
-            'Document Number': 'document_key',
+            'Document Number': 'document_number',
             'Title': 'title',
             'Contract Number': 'contract_number',
             'Originator': 'originator',
@@ -191,7 +191,7 @@ class ContractorDeliverable(Metadata):
             'Created': 'created_on',
         }
         export_fields = OrderedDict((
-            ('Document number', 'document_key'),
+            ('Document number', 'document_number'),
             ('Title', 'title'),
             ('Revision', 'revision_name'),
             ('Revision date', 'revision_date'),
@@ -457,7 +457,7 @@ class Correspondence(Metadata):
         filter_fields = (
             'originator', 'recipient', 'status', 'overdue', 'leader')
         column_fields = (
-            ('Reference', 'document_key'),
+            ('Reference', 'document_number'),
             ('Subject', 'subject'),
             ('Rec./Sent date', 'received_sent_date'),
             ('Resp. required', 'response_required'),
@@ -471,7 +471,7 @@ class Correspondence(Metadata):
             ('Document type', 'document_type'),
         )
         searchable_fields = (
-            'document_key',
+            'document_number',
             'subject',
             'status',
             'leader',
@@ -601,7 +601,7 @@ class MinutesOfMeeting(Metadata):
             'originator', 'recipient', 'status', 'signed', 'prepared_by',
         )
         column_fields = (
-            ('Reference', 'document_key'),
+            ('Reference', 'document_number'),
             ('Subject', 'subject'),
             ('Meeting date', 'meeting_date'),
             ('Rec./sent date', 'received_sent_date'),
@@ -613,7 +613,7 @@ class MinutesOfMeeting(Metadata):
             ('Status', 'status'),
         )
         searchable_fields = (
-            'document_key',
+            'document_number',
             'subject',
             'originator',
             'recipient',
@@ -673,15 +673,15 @@ class DemoMetadata(Metadata):
     class PhaseConfig:
         filter_fields = ('status',)
         searchable_fields = (
-            'title', 'document_key', 'title',
+            'title', 'document_number', 'title',
         )
         column_fields = (
-            ('Document Number', 'document_key'),
+            ('Document Number', 'document_number'),
             ('Title', 'title'),
             ('Status', 'status'),
         )
         transmittal_columns = {
-            'Document Number': 'document_key',
+            'Document Number': 'document_number',
             'Title': 'title',
             'Contract Number': 'contract_number',
             'Originator': 'originator',
