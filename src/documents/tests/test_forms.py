@@ -96,7 +96,7 @@ class DocumentCreateTest(TestCase):
             # Debug purpose
             self.assertEqual(r.context['form'].errors, {})
 
-    def test_creation_sets_document_key(self):
+    def test_creation_with_empty_document_key(self):
         """
         Tests that a document can be created with required fields.
         """
@@ -108,17 +108,21 @@ class DocumentCreateTest(TestCase):
             'received_date': '2015-10-10',
         }, follow=True)
         doc = Document.objects.all().order_by('-id')[0]
+        self.assertEqual(doc.document_number, 'a-title')
         self.assertEqual(doc.document_key, 'a-title')
 
+    def test_create_with_document_key(self):
+        c = self.client
         c.post(self.create_url, {
             'title': u'another title',
-            'document_key': u'gloubiboulga',
+            'document_number': u'Gloubi Boulga',
             'docclass': 1,
             'created_on': '2015-10-10',
             'received_date': '2015-10-10',
         }, follow=True)
         doc = Document.objects.all().order_by('-id')[0]
-        self.assertEqual(doc.document_key, 'gloubiboulga')
+        self.assertEqual(doc.document_number, 'Gloubi Boulga')
+        self.assertEqual(doc.document_key, 'GLOUBI-BOULGA')
 
     def test_creation_success_with_files(self):
         """
@@ -202,7 +206,7 @@ class DocumentCreateTest(TestCase):
             )
         ]
         c.post(self.create_url, {
-            'document_key': 'FAC09001-FWF-000-HSE-REP-0006',
+            'document_number': 'FAC09001-FWF-000-HSE-REP-0006',
             'title': u'HAZOP report',
             'docclass': 1,
             'created_on': '2015-10-10',
@@ -254,7 +258,7 @@ class DocumentEditTest(TestCase):
         r = c.get(edit_url)
         self.assertEqual(r.status_code, 200)
 
-        r = c.post(edit_url, {'document_key': doc.document_key})
+        r = c.post(edit_url, {'document_number': doc.document_key})
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r.context['form'].errors, {
             'title': [required_error],
@@ -277,7 +281,7 @@ class DocumentEditTest(TestCase):
         )
         c = self.client
         r = c.post(doc.get_edit_url(), {
-            'document_key': doc.document_key,
+            'document_number': doc.document_key,
             'title': u'a new title',
         })
         if r.status_code == 302:
@@ -306,7 +310,7 @@ class DocumentEditTest(TestCase):
         )
         c = self.client
         r = c.post(doc.get_edit_url(), {
-            'document_key': doc.document_key,
+            'document_number': doc.document_key,
             'title': u'a new title',
             'docclass': 1,
             'created_on': '2015-10-10',
@@ -321,7 +325,7 @@ class DocumentEditTest(TestCase):
         )
 
         r = c.post(doc.get_edit_url(), {
-            'document_key': doc.document_key,
+            'document_number': doc.document_key,
             'title': u'a new new title',
             'docclass': 1,
             'created_on': '2015-10-10',
@@ -382,7 +386,7 @@ class DocumentReviseTest(TestCase):
             document.document_key
         ])
         res = self.client.post(url, {
-            'document_key': document.document_key,
+            'document_number': document.document_key,
             'title': document.metadata.title,
             'status': 'SPD',
             'docclass': 1,
