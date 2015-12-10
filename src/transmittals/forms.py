@@ -22,7 +22,7 @@ class TransmittalForm(BaseDocumentForm):
             Field('rejected_dir', type='hidden'),
             DocumentFieldset(
                 _('General information'),
-                'document_key',
+                'document_number',
                 DateField('transmittal_date'),
                 DateField('ack_of_receipt_date'),
                 'contract_number',
@@ -35,8 +35,8 @@ class TransmittalForm(BaseDocumentForm):
 
     class Meta:
         model = Transmittal
-        exclude = ('document', 'latest_revision', 'status', 'transmittal_key',
-                   'document_type', 'contractor',)
+        exclude = ('document_key', 'document', 'latest_revision', 'status',
+                   'transmittal_key', 'document_type', 'contractor',)
 
 
 class TransmittalRevisionForm(BaseDocumentForm):
@@ -71,7 +71,7 @@ class OutgoingTransmittalForm(BaseDocumentForm):
         return Layout(
             DocumentFieldset(
                 _('General information'),
-                'document_key',
+                'document_number',
                 'contract_number',
                 'originator',
                 'recipient',
@@ -83,7 +83,8 @@ class OutgoingTransmittalForm(BaseDocumentForm):
 
     class Meta:
         model = OutgoingTransmittal
-        exclude = ('document', 'latest_revision', 'related_documents')
+        exclude = ('document_key', 'document', 'latest_revision',
+                   'related_documents')
 
 
 class OutgoingTransmittalRevisionForm(BaseDocumentForm):
