@@ -239,8 +239,8 @@ class ReviewMixin(models.Model):
 
         duration = self.get_review_duration()
         self.review_due_date = due_date or \
-                               self.received_date + datetime.timedelta(
-                                   days=duration)
+            self.received_date + \
+            datetime.timedelta(days=duration)
 
         reviewers = self.reviewers.all()
         for reviewer in reviewers:
@@ -493,8 +493,8 @@ class ReviewMixin(models.Model):
 
             # Should we end the reviewers step?
             waiting_reviews = self.get_filtered_reviews(
-                lambda
-                    rev: rev.id and rev.role == 'reviewer' and rev.status == 'progress')
+                lambda rev: rev.id and rev.role == 'reviewer' and
+                rev.status == 'progress')
             if len(waiting_reviews) == 0:
                 self.end_reviewers_step()
 
