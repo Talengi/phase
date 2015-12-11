@@ -5,6 +5,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.module_loading import import_string
+from django.utils.text import slugify
 
 from crispy_forms.helper import FormHelper
 from default_documents.layout import DocumentFieldset, FlatRelatedDocumentsLayout
@@ -50,8 +51,8 @@ class BaseDocumentForm(forms.ModelForm):
         self.helper.layout = self.build_layout()
 
         # Document key is automatically generated, this field should not be required
-        if 'document_key' in self.fields:
-            self.fields['document_key'].required = False
+        if 'document_number' in self.fields:
+            self.fields['document_number'].required = False
 
     def build_layout(self):
         raise NotImplementedError('Missing "build_layout" method')
@@ -95,3 +96,21 @@ class BaseDocumentForm(forms.ModelForm):
                     'A PDF file is not allowed in this field.'
                 )
         return native_file
+
+    def clean(self):
+        """Validate the document number and key."""
+        data = super(BaseDocumentForm, self).clean()
+
+        # In the creation form, we display a single field: the document number.
+        # The document_key must be generated from it.
+        # But in other cases (e.g the import module) we directly submit the
+        # document_key. In that case, we must copy the key to have a valid
+        # document number. Project History is the reason this is so complicated.
+        # See ticket #145 for more details.
+        if 'document_number' in data and 'document_key' in data:
+            if data['document_key'] and not data['document_number']:
+                data['document_number'] = data['document_key']
+            elif data['document_number']:
+                data['document_key'] = slugify(data['document_number']).upper()
+
+        return data

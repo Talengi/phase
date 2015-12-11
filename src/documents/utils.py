@@ -53,9 +53,18 @@ def create_document_from_forms(metadata_form, revision_form, category, **doc_kwa
     revision.revision = revision.get_first_revision_number()
     metadata = metadata_form.save(commit=False)
 
-    key = metadata.document_key or metadata.generate_document_key()
+    # Extract the manually submitted document key, or generate one
+    # if the field was left empty.
+    doc_number = metadata.document_number
+    if doc_number:
+        doc_key = metadata.document_key
+    else:
+        doc_number = metadata.generate_document_key()
+        doc_key = doc_number
+
     document = Document.objects.create(
-        document_key=key,
+        document_key=doc_key,
+        document_number=doc_number,
         category=category,
         current_revision=revision.revision,
         current_revision_date=revision.revision_date,
@@ -67,7 +76,8 @@ def create_document_from_forms(metadata_form, revision_form, category, **doc_kwa
 
     metadata.document = document
     metadata.latest_revision = revision
-    metadata.document_key = key
+    metadata.document_key = doc_key
+    metadata.document_number = doc_number
     metadata.save()
     metadata_form.save_m2m()
 
@@ -97,6 +107,8 @@ def create_revision_from_forms(metadata_form, revision_form, category):
 
     document.current_revision = revision.revision
     document.current_revision_date = revision.revision_date
+    document.document_key = metadata.document_key
+    document.document_number = metadata.document_number
     document.save()
 
     signals.document_revised.send(
@@ -112,7 +124,11 @@ def update_revision_from_forms(metadata_form, revision_form, category):
     """Updates and existing document and revision."""
     revision = revision_form.save()
     metadata = metadata_form.save()
+
     document = metadata.document
+    document.document_key = metadata.document_key
+    document.document_number = metadata.document_number
+    document.save()
 
     signals.revision_edited.send(
         document=document,

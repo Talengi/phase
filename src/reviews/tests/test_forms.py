@@ -111,6 +111,7 @@ class UpdateDistribListTests(BaseReviewFormMixinTests):
             'leader': self.user2.id,
             'approver': self.user3.id,
             'review_start_date': datetime.datetime.today(),
+            'review_due_date': datetime.datetime.today() + datetime.timedelta(days=14)
         })
 
     def test_form_is_valid(self):

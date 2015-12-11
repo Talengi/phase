@@ -21,7 +21,8 @@ class ContractorDeliverableForm(BaseDocumentForm):
         return Layout(
             DocumentFieldset(
                 _('General information'),
-                'document_key',
+                Field('document_key', type='hidden'),
+                'document_number',
                 Field('title', rows=2),
                 'contract_number',
                 'originator',
@@ -83,7 +84,8 @@ class CorrespondenceForm(BaseDocumentForm):
         return Layout(
             DocumentFieldset(
                 _('General information'),
-                'document_key',
+                Field('document_key', type='hidden'),
+                'document_number',
                 Field('subject', rows=2),
                 DateField('correspondence_date'),
                 DateField('received_sent_date'),
@@ -141,7 +143,8 @@ class MinutesOfMeetingForm(BaseDocumentForm):
         return Layout(
             DocumentFieldset(
                 _('General information'),
-                'document_key',
+                Field('document_key', type='hidden'),
+                'document_number',
                 Field('subject', rows=2),
                 DateField('meeting_date'),
                 DateField('received_sent_date'),
@@ -192,7 +195,8 @@ class DemoMetadataForm(BaseDocumentForm):
         return Layout(
             DocumentFieldset(
                 _('General information'),
-                'document_key',
+                Field('document_key', type='hidden'),
+                'document_number',
                 Field('title', rows=2),
                 self.get_related_documents_layout(),
             )

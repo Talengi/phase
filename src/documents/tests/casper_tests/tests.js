@@ -153,7 +153,7 @@ casper.test.begin('Selecting a row creates an input field in download form', 0, 
 casper.test.begin('Clicking a row redirects to the document page', 0, function suite(test) {
     casper.start(document_list_url, function() {
         test.assertUrlMatch(/\/organisation_\d+\/category_\d+\/$/);
-        casper.click('td.columndocument_key');
+        casper.click('td.columndocument_number');
     });
 
     casper.then(function() {
@@ -203,27 +203,27 @@ casper.test.begin('The filter form cannot be submitted', 0, function suite(test)
 
 casper.test.begin('Clicking a column sorts stuff', 0, function suite(test) {
     casper.start(document_list_url, function() {
-        test.assertExists('#columndocument_key span.glyphicon.glyphicon-chevron-down');
+        test.assertExists('#columndocument_number span.glyphicon.glyphicon-chevron-down');
         test.assertSelectorHasText('tbody tr:first-of-type td:nth-of-type(3)', 'hazop-report-0');
     });
 
     casper.then(function() {
-        casper.click('#columndocument_key');
+        casper.click('#columndocument_number');
         casper.wait(500);
     });
 
     casper.then(function() {
-        test.assertExists('#columndocument_key span.glyphicon.glyphicon-chevron-up');
+        test.assertExists('#columndocument_number span.glyphicon.glyphicon-chevron-up');
         test.assertSelectorHasText('tbody tr:first-of-type td:nth-of-type(3)', 'hazop-report-9');
     });
 
     casper.then(function() {
-        casper.click('#columndocument_key');
+        casper.click('#columndocument_number');
         casper.wait(500);
     });
 
     casper.then(function() {
-        test.assertExists('#columndocument_key span.glyphicon.glyphicon-chevron-down');
+        test.assertExists('#columndocument_number span.glyphicon.glyphicon-chevron-down');
         test.assertSelectorHasText('tbody tr:first-of-type td:nth-of-type(3)', 'hazop-report-0');
     });
 
@@ -233,7 +233,7 @@ casper.test.begin('Clicking a column sorts stuff', 0, function suite(test) {
     });
 
     casper.then(function() {
-        test.assertDoesntExist('#columndocument_key span.glyphicon');
+        test.assertDoesntExist('#columndocument_number span.glyphicon');
         test.assertExists('#columntitle span.glyphicon.glyphicon-chevron-down');
     });
 

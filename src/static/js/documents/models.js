@@ -19,7 +19,7 @@ var Phase = Phase || {};
         defaults: function() {
             var defaults = {
                 search_terms: '',
-                sort_by: 'document_key',
+                sort_by: 'document_number',
                 start: 0,
                 size: Phase.Config.paginateBy
             };

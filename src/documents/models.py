@@ -4,9 +4,10 @@ from collections import OrderedDict
 
 from django.db import models
 from django.db.models.base import ModelBase
-from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone, six
+from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
+
 from annoying.functions import get_object_or_None
 
 from accounts.models import User
@@ -24,9 +25,12 @@ class Document(models.Model):
     objects = DocumentManager()
 
     document_key = models.SlugField(
-        _('Document number'),
+        _('Document key'),
         unique=True,
         db_index=True,
+        max_length=250)
+    document_number = models.CharField(
+        _('Document number'),
         max_length=250)
     title = models.TextField(
         verbose_name=u"Title")
@@ -61,7 +65,7 @@ class Document(models.Model):
         permissions = (('can_control_document', 'Can control document'),)
 
     def __unicode__(self):
-        return self.document_key
+        return self.document_number
 
     def get_absolute_url(self):
         """Get the document url.
@@ -186,9 +190,14 @@ class MetadataBase(ModelBase):
 class Metadata(six.with_metaclass(MetadataBase, models.Model)):
     document = models.OneToOneField(Document)
     document_key = models.SlugField(
-        _('Document number'),
+        _('Document key'),
+        blank=True,
         unique=True,
         db_index=True,
+        max_length=250)
+    document_number = models.CharField(
+        _('Document number'),
+        blank=True,
         max_length=250)
 
     class Meta:
@@ -202,8 +211,6 @@ class Metadata(six.with_metaclass(MetadataBase, models.Model)):
 
     def save(self, *args, **kwargs):
         """Make sure the document has a document key."""
-        if not self.document_key:
-            self.document_key = self.generate_document_key()
         super(Metadata, self).save(*args, **kwargs)
 
         self.document.updated_on = timezone.now()
@@ -415,6 +422,8 @@ class MetadataRevision(models.Model):
         fields_infos = dict(fields)
         fields_infos.update({
             u'url': document.get_absolute_url(),
+            u'document_key': document.document_key,
+            u'document_number': document.document_number,
             u'document_pk': document.pk,
             u'metadata_pk': metadata.pk,
             u'pk': self.pk,
