@@ -6,6 +6,8 @@ import os
 import logging
 import shutil
 import uuid
+import zipfile
+import tempfile
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -527,6 +529,39 @@ class OutgoingTransmittal(Metadata):
     @property
     def title(self):
         return self.document_key
+
+    @classmethod
+    def compress_documents(cls, documents, format='both', revisions='latest'):
+        """See `documents.models.Metadata.compress_documents`"""
+        temp_file = tempfile.TemporaryFile()
+
+        with zipfile.ZipFile(temp_file, mode='w') as zip_file:
+            for document in documents:
+                dirname = document.document_key
+                revision = document.get_latest_revision()
+
+                pdf_file = revision.pdf_file
+                pdf_basename = os.path.basename(pdf_file.name)
+                zip_file.write(
+                    pdf_file.path,
+                    '{}/{}'.format(dirname, pdf_basename),
+                    compress_type=zipfile.ZIP_DEFLATED)
+
+                exported_revs = revision.metadata.exportedrevision_set.all() \
+                    .select_related()
+                for rev in exported_revs:
+                    comments_file = rev.comments
+                    comments_basename = os.path.basename(comments_file.path)
+                    zip_file.write(
+                        comments_file.path,
+                        '{}/{}_{}/{}'.format(
+                            dirname,
+                            rev.document.document_key,
+                            rev.name,
+                            comments_basename),
+                        compress_type=zipfile.ZIP_DEFLATED)
+
+        return temp_file
 
     def link_to_revisions(self, revisions):
         """Set the given revisions as related documents.
