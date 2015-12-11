@@ -62,5 +62,6 @@ class DocumentTest(TestCase):
                 u'document_pk': document.pk,
                 u'metadata_pk': document.metadata.pk,
                 u'document_key': 'FAC09001-FWF-000-HSE-REP-0004',
+                u'document_number': 'FAC09001-FWF-000-HSE-REP-0004',
             }
         )
