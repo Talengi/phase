@@ -197,7 +197,7 @@ class Metadata(six.with_metaclass(MetadataBase, models.Model)):
         max_length=250)
     document_number = models.CharField(
         _('Document number'),
-        null=True, blank=True,
+        blank=True,
         max_length=250)
 
     class Meta:
