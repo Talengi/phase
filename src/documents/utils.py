@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import zipfile
-import tempfile
-
 from django.contrib.contenttypes.models import ContentType
 from django.utils.encoding import force_text
 from django.db import transaction
@@ -137,41 +134,6 @@ def update_revision_from_forms(metadata_form, revision_form, category):
         sender=revision.__class__)
 
     return document, metadata, revision
-
-
-def compress_documents(documents, format='both', revisions='latest'):
-    """Compress the given files' documents (or queryset) in a zip file.
-
-    * format can be either 'both', 'native' or 'pdf'
-    * revisions can be either 'latest' or 'all'
-
-    Returns the name of the ziped file.
-    """
-    temp_file = tempfile.TemporaryFile()
-
-    with zipfile.ZipFile(temp_file, mode='w') as zip_file:
-        files = []
-        for document in documents:
-            if revisions == 'latest':
-                revs = [document.latest_revision]
-            elif revisions == 'all':
-                revs = document.get_all_revisions()
-
-            for rev in revs:
-                if rev is not None:
-                    if format in ('native', 'both'):
-                        files.append(rev.native_file)
-                    if format in ('pdf', 'both'):
-                        files.append(rev.pdf_file)
-
-        for file_ in files:
-            if file_.name:
-                zip_file.write(
-                    file_.path,
-                    file_.name,
-                    compress_type=zipfile.ZIP_DEFLATED
-                )
-    return temp_file
 
 
 def stringify_value(val, none_val='NC'):

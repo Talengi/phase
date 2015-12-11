@@ -36,7 +36,7 @@ from bookmarks.models import get_user_bookmarks
 from bookmarks.api.serializers import BookmarkSerializer
 from categories.views import CategoryMixin
 from documents.models import Document
-from documents.utils import compress_documents, save_document_forms
+from documents.utils import save_document_forms
 from documents.forms.models import documentform_factory
 from documents.forms.utils import DocumentDownloadForm
 from documents.forms.filters import filterform_factory
@@ -535,7 +535,8 @@ class DocumentDownload(BaseDocumentList):
             raise Http404('Invalid parameters to download files.')
 
         # Generates the temporary zip file
-        zip_filename = compress_documents(
+        _class = self.category.document_class()
+        zip_filename = _class.compress_documents(
             data['document_ids'],
             data['format'] or 'both',
             data['revisions'] or 'latest',
