@@ -176,7 +176,7 @@ class ContractorDeliverable(Metadata):
             ('Final revision', 'final_revision'),
         )
         transmittal_columns = {
-            'Document Number': 'document_number',
+            'Document Number': 'document_key',
             'Title': 'title',
             'Contract Number': 'contract_number',
             'Originator': 'originator',
@@ -238,7 +238,7 @@ class ContractorDeliverable(Metadata):
         )
 
     class Meta:
-        ordering = ('document_key',)
+        ordering = ('document_number',)
         unique_together = (
             (
                 "contract_number", "originator", "unit", "discipline",
@@ -588,7 +588,7 @@ class MinutesOfMeeting(Metadata):
         blank=True)
 
     class Meta:
-        ordering = ('document_key',)
+        ordering = ('document_number',)
         unique_together = (
             (
                 "contract_number", "originator", "recipient",
@@ -668,7 +668,7 @@ class DemoMetadata(Metadata):
         blank=True)
 
     class Meta:
-        ordering = ('document_key',)
+        ordering = ('document_number',)
 
     class PhaseConfig:
         filter_fields = ('status',)
@@ -681,7 +681,7 @@ class DemoMetadata(Metadata):
             ('Status', 'status'),
         )
         transmittal_columns = {
-            'Document Number': 'document_number',
+            'Document Number': 'document_key',
             'Title': 'title',
             'Contract Number': 'contract_number',
             'Originator': 'originator',

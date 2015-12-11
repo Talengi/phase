@@ -99,7 +99,7 @@ class Transmittal(Metadata):
 
     class Meta:
         app_label = 'transmittals'
-        ordering = ('document_key',)
+        ordering = ('document_number',)
         verbose_name = _('Transmittal')
         verbose_name_plural = _('Transmittals')
         index_together = (
@@ -491,7 +491,7 @@ class OutgoingTransmittal(Metadata):
 
     class Meta:
         app_label = 'transmittals'
-        ordering = ('document_key',)
+        ordering = ('document_number',)
         verbose_name = _('Outgoing transmittal')
         verbose_name_plural = _('Outgoing transmittals')
 
