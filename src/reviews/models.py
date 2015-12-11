@@ -154,7 +154,7 @@ class ReviewMixin(models.Model):
         (3, 13),
         (4, 13),
     )
-    e.g: if docclass is 2 then duration si 8, etc.
+    e.g: if docclass field value is 2 then duration is 8, etc.
     """
 
     review_start_date = models.DateField(
@@ -564,10 +564,10 @@ class ReviewMixin(models.Model):
 
     def get_review_duration(self):
         """We can define `REVIEW_DURATIONS` tuple in class attributes. Then we
-         return the duration matched by `docclass`field. If `REVIEW_DURATIONS`
+         return the duration matched by `docclass` field. If `REVIEW_DURATIONS`
           is not present, the global value `REVIEW_DURATION` is in settings."""
 
-        # If REVIEW_DURATIONS is not define we get the settings value
+        # If REVIEW_DURATIONS is not defined we get the settings value
         if not hasattr(self, 'REVIEW_DURATIONS'):
             return settings.REVIEW_DURATION
 
