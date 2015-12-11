@@ -1,3 +1,4 @@
+{% load review_form %}
 <div class="controls controls-row">
     <div class="form-group {% if form.errors.related_documents %}error{% endif %}">
         <table id="trs-rev-table" class="table table-bordered table-condensed table-hover">
@@ -19,7 +20,7 @@
                 <td>{{ rev.name }}</td>
                 <td>{{ rev.status }}</td>
                 <td>{{ rev.return_code }}</td>
-                <td></td>
+                <td>{% file_link rev.comments %}</td>
             </tr>
             {% empty %}
             <tr>
