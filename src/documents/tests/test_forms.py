@@ -4,19 +4,18 @@ from __future__ import unicode_literals
 import os
 from os.path import join
 
-from django.test import TestCase
-from django.core.urlresolvers import reverse
 from django.conf import settings
+from django.core.urlresolvers import reverse
+from django.test import TestCase
 
 from accounts.factories import UserFactory
 from categories.factories import CategoryFactory
+from default_documents.models import DemoMetadataRevision
 from documents.factories import DocumentFactory
 from documents.models import Document
-from default_documents.models import DemoMetadataRevision
 
 
 class DocumentCreateTest(TestCase):
-
     def setUp(self):
         self.category = CategoryFactory()
         user = UserFactory(
@@ -62,8 +61,10 @@ class DocumentCreateTest(TestCase):
         """
         extension_error = u'A PDF file is not allowed in this field.'
         c = self.client
-        with open(join(self.sample_path, 'sample_doc_native.docx')) as native_file:
-            with open(join(self.sample_path, 'sample_doc_pdf.pdf')) as pdf_file:
+        with open(join(self.sample_path,
+                       'sample_doc_native.docx')) as native_file:
+            with open(
+                    join(self.sample_path, 'sample_doc_pdf.pdf')) as pdf_file:
                 r = c.post(self.create_url, {
                     'title': u'a title',
                     'native_file': pdf_file,
@@ -125,8 +126,10 @@ class DocumentCreateTest(TestCase):
         """
         original_number_of_document = Document.objects.all().count()
         c = self.client
-        with open(join(self.sample_path, 'sample_doc_native.docx')) as native_file:
-            with open(join(self.sample_path, 'sample_doc_pdf.pdf')) as pdf_file:
+        with open(join(self.sample_path,
+                       'sample_doc_native.docx')) as native_file:
+            with open(
+                    join(self.sample_path, 'sample_doc_pdf.pdf')) as pdf_file:
                 r = c.post(self.create_url, {
                     'title': u'a title',
                     'native_file': native_file,
@@ -206,7 +209,8 @@ class DocumentCreateTest(TestCase):
             'received_date': '2015-10-10',
             'related_documents': [doc.pk for doc in related]
         })
-        document = Document.objects.get(document_key='FAC09001-FWF-000-HSE-REP-0006')
+        document = Document.objects.get(
+            document_key='FAC09001-FWF-000-HSE-REP-0006')
         metadata = document.metadata
         related = list(metadata.related_documents.all())
         self.assertEqual(len(related), 2)
@@ -332,7 +336,6 @@ class DocumentEditTest(TestCase):
 
 
 class DocumentReviseTest(TestCase):
-
     def setUp(self):
         self.category = CategoryFactory()
         user = UserFactory(
@@ -394,3 +397,62 @@ class DocumentReviseTest(TestCase):
             .filter(document=document) \
             .order_by('-id')[0]
         self.assertEqual(revision.revision, 2)
+
+    def test_new_revision_files(self):
+        """
+        Test the on-the-fly renaming when uploading native or pdf files.
+        """
+        document = DocumentFactory(
+            category=self.category,
+            document_key='FAC09001-FWF-000-HSE-REP-0004',
+            revision={
+                'status': 'STD',
+            }
+        )
+        revision = document.metadata.latest_revision
+        self.assertEqual(revision.revision, 1)
+
+        url = reverse('document_revise', args=[
+            self.category.organisation.slug,
+            self.category.slug,
+            document.document_key
+        ])
+        sample_path = join(settings.DJANGO_ROOT, 'documents', 'tests')
+
+        with open(join(sample_path, 'sample_doc_native.docx')) as native_file:
+            with open(join(sample_path, 'sample_doc_pdf.pdf')) as pdf_file:
+                self.client.post(url, {
+                    'document_key': document.document_key,
+                    'title': document.metadata.title,
+                    'status': 'SPD',
+                    'docclass': 1,
+                    'created_on': '2015-10-10',
+                    'revision_date': '2015-10-10',
+                    'received_date': '2015-10-10',
+                    'native_file': native_file,
+                    'pdf_file': pdf_file,
+                }, follow=True)
+
+        revision = DemoMetadataRevision.objects \
+            .filter(document=document) \
+            .order_by('-id')[0]
+        # Check the right file name creation KEY_REVISION_STATUS[HASH].EXT
+        fn_begin = "revisions/{key}_{revision}_{status}".format(
+            key=revision.document.document_key,
+            revision=revision.name,
+            status=revision.status
+        )
+        # A random hash can be appended to the file name to prevent filename
+        # collisions so we check the files beginning and extension
+        self.assertTrue(
+            revision.native_file.name.startswith(fn_begin)
+        )
+        self.assertTrue(
+            revision.pdf_file.name.startswith(fn_begin)
+        )
+        self.assertTrue(
+            revision.native_file.name.endswith('.docx')
+        )
+        self.assertTrue(
+            revision.pdf_file.name.endswith('.pdf')
+        )
