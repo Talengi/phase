@@ -133,7 +133,7 @@ class TransmittalPdf(object):
             self.revision.created_on,
             'd/m/Y')
         data = [
-            ('Transmittal Number', self.document.document_key),
+            ('Transmittal Number', self.document.document_number),
             ('Issue Date', date),
         ]
         table = Table(data, hAlign='LEFT', colWidths=[70 * mm, 60 * mm])
@@ -184,7 +184,7 @@ class TransmittalPdf(object):
         data = [header]
         for revision in self.revisions:
             data.append((
-                Paragraph(revision.document.document_key, body_style),
+                Paragraph(revision.document.document_number, body_style),
                 Paragraph(revision.title, body_style),
                 Paragraph(revision.name, centered),
                 Paragraph(revision.status, centered),
