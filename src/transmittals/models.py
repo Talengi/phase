@@ -547,7 +547,8 @@ class OutgoingTransmittal(Metadata):
                     revision=revision.revision,
                     title=revision.document.title,
                     status=revision.status,
-                    return_code=revision.get_final_return_code()))
+                    return_code=revision.get_final_return_code(),
+                    comments=revision.trs_comments))
             ids.append(revision.id)
 
             # Update ES index to make sure the "can_be_transmitted"
@@ -586,6 +587,9 @@ class ExportedRevision(models.Model):
     title = models.TextField(_('Title'))
     status = models.CharField(_('Status'), max_length=5)
     return_code = models.CharField(_('Return code'), max_length=5)
+    comments = PrivateFileField(
+        _('Comments'),
+        null=True, blank=True)
 
     class Meta:
         verbose_name = _('Exported revision')
@@ -617,8 +621,7 @@ class TransmittableMixin(ReviewMixin):
     trs_comments = PrivateFileField(
         _('Final comments'),
         null=True, blank=True,
-        upload_to=trs_comments_file_path
-    )
+        upload_to=trs_comments_file_path)
 
     class Meta:
         abstract = True
