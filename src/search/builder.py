@@ -20,7 +20,9 @@ class SearchBuilder(object):
 
     """
 
-    def __init__(self, category, filters={}):
+    def __init__(self, category, filters=None):
+        if filters is None:
+            filters = {}
         self.category = category
         self.init_filters(filters)
 
@@ -46,7 +48,9 @@ class SearchBuilder(object):
     def scan_results(self, *args, **kwargs):
         return self.build_query(*args, **kwargs).scan()
 
-    def build_query(self, fields=[], only_latest_revisions=True):
+    def build_query(self, fields=None, only_latest_revisions=True):
+        if fields is None:
+            fields = []
         document_type = self.category.document_type()
 
         s = Search(using=elastic, doc_type=document_type) \
@@ -63,7 +67,8 @@ class SearchBuilder(object):
 
         if fields:
             s = self._limit_fields(s, fields)
-
+        # result = s
+        # import pdb;pdb.set_trace()
         return s
 
     def _add_filter_fields(self, s):
@@ -126,7 +131,9 @@ class SearchBuilder(object):
             sort_direction = 'desc'
         else:
             sort_direction = 'asc'
-        s = s.sort({sort_field: {'order': sort_direction}})
+        s = s.sort({sort_field: {
+            'order': sort_direction,
+            'unmapped_type': "String"}})
         return s
 
     def _add_pagination(self, s):
