@@ -58,6 +58,8 @@ class Document(models.Model):
         verbose_name_plural = _('Documents')
 
         # Custom permission for document controllers
+        # Permission used in sidebar template to check if user belongs to
+        # doc controller group
         permissions = (('can_control_document', 'Can control document'),)
 
     def __unicode__(self):
