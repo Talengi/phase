@@ -148,7 +148,6 @@ class DocumentList(BaseDocumentList):
         context = super(DocumentList, self).get_context_data(**kwargs)
         model = context['object_list'].model
         FilterForm = filterform_factory(model)
-
         qs = self.get_queryset()
         download_form = DocumentDownloadForm(queryset=qs)
 

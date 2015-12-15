@@ -4,19 +4,21 @@ from __future__ import unicode_literals
 import os
 from os.path import join
 
-from django.test import TestCase
-from django.core.urlresolvers import reverse
 from django.conf import settings
+from django.core.urlresolvers import reverse
+from django.test import TestCase
 
 from accounts.factories import UserFactory
 from categories.factories import CategoryFactory
+from default_documents.models import DemoMetadataRevision, \
+    ContractorDeliverable
 from documents.factories import DocumentFactory
 from documents.models import Document
-from default_documents.models import DemoMetadataRevision
+
+from ..forms.filters import filterform_factory
 
 
 class DocumentCreateTest(TestCase):
-
     def setUp(self):
         self.category = CategoryFactory()
         user = UserFactory(
@@ -62,8 +64,10 @@ class DocumentCreateTest(TestCase):
         """
         extension_error = u'A PDF file is not allowed in this field.'
         c = self.client
-        with open(join(self.sample_path, 'sample_doc_native.docx')) as native_file:
-            with open(join(self.sample_path, 'sample_doc_pdf.pdf')) as pdf_file:
+        with open(join(self.sample_path,
+                       'sample_doc_native.docx')) as native_file:
+            with open(
+                    join(self.sample_path, 'sample_doc_pdf.pdf')) as pdf_file:
                 r = c.post(self.create_url, {
                     'title': u'a title',
                     'native_file': pdf_file,
@@ -125,8 +129,10 @@ class DocumentCreateTest(TestCase):
         """
         original_number_of_document = Document.objects.all().count()
         c = self.client
-        with open(join(self.sample_path, 'sample_doc_native.docx')) as native_file:
-            with open(join(self.sample_path, 'sample_doc_pdf.pdf')) as pdf_file:
+        with open(join(self.sample_path,
+                       'sample_doc_native.docx')) as native_file:
+            with open(
+                    join(self.sample_path, 'sample_doc_pdf.pdf')) as pdf_file:
                 r = c.post(self.create_url, {
                     'title': u'a title',
                     'native_file': native_file,
@@ -206,7 +212,8 @@ class DocumentCreateTest(TestCase):
             'received_date': '2015-10-10',
             'related_documents': [doc.pk for doc in related]
         })
-        document = Document.objects.get(document_key='FAC09001-FWF-000-HSE-REP-0006')
+        document = Document.objects.get(
+            document_key='FAC09001-FWF-000-HSE-REP-0006')
         metadata = document.metadata
         related = list(metadata.related_documents.all())
         self.assertEqual(len(related), 2)
@@ -332,7 +339,6 @@ class DocumentEditTest(TestCase):
 
 
 class DocumentReviseTest(TestCase):
-
     def setUp(self):
         self.category = CategoryFactory()
         user = UserFactory(
@@ -394,3 +400,33 @@ class DocumentReviseTest(TestCase):
             .filter(document=document) \
             .order_by('-id')[0]
         self.assertEqual(revision.revision, 2)
+
+
+class FilterFormTest(TestCase):
+    def test_filterform_factory(self):
+        """Test the filterform_factory behaviour with ordering"""
+        # We define a field order. In real life, this should be in PhaseConfig
+        fields_order = [
+            'approver',
+            'docclass',
+            'status',
+            'unit',
+            'discipline',
+            'document_type',
+            'under_review',
+            'overdue',
+            'leader']
+        doc = ContractorDeliverable
+
+        # Adding this attribute to the model because we do not have any model
+        # using this option at the moment
+        doc.PhaseConfig.filter_fields_order = fields_order
+        form = filterform_factory(doc)()
+
+        # We make alist from field ordered dict keys and get rid of the first
+        # fields which are hidden and not defined in filter_fields_order
+        # attribute
+        form_fields = form.fields.keys()[2:]
+
+        # Checking fields are in the right order
+        self.assertEqual(form_fields, fields_order)

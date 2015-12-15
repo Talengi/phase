@@ -67,7 +67,7 @@ def filterform_factory(model):
     revision_model = model.latest_revision.get_queryset().model
     all_fields = dict((field.name, field) for field in (
         model._meta.concrete_fields + revision_model._meta.concrete_fields))
-
+    # import pdb;pdb.set_trace()
     # Get the list of all configured fields
     config = getattr(model, 'PhaseConfig')
     field_list = []
@@ -118,11 +118,12 @@ def filterform_factory(model):
         # Trick used in django admin:
         # https://github.com/django/django/blob/1.8/django/contrib/auth/forms.py#L318
 
-        # These hidden fields belong to `BaseDocumentFilterForm`.
+        # These hidden fields belong to `BaseDocumentFilterForm` or are added
+        # above.
         # We have to add them to the `base_fields` by appending them to the
         # `filter_fields_order` list manually.
         # TODO Find a better way to do this.
-        filter_fields_order = ['size', 'start'] + filter_fields_order
+        fields_order = ['size', 'start'] + filter_fields_order
         form.base_fields = OrderedDict(
-            (k, form.base_fields[k]) for k in filter_fields_order)
+            (k, form.base_fields[k]) for k in fields_order)
     return form
