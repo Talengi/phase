@@ -176,10 +176,10 @@ class MetadataBase(ModelBase):
 
             filter_fields = getattr(phase_config, 'filter_fields', None)
             searchable_fields = getattr(
-                    phase_config, 'searchable_fields', None)
+                phase_config, 'searchable_fields', None)
             column_fields = getattr(phase_config, 'column_fields', None)
             filter_fields_order = getattr(
-                    phase_config, 'filter_fields_order', None)
+                phase_config, 'filter_fields_order', None)
 
             if not all((filter_fields, searchable_fields, column_fields)):
                 raise TypeError('Your "PhaseConfig" definition is incorrect '
@@ -188,11 +188,11 @@ class MetadataBase(ModelBase):
             if filter_fields_order:
                 if not set(filter_fields) <= set(filter_fields_order):
                     raise TypeError(
-                            'Your "PhaseConfig" definition is incorrect '
-                            '"filter_fields_order" should contain the same '
-                            'elements as "filter_fields" and the base'
-                            ' visible fields from'
-                            ' "documents.forms.BaseDocumentFilterForm"')
+                        'Your "PhaseConfig" definition is incorrect '
+                        '"filter_fields_order" should contain the same '
+                        'elements as "filter_fields" and the base'
+                        ' visible fields from'
+                        ' "documents.forms.BaseDocumentFilterForm"')
 
         return super(MetadataBase, cls).__new__(cls, name, bases, attrs)
 

@@ -8,16 +8,16 @@ from django.utils.translation import ugettext_lazy as _
 class BaseDocumentFilterForm(forms.Form):
     """Base form for filtering documents of any type."""
     size = forms.IntegerField(
-            widget=forms.HiddenInput(),
-            required=False,
-            initial=settings.PAGINATE_BY)
+        widget=forms.HiddenInput(),
+        required=False,
+        initial=settings.PAGINATE_BY)
     start = forms.IntegerField(
-            widget=forms.HiddenInput(),
-            required=False,
-            initial=0)
+        widget=forms.HiddenInput(),
+        required=False,
+        initial=0)
     search_terms = forms.CharField(
-            label=u'Search all columns',
-            required=False)
+        label=u'Search all columns',
+        required=False)
 
 
 # Additional fields that could be needed, e.g for filter fields that are
@@ -25,34 +25,34 @@ class BaseDocumentFilterForm(forms.Form):
 # TODO Find a better way to do this.
 additional_filter_fields = {
     'overdue': forms.ChoiceField(
-            choices=(
-                ('', '---------'),
-                ('true', 'Yes'),
-                ('false', 'No')
-            ),
-            required=False,
-            widget=forms.Select,
-            label=_('Overdue'),
+        choices=(
+            ('', '---------'),
+            ('true', 'Yes'),
+            ('false', 'No')
+        ),
+        required=False,
+        widget=forms.Select,
+        label=_('Overdue'),
     ),
     'under_review': forms.ChoiceField(
-            choices=(
-                ('', '---------'),
-                ('true', 'Yes'),
-                ('false', 'No')
-            ),
-            required=False,
-            widget=forms.Select,
-            label=_('Under review'),
+        choices=(
+            ('', '---------'),
+            ('true', 'Yes'),
+            ('false', 'No')
+        ),
+        required=False,
+        widget=forms.Select,
+        label=_('Under review'),
     ),
     'ack_of_receipt': forms.ChoiceField(
-            choices=(
-                ('', '---------'),
-                ('true', 'Yes'),
-                ('false', 'No')
-            ),
-            required=False,
-            widget=forms.Select,
-            label=_('Ack of receipt'),
+        choices=(
+            ('', '---------'),
+            ('true', 'Yes'),
+            ('false', 'No')
+        ),
+        required=False,
+        widget=forms.Select,
+        label=_('Ack of receipt'),
     )
 }
 
@@ -104,9 +104,9 @@ def filterform_factory(model):
         field_list.append((field_name, field))
     field_list.append((
         'sort_by', forms.CharField(
-                widget=forms.HiddenInput(),
-                required=False,
-                initial=model._meta.ordering[0])
+            widget=forms.HiddenInput(),
+            required=False,
+            initial=model._meta.ordering[0])
     ))
     class_name = model.__name__ + 'FilterForm'
     field_dict = OrderedDict(field_list)
@@ -124,5 +124,5 @@ def filterform_factory(model):
         # TODO Find a better way to do this.
         filter_fields_order = ['size', 'start'] + filter_fields_order
         form.base_fields = OrderedDict(
-                (k, form.base_fields[k]) for k in filter_fields_order )
+            (k, form.base_fields[k]) for k in filter_fields_order)
     return form
