@@ -28,6 +28,8 @@ class NavigationTests(TestCase):
         self.assertNotContains(res, '<a href="#nav-organisations"')
         self.assertNotContains(res, 'href="%s"' % self.create_url)
         self.assertNotContains(res, 'href="/admin/"')
+        self.assertNotContains(res, '<a href="#nav-transmittals"')
+        self.assertNotContains(res, '<a href="#nav-imports"')
 
     def test_authenticated_user_navbar(self):
         self.client.login(username=self.user.email, password='pass')
@@ -38,6 +40,8 @@ class NavigationTests(TestCase):
         self.assertContains(res, '<a href="#nav-organisations"')
         self.assertNotContains(res, 'href="%s"' % self.create_url)
         self.assertNotContains(res, 'href="/admin/"')
+        self.assertNotContains(res, '<a href="#nav-transmittals"')
+        self.assertNotContains(res, '<a href="#nav-imports"')
 
     def test_document_controller_navbar(self):
         self.user.user_permissions = self.dc_perms
@@ -52,6 +56,8 @@ class NavigationTests(TestCase):
         self.assertContains(res, '<a href="#nav-organisations"')
         self.assertContains(res, 'href="%s"' % self.create_url)
         self.assertNotContains(res, 'href="/admin/"')
+        self.assertContains(res, '<a href="#nav-transmittals"')
+        self.assertContains(res, '<a href="#nav-imports"')
 
     def test_admin_navbar(self):
         self.user.is_superuser = True
@@ -64,6 +70,8 @@ class NavigationTests(TestCase):
         self.assertContains(res, '<a href="#nav-organisations"')
         self.assertContains(res, 'href="%s"' % self.create_url)
         self.assertContains(res, 'href="/admin/"')
+        self.assertContains(res, '<a href="#nav-transmittals"')
+        self.assertContains(res, '<a href="#nav-imports"')
 
 
 class AclTests(TestCase):
