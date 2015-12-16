@@ -1,6 +1,8 @@
+from collections import OrderedDict
+
 from django import forms
-from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
 
 
 class BaseDocumentFilterForm(forms.Form):
@@ -18,7 +20,7 @@ class BaseDocumentFilterForm(forms.Form):
         required=False)
 
 
-# Additional fields that could be needed, e.g for filter fiedls that are
+# Additional fields that could be needed, e.g for filter fields that are
 # not model fields.
 # TODO Find a better way to do this.
 additional_filter_fields = {
@@ -56,7 +58,7 @@ additional_filter_fields = {
 
 
 def filterform_factory(model):
-    """Dynamicaly create a filter form for the given Metadata model.
+    """Dynamically create a filter form for the given Metadata model.
 
     Filter fields can be either located in the Metadata class, or in the
     corresponding Revision class.
@@ -65,7 +67,7 @@ def filterform_factory(model):
     revision_model = model.latest_revision.get_queryset().model
     all_fields = dict((field.name, field) for field in (
         model._meta.concrete_fields + revision_model._meta.concrete_fields))
-
+    # import pdb;pdb.set_trace()
     # Get the list of all configured fields
     config = getattr(model, 'PhaseConfig')
     field_list = []
@@ -73,6 +75,10 @@ def filterform_factory(model):
 
     # Add all field filters to form
     filter_fields = config.filter_fields
+
+    # Get the optional `filter_fields_order` in PhaseConfig
+    filter_fields_order = getattr(config, 'filter_fields_order', None)
+
     for field_name in filter_fields:
         if field_name in all_fields:
             f = all_fields[field_name]
@@ -96,13 +102,28 @@ def filterform_factory(model):
         field.required = False
         field.label = filter_config['label']
         field_list.append((field_name, field))
-
-    field_list = dict(field_list)
-    field_list.update({
-        'sort_by': forms.CharField(
+    field_list.append((
+        'sort_by', forms.CharField(
             widget=forms.HiddenInput(),
             required=False,
             initial=model._meta.ordering[0])
-    })
+    ))
     class_name = model.__name__ + 'FilterForm'
-    return type(class_name, (BaseDocumentFilterForm,), dict(field_list))
+    field_dict = OrderedDict(field_list)
+
+    form = type(class_name, (BaseDocumentFilterForm,), field_dict)
+
+    if filter_fields_order:
+        # We need to modify `base_fields` to get the wanted order
+        # Trick used in django admin:
+        # https://github.com/django/django/blob/1.8/django/contrib/auth/forms.py#L318
+
+        # These hidden fields belong to `BaseDocumentFilterForm` or are added
+        # above.
+        # We have to add them to the `base_fields` by appending them to the
+        # `filter_fields_order` list manually.
+        # TODO Find a better way to do this.
+        fields_order = ['size', 'start'] + filter_fields_order
+        form.base_fields = OrderedDict(
+            (k, form.base_fields[k]) for k in fields_order)
+    return form

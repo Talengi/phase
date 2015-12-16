@@ -166,6 +166,8 @@ class MetadataBase(ModelBase):
     Validates that all classes inheriting from Metadata
     define all the required fields.
 
+    An optional `filter_fields_order` defines the order in which right sidebar
+    filter fields are displayed.
     """
     def __new__(cls, name, bases, attrs):
         if name != 'NewBase' and name != 'Metadata':
@@ -179,12 +181,24 @@ class MetadataBase(ModelBase):
                                 'class on %s' % name)
 
             filter_fields = getattr(phase_config, 'filter_fields', None)
-            searchable_fields = getattr(phase_config, 'searchable_fields', None)
+            searchable_fields = getattr(
+                phase_config, 'searchable_fields', None)
             column_fields = getattr(phase_config, 'column_fields', None)
+            filter_fields_order = getattr(
+                phase_config, 'filter_fields_order', None)
 
             if not all((filter_fields, searchable_fields, column_fields)):
                 raise TypeError('Your "PhaseConfig" definition is incorrect '
                                 'on %s. Please check the doc' % name)
+
+            if filter_fields_order:
+                if not set(filter_fields) <= set(filter_fields_order):
+                    raise TypeError(
+                        'Your "PhaseConfig" definition is incorrect '
+                        '"filter_fields_order" should contain the same '
+                        'elements as "filter_fields" and the base'
+                        ' visible fields from'
+                        ' "documents.forms.BaseDocumentFilterForm"')
 
         return super(MetadataBase, cls).__new__(cls, name, bases, attrs)
 

@@ -10,9 +10,12 @@ from django.test import TestCase
 
 from accounts.factories import UserFactory
 from categories.factories import CategoryFactory
-from default_documents.models import DemoMetadataRevision
+from default_documents.models import DemoMetadataRevision, \
+    ContractorDeliverable
 from documents.factories import DocumentFactory
 from documents.models import Document
+
+from ..forms.filters import filterform_factory
 
 
 class DocumentCreateTest(TestCase):
@@ -520,3 +523,33 @@ class DocumentReviseTest(TestCase):
         metadata = doc.get_metadata()
         self.assertEqual(metadata.document_number, 'Another Document Number')
         self.assertEqual(metadata.document_key, 'ANOTHER-DOCUMENT-NUMBER')
+
+
+class FilterFormTest(TestCase):
+    def test_filterform_factory(self):
+        """Test the filterform_factory behaviour with ordering"""
+        # We define a field order. In real life, this should be in PhaseConfig
+        fields_order = [
+            'approver',
+            'docclass',
+            'status',
+            'unit',
+            'discipline',
+            'document_type',
+            'under_review',
+            'overdue',
+            'leader']
+        doc = ContractorDeliverable
+
+        # Adding this attribute to the model because we do not have any model
+        # using this option at the moment
+        doc.PhaseConfig.filter_fields_order = fields_order
+        form = filterform_factory(doc)()
+
+        # We make alist from field ordered dict keys and get rid of the first
+        # fields which are hidden and not defined in filter_fields_order
+        # attribute
+        form_fields = form.fields.keys()[2:]
+
+        # Checking fields are in the right order
+        self.assertEqual(form_fields, fields_order)
