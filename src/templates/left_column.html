@@ -12,9 +12,15 @@
     <ul id="sidebar-nav" class="nav nav-stacked">
         {% include 'documents/categories_menu.html' %}
         {% include 'reviews/review_menu.html' %}
-        {% include 'transmittals/transmittal_menu.html' %}
+        {# only superusers and doc controller can see transmittals import menu items #}
+        {#  the easiest way to know if user is a doc controller is to check the `documents.add_document` permission #}
+        {%  if user.is_superuser or perms.documents.add_document %}
+            {% include 'transmittals/transmittal_menu.html' %}
+        {% endif %}
         {% include 'favorites/favorites_menu.html' %}
-        {% include 'imports/import_menu.html' %}
+        {%  if user.is_superuser or perms.documents.add_document %}
+            {% include 'imports/import_menu.html' %}
+        {%  endif %}
         {% include 'exports/export_menu.html' %}
         {% include 'dashboards/dashboard_menu.html' %}
     </ul>

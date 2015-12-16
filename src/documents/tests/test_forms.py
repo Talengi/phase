@@ -99,7 +99,7 @@ class DocumentCreateTest(TestCase):
             # Debug purpose
             self.assertEqual(r.context['form'].errors, {})
 
-    def test_creation_sets_document_key(self):
+    def test_creation_with_empty_document_key(self):
         """
         Tests that a document can be created with required fields.
         """
@@ -111,17 +111,21 @@ class DocumentCreateTest(TestCase):
             'received_date': '2015-10-10',
         }, follow=True)
         doc = Document.objects.all().order_by('-id')[0]
+        self.assertEqual(doc.document_number, 'a-title')
         self.assertEqual(doc.document_key, 'a-title')
 
+    def test_create_with_document_key(self):
+        c = self.client
         c.post(self.create_url, {
             'title': u'another title',
-            'document_key': u'gloubiboulga',
+            'document_number': u'Gloubi Boulga',
             'docclass': 1,
             'created_on': '2015-10-10',
             'received_date': '2015-10-10',
         }, follow=True)
         doc = Document.objects.all().order_by('-id')[0]
-        self.assertEqual(doc.document_key, 'gloubiboulga')
+        self.assertEqual(doc.document_number, 'Gloubi Boulga')
+        self.assertEqual(doc.document_key, 'GLOUBI-BOULGA')
 
     def test_creation_success_with_files(self):
         """
@@ -205,7 +209,7 @@ class DocumentCreateTest(TestCase):
             )
         ]
         c.post(self.create_url, {
-            'document_key': 'FAC09001-FWF-000-HSE-REP-0006',
+            'document_number': 'FAC09001-FWF-000-HSE-REP-0006',
             'title': u'HAZOP report',
             'docclass': 1,
             'created_on': '2015-10-10',
@@ -257,7 +261,7 @@ class DocumentEditTest(TestCase):
         r = c.get(edit_url)
         self.assertEqual(r.status_code, 200)
 
-        r = c.post(edit_url, {'document_key': doc.document_key})
+        r = c.post(edit_url, {'document_number': doc.document_key})
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r.context['form'].errors, {
             'title': [required_error],
@@ -280,7 +284,7 @@ class DocumentEditTest(TestCase):
         )
         c = self.client
         r = c.post(doc.get_edit_url(), {
-            'document_key': doc.document_key,
+            'document_number': doc.document_key,
             'title': u'a new title',
         })
         if r.status_code == 302:
@@ -309,7 +313,7 @@ class DocumentEditTest(TestCase):
         )
         c = self.client
         r = c.post(doc.get_edit_url(), {
-            'document_key': doc.document_key,
+            'document_number': doc.document_key,
             'title': u'a new title',
             'docclass': 1,
             'created_on': '2015-10-10',
@@ -324,7 +328,7 @@ class DocumentEditTest(TestCase):
         )
 
         r = c.post(doc.get_edit_url(), {
-            'document_key': doc.document_key,
+            'document_number': doc.document_key,
             'title': u'a new new title',
             'docclass': 1,
             'created_on': '2015-10-10',
@@ -336,6 +340,35 @@ class DocumentEditTest(TestCase):
                 url=self.category.get_absolute_url(),
             ), 302)]
         )
+
+    def test_edition_updates_document_key(self):
+        doc = DocumentFactory(
+            category=self.category,
+            document_key='FAC09001-FWF-000-HSE-REP-0004',
+            metadata={
+                'title': u'HAZOP related 1',
+            },
+            revision={
+                'status': 'STD',
+            }
+        )
+        c = self.client
+        c.post(doc.get_edit_url(), {
+            'document_number': 'New Document Number',
+            'title': u'a new title',
+            'docclass': 1,
+            'created_on': '2015-10-10',
+            'received_date': '2015-10-10',
+            'save-view': 'View',
+        }, follow=True)
+
+        doc.refresh_from_db()
+        self.assertEqual(doc.document_number, 'New Document Number')
+        self.assertEqual(doc.document_key, 'NEW-DOCUMENT-NUMBER')
+
+        metadata = doc.get_metadata()
+        self.assertEqual(metadata.document_number, 'New Document Number')
+        self.assertEqual(metadata.document_key, 'NEW-DOCUMENT-NUMBER')
 
 
 class DocumentReviseTest(TestCase):
@@ -385,7 +418,7 @@ class DocumentReviseTest(TestCase):
             document.document_key
         ])
         res = self.client.post(url, {
-            'document_key': document.document_key,
+            'document_number': document.document_key,
             'title': document.metadata.title,
             'status': 'SPD',
             'docclass': 1,
@@ -400,6 +433,96 @@ class DocumentReviseTest(TestCase):
             .filter(document=document) \
             .order_by('-id')[0]
         self.assertEqual(revision.revision, 2)
+
+    def test_new_revision_files(self):
+        """
+        Test the on-the-fly renaming when uploading native or pdf files.
+        """
+        document = DocumentFactory(
+            category=self.category,
+            document_key='FAC09001-FWF-000-HSE-REP-0004',
+            revision={
+                'status': 'STD',
+            }
+        )
+        revision = document.metadata.latest_revision
+        self.assertEqual(revision.revision, 1)
+
+        url = reverse('document_revise', args=[
+            self.category.organisation.slug,
+            self.category.slug,
+            document.document_key
+        ])
+        sample_path = join(settings.DJANGO_ROOT, 'documents', 'tests')
+
+        with open(join(sample_path, 'sample_doc_native.docx')) as native_file:
+            with open(join(sample_path, 'sample_doc_pdf.pdf')) as pdf_file:
+                self.client.post(url, {
+                    'document_key': document.document_key,
+                    'title': document.metadata.title,
+                    'status': 'SPD',
+                    'docclass': 1,
+                    'created_on': '2015-10-10',
+                    'revision_date': '2015-10-10',
+                    'received_date': '2015-10-10',
+                    'native_file': native_file,
+                    'pdf_file': pdf_file,
+                }, follow=True)
+
+        revision = DemoMetadataRevision.objects \
+            .filter(document=document) \
+            .order_by('-id')[0]
+        # Check the right file name creation KEY_REVISION_STATUS[HASH].EXT
+        fn_begin = "revisions/{key}_{revision}_{status}".format(
+            key=revision.document.document_key,
+            revision=revision.name,
+            status=revision.status
+        )
+        # A random hash can be appended to the file name to prevent filename
+        # collisions so we check the files beginning and extension
+        self.assertTrue(
+            revision.native_file.name.startswith(fn_begin)
+        )
+        self.assertTrue(
+            revision.pdf_file.name.startswith(fn_begin)
+        )
+        self.assertTrue(
+            revision.native_file.name.endswith('.docx')
+        )
+        self.assertTrue(
+            revision.pdf_file.name.endswith('.pdf')
+        )
+
+    def test_new_revision_can_update_document_key(self):
+        doc = DocumentFactory(
+            category=self.category,
+            document_key='FAC09001-FWF-000-HSE-REP-0004',
+            revision={
+                'status': 'STD',
+            }
+        )
+        url = reverse('document_revise', args=[
+            self.category.organisation.slug,
+            self.category.slug,
+            doc.document_key
+        ])
+        self.client.post(url, {
+            'document_number': 'Another Document Number',
+            'title': doc.metadata.title,
+            'status': 'SPD',
+            'docclass': 1,
+            'created_on': '2015-10-10',
+            'revision_date': '2015-10-10',
+            'received_date': '2015-10-10',
+        }, follow=True)
+
+        doc.refresh_from_db()
+        self.assertEqual(doc.document_number, 'Another Document Number')
+        self.assertEqual(doc.document_key, 'ANOTHER-DOCUMENT-NUMBER')
+
+        metadata = doc.get_metadata()
+        self.assertEqual(metadata.document_number, 'Another Document Number')
+        self.assertEqual(metadata.document_key, 'ANOTHER-DOCUMENT-NUMBER')
 
 
 class FilterFormTest(TestCase):

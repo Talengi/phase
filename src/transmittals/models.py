@@ -99,7 +99,7 @@ class Transmittal(Metadata):
 
     class Meta:
         app_label = 'transmittals'
-        ordering = ('document_key',)
+        ordering = ('document_number',)
         verbose_name = _('Transmittal')
         verbose_name_plural = _('Transmittals')
         index_together = (
@@ -112,7 +112,7 @@ class Transmittal(Metadata):
             'originator', 'recipient', 'status',
         )
         column_fields = (
-            ('Reference', 'document_key'),
+            ('Reference', 'document_number'),
             ('Transmittal date', 'transmittal_date'),
             ('Ack. of receipt date', 'ack_of_receipt_date'),
             ('Originator', 'originator'),
@@ -121,7 +121,7 @@ class Transmittal(Metadata):
             ('Status', 'status'),
         )
         searchable_fields = (
-            'document_key',
+            'document_number',
             'originator',
             'recipient',
             'document_type',
@@ -491,20 +491,20 @@ class OutgoingTransmittal(Metadata):
 
     class Meta:
         app_label = 'transmittals'
-        ordering = ('document_key',)
+        ordering = ('document_number',)
         verbose_name = _('Outgoing transmittal')
         verbose_name_plural = _('Outgoing transmittals')
 
     class PhaseConfig:
         filter_fields = ('contract_number', 'ack_of_receipt')
         column_fields = (
-            ('Reference', 'document_key'),
+            ('Reference', 'document_number'),
             ('Originator', 'originator'),
             ('Recipient', 'recipient'),
             ('Ack of receipt', 'ack_of_receipt'),
         )
         searchable_fields = (
-            'document_key',
+            'document_number',
             'originator',
             'recipient',
         )

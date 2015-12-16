@@ -19,16 +19,16 @@
 
         {% if is_edit and not is_revise %}
             <p class="alert alert-info">
-            {% blocktrans with document_key=document.document_key revision=revision.name %}
+            {% blocktrans with document_number=document.document_number revision=revision.name %}
                 You are editing rev <strong>{{ revision }}</strong> of the
-                document <strong>{{ document_key }}</strong>.
+                document <strong>{{ document_number }}</strong>.
             {% endblocktrans %}
             </p>
         {% elif is_revise %}
             <p class="alert alert-info">
-            {% blocktrans with document_key=document.document_key revision=next_revision %}
+            {% blocktrans with document_number=document.document_number revision=next_revision %}
                 You are creating revision <strong>{{ revision }}</strong> of
-                the document <strong>{{ document_key }}</strong>.
+                the document <strong>{{ document_number }}</strong>.
             {% endblocktrans %}
             </p>
         {% endif %}

@@ -13,7 +13,7 @@
         {% include 'documents/document_detail_actions.html' with dropdirection='dropdown' %}
         <hr />
 
-        <h1>{{ document.document_key }}</h1>
+        <h1>{{ document.document_number }}</h1>
         <form class="disabled" id="document-detail">
             {% crispy form form.helper %}
             {% include 'documents/document_revisions.html' with revisions=revisions %}

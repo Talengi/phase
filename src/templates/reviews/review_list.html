@@ -39,7 +39,7 @@
                     </td>
                 {% endif %}
                 <td class="columndocument_key">
-                    <a href="{% url 'review_document' rev.document.document_key %}">{{ rev.document.document_key }}</a>
+                    <a href="{% url 'review_document' rev.document.document_key %}">{{ rev.document.document_number }}</a>
                 </td>
                 <td class="columntitle">
                     <a href="{% url 'review_document' rev.document.document_key %}">{{ rev.document.title }}</a>

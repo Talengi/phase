@@ -3,21 +3,20 @@ from __future__ import unicode_literals
 
 import datetime
 
-from django.db import models, transaction
-from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
-from django.utils.functional import cached_property
-from django.utils import timezone
 from django.core.cache import cache
-
+from django.core.exceptions import ImproperlyConfigured
+from django.db import models, transaction
+from django.utils import timezone
+from django.utils.functional import cached_property
+from django.utils.translation import ugettext_lazy as _
 from model_utils import Choices
 
 from accounts.models import User
 from documents.models import Document
+from metadata.fields import ConfigurableChoiceField
 from privatemedia.fields import PrivateFileField
 from reviews.fileutils import review_comments_file_path
-from metadata.fields import ConfigurableChoiceField
-
 
 CLASSES = (
     (1, '1'),
@@ -145,7 +144,18 @@ class Review(models.Model):
 
 
 class ReviewMixin(models.Model):
-    """A Mixin to use to define reviewable document types."""
+    """A Mixin to use to define reviewable document types.
+    The review duration is configurable via a tuple matching the CLASSES tuple.
+
+    The duration is extracted.
+    REVIEW_DURATIONS = (
+        (1, 4),
+        (2, 8),
+        (3, 13),
+        (4, 13),
+    )
+    e.g: if docclass field value is 2 then duration is 8, etc.
+    """
 
     review_start_date = models.DateField(
         _('Review start date'),
@@ -227,9 +237,10 @@ class ReviewMixin(models.Model):
         start_date = at_date or timezone.now()
         self.review_start_date = start_date
 
-        duration = settings.REVIEW_DURATION
+        duration = self.get_review_duration()
         self.review_due_date = due_date or \
-            self.received_date + datetime.timedelta(days=duration)
+            self.received_date + \
+            datetime.timedelta(days=duration)
 
         reviewers = self.reviewers.all()
         for reviewer in reviewers:
@@ -482,7 +493,8 @@ class ReviewMixin(models.Model):
 
             # Should we end the reviewers step?
             waiting_reviews = self.get_filtered_reviews(
-                lambda rev: rev.id and rev.role == 'reviewer' and rev.status == 'progress')
+                lambda rev: rev.id and rev.role == 'reviewer' and
+                rev.status == 'progress')
             if len(waiting_reviews) == 0:
                 self.end_reviewers_step()
 
@@ -491,6 +503,7 @@ class ReviewMixin(models.Model):
     def is_under_review(self):
         """It's under review only if review has started but not ended."""
         return bool(self.review_start_date) != bool(self.review_end_date)
+
     is_under_review.short_description = _('Under review')
 
     def is_overdue(self):
@@ -502,6 +515,7 @@ class ReviewMixin(models.Model):
         """
         today = timezone.now().date()
         return self.is_under_review() and self.review_due_date < today
+
     is_overdue.short_description = _('Overdue')
 
     def current_review_step(self):
@@ -519,12 +533,15 @@ class ReviewMixin(models.Model):
             return Review.STEPS.approver
 
         return Review.STEPS.closed
+
     current_review_step.short_description = _('Current review step')
 
     def get_current_review_step_display(self):
         step = self.current_review_step()
         return dict(Review.STEPS)[step]
-    get_current_review_step_display.short_description = _('Current review step')
+
+    get_current_review_step_display.short_description = _(
+        'Current review step')
 
     def is_at_review_step(self, step):
         return step == self.current_review_step()
@@ -544,6 +561,27 @@ class ReviewMixin(models.Model):
         """Reload the review cache."""
         if hasattr(self, '_reviews'):
             del self._reviews
+
+    def get_review_duration(self):
+        """We can define `REVIEW_DURATIONS` tuple in class attributes. Then we
+         return the duration matched by `docclass` field. If `REVIEW_DURATIONS`
+          is not present, the global value `REVIEW_DURATION` is in settings."""
+
+        # If REVIEW_DURATIONS is not defined we get the settings value
+        if not hasattr(self, 'REVIEW_DURATIONS'):
+            return settings.REVIEW_DURATION
+
+        review_durations = dict(self.REVIEW_DURATIONS)
+
+        # We try to get the duration from the tuple
+        review_duration = review_durations.get(self.docclass, None)
+        if review_duration is None:
+            raise ImproperlyConfigured(
+                'Define {0}.REVIEW_DURATIONS to match reviews.models.CLASSES'
+                'or define settings.LOGIN_URL or '
+                'override {0}.get_review_duration().'.format(
+                    self.__class__.__name__))
+        return review_duration
 
     def get_review(self, user):
         """Get the review from this specific user."""
@@ -645,7 +683,7 @@ class ReviewMixin(models.Model):
         """Return data to display on the review form."""
         fields = [
             (_('Category'), self.document.category),
-            (_('Document number'), self.document.document_key),
+            (_('Document number'), self.document.document_number),
             (_('Title'), self.document.title),
             (_('Status'), self.status),
             (_('Revision'), self.name),
