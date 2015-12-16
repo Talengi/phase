@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 import datetime
 
+from django.conf import settings
 from django.test import TestCase
 from django.utils import timezone
 
@@ -96,13 +97,38 @@ class ReviewMixinTests(TestCase):
         self.assertIsNone(revision.review_end_date)
         self.assertIsNone(revision.reviewers_step_closed)
         self.assertIsNone(revision.leader_step_closed)
-
+        # No custom duration rules defined, so we should get the default
+        # `REVIEW_DURATION` set in settings
+        # See reviews.models.ReviewsMixin
+        self.assertEqual(
+            revision.get_review_duration(),
+            settings.REVIEW_DURATION)
         revision.start_review()
         today = timezone.now().date()
         in_two_weeks = today + datetime.timedelta(days=13)
 
         self.assertSameDay(revision.review_start_date, today)
         self.assertSameDay(revision.review_due_date, in_two_weeks)
+
+    def test_start_review_process_____(self):
+        revision = self.create_reviewable_document()
+        # For now, no phase models use the reviews.models.ReviewsMixin
+        # features that allow them to define custom review durations matching
+        # docclass. It would be tedious to write a model simply to test
+        # this feature, so we mutate the revision object to have a
+        # `REVIEW_DURATION` tuple and test the behaviour.
+        TEST_REVIEW_DURATIONS = (
+            (1, 4),
+            (2, 8),
+            (3, 11),
+            (4, 13),
+        )
+        revision.REVIEW_DURATIONS = TEST_REVIEW_DURATIONS
+
+        # Check each docclass value triggers the matching duration
+        for docclass, duration in TEST_REVIEW_DURATIONS:
+            revision.docclass = docclass
+            self.assertEqual(revision.get_review_duration(), duration)
 
     def test_start_review_at_custom_date(self):
         revision = self.create_reviewable_document()
