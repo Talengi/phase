@@ -7,14 +7,14 @@ from crispy_forms.layout import Layout, Field
 
 from default_documents.layout import DocumentFieldset, DateField
 
-from documents.forms.models import BaseDocumentForm
+from documents.forms.models import GenericBaseDocumentForm
 from transmittals.layout import RelatedRevisionsLayout
 from transmittals.models import (
     Transmittal, TransmittalRevision, OutgoingTransmittal,
     OutgoingTransmittalRevision)
 
 
-class TransmittalForm(BaseDocumentForm):
+class TransmittalForm(GenericBaseDocumentForm):
     def build_layout(self):
         return Layout(
             Field('tobechecked_dir', type='hidden'),
@@ -40,7 +40,7 @@ class TransmittalForm(BaseDocumentForm):
                    'transmittal_key', 'document_type', 'contractor',)
 
 
-class TransmittalRevisionForm(BaseDocumentForm):
+class TransmittalRevisionForm(GenericBaseDocumentForm):
     def build_layout(self):
         fields = (
             _('Revision'),
@@ -61,7 +61,7 @@ class TransmittalRevisionForm(BaseDocumentForm):
         exclude = ('document', 'revision', 'trs_status', 'updated_on')
 
 
-class OutgoingTransmittalForm(BaseDocumentForm):
+class OutgoingTransmittalForm(GenericBaseDocumentForm):
     def get_related_documents_layout(self):
         related_documents = DocumentFieldset(
             _('Related documents'),
@@ -89,7 +89,7 @@ class OutgoingTransmittalForm(BaseDocumentForm):
                    'related_documents')
 
 
-class OutgoingTransmittalRevisionForm(BaseDocumentForm):
+class OutgoingTransmittalRevisionForm(GenericBaseDocumentForm):
     def build_layout(self):
         fields = (
             _('Revision'),

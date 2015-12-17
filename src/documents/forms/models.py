@@ -39,12 +39,24 @@ def documentform_factory(model):
     return DocumentForm
 
 
-class BaseDocumentForm(forms.ModelForm):
+class SameCategoryRelatedDocument(object):
+    """Form mixin used to limit related documents choices to those belonging to
+     the same category."""
+    def __init__(self, *args, **kwargs):
+        super(SameCategoryRelatedDocument, self).__init__(*args, **kwargs)
+        if 'related_documents' in self.fields:
+            qs = self.category.documents.all()
+            self.fields['related_documents'].queryset = qs
+
+
+class GenericBaseDocumentForm(forms.ModelForm):
+    """Base form used for transmittals. Transmittals need to handle
+    related documents in différent catégories """
     def __init__(self, *args, **kwargs):
         self.read_only = kwargs.pop('read_only', False)
         self.request = kwargs.pop('request', None)
         self.category = kwargs.pop('category')
-        super(BaseDocumentForm, self).__init__(*args, **kwargs)
+        super(GenericBaseDocumentForm, self).__init__(*args, **kwargs)
         self.prepare_form(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_tag = False
@@ -99,7 +111,7 @@ class BaseDocumentForm(forms.ModelForm):
 
     def clean(self):
         """Validate the document number and key."""
-        data = super(BaseDocumentForm, self).clean()
+        data = super(GenericBaseDocumentForm, self).clean()
 
         # In the creation form, we display a single field: the document number.
         # The document_key must be generated from it.
@@ -114,3 +126,11 @@ class BaseDocumentForm(forms.ModelForm):
                 data['document_key'] = slugify(data['document_number']).upper()
 
         return data
+
+
+class BaseDocumentForm(SameCategoryRelatedDocument, GenericBaseDocumentForm):
+    """Base document form used for any document excepted transmittals.
+    These documents must handle related documents belonging to the same
+    category. We keep this name to avoid breaking imports from customized
+    models."""
+    pass
