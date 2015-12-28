@@ -35,7 +35,9 @@ class GenericViewTest(TestCase):
             self.category.slug
         ])
 
-    def assertGet(self, parameters={}, auth=None, status_code=200):
+    def assertGet(self, parameters=None, auth=None, status_code=200):
+        if not parameters:
+            parameters = {}
         if auth:
             response = self.client.login(**auth)
             self.assertEqual(response, True)
@@ -44,7 +46,9 @@ class GenericViewTest(TestCase):
         self.content = response.content
         self.context = response.context
 
-    def assertPost(self, parameters={}, auth=None, status_code=200):
+    def assertPost(self, parameters=None, auth=None, status_code=200):
+        if not parameters:
+            parameters = {}
         if auth:
             response = self.client.login(**auth)
             self.assertEqual(response, True)
