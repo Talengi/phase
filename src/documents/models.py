@@ -450,7 +450,9 @@ class MetadataRevision(models.Model):
 
     def get_initial_ignored_fields(self):
         """New revision initial data that must stay default."""
-        fields_to_ignore = ('created_on', 'status', 'native_file', 'pdf_file')
+        fields_to_ignore = (
+            'created_on', 'status', 'native_file', 'pdf_file', 'received_date'
+        )
         return fields_to_ignore
 
     def get_initial_empty(self):
