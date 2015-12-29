@@ -50,7 +50,10 @@ class CSVFormatter(BaseFormatter):
             fields = self.fields.values()
             data = [self.get_field(doc, field) for field in fields]
 
-        csv_data = '{}\n'.format(';'.join(data))
+        # Some fields can contain new lines and break csv formatting so we
+        # need to remove them (eg: document title TextField)
+        csv_data = ';'.join(data).replace('\r\n', '').replace('\n', '')
+        csv_data = '{}\n'.format(csv_data)
         return csv_data.encode('utf-8')
 
     def get_field(self, doc, field):
