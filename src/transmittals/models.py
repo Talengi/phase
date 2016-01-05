@@ -555,16 +555,17 @@ class OutgoingTransmittal(Metadata):
                 exported_revs = revision.metadata.exportedrevision_set.all() \
                     .select_related()
                 for rev in exported_revs:
-                    comments_file = rev.comments
-                    comments_basename = os.path.basename(comments_file.path)
-                    zip_file.write(
-                        comments_file.path,
-                        '{}/{}_{}/{}'.format(
-                            dirname,
-                            rev.document.document_key,
-                            rev.name,
-                            comments_basename),
-                        compress_type=zipfile.ZIP_DEFLATED)
+                    if rev.comments:
+                        comments_file = rev.comments
+                        comments_basename = os.path.basename(comments_file.path)
+                        zip_file.write(
+                            comments_file.path,
+                            '{}/{}_{}/{}'.format(
+                                dirname,
+                                rev.document.document_key,
+                                rev.name,
+                                comments_basename),
+                            compress_type=zipfile.ZIP_DEFLATED)
 
         return temp_file
 
