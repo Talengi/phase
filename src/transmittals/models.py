@@ -689,3 +689,8 @@ class TransmittableMixin(ReviewMixin):
             bool(self.review_end_date),
             not self.already_transmitted,
             self.document.current_revision == self.revision))
+
+    def get_initial_empty(self):
+        """New revision initial data that must be empty."""
+        empty_fields = super(TransmittableMixin, self).get_initial_empty()
+        return empty_fields + ('trs_return_code', 'trs_comments',)
