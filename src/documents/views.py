@@ -38,7 +38,6 @@ from categories.views import CategoryMixin
 from documents.models import Document
 from documents.utils import save_document_forms
 from documents.forms.models import documentform_factory
-from documents.forms.utils import DocumentDownloadForm
 from documents.forms.filters import filterform_factory
 from notifications.models import notify
 
@@ -148,11 +147,8 @@ class DocumentList(BaseDocumentList):
         context = super(DocumentList, self).get_context_data(**kwargs)
         model = context['object_list'].model
         FilterForm = filterform_factory(model)
-        qs = self.get_queryset()
-        download_form = DocumentDownloadForm(queryset=qs)
 
         context.update({
-            'download_form': download_form,
             'form': FilterForm(),
             'documents_active': True,
             'paginate_by': settings.PAGINATE_BY,
@@ -526,21 +522,17 @@ class DocumentRevise(DocumentEdit):
 class DocumentDownload(BaseDocumentList):
 
     def post(self, request, *args, **kwargs):
+        _class = self.category.document_class()
         form_data = self.request.POST
         qs = Document.objects.filter(category=self.category)
-        form = DocumentDownloadForm(form_data, queryset=qs)
+        form = _class.get_document_download_form(form_data, queryset=qs)
         if form.is_valid():
             data = form.cleaned_data
         else:
             raise Http404('Invalid parameters to download files.')
 
         # Generates the temporary zip file
-        _class = self.category.document_class()
-        zip_filename = _class.compress_documents(
-            data['document_ids'],
-            data['format'] or 'both',
-            data['revisions'] or 'latest',
-        )
+        zip_filename = _class.compress_documents(data['document_ids'], **data)
         zip_filename.seek(0)
         wrapper = FileWrapper(zip_filename)
 

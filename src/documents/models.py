@@ -305,7 +305,12 @@ class Metadata(six.with_metaclass(MetadataBase, models.Model)):
         return ['documents/document_list_download_modal.html']
 
     @classmethod
-    def compress_documents(cls, documents, format='both', revisions='latest'):
+    def get_document_download_form(cls, data, queryset):
+        from documents.forms.utils import DocumentDownloadForm
+        return DocumentDownloadForm(data, queryset=queryset)
+
+    @classmethod
+    def compress_documents(cls, documents, **kwargs):
         """Compress the given files' documents (or queryset) in a zip file.
 
         * format can be either 'both', 'native' or 'pdf'
@@ -313,6 +318,8 @@ class Metadata(six.with_metaclass(MetadataBase, models.Model)):
 
         Returns the name of the ziped file.
         """
+        format = kwargs.pop('format', 'both')
+        revisions = kwargs.pop('revisions', 'latest')
         temp_file = tempfile.TemporaryFile()
 
         with zipfile.ZipFile(temp_file, mode='w') as zip_file:

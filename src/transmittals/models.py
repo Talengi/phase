@@ -531,7 +531,12 @@ class OutgoingTransmittal(Metadata):
         return self.document_key
 
     @classmethod
-    def compress_documents(cls, documents, format='both', revisions='latest'):
+    def get_document_download_form(cls, data, queryset):
+        from transmittals.forms import TransmittalDownloadForm
+        return TransmittalDownloadForm(data, queryset=queryset)
+
+    @classmethod
+    def compress_documents(cls, documents, **kwargs):
         """See `documents.models.Metadata.compress_documents`"""
         temp_file = tempfile.TemporaryFile()
 
@@ -602,6 +607,11 @@ class OutgoingTransmittal(Metadata):
                 .update(already_transmitted=True)
 
             bulk_actions(index_data)
+
+    @classmethod
+    def get_batch_actions_modals(cls):
+        """Returns a list of templates used in batch actions."""
+        return ['transmittals/document_list_download_modal.html']
 
 
 class OutgoingTransmittalRevision(MetadataRevision):
