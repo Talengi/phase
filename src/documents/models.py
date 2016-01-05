@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import zipfile
+import tempfile
 from collections import OrderedDict
 
 from django.db import models
@@ -301,6 +303,48 @@ class Metadata(six.with_metaclass(MetadataBase, models.Model)):
     def get_batch_actions_modals(cls):
         """Returns a list of templates used in batch actions."""
         return ['documents/document_list_download_modal.html']
+
+    @classmethod
+    def get_document_download_form(cls, data, queryset):
+        from documents.forms.utils import DocumentDownloadForm
+        return DocumentDownloadForm(data, queryset=queryset)
+
+    @classmethod
+    def compress_documents(cls, documents, **kwargs):
+        """Compress the given files' documents (or queryset) in a zip file.
+
+        * format can be either 'both', 'native' or 'pdf'
+        * revisions can be either 'latest' or 'all'
+
+        Returns the name of the ziped file.
+        """
+        format = kwargs.pop('format', 'both')
+        revisions = kwargs.pop('revisions', 'latest')
+        temp_file = tempfile.TemporaryFile()
+
+        with zipfile.ZipFile(temp_file, mode='w') as zip_file:
+            files = []
+            for document in documents:
+                if revisions == 'latest':
+                    revs = [document.latest_revision]
+                elif revisions == 'all':
+                    revs = document.get_all_revisions()
+
+                for rev in revs:
+                    if rev is not None:
+                        if format in ('native', 'both'):
+                            files.append(rev.native_file)
+                        if format in ('pdf', 'both'):
+                            files.append(rev.pdf_file)
+
+            for file_ in files:
+                if file_.name:
+                    zip_file.write(
+                        file_.path,
+                        file_.name,
+                        compress_type=zipfile.ZIP_DEFLATED
+                    )
+        return temp_file
 
 
 class MetadataRevision(models.Model):

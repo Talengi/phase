@@ -1,0 +1,45 @@
+<script id="documents-download-modal" type="text/x-underscore-template">
+<form method="POST" action="#">
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="documents-download-modal-label">{{ _('Download transmittals') }}</h4>
+        </div>
+        <div class="modal-body">
+
+            <div class="btn-toolbar">
+                <div class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-default active">
+                        <input type="radio" name="content" value="transmittal" id="content_transmittal" checked>Transmittal
+                    </label>
+                    <label class="btn btn-default">
+                        <input type="radio" name="content" value="revisions" id="content_revisions">Revisions
+                    </label>
+                    <label class="btn btn-default">
+                        <input type="radio" name="content" value="both" id="content_all">Both
+                    </label>
+                </div>
+                <div class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-default active">
+                        <input type="radio" name="revisions" value="latest" id="revisions_latest" checked>Latest
+                    </label>
+                    <label class="btn btn-default">
+                        <input type="radio" name="revisions" value="all" id="revisions_all">All revisions
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+                {{ _('Cancel') }}
+            </button>
+            <button type="submit" class="btn btn-primary">
+                <span class="glyphicon glyphicon-download glyphicon-white"></span>
+                Download
+            </button>
+        </div>
+    </div>
+</div>
+<form>
+</script>

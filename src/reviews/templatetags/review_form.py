@@ -13,8 +13,8 @@ register = template.Library()
 
 @register.simple_tag
 def file_link(file, name=None):
-    name = name if name else os.path.basename(file.name)
     if file:
+        name = name if name else os.path.basename(file.name)
         link = '<a href="{}">{}</a> ({})'.format(
             file.url,
             name,

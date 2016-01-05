@@ -6,6 +6,8 @@ import os
 import logging
 import shutil
 import uuid
+import zipfile
+import tempfile
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -528,6 +530,61 @@ class OutgoingTransmittal(Metadata):
     def title(self):
         return self.document_key
 
+    @classmethod
+    def get_document_download_form(cls, data, queryset):
+        from transmittals.forms import TransmittalDownloadForm
+        return TransmittalDownloadForm(data, queryset=queryset)
+
+    @classmethod
+    def compress_documents(cls, documents, **kwargs):
+        """See `documents.models.Metadata.compress_documents`"""
+        content = kwargs.get('content', 'transmittal')
+        revisions = kwargs.get('revisions', 'latest')
+
+        temp_file = tempfile.TemporaryFile()
+
+        with zipfile.ZipFile(temp_file, mode='w') as zip_file:
+            for document in documents:
+                dirname = document.document_key
+                revision = document.get_latest_revision()
+
+                # Should we embed the transmittal pdf?
+                if content in ('transmittal', 'both'):
+
+                    # All revisions or just the latest?
+                    if revisions == 'latest':
+                        revs = [revision]
+                    elif revisions == 'all':
+                        revs = document.get_all_revisions()
+
+                    # Embed the file in the zip archive
+                    for rev in revs:
+                        pdf_file = rev.pdf_file
+                        pdf_basename = os.path.basename(pdf_file.name)
+                        zip_file.write(
+                            pdf_file.path,
+                            '{}/{}'.format(dirname, pdf_basename),
+                            compress_type=zipfile.ZIP_DEFLATED)
+
+                # Should we embed review comments?
+                if content in ('revisions', 'both'):
+                    exported_revs = revision.metadata.exportedrevision_set \
+                        .all() \
+                        .select_related()
+                    for rev in exported_revs:
+                        if rev.comments:
+                            comments_file = rev.comments
+                            comments_basename = os.path.basename(comments_file.path)
+                            zip_file.write(
+                                comments_file.path,
+                                '{}/{}/{}'.format(
+                                    dirname,
+                                    rev.document.document_key,
+                                    comments_basename),
+                                compress_type=zipfile.ZIP_DEFLATED)
+
+        return temp_file
+
     def link_to_revisions(self, revisions):
         """Set the given revisions as related documents.
 
@@ -547,7 +604,8 @@ class OutgoingTransmittal(Metadata):
                     revision=revision.revision,
                     title=revision.document.title,
                     status=revision.status,
-                    return_code=revision.get_final_return_code()))
+                    return_code=revision.get_final_return_code(),
+                    comments=revision.trs_comments))
             ids.append(revision.id)
 
             # Update ES index to make sure the "can_be_transmitted"
@@ -566,6 +624,11 @@ class OutgoingTransmittal(Metadata):
                 .update(already_transmitted=True)
 
             bulk_actions(index_data)
+
+    @classmethod
+    def get_batch_actions_modals(cls):
+        """Returns a list of templates used in batch actions."""
+        return ['transmittals/document_list_download_modal.html']
 
 
 class OutgoingTransmittalRevision(MetadataRevision):
@@ -586,6 +649,9 @@ class ExportedRevision(models.Model):
     title = models.TextField(_('Title'))
     status = models.CharField(_('Status'), max_length=5)
     return_code = models.CharField(_('Return code'), max_length=5)
+    comments = PrivateFileField(
+        _('Comments'),
+        null=True, blank=True)
 
     class Meta:
         verbose_name = _('Exported revision')
@@ -617,8 +683,7 @@ class TransmittableMixin(ReviewMixin):
     trs_comments = PrivateFileField(
         _('Final comments'),
         null=True, blank=True,
-        upload_to=trs_comments_file_path
-    )
+        upload_to=trs_comments_file_path)
 
     class Meta:
         abstract = True
@@ -640,3 +705,8 @@ class TransmittableMixin(ReviewMixin):
             bool(self.review_end_date),
             not self.already_transmitted,
             self.document.current_revision == self.revision))
+
+    def get_initial_empty(self):
+        """New revision initial data that must be empty."""
+        empty_fields = super(TransmittableMixin, self).get_initial_empty()
+        return empty_fields + ('trs_return_code', 'trs_comments',)
