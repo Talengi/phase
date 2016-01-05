@@ -538,6 +538,9 @@ class OutgoingTransmittal(Metadata):
     @classmethod
     def compress_documents(cls, documents, **kwargs):
         """See `documents.models.Metadata.compress_documents`"""
+        content = kwargs.get('content', 'transmittal')
+        revisions = kwargs.get('revisions', 'latest')
+
         temp_file = tempfile.TemporaryFile()
 
         with zipfile.ZipFile(temp_file, mode='w') as zip_file:
@@ -545,27 +548,40 @@ class OutgoingTransmittal(Metadata):
                 dirname = document.document_key
                 revision = document.get_latest_revision()
 
-                pdf_file = revision.pdf_file
-                pdf_basename = os.path.basename(pdf_file.name)
-                zip_file.write(
-                    pdf_file.path,
-                    '{}/{}'.format(dirname, pdf_basename),
-                    compress_type=zipfile.ZIP_DEFLATED)
+                # Should we embed the transmittal pdf?
+                if content in ('transmittal', 'both'):
 
-                exported_revs = revision.metadata.exportedrevision_set.all() \
-                    .select_related()
-                for rev in exported_revs:
-                    if rev.comments:
-                        comments_file = rev.comments
-                        comments_basename = os.path.basename(comments_file.path)
+                    # All revisions or just the latest?
+                    if revisions == 'latest':
+                        revs = [revision]
+                    elif revisions == 'all':
+                        revs = document.get_all_revisions()
+
+                    # Embed the file in the zip archive
+                    for rev in revs:
+                        pdf_file = rev.pdf_file
+                        pdf_basename = os.path.basename(pdf_file.name)
                         zip_file.write(
-                            comments_file.path,
-                            '{}/{}_{}/{}'.format(
-                                dirname,
-                                rev.document.document_key,
-                                rev.name,
-                                comments_basename),
+                            pdf_file.path,
+                            '{}/{}'.format(dirname, pdf_basename),
                             compress_type=zipfile.ZIP_DEFLATED)
+
+                # Should we embed review comments?
+                if content in ('revisions', 'both'):
+                    exported_revs = revision.metadata.exportedrevision_set \
+                        .all() \
+                        .select_related()
+                    for rev in exported_revs:
+                        if rev.comments:
+                            comments_file = rev.comments
+                            comments_basename = os.path.basename(comments_file.path)
+                            zip_file.write(
+                                comments_file.path,
+                                '{}/{}/{}'.format(
+                                    dirname,
+                                    rev.document.document_key,
+                                    comments_basename),
+                                compress_type=zipfile.ZIP_DEFLATED)
 
         return temp_file
 
