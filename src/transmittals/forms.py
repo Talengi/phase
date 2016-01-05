@@ -2,6 +2,8 @@
 
 from __future__ import unicode_literals
 
+from django import forms
+from documents.forms.utils import DocumentDownloadForm
 from django.utils.translation import ugettext_lazy as _
 from crispy_forms.layout import Layout, Field
 
@@ -106,3 +108,13 @@ class OutgoingTransmittalRevisionForm(GenericBaseDocumentForm):
     class Meta:
         model = OutgoingTransmittalRevision
         exclude = ('document', 'revision', 'updated_on')
+
+
+class TransmittalDownloadForm(DocumentDownloadForm):
+    content = forms.ChoiceField(
+        choices=(
+            ('transmittal', "Transmittal"),
+            ('revisions', "Revisions"),
+            ('both', "Both"),
+        ),
+        required=False)
