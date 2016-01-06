@@ -76,7 +76,7 @@ class DocumentListMixin(CategoryMixin):
         We get all Metadata depending on the category.
 
         """
-        DocumentClass = self.category.category_template.metadata_model.model_class()
+        DocumentClass = self.category.document_class()
         qs = DocumentClass.objects \
             .select_related() \
             .filter(document__category=self.category)
@@ -85,8 +85,7 @@ class DocumentListMixin(CategoryMixin):
 
     def get_document_class(self):
         """Returns the document class hosted by this category."""
-        qs = self.get_queryset()
-        return qs.model
+        return self.category.document_class()
 
     def get_favorites(self):
         qs = Favorite.objects \
