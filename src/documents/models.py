@@ -90,8 +90,20 @@ class Document(models.Model):
 
         return url
 
-    def get_edit_url(self):
-        url = reverse('document_edit', args=(
+    def get_edit_url(self, revision=None):
+        kwargs = {
+            'organisation': self.category.organisation.slug,
+            'category': self.category.category_template.slug,
+            'document_key': self.document_key
+        }
+        if revision is not None:
+            kwargs.update({'revision': revision})
+
+        url = reverse('document_edit', kwargs=kwargs)
+        return url
+
+    def get_revise_url(self):
+        url = reverse('document_revise', args=(
             self.category.organisation.slug,
             self.category.category_template.slug,
             self.document_key,
@@ -175,7 +187,8 @@ class MetadataBase(ModelBase):
         if name != 'NewBase' and name != 'Metadata':
             base_attrs = []
             for base in bases:
-                base_attrs += base._meta.fields
+                if hasattr(base, '_meta'):
+                    base_attrs += base._meta.fields
 
             phase_config = attrs.get('PhaseConfig', None)
             if not phase_config:

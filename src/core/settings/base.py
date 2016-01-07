@@ -231,6 +231,7 @@ LOCAL_APPS = (
     'privatemedia',
     'tools',
     'exports',
+    'schedules',
 )
 
 # Load custom documents

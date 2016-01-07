@@ -17,10 +17,11 @@ from reviews.models import ReviewMixin
 from transmittals.models import TransmittableMixin
 from documents.models import Metadata, MetadataRevision
 from documents.constants import BOOLEANS
+from schedules.models import ScheduleMixin
 from .validators import StringNumberValidator
 
 
-class ContractorDeliverable(Metadata):
+class ContractorDeliverable(ScheduleMixin, Metadata):
     latest_revision = models.ForeignKey(
         'ContractorDeliverableRevision',
         verbose_name=_('Latest revision'))
@@ -263,6 +264,7 @@ class ContractorDeliverable(Metadata):
 
     class Meta:
         ordering = ('document_number',)
+        app_label = 'default_documents'
         unique_together = (
             (
                 "contract_number", "originator", "unit", "discipline",
@@ -404,6 +406,9 @@ class ContractorDeliverableRevision(TransmittableMixin, MetadataRevision):
         null=True,
         blank=True)
 
+    class Meta:
+        app_label = 'default_documents'
+
 
 class Correspondence(Metadata):
     latest_revision = models.ForeignKey(
@@ -470,6 +475,7 @@ class Correspondence(Metadata):
 
     class Meta:
         ordering = ('id',)
+        app_label = 'default_documents'
         unique_together = (
             (
                 "contract_number", "originator", "recipient",
@@ -559,6 +565,9 @@ class CorrespondenceRevision(MetadataRevision):
         related_name='leading_correspondance',
         null=True, blank=True)
 
+    class Meta:
+        app_label = 'default_documents'
+
 
 class MinutesOfMeeting(Metadata):
     latest_revision = models.ForeignKey(
@@ -613,6 +622,7 @@ class MinutesOfMeeting(Metadata):
 
     class Meta:
         ordering = ('document_number',)
+        app_label = 'default_documents'
         unique_together = (
             (
                 "contract_number", "originator", "recipient",
@@ -676,6 +686,9 @@ class MinutesOfMeetingRevision(MetadataRevision):
         max_length=20,
         list_index='STATUS_COR_MOM')
 
+    class Meta:
+        app_label = 'default_documents'
+
 
 # Those two classes are dummy document classes, used for demos and tests
 class DemoMetadata(Metadata):
@@ -693,6 +706,7 @@ class DemoMetadata(Metadata):
 
     class Meta:
         ordering = ('document_number',)
+        app_label = 'default_documents'
 
     class PhaseConfig:
         filter_fields = ('status',)
@@ -753,3 +767,6 @@ class DemoMetadataRevision(ReviewMixin, MetadataRevision):
         max_length=3,
         choices=STATUSES,
         null=True, blank=True)
+
+    class Meta:
+        app_label = 'default_documents'

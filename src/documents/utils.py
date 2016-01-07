@@ -35,11 +35,22 @@ def save_document_forms(metadata_form, revision_form, category, **doc_kwargs):
     # Those three functions could be regrouped, but they form
     # an if / else russian mountain
     if metadata.pk is None:
-        return create_document_from_forms(metadata_form, revision_form, category, **doc_kwargs)
+        doc, meta, rev = create_document_from_forms(
+            metadata_form, revision_form, category, **doc_kwargs)
     elif revision.pk is None:
-        return create_revision_from_forms(metadata_form, revision_form, category)
+        doc, meta, rev = create_revision_from_forms(
+            metadata_form, revision_form, category)
     else:
-        return update_revision_from_forms(metadata_form, revision_form, category)
+        doc, meta, rev = update_revision_from_forms(
+            metadata_form, revision_form, category)
+
+    signals.document_form_saved.send(
+        document=doc,
+        metadata=meta,
+        revision=rev,
+        sender=meta.__class__)
+
+    return doc, meta, rev
 
 
 def create_document_from_forms(metadata_form, revision_form, category, **doc_kwargs):

@@ -16,39 +16,46 @@ from crispy_forms.layout import Field, LayoutObject, Fieldset, TEMPLATE_PACK
 from crispy_forms.utils import render_field
 
 
-class ScheduleStatusLayout(LayoutObject):
+class ScheduleStatusLayout(Field):
     """Render a single line of the schedule table."""
     template = 'layout/schedule_status.html'
     field_template = 'layout/schedule_status_field.html'
 
     def __init__(self, name, **kwargs):
         self.name = name
+        super(ScheduleStatusLayout, self).__init__(name, **kwargs)
 
-    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
-        planned_field = form['status_%s_planned_date' % self.name]
-        forecast_field = form['status_%s_forecast_date' % self.name]
-        actual_field = form['status_%s_actual_date' % self.name]
+    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK,
+               **kwargs):
 
-        planned = render_to_string(
-            self.field_template,
-            Context({
-                'field': planned_field,
-                'form_style': form_style,
-            }))
+        planned = render_field(
+            'status_%s_planned_date' % self.name,
+            form,
+            form_style,
+            context,
+            attrs=self.attrs,
+            template=self.field_template,
+            **kwargs)
 
-        forecast = render_to_string(
-            self.field_template,
-            Context({
-                'field': forecast_field,
-                'form_style': form_style,
-            }))
+        forecast = render_field(
+            'status_%s_forecast_date' % self.name,
+            form,
+            form_style,
+            context,
+            attrs=self.attrs,
+            template=self.field_template,
+            **kwargs)
 
-        actual = render_to_string(
-            self.field_template,
-            Context({
-                'field': actual_field,
-                'form_style': form_style,
-            }))
+        actual_attrs = self.attrs.copy()
+        actual_attrs.update({'readonly': 'readonly'})
+        actual = render_field(
+            'status_%s_actual_date' % self.name,
+            form,
+            form_style,
+            context,
+            attrs=actual_attrs,
+            template=self.field_template,
+            **kwargs)
 
         return render_to_string(
             self.template,
