@@ -375,7 +375,11 @@ var Phase = Phase || {};
             this.listenTo(this.model, 'change', this.synchronizeForm);
 
             this.synchronizeForm();
-            if (!this.isDefaultForm()) {
+
+            // Check if the search form must be opened
+            var cookieVal = exports.document.cookie.replace(/(?:(?:^|.*;\s*)search_form\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+            console.log(cookieVal);
+            if (cookieVal === 'opened') {
                 this.showSearchForm();
             }
         },
@@ -422,9 +426,11 @@ var Phase = Phase || {};
         },
         showSearchForm: function () {
             this.$el.addClass('active');
+            exports.document.cookie = 'search_form=opened';
         },
         hideSearchForm: function () {
             this.$el.removeClass('active');
+            exports.document.cookie = 'search_form=closed';
         },
         submitForm: function(event) {
             event.preventDefault();
