@@ -1,4 +1,4 @@
-{% load widget_tweaks %}
+{% load widget_tweaks crispy_forms_field %}
 <form action="{% url 'search_documents' organisation_slug category_slug %}"
       method="get"
       class="sidebar-form"
@@ -19,7 +19,11 @@
             <div class="control-group {% if field.errors %}error{% endif %}">
                 <label class="control-label" for="{{ field.auto_id }}">{{ field.label }}</label>
                 <div class="controls">
-                    {{ field|add_class:"form-control filter" }} <span class="glyphicon glyphicon-remove"></span>
+                    {% if field|is_checkbox %}
+                        {{ field|add_class:"filter" }} <span class="glyphicon glyphicon-remove"></span>
+                    {% else %}
+                        {{ field|add_class:"form-control filter" }} <span class="glyphicon glyphicon-remove"></span>
+                    {% endif %}
                 </div>
                 {% if field.errors %}<span class="help-inline">{{ field.errors.0 }}</span>{% endif %}
             </div>
@@ -46,7 +50,7 @@
             <div class="control-group">
                 <label class="control-label" for="id_bookmark">{{ _('Bookmark') }}</label>
                 <div class="controls">
-                    <select name="bookmark" id="id_bookmark">
+                    <select class="form-control" name="bookmark" id="id_bookmark">
                         <option selected="selected"></option>
                     </select>
                     <a href="#" data-target="#delete-bookmark-modal" data-toggle="modal">
