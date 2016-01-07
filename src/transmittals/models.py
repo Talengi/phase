@@ -503,7 +503,7 @@ class OutgoingTransmittal(Metadata):
             ('Reference', 'document_number'),
             ('Originator', 'originator'),
             ('Recipient', 'recipient'),
-            ('Ack of receipt', 'ack_of_receipt'),
+            ('Acknowledgment of receipt', 'ack_of_receipt'),
         )
         searchable_fields = (
             'document_number',
