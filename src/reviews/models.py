@@ -685,7 +685,7 @@ class ReviewMixin(models.Model):
             (_('Category'), self.document.category),
             (_('Document number'), self.document.document_number),
             (_('Title'), self.document.title),
-            (_('Status'), self.status),
             (_('Revision'), self.name),
+            (_('Status'), self.status),
         ]
         return fields
