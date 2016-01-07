@@ -187,7 +187,8 @@ class MetadataBase(ModelBase):
         if name != 'NewBase' and name != 'Metadata':
             base_attrs = []
             for base in bases:
-                base_attrs += base._meta.fields
+                if hasattr(base, '_meta'):
+                    base_attrs += base._meta.fields
 
             phase_config = attrs.get('PhaseConfig', None)
             if not phase_config:

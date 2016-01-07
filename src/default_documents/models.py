@@ -17,10 +17,11 @@ from reviews.models import ReviewMixin
 from transmittals.models import TransmittableMixin
 from documents.models import Metadata, MetadataRevision
 from documents.constants import BOOLEANS
+from schedules.models import ScheduleMixin
 from .validators import StringNumberValidator
 
 
-class ContractorDeliverable(Metadata):
+class ContractorDeliverable(ScheduleMixin, Metadata):
     latest_revision = models.ForeignKey(
         'ContractorDeliverableRevision',
         verbose_name=_('Latest revision'))

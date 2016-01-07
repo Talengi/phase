@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from metadata.fields import get_choices_from_list
+from schedules.models import ScheduleMixin
 
 
 def update_schedule_section(document, metadata, revision, **kwargs):
@@ -13,6 +14,10 @@ def update_schedule_section(document, metadata, revision, **kwargs):
     See #172
 
     """
+    sender = kwargs.pop('sender')
+    if not issubclass(sender, ScheduleMixin):
+        return
+
     list_index = revision._meta.get_field('status').list_index
     statuses = get_choices_from_list(list_index)
     for status, _ in statuses:
