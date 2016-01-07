@@ -370,6 +370,7 @@ var Phase = Phase || {};
             this.filterForm.get(0).reset();
 
             this.listenTo(dispatcher, 'onSearchFormDisplayed', this.showSearchForm);
+            this.listenTo(dispatcher, 'onEscKeyPressed', this.hideSearchForm);
             this.listenTo(dispatcher, 'onAggregationsFetched', this.updateFacets);
             this.listenTo(this.model, 'change', this.synchronizeForm);
 

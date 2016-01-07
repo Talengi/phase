@@ -13,9 +13,14 @@ var Phase = Phase || {};
         },
         initialize: function() {
             this.content = $(this.$el.data('target'));
+
+            this.listenTo(dispatcher, 'onEscKeyPressed', this.hideContent);
         },
         toggleContent: function() {
             this.content.toggle();
+        },
+        hideContent: function() {
+            this.content.hide();
         }
     });
 
