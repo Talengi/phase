@@ -116,7 +116,7 @@ class Transmittal(Metadata):
         column_fields = (
             ('Reference', 'document_number'),
             ('Transmittal date', 'transmittal_date'),
-            ('Ack. of receipt date', 'ack_of_receipt_date'),
+            ('Acknowledgment of receipt', 'ack_of_receipt_date'),
             ('Originator', 'originator'),
             ('Recipient', 'recipient'),
             ('Document type', 'document_type'),
