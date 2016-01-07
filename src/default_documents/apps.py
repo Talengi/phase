@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django.apps import AppConfig
 
 from documents import signals
-from default_documents.handlers import cd_post_save
+from default_documents.handlers import update_schedule_section
 from default_documents.models import ContractorDeliverable
 
 
@@ -14,5 +14,5 @@ class DefaultDocumentsConfig(AppConfig):
 
     def ready(self):
         signals.document_form_saved.connect(
-            cd_post_save,
+            update_schedule_section,
             sender=ContractorDeliverable)
