@@ -241,6 +241,7 @@ var Phase = Phase || {};
             this.listenTo(dispatcher, 'onRowSelected', this.rowSelected);
             this.listenTo(dispatcher, 'onDocumentsFetched', this.renderResults);
             this.listenTo(dispatcher, 'onModalFormSubmitted', this.batchActionModalProcess);
+            this.listenTo(options.search, 'change', this.cleanupSelection);
         },
         configureForm: function() {
             // Prevent closing dropdown on any click
@@ -276,6 +277,11 @@ var Phase = Phase || {};
                 input = this.actionForm.find(input_id);
                 input.remove();
             }
+        },
+        // Un-select all selected rows
+        cleanupSelection: function() {
+            var inputs = this.actionForm.find('input[name=document_ids]');
+            inputs.remove();
         },
         showSearchForm: function() {
             dispatcher.trigger('onSearchFormDisplayed');

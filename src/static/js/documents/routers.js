@@ -43,7 +43,7 @@ var Phase = Phase || {};
                 collection: this.documentsCollection,
                 favorites: this.favoriteCollection
             });
-            this.navbarView = new Phase.Views.NavbarView();
+            this.navbarView = new Phase.Views.NavbarView({ search: this.search });
             this.progressView = new Phase.Views.ProgressView({ model: this.taskProgress });
             this.searchView = new Phase.Views.SearchView({ model: this.search });
             this.paginationView = new Phase.Views.PaginationView();
