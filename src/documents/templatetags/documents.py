@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django import template
-from django.template.loader import get_template
+from django.template.loader import get_template, select_template
 
 from ..utils import stringify_value
 
@@ -33,14 +33,15 @@ def generate_header_markup(document_class):
 @register.simple_tag()
 def generate_template_markup(document_class):
     """Generates the markup to be used in doc list table rows."""
+    default_template = 'documents/columns/default.html'
     columns = document_class.PhaseConfig.column_fields
 
     tds = list()
     for column in columns:
-        tds.append(TD_TPL % (
-            column[1],
-            column[1],
-        ))
+        custom_template = 'documents/columns/{}.html'.format(column[1])
+        tpl = select_template([custom_template, default_template])
+        content = tpl.render({'field_name': column[1]})
+        tds.append(content)
 
     return ' '.join(tds)
 
