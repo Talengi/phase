@@ -369,6 +369,17 @@ class ContractorDeliverable(ScheduleMixin, Metadata):
                 'progression_modal': True,
                 'icon': 'eye-close',
             }
+            actions['prepare_transmittal'] = {
+                'id': 'prepare-transmittal',
+                'label': 'Prepare outgoing transmittal',
+                'action': reverse('transmittal_prepare', args=[
+                    category.organisation.slug,
+                    category.slug]),
+                'ajax': 'false',
+                'progression_modal': False,
+                'modal': '',
+                'icon': 'hand-up',
+            }
             actions['create_transmittal'] = {
                 'id': 'create-transmittal',
                 'label': 'Create transmittal',
