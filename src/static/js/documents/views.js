@@ -378,7 +378,6 @@ var Phase = Phase || {};
 
             // Check if the search form must be opened
             var cookieVal = exports.document.cookie.replace(/(?:(?:^|.*;\s*)search_form\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-            console.log(cookieVal);
             if (cookieVal === 'opened') {
                 this.showSearchForm();
             }
