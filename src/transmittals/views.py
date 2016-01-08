@@ -266,11 +266,12 @@ class PrepareTransmittalView(BaseDocumentBatchActionView):
     def post(self, request, *args, **kwargs):
         qs = self.get_queryset()
         document_ids = request.POST.getlist('document_ids')
-        metadatas = qs.filter(id__in=document_ids)
-        revisions = [meta.latest_revision for meta in metadatas]
-        for rev in revisions:
-            rev.under_preparation_by = self.request.user
-            rev.save()
+        rev_ids = qs.filter(id__in=document_ids) \
+            .values_list('latest_revision_id', flat=True)
+
+        _class = self.category.revision_class()
+        revisions = _class.objects.filter(id__in=rev_ids)
+        revisions.update(under_preparation_by=self.request.user)
 
         index_revisions(revisions)
         return HttpResponseRedirect(self.get_redirect_url())
