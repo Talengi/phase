@@ -684,6 +684,11 @@ class TransmittableMixin(ReviewMixin):
         _('Final comments'),
         null=True, blank=True,
         upload_to=trs_comments_file_path)
+    under_preparation_by = models.ForeignKey(
+        'accounts.User',
+        verbose_name=_('Under preparation by'),
+        related_name='+',
+        null=True, blank=True)
 
     class Meta:
         abstract = True
