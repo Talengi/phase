@@ -18,6 +18,7 @@ from documents.views import BaseDocumentBatchActionView
 from transmittals.models import Transmittal, TrsRevision
 from transmittals.utils import FieldWrapper
 from transmittals.tasks import do_create_transmittal
+from search.utils import index_revisions
 from django.conf import settings
 
 
@@ -255,6 +256,25 @@ class TransmittalDownloadView(LoginRequiredMixin, PermissionRequiredMixin, BaseZ
                 files.append(revision.native_file.file)
 
         return files
+
+
+class PrepareTransmittalView(BaseDocumentBatchActionView):
+    """Mark selected revisions as "under preparation"""
+
+    http_method_names = ['post']
+
+    def post(self, request, *args, **kwargs):
+        qs = self.get_queryset()
+        document_ids = request.POST.getlist('document_ids')
+        rev_ids = qs.filter(id__in=document_ids) \
+            .values_list('latest_revision_id', flat=True)
+
+        _class = self.category.revision_class()
+        revisions = _class.objects.filter(id__in=rev_ids)
+        revisions.update(under_preparation_by=self.request.user)
+
+        index_revisions(revisions)
+        return HttpResponseRedirect(self.get_redirect_url())
 
 
 class CreateTransmittalView(BaseDocumentBatchActionView):

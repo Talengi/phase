@@ -6,10 +6,13 @@ from django.conf.urls import patterns, url
 
 from transmittals.views import (
     TransmittalListView, TransmittalDiffView, TransmittalRevisionDiffView,
-    TransmittalDownloadView, CreateTransmittalView)
+    TransmittalDownloadView, PrepareTransmittalView, CreateTransmittalView)
 
 urlpatterns = patterns(
     '',
+    url(r'^prepare/(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/$',
+        PrepareTransmittalView.as_view(),
+        name="transmittal_prepare"),
     url(r'^create/(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/$',
         CreateTransmittalView.as_view(),
         name="transmittal_create"),

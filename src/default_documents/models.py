@@ -160,6 +160,7 @@ class ContractorDeliverable(ScheduleMixin, Metadata):
         searchable_fields = ('document_number', 'title',)
         indexable_fields = ['is_existing', 'can_be_transmitted']
         column_fields = (
+            ('', 'under_preparation_by'),
             ('Document Number', 'document_number'),
             ('Title', 'title'),
             ('Rev.', 'current_revision'),
@@ -368,6 +369,17 @@ class ContractorDeliverable(ScheduleMixin, Metadata):
                 'modal': 'cancel-review-modal',
                 'progression_modal': True,
                 'icon': 'eye-close',
+            }
+            actions['prepare_transmittal'] = {
+                'id': 'prepare-transmittal',
+                'label': 'Prepare outgoing transmittal',
+                'action': reverse('transmittal_prepare', args=[
+                    category.organisation.slug,
+                    category.slug]),
+                'ajax': 'false',
+                'progression_modal': False,
+                'modal': '',
+                'icon': 'hand-up',
             }
             actions['create_transmittal'] = {
                 'id': 'create-transmittal',

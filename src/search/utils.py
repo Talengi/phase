@@ -177,8 +177,10 @@ def get_mapping(doc_class):
             except FieldDoesNotExist:
                 field = getattr(doc_class, field_name, None)
                 if field is None:
-                    warning = 'Field {} cannot be found and will not be indexed'.format(field_name)
-                    logger.warning(warning)
+                    field = getattr(revision_class, field_name, None)
+                    if field is None:
+                        warning = 'Field {} cannot be found and will not be indexed'.format(field_name)
+                        logger.warning(warning)
 
         es_type = get_mapping_type(field) if field else 'string'
 
