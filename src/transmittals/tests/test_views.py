@@ -8,6 +8,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils.html import escape
 
 from documents.factories import DocumentFactory
+from default_documents.tests.test import ContractorDeliverableTestCase
 from default_documents.models import ContractorDeliverable
 from default_documents.factories import (
     ContractorDeliverableFactory, ContractorDeliverableRevisionFactory)
@@ -187,3 +188,27 @@ class TrsRevisionDiffViewTests(BaseTransmittalDiffViewTests):
         })
         trs_revision = TrsRevision.objects.get(pk=trs_revision.pk)
         self.assertEqual(trs_revision.comment, 'Gloubiboulga')
+
+
+class TestPrepareTransmittalTests(ContractorDeliverableTestCase):
+
+    def setUp(self):
+        super(TestPrepareTransmittalTests, self).setUp()
+        self.prepare_transmittals_url = reverse('transmittal_prepare', args=[
+            self.category.organisation.slug,
+            self.category.slug,
+        ])
+
+    def test_prepare_documents(self):
+        under_prep_qs = ContractorDeliverable.objects \
+            .filter(latest_revision__under_preparation_by=self.user)
+
+        docs = [self.create_doc() for _ in range(5)]
+        self.assertEqual(under_prep_qs.count(), 0)
+
+        meta_ids = [doc.get_metadata().id for doc in docs]
+        self.client.post(self.prepare_transmittals_url, {
+            'document_ids': meta_ids
+        }, follow=True)
+
+        self.assertEqual(under_prep_qs.count(), 5)
