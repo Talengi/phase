@@ -160,6 +160,7 @@ class ContractorDeliverable(ScheduleMixin, Metadata):
         searchable_fields = ('document_number', 'title',)
         indexable_fields = ['is_existing', 'can_be_transmitted']
         column_fields = (
+            ('', 'under_preparation_by'),
             ('Document Number', 'document_number'),
             ('Title', 'title'),
             ('Rev.', 'current_revision'),
