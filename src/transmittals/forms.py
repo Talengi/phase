@@ -122,19 +122,12 @@ class TransmittalDownloadForm(DocumentDownloadForm):
 
 
 class TransmittableFormMixin(ReviewFormMixin):
-    def prepare_form(self, *args, **kwargs):
-        from transmittals.utils import get_cached_transmittal
-
-        if self.instance.id:
-            self.transmittal = get_cached_transmittal(self.instance)
-
-        super(TransmittableFormMixin, self).prepare_form(*args, **kwargs)
 
     def get_trs_layout(self):
         if self.read_only:
             layout = (DocumentFieldset(
                 _('Outgoing Transmittal'),
-                OutgoingTrsLayout(),
+                OutgoingTrsLayout('transmittal'),
             ),)
         else:
             layout = tuple()
