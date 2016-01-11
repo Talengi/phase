@@ -486,11 +486,6 @@ class OutgoingTransmittal(Metadata):
     ack_of_receipt_date = models.DateField(
         _('Acknowledgment of receipt date'),
         null=True, blank=True)
-    related_documents = models.ManyToManyField(
-        'documents.Document',
-        through='ExportedRevision',
-        related_name='outgoing_transmittal_set',
-        blank=True)
 
     class Meta:
         app_label = 'transmittals'
@@ -594,19 +589,9 @@ class OutgoingTransmittal(Metadata):
          - be transmittable objects
 
         """
-        trs_revisions = []
         ids = []
         index_data = []
         for revision in revisions:
-            trs_revisions.append(
-                ExportedRevision(
-                    document=revision.document,
-                    transmittal=self,
-                    revision=revision.revision,
-                    title=revision.document.title,
-                    status=revision.status,
-                    return_code=revision.get_final_return_code(),
-                    comments=revision.trs_comments))
             ids.append(revision.id)
 
             # Update ES index to make sure the "can_be_transmitted"
@@ -616,8 +601,6 @@ class OutgoingTransmittal(Metadata):
             index_data.append(index_datum)
 
         with transaction.atomic():
-            ExportedRevision.objects.bulk_create(trs_revisions)
-
             # Mark revisions as transmitted
             Revision = type(revisions[0])
             Revision.objects \
