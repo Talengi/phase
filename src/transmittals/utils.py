@@ -5,13 +5,11 @@ from __future__ import unicode_literals
 from django.db.models import Max
 from django.utils import timezone
 from django.db import transaction
-from django.core.cache import cache
 
 from documents.utils import save_document_forms
 from transmittals import errors
 from transmittals.models import (
-    OutgoingTransmittal, OutgoingTransmittalRevision, TransmittableMixin,
-    ExportedRevision)
+    OutgoingTransmittal, OutgoingTransmittalRevision, TransmittableMixin)
 from transmittals.forms import (
     OutgoingTransmittalForm, OutgoingTransmittalRevisionForm)
 
@@ -119,26 +117,3 @@ def find_next_trs_number(originator, recipient, contract_nb):
         .aggregate(Max('sequential_number'))
     max_nb = qs.get('sequential_number__max')
     return max_nb + 1 if max_nb else 1
-
-
-def get_cached_transmittal(revision):
-    transmittals = get_all_transmittals(revision.document)
-    return transmittals.get(revision.revision, None)
-
-
-def get_all_transmittals(document):
-    cache_key = 'all_transmittals_{}'.format(document.id)
-    all_transmittals = cache.get(cache_key, None)
-
-    if all_transmittals is None:
-        exp_revisions = ExportedRevision.objects \
-            .filter(document=document) \
-            .select_related() \
-            .order_by('revision')
-        all_transmittals = {}
-        for exp_rev in exp_revisions:
-            all_transmittals[exp_rev.revision] = exp_rev.transmittal
-
-        cache.set(cache_key, all_transmittals, 5)
-
-    return all_transmittals
