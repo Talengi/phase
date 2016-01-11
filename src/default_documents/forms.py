@@ -12,7 +12,7 @@ from .models import (
     MinutesOfMeeting, MinutesOfMeetingRevision,
     DemoMetadata, DemoMetadataRevision
 )
-from reviews.forms import ReviewFormMixin
+from transmittals.forms import TransmittableFormMixin
 from .layout import (
     DocumentFieldset, ScheduleLayout, ScheduleStatusLayout,
     PropertyLayout, DateField
@@ -58,7 +58,7 @@ class ContractorDeliverableForm(BaseDocumentForm):
         exclude = ('document', 'latest_revision')
 
 
-class ContractorDeliverableRevisionForm(ReviewFormMixin, BaseDocumentForm):
+class ContractorDeliverableRevisionForm(TransmittableFormMixin, BaseDocumentForm):
 
     def build_layout(self):
 
@@ -73,7 +73,7 @@ class ContractorDeliverableRevisionForm(ReviewFormMixin, BaseDocumentForm):
                 'native_file',
                 'pdf_file',
             ),
-            *self.get_review_layout()
+            *(self.get_review_layout() + self.get_trs_layout())
         )
 
     class Meta:

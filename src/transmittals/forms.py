@@ -10,7 +10,8 @@ from crispy_forms.layout import Layout, Field
 from default_documents.layout import DocumentFieldset, DateField
 
 from documents.forms.models import GenericBaseDocumentForm
-from transmittals.layout import RelatedRevisionsLayout
+from reviews.forms import ReviewFormMixin
+from transmittals.layout import RelatedRevisionsLayout, OutgoingTrsLayout
 from transmittals.models import (
     Transmittal, TransmittalRevision, OutgoingTransmittal,
     OutgoingTransmittalRevision)
@@ -118,3 +119,23 @@ class TransmittalDownloadForm(DocumentDownloadForm):
             ('both', "Both"),
         ),
         required=False)
+
+
+class TransmittableFormMixin(ReviewFormMixin):
+    def prepare_form(self, *args, **kwargs):
+        from transmittals.utils import get_cached_transmittal
+
+        if self.instance.id:
+            self.transmittal = get_cached_transmittal(self.instance)
+
+        super(TransmittableFormMixin, self).prepare_form(*args, **kwargs)
+
+    def get_trs_layout(self):
+        if self.read_only:
+            layout = (DocumentFieldset(
+                _('Outgoing Transmittal'),
+                OutgoingTrsLayout(),
+            ),)
+        else:
+            layout = tuple()
+        return layout

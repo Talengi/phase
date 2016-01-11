@@ -185,7 +185,7 @@ class ReviewFormMixin(forms.ModelForm):
                     'trs_comments',
                     'reviewers',
                     'leader',
-                    'approver'))
+                    'approver'),)
 
         return review_layout
 
