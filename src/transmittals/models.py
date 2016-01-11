@@ -14,6 +14,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.core.files.base import ContentFile
+from django.utils import timezone
 
 from model_utils import Choices
 
@@ -621,7 +622,9 @@ class OutgoingTransmittal(Metadata):
             Revision = type(revisions[0])
             Revision.objects \
                 .filter(id__in=ids) \
-                .update(already_transmitted=True)
+                .update(
+                    transmittal=self,
+                    transmittal_sent_date=timezone.now())
 
             bulk_actions(index_data)
 
@@ -672,9 +675,14 @@ class TransmittableMixin(ReviewMixin):
 
     """
 
-    already_transmitted = models.BooleanField(
-        _('Already embdedded in transmittal?'),
-        default=False)
+    transmittal = models.ForeignKey(
+        'OutgoingTransmittal',
+        verbose_name='transmittal',
+        null=True, blank=True,
+        on_delete=models.SET_NULL)
+    transmittal_sent_date = models.DateField(
+        _('Transmittal sent date'),
+        null=True, blank=True)
     trs_return_code = ConfigurableChoiceField(
         _('Final return code'),
         max_length=3,
@@ -708,7 +716,7 @@ class TransmittableMixin(ReviewMixin):
         """Is this rev ready to be embedded in an outgoing trs?"""
         return all((
             bool(self.review_end_date),
-            not self.already_transmitted,
+            not self.transmittal,
             self.document.current_revision == self.revision))
 
     def get_initial_empty(self):
