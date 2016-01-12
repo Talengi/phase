@@ -14,7 +14,7 @@ class RelatedRevisionsLayout(LayoutObject):
         self.field = field
 
     def render(self, form, form_style, context, template_pack=None):
-        revisions = form.instance.exportedrevision_set.all().select_related()
+        revisions = form.instance.get_revisions()
 
         return render_to_string(
             self.template,
