@@ -714,10 +714,6 @@ class TransmittableMixin(ReviewMixin):
             not self.transmittal,
             self.document.current_revision == self.revision))
 
-    @property
-    def transmittal_sent_date(self):
-        return self.transmittal.document.created_on
-
     def get_initial_empty(self):
         """New revision initial data that must be empty."""
         empty_fields = super(TransmittableMixin, self).get_initial_empty()
