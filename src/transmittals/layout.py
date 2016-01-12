@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django.template.loader import render_to_string
 from django.template import Context
 
-from crispy_forms.layout import LayoutObject, Field
+from crispy_forms.layout import LayoutObject
 
 
 class RelatedRevisionsLayout(LayoutObject):
@@ -24,5 +24,15 @@ class RelatedRevisionsLayout(LayoutObject):
             }))
 
 
-class OutgoingTrsLayout(Field):
-    pass
+class OutgoingTrsLayout(LayoutObject):
+    template = 'layout/outgoing_trs.html'
+
+    def render(self, form, form_style, context, template_pack=None):
+        transmittal = form.instance.transmittal
+
+        return render_to_string(
+            self.template,
+            Context({
+                'transmittal': transmittal,
+                'form_style': form_style,
+            }))

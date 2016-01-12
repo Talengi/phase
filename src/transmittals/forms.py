@@ -127,7 +127,7 @@ class TransmittableFormMixin(ReviewFormMixin):
         if self.read_only:
             layout = (DocumentFieldset(
                 _('Outgoing Transmittal'),
-                OutgoingTrsLayout('transmittal'),
+                OutgoingTrsLayout(),
             ),)
         else:
             layout = tuple()
