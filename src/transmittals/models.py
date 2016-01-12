@@ -515,6 +515,14 @@ class OutgoingTransmittal(Metadata):
     def __unicode__(self):
         return self.document_key
 
+    def get_revisions(self):
+        _class = self.get_revisions_class()
+        revisions = _class.objects.filter(transmittal=self).select_related()
+        return revisions
+
+    def get_revisions_class(self):
+        return self.revisions_category.revision_class()
+
     @property
     def ack_of_receipt(self):
         return bool(self.ack_of_receipt_date)
