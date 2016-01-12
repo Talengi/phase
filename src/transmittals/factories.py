@@ -76,6 +76,7 @@ class OutgoingTransmittalFactory(factory.DjangoModelFactory):
     document = factory.SubFactory(
         DocumentFactory,
         document_key=factory.SelfAttribute('..document_key'))
+    revisions_category = factory.SubFactory(CategoryFactory)
     latest_revision = factory.SubFactory(
         TransmittalRevisionFactory,
         document=factory.SelfAttribute('..document'))

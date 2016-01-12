@@ -14,6 +14,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.core.files.base import ContentFile
+from django.utils import timezone
 
 from model_utils import Choices
 
@@ -469,6 +470,10 @@ class OutgoingTransmittal(Metadata):
         'OutgoingTransmittalRevision',
         verbose_name=_('Latest revision'))
 
+    revisions_category = models.ForeignKey(
+        'categories.Category',
+        verbose_name=_('From category'),
+        on_delete=models.PROTECT)
     contract_number = ConfigurableChoiceField(
         verbose_name='Contract Number',
         max_length=8,
@@ -485,11 +490,6 @@ class OutgoingTransmittal(Metadata):
     ack_of_receipt_date = models.DateField(
         _('Acknowledgment of receipt date'),
         null=True, blank=True)
-    related_documents = models.ManyToManyField(
-        'documents.Document',
-        through='ExportedRevision',
-        related_name='outgoing_transmittal_set',
-        blank=True)
 
     class Meta:
         app_label = 'transmittals'
@@ -513,6 +513,14 @@ class OutgoingTransmittal(Metadata):
 
     def __unicode__(self):
         return self.document_key
+
+    def get_revisions(self):
+        _class = self.get_revisions_class()
+        revisions = _class.objects.filter(transmittal=self).select_related()
+        return revisions
+
+    def get_revisions_class(self):
+        return self.revisions_category.revision_class()
 
     @property
     def ack_of_receipt(self):
@@ -593,19 +601,9 @@ class OutgoingTransmittal(Metadata):
          - be transmittable objects
 
         """
-        trs_revisions = []
         ids = []
         index_data = []
         for revision in revisions:
-            trs_revisions.append(
-                ExportedRevision(
-                    document=revision.document,
-                    transmittal=self,
-                    revision=revision.revision,
-                    title=revision.document.title,
-                    status=revision.status,
-                    return_code=revision.get_final_return_code(),
-                    comments=revision.trs_comments))
             ids.append(revision.id)
 
             # Update ES index to make sure the "can_be_transmitted"
@@ -615,13 +613,13 @@ class OutgoingTransmittal(Metadata):
             index_data.append(index_datum)
 
         with transaction.atomic():
-            ExportedRevision.objects.bulk_create(trs_revisions)
-
             # Mark revisions as transmitted
             Revision = type(revisions[0])
             Revision.objects \
                 .filter(id__in=ids) \
-                .update(already_transmitted=True)
+                .update(
+                    transmittal=self,
+                    transmittal_sent_date=timezone.now())
 
             bulk_actions(index_data)
 
@@ -672,9 +670,14 @@ class TransmittableMixin(ReviewMixin):
 
     """
 
-    already_transmitted = models.BooleanField(
-        _('Already embdedded in transmittal?'),
-        default=False)
+    transmittal = models.ForeignKey(
+        'OutgoingTransmittal',
+        verbose_name='transmittal',
+        null=True, blank=True,
+        on_delete=models.SET_NULL)
+    transmittal_sent_date = models.DateField(
+        _('Transmittal sent date'),
+        null=True, blank=True)
     trs_return_code = ConfigurableChoiceField(
         _('Final return code'),
         max_length=3,
@@ -708,7 +711,7 @@ class TransmittableMixin(ReviewMixin):
         """Is this rev ready to be embedded in an outgoing trs?"""
         return all((
             bool(self.review_end_date),
-            not self.already_transmitted,
+            not self.transmittal,
             self.document.current_revision == self.revision))
 
     def get_initial_empty(self):

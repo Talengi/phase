@@ -19,8 +19,8 @@
                 <td>{{ rev.document.title }}</td>
                 <td>{{ rev.name }}</td>
                 <td>{{ rev.status }}</td>
-                <td>{{ rev.return_code }}</td>
-                <td>{% file_link rev.comments %}</td>
+                <td>{{ rev.get_final_return_code }}</td>
+                <td>{% file_link rev.trs_comments %}</td>
             </tr>
             {% empty %}
             <tr>

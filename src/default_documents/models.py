@@ -216,6 +216,8 @@ class ContractorDeliverable(ScheduleMixin, Metadata):
             ('Review due date', 'review_due_date'),
             ('Leader', 'leader'),
             ('Approver', 'approver'),
+            ('Outgoing transmittal', 'transmittal'),
+            ('Sent date', 'transmittal_sent_date'),
             ('Return code', 'return_code'),
             ('STD Planned', 'status_std_planned_date'),
             ('IDC Planned', 'status_idc_planned_date'),
