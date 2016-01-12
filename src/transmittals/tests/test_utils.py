@@ -108,6 +108,7 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
             self.entity)
         self.assertIsNotNone(trs)
         self.assertTrue(isinstance(trs, OutgoingTransmittal))
+        self.assertEqual(trs.revisions_category, self.category)
 
         revision.refresh_from_db()
         self.assertIsNotNone(revision.transmittal)

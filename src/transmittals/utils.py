@@ -90,7 +90,7 @@ def create_transmittal(from_category, to_category, revisions, contract_nb,
     originator = from_category.organisation.trigram
     sequential_number = find_next_trs_number(originator, recipient, contract_nb)
     form_data.update({
-        'revisions_category': from_category,
+        'revisions_category': from_category.id,
         'contract_number': contract_nb,
         'originator': originator,
         'recipient': recipient.id,

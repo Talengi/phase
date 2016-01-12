@@ -76,6 +76,7 @@ class OutgoingTransmittalForm(GenericBaseDocumentForm):
             DocumentFieldset(
                 _('General information'),
                 Field('document_key', type='hidden'),
+                Field('revisions_category', type='hidden'),
                 'document_number',
                 'contract_number',
                 'originator',
@@ -88,8 +89,7 @@ class OutgoingTransmittalForm(GenericBaseDocumentForm):
 
     class Meta:
         model = OutgoingTransmittal
-        exclude = ('document', 'latest_revision',
-                   'related_documents')
+        exclude = ('document', 'latest_revision', 'related_documents')
 
 
 class OutgoingTransmittalRevisionForm(GenericBaseDocumentForm):
