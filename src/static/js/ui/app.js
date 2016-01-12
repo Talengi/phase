@@ -11,7 +11,7 @@ jQuery(function($) {
     });
 
     $(document).keyup(function(event) {
-        if (event.keyCode == 27) {
+        if (event.keyCode === 27) {
             dispatcher.trigger('onEscKeyPressed');
         }
     });
