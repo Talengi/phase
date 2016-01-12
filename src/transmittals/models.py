@@ -470,6 +470,11 @@ class OutgoingTransmittal(Metadata):
         'OutgoingTransmittalRevision',
         verbose_name=_('Latest revision'))
 
+    revisions_category = models.ForeignKey(
+        'categories.Category',
+        verbose_name=_('From category'),
+        null=True, blank=True,
+        on_delete=models.PROTECT)
     contract_number = ConfigurableChoiceField(
         verbose_name='Contract Number',
         max_length=8,
