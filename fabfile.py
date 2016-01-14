@@ -61,26 +61,6 @@ def reindex_all():
             run(reindex + with_production_settings)
 
 
-def deploy():
-    """Deploys the project against staging."""
-    with cd(env.directory):
-        run('git pull')
-        with prefix(env.activate):
-            with_production_settings = ' --settings=core.settings.production'
-
-            run('pip install -r requirements/production.txt')
-
-            collectstatic = 'python src/manage.py collectstatic --noinput'
-            run(collectstatic + with_production_settings)
-
-            clearcache = 'python src/manage.py clearcache'
-            run(clearcache + with_production_settings)
-
-            migrate = 'python src/manage.py migrate'
-            run(migrate + with_production_settings)
-    restart_webserver()
-
-
 def log(filename="admin/log/access.log", backlog='F'):
     """Displays access.log file from staging."""
     run("tail -%s '%s'" % (backlog, filename))
