@@ -163,10 +163,9 @@ def get_mapping(doc_class):
 
     config = doc_class.PhaseConfig
     filter_fields = list(config.filter_fields)
-    searchable_fields = list(config.searchable_fields)
     column_fields = dict(config.column_fields).values()
     additional_fields = getattr(config, 'indexable_fields', [])
-    fields = set(filter_fields + searchable_fields + column_fields + additional_fields)
+    fields = set(filter_fields + column_fields + additional_fields)
 
     for field_name in fields:
         try:
@@ -187,7 +186,7 @@ def get_mapping(doc_class):
         mapping['properties'].update({
             field_name: {
                 'type': es_type,
-                'include_in_all': field_name in searchable_fields,
+                'include_in_all': field_name in column_fields,
                 'fields': {
                     'raw': {
                         'type': es_type,

@@ -52,7 +52,7 @@ additional_filter_fields = {
         ),
         required=False,
         widget=forms.Select,
-        label=_('Ack of receipt'),
+        label=_('Acknowledgment of receipt'),
     )
 }
 

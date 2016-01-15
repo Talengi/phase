@@ -196,13 +196,11 @@ class MetadataBase(ModelBase):
                                 'class on %s' % name)
 
             filter_fields = getattr(phase_config, 'filter_fields', None)
-            searchable_fields = getattr(
-                phase_config, 'searchable_fields', None)
             column_fields = getattr(phase_config, 'column_fields', None)
             filter_fields_order = getattr(
                 phase_config, 'filter_fields_order', None)
 
-            if not all((filter_fields, searchable_fields, column_fields)):
+            if not all((filter_fields, column_fields)):
                 raise TypeError('Your "PhaseConfig" definition is incorrect '
                                 'on %s. Please check the doc' % name)
 
@@ -484,10 +482,9 @@ class MetadataRevision(models.Model):
 
         config = metadata.PhaseConfig
         filter_fields = list(config.filter_fields)
-        searchable_fields = list(config.searchable_fields)
         column_fields = dict(config.column_fields).values()
         indexable_fields = getattr(config, 'indexable_fields', [])
-        fields_to_index = set(filter_fields + searchable_fields + column_fields + indexable_fields)
+        fields_to_index = set(filter_fields + column_fields + indexable_fields)
 
         for field in fields_to_index:
             fields += add_to_fields(field)
