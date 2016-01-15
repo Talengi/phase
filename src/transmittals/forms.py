@@ -7,7 +7,8 @@ from documents.forms.utils import DocumentDownloadForm
 from django.utils.translation import ugettext_lazy as _
 from crispy_forms.layout import Layout, Field
 
-from default_documents.layout import DocumentFieldset, DateField
+from default_documents.layout import (DocumentFieldset, DateField,
+                                      PropertyLayout)
 
 from documents.forms.models import GenericBaseDocumentForm
 from reviews.forms import ReviewFormMixin
@@ -82,6 +83,7 @@ class OutgoingTransmittalForm(GenericBaseDocumentForm):
                 'originator',
                 'recipient',
                 'sequential_number',
+                PropertyLayout('get_ack_of_receipt_display'),
                 DateField('ack_of_receipt_date'),
                 self.get_related_documents_layout(),
             )
