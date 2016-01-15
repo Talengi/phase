@@ -491,7 +491,7 @@ class OutgoingTransmittal(Metadata):
         verbose_name_plural = _('Outgoing transmittals')
 
     class PhaseConfig:
-        filter_fields = ('contract_number', 'ack_of_receipt')
+        filter_fields = ('recipient', 'ack_of_receipt')
         column_fields = (
             ('Reference', 'document_number'),
             ('Created', 'created_on'),
