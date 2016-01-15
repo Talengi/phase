@@ -494,6 +494,7 @@ class OutgoingTransmittal(Metadata):
         filter_fields = ('contract_number', 'ack_of_receipt')
         column_fields = (
             ('Reference', 'document_number'),
+            ('Created', 'created_on'),
             ('Originator', 'originator'),
             ('Recipient', 'recipient'),
             ('Acknowledgment of receipt', 'ack_of_receipt'),
