@@ -82,7 +82,7 @@ class OutgoingTransmittalForm(GenericBaseDocumentForm):
                 'contract_number',
                 'originator',
                 'recipient',
-                'sequential_number',
+                Field('sequential_number', type='hidden'),
                 PropertyLayout('get_ack_of_receipt_display'),
                 DateField('ack_of_receipt_date'),
                 self.get_related_documents_layout(),
