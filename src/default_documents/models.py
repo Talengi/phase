@@ -157,7 +157,6 @@ class ContractorDeliverable(ScheduleMixin, Metadata):
             'docclass', 'status', 'unit', 'discipline',
             'document_type', 'under_review', 'overdue', 'leader', 'approver'
         )
-        searchable_fields = ('document_number', 'title',)
         indexable_fields = ['is_existing', 'can_be_transmitted']
         column_fields = (
             ('', 'under_preparation_by'),
@@ -514,15 +513,6 @@ class Correspondence(Metadata):
             ('Recipient', 'recipient'),
             ('Document type', 'document_type'),
         )
-        searchable_fields = (
-            'document_number',
-            'subject',
-            'status',
-            'leader',
-            'originator',
-            'recipient',
-            'document_type',
-        )
 
     def generate_document_key(self):
         return slugify(
@@ -660,15 +650,6 @@ class MinutesOfMeeting(Metadata):
             ('Signed', 'signed'),
             ('Status', 'status'),
         )
-        searchable_fields = (
-            'document_number',
-            'subject',
-            'originator',
-            'recipient',
-            'document_type',
-            'prepared_by',
-            'status',
-        )
 
     def generate_document_key(self):
         return slugify(
@@ -724,9 +705,6 @@ class DemoMetadata(Metadata):
 
     class PhaseConfig:
         filter_fields = ('status',)
-        searchable_fields = (
-            'title', 'document_number', 'title',
-        )
         column_fields = (
             ('Document Number', 'document_number'),
             ('Title', 'title'),

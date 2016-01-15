@@ -30,7 +30,6 @@ class SearchBuilder(object):
         Config = DocumentModel.PhaseConfig
         self.filter_fields = Config.filter_fields
         self.custom_filters = getattr(Config, 'custom_filters', {})
-        self.searchable_fields = Config.searchable_fields
 
     def init_filters(self, filters):
         DocumentModel = self.category.document_class()
@@ -111,12 +110,11 @@ class SearchBuilder(object):
     def _add_search_query(self, s):
         """Add the full text search to the query."""
         search_terms = self.filters.get('search_terms', None)
-        raw_search_fields = map(lambda x: '%s.raw' % x, self.searchable_fields)
         if search_terms:
             s = s.query({
                 'multi_match': {
                     'query': search_terms,
-                    'fields': ['_all'] + raw_search_fields,
+                    'fields': ['_all'],
                     'operator': 'and'
                 }
             })
