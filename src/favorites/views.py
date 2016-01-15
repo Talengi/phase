@@ -20,4 +20,6 @@ class FavoriteList(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         """Filters favorites per authenticated user."""
-        return self.model.objects.filter(user=self.request.user)
+        return self.model.objects \
+            .filter(user=self.request.user) \
+            .select_related()
