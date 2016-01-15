@@ -123,13 +123,6 @@ class Transmittal(Metadata):
             ('Document type', 'document_type'),
             ('Status', 'status'),
         )
-        searchable_fields = (
-            'document_number',
-            'originator',
-            'recipient',
-            'document_type',
-            'status',
-        )
 
     def __unicode__(self):
         return self.document_key
@@ -504,11 +497,6 @@ class OutgoingTransmittal(Metadata):
             ('Originator', 'originator'),
             ('Recipient', 'recipient'),
             ('Acknowledgment of receipt', 'ack_of_receipt'),
-        )
-        searchable_fields = (
-            'document_number',
-            'originator',
-            'recipient',
         )
 
     def __unicode__(self):
