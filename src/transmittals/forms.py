@@ -98,7 +98,6 @@ class OutgoingTransmittalRevisionForm(GenericBaseDocumentForm):
     def build_layout(self):
         fields = (
             _('Revision'),
-            DateField('revision_date'),
             DateField('received_date'),
             Field('created_on', readonly='readonly'))
 
@@ -110,7 +109,7 @@ class OutgoingTransmittalRevisionForm(GenericBaseDocumentForm):
 
     class Meta:
         model = OutgoingTransmittalRevision
-        exclude = ('document', 'revision', 'updated_on')
+        exclude = ('document', 'revision', 'revision_date', 'updated_on')
 
 
 class TransmittalDownloadForm(DocumentDownloadForm):
