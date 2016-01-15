@@ -438,7 +438,7 @@ class MetadataRevision(models.Model):
 
     @property
     def unique_id(self):
-        return '{}_{}'.format(self.document.document_key, self.name)
+        return self.id
 
     def to_json(self):
         """Converts the revision to a json representation.
