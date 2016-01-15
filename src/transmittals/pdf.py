@@ -56,7 +56,7 @@ class TransmittalPdf(object):
         self.document = revision.document
         self.transmittal = revision.metadata
         self.category = self.document.category
-        self.revisions = self.transmittal.exportedrevision_set.select_related()
+        self.revisions = self.transmittal.get_revisions()
         self.build_document()
 
     def build_document(self):
@@ -185,10 +185,10 @@ class TransmittalPdf(object):
         for revision in self.revisions:
             data.append((
                 Paragraph(revision.document.document_number, body_style),
-                Paragraph(revision.title, body_style),
+                Paragraph(revision.document.title, body_style),
                 Paragraph(revision.name, centered),
                 Paragraph(revision.status, centered),
-                Paragraph(revision.return_code, centered)))
+                Paragraph(revision.get_final_return_code(), centered)))
         table = Table(
             data,
             hAlign='LEFT',
