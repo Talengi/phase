@@ -13,8 +13,9 @@ from django.conf import settings
 
 from braces.views import LoginRequiredMixin
 
-from exports.models import Export
 from documents.views import DocumentListMixin
+from notifications.models import notify
+from exports.models import Export
 
 
 class ExportCreate(LoginRequiredMixin, DocumentListMixin, UpdateView):
@@ -55,11 +56,14 @@ class ExportCreate(LoginRequiredMixin, DocumentListMixin, UpdateView):
         return export
 
     def get_success_url(self):
-        return reverse('export_list')
+        return self.category.get_absolute_url()
 
     def form_valid(self, form):
         return_value = super(ExportCreate, self).form_valid(form)
         self.object.start_export()
+        message = _('Your export will be processed soon. We will let you know'
+                    ' as soon as it\'s ready.')
+        notify(self.object.owner, message)
         return return_value
 
 
