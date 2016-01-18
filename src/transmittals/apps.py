@@ -3,7 +3,8 @@ from __future__ import unicode_literals
 
 from django.apps import AppConfig
 
-from documents import signals
+from documents.signals import document_revised
+from transmittals.signals import transmittal_created
 from transmittals.handlers import transmittal_post_save
 from transmittals.models import OutgoingTransmittal
 
@@ -13,9 +14,9 @@ class TransmittalsConfig(AppConfig):
     verbose_name = 'Transmittals'
 
     def ready(self):
-        signals.document_created.connect(
+        transmittal_created.connect(
             transmittal_post_save,
             sender=OutgoingTransmittal)
-        signals.document_revised.connect(
+        document_revised.connect(
             transmittal_post_save,
             sender=OutgoingTransmittal)
