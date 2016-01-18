@@ -61,7 +61,7 @@ def do_batch_import(user_id, category_id, contenttype_id, document_ids,
             # However, by doing so, individual `post_save` signals would not
             # be fired. Since the request is expected to take some time anyway,
             # we will let this as is for now.
-            if remark is not None:
+            if remark:
                 Note.objects.create(
                     author_id=user_id,
                     document_id=doc.id,

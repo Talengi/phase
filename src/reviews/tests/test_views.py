@@ -69,6 +69,16 @@ class BatchReviewTests(TestCase):
         json_content = json.loads(res.content)
         self.assertTrue('poll_url' in json_content)
 
+    def test_start_review_with_empty_remark(self):
+        self.assertEqual(Note.objects.all().count(), 0)
+
+        res = self.client.post(self.url, {
+            'document_ids': [self.doc1.id, self.doc2.id, self.doc3.id],
+            'remark': ''},
+            follow=True)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(Note.objects.all().count(), 0)
+
     def test_start_review_with_remarks(self):
         self.assertEqual(Note.objects.all().count(), 0)
 
