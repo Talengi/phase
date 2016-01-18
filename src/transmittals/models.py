@@ -565,12 +565,11 @@ class OutgoingTransmittal(Metadata):
 
                 # Should we embed review comments?
                 if content in ('revisions', 'both'):
-                    exported_revs = revision.metadata.exportedrevision_set \
-                        .all() \
-                        .select_related()
+                    meta = document.get_metadata()
+                    exported_revs = meta.get_revisions()
                     for rev in exported_revs:
-                        if rev.comments:
-                            comments_file = rev.comments
+                        if rev.trs_comments:
+                            comments_file = rev.trs_comments
                             comments_basename = os.path.basename(comments_file.path)
                             zip_file.write(
                                 comments_file.path,
