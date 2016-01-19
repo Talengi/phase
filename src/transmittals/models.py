@@ -680,6 +680,10 @@ class TransmittableMixin(ReviewMixin):
         verbose_name=_('Under preparation by'),
         related_name='+',
         null=True, blank=True)
+    internal_review = models.BooleanField(
+        _('Internal review only?'),
+        default=False,
+    )
 
     class Meta:
         abstract = True
