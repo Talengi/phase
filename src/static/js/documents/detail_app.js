@@ -5,8 +5,7 @@ jQuery(function($) {
 
     var router = new Phase.Routers.DocumentDetailRouter();
     Backbone.history.start({
-        root: Phase.Config.currentUrl,
-        pushState: true
+        root: Phase.Config.currentUrl
     });
 });
 

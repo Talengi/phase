@@ -7,8 +7,7 @@ jQuery(function($) {
 
     var router = new Phase.Routers.ReviewRouter();
     Backbone.history.start({
-        root: Phase.Config.currentUrl,
-        pushState: true
+        root: Phase.Config.currentUrl
     });
 
     var commentInput = $('#id_comments');
