@@ -10,7 +10,9 @@
         <li><a href="#fieldset-files">Files</a></li>
         <li><a href="#fieldset-review-data">Review data</a></li>
         <li><a href="#fieldset-reviewers">Distribution list</a></li>
-        <li><a href="#fieldset-your-comments">Your comments</a></li>
+        {% if can_comment %}
+            <li><a href="#fieldset-your-comments">Your comments</a></li>
+        {% endif %}
     </ul>
 </div>
 <div class="col-sm-8">
