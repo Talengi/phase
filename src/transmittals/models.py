@@ -703,6 +703,7 @@ class TransmittableMixin(ReviewMixin):
         """Is this rev ready to be embedded in an outgoing trs?"""
         return all((
             bool(self.review_end_date),
+            not self.internal_review,
             not self.transmittal,
             self.document.current_revision == self.revision))
 
