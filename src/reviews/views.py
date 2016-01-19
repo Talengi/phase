@@ -308,6 +308,9 @@ class ReviewFormView(LoginRequiredMixin, UpdateView):
         revision = document.latest_revision
         review = revision.get_review(self.request.user)
 
+        if review is None:
+            raise Http404()
+
         # For better performance
         self.document = document
         self.revision = revision
