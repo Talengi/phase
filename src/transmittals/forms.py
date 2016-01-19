@@ -7,7 +7,7 @@ from documents.forms.utils import DocumentDownloadForm
 from django.utils.translation import ugettext_lazy as _
 from crispy_forms.layout import Layout, Field
 
-from default_documents.layout import DocumentFieldset, DateField
+from default_documents.layout import DocumentFieldset, DateField, YesNoLayout
 
 from documents.forms.models import GenericBaseDocumentForm
 from reviews.forms import ReviewFormMixin
@@ -125,10 +125,16 @@ class TransmittableFormMixin(ReviewFormMixin):
 
     def get_trs_layout(self):
         if self.read_only:
-            layout = (DocumentFieldset(
-                _('Outgoing Transmittal'),
-                OutgoingTrsLayout(),
-            ),)
+            layout = (
+                DocumentFieldset(
+                    _('Outgoing Transmittal'),
+                    'internal_review',
+                    OutgoingTrsLayout(),
+                ),)
         else:
-            layout = tuple()
+            layout = (
+                DocumentFieldset(
+                    _('Outgoing Transmittal'),
+                    'internal_review',
+                ),)
         return layout

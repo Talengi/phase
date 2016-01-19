@@ -682,6 +682,10 @@ class TransmittableMixin(ReviewMixin):
         null=True, blank=True)
     internal_review = models.BooleanField(
         _('Internal review only?'),
+        choices=Choices(
+            (False, 'No'),
+            (True, 'Yes')
+        ),
         default=False,
     )
 
