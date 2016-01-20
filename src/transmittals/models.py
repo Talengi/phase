@@ -680,6 +680,14 @@ class TransmittableMixin(ReviewMixin):
         verbose_name=_('Under preparation by'),
         related_name='+',
         null=True, blank=True)
+    internal_review = models.BooleanField(
+        _('Internal review only?'),
+        choices=Choices(
+            (False, 'No'),
+            (True, 'Yes')
+        ),
+        default=False,
+    )
 
     class Meta:
         abstract = True
@@ -699,6 +707,7 @@ class TransmittableMixin(ReviewMixin):
         """Is this rev ready to be embedded in an outgoing trs?"""
         return all((
             bool(self.review_end_date),
+            not self.internal_review,
             not self.transmittal,
             self.document.current_revision == self.revision))
 

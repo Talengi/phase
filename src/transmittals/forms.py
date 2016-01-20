@@ -125,10 +125,16 @@ class TransmittableFormMixin(ReviewFormMixin):
 
     def get_trs_layout(self):
         if self.read_only:
-            layout = (DocumentFieldset(
-                _('Outgoing Transmittal'),
-                OutgoingTrsLayout(),
-            ),)
+            layout = (
+                DocumentFieldset(
+                    _('Outgoing Transmittal'),
+                    'internal_review',
+                    OutgoingTrsLayout(),
+                ),)
         else:
-            layout = tuple()
+            layout = (
+                DocumentFieldset(
+                    _('Outgoing Transmittal'),
+                    'internal_review',
+                ),)
         return layout
