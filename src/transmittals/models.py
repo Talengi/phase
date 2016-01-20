@@ -705,6 +705,7 @@ class TransmittableMixin(ReviewMixin):
     purpose_of_issue = models.CharField(
         _('Purpose of issue'),
         max_length=2,
+        blank=True,
         choices=PURPOSE_OF_ISSUE_CHOICES,
         default=PURPOSE_OF_ISSUE_CHOICES.FR)
     external_review_due_date = models.DateField(
