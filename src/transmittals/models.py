@@ -702,7 +702,7 @@ class TransmittableMixin(ReviewMixin):
         _('Purpose of issue'),
         max_length=2,
         choices=PURPOSE_OF_ISSUE_CHOICES,
-        default=PURPOSE_OF_ISSUE_CHOICES.FI)
+        default=PURPOSE_OF_ISSUE_CHOICES.FR)
     external_review_due_date = models.DateField(
         _('External due date'),
         null=True, blank=True)
