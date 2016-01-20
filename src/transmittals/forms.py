@@ -7,7 +7,7 @@ from documents.forms.utils import DocumentDownloadForm
 from django.utils.translation import ugettext_lazy as _
 from crispy_forms.layout import Layout, Field
 
-from default_documents.layout import DocumentFieldset, DateField, YesNoLayout
+from default_documents.layout import DocumentFieldset, DateField
 
 from documents.forms.models import GenericBaseDocumentForm
 from reviews.forms import ReviewFormMixin
