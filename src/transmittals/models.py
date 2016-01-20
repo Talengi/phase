@@ -658,6 +658,10 @@ class TransmittableMixin(ReviewMixin):
 
     """
 
+    PURPOSE_OF_ISSUE_CHOICES = Choices(
+        ('FR', _('For review')),
+        ('FI', _('For information')))
+
     transmittal = models.ForeignKey(
         'OutgoingTransmittal',
         verbose_name='transmittal',
@@ -686,8 +690,15 @@ class TransmittableMixin(ReviewMixin):
             (False, 'No'),
             (True, 'Yes')
         ),
-        default=False,
-    )
+        default=False)
+    purpose_of_issue = models.CharField(
+        _('Outgoing trs purpose of issue'),
+        max_length=2,
+        choices=PURPOSE_OF_ISSUE_CHOICES,
+        default=PURPOSE_OF_ISSUE_CHOICES.FI)
+    external_review_due_date = models.DateField(
+        _('External due date'),
+        null=True, blank=True)
 
     class Meta:
         abstract = True
