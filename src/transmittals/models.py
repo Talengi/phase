@@ -8,6 +8,7 @@ import shutil
 import uuid
 import zipfile
 import tempfile
+import datetime
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -459,6 +460,8 @@ class OutgoingTransmittal(Metadata):
     code and is kept isolated for now.
 
     """
+    EXTERNAL_REVIEW_DURATION = 13
+
     latest_revision = models.ForeignKey(
         'OutgoingTransmittalRevision',
         verbose_name=_('Latest revision'))
@@ -601,13 +604,17 @@ class OutgoingTransmittal(Metadata):
             index_data.append(index_datum)
 
         with transaction.atomic():
+            today = timezone.now()
+            later = today + datetime.timedelta(days=self.EXTERNAL_REVIEW_DURATION)
+
             # Mark revisions as transmitted
             Revision = type(revisions[0])
             Revision.objects \
                 .filter(id__in=ids) \
                 .update(
                     transmittal=self,
-                    transmittal_sent_date=timezone.now())
+                    transmittal_sent_date=timezone.now(),
+                    external_review_due_date=later)
 
             bulk_actions(index_data)
 

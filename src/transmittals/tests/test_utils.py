@@ -102,6 +102,7 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
         revisions = self.create_docs()
         revision = revisions[0]
         self.assertIsNone(revision.transmittal)
+        self.assertIsNone(revision.external_review_due_date)
 
         doc, trs, trs_rev = create_transmittal(
             self.category, self.dst_category, revisions, 'FAC10005',
@@ -112,6 +113,7 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
 
         revision.refresh_from_db()
         self.assertIsNotNone(revision.transmittal)
+        self.assertIsNotNone(revision.external_review_due_date)
 
 
 class TransmittalSequentialNumberTests(TestCase):
