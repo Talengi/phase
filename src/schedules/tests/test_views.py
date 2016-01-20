@@ -32,6 +32,7 @@ class ScheduleFieldsTests(ContractorDeliverableTestCase):
             'document_type': 'LAY',
             'sequential_number': '0001',
             'docclass': 1,
+            'purpose_of_issue': 'FR',
             'created_on': self.today.strftime('%Y-%m-%d'),
             'received_date': self.today.strftime('%Y-%m-%d'),
             'status': '',
