@@ -1,7 +1,14 @@
-{% if transmittal %}
-    <a href="{{ transmittal.get_absolute_url }}">
-        {{ transmittal }}
-    </a> ({{ transmittal.document.created_on|date:'SHORT_DATE_FORMAT' }})
-{% else %}
-    {{ _('There is no associated outgoing transmittal.') }}
-{% endif %}
+<div class="form-group">
+    <label class="control-label">
+        {{ _('Outgoing transmittal') }}
+    </label>
+    <div class="controls">
+        {% if transmittal %}
+            <a href="{{ transmittal.get_absolute_url }}">
+                {{ transmittal }}
+            </a> ({{ transmittal.document.created_on|date:'SHORT_DATE_FORMAT' }})
+        {% else %}
+            {{ _('There is no associated outgoing transmittal.') }}
+        {% endif %}
+    </div>
+</div>
