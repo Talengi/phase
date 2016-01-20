@@ -692,7 +692,7 @@ class TransmittableMixin(ReviewMixin):
         ),
         default=False)
     purpose_of_issue = models.CharField(
-        _('Outgoing trs purpose of issue'),
+        _('Purpose of issue'),
         max_length=2,
         choices=PURPOSE_OF_ISSUE_CHOICES,
         default=PURPOSE_OF_ISSUE_CHOICES.FI)
