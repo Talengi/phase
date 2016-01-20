@@ -38,7 +38,7 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
             password='pass',
             category=self.category)
 
-    def create_docs(self, nb_docs=10, transmittable=True):
+    def create_docs(self, nb_docs=10, transmittable=True, default_kwargs={}):
         doc_kwargs = {
             'revision': {
                 'reviewers': [self.user1],
@@ -46,6 +46,7 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
                 'approver': self.user3,
                 'trs_return_code': '1',
                 'received_date': datetime.datetime.today()}}
+        doc_kwargs.update(default_kwargs)
 
         docs = [self.create_doc(**doc_kwargs) for _ in xrange(nb_docs)]
         revisions = []
@@ -102,7 +103,6 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
         revisions = self.create_docs()
         revision = revisions[0]
         self.assertIsNone(revision.transmittal)
-        self.assertIsNone(revision.external_review_due_date)
 
         doc, trs, trs_rev = create_transmittal(
             self.category, self.dst_category, revisions, 'FAC10005',
@@ -113,6 +113,45 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
 
         revision.refresh_from_db()
         self.assertIsNotNone(revision.transmittal)
+
+    def test_create_transmittal_for_information(self):
+        doc_kwargs = {
+            'revision': {
+                'reviewers': [self.user1],
+                'leader': self.user2,
+                'approver': self.user3,
+                'trs_return_code': '1',
+                'purpose_of_issue': 'FI',
+                'received_date': datetime.datetime.today()}}
+        revisions = self.create_docs(default_kwargs=doc_kwargs)
+        revision = revisions[0]
+        self.assertIsNone(revision.external_review_due_date)
+
+        doc, trs, trs_rev = create_transmittal(
+            self.category, self.dst_category, revisions, 'FAC10005',
+            self.entity)
+        self.assertIsNotNone(trs)
+        revision.refresh_from_db()
+        self.assertIsNone(revision.external_review_due_date)
+
+    def test_create_transmittal_for_review(self):
+        doc_kwargs = {
+            'revision': {
+                'reviewers': [self.user1],
+                'leader': self.user2,
+                'approver': self.user3,
+                'trs_return_code': '1',
+                'purpose_of_issue': 'FR',
+                'received_date': datetime.datetime.today()}}
+        revisions = self.create_docs(default_kwargs=doc_kwargs)
+        revision = revisions[0]
+        self.assertIsNone(revision.external_review_due_date)
+
+        doc, trs, trs_rev = create_transmittal(
+            self.category, self.dst_category, revisions, 'FAC10005',
+            self.entity)
+        self.assertIsNotNone(trs)
+        revision.refresh_from_db()
         self.assertIsNotNone(revision.external_review_due_date)
 
 

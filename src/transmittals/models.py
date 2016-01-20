@@ -11,6 +11,7 @@ import tempfile
 import datetime
 
 from django.db import models
+from django.db.models import Case, Value, When
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.db import transaction
@@ -614,7 +615,10 @@ class OutgoingTransmittal(Metadata):
                 .update(
                     transmittal=self,
                     transmittal_sent_date=timezone.now(),
-                    external_review_due_date=later)
+                    external_review_due_date=Case(
+                        When(purpose_of_issue='FR', then=Value(later)),
+                        When(purpose_of_issue='FI', then=Value(None)),
+                    ))
 
             bulk_actions(index_data)
 
@@ -732,4 +736,8 @@ class TransmittableMixin(ReviewMixin):
     def get_initial_empty(self):
         """New revision initial data that must be empty."""
         empty_fields = super(TransmittableMixin, self).get_initial_empty()
-        return empty_fields + ('trs_return_code', 'trs_comments',)
+        return empty_fields + (
+            'trs_return_code',
+            'trs_comments',
+            'external_review_due_date',
+        )
