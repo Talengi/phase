@@ -172,3 +172,5 @@ class ContractorDeliverableFactory(MetadataFactory):
 class ContractorDeliverableRevisionFactory(MetadataRevisionFactory):
     class Meta:
         model = ContractorDeliverableRevision
+
+    purpose_of_issue = 'FR'
