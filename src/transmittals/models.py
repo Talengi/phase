@@ -16,6 +16,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.core.files.base import ContentFile
+from django.utils.functional import cached_property
 from django.utils import timezone
 
 from model_utils import Choices
@@ -724,6 +725,18 @@ class TransmittableMixin(ReviewMixin):
         else:
             rc = ''
         return rc
+
+    @cached_property
+    def can_be_reviewed(self):
+        """Can this revision be reviewed.
+
+        A revision that was already embedded in a transmittal cannot
+        be reviewed anymore.
+
+        """
+        return all((
+            super(TransmittableMixin, self).can_be_transmitted,
+            not self.transmittal))
 
     @property
     def can_be_transmitted(self):
