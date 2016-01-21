@@ -687,7 +687,7 @@ class TransmittableMixin(ReviewMixin):
         null=True, blank=True,
         list_index='REVIEW_RETURN_CODES')
     trs_comments = PrivateFileField(
-        _('Final comments'),
+        _('File Transmitted'),
         null=True, blank=True,
         upload_to=trs_comments_file_path)
     under_preparation_by = models.ForeignKey(
