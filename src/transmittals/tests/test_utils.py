@@ -76,10 +76,10 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
     def test_create_trs_with_unreviewed_revisions(self):
         """Revisions must have been reviewed to be transmittable."""
         revisions = self.create_docs(transmittable=False)
-        with self.assertRaises(errors.InvalidRevisionsError):
-            create_transmittal(
-                self.category, self.dst_category, revisions, 'FAC10005',
-                self.entity)
+        doc, trs, trs_rev = create_transmittal(
+            self.category, self.dst_category, revisions, 'FAC10005',
+            self.entity)
+        self.assertIsNotNone(trs)
 
     def test_create_trs_with_invalid_from_category(self):
         """Source category must contain transmittable documents."""
