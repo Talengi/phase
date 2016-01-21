@@ -393,7 +393,7 @@ class ContractorDeliverable(ScheduleMixin, Metadata):
                 'ajax': 'true',
                 'modal': 'create-transmittal-modal',
                 'progression_modal': True,
-                'icon': 'refresh',
+                'icon': 'transfer',
             }
         return actions
 
