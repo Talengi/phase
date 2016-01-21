@@ -1,18 +1,20 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import importlib
+import os
 from io import BytesIO
 
+from django.conf import settings
 from django.utils import dateformat
-
-from reportlab.lib import colors
-from reportlab.pdfgen import canvas
-from reportlab.lib.units import cm, mm
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.pagesizes import A4
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
-from reportlab.platypus.tables import Table, TableStyle
+from reportlab.lib import colors, utils
 from reportlab.lib.enums import TA_CENTER
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.units import cm, mm
+from reportlab.pdfgen import canvas
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
+from reportlab.platypus.tables import Table, TableStyle
 
 
 class NumberedCanvas(canvas.Canvas):
@@ -22,6 +24,7 @@ class NumberedCanvas(canvas.Canvas):
     http://stackoverflow.com/questions/1087495/reportlab-page-x-of-y-numberedcanvas-and-images
 
     """
+
     def __init__(self, *args, **kwargs):
         canvas.Canvas.__init__(self, *args, **kwargs)
         self._saved_page_states = []
@@ -47,7 +50,23 @@ class NumberedCanvas(canvas.Canvas):
             "Page %d of %d" % (self._pageNumber, page_count))
 
 
-class TransmittalPdf(object):
+class BaseTransmittalPdf(object):
+    """
+    Pdf generator for transmittals.
+
+    This can be customized on a per organisation basis by writing
+    logo settings on this pattern: COMPANY_LOGO_XXX where XXX is the
+    organisation trigram. This setting is a dict and must define
+    a path to the logo image file and optionally a wanted_height,
+    logo_x and logo_y in mm (see draw_logo() method).
+
+    It can also be overriden by writing TRANSMITTALS_PDF_GENERATOR_XXX settings
+    which will provide the dotted path to a custom generator subclassing
+    BaseTransmittalPdf.
+
+
+    """
+
     def __init__(self, revision):
         self.buff = BytesIO()
         self.styles = getSampleStyleSheet()
@@ -57,7 +76,16 @@ class TransmittalPdf(object):
         self.transmittal = revision.metadata
         self.category = self.document.category
         self.revisions = self.transmittal.get_revisions()
+        self.company_logo_settings = self.get_logo_settings()
         self.build_document()
+
+    def get_logo_settings(self):
+        trigram = self.document.category.organisation.trigram
+        logo_settings_name = 'COMPANY_LOGO_{}'.format(trigram)
+        logo_settings = getattr(settings, logo_settings_name, {})
+        if type(logo_settings) is not dict:
+            raise ImportError('{} must be a dict'.format(logo_settings_name))
+        return logo_settings
 
     def build_document(self):
         self.doc = SimpleDocTemplate(
@@ -86,9 +114,11 @@ class TransmittalPdf(object):
             self.build_ack_label(),
             self.build_ack_table(),
         ]
-        self.doc.build(story, onFirstPage=self.build_header, canvasmaker=NumberedCanvas)
+        self.doc.build(story, onFirstPage=self.build_header,
+                       canvasmaker=NumberedCanvas)
 
     def build_header(self, canvas, doc):
+        self.draw_logo(canvas)
         self.draw_title(canvas)
         self.draw_contract_nb_table(canvas)
 
@@ -99,6 +129,37 @@ class TransmittalPdf(object):
             ('VALIGN', (0, 0), (-1, -1), 'TOP'),
         ])
         return style
+
+    def draw_logo(self, canvas):
+        """ Draw the logo on pdf according to following settings:
+        logo_path: absolute path to image
+        wanted_height: wanted height in mm (optional, default 20 mm)
+        logo_x: x coordinate in mm (optional, default 13 mm)
+        logo_y: y coordinate in mm (optional, default 55 mm)
+        """
+        if not self.company_logo_settings:
+            return
+        # Get logo settings
+        logo_path = self.company_logo_settings.get('path', None)
+        wanted_height = self.company_logo_settings.get('wanted_height', 20)
+        logo_x = self.company_logo_settings.get('x', 13)
+        logo_y = self.company_logo_settings.get('y', 55)
+
+        # Sanity check
+        if not os.access(logo_path, os.R_OK):
+            return
+
+        # get original lgo dimensions to compute ratio
+        logo = utils.ImageReader(logo_path)
+        width, height = logo.getSize()
+        ratio = float(width) / height
+
+        # Compute width according to wanted height
+        computed_width = int(wanted_height * ratio)
+
+        # Draw logo
+        im = Image(logo_path, computed_width * mm, wanted_height * mm)
+        im.drawOn(canvas, *self.coord(logo_x, logo_y))
 
     def draw_title(self, canvas):
         title = self.category.organisation.name
@@ -209,7 +270,8 @@ class TransmittalPdf(object):
         return table
 
     def build_ack_label(self):
-        p = Paragraph('Adressee acknowledgment of receipt', self.styles['Normal'])
+        p = Paragraph('Adressee acknowledgment of receipt',
+                      self.styles['Normal'])
         return p
 
     def build_ack_table(self):
@@ -239,6 +301,33 @@ class TransmittalPdf(object):
         return pdf_binary
 
 
+class TransmittalPdf(BaseTransmittalPdf):
+    pass
+
+
+def get_transmittals_pdf_generator(revision):
+    """
+    Import helper. Takes the organisation trigram name, contruct
+    a TRANSMITTALS_PDF_GENERATOR_XXX settings variable which holds a
+    dotted path, tries to get its value then import the class according
+    to the dotted path.
+    It returns the imported class.
+    """
+    trigram = revision.document.category.organisation.trigram
+    pdf_generator_name = 'TRANSMITTALS_PDF_GENERATOR_{}'.format(trigram)
+    pdf_generator_path = getattr(settings, pdf_generator_name, None)
+    if not pdf_generator_path:
+        return TransmittalPdf
+
+    splitted_path = pdf_generator_path.split(".")
+    module_path = ".".join(splitted_path[:-1])
+    class_str = splitted_path[-1]
+
+    module = importlib.import_module(module_path)
+    return getattr(module, class_str)
+
+
 def transmittal_to_pdf(revision):
-    pdf = TransmittalPdf(revision)
+    transmittals_pdf_generator = get_transmittals_pdf_generator(revision)
+    pdf = transmittals_pdf_generator(revision)
     return pdf.as_binary()

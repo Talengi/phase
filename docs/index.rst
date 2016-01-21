@@ -7,6 +7,7 @@ Welcome to Phase's documentation!
    getting_started.rst
    usage.rst
    customizing.rst
+   customizing_reports.rst
    deployment.rst
    cron.rst
    transmittals.rst
