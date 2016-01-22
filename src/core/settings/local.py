@@ -14,6 +14,14 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 # ######### END DEBUG CONFIGURATION
 
+# Third party templates are cached.
+TEMPLATE_LOADERS = (
+    ('django.template.loaders.cached.Loader', [
+        'django.template.loaders.app_directories.Loader',
+    ]),
+    'django.template.loaders.filesystem.Loader',
+)
+
 
 # ######### EMAIL CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
