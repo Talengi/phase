@@ -1,3 +1,5 @@
+import operator
+
 from django.template.loader import render_to_string
 from django.template import Context
 from crispy_forms.layout import LayoutObject
@@ -9,6 +11,13 @@ class ReviewsLayout(LayoutObject):
     def render(self, form, form_style, context, template_pack=None):
         revision = form.instance
         reviews = form.reviews
+        # We need to have the list sorted by role and by insertion order
+        # for reviewsers. We sort the review list in two steps, (python lists
+        # retains their original order). First we sort items according to their
+        #  pk, then according to the role name in order to get Reviewers,
+        # then the Leader and finally The Approver (R, L, A)
+        reviews.sort(key=operator.attrgetter('pk'))
+        reviews.sort(key=operator.attrgetter('role'), reverse=True)
         nb_comments = form.nb_comments
         can_discuss = form.can_discuss
 
