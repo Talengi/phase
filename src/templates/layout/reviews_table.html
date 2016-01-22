@@ -10,6 +10,7 @@
             <th>Comment</th>
         </tr>
     </thead>
+
     {% for review in reviews %}
     <tr class="{{ review.role }}">
         <td>{{ review.get_role_display }}</td>
