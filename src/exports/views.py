@@ -37,10 +37,10 @@ class ExportCreate(LoginRequiredMixin, DocumentListMixin, UpdateView):
 
     def get_form_kwargs(self):
         qd = self.request.POST.copy()
-        qd.pop('csrfmiddlewaretoken')
-        qd.pop('start')
-        qd.pop('size')
-        qd.pop('sort_by')
+        qd.pop('csrfmiddlewaretoken', None)
+        qd.pop('start', None)
+        qd.pop('size', None)
+        qd.pop('sort_by', None)
 
         kwargs = super(ExportCreate, self).get_form_kwargs()
         kwargs.update({'data': {
