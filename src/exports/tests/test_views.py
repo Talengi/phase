@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from datetime import timedelta
+
 from django.test import TestCase
 from django.core.urlresolvers import reverse
+from django.utils import timezone
 
 from categories.factories import CategoryFactory
 from accounts.factories import UserFactory
@@ -23,10 +26,12 @@ class ExportCreateTests(TestCase):
             self.category.organisation.slug, self.category.slug])
 
     def test_export_create_cleanup_old_exports(self):
-        for _ in xrange(0, 25):
+        now = timezone.now()
+        for delta in xrange(0, 25):
             ExportFactory(
                 owner=self.user,
-                category=self.category)
+                category=self.category,
+                created_on=now + timedelta(days=-delta))
 
         self.assertEqual(Export.objects.all().count(), 25)
 
