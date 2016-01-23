@@ -47,9 +47,10 @@ class MultipleUserAutocomplete(BaseUserAutocomplete):
 
     def render(self, name, value, attrs=None):
         value = value or []
-        objects = self.choices.queryset.filter(pk__in=value)
+        objects = self.choices.queryset.filter(pk__in=value)\
+            .values_list('id', 'name')
         attrs.update({
-            'data-initial-id': '[%s]' % ','.join(unicode(val) for val in value),
-            'data-initial-label': '[%s]' % ','.join('"%s"' % obj for obj in objects),
+            'data-initial-id': '[%s]' % ','.join(unicode(obj[0]) for obj in objects),
+            'data-initial-label': '[%s]' % ','.join('"%s"' % obj[1] for obj in objects),
         })
         return super(AutocompleteTextInput, self).render(name, value, attrs)
