@@ -64,7 +64,7 @@ def do_batch_import(user_id, category_id, contenttype_id, document_ids,
             if remark:
                 Note.objects.create(
                     author_id=user_id,
-                    document_id=doc.id,
+                    document_id=doc.document.id,
                     revision=doc.latest_revision.revision,
                     body=remark)
 
