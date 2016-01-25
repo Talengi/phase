@@ -77,3 +77,34 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="delete-revision-modal" tabindex="-1" role="dialog" aria-labelledby="delete-revision-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="delete-revision-modal-label">{{ _('Delete latest revision') }}</h4>
+            </div>
+            <div class="modal-body">
+                {% if latest_revision.is_under_review %}
+                    <p>{{ _('This revision is currently under review. Please cancel the review to delete this revision.') }}</p>
+                {% else %}
+                    <p>{{ _('Are you sure you want to delete the latest revision and all it\'s associated data?') }}</p>
+                    <p>{{ _('This action cannot be undone.') }}</p>
+                {% endif %}
+            </div>
+            <div class="modal-footer">
+                {% if latest_revision.is_under_review %}
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{ _('Back to document view') }}</button>
+                {% else %}
+                    {% url "document_revision_delete" organisation_slug category_slug document.document_key as delete_url %}
+                    <form method="post" action="{{ delete_url }}">
+                        {% csrf_token %}
+                        <button type="button" class="btn btn-default" data-dismiss="modal">{{ _('Back to document view') }}</button>
+                        <button type="submit" class="btn btn-danger">{{ _('Delete latest revision') }}</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

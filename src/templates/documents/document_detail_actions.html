@@ -62,8 +62,21 @@
 
                 {% if perms.documents.can_control_document %}
                     <li class="divider"></li>
+                    <li class="dropdown-header">
+                        {{ _('Be careful!') }}
+                        <span class="glyphicon glyphicon-warning-sign"></span>
+                    </li>
+                    {% if latest_revision.revision > 1 %}
+                        <li><a href="#" data-toggle="modal" data-target="#delete-revision-modal">
+                            {{ _('Delete latest revision') }}
+                        </a></li>
+                    {% else %}
+                        <li class="disabled"><a href="#">
+                            {{ _('Delete latest revision') }}
+                        </span></li>
+                    {% endif %}
                     <li><a href="#" data-toggle="modal" data-target="#delete-document-modal">
-                        {{ _('Delete document') }} <span class="glyphicon glyphicon-warning-sign"></span>
+                        {{ _('Delete document') }}
                     </a></li>
                 {% endif %}
 

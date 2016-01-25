@@ -347,3 +347,67 @@ class DocumentDeleteTests(TestCase):
         res = self.client.post(delete_url)
 
         self.assertEqual(res.status_code, 403)
+
+
+class DocumentRevisionDeleteTests(TestCase):
+
+    def create_doc(self, nb_revisions=1):
+        doc = DocumentFactory(category=self.category)
+        for rev in range(2, nb_revisions + 1):
+            MetadataRevisionFactory(
+                document=doc,
+                revision=rev
+            )
+        url = reverse('document_revision_delete', args=[
+            self.category.organisation.slug,
+            self.category.slug,
+            doc.document_key
+        ])
+        return doc, url
+
+    def setUp(self):
+        self.category = CategoryFactory()
+        self.user = UserFactory(
+            email='testadmin@phase.fr',
+            password='pass',
+            is_superuser=True,
+            category=self.category,
+        )
+        self.client.login(email=self.user.email, password='pass')
+        self.doc_list_url = self.category.get_absolute_url()
+
+    def test_delete_page_only_accepts_post_requests(self):
+        doc, url = self.create_doc()
+        res = self.client.get(url)
+        self.assertEqual(res.status_code, 405)
+
+    def test_delete_single_revision_is_not_allowed(self):
+        """Latest revision cannot be delete if this is the only revision."""
+        doc, url = self.create_doc()
+        res = self.client.post(url)
+        self.assertEqual(res.status_code, 403)
+
+    def test_cannot_delete_revision_in_review(self):
+        doc, url = self.create_doc(nb_revisions=5)
+        rev = doc.get_latest_revision()
+        rev.leader = self.user
+        rev.start_review()
+
+        self.assertTrue(rev.is_under_review)
+
+        res = self.client.post(url)
+        self.assertEqual(res.status_code, 403)
+
+    def test_delete_latest_revision(self):
+        doc, url = self.create_doc(nb_revisions=5)
+        self.assertEqual(doc.get_all_revisions().count(), 5)
+
+        self.client.post(url)
+        self.assertEqual(doc.get_all_revisions().count(), 4)
+        doc.refresh_from_db()
+        self.assertEqual(doc.current_revision, 4)
+
+        self.client.post(url)
+        self.assertEqual(doc.get_all_revisions().count(), 3)
+        doc.refresh_from_db()
+        self.assertEqual(doc.current_revision, 3)
