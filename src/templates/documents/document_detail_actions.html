@@ -62,8 +62,13 @@
 
                 {% if perms.documents.can_control_document %}
                     <li class="divider"></li>
+                    <li><a href="#" data-toggle="modal" data-target="#delete-revision-modal">
+                        {{ _('Delete latest revision') }} <span class="glyphicon glyphicon-warning-sign"></span>
+                    </a></li>
                     <li><a href="#" data-toggle="modal" data-target="#delete-document-modal">
-                        {{ _('Delete document') }} <span class="glyphicon glyphicon-warning-sign"></span>
+                        {{ _('Delete document') }}
+                        <span class="glyphicon glyphicon-warning-sign"></span>
+                        <span class="glyphicon glyphicon-warning-sign"></span>
                     </a></li>
                 {% endif %}
 
