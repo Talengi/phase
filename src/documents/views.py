@@ -457,6 +457,30 @@ class DocumentDelete(LoginRequiredMixin,
         return self.category.get_absolute_url()
 
 
+class DocumentRevisionDelete(DocumentDelete):
+    """Delete only the latest document revision."""
+
+    def delete(self, request, *args, **kwargs):
+        all_revisions = list(self.object.get_all_revisions())
+
+        if len(all_revisions) < 2:
+            return HttpResponseForbidden('Cannot delete a single latest revision')
+
+        latest_revision = all_revisions[0]
+        previous_revision = all_revisions[1]
+
+        self.object.latest_revision = previous_revision
+        self.object.save()
+
+        latest_revision.delete()
+
+        success_url = self.get_success_url()
+        return HttpResponseRedirect(success_url)
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
+
+
 class DocumentRevise(DocumentEdit):
     """Creates a new revision for the document."""
 

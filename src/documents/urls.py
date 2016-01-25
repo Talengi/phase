@@ -3,6 +3,7 @@ from django.conf.urls import patterns, url
 from documents.views import (
     DocumentList, DocumentCreate, DocumentDetail, DocumentEdit,
     DocumentDownload, DocumentRedirect, DocumentRevise, DocumentDelete,
+    DocumentRevisionDelete
 )
 
 urlpatterns = patterns(
@@ -37,6 +38,9 @@ urlpatterns = patterns(
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/(?P<document_key>[\w-]+)/delete/$',
         DocumentDelete.as_view(),
         name="document_delete"),
+    url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/(?P<document_key>[\w-]+)/revision_delete/$',
+        DocumentRevisionDelete.as_view(),
+        name="document_revision_delete"),
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/(?P<document_key>[\w-]+)/edit/(?P<revision>\d+)/$',
         DocumentEdit.as_view(),
         name="document_edit"),
