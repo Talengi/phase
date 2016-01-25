@@ -112,7 +112,7 @@ class Export(models.Model):
 
     def start_export(self, async=True):
         """Asynchronously starts the export"""
-        logger.info('Starting import {}'.format(self.id))
+        logger.info('Starting export {}'.format(self.id))
 
         if async:
             process_export.delay(unicode(self.pk))
