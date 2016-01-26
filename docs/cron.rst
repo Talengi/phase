@@ -42,6 +42,12 @@ task to clean old exported file.
     python manage.py exports_cleanup
 
 
+.. warning::
+
+This task is unnecesary, since old exports are now cleaned on a new export
+creation.
+
+
 Crontab
 -------
 
