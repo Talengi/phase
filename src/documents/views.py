@@ -310,7 +310,6 @@ class DocumentDetail(LoginRequiredMixin,
                 request=self.request,
                 category=self.category,
                 read_only=True)
-
             # Get latest revision without additional query
             if latest_revision is None or latest_revision.revision < revision.revision:
                 latest_revision = revision
