@@ -22,7 +22,7 @@ class Command(BaseCommand):
         self.site = Site.objects.get_current()
 
         pending_reviews = Review.objects \
-            .filter(status='pending') \
+            .filter(status='progress') \
             .select_related('document', 'reviewer') \
             .order_by('reviewer')
         users = groupby(pending_reviews, lambda rev: rev.reviewer)
