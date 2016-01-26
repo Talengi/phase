@@ -76,12 +76,12 @@ class BaseTransmittalPdf(object):
         self.transmittal = revision.metadata
         self.category = self.document.category
         self.revisions = self.transmittal.get_revisions()
+        self.trigram = revision.metadata.originator
         self.company_logo_settings = self.get_logo_settings()
         self.build_document()
 
     def get_logo_settings(self):
-        trigram = self.document.category.organisation.trigram
-        logo_settings_name = 'COMPANY_LOGO_{}'.format(trigram)
+        logo_settings_name = 'COMPANY_LOGO_{}'.format(self.trigram)
         logo_settings = getattr(settings, logo_settings_name, {})
         if type(logo_settings) is not dict:
             raise ImportError('{} must be a dict'.format(logo_settings_name))
