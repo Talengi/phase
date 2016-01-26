@@ -39,6 +39,7 @@ class DocumentDetailTests(TestCase):
     def test_review_started(self):
         self.doc.latest_revision.start_review()
         res = self.client.get(self.url)
+        print res
         self.assertNotContains(res, review_button, html=True)
         self.assertContains(res, 'Cancel review')
 
