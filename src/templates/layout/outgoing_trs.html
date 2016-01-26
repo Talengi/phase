@@ -6,7 +6,7 @@
         {% if transmittal %}
             <a href="{{ transmittal.get_absolute_url }}">
                 {{ transmittal }}
-            </a> ({{ transmittal.document.created_on|date:'SHORT_DATE_FORMAT' }})
+            </a> ({{ transmittal.document.created_on|date:'Y-m-d' }})
         {% else %}
             {{ _('There is no associated outgoing transmittal.') }}
         {% endif %}
