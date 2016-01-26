@@ -303,7 +303,6 @@ class DocumentDetail(LoginRequiredMixin,
 
         revisions = document.get_all_revisions()
         RevisionForm = self.get_revisionform_class()
-        print RevisionForm
         latest_revision = None
         for revision in revisions:
             revision.form = RevisionForm(
@@ -311,7 +310,6 @@ class DocumentDetail(LoginRequiredMixin,
                 request=self.request,
                 category=self.category,
                 read_only=True)
-            print revision.form.fields
             # Get latest revision without additional query
             if latest_revision is None or latest_revision.revision < revision.revision:
                 latest_revision = revision
