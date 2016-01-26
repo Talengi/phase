@@ -33,7 +33,12 @@
             <div class="form-group">
                 <label class="control-label col-sm-4">Created on</label>
                 <div class="controls col-sm-8 input-group date">
-                    <input class="datepicker span2" data-date-format="yyyy-mm-dd" id="id_created_on" name="created_on" type="text" value="{{ document.created_on|date:"Y-m-d" }}" />
+                    <input class="datepicker span2"
+                            id="id_created_on"
+                            name="created_on"
+                            type="text"
+                            data-date-format="yyyy-mm-dd"
+                            value="{{ document.created_on|date:"SHORT_DATE_FORMAT" }}" />
                     <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                 </div>
                 {% if form.errors.created_on %}<span class="help-inline">{{ form.errors.created_on.0 }}</span>{% endif %}
