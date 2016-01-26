@@ -15,7 +15,7 @@
             <a class="btn btn-primary" href="{{ edit_url }}">{{ _('Edit latest revision') }}</a>
             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                 <span class="caret"></span>
-                <span class="sr-only">{{ _('Edit revisions')</span>
+                <span class="sr-only">{{ _('Edit revisions')}}</span>
             </button>
             <ul class="dropdown-menu" role="menu">
                 {% for revision in revisions reversed %}
@@ -73,7 +73,7 @@
                     {% else %}
                         <li class="disabled"><a href="#">
                             {{ _('Delete latest revision') }}
-                        </span></li>
+                        </a></li>
                     {% endif %}
                     <li><a href="#" data-toggle="modal" data-target="#delete-document-modal">
                         {{ _('Delete document') }}
