@@ -1,0 +1,11 @@
+Dear {{ user.username }},
+
+Some documents have been distributed for you to review.
+
+{% for review in reviews %}
+ - {{ review.document.document_key }} ({{ review.revision_name }})
+{% endfor %}
+
+You can see the whole list here:
+
+http://{{ site.domain }}{% url 'review_home' %}
