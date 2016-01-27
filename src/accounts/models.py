@@ -152,4 +152,4 @@ class Entity(models.Model):
         verbose_name_plural = _('Entities')
 
     def __unicode__(self):
-        return self.name
+        return '{} - {}'.format(self.trigram, self.name)

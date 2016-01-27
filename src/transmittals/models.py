@@ -520,6 +520,10 @@ class OutgoingTransmittal(Metadata):
     def ack_of_receipt(self):
         return bool(self.ack_of_receipt_date)
 
+    def get_ack_of_receipt_display(self):
+        return 'Yes' if self.ack_of_receipt else 'No'
+    get_ack_of_receipt_display.short_description = 'Acknowledgment of receipt'
+
     def generate_document_key(self):
         key = '{}-{}-{}-TRS-{:0>5d}'.format(
             self.contract_number,
