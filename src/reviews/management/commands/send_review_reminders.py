@@ -7,6 +7,7 @@ from django.core.management.base import BaseCommand
 from django.core.mail import send_mail
 from django.template.loader import get_template
 from django.contrib.sites.models import Site
+from django.utils import translation
 from django.conf import settings
 
 from reviews.models import Review
@@ -19,6 +20,8 @@ class Command(BaseCommand):
     help = 'Send an email reminder to all users with pending reviews'
 
     def handle(self, *args, **options):
+        translation.activate(settings.LANGUAGE_CODE)
+
         self.body_template = get_template(BODY_TEMPLATE)
         self.html_body_template = get_template(HTML_BODY_TEMPLATE)
         self.site = Site.objects.get_current()
