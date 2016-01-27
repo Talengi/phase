@@ -16,10 +16,10 @@ from reviews.layout import ReviewsLayout
 from reviews.models import Review, DistributionList
 
 
-class DistributionListFormMixin(object):
+class DistributionListValidationMixin(object):
     """Common code for validating forms with distrib lists."""
     def clean(self):
-        data = super(DistributionListFormMixin, self).clean()
+        data = super(DistributionListValidationMixin, self).clean()
 
         # Check that no user appears twice in the distrib list
         distrib_list = []
@@ -44,8 +44,7 @@ class DistributionListFormMixin(object):
         return data
 
 
-
-class ReviewFormMixin(DistributionListFormMixin, forms.ModelForm):
+class ReviewFormMixin(DistributionListValidationMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ReviewFormMixin, self).__init__(*args, **kwargs)
 
@@ -221,7 +220,7 @@ class BasePostReviewForm(forms.ModelForm):
         return return_code
 
 
-class DistributionListForm(DistributionListFormMixin, forms.ModelForm):
+class DistributionListForm(DistributionListValidationMixin, forms.ModelForm):
     class Meta:
         model = DistributionList
         exclude = []
