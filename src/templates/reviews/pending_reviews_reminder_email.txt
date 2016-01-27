@@ -1,6 +1,6 @@
 Dear {{ user.username }},
 
-Some documents have been distributed for you to review.
+Please note that the following documents are pending your review in Phase.
 
 {% for review in reviews %}
  - {{ review.document.document_key }} ({{ review.revision_name }})

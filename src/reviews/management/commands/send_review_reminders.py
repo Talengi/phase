@@ -12,6 +12,7 @@ from django.conf import settings
 from reviews.models import Review
 
 BODY_TEMPLATE = 'reviews/pending_reviews_reminder_email.txt'
+HTML_BODY_TEMPLATE = 'reviews/pending_reviews_reminder_email.html'
 
 
 class Command(BaseCommand):
@@ -36,13 +37,21 @@ class Command(BaseCommand):
             self.get_body(user, reviews),
             settings.DEFAULT_FROM_EMAIL,
             [user.email],
+            html_message=self.get_html_body(user, reviews),
             fail_silently=False)
 
     def get_subject(self, user, reviews):
-        return 'Phase - Document Reviews'
+        return 'Phase - Pending reviews'
 
     def get_body(self, user, reviews):
         return self.body_template.render({
+            'user': user,
+            'reviews': reviews,
+            'site': self.site,
+        })
+
+    def get_html_body(self, user, reviews):
+        return self.html_body_template.render({
             'user': user,
             'reviews': reviews,
             'site': self.site,

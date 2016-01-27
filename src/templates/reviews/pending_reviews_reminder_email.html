@@ -1,0 +1,24 @@
+Dear {{ user.username }},
+
+Please note that the following documents are pending your review in Phase.
+
+<table>
+    <thead>
+    </thead>
+    <tbody>
+{% for review in reviews %}
+<tr>
+    <td>{{ review.document.document_key }}</td>
+    <td>{{ review.document.title }}</td>
+    <td>{{ review.revision_name }}</td>
+    <td>{{ review.get_status_display }}</td>
+    <td>{{ review.due_date|date:'SHORT_DATE_FORMAT' }}</td>
+</tr>
+{% endfor %}
+    </tbody>
+</table>
+
+<a href="http://{{ site.domain }}{% url 'review_home' %}">
+You can see the whole list here.
+</a>
+
