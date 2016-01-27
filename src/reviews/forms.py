@@ -13,10 +13,39 @@ from default_documents.layout import (
     DocumentFieldset, PropertyLayout, YesNoLayout, DateField)
 from reviews.utils import get_cached_reviews
 from reviews.layout import ReviewsLayout
-from reviews.models import Review
+from reviews.models import Review, DistributionList
 
 
-class ReviewFormMixin(forms.ModelForm):
+class DistributionListFormMixin(object):
+    """Common code for validating forms with distrib lists."""
+    def clean(self):
+        data = super(DistributionListFormMixin, self).clean()
+
+        # Check that no user appears twice in the distrib list
+        distrib_list = []
+
+        leader = data.get('leader', None)
+        if leader:
+            distrib_list.append(leader)
+
+        approver = data.get('approver', None)
+        if approver:
+            distrib_list.append(approver)
+
+        reviewers = data.get('reviewers', [])
+        distrib_list += reviewers
+
+        distrib_set = set(distrib_list)
+        if len(distrib_list) != len(distrib_set):
+            msg = _('The same user cannot appear multiple times in the same '
+                    'distribution list.')
+            raise ValidationError(msg, code='duplicate_distrib_list')
+
+        return data
+
+
+
+class ReviewFormMixin(DistributionListFormMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ReviewFormMixin, self).__init__(*args, **kwargs)
 
@@ -121,31 +150,6 @@ class ReviewFormMixin(forms.ModelForm):
 
         return approver
 
-    def clean(self):
-        data = super(ReviewFormMixin, self).clean()
-
-        # Check that no user appears twice in the distrib list
-        distrib_list = []
-
-        leader = data.get('leader', None)
-        if leader:
-            distrib_list.append(leader)
-
-        approver = data.get('approver', None)
-        if approver:
-            distrib_list.append(approver)
-
-        reviewers = data.get('reviewers', [])
-        distrib_list += reviewers
-
-        distrib_set = set(distrib_list)
-        if len(distrib_list) != len(distrib_set):
-            msg = _('The same user cannot appear multiple times in the same '
-                    'distribution list.')
-            raise ValidationError(msg, code='duplicate_distrib_list')
-
-        return data
-
     def save(self, commit=True):
         saved = super(ReviewFormMixin, self).save(commit)
         if saved.is_under_review():
@@ -215,3 +219,9 @@ class BasePostReviewForm(forms.ModelForm):
             raise forms.ValidationError('This field is required.')
 
         return return_code
+
+
+class DistributionListForm(DistributionListFormMixin, forms.ModelForm):
+    class Meta:
+        model = DistributionList
+        exclude = []
