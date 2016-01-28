@@ -3,7 +3,8 @@
         {{ _('Distribution list') }}
     </label>
     <div class="controls">
-        <button class="btn btn-primary">
+        <button class="btn btn-primary"
+            data-api-url="{% url 'distributionlist-list' category.organisation.slug category.slug %}">
             {{ _('Pick a predefined distribution list.') }}
         </button>
     </div>
