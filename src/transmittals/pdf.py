@@ -81,8 +81,12 @@ class BaseTransmittalPdf(object):
         self.build_document()
 
     def get_logo_settings(self):
+        logos_settings = getattr(settings, 'COMPANY_LOGOS', {})
+        if type(logos_settings) is not dict:
+            raise ImportError('COMPANY_LOGOS must be a dict')
+
         logo_settings_name = 'COMPANY_LOGO_{}'.format(self.trigram)
-        logo_settings = getattr(settings, logo_settings_name, {})
+        logo_settings = logos_settings.get(logo_settings_name, {})
         if type(logo_settings) is not dict:
             raise ImportError('{} must be a dict'.format(logo_settings_name))
         return logo_settings
@@ -313,16 +317,20 @@ def get_transmittals_pdf_generator(revision):
     to the dotted path.
     It returns the imported class.
     """
+    pdf_configuration = getattr(settings, 'PDF_CONFIGURATION', {})
+    if type(pdf_configuration) is not dict:
+        raise ImportError('PDF_CONFIGURATION must be a dict')
+
     trigram = revision.document.category.organisation.trigram
     pdf_generator_name = 'TRANSMITTALS_PDF_GENERATOR_{}'.format(trigram)
-    pdf_generator_path = getattr(settings, pdf_generator_name, None)
+    pdf_generator_path = pdf_configuration.get(pdf_generator_name, None)
+
     if not pdf_generator_path:
         return TransmittalPdf
 
     splitted_path = pdf_generator_path.split(".")
     module_path = ".".join(splitted_path[:-1])
     class_str = splitted_path[-1]
-
     module = importlib.import_module(module_path)
     return getattr(module, class_str)
 
