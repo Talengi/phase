@@ -7,5 +7,7 @@ var Phase = Phase || {};
 
     Phase.Models.Review = Backbone.Model.extend({});
 
+    Phase.Models.DistributionList = Backbone.Model.extend({});
+
 })(this, Phase, Backbone, _);
 

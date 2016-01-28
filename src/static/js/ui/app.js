@@ -16,4 +16,3 @@ jQuery(function($) {
         }
     });
 });
-

@@ -6,7 +6,10 @@ import json
 from django.views.generic import View
 from django.http import HttpResponse
 
+from rest_framework.permissions import BasePermission
 from celery.result import AsyncResult
+
+from categories.models import Category
 
 
 class TaskPollView(View):
@@ -58,3 +61,42 @@ class TaskPollView(View):
             data['error_msg'] = result.get('exc_message')
 
         return HttpResponse(json.dumps(data), content_type='application/json')
+
+
+class CategoryPermission(BasePermission):
+
+    def has_permission(self, request, view):
+        category = view.get_category()
+        if category is None:
+            return False
+        return request.user in category.users.all()
+
+
+class CategoryAPIViewMixin(object):
+    """Mixin with category code handling.
+
+    Some api views embeds a category parameters.
+    E.g /accounts/<organisation>/<category>/
+
+    Some custom permission handling must apply, i.e the requesting user
+    must have access to the given category.
+
+    """
+    _category = None
+
+    def get_permissions(self):
+        perms = super(CategoryAPIViewMixin, self).get_permissions()
+        return perms + [CategoryPermission()]
+
+    def get_category(self):
+        if self._category is None:
+            organisation_slug = self.kwargs.get('organisation')
+            category_slug = self.kwargs.get('category')
+            try:
+                self._category = Category.objects.get(
+                    organisation__slug=organisation_slug,
+                    category_template__slug=category_slug)
+            except Category.DoesNotExist:
+                self._category = None
+
+        return self._category
