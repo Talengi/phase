@@ -40,5 +40,5 @@ class QuickDistributionListWidgetLayout(LayoutObject):
         return render_to_string(
             self.template,
             Context({
-                'category': form.instance.document.category
+                'category': form.category
             }))
