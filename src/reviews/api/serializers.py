@@ -20,4 +20,4 @@ class DistributionListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DistributionList
-        fields = ('name', 'leader', 'approver', 'reviewers')
+        fields = ('id', 'name', 'leader', 'approver', 'reviewers')
