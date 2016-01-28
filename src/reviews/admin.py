@@ -8,7 +8,7 @@ from reviews.forms import DistributionListForm
 
 
 class DistributionListAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ('name', 'category')
     filter_horizontal = ('reviewers',)
     form = DistributionListForm
 
