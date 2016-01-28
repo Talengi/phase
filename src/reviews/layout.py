@@ -31,3 +31,12 @@ class ReviewsLayout(LayoutObject):
                 'form_style': form_style,
                 'can_discuss': can_discuss,
             }))
+
+
+class QuickDistributionListWidgetLayout(LayoutObject):
+    template = 'layout/distribution_list_widget.html'
+
+    def render(self, *args, **kwargs):
+        return render_to_string(
+            self.template,
+            Context({}))

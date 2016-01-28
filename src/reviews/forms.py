@@ -12,7 +12,7 @@ from accounts.forms import UserChoiceField, UserMultipleChoiceField
 from default_documents.layout import (
     DocumentFieldset, PropertyLayout, YesNoLayout, DateField)
 from reviews.utils import get_cached_reviews
-from reviews.layout import ReviewsLayout
+from reviews.layout import ReviewsLayout, QuickDistributionListWidgetLayout
 from reviews.models import Review, DistributionList
 
 
@@ -185,10 +185,14 @@ class ReviewFormMixin(DistributionListValidationMixin, forms.ModelForm):
                     YesNoLayout('is_under_review'),
                     YesNoLayout('is_overdue'),
                     'trs_return_code',
-                    'trs_comments',
+                    'trs_comments'),
+                DocumentFieldset(
+                    _('Distribution list'),
                     'reviewers',
                     'leader',
-                    'approver'),)
+                    'approver',
+                    QuickDistributionListWidgetLayout()
+                ),)
 
         return review_layout
 
