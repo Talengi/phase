@@ -23,13 +23,15 @@ except ImportError:
     raise ImproperlyConfigured("Create a prod_private.py file in settings")
 
 
-def get_prod_setting(setting):
+def get_prod_setting(setting, optional_import=False):
     """Get the setting or return exception """
     try:
         return getattr(prod_private, setting)
     except AttributeError:
         error_msg = "The %s setting is missing from prod settings" % setting
-        raise ImproperlyConfigured(error_msg)
+        if not optional_import:
+            raise ImproperlyConfigured(error_msg)
+        return None
 
 
 # Template configuration: enable compiled templates caching
@@ -75,3 +77,8 @@ TRS_IMPORTS_CONFIG = get_prod_setting('TRS_IMPORTS_CONFIG')
 # ######### LOGS CONFIG
 USE_SENTRY = get_prod_setting('USE_SENTRY')
 RAVEN_CONFIG = get_prod_setting('RAVEN_CONFIG')
+
+# ######### CUSTOM PDFS AND BRANDING
+COMPANY_LOGOS = get_prod_setting('COMPANY_LOGOS', optional_import=True)
+PDF_CONFIGURATION = get_prod_setting(
+    'PDF_CONFIGURATION', optional_import=True)
