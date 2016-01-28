@@ -60,6 +60,7 @@ class GenericBaseDocumentForm(forms.ModelForm):
         self.prepare_form(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_tag = False
+        self.helper.include_media = False
         self.helper.layout = self.build_layout()
 
         # Document key is automatically generated, this field should not be required

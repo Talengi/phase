@@ -62,5 +62,6 @@
 
 {% block extra_js %}
     {% javascript "document_edit" %}
+    {{ document_form.media }}
+    {{ revision_form.media }}
 {% endblock extra_js %}
-
