@@ -9,4 +9,14 @@ var Phase = Phase || {};
         model: Phase.Models.Review
     });
 
+    Phase.Collections.DistributionListCollection = Backbone.Collection.extend({
+        model: Phase.Models.DistributionList,
+        url: function() {
+            return this.apiUrl;
+        },
+        initialize: function(models, options) {
+            this.apiUrl = options.apiUrl;
+        }
+    });
+
 })(this, Phase, Backbone, _);

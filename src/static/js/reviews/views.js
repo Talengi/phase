@@ -93,5 +93,107 @@ var Phase = Phase || {};
         }
     });
 
+    /**
+     * Handle the "pick a distribution list" button.
+     */
+    Phase.Views.PickDistribListButtonView = Backbone.View.extend({
+        el: '#pick-distrib-list-field',
+        events: {
+            'click button': 'loadDistributionLists'
+        },
+        initialize: function() {
+            this.apiUrl = this.$el.data('api-url');
+            this.ul = this.$el.find('ul');
+            this.listCollection = new Phase.Collections.DistributionListCollection(
+                null, {
+                apiUrl: this.apiUrl});
+
+            this.listenTo(this.listCollection, 'add', this.addOption);
+        },
+        loadDistributionLists: function(event) {
+            event.preventDefault();
+
+            this.listCollection.fetch();
+        },
+        addOption(distributionList) {
+            var entryView = new Phase.Views.DistributionListEntryView({
+                model: distributionList
+            });
+            this.ul.append(entryView.$el);
+            this.listenTo(entryView, 'onItemSelected', this.selectList);
+        },
+        selectList: function(list) {
+            dispatcher.trigger('onLeaderSelected', list.get('leader'));
+            dispatcher.trigger('onApproverSelected', list.get('approver'));
+            dispatcher.trigger('onReviewersSelected', list.get('reviewers'));
+        }
+    });
+
+    Phase.Views.DistributionListEntryView = Backbone.View.extend({
+        tagName: 'li',
+        events: {
+            'click': 'selectItem'
+        },
+        initialize: function() {
+            this.render();
+        },
+        render: function() {
+            var a = $('<a href="#"></a>');
+            a.html(this.model.get('name'));
+            this.$el.html(a);
+            return this;
+        },
+        selectItem: function(event) {
+            event.preventDefault();
+
+            this.trigger('onItemSelected', this.model);
+        }
+    });
+
+    Phase.Views.LeaderWidgetView = Backbone.View.extend({
+        el: '#id_leader',
+        initialize: function() {
+            this.listenTo(dispatcher, 'onLeaderSelected', this.setValue);
+            this.selectize = this.$el[0].selectize;
+        },
+        setValue: function(leader) {
+            this.selectize.addOption(leader);
+            this.selectize.addItem(leader.id);
+        }
+    });
+
+    Phase.Views.ApproverWidgetView = Backbone.View.extend({
+        el: '#id_approver',
+        initialize: function() {
+            this.listenTo(dispatcher, 'onApproverSelected', this.setValue);
+            this.selectize = this.$el[0].selectize;
+        },
+        setValue: function(approver) {
+            if (approver !== null) {
+                this.selectize.addOption(approver);
+                this.selectize.addItem(approver.id);
+            } else {
+                this.selectize.clear();
+            }
+        }
+    });
+
+    Phase.Views.ReviewersWidgetView = Backbone.View.extend({
+        el: '#id_reviewers',
+        initialize: function() {
+            this.listenTo(dispatcher, 'onReviewersSelected', this.setValue);
+            this.selectize = this.$el[0].selectize;
+        },
+        setValue: function(reviewers) {
+            this.selectize.clear();
+            if (reviewers !== null ) {
+                var selectize = this.selectize;
+                _.each(reviewers, function(reviewer) {
+                    selectize.addOption(reviewer);
+                    selectize.addItem(reviewer.id);
+                });
+            }
+        }
+    });
 
 })(this, Phase, Backbone, _);

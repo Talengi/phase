@@ -45,6 +45,15 @@ class DistributionListValidationMixin(object):
 
 
 class ReviewFormMixin(DistributionListValidationMixin, forms.ModelForm):
+
+    class Media:
+        js = (
+            'js/reviews/models.js',
+            'js/reviews/collections.js',
+            'js/reviews/views.js',
+            'js/reviews/distribution_list_app.js',
+        )
+
     def __init__(self, *args, **kwargs):
         super(ReviewFormMixin, self).__init__(*args, **kwargs)
 
