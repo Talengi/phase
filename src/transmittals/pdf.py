@@ -55,13 +55,14 @@ class BaseTransmittalPdf(object):
     Pdf generator for transmittals.
 
     This can be customized on a per organisation basis by writing
-    logo settings on this pattern: COMPANY_LOGO_XXX where XXX is the
-    organisation trigram. This setting is a dict and must define
-    a path to the logo image file and optionally a wanted_height,
-    logo_x and logo_y in mm (see draw_logo() method).
+    logo settings in COMPANY_LOGOS dict where each item follows this
+    pattern: COMPANY_LOGO_XXX where XXX is the organisation trigram.
+    Each item is a dict and must define a path to the logo image file and
+    optionally a wanted_height, logo_x and logo_y in mm
+    (see draw_logo() method).
 
-    It can also be overriden by writing TRANSMITTALS_PDF_GENERATOR_XXX settings
-    which will provide the dotted path to a custom generator subclassing
+    It can also be overriden by writing PDF_CONFIGURATION settings
+    which will provide dotted paths to custom generators subclassing
     BaseTransmittalPdf.
 
 
@@ -311,10 +312,10 @@ class TransmittalPdf(BaseTransmittalPdf):
 
 def get_transmittals_pdf_generator(revision):
     """
-    Import helper. Takes the organisation trigram name, contruct
-    a TRANSMITTALS_PDF_GENERATOR_XXX settings variable which holds a
-    dotted path, tries to get its value then import the class according
-    to the dotted path.
+    Import helper. Takes the organisation trigram name, constructs
+    a TRANSMITTALS_PDF_GENERATOR_XXX key in PDF_CONFIGURATION
+    settings variable which holds a dotted path, tries to get its value
+    then import the class according to the dotted path.
     It returns the imported class.
     """
     pdf_configuration = getattr(settings, 'PDF_CONFIGURATION', {})
