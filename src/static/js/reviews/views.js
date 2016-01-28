@@ -115,7 +115,7 @@ var Phase = Phase || {};
 
             this.listCollection.fetch();
         },
-        addOption(distributionList) {
+        addOption: function(distributionList) {
             var entryView = new Phase.Views.DistributionListEntryView({
                 model: distributionList
             });
