@@ -1,12 +1,14 @@
-<div class="form-group">
+<div class="form-group"
+    id="pick-distrib-list-field"
+    data-api-url="{% url 'distributionlist-list' category.organisation.slug category.slug %}">
     <label class="control-label">
         {{ _('Distribution list') }}
     </label>
     <div class="controls">
-        <button class="btn btn-primary"
-            data-api-url="{% url 'distributionlist-list' category.organisation.slug category.slug %}">
-            {{ _('Pick a predefined distribution list.') }}
+        <button id="pick-distrib-list-btn" class="btn btn-primary">
+            {{ _('Pick a predefined distribution list') }}
         </button>
+        <ul></ul>
     </div>
     <p class="help-block">
     {{ _('Be careful! It will erase your previous selection.') }}
