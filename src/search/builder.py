@@ -31,6 +31,9 @@ class SearchBuilder(object):
         self.filter_fields = Config.filter_fields
         self.custom_filters = getattr(Config, 'custom_filters', {})
 
+        # filter_on_entities parameters is used for OutgoingTransmittals and
+        # indicates to restrict items to those whose recipient id is in
+        # the list
         self.filter_on_entities = filter_on_entities
 
     def init_filters(self, filters):
@@ -63,16 +66,11 @@ class SearchBuilder(object):
         s = self._add_filter_fields(s)
         s = self._add_custom_filters(s)
         s = self._add_search_query(s)
-
-        if self.filter_on_entities:
-            s = s.filter({'terms': {'recipient_id': self.filter_on_entities}})
-
+        s = self._add_filter_on_entities(s)
         s = self._add_sort(s)
         s = self._add_pagination(s)
         if fields:
             s = self._limit_fields(s, fields)
-        # result = s
-        # import pdb;pdb.set_trace()
         return s
 
     def _add_filter_fields(self, s):
@@ -94,6 +92,11 @@ class SearchBuilder(object):
             if f is not None:
                 s = s.filter(f)
 
+        return s
+
+    def _add_filter_on_entities(self, s):
+        if self.filter_on_entities:
+            s = s.filter({'terms': {'recipient_id': self.filter_on_entities}})
         return s
 
     def add_aggregations(self, s):

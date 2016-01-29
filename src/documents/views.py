@@ -30,6 +30,7 @@ from django.contrib.contenttypes.models import ContentType
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 from rest_framework.renderers import JSONRenderer
 
+from accounts.models import get_entities
 from favorites.models import Favorite
 from favorites.api.serializers import FavoriteSerializer
 from bookmarks.models import get_user_bookmarks
@@ -41,21 +42,6 @@ from documents.forms.models import documentform_factory
 from documents.forms.filters import filterform_factory
 from notifications.models import notify
 
-from django.core.cache import cache
-from accounts.models import Entity
-
-def get_entities(user):
-    # cache_key = 'entities_%d' % (user.id)
-    cache_key_pk = 'entities_pk_%d' % (user.id)
-    cache.delete(cache_key_pk)
-    # entities = cache.get(cache_key)
-    entities_pk = cache.get(cache_key_pk)
-    if entities_pk is None:
-        entities = Entity.objects.filter(users=user)
-        entities_pk = [e.pk for e in entities]
-        # cache.set(cache_key, entities, None)
-        cache.set(cache_key_pk,entities_pk, None)
-    return entities_pk
 
 class DocumentListMixin(CategoryMixin):
     """Base class for listing documents.
@@ -74,8 +60,9 @@ class DocumentListMixin(CategoryMixin):
         return self.category
 
     def get_external_filtering(self):
-        entities = get_entities(self.request.user)
-        return entities
+        """This is used to filter Outgoing transmittals for
+        third party users"""
+        return get_entities(self.request.user)
 
     def get_context_data(self, **kwargs):
         self.get_external_filtering()
@@ -178,9 +165,6 @@ class DocumentList(BaseDocumentList):
             'sort_by': model._meta.ordering[0],
             'document_class': self.get_document_class(),
         })
-        entities = self.get_external_filtering()
-        if entities:
-            context.update({'filter_entities': entities})
         return context
 
 
