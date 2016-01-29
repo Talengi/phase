@@ -42,7 +42,8 @@ def get_outgoing_transmittal_categories(organisation_slug=None):
     ct = ContentType.objects.get_for_model(OutgoingTransmittal)
     categories = Category.objects \
         .select_related() \
-        .filter(category_template__metadata_model=ct)
+        .filter(category_template__metadata_model=ct) \
+        .prefetch_related('third_parties')
 
     if organisation_slug:
         categories = categories.filter(organisation__slug=organisation_slug)
