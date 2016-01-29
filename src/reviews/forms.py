@@ -197,10 +197,10 @@ class ReviewFormMixin(DistributionListValidationMixin, forms.ModelForm):
                     'trs_comments'),
                 DocumentFieldset(
                     _('Distribution list'),
+                    QuickDistributionListWidgetLayout(),
                     'reviewers',
                     'leader',
                     'approver',
-                    QuickDistributionListWidgetLayout()
                 ),)
 
         return review_layout
