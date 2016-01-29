@@ -160,10 +160,9 @@ def get_entities(user):
     """Put the entities list in cache if user belongs to one or several of
     them (if he is a contractor)."""
     cache_key_pk = 'entities_pk_%d' % (user.id)
-    cache.delete(cache_key_pk)
     entities_pk = cache.get(cache_key_pk)
     if entities_pk is None:
         entities = Entity.objects.filter(users=user)
-        entities_pk = [e.pk for e in entities]
-        cache.set(cache_key_pk,entities_pk, None)
-    return entities_pk
+        entities_pk = entities.values_list('pk', flat=True)
+        cache.set(cache_key_pk, entities_pk, None)
+    return list(entities_pk)

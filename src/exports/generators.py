@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.conf import settings
 
+from accounts.models import Entity
 from search.builder import SearchBuilder
 
 
@@ -15,7 +16,7 @@ class ExportGenerator(object):
     Yields data in chunks.
 
     """
-    def __init__(self, category, filters, fields):
+    def __init__(self, category, filters, fields, owner=None):
         self.category = category
         self.fields = fields
         self.filters = filters
@@ -23,11 +24,20 @@ class ExportGenerator(object):
             'start': 0,
             'size': 60000})
 
+        self.owner = owner
+
     def __iter__(self):
         self.pks, self.total = self.get_es_results()
         self.start = -1
         self.chunk_size = settings.EXPORTS_CHUNK_SIZE
         return self
+
+    def get_entities(self):
+        if not self.owner:
+            return None
+
+        return list(Entity.objects.filter(users=self.owner).
+                    values_list('pk', flat=True))
 
     def get_es_results(self):
         """Perform initial doc search using elasticsearch.
@@ -35,7 +45,14 @@ class ExportGenerator(object):
         Only return document ids, since the actual data export will use db.
 
         """
-        builder = SearchBuilder(self.category, self.filters)
+
+        # For contractor accessing phase, we have to filter
+        # OutgoingTransmittals according to recipient
+        entities = self.get_entities()
+        builder = SearchBuilder(
+            self.category,
+            self.filters,
+            filter_on_entities=entities)
         result = builder.scan_results(['pk'], only_latest_revisions=False)
         pks = [doc['pk'][0] for doc in result]
         total = len(pks)
@@ -48,7 +65,7 @@ class ExportGenerator(object):
         return self.next_data_chunk()
 
     def next_data_chunk(self):
-        """Actual next() implemenation.
+        """Actual next() implementation.
 
         Must return the next formatted chunk of data to be
         dumped in the file.
