@@ -695,7 +695,7 @@ class DistributionList(models.Model):
     name = models.CharField(
         _('Name'),
         max_length=250)
-    category = models.ForeignKey(
+    categories = models.ManyToManyField(
         'categories.Category',
         verbose_name=_('Category'))
     reviewers = models.ManyToManyField(
@@ -717,3 +717,6 @@ class DistributionList(models.Model):
         app_label = 'reviews'
         verbose_name = _('Distribution list')
         verbose_name_plural = _('Distribution lists')
+
+    def __unicode__(self):
+        return self.name

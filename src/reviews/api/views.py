@@ -13,5 +13,8 @@ class DistributionListList(CategoryAPIViewMixin, generics.ListAPIView):
     serializer_class = DistributionListSerializer
 
     def get_queryset(self):
-        qs = DistributionList.objects.filter(category=self.get_category())
+        qs = DistributionList.objects \
+            .filter(categories=self.get_category()) \
+            .select_related('leader', 'approver') \
+            .prefetch_related('reviewers')
         return qs

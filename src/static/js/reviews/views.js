@@ -94,59 +94,52 @@ var Phase = Phase || {};
     });
 
     /**
-     * Handle the "pick a distribution list" button.
+     * Handle the "pick a distribution list" widget.
      */
-    Phase.Views.PickDistribListButtonView = Backbone.View.extend({
+    Phase.Views.PickDistribListWidgetView = Backbone.View.extend({
         el: '#pick-distrib-list-field',
-        events: {
-            'click button': 'loadDistributionLists'
-        },
         initialize: function() {
+            _.bindAll(this, 'selectList');
             this.apiUrl = this.$el.data('api-url');
-            this.ul = this.$el.find('ul');
-            this.listCollection = new Phase.Collections.DistributionListCollection(
+            this.select = this.$el.find('select');
+            this.select.selectize({
+                valueField: 'id',
+                labelField: 'name'
+            });
+            this.selectize = this.select[0].selectize;
+            this.selectize.on('item_add', this.selectList);
+
+            this.collection = new Phase.Collections.DistributionListCollection(
                 null, {
                 apiUrl: this.apiUrl});
-
-            this.listenTo(this.listCollection, 'add', this.addOption);
+            this.listenTo(this.collection, 'add', this.addOption);
+            this.listenTo(this.collection, 'sync', this.checkAvailableLists);
+            this.collection.fetch();
         },
-        loadDistributionLists: function(event) {
-            event.preventDefault();
-
-            this.listCollection.fetch();
+        checkAvailableLists: function() {
+            if (this.collection.length === 0) {
+                this.selectize.addOption({
+                    id: -1,
+                    name: 'No lists are available for this category.'
+                });
+            }
         },
         addOption: function(distributionList) {
-            var entryView = new Phase.Views.DistributionListEntryView({
-                model: distributionList
+            this.selectize.addOption({
+                id: distributionList.get('id'),
+                name: distributionList.get('name'),
+                data: distributionList
             });
-            this.ul.append(entryView.$el);
-            this.listenTo(entryView, 'onItemSelected', this.selectList);
         },
-        selectList: function(list) {
-            dispatcher.trigger('onLeaderSelected', list.get('leader'));
-            dispatcher.trigger('onApproverSelected', list.get('approver'));
-            dispatcher.trigger('onReviewersSelected', list.get('reviewers'));
-        }
-    });
-
-    Phase.Views.DistributionListEntryView = Backbone.View.extend({
-        tagName: 'li',
-        events: {
-            'click': 'selectItem'
-        },
-        initialize: function() {
-            this.render();
-        },
-        render: function() {
-            var a = $('<a href="#"></a>');
-            a.html(this.model.get('name'));
-            this.$el.html(a);
-            return this;
-        },
-        selectItem: function(event) {
-            event.preventDefault();
-
-            this.trigger('onItemSelected', this.model);
+        selectList: function(value) {
+            if (value >= 0) {
+                var list = this.collection.get(value);
+                dispatcher.trigger('onLeaderSelected', list.get('leader'));
+                dispatcher.trigger('onApproverSelected', list.get('approver'));
+                dispatcher.trigger('onReviewersSelected', list.get('reviewers'));
+            } else {
+                this.selectize.clear();
+            }
         }
     });
 
