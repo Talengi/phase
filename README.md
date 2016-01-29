@@ -1,6 +1,10 @@
 Phase - Project Document Management System
 ==========================================
 
+[![Build Status](https://travis-ci.org/Talengi/phase.svg?branch=master)](https://travis-ci.org/Talengi/phase)
+
+[![Coverage Status](https://coveralls.io/repos/github/Talengi/phase/badge.svg?branch=master)](https://coveralls.io/github/Talengi/phase?branch=master)
+
 Phase is a document management system specifically designed for the needs of engineering and construction projects to manage the documentation of oil & gas, water treatment, nuclear, solar and wind facilities.
 
 Phase offers the following characteristics:
