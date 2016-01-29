@@ -24,7 +24,7 @@
 
             <div class="form-group">
                 <label for="destination-category-select">{{ _('Destination Category') }}</label>
-                {% get_outgoing_transmittal_categories as categories %}
+                {% get_outgoing_transmittal_categories organisation_slug as categories %}
                 <select id="destination-category-select" name="destination_category" class="form-control">
                     {% for category in categories %}
                     <option value="{{ category.id }}">

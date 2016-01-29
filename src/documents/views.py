@@ -30,6 +30,7 @@ from django.contrib.contenttypes.models import ContentType
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 from rest_framework.renderers import JSONRenderer
 
+from accounts.models import get_entities
 from favorites.models import Favorite
 from favorites.api.serializers import FavoriteSerializer
 from bookmarks.models import get_user_bookmarks
@@ -58,7 +59,13 @@ class DocumentListMixin(CategoryMixin):
     def breadcrumb_subsection(self):
         return self.category
 
+    def get_external_filtering(self):
+        """This is used to filter Outgoing transmittals for
+        third party users"""
+        return get_entities(self.request.user)
+
     def get_context_data(self, **kwargs):
+        self.get_external_filtering()
         context = super(DocumentListMixin, self).get_context_data(**kwargs)
         context.update({
             'organisation_slug': self.kwargs['organisation'],
@@ -81,6 +88,10 @@ class DocumentListMixin(CategoryMixin):
             .select_related() \
             .filter(document__category=self.category)
 
+        entities = self.get_external_filtering()
+        if entities:
+            # todo: check qs has recipient_id
+            qs = qs.filter(recipient_id__in=entities)
         return qs
 
     def get_document_class(self):

@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 import logging
 
+from django.core.cache import cache
 from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser, PermissionsMixin, BaseUserManager
@@ -153,3 +154,15 @@ class Entity(models.Model):
 
     def __unicode__(self):
         return '{} - {}'.format(self.trigram, self.name)
+
+
+def get_entities(user):
+    """Put the entities list in cache if user belongs to one or several of
+    them (if he is a contractor)."""
+    cache_key_pk = 'entities_pk_%d' % (user.id)
+    entities_pk = cache.get(cache_key_pk)
+    if entities_pk is None:
+        entities = Entity.objects.filter(users=user)
+        entities_pk = entities.values_list('pk', flat=True)
+        cache.set(cache_key_pk, entities_pk, None)
+    return list(entities_pk)
