@@ -374,7 +374,7 @@ class DistributionListFormTests(TestCase):
     def test_form_valid(self):
         form = DistributionListForm({
             'name': 'test',
-            'category': self.category.id,
+            'categories': [self.category.id],
             'leader': self.users[0].id,
             'approver': self.users[1].id,
             'reviewers': [u.id for u in self.users[2:]]})
@@ -383,7 +383,7 @@ class DistributionListFormTests(TestCase):
     def test_same_user_in_leader_and_approver(self):
         form = DistributionListForm({
             'name': 'test',
-            'category': self.category.id,
+            'categories': [self.category.id],
             'leader': self.users[0].id,
             'approver': self.users[0].id,
             'reviewers': [u.id for u in self.users[2:]]})
@@ -392,7 +392,7 @@ class DistributionListFormTests(TestCase):
     def test_same_user_in_leader_and_reviewer(self):
         form = DistributionListForm({
             'name': 'test',
-            'category': self.category.id,
+            'categories': [self.category.id],
             'leader': self.users[1].id,
             'approver': self.users[0].id,
             'reviewers': [u.id for u in self.users[1:]]})
@@ -401,7 +401,7 @@ class DistributionListFormTests(TestCase):
     def test_same_user_in_approver_and_reviewer(self):
         form = DistributionListForm({
             'name': 'test',
-            'category': self.category.id,
+            'categories': [self.category.id],
             'leader': self.users[0].id,
             'approver': self.users[1].id,
             'reviewers': [u.id for u in self.users[1:]]})
