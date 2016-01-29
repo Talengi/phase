@@ -17,4 +17,11 @@ class DistributionListList(CategoryAPIViewMixin, generics.ListAPIView):
             .filter(categories=self.get_category()) \
             .select_related('leader', 'approver') \
             .prefetch_related('reviewers')
+
+        q = self.request.query_params.get('q', None)
+        if q:
+            # Should we use an index?
+            # See http://dba.stackexchange.com/a/21648/85866
+            qs = qs.filter(name__icontains=q)
+
         return qs
