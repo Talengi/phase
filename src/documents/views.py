@@ -101,6 +101,10 @@ class DocumentListMixin(CategoryMixin):
             .select_related() \
             .filter(document__category=self.category)
 
+        entities = self.get_external_filtering()
+        if entities:
+            # todo: check qs has recipient_id
+            qs = qs.filter(recipient_id__in=entities)
         return qs
 
     def get_document_class(self):
