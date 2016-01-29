@@ -20,7 +20,7 @@ class SearchBuilder(object):
 
     """
 
-    def __init__(self, category, filters=None):
+    def __init__(self, category, filters=None, filter_on_entities=None):
         if filters is None:
             filters = {}
         self.category = category
@@ -30,6 +30,8 @@ class SearchBuilder(object):
         Config = DocumentModel.PhaseConfig
         self.filter_fields = Config.filter_fields
         self.custom_filters = getattr(Config, 'custom_filters', {})
+
+        self.filter_on_entities = filter_on_entities
 
     def init_filters(self, filters):
         DocumentModel = self.category.document_class()
@@ -61,9 +63,12 @@ class SearchBuilder(object):
         s = self._add_filter_fields(s)
         s = self._add_custom_filters(s)
         s = self._add_search_query(s)
+
+        if self.filter_on_entities:
+            s = s.filter({'terms': {'recipient_id': self.filter_on_entities}})
+
         s = self._add_sort(s)
         s = self._add_pagination(s)
-
         if fields:
             s = self._limit_fields(s, fields)
         # result = s
@@ -80,7 +85,6 @@ class SearchBuilder(object):
                 else:
                     field = '%s.raw' % field
                 s = s.filter({'term': {field: value}})
-
         return s
 
     def _add_custom_filters(self, s):

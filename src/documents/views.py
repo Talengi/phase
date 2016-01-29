@@ -41,6 +41,21 @@ from documents.forms.models import documentform_factory
 from documents.forms.filters import filterform_factory
 from notifications.models import notify
 
+from django.core.cache import cache
+from accounts.models import Entity
+
+def get_entities(user):
+    # cache_key = 'entities_%d' % (user.id)
+    cache_key_pk = 'entities_pk_%d' % (user.id)
+    cache.delete(cache_key_pk)
+    # entities = cache.get(cache_key)
+    entities_pk = cache.get(cache_key_pk)
+    if entities_pk is None:
+        entities = Entity.objects.filter(users=user)
+        entities_pk = [e.pk for e in entities]
+        # cache.set(cache_key, entities, None)
+        cache.set(cache_key_pk,entities_pk, None)
+    return entities_pk
 
 class DocumentListMixin(CategoryMixin):
     """Base class for listing documents.
@@ -58,7 +73,12 @@ class DocumentListMixin(CategoryMixin):
     def breadcrumb_subsection(self):
         return self.category
 
+    def get_external_filtering(self):
+        entities = get_entities(self.request.user)
+        return entities
+
     def get_context_data(self, **kwargs):
+        self.get_external_filtering()
         context = super(DocumentListMixin, self).get_context_data(**kwargs)
         context.update({
             'organisation_slug': self.kwargs['organisation'],
@@ -154,6 +174,9 @@ class DocumentList(BaseDocumentList):
             'sort_by': model._meta.ordering[0],
             'document_class': self.get_document_class(),
         })
+        entities = self.get_external_filtering()
+        if entities:
+            context.update({'filter_entities': entities})
         return context
 
 
