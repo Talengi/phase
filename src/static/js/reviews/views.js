@@ -100,36 +100,48 @@ var Phase = Phase || {};
         el: '#pick-distrib-list-field',
         initialize: function() {
             _.bindAll(this, 'selectList');
-            this.apiUrl = this.$el.data('api-url');
-            this.select = this.$el.find('select');
-            this.select.selectize({
-                valueField: 'id',
-                labelField: 'name'
-            });
-            this.selectize = this.select[0].selectize;
-            this.selectize.on('item_add', this.selectList);
 
             this.collection = new Phase.Collections.DistributionListCollection(
                 null, {
                 apiUrl: this.apiUrl});
-            this.listenTo(this.collection, 'add', this.addOption);
-            this.listenTo(this.collection, 'sync', this.checkAvailableLists);
-            this.collection.fetch();
-        },
-        checkAvailableLists: function() {
-            if (this.collection.length === 0) {
-                this.selectize.addOption({
-                    id: -1,
-                    name: 'No lists are available for this category.'
-                });
-            }
-        },
-        addOption: function(distributionList) {
-            this.selectize.addOption({
-                id: distributionList.get('id'),
-                name: distributionList.get('name'),
-                data: distributionList
+
+            this.apiUrl = this.$el.data('api-url');
+            this.select = this.$el.find('select');
+
+            var that = this;
+            this.select.selectize({
+                plugins: {
+                    'no_results': {message: 'No corresponding list was found.'}
+                },
+                valueField: 'id',
+                labelField: 'name',
+                searchField: 'name',
+                mode: 'single',
+                create: false,
+                preload: true,
+                onOptionAdd: function(value, data) {
+                    that.collection.add(data);
+                },
+                load: function(query, callback) {
+                    $.ajax({
+                        url: that.apiUrl,
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {
+                            q: query,
+                            page_limit: 10,
+                        },
+                        error: function() {
+                            callback();
+                        },
+                        success: function(res) {
+                            callback(res.results);
+                        }
+                    });
+                }
             });
+            this.selectize = this.select[0].selectize;
+            this.selectize.on('item_add', this.selectList);
         },
         selectList: function(value) {
             if (value >= 0) {
