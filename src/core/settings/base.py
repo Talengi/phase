@@ -418,6 +418,7 @@ PIPELINE_JS = {
             'js/vendor/jquery.multiselect.js',
             'js/vendor/jquery.multiselect.filter.js',
             'js/vendor/selectize.js',
+            'js/vendor/selectize_no_results.js',
             'js/autocomplete.js',
             'js/document-detail.js',
         ),

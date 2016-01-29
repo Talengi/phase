@@ -16,7 +16,6 @@ jQuery(function($) {
             labelField: labelField,
             searchField: searchFields,
             mode: mode,
-            dataAttr: 'data-data',
             create: false,
             options: [],
             load: function(query, callback) {

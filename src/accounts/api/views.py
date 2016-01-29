@@ -29,6 +29,8 @@ class UserViewSet(CategoryAPIViewMixin, viewsets.ReadOnlyModelViewSet):
 
         q = self.request.query_params.get('q', None)
         if q:
+            # Should we use an index?
+            # See http://dba.stackexchange.com/a/21648/85866
             q_name = Q(name__icontains=q)
             q_email = Q(email__icontains=q)
             qs = qs.filter(q_name | q_email)
