@@ -11,6 +11,7 @@ from reviews.api.serializers import DistributionListSerializer
 class DistributionListList(CategoryAPIViewMixin, generics.ListAPIView):
     model = DistributionList
     serializer_class = DistributionListSerializer
+    paginate_by_param = 'page_limit'
 
     def get_queryset(self):
         qs = DistributionList.objects \
