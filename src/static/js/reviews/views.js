@@ -113,7 +113,16 @@ var Phase = Phase || {};
                 null, {
                 apiUrl: this.apiUrl});
             this.listenTo(this.collection, 'add', this.addOption);
+            this.listenTo(this.collection, 'sync', this.checkAvailableLists);
             this.collection.fetch();
+        },
+        checkAvailableLists: function() {
+            if (this.collection.length === 0) {
+                this.selectize.addOption({
+                    id: -1,
+                    name: 'No lists are available for this category.'
+                });
+            }
         },
         addOption: function(distributionList) {
             this.selectize.addOption({
@@ -123,10 +132,14 @@ var Phase = Phase || {};
             });
         },
         selectList: function(value) {
-            var list = this.collection.get(value);
-            dispatcher.trigger('onLeaderSelected', list.get('leader'));
-            dispatcher.trigger('onApproverSelected', list.get('approver'));
-            dispatcher.trigger('onReviewersSelected', list.get('reviewers'));
+            if (value >= 0) {
+                var list = this.collection.get(value);
+                dispatcher.trigger('onLeaderSelected', list.get('leader'));
+                dispatcher.trigger('onApproverSelected', list.get('approver'));
+                dispatcher.trigger('onReviewersSelected', list.get('reviewers'));
+            } else {
+                this.selectize.clear();
+            }
         }
     });
 
