@@ -406,3 +406,20 @@ class DistributionListFormTests(TestCase):
             'approver': self.users[1].id,
             'reviewers': [u.id for u in self.users[1:]]})
         self.assertFalse(form.is_valid())
+
+    def test_leader_not_in_categories(self):
+        form = DistributionListForm({
+            'name': 'test',
+            'categories': [self.category.id],
+            'leader': UserFactory().id})
+        self.assertFalse(form.is_valid())
+        self.assertTrue('leader' in form.errors)
+
+    def test_approver_not_in_categories(self):
+        form = DistributionListForm({
+            'name': 'test',
+            'categories': [self.category.id],
+            'leader': self.users[0].id,
+            'approver': UserFactory().id})
+        self.assertFalse(form.is_valid())
+        self.assertTrue('approver' in form.errors)

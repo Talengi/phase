@@ -237,3 +237,39 @@ class DistributionListForm(DistributionListValidationMixin, forms.ModelForm):
     class Meta:
         model = DistributionList
         exclude = []
+
+    def clean_leader(self):
+        """Leader must be a member of all selected categories."""
+        leader = self.cleaned_data['leader']
+        leader_categories = set(leader.categories.all())
+        categories = set(self.cleaned_data['categories'])
+
+        if not categories.issubset(leader_categories):
+            diff = categories - leader_categories
+            formatted_diff = ', '.join(d.__unicode__() for d in diff)
+            msg = _('The leader must be a member of all the selected'
+                    'categories. The following categories are missing: '
+                    '{}'.format(formatted_diff))
+            raise ValidationError(msg)
+
+        return leader
+
+    def clean_approver(self):
+        """Approver must be a member of all selected categories."""
+        approver = self.cleaned_data['approver']
+
+        if not approver:
+            return approver
+
+        approver_categories = set(approver.categories.all())
+        categories = set(self.cleaned_data['categories'])
+
+        if not categories.issubset(approver_categories):
+            diff = categories - approver_categories
+            formatted_diff = ', '.join(d.__unicode__() for d in diff)
+            msg = _('The approver must be a member of all the selected'
+                    'categories. The following categories are missing: '
+                    '{}'.format(formatted_diff))
+            raise ValidationError(msg)
+
+        return approver
