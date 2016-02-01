@@ -78,6 +78,7 @@ def index_revisions(revisions):
         actions,
         chunk_size=settings.ELASTIC_BULK_SIZE,
         request_timeout=60)
+    refresh_index()
 
 
 def bulk_actions(actions):
