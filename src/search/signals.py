@@ -7,7 +7,8 @@ from django.conf import settings
 
 
 from categories.models import Category
-from search.utils import index_document, unindex_document, put_category_mapping
+from search.utils import (
+    index_document, unindex_document, put_category_mapping, refresh_index)
 from documents.models import Document
 
 
@@ -21,10 +22,12 @@ def update_index(sender, instance, **kwargs):
     # metadata and revision does not exist yet
     if not created and instance.is_indexable:
         index_document(instance.pk)
+    refresh_index()
 
 
 def remove_from_index(sender, instance, **kwargs):
     unindex_document(instance.pk)
+    refresh_index()
 
 
 def save_mapping(sender, instance, **kwargs):
