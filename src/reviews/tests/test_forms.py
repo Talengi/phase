@@ -423,3 +423,13 @@ class DistributionListFormTests(TestCase):
             'approver': UserFactory().id})
         self.assertFalse(form.is_valid())
         self.assertTrue('approver' in form.errors)
+
+    def test_reviewers_not_in_categories(self):
+        form = DistributionListForm({
+            'name': 'test',
+            'categories': [self.category.id],
+            'leader': self.users[0].id,
+            'reviewers': [UserFactory().id, UserFactory().id]
+        })
+        self.assertFalse(form.is_valid())
+        self.assertTrue('reviewers' in form.errors)

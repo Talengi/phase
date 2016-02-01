@@ -241,35 +241,39 @@ class DistributionListForm(DistributionListValidationMixin, forms.ModelForm):
     def clean_leader(self):
         """Leader must be a member of all selected categories."""
         leader = self.cleaned_data['leader']
-        leader_categories = set(leader.categories.all())
-        categories = set(self.cleaned_data['categories'])
-
-        if not categories.issubset(leader_categories):
-            diff = categories - leader_categories
-            formatted_diff = ', '.join(d.__unicode__() for d in diff)
-            msg = _('The leader must be a member of all the selected'
-                    'categories. The following categories are missing: '
-                    '{}'.format(formatted_diff))
-            raise ValidationError(msg)
-
+        self.validate_user_categories(leader)
         return leader
 
     def clean_approver(self):
         """Approver must be a member of all selected categories."""
         approver = self.cleaned_data['approver']
+        if approver:
+            self.validate_user_categories(approver)
+        return approver
 
-        if not approver:
-            return approver
+    def clean_reviewers(self):
+        reviewers = self.cleaned_data['reviewers']
+        errors = []
+        for reviewer in reviewers:
+            try:
+                self.validate_user_categories(reviewer)
+            except ValidationError, e:
+                errors.append(e.message)
 
-        approver_categories = set(approver.categories.all())
+        if len(errors) > 0:
+            raise ValidationError(errors)
+
+        return reviewers
+
+    def validate_user_categories(self, user):
+        """Check that user belongs to the selected categories."""
+        user_categories = set(user.categories.all())
         categories = set(self.cleaned_data['categories'])
 
-        if not categories.issubset(approver_categories):
-            diff = categories - approver_categories
+        if not categories.issubset(user_categories):
+            diff = categories - user_categories
             formatted_diff = ', '.join(d.__unicode__() for d in diff)
-            msg = _('The approver must be a member of all the selected'
+            msg = _('The user "{}" must be a member of all the selected '
                     'categories. The following categories are missing: '
-                    '{}'.format(formatted_diff))
+                    '{}'.format(user.name, formatted_diff))
             raise ValidationError(msg)
-
-        return approver
