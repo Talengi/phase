@@ -37,21 +37,21 @@ casper.test.begin('Distribution list fields are empty', 0, function suite(test) 
 
     casper.then(function() {
         test.assertNotVisible('#pick-distrib-list-field select');
-        test.assertField('leader', '')
+        test.assertField('leader', '');
         test.assertField('approver', '');
         test.assertField('reviewers', '');
 
     });
 
     casper.then(function() {
-        test.assertNotVisible('#pick-distrib-list-field .selectize-dropdown')
+        test.assertNotVisible('#pick-distrib-list-field .selectize-dropdown');
         casper.click('#pick-distrib-list-field .controls');
         casper.sendKeys('#pick-distrib-list-field input', 'Team', {keepFocus: true});
         casper.wait(500);
     });
 
     casper.then(function() {
-        test.assertVisible('#pick-distrib-list-field .selectize-dropdown')
+        test.assertVisible('#pick-distrib-list-field .selectize-dropdown');
         test.assertElementCount(
             '#pick-distrib-list-field .selectize-dropdown-content .option', 3);
         test.assertSelectorHasText(
@@ -61,7 +61,7 @@ casper.test.begin('Distribution list fields are empty', 0, function suite(test) 
     casper.then(function() {
         casper.sendKeys('#pick-distrib-list-field input', ' Cassoulet', {keepFocus: true});
         casper.wait(500);
-        test.assertVisible('#pick-distrib-list-field .selectize-dropdown')
+        test.assertVisible('#pick-distrib-list-field .selectize-dropdown');
         test.assertElementCount(
             '#pick-distrib-list-field .selectize-dropdown-content .option', 2);
         test.assertSelectorHasText(
