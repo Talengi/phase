@@ -472,10 +472,17 @@ class OutgoingTransmittal(Metadata):
         'categories.Category',
         verbose_name=_('From category'),
         on_delete=models.PROTECT)
-    contract_number = ConfigurableChoiceField(
+    contract_number_old = ConfigurableChoiceField(
         verbose_name='Contract Number',
         max_length=8,
-        list_index='CONTRACT_NBS')
+        list_index='CONTRACT_NBS',
+        null=True,
+        blank=True
+    )
+    contract_number = models.CharField(
+         verbose_name='Contract Number',
+         max_length=50
+    )
     originator = models.CharField(
         _('Originator'),
         max_length=3)
