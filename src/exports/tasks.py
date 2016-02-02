@@ -33,8 +33,3 @@ def process_export(export_id):
     export.write_file()
     export.status = 'done'
     export.save()
-
-    url = export.get_absolute_url()
-    message = _('The export <a href="{}">you required for category {} is ready</a>.'.format(
-        url, export.category))
-    notify(export.owner, message)
