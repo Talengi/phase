@@ -64,8 +64,13 @@ class UserCategoryInline(admin.StackedInline):
 
 
 class ContractAdmin(admin.ModelAdmin):
-    list_display = ('number', 'name')
+    list_display = ('number', 'name', 'get_associated_categories')
 
+    def get_associated_categories(self, obj):
+        categories = obj.categories.all()
+        return ", ".join([c.name for c in categories])
+
+    get_associated_categories.short_description = _('Categories')
 
 admin.site.register(Organisation, OrganisationAdmin)
 admin.site.register(CategoryTemplate, CategoryTemplateAdmin)
