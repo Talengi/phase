@@ -36,11 +36,10 @@
 
             <div class="form-group">
                 <label for="contract-number-select">{{ _('Contract Number') }}</label>
-                {% get_values_list 'CONTRACT_NBS' as values %}
                 <select id="contract-number-select" name="contract_number" class="form-control">
-                    {% for index, value in values %}
-                    <option value="{{ index }}">
-                        {{ value }}
+                    {% for contracts in category.contracts.all %}
+                    <option value="{{ contracts.number }}">
+                        {{ contracts.name }}
                     </option>
                     {% endfor %}
                 </select>

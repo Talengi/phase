@@ -7,7 +7,11 @@ from django.db import migrations
 def copy_contracts_from_values_list(apps, schema_editor):
     ValuesList = apps.get_model("metadata", "ValuesList")
     Contract = apps.get_model("categories", "Contract")
-    value_list = ValuesList.objects.filter(index='CONTRACT_NBS').get()
+    try:
+        value_list = ValuesList.objects.filter(index='CONTRACT_NBS').get()
+    except ValuesList.DoesNotExist:
+        return
+    
     for contract in value_list.values.all():
         Contract.objects.create(number=contract.index, name=contract.value)
 
