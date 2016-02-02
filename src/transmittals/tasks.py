@@ -30,8 +30,8 @@ def do_notify_transmittal_recipients(metadata_id, revision_id):
     transmittal = OutgoingTransmittal.objects \
         .select_related('document', 'recipient') \
         .prefetch_related('recipient__users') \
-        .get(metadata_id)
-    revision = OutgoingTransmittalRevision.objects.get(revision_id)
+        .get(pk=metadata_id)
+    revision = OutgoingTransmittalRevision.objects.get(pk=revision_id)
     send_transmittal_creation_notifications(transmittal, revision)
 
 
