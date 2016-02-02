@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from transmittals import signals
+from transmittals.tasks import do_notify_transmittal_recipients
 
 
 def transmittal_post_save(document, metadata, revision, **kwargs):
@@ -15,3 +16,7 @@ def transmittal_post_save(document, metadata, revision, **kwargs):
             metadata=metadata,
             revision=revision,
             sender=metadata.__class__)
+
+
+def notify_transmittal_recipients(document, metadata, revision, **kwargs):
+    do_notify_transmittal_recipients.delay(revision.id)

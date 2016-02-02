@@ -23,6 +23,12 @@ logger = logging.getLogger(__name__)
 
 
 @app.task
+def do_notify_transmittal_recipients(revision_id):
+    """Send email notifs to transmittal recipients."""
+    print 'Task, yeah \o/'
+
+
+@app.task
 def do_create_transmittal(
         user_id, from_category_id, to_category_id, document_ids,
         contract_number, recipient_id):
