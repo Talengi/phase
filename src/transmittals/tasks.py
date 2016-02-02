@@ -14,8 +14,10 @@ from accounts.models import Entity
 from categories.models import Category
 from documents.models import Document
 from notifications.models import notify
-from transmittals.models import Transmittal, TrsRevision
-from transmittals.utils import create_transmittal
+from transmittals.models import (
+    Transmittal, TrsRevision, OutgoingTransmittal, OutgoingTransmittalRevision)
+from transmittals.utils import (
+    create_transmittal, send_transmittal_creation_notifications)
 from transmittals.errors import TransmittalError
 
 
@@ -23,9 +25,14 @@ logger = logging.getLogger(__name__)
 
 
 @app.task
-def do_notify_transmittal_recipients(revision_id):
+def do_notify_transmittal_recipients(metadata_id, revision_id):
     """Send email notifs to transmittal recipients."""
-    print 'Task, yeah \o/'
+    transmittal = OutgoingTransmittal.objects \
+        .select_related('document', 'recipient') \
+        .prefetch_related('recipient__users') \
+        .get(metadata_id)
+    revision = OutgoingTransmittalRevision.objects.get(revision_id)
+    send_transmittal_creation_notifications(transmittal, revision)
 
 
 @app.task

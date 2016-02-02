@@ -19,4 +19,4 @@ def transmittal_post_save(document, metadata, revision, **kwargs):
 
 
 def notify_transmittal_recipients(document, metadata, revision, **kwargs):
-    do_notify_transmittal_recipients.delay(revision.id)
+    do_notify_transmittal_recipients.delay(metadata.id, revision.id)
