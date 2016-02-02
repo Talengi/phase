@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 from django.db.models import Max
 from django.utils import timezone
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 from django.template.loader import get_template
 from django.contrib.sites.models import Site
 from django.utils import translation
@@ -145,6 +145,7 @@ def send_transmittal_creation_notifications(trs, revision):
     tpl = get_template('transmittals/creation_notification_email.txt')
     site = Site.objects.get_current()
     recipients = trs.recipient.users.all()
+
     for user in recipients:
         content = tpl.render({
             'user': user,
@@ -153,9 +154,16 @@ def send_transmittal_creation_notifications(trs, revision):
             'transmittal': trs,
             'revision': revision,
             'related_revisions': trs.get_revisions()})
-        send_mail(
+
+        email = EmailMessage(
             subject,
             content,
             settings.DEFAULT_FROM_EMAIL,
-            [user.email],
-            fail_silently=False)
+            [user.email])
+
+        if revision.pdf_file:
+            storage = revision.pdf_file.storage
+            absolute_path = storage.path(revision.pdf_file.name)
+            email.attach_file(absolute_path)
+
+        email.send()
