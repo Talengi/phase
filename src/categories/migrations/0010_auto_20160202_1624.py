@@ -11,7 +11,7 @@ def copy_contracts_from_values_list(apps, schema_editor):
         value_list = ValuesList.objects.filter(index='CONTRACT_NBS').get()
     except ValuesList.DoesNotExist:
         return
-    
+
     for contract in value_list.values.all():
         Contract.objects.create(number=contract.index, name=contract.value)
 
