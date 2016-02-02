@@ -86,8 +86,8 @@ def create_transmittal():
     """Create a test transmittal with a few documents linked."""
 
     # Create documents
-    CDModel = ContentType.objects.get_for_model(ContractorDeliverable)
     entity = EntityFactory()
+    CDModel = ContentType.objects.get_for_model(ContractorDeliverable)
     deliverables_category = CategoryFactory(
         category_template__metadata_model=CDModel,
         third_parties=[entity])
@@ -113,6 +113,7 @@ def create_transmittal():
     data = {
         'category': transmittal_category,
         'metadata': {
+            'revisions_category': deliverables_category,
             'originator': 'CTR',
             'recipient': entity,
             'contract_number': 'FAC10005',

@@ -4,7 +4,12 @@ from __future__ import unicode_literals
 
 from django.db.models import Max
 from django.utils import timezone
+from django.core.mail import EmailMessage
+from django.template.loader import get_template
+from django.contrib.sites.models import Site
+from django.utils import translation
 from django.db import transaction
+from django.conf import settings
 
 from documents.utils import save_document_forms
 from transmittals import errors
@@ -125,3 +130,40 @@ def find_next_trs_number(originator, recipient, contract_nb):
         .aggregate(Max('sequential_number'))
     max_nb = qs.get('sequential_number__max')
     return max_nb + 1 if max_nb else 1
+
+
+def send_transmittal_creation_notifications(trs, revision):
+    """Email recipients with a link to the transmittal."""
+
+    if not settings.SEND_EMAIL_REMINDERS:
+        return
+
+    translation.activate(settings.LANGUAGE_CODE)
+    subject = 'Phase - {} - {}'.format(
+        trs.contract_number,
+        trs.document.document_number)
+    tpl = get_template('transmittals/creation_notification_email.txt')
+    site = Site.objects.get_current()
+    recipients = trs.recipient.users.all()
+
+    for user in recipients:
+        content = tpl.render({
+            'user': user,
+            'site': site,
+            'document': trs.document,
+            'transmittal': trs,
+            'revision': revision,
+            'related_revisions': trs.get_revisions()})
+
+        email = EmailMessage(
+            subject,
+            content,
+            settings.DEFAULT_FROM_EMAIL,
+            [user.email])
+
+        if revision.pdf_file:
+            storage = revision.pdf_file.storage
+            absolute_path = storage.path(revision.pdf_file.name)
+            email.attach_file(absolute_path)
+
+        email.send()
