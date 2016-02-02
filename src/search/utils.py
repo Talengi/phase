@@ -20,6 +20,12 @@ from django.conf import settings
 logger = logging.getLogger(__name__)
 
 
+def refresh_index():
+    """Make latest data available."""
+    index = settings.ELASTIC_INDEX
+    elastic.indices.refresh(index=index)
+
+
 def create_index():
     """Create all needed indexes."""
     index = settings.ELASTIC_INDEX
@@ -72,6 +78,7 @@ def index_revisions(revisions):
         actions,
         chunk_size=settings.ELASTIC_BULK_SIZE,
         request_timeout=60)
+    refresh_index()
 
 
 def bulk_actions(actions):
