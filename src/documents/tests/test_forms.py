@@ -221,8 +221,9 @@ class DocumentCreateTest(TestCase):
         metadata = document.metadata
         related = list(metadata.related_documents.all())
         self.assertEqual(len(related), 2)
-        self.assertEqual(related[0].metadata.title, "HAZOP related 1")
-        self.assertEqual(related[1].metadata.title, "HAZOP related 2")
+        related_titles = (related[0].metadata.title, related[1].metadata.title)
+        self.assertTrue("HAZOP related 1" in related_titles)
+        self.assertTrue("HAZOP related 2" in related_titles)
 
 
 class DocumentEditTest(TestCase):
