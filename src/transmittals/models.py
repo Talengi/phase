@@ -738,7 +738,7 @@ class TransmittableMixin(ReviewMixin):
         be reviewed anymore.
 
         """
-        return self.can_be_transmitted and not self.transmittal
+        return self.can_be_reviewed and not self.transmittal
 
     @property
     def can_be_transmitted(self):
