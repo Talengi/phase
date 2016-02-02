@@ -20,6 +20,10 @@ class Command(BaseCommand):
     help = 'Send an email reminder to all users with pending reviews'
 
     def handle(self, *args, **options):
+
+        if not settings.SEND_EMAIL_REMINDERS:
+            return
+
         translation.activate(settings.LANGUAGE_CODE)
 
         self.body_template = get_template(BODY_TEMPLATE)

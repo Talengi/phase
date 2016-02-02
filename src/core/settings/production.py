@@ -57,6 +57,7 @@ EMAIL_HOST_USER = get_prod_setting('EMAIL_HOST_USER')
 EMAIL_PORT = get_prod_setting('EMAIL_PORT')
 EMAIL_USE_TLS = get_prod_setting('EMAIL_USE_TLS')
 SERVER_EMAIL = get_prod_setting('SERVER_EMAIL')
+SEND_EMAIL_REMINDERS = get_prod_setting('SEND_EMAIL_REMINDERS')
 
 # ######### DATABASE CONFIGURATION
 DATABASES = get_prod_setting('DATABASES')
