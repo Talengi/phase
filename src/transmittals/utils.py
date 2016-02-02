@@ -133,6 +133,11 @@ def find_next_trs_number(originator, recipient, contract_nb):
 
 
 def send_transmittal_creation_notifications(trs, revision):
+    """Email recipients with a link to the transmittal."""
+
+    if not settings.SEND_EMAIL_REMINDERS:
+        return
+
     translation.activate(settings.LANGUAGE_CODE)
     subject = 'Phase - {} - {}'.format(
         trs.contract_number,
