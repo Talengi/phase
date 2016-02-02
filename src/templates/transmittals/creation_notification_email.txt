@@ -1,0 +1,17 @@
+{% load i18n %}
+Dear {{ user.username }},
+
+{% blocktrans with trs_number=document.document_key %}
+The transmittal {{ trs_number }} can be downloaded with the following
+documents:
+{% endblocktrans %}
+{% for rev in related_revisions %}{% spaceless %}
+- {{ rev.document.document_key }}
+{% endspaceless %}
+{% endfor %}
+
+You can see the whole transmittal here:
+
+http://{{ site.domain }}{{ document.get_absolute_url }}
+
+The Phase team.
