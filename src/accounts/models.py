@@ -81,6 +81,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         default=True,
         help_text=_('Designates whether this user should be treated as '
                     'active. Unselect this instead of deleting accounts.'))
+    is_external = models.BooleanField(
+        _('External User'),
+        default=False,
+        help_text=_('Used to tell apart regular users and externals ones'
+                    ' (contractors).'))
     date_joined = models.DateTimeField(
         _('date joined'),
         default=timezone.now)
@@ -155,14 +160,26 @@ class Entity(models.Model):
     def __unicode__(self):
         return '{} - {}'.format(self.trigram, self.name)
 
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        super(Entity, self).save(force_insert, force_update, using,
+                                 update_fields)
+        # Clear `entities_pk` cache
+        clear_entities_cache()
+
 
 def get_entities(user):
     """Put the entities list in cache if user belongs to one or several of
     them (if he is a contractor)."""
-    cache_key_pk = 'entities_pk_%d' % (user.id)
+    cache_key_pk = 'entities_pk_%d' % user.id
     entities_pk = cache.get(cache_key_pk)
     if entities_pk is None:
         entities = Entity.objects.filter(users=user)
         entities_pk = entities.values_list('pk', flat=True)
         cache.set(cache_key_pk, entities_pk, None)
     return list(entities_pk)
+
+
+def clear_entities_cache():
+    users_pk = User.objects.values_list('pk', flat=True)
+    cache.delete_many(['entities_pk_%d' % pk for pk in users_pk])

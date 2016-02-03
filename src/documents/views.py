@@ -89,7 +89,7 @@ class DocumentListMixin(CategoryMixin):
             .filter(document__category=self.category)
 
         entities = self.get_external_filtering()
-        if entities:
+        if self.request.user.is_external and entities:
             # todo: check qs has recipient_id
             qs = qs.filter(recipient_id__in=entities)
         return qs
