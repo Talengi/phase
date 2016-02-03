@@ -39,7 +39,7 @@
                 <select id="contract-number-select" name="contract_number" class="form-control">
                     {% for contracts in category.contracts.all %}
                     <option value="{{ contracts.number }}">
-                        {{ contracts.name }}
+                        {{ contracts.number }} - {{ contracts.name }}
                     </option>
                     {% endfor %}
                 </select>
