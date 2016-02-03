@@ -12,7 +12,7 @@ from django.core.cache import cache
 from django.contrib.contenttypes.models import ContentType
 
 from documents.models import Document
-from categories.factories import CategoryFactory
+from categories.factories import CategoryFactory, ContractFactory
 from transmittals.imports import TrsImport
 from transmittals.factories import TransmittalFactory
 from transmittals.models import Transmittal
@@ -36,7 +36,9 @@ class TransmittalsValidationTests(TestCase):
             self.doc_category = document.category
         except Document.DoesNotExist:
             self.doc_category = CategoryFactory()
-
+        contract = ContractFactory.create(number='FAC10005-CTR-CLT-TRS-00001',
+                                          categories=[self.doc_category])
+        self.contract_number = contract.number
         trs_content_type = ContentType.objects.get_for_model(Transmittal)
         self.trs_category = CategoryFactory(category_template__metadata_model=trs_content_type)
 

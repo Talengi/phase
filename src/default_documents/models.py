@@ -29,10 +29,14 @@ class ContractorDeliverable(ScheduleMixin, Metadata):
     # General information
     title = models.TextField(
         verbose_name=u"Title")
-    contract_number = ConfigurableChoiceField(
+    # Let's keep this field for a while
+    contract_number_old = ConfigurableChoiceField(
         verbose_name=u"Contract Number",
         max_length=15,
-        list_index='CONTRACT_NBS')
+        list_index='CONTRACT_NBS', null=True, blank=True)
+    contract_number = models.CharField(
+        verbose_name='Contract Number',
+        max_length=50)
     originator = ConfigurableChoiceField(
         verbose_name=u"Originator",
         default=u"FWF",
@@ -436,10 +440,13 @@ class Correspondence(Metadata):
     subject = models.TextField(_('Subject'))
     correspondence_date = models.DateField(_('Correspondence date'))
     received_sent_date = models.DateField(_('Received / sent date'))
-    contract_number = ConfigurableChoiceField(
+    contract_number_old = ConfigurableChoiceField(
         _('Contract Number'),
         max_length=8,
-        list_index='CONTRACT_NBS')
+        list_index='CONTRACT_NBS', null=True, blank=True)
+    contract_number = models.CharField(
+        verbose_name='Contract Number',
+        max_length=50)
     originator = ConfigurableChoiceField(
         _('Originator'),
         default='FWF',
@@ -586,10 +593,15 @@ class MinutesOfMeeting(Metadata):
     subject = models.TextField(_('Subject'))
     meeting_date = models.DateField(_('Meeting date'))
     received_sent_date = models.DateField(_('Received / sent date'))
-    contract_number = ConfigurableChoiceField(
+    # We keep it for a while
+    contract_number_old = ConfigurableChoiceField(
         _('Contract Number'),
         max_length=8,
-        list_index='CONTRACT_NBS')
+        list_index='CONTRACT_NBS', blank=True, null=True)
+    contract_number = models.CharField(
+        verbose_name='Contract Number',
+        max_length=50
+    )
     originator = ConfigurableChoiceField(
         _('Originator'),
         default='FWF',

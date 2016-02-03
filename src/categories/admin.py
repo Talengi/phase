@@ -6,7 +6,7 @@ from django.forms.models import BaseInlineFormSet
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
-from .models import Organisation, CategoryTemplate, Category
+from .models import Organisation, CategoryTemplate, Category, Contract
 from .admin_forms import CategoryTemplateAdminForm
 
 
@@ -63,6 +63,16 @@ class UserCategoryInline(admin.StackedInline):
     formset = RequiredInlineFormSet
 
 
+class ContractAdmin(admin.ModelAdmin):
+    list_display = ('number', 'name', 'get_associated_categories')
+
+    def get_associated_categories(self, obj):
+        categories = obj.categories.all()
+        return ", ".join([c.name for c in categories])
+
+    get_associated_categories.short_description = _('Categories')
+
 admin.site.register(Organisation, OrganisationAdmin)
 admin.site.register(CategoryTemplate, CategoryTemplateAdmin)
 admin.site.register(Category, CategoryAdmin)
+admin.site.register(Contract, ContractAdmin)

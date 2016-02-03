@@ -84,6 +84,12 @@ def create_transmittal(from_category, to_category, revisions, contract_nb,
         raise errors.InvalidRecipientError(
             'Recipient is not linked to the document category')
 
+    # The 'contract_nb' must belong to the contracts linked by the category
+    cat_contracts = from_category.contracts.values_list('number', flat=True)
+    if contract_nb not in cat_contracts:
+        raise errors.InvalidContractNumberError(
+            'Contract number is not linked to the document category')
+
     # Do we have valid revisions?
     for rev in revisions:
         if not isinstance(rev, TransmittableMixin):

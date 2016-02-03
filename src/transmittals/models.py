@@ -66,10 +66,16 @@ class Transmittal(Metadata):
     ack_of_receipt_date = models.DateField(
         _('Acknowledgment of receipt date'),
         null=True, blank=True)
-    contract_number = ConfigurableChoiceField(
+    # We'll keep it for a while
+    contract_number_old = ConfigurableChoiceField(
         verbose_name='Contract Number',
         max_length=8,
-        list_index='CONTRACT_NBS')
+        list_index='CONTRACT_NBS',
+        null=True,
+        blank=True)
+    contract_number = models.CharField(
+        verbose_name='Contract Number',
+        max_length=50)
     originator = ConfigurableChoiceField(
         _('Originator'),
         default='CTR',
@@ -281,12 +287,18 @@ class TrsRevision(models.Model):
     is_new_revision = models.BooleanField(
         _('Is new revision?'))
 
+    # We'll keep it for a while.
     # Those are fields that will one day be configurable
     # but are static for now.
-    contract_number = ConfigurableChoiceField(
+    contract_number_old = ConfigurableChoiceField(
         verbose_name='Contract Number',
         max_length=8,
-        list_index='CONTRACT_NBS')
+        list_index='CONTRACT_NBS',
+        null=True,
+        blank=True)
+    contract_number = models.CharField(
+        verbose_name='Contract Number',
+        max_length=50)
     originator = ConfigurableChoiceField(
         _('Originator'),
         default='FWF',
@@ -385,7 +397,7 @@ class TrsRevision(models.Model):
         verbose_name=_('Pdf file'))
     native_file = TransmittalFileField(
         verbose_name=_('Native file'),
-        null=True, blank=True)
+        null=True, blank=True, max_length=255)
 
     class Meta:
         app_label = 'transmittals'
@@ -472,10 +484,17 @@ class OutgoingTransmittal(Metadata):
         'categories.Category',
         verbose_name=_('From category'),
         on_delete=models.PROTECT)
-    contract_number = ConfigurableChoiceField(
+    # We'll have to delete it, but let's keep this one for a while
+    contract_number_old = ConfigurableChoiceField(
         verbose_name='Contract Number',
         max_length=8,
-        list_index='CONTRACT_NBS')
+        list_index='CONTRACT_NBS',
+        null=True,
+        blank=True
+    )
+    contract_number = models.CharField(
+        verbose_name='Contract Number',
+        max_length=50)
     originator = models.CharField(
         _('Originator'),
         max_length=3)

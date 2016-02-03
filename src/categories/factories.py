@@ -7,7 +7,7 @@ from factory import fuzzy
 from django.contrib.contenttypes.models import ContentType
 
 from default_documents.models import DemoMetadata
-from .models import Organisation, CategoryTemplate, Category
+from .models import Organisation, CategoryTemplate, Category, Contract
 
 
 class OrganisationFactory(factory.DjangoModelFactory):
@@ -53,3 +53,22 @@ class CategoryFactory(factory.DjangoModelFactory):
             # A list of groups were passed in, use them
             for entity in extracted:
                 self.third_parties.add(entity)
+
+
+class ContractFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = Contract
+
+    number = factory.Sequence(lambda n: 'CONTRACTNB-{0}'.format(n))
+    name = factory.Sequence(lambda n: 'CONTRACTNAME-{0}'.format(n))
+
+    @factory.post_generation
+    def categories(self, create, extracted, **kwargs):
+        if not create:
+            # Simple build, do nothing.
+            return
+
+        if extracted:
+            # A list of groups were passed in, use them
+            for cat in extracted:
+                self.categories.add(cat)

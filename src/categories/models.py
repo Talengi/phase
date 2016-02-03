@@ -163,3 +163,14 @@ class Category(models.Model):
             self.organisation.slug,
             self.category_template.slug))
         return url
+
+
+class Contract(models.Model):
+    number = models.CharField(_('Number'), max_length=50)
+    name = models.CharField(_('Name'), max_length=255)
+    categories = models.ManyToManyField(Category,
+                                        related_name='contracts',
+                                        verbose_name=_('Categories'))
+
+    def __unicode__(self):
+        return self.number

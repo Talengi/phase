@@ -8,7 +8,7 @@ from django.test import TestCase
 
 from documents.factories import DocumentFactory
 from default_documents.tests.test import ContractorDeliverableTestCase
-from categories.factories import CategoryFactory
+from categories.factories import CategoryFactory, ContractFactory
 from accounts.factories import UserFactory, EntityFactory
 from transmittals.factories import (
     OutgoingTransmittalFactory, OutgoingTransmittalRevisionFactory)
@@ -38,7 +38,12 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
             password='pass',
             category=self.category)
 
-    def create_docs(self, nb_docs=10, transmittable=True, default_kwargs={}):
+        self.linked_contract = ContractFactory.create(
+            categories=[self.category])
+
+    def create_docs(self, nb_docs=10, transmittable=True, default_kwargs=None):
+        if default_kwargs is None:
+            default_kwargs = {}
         doc_kwargs = {
             'revision': {
                 'reviewers': [self.user1],
@@ -62,23 +67,23 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
         """A trs cannot be created without revisions."""
         with self.assertRaises(errors.MissingRevisionsError):
             create_transmittal(
-                self.category, self.dst_category, [], 'FAC10005',
-                self.entity)
+                self.category, self.dst_category, [],
+                self.linked_contract.number, self.entity)
 
     def test_create_trs_with_invalid_revisions(self):
         """We must check that the given revisions are valid."""
         with self.assertRaises(errors.InvalidRevisionsError):
             revisions = ['toto', 'tata', 'tutu']
             create_transmittal(
-                self.category, self.dst_category, revisions, 'FAC10005',
-                self.entity)
+                self.category, self.dst_category, revisions,
+                self.linked_contract.number, self.entity)
 
     def test_create_trs_with_unreviewed_revisions(self):
         """Revisions must have been reviewed to be transmittable."""
         revisions = self.create_docs(transmittable=False)
         doc, trs, trs_rev = create_transmittal(
-            self.category, self.dst_category, revisions, 'FAC10005',
-            self.entity)
+            self.category, self.dst_category, revisions,
+            self.linked_contract.number, self.entity)
         self.assertIsNotNone(trs)
 
     def test_create_trs_with_invalid_from_category(self):
@@ -87,8 +92,8 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
         revisions = self.create_docs()
         with self.assertRaises(errors.InvalidCategoryError):
             create_transmittal(
-                invalid_cat, self.dst_category, revisions, 'FAC10005',
-                self.entity)
+                invalid_cat, self.dst_category, revisions,
+                self.linked_contract.number, self.entity)
 
     def test_create_trs_with_invalid_dest_category(self):
         """Destination category must contain outgoing transmittals."""
@@ -96,8 +101,20 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
         revisions = self.create_docs()
         with self.assertRaises(errors.InvalidCategoryError):
             create_transmittal(
-                self.category, invalid_cat, revisions, 'FAC10005',
-                self.entity)
+                self.category, invalid_cat, revisions,
+                self.linked_contract.number, self.entity)
+
+    def test_create_transmittal_with_unlinked_contract(self):
+        """"Contract must be linked to doc category."""
+        revisions = self.create_docs()
+        unlinked_contract = ContractFactory()  # Non linked to the category
+        junk_number = "XYZ"  # This one does not exist in db
+        for contract_number in unlinked_contract.number, junk_number:
+            # Both must fail
+            with self.assertRaises(errors.InvalidContractNumberError):
+                create_transmittal(
+                    self.category, self.dst_category, revisions,
+                    contract_number, self.entity)
 
     def test_create_transmittal(self):
         revisions = self.create_docs()
@@ -105,8 +122,8 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
         self.assertIsNone(revision.transmittal)
 
         doc, trs, trs_rev = create_transmittal(
-            self.category, self.dst_category, revisions, 'FAC10005',
-            self.entity)
+            self.category, self.dst_category, revisions,
+            self.linked_contract.number, self.entity)
         self.assertIsNotNone(trs)
         self.assertTrue(isinstance(trs, OutgoingTransmittal))
         self.assertEqual(trs.revisions_category, self.category)
@@ -128,8 +145,8 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
         self.assertIsNone(revision.external_review_due_date)
 
         doc, trs, trs_rev = create_transmittal(
-            self.category, self.dst_category, revisions, 'FAC10005',
-            self.entity)
+            self.category, self.dst_category, revisions,
+            self.linked_contract.number, self.entity)
         self.assertIsNotNone(trs)
         revision.refresh_from_db()
         self.assertIsNone(revision.external_review_due_date)
@@ -148,8 +165,8 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
         self.assertIsNone(revision.external_review_due_date)
 
         doc, trs, trs_rev = create_transmittal(
-            self.category, self.dst_category, revisions, 'FAC10005',
-            self.entity)
+            self.category, self.dst_category, revisions,
+            self.linked_contract.number, self.entity)
         self.assertIsNotNone(trs)
         revision.refresh_from_db()
         self.assertIsNotNone(revision.external_review_due_date)
