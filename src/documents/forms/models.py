@@ -63,9 +63,19 @@ class GenericBaseDocumentForm(forms.ModelForm):
         self.helper.include_media = False
         self.helper.layout = self.build_layout()
 
-        # Document key is automatically generated, this field should not be required
+        # Document key is automatically generated, this field should not
+        # be required
         if 'document_number' in self.fields:
             self.fields['document_number'].required = False
+
+        # Contract numbers must belong to the category
+        # If it is read only, we simply the charfield value
+        if 'contract_number' in self.fields and not self.read_only:
+            # Todo find a cleaner way
+            self.allowed_contracts = self.category.contracts.all().\
+                values_list('number', 'number')
+            self.fields['contract_number'].widget = forms.Select(
+                choices=self.allowed_contracts)
 
     def build_layout(self):
         raise NotImplementedError('Missing "build_layout" method')
@@ -110,6 +120,15 @@ class GenericBaseDocumentForm(forms.ModelForm):
                 )
         return native_file
 
+    def _clean_contract_number(self):
+        contract_number = self.cleaned_data['contract_number']
+        # using zip() to get the first elt of each tuple
+        if contract_number not in zip(*self.allowed_contracts)[0]:
+            raise forms.ValidationError(
+                'Bad contract number. Contract must belong to the '
+                'document category.')
+        return contract_number
+
     def clean(self):
         """Validate the document number and key."""
         data = super(GenericBaseDocumentForm, self).clean()
@@ -118,8 +137,8 @@ class GenericBaseDocumentForm(forms.ModelForm):
         # The document_key must be generated from it.
         # But in other cases (e.g the import module) we directly submit the
         # document_key. In that case, we must copy the key to have a valid
-        # document number. Project History is the reason this is so complicated.
-        # See ticket #145 for more details.
+        # document number. Project History is the reason this is so
+        # complicated.See ticket #145 for more details.
         if 'document_number' in data and 'document_key' in data:
             if data['document_key'] and not data['document_number']:
                 data['document_number'] = data['document_key']
