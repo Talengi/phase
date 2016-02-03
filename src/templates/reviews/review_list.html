@@ -60,11 +60,7 @@
     </div>
 </div>
 
-<div id="search-sidebar" class="sidebar-offcanvas">
-    <div class="offcanvas-wrapper">
-        {% include "reviews/form_filtering.html" %}
-    </div>
-</div>
+{% include "reviews/search_sidebar.html" with form=search_form %}
 {% endblock %}
 
 {% block extra_js %}

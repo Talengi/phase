@@ -1,16 +1,17 @@
 {% load widget_tweaks crispy_forms_field %}
+<div id="search-sidebar-container" class="collapse">
+<div class="modal-backdrop in"></div>
+<div class="sidebar right-sidebar">
 <form action="#"
       method="get"
       class="sidebar-form"
       id="table-filters">
 <fieldset>
     <legend>
-        <button type="reset" id="resetForm" class="btn btn-primary">Reset filters</button>
-        &nbsp;
         <button type="button"
                 id="sidebar-close-btn"
-                class="btn btn-default"
-                data-toggle="offcanvas">Close</button>
+                class="btn btn-default toggle-content-button"
+                data-target="#search-sidebar-container">Close</button>
     </legend>
     <div id="controls-rows">
     {% for field in form.visible_fields %}
@@ -31,4 +32,5 @@
     </div>
 </fieldset>
 </form>
-
+</div>
+</div>
