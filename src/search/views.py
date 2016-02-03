@@ -15,7 +15,10 @@ class SearchDocuments(JSONResponseMixin, BaseDocumentList):
     def get_queryset(self):
         """Given DataTables' GET parameters, filter the initial queryset."""
         super(SearchDocuments, self).get_queryset()
-        entities = self.get_external_filtering()
+        if self.request.user.is_external:
+            entities = self.get_external_filtering()
+        else:
+            entities = None
         try:
             builder = SearchBuilder(self.category,
                                     self.request.GET,
