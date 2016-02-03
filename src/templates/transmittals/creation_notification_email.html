@@ -2,8 +2,8 @@
 Dear {{ user.username }}, <br /><br />
 
 {% blocktrans with trs_number=document.document_key %}
-The transmittal {{ trs_number }} can be downloaded with the following
-documents:
+Please not that the transmittal <b>{{ trs_number }}</b> as been issued with the
+following documents:
 {% endblocktrans %}
 <br /><br />
 
@@ -12,7 +12,7 @@ documents:
 <br /> <br />
 
 You can <a href="http://{{ site.domain }}{{ document.get_absolute_url }}">
-    see the whole transmittal on Phase
+    download the documents on Phase
 </a>.
 
 <br /><br />
