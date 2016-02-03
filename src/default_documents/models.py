@@ -595,10 +595,15 @@ class MinutesOfMeeting(Metadata):
     subject = models.TextField(_('Subject'))
     meeting_date = models.DateField(_('Meeting date'))
     received_sent_date = models.DateField(_('Received / sent date'))
-    contract_number = ConfigurableChoiceField(
+    # We keep it for a while
+    contract_number_old = ConfigurableChoiceField(
         _('Contract Number'),
         max_length=8,
-        list_index='CONTRACT_NBS')
+        list_index='CONTRACT_NBS', blank=True, null=True)
+    contract_number = models.CharField(
+         verbose_name='Contract Number',
+         max_length=50
+    )
     originator = ConfigurableChoiceField(
         _('Originator'),
         default='FWF',
