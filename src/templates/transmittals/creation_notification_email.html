@@ -26,7 +26,7 @@ following documents:
         <td style="border: solid 1px black;">{{ rev.name }}</td>
         <td style="border: solid 1px black;">{{ rev.status }}</td>
         <td style="border: solid 1px black;">{{ rev.get_final_return_code }}</td>
-        <td style="border: solid 1px black;">{% rev.purpose_of_issue %}</td>
+        <td style="border: solid 1px black;">{{ rev.purpose_of_issue }}</td>
     </tr>
     {% endfor %}
     </tbody>
