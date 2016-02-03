@@ -2,6 +2,8 @@
 
 from __future__ import unicode_literals
 
+import logging
+
 from django.db.models import Max
 from django.utils import timezone
 from django.core.mail import EmailMultiAlternatives
@@ -18,6 +20,9 @@ from transmittals.models import (
     OutgoingTransmittal, OutgoingTransmittalRevision, TransmittableMixin)
 from transmittals.forms import (
     OutgoingTransmittalForm, OutgoingTransmittalRevisionForm)
+
+
+logger = logging.getLogger(__name__)
 
 
 class FieldWrapper(object):
@@ -148,6 +153,7 @@ def send_transmittal_creation_notifications(trs, revision):
     recipients = trs.recipient.users.all()
 
     for user in recipients:
+        logger.info('Notifying user {}'.format(user.email))
         content = tpl.render({
             'user': user,
             'site': site,

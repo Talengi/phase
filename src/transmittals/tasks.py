@@ -27,6 +27,10 @@ logger = logging.getLogger(__name__)
 @app.task
 def do_notify_transmittal_recipients(metadata_id, revision_id):
     """Send email notifs to transmittal recipients."""
+    logger.info('Notifying transmittal recipients. Meta={} Rev={}'.format(
+        metadata_id, revision_id
+    ))
+
     transmittal = OutgoingTransmittal.objects \
         .select_related('document', 'recipient') \
         .prefetch_related('recipient__users') \
