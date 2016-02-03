@@ -40,7 +40,6 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
 
         self.linked_contract = ContractFactory.create(
             categories=[self.category])
-        self.unlinked_contract = ContractFactory()
 
     def create_docs(self, nb_docs=10, transmittable=True, default_kwargs=None):
         if default_kwargs is None:
@@ -105,8 +104,19 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
                 self.category, invalid_cat, revisions,
                 self.linked_contract.number, self.entity)
 
-    def test_create_transmittal(self):
+    def test_create_transmittal_with_unlinked_contract(self):
+        """"Contract must be linked to doc category."""
+        revisions = self.create_docs()
+        unlinked_contract = ContractFactory()  # Non linked to the category
+        junk_number = "XYZ"  # This one does not exist in db
+        for contract_number in unlinked_contract.number, junk_number:
+            # Both must fail
+            with self.assertRaises(errors.InvalidContractNumberError):
+                create_transmittal(
+                    self.category, self.dst_category, revisions,
+                    contract_number, self.entity)
 
+    def test_create_transmittal(self):
         revisions = self.create_docs()
         revision = revisions[0]
         self.assertIsNone(revision.transmittal)
