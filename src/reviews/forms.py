@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 from django import forms
+from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
 
@@ -17,9 +18,43 @@ from reviews.models import Review, DistributionList
 
 
 class ReviewSearchForm(forms.Form):
-    category = forms.CharField()
-    status = forms.CharField()
-    step = forms.CharField()
+    category = forms.CharField(required=False)
+    status = forms.CharField(required=False)
+    step = forms.CharField(required=False)
+
+    def filter_qs(self, qs):
+        if not self.is_bound:
+            return qs
+
+        if self.is_valid():
+            qs = self.filter_qs_by_category(qs)
+            qs = self.filter_qs_by_status(qs)
+            qs = self.filter_qs_by_step(qs)
+
+        return qs
+
+    def filter_qs_by_category(self, qs):
+        category = self.cleaned_data['category']
+        if category:
+            q_orga = Q(document__category__organisation__name__icontains=category)
+            q_cate = Q(document__category__category_template__name__icontains=category)
+            qs = qs.filter(q_orga | q_cate)
+
+        return qs
+
+    def filter_qs_by_status(self, qs):
+        status = self.cleaned_data['status']
+        if status:
+            qs = qs.filter(revision_status__icontains=status)
+
+        return qs
+
+    def filter_qs_by_step(self, qs):
+        step = self.cleaned_data['step']
+        if step:
+            qs = qs.filter(status__icontains=step)
+
+        return qs
 
 
 class DistributionListValidationMixin(object):
