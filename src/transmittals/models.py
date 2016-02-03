@@ -66,10 +66,15 @@ class Transmittal(Metadata):
     ack_of_receipt_date = models.DateField(
         _('Acknowledgment of receipt date'),
         null=True, blank=True)
-    contract_number = ConfigurableChoiceField(
+    # We'll keep it for a while
+    contract_number_old = ConfigurableChoiceField(
         verbose_name='Contract Number',
         max_length=8,
         list_index='CONTRACT_NBS')
+    contract_number = models.CharField(
+         verbose_name='Contract Number',
+         max_length=50
+    )
     originator = ConfigurableChoiceField(
         _('Originator'),
         default='CTR',
@@ -472,6 +477,7 @@ class OutgoingTransmittal(Metadata):
         'categories.Category',
         verbose_name=_('From category'),
         on_delete=models.PROTECT)
+    # We'll have to delete it, but let's keep this one for a while
     contract_number_old = ConfigurableChoiceField(
         verbose_name='Contract Number',
         max_length=8,
