@@ -25,7 +25,6 @@ class OrganisationAdmin(admin.ModelAdmin):
     list_display = ('name', 'trigram', 'description')
     prepopulated_fields = {'slug': ('name',)}
     inlines = [CategoryInline]
-    prepopulated_fields = {'slug': ('name',)}
 
 
 class CategoryTemplateAdmin(admin.ModelAdmin):
@@ -65,6 +64,7 @@ class UserCategoryInline(admin.StackedInline):
 
 class ContractAdmin(admin.ModelAdmin):
     list_display = ('number', 'name', 'get_associated_categories')
+    filter_horizontal = ('categories',)
 
     def get_associated_categories(self, obj):
         categories = obj.categories.all()
