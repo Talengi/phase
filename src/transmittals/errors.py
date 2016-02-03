@@ -20,3 +20,7 @@ class InvalidCategoryError(TransmittalError):
 
 class InvalidRecipientError(TransmittalError):
     pass
+
+
+class InvalidContractNumberError(TransmittalError):
+    pass
