@@ -70,7 +70,9 @@ class Transmittal(Metadata):
     contract_number_old = ConfigurableChoiceField(
         verbose_name='Contract Number',
         max_length=8,
-        list_index='CONTRACT_NBS')
+        list_index='CONTRACT_NBS',
+        null=True,
+        blank=True)
     contract_number = models.CharField(
          verbose_name='Contract Number',
          max_length=50
@@ -286,12 +288,19 @@ class TrsRevision(models.Model):
     is_new_revision = models.BooleanField(
         _('Is new revision?'))
 
+    # We'll keep it for a while.
     # Those are fields that will one day be configurable
     # but are static for now.
-    contract_number = ConfigurableChoiceField(
+    contract_number_old = ConfigurableChoiceField(
         verbose_name='Contract Number',
         max_length=8,
-        list_index='CONTRACT_NBS')
+        list_index='CONTRACT_NBS',
+        null=True,
+        blank=True)
+    contract_number = models.CharField(
+         verbose_name='Contract Number',
+         max_length=50
+    )
     originator = ConfigurableChoiceField(
         _('Originator'),
         default='FWF',

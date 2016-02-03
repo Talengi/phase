@@ -5,8 +5,8 @@ from django.db import migrations, models
 
 
 def copy_contracts_numbers(apps, schema_editor):
-    OutgoingTransmittal = apps.get_model('transmittals', 'OutgoingTransmittal')
-    for otg in OutgoingTransmittal.objects.all():
+    TrsRevision = apps.get_model('transmittals', 'TrsRevision')
+    for otg in TrsRevision.objects.all():
         otg.contract_number_new = otg.contract_number
         otg.save()
 
@@ -14,7 +14,7 @@ def copy_contracts_numbers(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('transmittals', '0021_outgoingtransmittal_contract_number_new'),
+        ('transmittals', '0032_auto_20160203_1040'),
     ]
 
     operations = [
