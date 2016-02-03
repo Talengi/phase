@@ -35,9 +35,8 @@ class ContractorDeliverable(ScheduleMixin, Metadata):
         max_length=15,
         list_index='CONTRACT_NBS', null=True, blank=True)
     contract_number = models.CharField(
-         verbose_name='Contract Number',
-         max_length=50
-    )
+        verbose_name='Contract Number',
+        max_length=50)
     originator = ConfigurableChoiceField(
         verbose_name=u"Originator",
         default=u"FWF",
@@ -446,9 +445,8 @@ class Correspondence(Metadata):
         max_length=8,
         list_index='CONTRACT_NBS', null=True, blank=True)
     contract_number = models.CharField(
-         verbose_name='Contract Number',
-         max_length=50
-    )
+        verbose_name='Contract Number',
+        max_length=50)
     originator = ConfigurableChoiceField(
         _('Originator'),
         default='FWF',
@@ -601,8 +599,8 @@ class MinutesOfMeeting(Metadata):
         max_length=8,
         list_index='CONTRACT_NBS', blank=True, null=True)
     contract_number = models.CharField(
-         verbose_name='Contract Number',
-         max_length=50
+        verbose_name='Contract Number',
+        max_length=50
     )
     originator = ConfigurableChoiceField(
         _('Originator'),

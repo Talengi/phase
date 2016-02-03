@@ -74,9 +74,8 @@ class Transmittal(Metadata):
         null=True,
         blank=True)
     contract_number = models.CharField(
-         verbose_name='Contract Number',
-         max_length=50
-    )
+        verbose_name='Contract Number',
+        max_length=50)
     originator = ConfigurableChoiceField(
         _('Originator'),
         default='CTR',
@@ -298,9 +297,8 @@ class TrsRevision(models.Model):
         null=True,
         blank=True)
     contract_number = models.CharField(
-         verbose_name='Contract Number',
-         max_length=50
-    )
+        verbose_name='Contract Number',
+        max_length=50)
     originator = ConfigurableChoiceField(
         _('Originator'),
         default='FWF',
@@ -495,9 +493,8 @@ class OutgoingTransmittal(Metadata):
         blank=True
     )
     contract_number = models.CharField(
-         verbose_name='Contract Number',
-         max_length=50
-    )
+        verbose_name='Contract Number',
+        max_length=50)
     originator = models.CharField(
         _('Originator'),
         max_length=3)
