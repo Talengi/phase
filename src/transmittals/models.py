@@ -399,7 +399,7 @@ class TrsRevision(models.Model):
         verbose_name=_('Pdf file'))
     native_file = TransmittalFileField(
         verbose_name=_('Native file'),
-        null=True, blank=True)
+        null=True, blank=True, max_length=255)
 
     class Meta:
         app_label = 'transmittals'

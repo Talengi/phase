@@ -367,7 +367,7 @@ class MetadataRevision(models.Model):
         verbose_name=u"Revision Date")
     native_file = RevisionFileField(
         verbose_name=u"Native File",
-        null=True, blank=True)
+        null=True, blank=True, max_length=255)
     pdf_file = RevisionFileField(
         verbose_name=u"PDF File",
         null=True, blank=True)
