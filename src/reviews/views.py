@@ -25,7 +25,7 @@ from notifications.models import notify
 from reviews.models import Review
 from reviews.tasks import (do_batch_import, batch_close_reviews,
                            batch_cancel_reviews)
-from reviews.forms import BasePostReviewForm
+from reviews.forms import BasePostReviewForm, ReviewSearchForm
 
 
 class ReviewHome(LoginRequiredMixin, TemplateView):
@@ -187,6 +187,7 @@ class BaseReviewDocumentList(LoginRequiredMixin, ListView):
             'reviews_active': True,
             'review_step': self.review_step,
             'current_url': self.request.path,
+            'search_form': ReviewSearchForm(),
         })
         return context
 

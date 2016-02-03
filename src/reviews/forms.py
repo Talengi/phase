@@ -16,6 +16,12 @@ from reviews.layout import ReviewsLayout, QuickDistributionListWidgetLayout
 from reviews.models import Review, DistributionList
 
 
+class ReviewSearchForm(forms.Form):
+    category = forms.CharField()
+    status = forms.CharField()
+    step = forms.CharField()
+
+
 class DistributionListValidationMixin(object):
     """Common code for validating forms with distrib lists."""
     def clean(self):
