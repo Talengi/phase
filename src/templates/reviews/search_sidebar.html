@@ -2,7 +2,7 @@
 <div id="search-sidebar-container" class="collapse">
 <div class="modal-backdrop in"></div>
 <div class="sidebar right-sidebar">
-<form action="#"
+<form action=""
       method="get"
       class="sidebar-form"
       id="table-filters">
@@ -29,6 +29,12 @@
             </div>
         </div>
     {% endfor %}
+
+    <div class="control-group">
+        <button type="submit"
+                class="btn btn-primary">
+            {{ _('Search') }}
+        </button>
     </div>
 </fieldset>
 </form>
