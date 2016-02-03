@@ -10,6 +10,12 @@
     {% endblocktrans %}
     </p>
 
+    <button class="btn btn-primary navbar-btn navbar-right toggle-content-button"
+            data-target="#search-sidebar-container"
+            alt="{{ _('Search') }}">
+        <span class="glyphicon glyphicon-search"></span> Search
+    </button>
+
     {% if review_step == 'reviewer' %}
     <form
         id="review-batch-action-form"

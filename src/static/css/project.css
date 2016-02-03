@@ -399,10 +399,10 @@ table.reviewers tr td.small {
     width: 450px;
     padding: 0px;
 }
-#left-sidebar {
+.left-sidebar {
     left: 0;
 }
-#right-sidebar {
+.right-sidebar {
     right: 0;
     height: 100%;
 }

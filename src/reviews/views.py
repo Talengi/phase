@@ -25,7 +25,7 @@ from notifications.models import notify
 from reviews.models import Review
 from reviews.tasks import (do_batch_import, batch_close_reviews,
                            batch_cancel_reviews)
-from reviews.forms import BasePostReviewForm
+from reviews.forms import BasePostReviewForm, ReviewSearchForm
 
 
 class ReviewHome(LoginRequiredMixin, TemplateView):
@@ -181,18 +181,24 @@ class BaseReviewDocumentList(LoginRequiredMixin, ListView):
     def breadcrumb_section(self):
         return _('Reviews'), reverse('review_home')
 
+    def get_search_form(self):
+        form = ReviewSearchForm(self.request.GET or None)
+        return form
+
     def get_context_data(self, **kwargs):
         context = super(BaseReviewDocumentList, self).get_context_data(**kwargs)
         context.update({
             'reviews_active': True,
             'review_step': self.review_step,
             'current_url': self.request.path,
+            'search_form': self.get_search_form(),
         })
         return context
 
     def step_filter(self, qs):
         """Filter document list to get reviews at the current step."""
-        raise NotImplementedError('Implement me in the child class.')
+        form = self.get_search_form()
+        return form.filter_qs(qs)
 
     def order_reviews(self, reviews):
         """Return an ordered list of reviews.
@@ -228,11 +234,11 @@ class PrioritiesDocumentList(BaseReviewDocumentList):
         return _('Priorities')
 
     def step_filter(self, qs):
+        qs = super(PrioritiesDocumentList, self).step_filter(qs)
         role_q = Q(role='leader') | Q(role='approver')
         delta = timezone.now() + datetime.timedelta(days=5)
 
-        qs = qs \
-            .filter(role_q) \
+        qs = qs.filter(role_q) \
             .filter(due_date__lte=delta) \
             .filter(docclass__lte=2)
         return qs
@@ -246,6 +252,7 @@ class ReviewersDocumentList(BaseReviewDocumentList):
         return _('Reviewer')
 
     def step_filter(self, qs):
+        qs = super(ReviewersDocumentList, self).step_filter(qs)
         return qs.filter(role=Review.ROLES.reviewer)
 
     def post(self, request, *args, **kwargs):
@@ -266,6 +273,7 @@ class LeaderDocumentList(BaseReviewDocumentList):
         return _('Leader')
 
     def step_filter(self, qs):
+        qs = super(LeaderDocumentList, self).step_filter(qs)
         return qs.filter(role=Review.ROLES.leader)
 
 
@@ -277,6 +285,7 @@ class ApproverDocumentList(BaseReviewDocumentList):
         return _('Approver')
 
     def step_filter(self, qs):
+        qs = super(ApproverDocumentList, self).step_filter(qs)
         return qs.filter(role=Review.ROLES.approver)
 
 

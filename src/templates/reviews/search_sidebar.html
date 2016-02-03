@@ -1,0 +1,42 @@
+{% load widget_tweaks crispy_forms_field %}
+<div id="search-sidebar-container" class="collapse">
+<div class="modal-backdrop in"></div>
+<div class="sidebar right-sidebar">
+<form action=""
+      method="get"
+      class="sidebar-form"
+      id="table-filters">
+<fieldset>
+    <legend>
+        <button type="button"
+                id="sidebar-close-btn"
+                class="btn btn-default toggle-content-button"
+                data-target="#search-sidebar-container">Close</button>
+    </legend>
+    <div id="controls-rows">
+    {% for field in form.visible_fields %}
+        <div class="form-group form-group-{{ field.name }}">
+            <div class="control-group {% if field.errors %}error{% endif %}">
+                <label class="control-label" for="{{ field.auto_id }}">{{ field.label }}</label>
+                <div class="controls">
+                    {% if field|is_checkbox %}
+                        {{ field|add_class:"filter" }} <span class="glyphicon glyphicon-remove"></span>
+                    {% else %}
+                        {{ field|add_class:"form-control filter" }} <span class="glyphicon glyphicon-remove"></span>
+                    {% endif %}
+                </div>
+                {% if field.errors %}<span class="help-inline">{{ field.errors.0 }}</span>{% endif %}
+            </div>
+        </div>
+    {% endfor %}
+
+    <div class="control-group">
+        <button type="submit"
+                class="btn btn-primary">
+            {{ _('Search') }}
+        </button>
+    </div>
+</fieldset>
+</form>
+</div>
+</div>
