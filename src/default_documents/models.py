@@ -29,10 +29,14 @@ class ContractorDeliverable(ScheduleMixin, Metadata):
     # General information
     title = models.TextField(
         verbose_name=u"Title")
-    contract_number = ConfigurableChoiceField(
+    contract_number_old = ConfigurableChoiceField(
         verbose_name=u"Contract Number",
         max_length=15,
-        list_index='CONTRACT_NBS')
+        list_index='CONTRACT_NBS', null=True, blank=True)
+    contract_number = models.CharField(
+         verbose_name='Contract Number',
+         max_length=50
+    )
     originator = ConfigurableChoiceField(
         verbose_name=u"Originator",
         default=u"FWF",
