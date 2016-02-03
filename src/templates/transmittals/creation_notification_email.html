@@ -2,12 +2,35 @@
 Dear {{ user.username }}, <br /><br />
 
 {% blocktrans with trs_number=document.document_key %}
-Please not that the transmittal <b>{{ trs_number }}</b> as been issued with the
+Please not that the transmittal <b>{{ trs_number }}</b> has been issued with the
 following documents:
 {% endblocktrans %}
 <br /><br />
 
-{% include 'transmittals/layout/related_revisions.html' with revisions=related_revisions %}
+<table style="border:1px solid black; border-collapse: collapse;">
+    <thead>
+        <tr>
+            <th style="border: solid 1px black;">{{ _('Document number') }}</th>
+            <th style="border: solid 1px black;">{{ _('Title') }}</th>
+            <th style="border: solid 1px black;">{{ _('Rev.') }}</th>
+            <th style="border: solid 1px black;">{{ _('Status') }}</th>
+            <th style="border: solid 1px black;">{{ _('RC.') }}</th>
+            <th style="border: solid 1px black;">{{ _('Comments') }}</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for rev in related_revisions %}
+    <tr>
+        <td style="border: solid 1px black;">{{ rev.document.document_number }}</td>
+        <td style="border: solid 1px black;">{{ rev.document.title }}</td>
+        <td style="border: solid 1px black;">{{ rev.name }}</td>
+        <td style="border: solid 1px black;">{{ rev.status }}</td>
+        <td style="border: solid 1px black;">{{ rev.get_final_return_code }}</td>
+        <td style="border: solid 1px black;">{% file_link rev.trs_comments %}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
 
 <br /> <br />
 
