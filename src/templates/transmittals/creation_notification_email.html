@@ -1,0 +1,21 @@
+{% load i18n %}
+Dear {{ user.username }}, <br /><br />
+
+{% blocktrans with trs_number=document.document_key %}
+Please not that the transmittal <b>{{ trs_number }}</b> as been issued with the
+following documents:
+{% endblocktrans %}
+<br /><br />
+
+{% include 'transmittals/layout/related_revisions.html' with revisions=related_revisions %}
+
+<br /> <br />
+
+You can <a href="http://{{ site.domain }}{{ document.get_absolute_url }}">
+    download the documents on Phase
+</a>.
+
+<br /><br />
+
+The Phase team.
+
