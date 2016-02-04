@@ -223,9 +223,8 @@ class DocumentFormMixin(object):
         """Get the edited revision."""
         revision_number = self.kwargs.get('revision', None)
         if revision_number:
-            try:
-                revision = self.object.get_revision(revision_number)
-            except ObjectDoesNotExist:
+            revision = self.object.get_revision(revision_number)
+            if revision is None:
                 raise Http404(_('This revision does not exist'))
         else:
             revision = self.object.latest_revision
