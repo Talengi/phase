@@ -2,12 +2,14 @@
 from __future__ import unicode_literals
 
 from django import forms
+from django.forms import fields
 from django.db.utils import ProgrammingError
 
 from documents.fileutils import revision_file_path
 from documents.utils import get_all_document_qs
 
 from privatemedia.fields import PrivateFileField
+from documents.widgets import RevisionClearableFileInput
 
 
 class RevisionFileField(PrivateFileField):
@@ -23,6 +25,17 @@ class RevisionFileField(PrivateFileField):
         name, path, args, kwargs = super(RevisionFileField, self).deconstruct()
         kwargs['upload_to'] = revision_file_path
         return name, path, args, kwargs
+
+    def formfield(self, **kwargs):
+        defaults = {
+            'form_class': RevisionClearableFileField,
+        }
+        defaults.update(kwargs)
+        return super(RevisionFileField, self).formfield(**defaults)
+
+
+class RevisionClearableFileField(fields.FileField):
+    widget = RevisionClearableFileInput
 
 
 class MetadataTypeChoiceField(forms.ModelChoiceField):
