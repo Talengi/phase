@@ -619,3 +619,7 @@ class ProtectedDownload(LoginRequiredMixin, View):
             return response
         else:
             return serve(request, clean_path, settings.PRIVATE_ROOT)
+
+
+class DocumentFileDownload(LoginRequiredMixin, View):
+    pass

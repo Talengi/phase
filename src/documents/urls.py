@@ -3,7 +3,7 @@ from django.conf.urls import patterns, url
 from documents.views import (
     DocumentList, DocumentCreate, DocumentDetail, DocumentEdit,
     DocumentDownload, DocumentRedirect, DocumentRevise, DocumentDelete,
-    DocumentRevisionDelete
+    DocumentRevisionDelete, DocumentFileDownload
 )
 
 urlpatterns = patterns(
@@ -44,4 +44,12 @@ urlpatterns = patterns(
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/(?P<document_key>[\w-]+)/revision_delete/$',
         DocumentRevisionDelete.as_view(),
         name="document_revision_delete"),
+    url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/(?P<document_key>[\w-]+)/(?P<revision>\d+)/pdf_file/$',
+        DocumentFileDownload.as_view(),
+        {'field': 'pdf_file'},
+        name="document_download_pdf_file"),
+    url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/(?P<document_key>[\w-]+)/(?P<revision>\d+)/native_file/$',
+        DocumentFileDownload.as_view(),
+        {'field': 'native_file'},
+        name="document_download_native_file"),
 )
