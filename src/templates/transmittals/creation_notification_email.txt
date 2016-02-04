@@ -2,7 +2,7 @@
 Dear {{ user.username }},
 
 {% blocktrans with trs_number=document.document_key %}
-Please not that the transmittal **{{ trs_number }}** has been issued with the
+Please note that the transmittal **{{ trs_number }}** has been issued with the
 following documents:
 {% endblocktrans %}
 {% for rev in related_revisions %}{% spaceless %}
