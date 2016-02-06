@@ -586,10 +586,20 @@ class OutgoingTransmittal(Metadata):
                     for rev in revs:
                         pdf_file = rev.pdf_file
                         pdf_basename = os.path.basename(pdf_file.name)
-                        zip_file.write(
-                            pdf_file.path,
-                            '{}/{}'.format(dirname, pdf_basename),
-                            compress_type=zipfile.ZIP_DEFLATED)
+
+                        # Avoiding to break export process
+                        if not pdf_file:
+                            continue
+
+                        # If file is gone, don't break export process
+                        try:
+                            zip_file.write(
+                                pdf_file.path,
+                                '{}/{}'.format(dirname, pdf_basename),
+                                compress_type=zipfile.ZIP_DEFLATED)
+                        except OSError as e:
+                            logger.warning(
+                                'File: {} missing in export process'.format(pdf_file))
 
                 # Should we embed review comments?
                 if content in ('revisions', 'both'):
