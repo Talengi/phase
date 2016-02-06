@@ -66,6 +66,22 @@ class TransmittalRevisionForm(GenericBaseDocumentForm):
 
 
 class OutgoingTransmittalForm(GenericBaseDocumentForm):
+    def setup_contract_number_field(self):
+        # The behavior is different in Outgoing transmittals.
+        # Here, contract numbers must belong to the instance
+        # revisions_category field.
+
+        # OutgoingTransmittal are not supposed to be created from this form
+        if not self.instance:
+            return
+
+        # If it is read only, we simply display the charfield value
+        if 'contract_number' in self.fields and not self.read_only:
+            self.allowed_contracts = self.instance.revisions_category.\
+                contracts.all().values_list('number', 'number')
+            self.fields['contract_number'].widget = forms.Select(
+                choices=self.allowed_contracts)
+
     def get_related_documents_layout(self):
         related_documents = DocumentFieldset(
             _('Related documents'),

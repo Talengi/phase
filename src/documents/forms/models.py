@@ -67,9 +67,12 @@ class GenericBaseDocumentForm(forms.ModelForm):
         # be required
         if 'document_number' in self.fields:
             self.fields['document_number'].required = False
+        self.setup_contract_number_field()
 
-        # Contract numbers must belong to the category
-        # If it is read only, we simply the charfield value
+    def setup_contract_number_field(self):
+        # Contract numbers must belong to the document category
+        # If it is read only, we simply display the charfield value
+        # This method is overriden for outgoing transmittals
         if 'contract_number' in self.fields and not self.read_only:
             # Todo find a cleaner way
             self.allowed_contracts = self.category.contracts.all().\
