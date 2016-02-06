@@ -597,7 +597,7 @@ class OutgoingTransmittal(Metadata):
                                 pdf_file.path,
                                 '{}/{}'.format(dirname, pdf_basename),
                                 compress_type=zipfile.ZIP_DEFLATED)
-                        except OSError as e:
+                        except OSError:
                             logger.warning(
                                 'File: {} missing in export process'.format(pdf_file))
 
