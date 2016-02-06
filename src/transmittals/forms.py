@@ -66,6 +66,31 @@ class TransmittalRevisionForm(GenericBaseDocumentForm):
 
 
 class OutgoingTransmittalForm(GenericBaseDocumentForm):
+    def __init__(self, *args, **kwargs):
+        super(OutgoingTransmittalForm, self).__init__(*args, **kwargs)
+        self.setup_originator_field()
+
+    def setup_originator_field(self):
+        if not self.instance:
+            return
+        # This field is not supposed to be edited so me make it readonly
+        if 'originator' in self.fields:
+            self.fields['originator'].widget.attrs.update({'readonly': True})
+
+    def setup_contract_number_field(self):
+        # The behavior is different in Outgoing transmittals.
+        # Here, contract numbers must belong to the instance
+        # revisions_category field.
+
+        # OutgoingTransmittal are not supposed to be created from this form
+        if not self.instance:
+            return
+
+        # This field is not supposed to be edited so me make it readonly
+        if 'contract_number' in self.fields:
+            self.fields['contract_number'].widget.attrs.update(
+                {'readonly': True})
+
     def get_related_documents_layout(self):
         related_documents = DocumentFieldset(
             _('Related documents'),

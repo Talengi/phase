@@ -67,9 +67,12 @@ class GenericBaseDocumentForm(forms.ModelForm):
         # be required
         if 'document_number' in self.fields:
             self.fields['document_number'].required = False
+        self.setup_contract_number_field()
 
-        # Contract numbers must belong to the category
-        # If it is read only, we simply the charfield value
+    def setup_contract_number_field(self):
+        # Contract numbers must belong to the document category
+        # If it is read only, we simply display the charfield value
+        # This method is overriden for outgoing transmittals
         if 'contract_number' in self.fields and not self.read_only:
             # Todo find a cleaner way
             self.allowed_contracts = self.category.contracts.all().\
@@ -119,15 +122,6 @@ class GenericBaseDocumentForm(forms.ModelForm):
                     'A PDF file is not allowed in this field.'
                 )
         return native_file
-
-    def _clean_contract_number(self):
-        contract_number = self.cleaned_data['contract_number']
-        # using zip() to get the first elt of each tuple
-        if contract_number not in zip(*self.allowed_contracts)[0]:
-            raise forms.ValidationError(
-                'Bad contract number. Contract must belong to the '
-                'document category.')
-        return contract_number
 
     def clean(self):
         """Validate the document number and key."""
