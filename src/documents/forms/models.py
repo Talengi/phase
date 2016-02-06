@@ -123,15 +123,6 @@ class GenericBaseDocumentForm(forms.ModelForm):
                 )
         return native_file
 
-    def _clean_contract_number(self):
-        contract_number = self.cleaned_data['contract_number']
-        # using zip() to get the first elt of each tuple
-        if contract_number not in zip(*self.allowed_contracts)[0]:
-            raise forms.ValidationError(
-                'Bad contract number. Contract must belong to the '
-                'document category.')
-        return contract_number
-
     def clean(self):
         """Validate the document number and key."""
         data = super(GenericBaseDocumentForm, self).clean()
