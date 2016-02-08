@@ -4,8 +4,32 @@ from __future__ import unicode_literals
 from django.db import models
 from django.forms import fields
 
-from privatemedia.fileutils import private_storage
+from privatemedia.fileutils import protected_storage, private_storage
 from privatemedia.widgets import PhaseClearableFileInput
+
+
+class ProtectedFileField(models.FileField):
+    """Store files in a private dir."""
+    def __init__(self, *args, **kwargs):
+        kwargs.update({
+            'storage': protected_storage,
+        })
+        return super(ProtectedFileField, self).__init__(*args, **kwargs)
+
+    def deconstruct(self):
+        name, path, args, kwargs = super(ProtectedFileField, self).deconstruct()
+        kwargs['storage'] = protected_storage
+        return name, path, args, kwargs
+
+    def formfield(self, **kwargs):
+        defaults = {
+            'form_class': PhaseClearableFileField,
+            'max_length': self.max_length,
+        }
+        if 'initial' in kwargs:
+            defaults['required'] = False
+        defaults.update(kwargs)
+        return super(ProtectedFileField, self).formfield(**defaults)
 
 
 class PrivateFileField(models.FileField):
@@ -18,7 +42,7 @@ class PrivateFileField(models.FileField):
 
     def deconstruct(self):
         name, path, args, kwargs = super(PrivateFileField, self).deconstruct()
-        kwargs['storage'] = private_storage
+        kwargs['storage'] = protected_storage
         return name, path, args, kwargs
 
     def formfield(self, **kwargs):

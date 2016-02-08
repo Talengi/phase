@@ -6,6 +6,10 @@ from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 
 
-# Revision documents
-private_storage = FileSystemStorage(location='{}'.format(settings.PRIVATE_ROOT),
-                                    base_url='{}'.format(settings.PRIVATE_URL))
+protected_storage = FileSystemStorage(
+    location='{}'.format(settings.PROTECTED_ROOT),
+    base_url='{}'.format(settings.PROTECTED_URL))
+
+private_storage = FileSystemStorage(
+    location='{}'.format(settings.PRIVATE_ROOT),
+    base_url='{}'.format(settings.PRIVATE_URL))
