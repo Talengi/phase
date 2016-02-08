@@ -491,9 +491,16 @@ REVIEW_DURATION = 13
 DISPLAY_NOTIFICATION_COUNT = 5
 SEND_EMAIL_REMINDERS = True
 
-# Path to private files (must be served with X-SENDFILE)
+# Files that only logged user can download
+PROTECTED_ROOT = SITE_ROOT.child('protected')
+PROTECTED_URL = '/protected/'
+PROTECTED_X_ACCEL_PREFIX = '/xprotected/'
+
+# Files with extra acl tests (must be served with x-accel)
 PRIVATE_ROOT = SITE_ROOT.child('private')
 PRIVATE_URL = '/private/'
+PRIVATE_X_ACCEL_PREFIX = '/xprivate/'
+
 NGING_X_ACCEL_PREFIX = '/xaccel/'
 USE_X_SENDFILE = False
 
