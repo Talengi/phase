@@ -31,7 +31,13 @@ class RevisionClearableFileInput(ClearableFileInput):
             filesize = 'NA'
         text = '{} ({})'.format(filename, filesize)
 
+        # This value could be set in the top form
+        if hasattr(self, 'value_url'):
+            url = self.value_url
+        else:
+            url = value.url
+
         return {
             'initial': text,
-            'initial_url': conditional_escape(value.url),
+            'initial_url': conditional_escape(url),
         }

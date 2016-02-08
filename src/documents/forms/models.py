@@ -107,7 +107,7 @@ class GenericBaseDocumentForm(forms.ModelForm):
                 self.instance.document.document_key,
                 self.instance.revision
             ])
-            self.fields['native_file'].widget.file_url = url
+            self.fields['native_file'].widget.value_url = url
 
     def prepare_field_pdf_file(self):
         if self.instance.pdf_file:
@@ -117,7 +117,7 @@ class GenericBaseDocumentForm(forms.ModelForm):
                 self.instance.document.document_key,
                 self.instance.revision
             ])
-            self.fields['pdf_file'].widget.file_url = url
+            self.fields['pdf_file'].widget.value_url = url
 
     def get_related_documents_layout(self):
         # Init related documents field
