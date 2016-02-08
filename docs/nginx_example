@@ -3,24 +3,28 @@ upstream phase {
 }
 
 server {
-    server_name app.url.com;
+    server_name phase;
     access_log /var/log/nginx/phase.access.log;
     error_log /var/log/nginx/phase.error.log;
+
     client_max_body_size 1g;
 
     location /static/ {
-        alias   /home/phase/phase/public/static/;
+        root   /home/thibault/code/phase/public/;
     }
 
     location /media/ {
-        alias   /home/phase/phase/public/media/;
+        root   /home/thibault/code/phase/public/;
     }
 
-    # Phase use x-sendfile / x-accel to serve protected file
-    # directly using the server.
-    location /xaccel/ {
+    location /xprotected/ {
         internal;
-        alias /home/phase/phase/private/;
+        alias /home/thibault/code/phase/protected/;
+    }
+
+    location /xprivate/ {
+        internal;
+        alias /home/thibault/code/phase/private/;
     }
 
     location / {
