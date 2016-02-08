@@ -16,7 +16,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.core.files.base import ContentFile
-from django.utils.functional import cached_property
 from django.utils import timezone
 
 from model_utils import Choices
@@ -759,7 +758,7 @@ class TransmittableMixin(ReviewMixin):
             rc = ''
         return rc
 
-    @cached_property
+    @property
     def can_be_reviewed(self):
         """Can this revision be reviewed.
 
@@ -767,7 +766,11 @@ class TransmittableMixin(ReviewMixin):
         be reviewed anymore.
 
         """
-        return self.can_be_reviewed and not self.transmittal
+        # Turns out, simply calling "self.can_be_transmitted" leads to
+        # an infinite recursion error.
+        return all((
+            super(TransmittableMixin, self).can_be_reviewed,
+            not self.transmittal))
 
     @property
     def can_be_transmitted(self):
