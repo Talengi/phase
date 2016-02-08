@@ -108,17 +108,24 @@ def create_transmittal(from_category, to_category, revisions, contract_nb,
     sequential_number = find_next_trs_number(originator, recipient, contract_nb)
     form_data.update({
         'revisions_category': from_category.id,
-        'contract_number': contract_nb,
-        'originator': originator,
-        'recipient': recipient.id,
         'sequential_number': sequential_number,
         'created_on': timezone.now(),
         'received_date': timezone.now(),
     })
 
+    # Some fields are excluded from the form, so we have to
+    # provide a base instance instead
+    base_instance = OutgoingTransmittal(
+        contract_number=contract_nb,
+        originator=originator,
+        recipient=recipient,
+    )
+
     # Let's create the transmittal, then
-    trs_form = OutgoingTransmittalForm(form_data, category=to_category)
-    revision_form = OutgoingTransmittalRevisionForm(form_data, category=to_category)
+    trs_form = OutgoingTransmittalForm(
+        form_data, instance=base_instance, category=to_category)
+    revision_form = OutgoingTransmittalRevisionForm(
+        form_data, category=to_category)
 
     with transaction.atomic():
         doc, trs, revision = save_document_forms(trs_form, revision_form, to_category)
