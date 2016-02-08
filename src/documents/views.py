@@ -20,7 +20,6 @@ from django.views.generic import (
 from django.views.generic.edit import (
     ModelFormMixin, ProcessFormView, SingleObjectTemplateResponseMixin)
 from django.core.urlresolvers import reverse
-from django.core.exceptions import ObjectDoesNotExist
 from django.views.static import serve
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
