@@ -594,11 +594,11 @@ class ProtectedDownload(LoginRequiredMixin, View):
             raise Http404('Nice try!')
 
         full_path = os.path.join(
-            settings.PRIVATE_ROOT,
+            settings.PROTECTED_ROOT,
             clean_path)
 
         file_url = os.path.join(
-            settings.NGING_X_ACCEL_PREFIX,
+            settings.PROTECTED_X_ACCEL_PREFIX,
             clean_path)
 
         if not os.path.exists(full_path):
