@@ -63,35 +63,40 @@ class GenericBaseDocumentForm(forms.ModelForm):
         self.helper.include_media = False
         self.helper.layout = self.build_layout()
 
-        # Document key is automatically generated, this field should not
-        # be required
-        if 'document_number' in self.fields:
-            self.fields['document_number'].required = False
-        self.setup_contract_number_field()
-
-    def setup_contract_number_field(self):
-        # Contract numbers must belong to the document category
-        # If it is read only, we simply display the charfield value
-        # This method is overriden for outgoing transmittals
-        if 'contract_number' in self.fields and not self.read_only:
-            # Todo find a cleaner way
-            self.allowed_contracts = self.category.contracts.all().\
-                values_list('number', 'number')
-            self.fields['contract_number'].widget = forms.Select(
-                choices=self.allowed_contracts)
-
     def build_layout(self):
         raise NotImplementedError('Missing "build_layout" method')
 
     def prepare_form(self, *args, **kwargs):
         """Perform some common operations."""
 
-        # Initialize values lists choices
-        # See metadata.fields.ConfigurableChoiceField
         for field_name, field in self.fields.items():
+
+            # Initialize values lists choices
+            # See metadata.fields.ConfigurableChoiceField
             model_field = self._meta.model._meta.get_field(field_name)
             if isinstance(model_field, ConfigurableChoiceField):
                 self.fields[field_name].choices = model_field.get_choices()
+
+            # Call custom prepare method
+            method_name = 'prepare_field_%s' % field_name
+            if hasattr(self, method_name):
+                getattr(self, method_name)()
+
+    def prepare_field_document_number(self):
+        # Document key is automatically generated, this field should not
+        # be required
+        self.fields['document_number'].required = False
+
+    def prepare_field_contract_number(self):
+        # Contract numbers must belong to the category
+        # If it is read only, we simply the charfield value
+        # This method is overriden for outgoing transmittals
+        if not self.read_only:
+            # Todo find a cleaner way
+            self.allowed_contracts = self.category.contracts.all().\
+                values_list('number', 'number')
+            self.fields['contract_number'].widget = forms.Select(
+                choices=self.allowed_contracts)
 
     def get_related_documents_layout(self):
         # Init related documents field

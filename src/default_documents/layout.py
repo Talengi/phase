@@ -104,6 +104,7 @@ class FlatRelatedDocumentsLayout(LayoutObject):
 
 
 class PropertyLayout(LayoutObject):
+    """Display a text value as a fake readonly input."""
 
     html = '''
     <div id="" class="form-group{% if field.css_classes %} {{ field.css_classes }}{% endif %}">
@@ -130,12 +131,25 @@ class PropertyLayout(LayoutObject):
 
     def render(self, form, form_style, context, template_pack=None):
         prop = getattr(form.instance, self.property_name) or ''
+        prop_name = self.property_name
+
+        try:
+            form_field = form.fields[prop_name]
+        except:
+            form_field = None
+
+        try:
+            model_field = form.instance._meta.get_field(prop_name)
+        except:
+            model_field = None
 
         # Get the property label
         if hasattr(prop, 'short_description'):
             name = prop.short_description
-        elif self.property_name in form.fields:
-            name = form.fields[self.property_name].label
+        elif form_field:
+            name = form_field.label
+        elif model_field:
+            name = model_field.verbose_name
         else:
             name = self.property_name
 
