@@ -618,7 +618,7 @@ class ProtectedDownload(LoginRequiredMixin, View):
             response['X-Accel-Redirect '] = file_url
             return response
         else:
-            return serve(request, clean_path, settings.PRIVATE_ROOT)
+            return serve(request, clean_path, settings.PROTECTED_ROOT)
 
 
 class DocumentFileDownload(LoginRequiredMixin, View):
