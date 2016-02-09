@@ -4,9 +4,9 @@ from __future__ import unicode_literals
 from os.path import basename, join
 
 from django.http import Http404, HttpResponse
+from django.http.request import HttpRequest
 from django.core.exceptions import ImproperlyConfigured
-from django.contrib.staticfiles.views import serve
-from django.test import RequestFactory
+from django.views.static import serve
 from django.conf import settings
 
 
@@ -26,15 +26,15 @@ def serve_model_file_field(model, field_name):
     if xaccel_prefix is None:
         raise ImproperlyConfigured("Use Phase's custom storage classes")
 
-    file_name = basename(field.name)
-    xaccel_url = join(xaccel_prefix, field.name)
-
     if settings.USE_X_SENDFILE:
+        file_name = basename(field.name)
+        xaccel_url = join(xaccel_prefix, field.name)
         response = HttpResponse(content_type='application/force-download')
         response['Content-Disposition'] = 'attachment; filename=%s' % file_name
         response['Content-Type'] = ''
         response['X-Accel-Redirect'] = xaccel_url
         return response
     else:
-        request = RequestFactory()
-        return serve(request, field.path)
+        request = HttpRequest()
+        root = storage.location
+        return serve(request, field.name, document_root=root)

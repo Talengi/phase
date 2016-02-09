@@ -20,7 +20,7 @@ from django.views.generic import (
 from django.views.generic.edit import (
     ModelFormMixin, ProcessFormView, SingleObjectTemplateResponseMixin)
 from django.core.urlresolvers import reverse
-from django.contrib.staticfiles.views import serve
+from django.views.static import serve
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 from django.db import transaction
@@ -618,7 +618,7 @@ class ProtectedDownload(LoginRequiredMixin, View):
             response['X-Accel-Redirect '] = file_url
             return response
         else:
-            return serve(request, full_path)
+            return serve(request, full_path, document_root=settings.PROTECTED_ROOT)
 
 
 class DocumentFileDownload(LoginRequiredMixin,
