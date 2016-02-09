@@ -14,7 +14,7 @@ from django.http import (
     HttpResponse, Http404, HttpResponseForbidden, HttpResponseRedirect
 )
 from django.core.servers.basehttp import FileWrapper
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ImproperlyConfigured
 from django.views.generic import (
     View, ListView, DetailView, RedirectView, DeleteView)
 from django.views.generic.edit import (
@@ -40,6 +40,7 @@ from documents.utils import save_document_forms
 from documents.forms.models import documentform_factory
 from documents.forms.filters import filterform_factory
 from notifications.models import notify
+from privatemedia.views import serve_model_file_field
 
 
 class DocumentListMixin(CategoryMixin):
@@ -597,20 +598,19 @@ class ProtectedDownload(LoginRequiredMixin, View):
             settings.PROTECTED_ROOT,
             clean_path)
 
-        file_url = os.path.join(
-            settings.PROTECTED_X_ACCEL_PREFIX,
-            clean_path)
-
         if not os.path.exists(full_path):
             raise Http404('File not found. Check the name.')
-
-        file_name = os.path.basename(clean_path)
 
         # The X-sendfile Apache module makes it possible to serve file
         # directly from apache, but keeping a control from Django.
         # If we are in debug mode, and the module is unavailable, we fallback
         # to the django internal method to serve static files
         if settings.USE_X_SENDFILE:
+            file_url = os.path.join(
+                settings.PROTECTED_X_ACCEL_PREFIX,
+                clean_path)
+            file_name = os.path.basename(clean_path)
+
             response = HttpResponse(content_type='application/force-download')
             response['Content-Disposition'] = 'attachment; filename=%s' % file_name
             response['Content-Type'] = ''  # Apache will guess this
@@ -621,5 +621,30 @@ class ProtectedDownload(LoginRequiredMixin, View):
             return serve(request, clean_path, settings.PROTECTED_ROOT)
 
 
-class DocumentFileDownload(LoginRequiredMixin, View):
-    pass
+class DocumentFileDownload(LoginRequiredMixin,
+                           CategoryMixin,
+                           DetailView):
+    """Download files from a MetadataRevision FileField."""
+    http_method_names = ['get']
+
+    def get_object(self, queryset=None):
+        """Get a single MetadataRevision FileField instance."""
+        key = self.kwargs.get('document_key')
+        revision = self.kwargs.get('revision')
+
+        qs = self.category.revision_class().objects \
+            .filter(document__document_key=key) \
+            .filter(document__category=self.category) \
+            .filter(revision=revision)
+        revision = get_object_or_404(qs)
+        return revision
+
+    def get(self, request, *args, **kwargs):
+        revision = self.get_object()
+
+        field = self.kwargs.get('field', None)
+        if field is None:
+            msg = 'Add a "field" keyword in the url definition.'
+            raise ImproperlyConfigured(msg)
+
+        return serve_model_file_field(revision, field)
