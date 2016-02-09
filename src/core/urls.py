@@ -2,7 +2,7 @@ from django.conf.urls import patterns, include, url
 from django.http import HttpResponse
 from django.contrib import admin
 
-from documents.views import ProtectedDownload
+from privatemedia.views import ProtectedDownload
 
 
 admin.autodiscover()
