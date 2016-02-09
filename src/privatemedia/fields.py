@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.forms import fields
 
-from privatemedia.fileutils import protected_storage, private_storage
+from privatemedia.storage import protected_storage, private_storage
 from privatemedia.widgets import PhaseClearableFileInput
 
 
