@@ -16,14 +16,15 @@ def create_protected_dir(*args):
 
     # Move private dirs to new protected dir
     private_root = settings.PRIVATE_ROOT
-    private_dirs = os.listdir(private_root)
-    for dirname in private_dirs:
-        if dirname == 'revisions':
-            continue
+    if path.exists(private_root):
+        private_dirs = os.listdir(private_root)
+        for dirname in private_dirs:
+            if dirname == 'revisions':
+                continue
 
-        full_name = private_root.child(dirname)
-        new_name = protected_root.child(dirname)
-        os.rename(full_name, new_name)
+            full_name = private_root.child(dirname)
+            new_name = protected_root.child(dirname)
+            os.rename(full_name, new_name)
 
 
 class Migration(migrations.Migration):
