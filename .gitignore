@@ -20,9 +20,10 @@ build
 # (generated with collectstatic)
 public/
 
-# Private uploaded files
-# Those files are user generated, but must no be served with the
+# Protected and private uploaded files
+# Those files are user generated, but must no be served directly with the
 # web server
+protected/
 private/
 
 # Default file upload directory
