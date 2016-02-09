@@ -21,3 +21,21 @@ def private_link(file_field):
     url = reverse('protected_download', args=[relative_name])
     return '<a href="{}">{}</a>'.format(
         url, basename)
+
+
+@register.simple_tag
+def download_link(revision, fieldname):
+    field = getattr(revision, fieldname)
+    if not field:
+        return ''
+
+    url = reverse('document_file_download', args=[
+        revision.document.category.organisation.slug,
+        revision.document.category.slug,
+        revision.document.document_key,
+        revision.revision,
+        fieldname
+    ])
+    return '<a href="{}">{}</a>'.format(
+        url,
+        field)
