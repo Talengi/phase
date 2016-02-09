@@ -91,13 +91,13 @@
             </tr>
             <tr>
                 <th>Pdf file</th>
-                <td>{% private_link revision.pdf_file %}</td>
-                <td>{% private_link trs_revision.pdf_file %}</td>
+                <td>{% download_link revision 'pdf_file' %}</td>
+                <td>{% download_link trs_revision 'pdf_file' %}</td>
             </tr>
             <tr>
                 <th>Native file</th>
-                <td>{% private_link revision.native_file %}</td>
-                <td>{% private_link trs_revision.native_file %}</td>
+                <td>{% download_link revision 'native_file' %}</td>
+                <td>{% download_link trs_revision 'native_file' %}</td>
             </tr>
             </tbody>
         </table>
