@@ -5,9 +5,10 @@ from __future__ import unicode_literals
 import datetime
 import json
 
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.core.urlresolvers import reverse
 from django.utils import timezone
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 from metadata.factories import ValuesListFactory
 from categories.factories import CategoryFactory
@@ -786,3 +787,54 @@ class StartReviewTests(TestCase):
         res = self.client.post(self.start_review_url, follow=True)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(self.doc.note_set.all().count(), 0)
+
+
+@override_settings(USE_X_SENDFILE=True)
+class ReviewCommentsDownloadTests(TestCase):
+    def setUp(self):
+        self.category = CategoryFactory()
+        self.user = UserFactory(
+            email='testadmin@phase.fr',
+            password='pass',
+            is_superuser=True,
+            category=self.category
+        )
+        self.other_user = UserFactory(
+            email='test@phase.fr',
+            password='pass',
+        )
+        self.client.login(email=self.user.email, password='pass')
+
+        doc = DocumentFactory(
+            document_key='test_key',
+            category=self.category,
+            revision={
+                'reviewers': [],
+                'leader': self.user,
+                'received_date': datetime.date.today(),
+            }
+        )
+        revision = doc.latest_revision
+        revision.start_review()
+
+        self.review = revision.get_review(self.user)
+        self.url = self.review.get_comments_url()
+
+        sample_path = b'documents/tests/'
+        pdf_doc = b'sample_doc_pdf.pdf'
+        self.sample_pdf = SimpleUploadedFile(pdf_doc, sample_path + pdf_doc)
+
+    def test_download_empty_file(self):
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 404)
+
+    def test_download_file(self):
+        self.review.comments = self.sample_pdf
+        self.review.save()
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 200)
+
+    def test_download_permission(self):
+        self.client.login(email=self.other_user.email, password='pass')
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 404)

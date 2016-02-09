@@ -10,6 +10,7 @@ from django.db import models, transaction
 from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
+from django.core.urlresolvers import reverse
 from model_utils import Choices
 
 from accounts.models import User
@@ -141,6 +142,13 @@ class Review(models.Model):
 
         if save:
             self.save()
+
+    def get_comments_url(self):
+        return reverse('download_review_comments', args=[
+            self.document.document_key,
+            self.revision,
+            self.id
+        ])
 
 
 class ReviewMixin(models.Model):

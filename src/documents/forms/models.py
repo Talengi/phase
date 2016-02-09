@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django import forms
+from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.module_loading import import_string
@@ -97,6 +98,28 @@ class GenericBaseDocumentForm(forms.ModelForm):
                 values_list('number', 'number')
             self.fields['contract_number'].widget = forms.Select(
                 choices=self.allowed_contracts)
+
+    def prepare_field_native_file(self):
+        if self.instance.native_file:
+            url = reverse('document_file_download', args=[
+                self.category.organisation.slug,
+                self.category.slug,
+                self.instance.document.document_key,
+                self.instance.revision,
+                'native_file',
+            ])
+            self.fields['native_file'].widget.value_url = url
+
+    def prepare_field_pdf_file(self):
+        if self.instance.pdf_file:
+            url = reverse('document_file_download', args=[
+                self.category.organisation.slug,
+                self.category.slug,
+                self.instance.document.document_key,
+                self.instance.revision,
+                'pdf_file',
+            ])
+            self.fields['pdf_file'].widget.value_url = url
 
     def get_related_documents_layout(self):
         # Init related documents field

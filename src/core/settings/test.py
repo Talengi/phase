@@ -42,7 +42,8 @@ CACHES = {
 
 # We need a different media root so we can wipe it securely in tests
 MEDIA_ROOT = '/tmp/phase_media/'
-PRIVATE_ROOT = '/tmp/phase_media/'
+PROTECTED_ROOT = '/tmp/phase_test_protected/'
+PRIVATE_ROOT = '/tmp/phase_test_private/'
 
 PIPELINE_ENABLED = False
 STATICFILES_STORAGE = 'pipeline.storage.NonPackagingPipelineStorage'

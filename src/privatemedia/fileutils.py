@@ -2,10 +2,5 @@
 from __future__ import unicode_literals
 
 
-from django.core.files.storage import FileSystemStorage
-from django.conf import settings
-
-
-# Revision documents
-private_storage = FileSystemStorage(location='{}'.format(settings.PRIVATE_ROOT),
-                                    base_url='{}'.format(settings.PRIVATE_URL))
+# We need those imports for migrations compatibility purpose
+from privatemedia.storage import ProtectedStorage, PrivateStorage  # noqa

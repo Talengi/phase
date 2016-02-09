@@ -4,7 +4,8 @@ import datetime
 import json
 
 from django.db import transaction
-from django.views.generic import View, ListView, UpdateView, TemplateView
+from django.views.generic import (
+    View, ListView, UpdateView, TemplateView, DetailView)
 from django.views.generic.detail import SingleObjectMixin
 from django.shortcuts import get_object_or_404
 from django.http import (HttpResponse, HttpResponseRedirect, Http404,
@@ -26,6 +27,7 @@ from reviews.models import Review
 from reviews.tasks import (do_batch_import, batch_close_reviews,
                            batch_cancel_reviews)
 from reviews.forms import BasePostReviewForm, ReviewSearchForm
+from privatemedia.views import serve_model_file_field
 
 
 class ReviewHome(LoginRequiredMixin, TemplateView):
@@ -527,7 +529,34 @@ class ReviewFormView(LoginRequiredMixin, UpdateView):
         self.revision.save(update_document=True)
 
 
-class CommentsArchiveView(LoginRequiredMixin, BaseZipView):
+class CommentsDownload(LoginRequiredMixin, DetailView):
+    """Download a single comments file."""
+
+    http_method_names = ['get']
+
+    def get_object(self, queryset=None):
+        key = self.kwargs.get('document_key')
+        revision = self.kwargs.get('revision')
+        review_id = self.kwargs.get('review_id')
+
+        qs = Review.objects \
+            .filter(document__document_key=key) \
+            .filter(revision=revision) \
+            .filter(id=review_id) \
+            .filter(document__category=self.request.user.categories.all())
+        review = get_object_or_404(qs)
+        return review
+
+    def get(self, request, *args, **kwargs):
+        review = self.get_object()
+
+        if not review.comments:
+            raise Http404('This review has no comments')
+
+        return serve_model_file_field(review, 'comments')
+
+
+class CommentsArchiveDownload(LoginRequiredMixin, BaseZipView):
     """Download at once all comments for a review."""
 
     zipfile_name = 'comments.zip'

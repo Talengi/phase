@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import os
 import json
-try:
-    from urllib.parse import unquote
-except ImportError:
-    from urllib import unquote
 
 from django.utils import timezone
 from django.conf import settings
@@ -16,11 +11,10 @@ from django.http import (
 from django.core.servers.basehttp import FileWrapper
 from django.core.exceptions import PermissionDenied
 from django.views.generic import (
-    View, ListView, DetailView, RedirectView, DeleteView)
+    ListView, DetailView, RedirectView, DeleteView)
 from django.views.generic.edit import (
     ModelFormMixin, ProcessFormView, SingleObjectTemplateResponseMixin)
 from django.core.urlresolvers import reverse
-from django.views.static import serve
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 from django.db import transaction
@@ -40,6 +34,7 @@ from documents.utils import save_document_forms
 from documents.forms.models import documentform_factory
 from documents.forms.filters import filterform_factory
 from notifications.models import notify
+from privatemedia.views import serve_model_file_field
 
 
 class DocumentListMixin(CategoryMixin):
@@ -575,47 +570,25 @@ class DocumentDownload(BaseDocumentList):
         return response
 
 
-class ProtectedDownload(LoginRequiredMixin, View):
-    """Serve files with a web server after an ACL control.
+class DocumentFileDownload(LoginRequiredMixin,
+                           CategoryMixin,
+                           DetailView):
+    """Download files from a MetadataRevision FileField."""
+    http_method_names = ['get']
 
-    One might consider some alternate way, like this one:
-    https://github.com/johnsensible/django-sendfile
+    def get_object(self, queryset=None):
+        """Get a single MetadataRevision FileField instance."""
+        key = self.kwargs.get('document_key')
+        revision = self.kwargs.get('revision')
 
-    TODO Replace with django-downloadview
-
-    """
+        qs = self.category.revision_class().objects \
+            .filter(document__document_key=key) \
+            .filter(document__category=self.category) \
+            .filter(revision=revision)
+        revision = get_object_or_404(qs)
+        return revision
 
     def get(self, request, *args, **kwargs):
-        file_path = kwargs.get('file_path')
-
-        # Prevent nasty things to happen
-        clean_path = os.path.normpath(unquote(file_path))
-        if clean_path.startswith('/') or '..' in clean_path:
-            raise Http404('Nice try!')
-
-        full_path = os.path.join(
-            settings.PRIVATE_ROOT,
-            clean_path)
-
-        file_url = os.path.join(
-            settings.NGING_X_ACCEL_PREFIX,
-            clean_path)
-
-        if not os.path.exists(full_path):
-            raise Http404('File not found. Check the name.')
-
-        file_name = os.path.basename(clean_path)
-
-        # The X-sendfile Apache module makes it possible to serve file
-        # directly from apache, but keeping a control from Django.
-        # If we are in debug mode, and the module is unavailable, we fallback
-        # to the django internal method to serve static files
-        if settings.USE_X_SENDFILE:
-            response = HttpResponse(content_type='application/force-download')
-            response['Content-Disposition'] = 'attachment; filename=%s' % file_name
-            response['Content-Type'] = ''  # Apache will guess this
-            response['X-Sendfile'] = full_path
-            response['X-Accel-Redirect '] = file_url
-            return response
-        else:
-            return serve(request, clean_path, settings.PRIVATE_ROOT)
+        revision = self.get_object()
+        field_name = self.kwargs.get('field_name')
+        return serve_model_file_field(revision, field_name)

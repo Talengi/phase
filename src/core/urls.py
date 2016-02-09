@@ -2,7 +2,7 @@ from django.conf.urls import patterns, include, url
 from django.http import HttpResponse
 from django.contrib import admin
 
-from documents.views import ProtectedDownload
+from privatemedia.views import ProtectedDownload
 
 
 admin.autodiscover()
@@ -20,7 +20,7 @@ urlpatterns = patterns(
     url(r'^transmittals/', include('transmittals.urls')),
     url(r'^search/', include('search.urls')),
     url(r'^exports/', include('exports.urls')),
-    url(r'^private/(?P<file_path>[-\w./]+)?$',
+    url(r'^protected/(?P<file_path>[-\w./]+)?$',
         ProtectedDownload.as_view(),
         name="protected_download"),
     url(r'^', include('categories.urls')),
