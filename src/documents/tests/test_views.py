@@ -5,7 +5,7 @@ import os
 from io import BytesIO
 from zipfile import ZipFile
 
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.test.client import Client
 from django.core.urlresolvers import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -411,3 +411,47 @@ class DocumentRevisionDeleteTests(TestCase):
         self.assertEqual(doc.get_all_revisions().count(), 3)
         doc.refresh_from_db()
         self.assertEqual(doc.current_revision, 3)
+
+
+@override_settings(USE_X_SENDFILE=True)
+class PrivateDownloadTests(TestCase):
+    def setUp(self):
+        self.category = CategoryFactory()
+        self.user = UserFactory(
+            email='test@phase.fr',
+            password='pass',
+            is_superuser=True,
+            category=self.category)
+        self.client.login(email=self.user.email, password='pass')
+        self.doc = DocumentFactory(category=self.category)
+        self.rev = self.doc.get_latest_revision()
+
+        sample_path = b'documents/tests/'
+        pdf_doc = b'sample_doc_pdf.pdf'
+        self.sample_pdf = SimpleUploadedFile(pdf_doc, sample_path + pdf_doc)
+        self.url = reverse('document_download_pdf_file', args=[
+            self.category.organisation.slug,
+            self.category.slug,
+            self.doc.document_key,
+            self.rev.revision
+        ])
+
+    def test_download_empty_file(self):
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 404)
+
+    def test_download_file(self):
+        self.rev.pdf_file = self.sample_pdf
+        self.rev.save()
+
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 200)
+
+    def test_download_file_without_permissions(self):
+        self.user.categories.clear()
+
+        self.rev.pdf_file = self.sample_pdf
+        self.rev.save()
+
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 404)
