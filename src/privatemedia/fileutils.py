@@ -6,10 +6,27 @@ from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 
 
-protected_storage = FileSystemStorage(
-    location='{}'.format(settings.PROTECTED_ROOT),
-    base_url='{}'.format(settings.PROTECTED_URL))
+class ProtectedStorage(FileSystemStorage):
+    def __init__(self, *args, **kwargs):
+        kwargs.update({
+            'location': '{}'.format(settings.PROTECTED_ROOT),
+            'base_url': '{}'.format(settings.PROTECTED_URL)
+        })
+        super(ProtectedStorage, self).__init__(*args, **kwargs)
 
-private_storage = FileSystemStorage(
-    location='{}'.format(settings.PRIVATE_ROOT),
-    base_url='{}'.format(settings.PRIVATE_URL))
+
+class PrivateStorage(FileSystemStorage):
+    def __init__(self, *args, **kwargs):
+        kwargs.update({
+            'location': '{}'.format(settings.PRIVATE_ROOT),
+            'base_url': '{}'.format(settings.PRIVATE_URL)
+        })
+        super(PrivateStorage, self).__init__(*args, **kwargs)
+
+
+# We had to override `FileSystemStorage` instead of just instanciating it
+# with the correct parameters because those parameters were ending up in
+# the migrations file, with paths that only existed on the machine that
+# generated the migration.
+protected_storage = ProtectedStorage()
+private_storage = PrivateStorage()
