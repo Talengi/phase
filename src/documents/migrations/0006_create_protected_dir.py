@@ -22,8 +22,8 @@ def create_protected_dir(*args):
             if dirname == 'revisions':
                 continue
 
-            full_name = private_root.child(dirname)
-            new_name = protected_root.child(dirname)
+            full_name = path.join(private_root, dirname)
+            new_name = path.join(protected_root, dirname)
             os.rename(full_name, new_name)
 
 
