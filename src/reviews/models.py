@@ -15,7 +15,7 @@ from model_utils import Choices
 from accounts.models import User
 from documents.models import Document
 from metadata.fields import ConfigurableChoiceField
-from privatemedia.fields import PrivateFileField
+from privatemedia.fields import ProtectedFileField
 from reviews.fileutils import review_comments_file_path
 
 CLASSES = (
@@ -98,7 +98,7 @@ class Review(models.Model):
     amended_on = models.DateTimeField(
         _('Amended on'),
         null=True, blank=True)
-    comments = PrivateFileField(
+    comments = ProtectedFileField(
         _('Comments'),
         null=True, blank=True,
         upload_to=review_comments_file_path
