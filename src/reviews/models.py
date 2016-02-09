@@ -142,6 +142,9 @@ class Review(models.Model):
         if save:
             self.save()
 
+    def get_comments_url(self):
+        return ''
+
 
 class ReviewMixin(models.Model):
     """A Mixin to use to define reviewable document types.

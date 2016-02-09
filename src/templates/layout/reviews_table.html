@@ -34,7 +34,12 @@
             </span>
             {% endif %}
         </td>
-        <td class="center">{% file_link review.comments 'Comments' %}</td>
+
+        <td class="center">
+            {% if review.comments %}
+                <a href="{{ review.get_comments_url }}">{{ _('Comments') }}</a>
+            {% endif %}
+        </td>
     </tr>
 
     {% empty %}
