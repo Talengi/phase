@@ -38,4 +38,4 @@ def download_link(revision, fieldname):
     ])
     return '<a href="{}">{}</a>'.format(
         url,
-        field)
+        os.path.basename(field.name))
