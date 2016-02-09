@@ -429,11 +429,12 @@ class PrivateDownloadTests(TestCase):
         sample_path = b'documents/tests/'
         pdf_doc = b'sample_doc_pdf.pdf'
         self.sample_pdf = SimpleUploadedFile(pdf_doc, sample_path + pdf_doc)
-        self.url = reverse('document_download_pdf_file', args=[
+        self.url = reverse('document_file_download', args=[
             self.category.organisation.slug,
             self.category.slug,
             self.doc.document_key,
-            self.rev.revision
+            self.rev.revision,
+            'pdf_file',
         ])
 
     def test_download_empty_file(self):

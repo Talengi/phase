@@ -101,21 +101,23 @@ class GenericBaseDocumentForm(forms.ModelForm):
 
     def prepare_field_native_file(self):
         if self.instance.native_file:
-            url = reverse('document_download_native_file', args=[
+            url = reverse('document_file_download', args=[
                 self.category.organisation.slug,
                 self.category.slug,
                 self.instance.document.document_key,
-                self.instance.revision
+                self.instance.revision,
+                'native_file',
             ])
             self.fields['native_file'].widget.value_url = url
 
     def prepare_field_pdf_file(self):
         if self.instance.pdf_file:
-            url = reverse('document_download_pdf_file', args=[
+            url = reverse('document_file_download', args=[
                 self.category.organisation.slug,
                 self.category.slug,
                 self.instance.document.document_key,
-                self.instance.revision
+                self.instance.revision,
+                'pdf_file',
             ])
             self.fields['pdf_file'].widget.value_url = url
 

@@ -9,7 +9,7 @@ from django.http import (
     HttpResponse, Http404, HttpResponseForbidden, HttpResponseRedirect
 )
 from django.core.servers.basehttp import FileWrapper
-from django.core.exceptions import PermissionDenied, ImproperlyConfigured
+from django.core.exceptions import PermissionDenied
 from django.views.generic import (
     ListView, DetailView, RedirectView, DeleteView)
 from django.views.generic.edit import (
@@ -590,10 +590,5 @@ class DocumentFileDownload(LoginRequiredMixin,
 
     def get(self, request, *args, **kwargs):
         revision = self.get_object()
-
-        field = self.kwargs.get('field', None)
-        if field is None:
-            msg = 'Add a "field" keyword in the url definition.'
-            raise ImproperlyConfigured(msg)
-
-        return serve_model_file_field(revision, field)
+        field_name = self.kwargs.get('field_name')
+        return serve_model_file_field(revision, field_name)
