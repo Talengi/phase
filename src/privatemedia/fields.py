@@ -18,7 +18,7 @@ class BaseFileField(models.FileField):
         if 'initial' in kwargs:
             defaults['required'] = False
         defaults.update(kwargs)
-        return super(ProtectedFileField, self).formfield(**defaults)
+        return super(BaseFileField, self).formfield(**defaults)
 
 
 class ProtectedFileField(BaseFileField):
