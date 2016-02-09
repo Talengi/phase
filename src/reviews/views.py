@@ -4,7 +4,8 @@ import datetime
 import json
 
 from django.db import transaction
-from django.views.generic import View, ListView, UpdateView, TemplateView
+from django.views.generic import (
+    View, ListView, UpdateView, TemplateView, DetailView)
 from django.views.generic.detail import SingleObjectMixin
 from django.shortcuts import get_object_or_404
 from django.http import (HttpResponse, HttpResponseRedirect, Http404,
@@ -527,7 +528,12 @@ class ReviewFormView(LoginRequiredMixin, UpdateView):
         self.revision.save(update_document=True)
 
 
-class CommentsArchiveView(LoginRequiredMixin, BaseZipView):
+class CommentsDownload(LoginRequiredMixin, DetailView):
+    def get_object(self, queryset=None):
+        pass
+
+
+class CommentsArchiveDownload(LoginRequiredMixin, BaseZipView):
     """Download at once all comments for a review."""
 
     zipfile_name = 'comments.zip'

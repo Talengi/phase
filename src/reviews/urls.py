@@ -3,7 +3,8 @@ from django.conf.urls import patterns, url
 from reviews.views import (
     ReviewersDocumentList, LeaderDocumentList, ApproverDocumentList,
     ReviewFormView, StartReview, CancelReview, BatchStartReviews,
-    BatchCancelReviews, PrioritiesDocumentList, ReviewHome, CommentsArchiveView,
+    BatchCancelReviews, PrioritiesDocumentList, ReviewHome, CommentsDownload,
+    CommentsArchiveDownload,
 )
 
 urlpatterns = patterns(
@@ -50,7 +51,10 @@ urlpatterns = patterns(
         name="review_document"),
 
     # Comments download
-    url(r'^(?P<document_key>[\w-]+)/(?P<revision>\d+)/comments.zip$',
-        CommentsArchiveView.as_view(),
+    url(r'^(?P<document_key>[\w-]+)/(?P<revision>\d+)/comments/(?P<review_id>\d+)/$',
+        CommentsDownload.as_view(),
         name="download_review_comments"),
+    url(r'^(?P<document_key>[\w-]+)/(?P<revision>\d+)/comments/all.zip$',
+        CommentsArchiveDownload.as_view(),
+        name="download_review_comments_archive"),
 )
