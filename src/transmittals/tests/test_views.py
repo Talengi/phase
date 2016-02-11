@@ -14,7 +14,8 @@ from default_documents.factories import (
     ContractorDeliverableFactory, ContractorDeliverableRevisionFactory)
 from categories.factories import CategoryFactory
 from accounts.factories import UserFactory
-from transmittals.factories import TransmittalFactory, TrsRevisionFactory
+from transmittals.factories import (
+    TransmittalFactory, TrsRevisionFactory, create_transmittal)
 from transmittals.models import TrsRevision
 
 
@@ -212,3 +213,38 @@ class TestPrepareTransmittalTests(ContractorDeliverableTestCase):
         }, follow=True)
 
         self.assertEqual(under_prep_qs.count(), 5)
+
+
+class AckReceiptOfTransmittalTests(TestCase):
+    def setUp(self):
+        self.trs = create_transmittal()
+        self.category = self.trs.document.category
+        self.user = UserFactory(
+            email='testadmin@phase.fr',
+            password='pass',
+            is_superuser=True,
+            category=self.category)
+        self.client.login(email=self.user.email, password='pass')
+        self.url = reverse('transmittal_ack_of_receipt', args=[
+            self.category.organisation.slug,
+            self.category.slug,
+            self.trs.document.document_key
+        ])
+
+    def test_non_contractor_acks_receipt(self):
+        """Non contractor cannot ack receipt of transmittals."""
+        res = self.client.post(self.url)
+        self.assertEqual(res.status_code, 403)
+
+    def test_acks_receipt(self):
+        self.assertIsNone(self.trs.ack_of_receipt_date)
+        self.assertIsNone(self.trs.ack_of_receipt_author)
+
+        self.user.is_external = True
+        self.user.save()
+        res = self.client.post(self.url, follow=True)
+        self.assertEqual(res.status_code, 200)
+
+        self.trs.refresh_from_db()
+        self.assertIsNotNone(self.trs.ack_of_receipt_date)
+        self.assertEqual(self.trs.ack_of_receipt_author, self.user)

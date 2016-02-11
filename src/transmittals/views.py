@@ -7,7 +7,7 @@ import logging
 from django.views.generic import ListView, DetailView
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponseForbidden
 
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 from zipview.views import BaseZipView
@@ -19,6 +19,7 @@ from transmittals.models import Transmittal, TrsRevision
 from transmittals.utils import FieldWrapper
 from transmittals.tasks import do_create_transmittal
 from search.utils import index_revisions
+from documents.views import DocumentListMixin
 from django.conf import settings
 
 
@@ -45,7 +46,7 @@ class TransmittalList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             .order_by('-id')
 
     def get_context_data(self, **kwargs):
-        context = super(TransmittalListView, self).get_context_data(**kwargs)
+        context = super(TransmittalList, self).get_context_data(**kwargs)
         context.update({
             'transmittals_active': True,
         })
@@ -75,7 +76,7 @@ class TransmittalDiff(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         return self.object.trsrevision_set.all()
 
     def get_context_data(self, **kwargs):
-        context = super(TransmittalDiffView, self).get_context_data(**kwargs)
+        context = super(TransmittalDiff, self).get_context_data(**kwargs)
         context.update({
             'transmittal': self.object,
             'transmittals_active': True,
@@ -85,7 +86,7 @@ class TransmittalDiff(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        return super(TransmittalDiffView, self).get(request, *args, **kwargs)
+        return super(TransmittalDiff, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         """Accept or reject transmittal."""
@@ -212,7 +213,7 @@ class TransmittalRevisionDiff(LoginRequiredMixin, PermissionRequiredMixin, Detai
         return revision
 
     def get_context_data(self, **kwargs):
-        context = super(TransmittalRevisionDiffView, self).get_context_data(**kwargs)
+        context = super(TransmittalRevisionDiff, self).get_context_data(**kwargs)
         context.update({
             'revision': self.get_revision(),
             'transmittals_active': True,
@@ -299,5 +300,17 @@ class CreateTransmittal(BaseDocumentBatchActionView):
         return job
 
 
-class AckOfTransmittalReceipt(View):
-    pass
+class AckOfTransmittalReceipt(LoginRequiredMixin,
+                              DocumentListMixin,
+                              DetailView):
+    """Acknowledge receipt of a single transmittal."""
+    http_method_names = ['post']
+
+    def post(self, request, *args, **kwargs):
+        if not self.request.user.is_external:
+            return HttpResponseForbidden(
+                'Only contractors can acknowledge receipt of transmittals')
+
+        transmittal = self.get_object()
+        transmittal.ack_receipt(self.request.user, save=True)
+        return HttpResponseRedirect(transmittal.document.get_edit_url())
