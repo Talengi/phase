@@ -25,7 +25,7 @@ from django.conf import settings
 logger = logging.getLogger(__name__)
 
 
-class TransmittalListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+class TransmittalList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     """List all transmittals."""
     context_object_name = 'transmittal_list'
     permission_required = 'documents.can_control_document'
@@ -52,7 +52,7 @@ class TransmittalListView(LoginRequiredMixin, PermissionRequiredMixin, ListView)
         return context
 
 
-class TransmittalDiffView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+class TransmittalDiff(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'transmittals/diff_view.html'
     permission_required = 'documents.can_control_document'
     context_object_name = 'revisions'
@@ -119,7 +119,7 @@ class TransmittalDiffView(LoginRequiredMixin, PermissionRequiredMixin, ListView)
                       self.object.document_key]))
 
 
-class TransmittalRevisionDiffView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
+class TransmittalRevisionDiff(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     template_name = 'transmittals/revision_diff_view.html'
     context_object_name = 'trs_revision'
     permission_required = 'documents.can_control_document'
@@ -231,7 +231,7 @@ class TransmittalRevisionDiffView(LoginRequiredMixin, PermissionRequiredMixin, D
                   self.object.transmittal.document_key]))
 
 
-class TransmittalDownloadView(LoginRequiredMixin, PermissionRequiredMixin, BaseZipView):
+class TransmittalDownload(LoginRequiredMixin, PermissionRequiredMixin, BaseZipView):
     zipfile_name = 'transmittal_documents.zip'
     permission_required = 'documents.can_control_document'
 
@@ -258,7 +258,7 @@ class TransmittalDownloadView(LoginRequiredMixin, PermissionRequiredMixin, BaseZ
         return files
 
 
-class PrepareTransmittalView(BaseDocumentBatchActionView):
+class PrepareTransmittal(BaseDocumentBatchActionView):
     """Mark selected revisions as "under preparation"""
 
     http_method_names = ['post']
@@ -277,7 +277,7 @@ class PrepareTransmittalView(BaseDocumentBatchActionView):
         return HttpResponseRedirect(self.get_redirect_url())
 
 
-class CreateTransmittalView(BaseDocumentBatchActionView):
+class CreateTransmittal(BaseDocumentBatchActionView):
     """Create a transmittal embedding the given documents"""
 
     http_method_names = ['post']
