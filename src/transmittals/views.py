@@ -297,3 +297,7 @@ class CreateTransmittalView(BaseDocumentBatchActionView):
             contract_number,
             recipient_id)
         return job
+
+
+class AckOfTransmittalReceipt(View):
+    pass

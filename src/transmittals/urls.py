@@ -6,7 +6,8 @@ from django.conf.urls import patterns, url
 
 from transmittals.views import (
     TransmittalListView, TransmittalDiffView, TransmittalRevisionDiffView,
-    TransmittalDownloadView, PrepareTransmittalView, CreateTransmittalView)
+    TransmittalDownloadView, PrepareTransmittalView, CreateTransmittalView,
+    AckOfTransmittalReceipt)
 
 urlpatterns = patterns(
     '',
@@ -16,6 +17,10 @@ urlpatterns = patterns(
     url(r'^create/(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/$',
         CreateTransmittalView.as_view(),
         name="transmittal_create"),
+    url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/(?P<document_key>[\w-]+)/ack/$',
+        AckOfTransmittalReceipt.as_view(),
+        name="transmittal_ack_of_receipt"),
+
     url(r'^incoming/$',
         TransmittalListView.as_view(),
         name="transmittal_list"),
