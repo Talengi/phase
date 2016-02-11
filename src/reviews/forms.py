@@ -3,9 +3,8 @@
 from __future__ import unicode_literals
 
 from django import forms
-from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ImproperlyConfigured
 from django.core.urlresolvers import reverse
 
 from crispy_forms.layout import Field
@@ -17,30 +16,75 @@ from documents.widgets import RevisionClearableFileInput
 from reviews.utils import get_cached_reviews
 from reviews.layout import ReviewsLayout, QuickDistributionListWidgetLayout
 from reviews.models import Review, DistributionList
+from categories.models import Category
 
 
 class ReviewSearchForm(forms.Form):
-    category = forms.CharField(required=False)
-    status = forms.CharField(required=False)
+    doc_number = forms.CharField(required=False)
+    title = forms.CharField(required=False)
+    category = forms.ModelChoiceField(
+        queryset=Category.objects.all(),
+        required=False)
+    status = forms.ChoiceField(choices=[], required=False)
     step = forms.CharField(required=False)
 
-    def filter_qs(self, qs):
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        if self.user is None:
+            raise ImproperlyConfigured('Missing "user" parameter')
+
+        self.reviews = kwargs.pop('reviews', None)
+        if self.reviews is None:
+            raise ImproperlyConfigured('Missing "reviews" parameter')
+
+        super(ReviewSearchForm, self).__init__(*args, **kwargs)
+
+        # Only display categories the user has access to
+        self.fields['category'].queryset = Category.objects \
+            .filter(users=self.user) \
+            .select_related() \
+            .order_by('organisation__name', 'category_template__name')
+
+        # Only display existing statuses
+        statuses = self.reviews.values_list('revision_status', flat=True)
+        statuses = filter(None, statuses)
+        choices = [
+            ('', '---------'),
+        ] + zip(statuses, statuses)
+        self.fields['status'].choices = choices
+
+    def filter_reviews(self):
         if not self.is_bound:
-            return qs
+            return self.reviews
 
         if self.is_valid():
+            qs = self.reviews
+            qs = self.filter_qs_by_doc_number(qs)
+            qs = self.filter_qs_by_title(qs)
             qs = self.filter_qs_by_category(qs)
             qs = self.filter_qs_by_status(qs)
             qs = self.filter_qs_by_step(qs)
 
         return qs
 
+    def filter_qs_by_doc_number(self, qs):
+        doc_number = self.cleaned_data['doc_number']
+        if doc_number:
+            qs = qs.filter(document__document_key__icontains=doc_number)
+
+        return qs
+
+    def filter_qs_by_title(self, qs):
+        title = self.cleaned_data['title']
+        if title:
+            qs = qs.filter(document__title__icontains=title)
+
+        return qs
+
     def filter_qs_by_category(self, qs):
         category = self.cleaned_data['category']
         if category:
-            q_orga = Q(document__category__organisation__name__icontains=category)
-            q_cate = Q(document__category__category_template__name__icontains=category)
-            qs = qs.filter(q_orga | q_cate)
+            qs = qs.filter(document__category=category)
 
         return qs
 

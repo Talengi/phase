@@ -183,8 +183,11 @@ class BaseReviewDocumentList(LoginRequiredMixin, ListView):
     def breadcrumb_section(self):
         return _('Reviews'), reverse('review_home')
 
-    def get_search_form(self):
-        form = ReviewSearchForm(self.request.GET or None)
+    def get_search_form(self, reviews):
+        form = ReviewSearchForm(
+            self.request.GET or None,
+            user=self.request.user,
+            reviews=reviews)
         return form
 
     def get_context_data(self, **kwargs):
@@ -193,14 +196,13 @@ class BaseReviewDocumentList(LoginRequiredMixin, ListView):
             'reviews_active': True,
             'review_step': self.review_step,
             'current_url': self.request.path,
-            'search_form': self.get_search_form(),
+            'search_form': self.search_form,
         })
         return context
 
     def step_filter(self, qs):
         """Filter document list to get reviews at the current step."""
-        form = self.get_search_form()
-        return form.filter_qs(qs)
+        return qs
 
     def order_reviews(self, reviews):
         """Return an ordered list of reviews.
@@ -217,7 +219,12 @@ class BaseReviewDocumentList(LoginRequiredMixin, ListView):
             .filter(closed_on=None) \
             .order_by('due_date') \
             .select_related()
+
         reviews = self.step_filter(reviews)
+
+        self.search_form = self.get_search_form(reviews)
+        reviews = self.search_form.filter_reviews()
+
         return reviews
 
 
