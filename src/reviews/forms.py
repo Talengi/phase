@@ -25,13 +25,18 @@ class ReviewSearchForm(forms.Form):
     category = forms.ModelChoiceField(
         queryset=Category.objects.all(),
         required=False)
-    status = forms.CharField(required=False)
+    status = forms.ChoiceField(choices=[], required=False)
     step = forms.CharField(required=False)
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
         if self.user is None:
             raise ImproperlyConfigured('Missing "user" parameter')
+
+        self.reviews = kwargs.pop('reviews', None)
+        if self.reviews is None:
+            raise ImproperlyConfigured('Missing "reviews" parameter')
+
         super(ReviewSearchForm, self).__init__(*args, **kwargs)
 
         # Only display categories the user has access to
@@ -40,11 +45,20 @@ class ReviewSearchForm(forms.Form):
             .select_related() \
             .order_by('organisation__name', 'category_template__name')
 
-    def filter_qs(self, qs):
+        # Only display existing statuses
+        statuses = self.reviews.values_list('revision_status', flat=True)
+        statuses = filter(None, statuses)
+        choices = [
+            ('', '---------'),
+        ] + zip(statuses, statuses)
+        self.fields['status'].choices = choices
+
+    def filter_reviews(self):
         if not self.is_bound:
-            return qs
+            return self.reviews
 
         if self.is_valid():
+            qs = self.reviews
             qs = self.filter_qs_by_doc_number(qs)
             qs = self.filter_qs_by_title(qs)
             qs = self.filter_qs_by_category(qs)
