@@ -3,9 +3,8 @@
 from __future__ import unicode_literals
 
 from django import forms
-from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ImproperlyConfigured
 from django.core.urlresolvers import reverse
 
 from crispy_forms.layout import Field
@@ -17,14 +16,29 @@ from documents.widgets import RevisionClearableFileInput
 from reviews.utils import get_cached_reviews
 from reviews.layout import ReviewsLayout, QuickDistributionListWidgetLayout
 from reviews.models import Review, DistributionList
+from categories.models import Category
 
 
 class ReviewSearchForm(forms.Form):
     doc_number = forms.CharField(required=False)
     title = forms.CharField(required=False)
-    category = forms.CharField(required=False)
+    category = forms.ModelChoiceField(
+        queryset=Category.objects.all(),
+        required=False)
     status = forms.CharField(required=False)
     step = forms.CharField(required=False)
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        if self.user is None:
+            raise ImproperlyConfigured('Missing "user" parameter')
+        super(ReviewSearchForm, self).__init__(*args, **kwargs)
+
+        # Only display categories the user has access to
+        self.fields['category'].queryset = Category.objects \
+            .filter(users=self.user) \
+            .select_related() \
+            .order_by('organisation__name', 'category_template__name')
 
     def filter_qs(self, qs):
         if not self.is_bound:
@@ -56,9 +70,7 @@ class ReviewSearchForm(forms.Form):
     def filter_qs_by_category(self, qs):
         category = self.cleaned_data['category']
         if category:
-            q_orga = Q(document__category__organisation__name__icontains=category)
-            q_cate = Q(document__category__category_template__name__icontains=category)
-            qs = qs.filter(q_orga | q_cate)
+            qs = qs.filter(document__category=category)
 
         return qs
 

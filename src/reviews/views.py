@@ -184,7 +184,9 @@ class BaseReviewDocumentList(LoginRequiredMixin, ListView):
         return _('Reviews'), reverse('review_home')
 
     def get_search_form(self):
-        form = ReviewSearchForm(self.request.GET or None)
+        form = ReviewSearchForm(
+            self.request.GET or None,
+            user=self.request.user)
         return form
 
     def get_context_data(self, **kwargs):
