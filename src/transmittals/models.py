@@ -506,6 +506,11 @@ class OutgoingTransmittal(Metadata):
     ack_of_receipt_date = models.DateField(
         _('Acknowledgment of receipt date'),
         null=True, blank=True)
+    ack_of_receipt_author = models.ForeignKey(
+        'accounts.User',
+        verbose_name=_('Acknowledgment of receipt author'),
+        null=True, blank=True,
+        on_delete=models.PROTECT)
 
     class Meta:
         app_label = 'transmittals'
@@ -659,6 +664,14 @@ class OutgoingTransmittal(Metadata):
     def get_batch_actions_modals(cls):
         """Returns a list of templates used in batch actions."""
         return ['transmittals/document_list_download_modal.html']
+
+    def ack_receipt(self, user, save=True):
+        """Acknowledge receipt of this transmittal."""
+        self.ack_of_receipt_date = timezone.now().date()
+        self.ack_of_receipt_author = user
+
+        if save:
+            self.save()
 
 
 class OutgoingTransmittalRevision(MetadataRevision):

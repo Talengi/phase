@@ -103,7 +103,7 @@ class OutgoingTransmittalModelTests(TestCase):
         self.assertIsNone(self.trs.ack_of_receipt_date)
         self.assertIsNone(self.trs.ack_of_receipt_author)
 
-        self.trs.acknowledge_receipt(self.user)
+        self.trs.ack_receipt(self.user)
 
         today = timezone.now().date()
         self.assertEqual(self.trs.ack_of_receipt_date, today)
