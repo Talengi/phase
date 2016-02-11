@@ -91,7 +91,7 @@ class OutgoingTransmittalForm(GenericBaseDocumentForm):
                 PropertyLayout('recipient'),
                 Field('sequential_number', type='hidden'),
                 PropertyLayout('get_ack_of_receipt_display'),
-                DateField('ack_of_receipt_date'),
+                PropertyLayout('ack_of_receipt_date'),
                 self.get_related_documents_layout(),
             )
         )
@@ -100,7 +100,7 @@ class OutgoingTransmittalForm(GenericBaseDocumentForm):
         model = OutgoingTransmittal
         exclude = ('document', 'latest_revision', 'related_documents',
                    'document_number', 'contract_number', 'originator',
-                   'recipient')
+                   'recipient', 'ack_of_receipt_date')
 
 
 class OutgoingTransmittalRevisionForm(GenericBaseDocumentForm):
