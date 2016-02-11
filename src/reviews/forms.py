@@ -138,14 +138,15 @@ class ReviewFormMixin(DistributionListValidationMixin, forms.ModelForm):
 
     def prepare_field_trs_comments(self):
         self.fields['trs_comments'].widget = RevisionClearableFileInput()
-        url = reverse('document_file_download', args=[
-            self.category.organisation.slug,
-            self.category.slug,
-            self.instance.document.document_key,
-            self.instance.revision,
-            'trs_comments',
-        ])
-        self.fields['trs_comments'].widget.value_url = url
+        if self.instance.trs_comments:
+            url = reverse('document_file_download', args=[
+                self.category.organisation.slug,
+                self.category.slug,
+                self.instance.document.document_key,
+                self.instance.revision,
+                'trs_comments',
+            ])
+            self.fields['trs_comments'].widget.value_url = url
 
     def clean_reviewers(self):
         """Validate the reviewers

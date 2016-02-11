@@ -1,4 +1,4 @@
-{% load review_form %}
+{% load review_form private %}
 <div class="controls controls-row">
     <div class="form-group {% if form.errors.related_documents %}error{% endif %}">
         <table id="trs-rev-table" class="table table-bordered table-condensed table-hover">
@@ -9,7 +9,8 @@
                     <th>{{ _('Rev.') }}</th>
                     <th>{{ _('Status') }}</th>
                     <th>{{ _('RC.') }}</th>
-                    <th>{{ _('Comments') }}</th>
+                    <th>{{ _('POI') }}</th>
+                    <th>{{ _('File transmitted') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -20,7 +21,8 @@
                 <td>{{ rev.name }}</td>
                 <td>{{ rev.status }}</td>
                 <td>{{ rev.get_final_return_code }}</td>
-                <td>{% file_link rev.trs_comments %}</td>
+                <td>{{ rev.purpose_of_issue }}</td>
+                <td>{% download_link rev 'trs_comments' %}</td>
             </tr>
             {% empty %}
             <tr>
