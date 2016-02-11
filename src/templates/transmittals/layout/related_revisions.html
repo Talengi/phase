@@ -9,6 +9,7 @@
                     <th>{{ _('Rev.') }}</th>
                     <th>{{ _('Status') }}</th>
                     <th>{{ _('RC.') }}</th>
+                    <th>{{ _('POI') }}</th>
                     <th>{{ _('File transmitted') }}</th>
                 </tr>
             </thead>
@@ -20,6 +21,7 @@
                 <td>{{ rev.name }}</td>
                 <td>{{ rev.status }}</td>
                 <td>{{ rev.get_final_return_code }}</td>
+                <td>{{ rev.purpose_of_issue }}</td>
                 <td>{% file_link rev.trs_comments %}</td>
             </tr>
             {% empty %}
