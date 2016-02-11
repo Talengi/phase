@@ -26,7 +26,7 @@ from reviews.models import CLASSES, ReviewMixin
 from search.utils import build_index_data, bulk_actions
 from metadata.fields import ConfigurableChoiceField
 from default_documents.validators import StringNumberValidator
-from privatemedia.fields import ProtectedFileField
+from privatemedia.fields import ProtectedFileField, PrivateFileField
 from transmittals.fields import TransmittalFileField
 from transmittals.fileutils import trs_comments_file_path
 from transmittals.pdf import transmittal_to_pdf
@@ -719,7 +719,7 @@ class TransmittableMixin(ReviewMixin):
         max_length=3,
         null=True, blank=True,
         list_index='REVIEW_RETURN_CODES')
-    trs_comments = ProtectedFileField(
+    trs_comments = PrivateFileField(
         _('File Transmitted'),
         null=True, blank=True,
         upload_to=trs_comments_file_path)

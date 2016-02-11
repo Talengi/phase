@@ -6,12 +6,14 @@ from django import forms
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
+from django.core.urlresolvers import reverse
 
 from crispy_forms.layout import Field
 
 from accounts.forms import UserChoiceField, UserMultipleChoiceField
 from default_documents.layout import (
     DocumentFieldset, PropertyLayout, YesNoLayout, DateField)
+from documents.widgets import RevisionClearableFileInput
 from reviews.utils import get_cached_reviews
 from reviews.layout import ReviewsLayout, QuickDistributionListWidgetLayout
 from reviews.models import Review, DistributionList
@@ -133,6 +135,17 @@ class ReviewFormMixin(DistributionListValidationMixin, forms.ModelForm):
                 self.can_discuss = self.request.user in reviewers
 
         super(ReviewFormMixin, self).prepare_form(*args, **kwargs)
+
+    def prepare_field_trs_comments(self):
+        self.fields['trs_comments'].widget = RevisionClearableFileInput()
+        url = reverse('document_file_download', args=[
+            self.category.organisation.slug,
+            self.category.slug,
+            self.instance.document.document_key,
+            self.instance.revision,
+            'trs_comments',
+        ])
+        self.fields['trs_comments'].widget.value_url = url
 
     def clean_reviewers(self):
         """Validate the reviewers
