@@ -8,8 +8,10 @@ import tempfile
 from shutil import rmtree, copytree
 
 from django.test import TestCase
+from django.utils import timezone
 
-from transmittals.factories import TransmittalFactory
+from accounts.factories import UserFactory
+from transmittals.factories import TransmittalFactory, create_transmittal
 
 
 def touch(path):
@@ -90,3 +92,19 @@ class TransmittalModelTests(TestCase):
     def test_accept(self):
         self.transmittal.accept()
         self.assertEqual(self.transmittal.status, 'processing')
+
+
+class OutgoingTransmittalModelTests(TestCase):
+    def setUp(self):
+        self.trs = create_transmittal()
+        self.user = UserFactory()
+
+    def test_acknowledge_receipt(self):
+        self.assertIsNone(self.trs.ack_of_receipt_date)
+        self.assertIsNone(self.trs.ack_of_receipt_author)
+
+        self.trs.acknowledge_receipt(self.user)
+
+        today = timezone.now().date()
+        self.assertEqual(self.trs.ack_of_receipt_date, today)
+        self.assertEqual(self.trs.ack_of_receipt_author, self.user)
