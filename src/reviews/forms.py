@@ -20,6 +20,8 @@ from reviews.models import Review, DistributionList
 
 
 class ReviewSearchForm(forms.Form):
+    doc_number = forms.CharField(required=False)
+    title = forms.CharField(required=False)
     category = forms.CharField(required=False)
     status = forms.CharField(required=False)
     step = forms.CharField(required=False)
@@ -29,9 +31,25 @@ class ReviewSearchForm(forms.Form):
             return qs
 
         if self.is_valid():
+            qs = self.filter_qs_by_doc_number(qs)
+            qs = self.filter_qs_by_title(qs)
             qs = self.filter_qs_by_category(qs)
             qs = self.filter_qs_by_status(qs)
             qs = self.filter_qs_by_step(qs)
+
+        return qs
+
+    def filter_qs_by_doc_number(self, qs):
+        doc_number = self.cleaned_data['doc_number']
+        if doc_number:
+            qs = qs.filter(document__document_key__icontains=doc_number)
+
+        return qs
+
+    def filter_qs_by_title(self, qs):
+        title = self.cleaned_data['title']
+        if title:
+            qs = qs.filter(document__title__icontains=title)
 
         return qs
 
