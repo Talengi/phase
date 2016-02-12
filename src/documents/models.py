@@ -309,6 +309,7 @@ class Metadata(six.with_metaclass(MetadataBase, models.Model)):
                 category.slug,
                 self.document.document_key]),
             disabled=self.latest_revision.is_under_review(),
+            method='GET',
         )
         return actions
 
