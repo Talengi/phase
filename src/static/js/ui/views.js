@@ -65,6 +65,7 @@ var Phase = Phase || {};
             var modalId = menuItem.data('modal');
             var actionHref = menuItem.attr('href');
             var isAjax = menuItem.data('ajax');
+            var method = menuItem.data('method');
 
             var formData = [];
             if (this.actionForm.length > 0) {
@@ -76,13 +77,13 @@ var Phase = Phase || {};
              * Otherwise, raise an event to trigger the modal diplay.
              */
             if (modalId === '') {
-                this.actionSubmit(actionHref, formData, isAjax);
+                this.actionSubmit(actionHref, formData, method, isAjax);
             } else {
                 dispatcher.trigger('onModalDisplayRequired', {
                     menuItem: menuItem,
                     formAction: actionHref,
                     formData: formData,
-                    modalId: modalId
+                    modalId: modalId,
                 });
             }
         },
@@ -91,24 +92,33 @@ var Phase = Phase || {};
             this.actionSubmit(
                 data.formAction,
                 data.formData,
+                menuItem.data('method'),
                 menuItem.data('ajax'));
         },
-        actionSubmit: function(actionHref, formData, isAjax) {
+        actionSubmit: function(actionHref, formData, method, isAjax) {
             if (isAjax) {
-                $.post(actionHref, formData, this.actionSuccess);
-            } else {
-                var form = $('<form />');
-                form.attr('method', 'POST');
-                form.attr('action', actionHref);
-                var inputs = _.map(formData, function(data) {
-                    var input = $('<input type="hidden" />');
-                    input.attr('name', data.name);
-                    input.attr('value', data.value);
-                    return input;
+                $.ajax(actionHref, {
+                    method: method,
+                    data: formData,
+                    success: this.actionSuccess
                 });
-                form.append(inputs);
-                $('body').append(form);
-                form.submit();
+            } else {
+                if (method == 'GET') {
+                    exports.location.href = actionHref;
+                } else {
+                    var form = $('<form />');
+                    form.attr('method', 'POST');
+                    form.attr('action', actionHref);
+                    var inputs = _.map(formData, function(data) {
+                        var input = $('<input type="hidden" />');
+                        input.attr('name', data.name);
+                        input.attr('value', data.value);
+                        return input;
+                    });
+                    form.append(inputs);
+                    $('body').append(form);
+                    form.submit();
+                }
             }
         },
         actionSuccess: function(data) {

@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django import template
 from django.template.loader import get_template, select_template
+from django.core.exceptions import ImproperlyConfigured
 
 from ..utils import stringify_value
 
@@ -15,13 +16,14 @@ TD_TPL = '<td class="column%s"><%%= %s %%></td>'
 
 
 class MenuItem(object):
-    def __init__(self, id, label, action, ajax=False, modal=None,
-                 progression_modal=False, icon='', disabled=False):
+    def __init__(self, id, label, action, method='POST', ajax=False,
+                 modal=None, progression_modal=False, icon='', disabled=False):
         """Represents a single item in document actions menus.
 
         - id: the html id of the menu item.
         - label: the displayed text.
         - action: the action url.
+        - method: as it says.
         - ajax: should the action be submitted diretly or through an ajax request?
         - modal: the #id of the modal to display before submitting (if any)
         - progression_modal: should a progression bar be displayed?
@@ -38,6 +40,10 @@ class MenuItem(object):
         self.icon = icon
         self.disabled = disabled
 
+        if method not in ('GET', 'POST'):
+            raise ImproperlyConfigured('Incorrect "method" value')
+        self.method = method
+
     def __unicode__(self):
         return self.to_html()
 
@@ -52,6 +58,7 @@ class MenuItem(object):
                 data-form-action="{action}"
                 data-keyboard="false"
                 data-ajax="{ajax}"
+                data-method="{method}"
                 data-modal="{modal}" >
                 <span class="glyphicon glyphicon-{icon} glyphicon-white"></span>
                 {label}
@@ -62,6 +69,7 @@ class MenuItem(object):
             id=self.id,
             action=self.action,
             ajax='true' if self.ajax else 'false',
+            method=self.method,
             modal=self.modal or '',
             icon=self.icon,
             label=self.label
