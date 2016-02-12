@@ -14,6 +14,60 @@ HEADER_TPL = '<th id="column%s" data-sortby="%s">%s</th>'
 TD_TPL = '<td class="column%s"><%%= %s %%></td>'
 
 
+class MenuItem(object):
+    def __init__(self, id, label, action, ajax=False, modal=None,
+                 progression_modal=False, icon='', disabled=False):
+        """Represents a single item in document actions menus.
+
+        - id: the html id of the menu item.
+        - label: the displayed text.
+        - action: the action url.
+        - ajax: should the action be submitted diretly or through an ajax request?
+        - modal: the #id of the modal to display before submitting (if any)
+        - progression_modal: should a progression bar be displayed?
+        - icon: which glyphicon to display as the item icon?
+        - disabled: is the menu item disabled?
+
+        """
+        self.id = id
+        self.label = label
+        self.action = action
+        self.ajax = ajax
+        self.modal = modal
+        self.progression_modal = progression_modal
+        self.icon = icon
+        self.disabled = disabled
+
+    def __unicode__(self):
+        return self.to_html()
+
+    def __str__(self):
+        return self.to_html()
+
+    def to_html(self):
+        menu_entry = '''
+            <li disabled="{disabled}">
+            <a id="action-{id}"
+                data-form-action="{action}"
+                data-keyboard="false"
+                data-ajax="{ajax}"
+                data-modal="{modal}" >
+                <span class="glyphicon glyphicon-{icon} glyphicon-white"></span>
+                {label}
+            </a>
+            </li>
+        '''.format(
+            disabled='disabled' if self.disabled else '',
+            id=self.id,
+            action=self.action,
+            ajax='true' if self.ajax else 'false',
+            modal=self.modal or '',
+            icon=self.icon,
+            label=self.label
+        )
+        return menu_entry
+
+
 @register.simple_tag()
 def generate_header_markup(document_class):
     """Generates the markup to be used in doc list table header."""
