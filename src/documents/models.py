@@ -311,7 +311,23 @@ class Metadata(six.with_metaclass(MetadataBase, models.Model)):
             disabled=self.latest_revision.is_under_review(),
             method='GET',
         )
+
+        if self.latest_revision.is_under_review() and \
+                user.has_perm('documents.can_control_document'):
+            actions['cancel-review'] = MenuItem(
+                'cancel-review',
+                _('Cancel review'),
+                reverse('document_cancel_review', args=[
+                    self.document.document_key]),
+                modal='cancel-review-modal'
+            )
+
         return actions
+
+    def get_action_modals(self):
+        return [
+            'reviews/document_detail_cancel_review_modal.html',
+        ]
 
     @classmethod
     def get_batch_actions(cls, category, user):

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load pipeline crispy_forms_tags %}
+{% load pipeline crispy_forms_tags documents %}
 
 {% block extra_css %}
     {% stylesheet "detail" %}
@@ -27,6 +27,7 @@
 </div>
 
 {% include 'discussion/discussion_modal.html' %}
+{% include_action_modals document %}
 {% endblock content %}
 
 {% block extra_js %}
