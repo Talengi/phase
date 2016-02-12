@@ -10,6 +10,12 @@ jQuery(function($) {
         new Phase.Views.ToggleContentButton({ el: button });
     });
 
+    var modalView = new Phase.Views.ModalView();
+    var actionMenus = $('ul.action-menu');
+    actionMenus.each(function(counter, menu) {
+        new Phase.Views.ActionMenuView({ el: menu });
+    });
+
     $(document).keyup(function(event) {
         if (event.keyCode === 27) {
             dispatcher.trigger('onEscKeyPressed');

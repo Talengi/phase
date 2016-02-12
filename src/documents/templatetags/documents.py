@@ -110,7 +110,7 @@ def stringify(val):
 def action_menu(metadata, user):
     actions = metadata.get_actions(user)
     menu = '''
-    <ul class="dropdown-menu dropdown-menu-right">
+    <ul class="action-menu dropdown-menu dropdown-menu-right">
         {}
     </ul>
     '''.format(''.join(action.to_html() for action in actions.values()))
@@ -121,7 +121,7 @@ def action_menu(metadata, user):
 def batch_action_menu(Metadata, category, user):
     actions = Metadata.get_batch_actions(category, user)
     menu = '''
-    <ul class="dropdown-menu">
+    <ul class="action-menu dropdown-menu">
         {}
     </ul>
     '''.format(''.join(action.to_html() for action in actions.values()))

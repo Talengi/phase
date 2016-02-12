@@ -177,58 +177,14 @@ var Phase = Phase || {};
     });
 
     /**
-     * Custom view to handle confirmation modals.
-     */
-    Phase.Views.ModalView = Backbone.View.extend({
-        el: '#document-list-modal',
-        events: {
-            'submit form': 'submit'
-        },
-        initialize: function() {
-            this.listenTo(dispatcher, 'onModalDisplayRequired', this.display);
-        },
-        show: function() {
-            this.$el.modal('show');
-        },
-        hide: function() {
-            this.$el.modal('hide');
-        },
-        display: function(data) {
-            this.menuItem = data.menuItem;
-            this.formAction = data.formAction;
-            this.formData = data.formData;
-            var modalId = data.modalId;
-            var modalContent = $('#' + modalId).html();
-            this.$el.html(modalContent);
-            this.form = this.$el.find('form');
-            this.show();
-        },
-        submit: function(event) {
-            event.preventDefault();
-            var form = $(event.currentTarget);
-            var customFormData = form.serializeArray();
-            var finalFormData = this.formData.concat(customFormData);
-            this.hide();
-            var data = {
-                formAction: this.formAction,
-                formData: finalFormData,
-                menuItem: this.menuItem
-            };
-            dispatcher.trigger('onModalFormSubmitted', data);
-        }
-    });
-
-    /**
      * Handle the different navbar buttons and form.
      */
     Phase.Views.NavbarView = Backbone.View.extend({
         el: '#table-controls',
         events: {
             'click #toggle-filters-button': 'showSearchForm',
-            'click #batch-action-buttons a': 'batchActionClick'
         },
         initialize: function(options) {
-            _.bindAll(this, 'batchActionSuccess');
             this.actionForm = this.$el.find('#document-list-form form').first();
             this.actionButtons = this.actionForm.find('.navbar-action');
             this.submitButtons = this.actionForm.find('[data-form-action]');
@@ -240,7 +196,6 @@ var Phase = Phase || {};
             this.listenTo(dispatcher, 'onRowSelected', this.setButtonsState);
             this.listenTo(dispatcher, 'onRowSelected', this.rowSelected);
             this.listenTo(dispatcher, 'onDocumentsFetched', this.renderResults);
-            this.listenTo(dispatcher, 'onModalFormSubmitted', this.batchActionModalProcess);
             this.listenTo(options.search, 'change', this.cleanupSelection);
         },
         configureForm: function() {
@@ -294,61 +249,6 @@ var Phase = Phase || {};
                 results = '' + data.displayed + ' documents on ' + data.total;
             }
             this.resultsP.html(results);
-        },
-        // Submit form upon click on a batch action
-        batchActionClick: function(event) {
-            event.preventDefault();
-            var menuItem = $(event.target);
-            var modalId = menuItem.data('modal');
-            var formAction = menuItem.data('form-action');
-            var formData = this.actionForm.serializeArray();
-            var isAjax = menuItem.data('ajax');
-
-            /*
-             * If there is no confirmation modal, immediately submit the form.
-             * Otherwise, raise an event to trigger the modal diplay.
-             */
-            if (modalId === '') {
-                this.batchActionSubmit(formAction, formData, isAjax);
-            } else {
-                dispatcher.trigger('onModalDisplayRequired', {
-                    menuItem: menuItem,
-                    formAction: formAction,
-                    formData: formData,
-                    modalId: modalId
-                });
-            }
-        },
-        batchActionModalProcess: function(data) {
-            var menuItem = data.menuItem;
-            this.batchActionSubmit(
-                data.formAction,
-                data.formData,
-                menuItem.data('ajax'));
-        },
-        batchActionSubmit: function(formAction, formData, isAjax) {
-            if (isAjax) {
-                $.post(formAction, formData, this.batchActionSuccess);
-            } else {
-                var form = $('<form />');
-                form.attr('method', 'POST');
-                form.attr('action', formAction);
-                var inputs = _.map(formData, function(data) {
-                    var input = $('<input type="hidden" />');
-                    input.attr('name', data.name);
-                    input.attr('value', data.value);
-                    return input;
-                });
-                form.append(inputs);
-                $('body').append(form);
-                form.submit();
-            }
-        },
-        batchActionSuccess: function(data) {
-            if (data.hasOwnProperty('poll_url')) {
-                var poll_url = data.poll_url;
-                dispatcher.trigger('onPollableTaskStarted', {pollUrl: poll_url});
-            }
         }
     });
 
