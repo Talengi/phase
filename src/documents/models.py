@@ -291,7 +291,7 @@ class Metadata(six.with_metaclass(MetadataBase, models.Model)):
     def current_revision_date(self):
         return self.latest_revision.created_on
 
-    def get_actions(cls, user):
+    def get_actions(self, user):
         """Define actions that apply to a single document.
 
         This list is used to builde the "Actions" menu in the
