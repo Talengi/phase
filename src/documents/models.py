@@ -357,10 +357,33 @@ class Metadata(six.with_metaclass(MetadataBase, models.Model)):
                     modal='start-comment-review'
                 )
 
+        if user.has_perm('can_control_document'):
+            actions['delete_revision'] = MenuItem(
+                'delete-revision',
+                _('Delete latest revision'),
+                reverse('document_revision_delete', args=[
+                    category.organisation.slug,
+                    category.slug,
+                    self.document.document_key]),
+                modal='delete-revision-modal',
+                disabled=self.latest_revision.revision <= 1
+            )
+
+            actions['delete_document'] = MenuItem(
+                'delete-document',
+                _('Delete document'),
+                reverse('document_delete', args=[
+                    category.organisation.slug,
+                    category.slug,
+                    self.document.document_key]),
+                modal='delete-document-modal'
+            )
+
         return actions
 
     def get_action_modals(self):
         return [
+            'documents/document_detail_delete_revision_modal.html',
             'reviews/document_detail_cancel_review_modal.html',
             'reviews/document_detail_start_review_with_comments.html',
         ]
