@@ -1,0 +1,21 @@
+<script id="start-comment-review" type="text/x-underscore-template">
+<form method="POST" action="#">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="start-comment-review-label">{{ _('Start review with remarks') }}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <textarea autocomplete="off" class="form-control" name="body"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ _('Cancel') }}</button>
+                <button type="submit" class="btn btn-primary">{{ _('Start review') }}</button>
+            </div>
+        </div>
+    </div>
+</form>
+</script>
