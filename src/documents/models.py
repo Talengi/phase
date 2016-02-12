@@ -15,6 +15,7 @@ from annoying.functions import get_object_or_None
 from accounts.models import User
 from documents.fields import RevisionFileField
 from categories.models import Category
+from documents.templatetags.documents import MenuItem
 
 
 class DocumentManager(models.Manager):
@@ -292,22 +293,21 @@ class Metadata(six.with_metaclass(MetadataBase, models.Model)):
 
     @classmethod
     def get_batch_actions(cls, category, user):
-        """Define action that apply on lists of documents.
+        """Define actions that apply on lists of documents.
 
         This list is used to build the menu in the document list navbar.
 
         """
         actions = OrderedDict()
-        actions['download'] = {
-            'id': 'download',
-            'label': 'Download',
-            'action': reverse('document_download', args=[
+        actions['download'] = MenuItem(
+            'download',
+            _('Download'),
+            reverse('document_download', args=[
                 category.organisation.slug,
                 category.slug]),
-            'ajax': 'false',
-            'modal': 'documents-download-modal',
-            'icon': 'download',
-        }
+            ajax=False,
+            modal='documents-download-modal',
+            icon='download')
         return actions
 
     @classmethod

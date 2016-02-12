@@ -105,33 +105,27 @@ def stringify(val):
     return stringify_value(val)
 
 
+# @register.simple_tag
+# def action_menu(metadata, user):
+#     actions = metadata.get_actions(user)
+#     menu_items = map(action_menu_item, actions.items())
+#     menu = '''
+#     <ul class="dropdown-menu dropdown-menu-right">
+#         <li>{}</li>
+#     </ul>
+#     '''.format('</li><li>'.join(menu_items))
+#     return menu
+
+
 @register.simple_tag()
 def batch_action_menu(Metadata, category, user):
     actions = Metadata.get_batch_actions(category, user)
-    menu_items = map(action_menu_item, actions.items())
     menu = '''
     <ul class="dropdown-menu">
-        <li>{}</li>
+        {}
     </ul>
-    '''.format('</li><li>'.join(menu_items))
+    '''.format(''.join(action.to_html() for action in actions.values()))
     return menu
-
-
-def action_menu_item(action_tuple):
-    key, action = action_tuple
-
-    menu_entry = '''
-    <a id="action-{id}"
-        data-form-action="{action}"
-        data-keyboard="false"
-        data-ajax="{ajax}"
-        data-modal="{modal}"
-    >
-        <span class="glyphicon glyphicon-{icon} glyphicon-white"></span>
-        {label}
-    </a>
-    '''.format(**action)
-    return menu_entry
 
 
 @register.simple_tag(takes_context=True)
