@@ -1,3 +1,4 @@
+{% load documents %}
 {% comment %}
     This is probably the worst template in the whole project.
 
@@ -29,54 +30,7 @@
             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                 {{ _('Action') }} <span class="caret"></span>
             </button>
-            <ul class="dropdown-menu dropdown-menu-right" role="menu">
-
-                {% if latest_revision.is_under_review %}
-                    <li class="disabled"><a href="#">{{ _('Create revision') }}</a></li>
-                {% else %}
-                    {% url "document_revise" organisation_slug category_slug document.document_key as revise_url %}
-                    <li><a href="{{ revise_url }}">{{ _('Create revision') }}</a></li>
-                {% endif %}
-
-                {% if latest_revision.is_under_review and perms.documents.can_control_document %}
-                    <li><a href="#" data-toggle="modal" data-target="#cancel-review-modal">{{ _('Cancel review') }}</a></li>
-                {% endif %}
-
-                {% if not latest_revision.is_under_review %}
-                    {% if latest_revision.can_be_reviewed and perms.documents.can_control_document %}
-                        {% url "document_start_review" organisation_slug category_slug document.document_key as start_review_url %}
-                        <li>
-                            <form class="" method="post" action="{{ start_review_url }}">
-                                {% csrf_token %}
-                            </form>
-                            <a href="#" class="dropdown-submit">{{ _('Start review') }}</a>
-                        </li>
-                        <li><a href="#" data-toggle="modal" data-target="#start-comment-review">{{ _('Start review w/ remarks') }}</a></li>
-                    {% endif %}
-                {% endif %}
-
-                {% if latest_revision.is_under_review and review_closed_on %}
-                    {% url "review_document" document.document_key as review_url %}
-                    <li><a href="{{ review_url }}">{{ _('Modify your comment') }}</a></li>
-                {% endif %}
-
-                {% if perms.documents.can_control_document %}
-                    <li class="divider"></li>
-                    {% if latest_revision.revision > 1 %}
-                        <li><a href="#" data-toggle="modal" data-target="#delete-revision-modal">
-                            {{ _('Delete latest revision') }}
-                        </a></li>
-                    {% else %}
-                        <li class="disabled"><a href="#">
-                            {{ _('Delete latest revision') }}
-                        </a></li>
-                    {% endif %}
-                    <li><a href="#" data-toggle="modal" data-target="#delete-document-modal">
-                        {{ _('Delete document') }}
-                    </a></li>
-                {% endif %}
-
-            </ul>
+            {% action_menu document user %}
         </div>
     {% endif %}
 </div>

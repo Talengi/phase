@@ -105,16 +105,15 @@ def stringify(val):
     return stringify_value(val)
 
 
-# @register.simple_tag
-# def action_menu(metadata, user):
-#     actions = metadata.get_actions(user)
-#     menu_items = map(action_menu_item, actions.items())
-#     menu = '''
-#     <ul class="dropdown-menu dropdown-menu-right">
-#         <li>{}</li>
-#     </ul>
-#     '''.format('</li><li>'.join(menu_items))
-#     return menu
+@register.simple_tag()
+def action_menu(metadata, user):
+    actions = metadata.get_actions(user)
+    menu = '''
+    <ul class="dropdown-menu dropdown-menu-right">
+        {}
+    </ul>
+    '''.format(''.join(action.to_html() for action in actions.values()))
+    return menu
 
 
 @register.simple_tag()
