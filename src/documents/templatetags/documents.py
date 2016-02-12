@@ -46,7 +46,7 @@ class MenuItem(object):
 
     def to_html(self):
         menu_entry = '''
-            <li disabled="{disabled}">
+            <li class="{disabled}">
             <a id="action-{id}"
                 data-form-action="{action}"
                 data-keyboard="false"
