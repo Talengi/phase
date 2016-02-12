@@ -48,6 +48,7 @@ class MenuItem(object):
         menu_entry = '''
             <li class="{disabled}">
             <a id="action-{id}"
+                href="{action}"
                 data-form-action="{action}"
                 data-keyboard="false"
                 data-ajax="{ajax}"
