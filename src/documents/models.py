@@ -299,6 +299,17 @@ class Metadata(six.with_metaclass(MetadataBase, models.Model)):
 
         """
         actions = OrderedDict()
+        category = self.document.category
+
+        actions['create-revision'] = MenuItem(
+            'create-revision',
+            _('Create revision'),
+            reverse('document_revise', args=[
+                category.organisation.slug,
+                category.slug,
+                self.document.document_key]),
+            disabled=self.latest_revision.is_under_review(),
+        )
         return actions
 
     @classmethod
