@@ -123,8 +123,8 @@ def stringify(val):
 
 
 @register.simple_tag()
-def action_menu(revision, user):
-    actions = revision.get_actions(user)
+def action_menu(metadata, revision, user):
+    actions = revision.get_actions(metadata, user)
     menu = '''
     <ul class="action-menu dropdown-menu dropdown-menu-right">
         {}

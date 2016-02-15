@@ -557,7 +557,7 @@ class MetadataRevision(models.Model):
         """
         return {}
 
-    def get_actions(self, user):
+    def get_actions(self, metadata, user):
         """Define actions that apply to a single document.
 
         This list is used to builde the "Actions" menu in the

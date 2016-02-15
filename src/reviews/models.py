@@ -699,8 +699,8 @@ class ReviewMixin(models.Model):
         ]
         return fields
 
-    def get_actions(self, user):
-        actions = super(ReviewMixin, self).get_actions(user)
+    def get_actions(self, metadata, user):
+        actions = super(ReviewMixin, self).get_actions(metadata, user)
         category = self.document.category
 
         if self.is_under_review():

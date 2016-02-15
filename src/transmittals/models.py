@@ -684,11 +684,12 @@ class OutgoingTransmittalRevision(MetadataRevision):
         pdf_file = ContentFile(pdf_content)
         return pdf_file
 
-    def get_actions(self, user):
-        actions = super(OutgoingTransmittalRevision, self).get_actions(user)
+    def get_actions(self, metadata, user):
+        actions = super(OutgoingTransmittalRevision, self).get_actions(
+            metadata, user)
         category = self.document.category
 
-        if user.is_external:
+        if user.is_external and metadata.ack_of_receipt_date is None:
             actions.insert(-3, MenuItem(
                 'ack-transmittal',
                 _('Acknowledge receipt'),
