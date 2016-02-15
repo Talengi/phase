@@ -312,5 +312,10 @@ class AckOfTransmittalReceipt(LoginRequiredMixin,
                 'Only contractors can acknowledge receipt of transmittals')
 
         transmittal = self.get_object()
+
+        if transmittal.ack_of_receipt_date is not None:
+            return HttpResponseForbidden(
+                'Receipt already acknowledged')
+
         transmittal.ack_receipt(self.request.user, save=True)
         return HttpResponseRedirect(transmittal.document.get_absolute_url())

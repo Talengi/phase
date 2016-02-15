@@ -248,3 +248,12 @@ class AckReceiptOfTransmittalTests(TestCase):
         self.trs.refresh_from_db()
         self.assertIsNotNone(self.trs.ack_of_receipt_date)
         self.assertEqual(self.trs.ack_of_receipt_author, self.user)
+
+    def test_acks_receipt_twice_fails(self):
+        self.user.is_external = True
+        self.user.save()
+
+        self.trs.ack_receipt(self.user)
+
+        res = self.client.post(self.url, follow=True)
+        self.assertEqual(res.status_code, 403)
