@@ -77,6 +77,14 @@ class MenuItem(object):
         return menu_entry
 
 
+class DividerMenuItem(object):
+    def __init__(self):
+        pass
+
+    def to_html(self):
+        return '<li class="divider"></li>'
+
+
 @register.simple_tag()
 def generate_header_markup(document_class):
     """Generates the markup to be used in doc list table header."""

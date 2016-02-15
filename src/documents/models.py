@@ -15,7 +15,7 @@ from annoying.functions import get_object_or_None
 from accounts.models import User
 from documents.fields import RevisionFileField
 from categories.models import Category
-from documents.templatetags.documents import MenuItem
+from documents.templatetags.documents import MenuItem, DividerMenuItem
 
 
 class DocumentManager(models.Manager):
@@ -358,6 +358,8 @@ class Metadata(six.with_metaclass(MetadataBase, models.Model)):
                 )
 
         if user.has_perm('can_control_document'):
+            actions['separator'] = DividerMenuItem()
+
             actions['delete_revision'] = MenuItem(
                 'delete-revision',
                 _('Delete latest revision'),
