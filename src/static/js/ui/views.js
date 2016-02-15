@@ -103,7 +103,7 @@ var Phase = Phase || {};
                     success: this.actionSuccess
                 });
             } else {
-                if (method == 'GET') {
+                if (method === 'GET') {
                     exports.location.href = actionHref;
                 } else {
                     var form = $('<form />');
