@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 from django import forms
+from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError, ImproperlyConfigured
 from django.core.urlresolvers import reverse
@@ -20,8 +21,9 @@ from categories.models import Category
 
 
 class ReviewSearchForm(forms.Form):
-    doc_number = forms.CharField(required=False)
-    title = forms.CharField(required=False)
+    key_title = forms.CharField(
+        label=_('Document nb. / Title'),
+        required=False)
     category = forms.ModelChoiceField(
         queryset=Category.objects.all(),
         required=False)
@@ -59,25 +61,19 @@ class ReviewSearchForm(forms.Form):
 
         if self.is_valid():
             qs = self.reviews
-            qs = self.filter_qs_by_doc_number(qs)
-            qs = self.filter_qs_by_title(qs)
+            qs = self.filter_qs_by_number_and_title(qs)
             qs = self.filter_qs_by_category(qs)
             qs = self.filter_qs_by_status(qs)
             qs = self.filter_qs_by_step(qs)
 
         return qs
 
-    def filter_qs_by_doc_number(self, qs):
-        doc_number = self.cleaned_data['doc_number']
-        if doc_number:
-            qs = qs.filter(document__document_key__icontains=doc_number)
-
-        return qs
-
-    def filter_qs_by_title(self, qs):
-        title = self.cleaned_data['title']
-        if title:
-            qs = qs.filter(document__title__icontains=title)
+    def filter_qs_by_number_and_title(self, qs):
+        search = self.cleaned_data['key_title']
+        if search:
+            q_doc_number = Q(document__document_key__icontains=search)
+            q_title = Q(document__title__icontains=search)
+            qs = qs.filter(q_doc_number | q_title)
 
         return qs
 
