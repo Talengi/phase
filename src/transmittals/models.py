@@ -29,7 +29,7 @@ from metadata.fields import ConfigurableChoiceField
 from default_documents.validators import StringNumberValidator
 from privatemedia.fields import ProtectedFileField, PrivateFileField
 from transmittals.fields import TransmittalFileField
-from transmittals.fileutils import trs_comments_file_path
+from transmittals.fileutils import file_transmitted_file_path
 from transmittals.pdf import transmittal_to_pdf
 
 
@@ -611,8 +611,8 @@ class OutgoingTransmittal(Metadata):
                     meta = document.get_metadata()
                     exported_revs = meta.get_revisions()
                     for rev in exported_revs:
-                        if rev.trs_comments:
-                            comments_file = rev.trs_comments
+                        if rev.file_transmitted:
+                            comments_file = rev.file_transmitted
                             comments_basename = os.path.basename(comments_file.path)
                             zip_file.write(
                                 comments_file.path,
@@ -750,10 +750,10 @@ class TransmittableMixin(ReviewMixin):
         max_length=3,
         null=True, blank=True,
         list_index='REVIEW_RETURN_CODES')
-    trs_comments = PrivateFileField(
+    file_transmitted = PrivateFileField(
         _('File Transmitted'),
         null=True, blank=True,
-        upload_to=trs_comments_file_path)
+        upload_to=file_transmitted_file_path)
     under_preparation_by = models.ForeignKey(
         'accounts.User',
         verbose_name=_('Under preparation by'),
@@ -816,6 +816,6 @@ class TransmittableMixin(ReviewMixin):
         empty_fields = super(TransmittableMixin, self).get_initial_empty()
         return empty_fields + (
             'trs_return_code',
-            'trs_comments',
+            'file_transmitted',
             'external_review_due_date',
         )
