@@ -15,6 +15,7 @@ from model_utils import Choices
 
 from accounts.models import User
 from documents.models import Document
+from documents.templatetags.documents import MenuItem
 from metadata.fields import ConfigurableChoiceField
 from privatemedia.fields import PrivateFileField
 from reviews.fileutils import review_comments_file_path
@@ -697,6 +698,57 @@ class ReviewMixin(models.Model):
             (_('Status'), self.status),
         ]
         return fields
+
+    def get_actions(self, metadata, user):
+        actions = super(ReviewMixin, self).get_actions(metadata, user)
+        category = self.document.category
+
+        if self.is_under_review():
+
+            if user.has_perm('documents.can_control_document'):
+                actions.insert(-3, MenuItem(
+                    'cancel-review',
+                    _('Cancel review'),
+                    reverse('document_cancel_review', args=[
+                        self.document.document_key]),
+                    modal='cancel-review-modal'
+                ))
+
+            user_review = self.get_review(user)
+            review_closed_on = user_review.closed_on if user_review else None
+            if review_closed_on:
+                actions.insert(-3, MenuItem(
+                    'update-comment',
+                    _('Modify your comment'),
+                    reverse('review_document', args=[
+                        self.document.document_key]),
+                    method='GET',
+                ))
+
+        else:  # revision is not under review
+            if self.can_be_reviewed and \
+                    user.has_perm('can_control_document'):
+
+                actions.insert(-3, MenuItem(
+                    'start-review',
+                    _('Start review'),
+                    reverse('document_start_review', args=[
+                        category.organisation.slug,
+                        category.slug,
+                        self.document.document_key]),
+                ))
+
+                actions.insert(-3, MenuItem(
+                    'start-review-remark',
+                    _('Start review w/ remark'),
+                    reverse('document_start_review', args=[
+                        category.organisation.slug,
+                        category.slug,
+                        self.document.document_key]),
+                    modal='start-comment-review'
+                ))
+
+        return actions
 
 
 class DistributionList(models.Model):

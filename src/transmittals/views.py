@@ -7,7 +7,7 @@ import logging
 from django.views.generic import ListView, DetailView
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponseForbidden
 
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 from zipview.views import BaseZipView
@@ -19,13 +19,14 @@ from transmittals.models import Transmittal, TrsRevision
 from transmittals.utils import FieldWrapper
 from transmittals.tasks import do_create_transmittal
 from search.utils import index_revisions
+from documents.views import DocumentListMixin
 from django.conf import settings
 
 
 logger = logging.getLogger(__name__)
 
 
-class TransmittalListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+class TransmittalList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     """List all transmittals."""
     context_object_name = 'transmittal_list'
     permission_required = 'documents.can_control_document'
@@ -45,14 +46,14 @@ class TransmittalListView(LoginRequiredMixin, PermissionRequiredMixin, ListView)
             .order_by('-id')
 
     def get_context_data(self, **kwargs):
-        context = super(TransmittalListView, self).get_context_data(**kwargs)
+        context = super(TransmittalList, self).get_context_data(**kwargs)
         context.update({
             'transmittals_active': True,
         })
         return context
 
 
-class TransmittalDiffView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+class TransmittalDiff(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'transmittals/diff_view.html'
     permission_required = 'documents.can_control_document'
     context_object_name = 'revisions'
@@ -75,7 +76,7 @@ class TransmittalDiffView(LoginRequiredMixin, PermissionRequiredMixin, ListView)
         return self.object.trsrevision_set.all()
 
     def get_context_data(self, **kwargs):
-        context = super(TransmittalDiffView, self).get_context_data(**kwargs)
+        context = super(TransmittalDiff, self).get_context_data(**kwargs)
         context.update({
             'transmittal': self.object,
             'transmittals_active': True,
@@ -85,7 +86,7 @@ class TransmittalDiffView(LoginRequiredMixin, PermissionRequiredMixin, ListView)
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        return super(TransmittalDiffView, self).get(request, *args, **kwargs)
+        return super(TransmittalDiff, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         """Accept or reject transmittal."""
@@ -119,7 +120,7 @@ class TransmittalDiffView(LoginRequiredMixin, PermissionRequiredMixin, ListView)
                       self.object.document_key]))
 
 
-class TransmittalRevisionDiffView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
+class TransmittalRevisionDiff(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     template_name = 'transmittals/revision_diff_view.html'
     context_object_name = 'trs_revision'
     permission_required = 'documents.can_control_document'
@@ -212,7 +213,7 @@ class TransmittalRevisionDiffView(LoginRequiredMixin, PermissionRequiredMixin, D
         return revision
 
     def get_context_data(self, **kwargs):
-        context = super(TransmittalRevisionDiffView, self).get_context_data(**kwargs)
+        context = super(TransmittalRevisionDiff, self).get_context_data(**kwargs)
         context.update({
             'revision': self.get_revision(),
             'transmittals_active': True,
@@ -231,7 +232,7 @@ class TransmittalRevisionDiffView(LoginRequiredMixin, PermissionRequiredMixin, D
                   self.object.transmittal.document_key]))
 
 
-class TransmittalDownloadView(LoginRequiredMixin, PermissionRequiredMixin, BaseZipView):
+class TransmittalDownload(LoginRequiredMixin, PermissionRequiredMixin, BaseZipView):
     zipfile_name = 'transmittal_documents.zip'
     permission_required = 'documents.can_control_document'
 
@@ -258,7 +259,7 @@ class TransmittalDownloadView(LoginRequiredMixin, PermissionRequiredMixin, BaseZ
         return files
 
 
-class PrepareTransmittalView(BaseDocumentBatchActionView):
+class PrepareTransmittal(BaseDocumentBatchActionView):
     """Mark selected revisions as "under preparation"""
 
     http_method_names = ['post']
@@ -277,7 +278,7 @@ class PrepareTransmittalView(BaseDocumentBatchActionView):
         return HttpResponseRedirect(self.get_redirect_url())
 
 
-class CreateTransmittalView(BaseDocumentBatchActionView):
+class CreateTransmittal(BaseDocumentBatchActionView):
     """Create a transmittal embedding the given documents"""
 
     http_method_names = ['post']
@@ -297,3 +298,24 @@ class CreateTransmittalView(BaseDocumentBatchActionView):
             contract_number,
             recipient_id)
         return job
+
+
+class AckOfTransmittalReceipt(LoginRequiredMixin,
+                              DocumentListMixin,
+                              DetailView):
+    """Acknowledge receipt of a single transmittal."""
+    http_method_names = ['post']
+
+    def post(self, request, *args, **kwargs):
+        if not self.request.user.is_external:
+            return HttpResponseForbidden(
+                'Only contractors can acknowledge receipt of transmittals')
+
+        transmittal = self.get_object()
+
+        if transmittal.ack_of_receipt_date is not None:
+            return HttpResponseForbidden(
+                'Receipt already acknowledged')
+
+        transmittal.ack_receipt(self.request.user, save=True)
+        return HttpResponseRedirect(transmittal.document.get_absolute_url())

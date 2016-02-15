@@ -15,6 +15,7 @@ from annoying.functions import get_object_or_None
 from accounts.models import User
 from documents.fields import RevisionFileField
 from categories.models import Category
+from documents.templatetags.documents import MenuItem, DividerMenuItem
 
 
 class DocumentManager(models.Manager):
@@ -262,7 +263,7 @@ class Metadata(six.with_metaclass(MetadataBase, models.Model)):
         Revision = self.get_revision_class()
         revisions = Revision.objects \
             .filter(document=self.document) \
-            .select_related('document') \
+            .select_related() \
             .order_by('-id')
         return revisions
 
@@ -292,22 +293,21 @@ class Metadata(six.with_metaclass(MetadataBase, models.Model)):
 
     @classmethod
     def get_batch_actions(cls, category, user):
-        """Define action that apply on lists of documents.
+        """Define actions that apply on lists of documents.
 
         This list is used to build the menu in the document list navbar.
 
         """
         actions = OrderedDict()
-        actions['download'] = {
-            'id': 'download',
-            'label': 'Download',
-            'action': reverse('document_download', args=[
+        actions['download'] = MenuItem(
+            'download',
+            _('Download'),
+            reverse('document_download', args=[
                 category.organisation.slug,
                 category.slug]),
-            'ajax': 'false',
-            'modal': 'documents-download-modal',
-            'icon': 'download',
-        }
+            ajax=False,
+            modal='documents-download-modal',
+            icon='download')
         return actions
 
     @classmethod
@@ -556,3 +556,57 @@ class MetadataRevision(models.Model):
         the document detail template context.
         """
         return {}
+
+    def get_actions(self, metadata, user):
+        """Define actions that apply to a single document.
+
+        This list is used to builde the "Actions" menu in the
+        document form.
+
+        """
+        actions = []
+        category = self.document.category
+
+        actions.append(MenuItem(
+            'create-revision',
+            _('Create revision'),
+            reverse('document_revise', args=[
+                category.organisation.slug,
+                category.slug,
+                self.document.document_key]),
+            disabled=self.is_under_review(),
+            method='GET',
+        ))
+
+        if user.has_perm('can_control_document'):
+            actions.append(DividerMenuItem())
+
+            actions.append(MenuItem(
+                'delete-revision',
+                _('Delete latest revision'),
+                reverse('document_revision_delete', args=[
+                    category.organisation.slug,
+                    category.slug,
+                    self.document.document_key]),
+                modal='delete-revision-modal',
+                disabled=self.revision <= 1
+            ))
+
+            actions.append(MenuItem(
+                'delete-document',
+                _('Delete document'),
+                reverse('document_delete', args=[
+                    category.organisation.slug,
+                    category.slug,
+                    self.document.document_key]),
+                modal='delete-document-modal'
+            ))
+
+        return actions
+
+    def get_action_modals(self):
+        return [
+            'documents/document_detail_delete_revision_modal.html',
+            'reviews/document_detail_cancel_review_modal.html',
+            'reviews/document_detail_start_review_with_comments.html',
+        ]

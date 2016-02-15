@@ -17,6 +17,7 @@ from reviews.models import ReviewMixin
 from transmittals.models import TransmittableMixin
 from documents.models import Metadata, MetadataRevision
 from documents.constants import BOOLEANS
+from documents.templatetags.documents import MenuItem
 from schedules.models import ScheduleMixin
 from .validators import StringNumberValidator
 
@@ -357,50 +358,49 @@ class ContractorDeliverable(ScheduleMixin, Metadata):
             category, user)
 
         if user.has_perm('documents.can_control_document'):
-            actions['start_review'] = {
-                'id': 'start-review',
-                'label': 'Start review',
-                'action': reverse('batch_start_reviews', args=[
+            actions['start_review'] = MenuItem(
+                'start-review',
+                _('Start review'),
+                reverse('batch_start_reviews', args=[
                     category.organisation.slug,
                     category.slug]),
-                'ajax': 'true',
-                'modal': 'batch-review-modal',
-                'progression_modal': True,
-                'icon': 'eye-open',
-            }
-            actions['cancel_review'] = {
-                'id': 'cancel-review',
-                'label': 'Cancel review',
-                'action': reverse('batch_cancel_reviews', args=[
+                ajax=True,
+                modal='batch-review-modal',
+                progression_modal=True,
+                icon='eye-open',
+            )
+            actions['cancel_review'] = MenuItem(
+                'cancel-review',
+                _('Cancel review'),
+                reverse('batch_cancel_reviews', args=[
                     category.organisation.slug,
                     category.slug]),
-                'ajax': 'true',
-                'modal': 'cancel-review-modal',
-                'progression_modal': True,
-                'icon': 'eye-close',
-            }
-            actions['prepare_transmittal'] = {
-                'id': 'prepare-transmittal',
-                'label': 'Prepare outgoing transmittal',
-                'action': reverse('transmittal_prepare', args=[
+                ajax=True,
+                modal='cancel-review-modal',
+                progression_modal=True,
+                icon='eye-close',
+            )
+            actions['prepare_transmittal'] = MenuItem(
+                'prepare-transmittal',
+                _('Prepare outgoing transmittal'),
+                reverse('transmittal_prepare', args=[
                     category.organisation.slug,
                     category.slug]),
-                'ajax': 'false',
-                'progression_modal': False,
-                'modal': '',
-                'icon': 'hand-up',
-            }
-            actions['create_transmittal'] = {
-                'id': 'create-transmittal',
-                'label': 'Create transmittal',
-                'action': reverse('transmittal_create', args=[
+                ajax=False,
+                progression_modal=False,
+                icon='hand-up'
+            )
+            actions['create_transmittal'] = MenuItem(
+                'create-transmittal',
+                'Create transmittal',
+                reverse('transmittal_create', args=[
                     category.organisation.slug,
                     category.slug]),
-                'ajax': 'true',
-                'modal': 'create-transmittal-modal',
-                'progression_modal': True,
-                'icon': 'transfer',
-            }
+                ajax=True,
+                modal='create-transmittal-modal',
+                progression_modal=True,
+                icon='transfer',
+            )
         return actions
 
     @classmethod

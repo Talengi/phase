@@ -22,6 +22,7 @@ from model_utils import Choices
 
 from documents.utils import save_document_forms
 from documents.models import Document, Metadata, MetadataRevision
+from documents.templatetags.documents import MenuItem
 from reviews.models import CLASSES, ReviewMixin
 from search.utils import build_index_data, bulk_actions
 from metadata.fields import ConfigurableChoiceField
@@ -506,6 +507,11 @@ class OutgoingTransmittal(Metadata):
     ack_of_receipt_date = models.DateField(
         _('Acknowledgment of receipt date'),
         null=True, blank=True)
+    ack_of_receipt_author = models.ForeignKey(
+        'accounts.User',
+        verbose_name=_('Acknowledgment of receipt author'),
+        null=True, blank=True,
+        on_delete=models.PROTECT)
 
     class Meta:
         app_label = 'transmittals'
@@ -660,6 +666,14 @@ class OutgoingTransmittal(Metadata):
         """Returns a list of templates used in batch actions."""
         return ['transmittals/document_list_download_modal.html']
 
+    def ack_receipt(self, user, save=True):
+        """Acknowledge receipt of this transmittal."""
+        self.ack_of_receipt_date = timezone.now().date()
+        self.ack_of_receipt_author = user
+
+        if save:
+            self.save()
+
 
 class OutgoingTransmittalRevision(MetadataRevision):
     class Meta:
@@ -669,6 +683,23 @@ class OutgoingTransmittalRevision(MetadataRevision):
         pdf_content = transmittal_to_pdf(self)
         pdf_file = ContentFile(pdf_content)
         return pdf_file
+
+    def get_actions(self, metadata, user):
+        actions = super(OutgoingTransmittalRevision, self).get_actions(
+            metadata, user)
+        category = self.document.category
+
+        if user.is_external and metadata.ack_of_receipt_date is None:
+            actions.insert(-3, MenuItem(
+                'ack-transmittal',
+                _('Acknowledge receipt'),
+                reverse('transmittal_ack_of_receipt', args=[
+                    category.organisation.slug,
+                    category.slug,
+                    self.document.document_key])
+            ))
+
+        return actions
 
 
 class ExportedRevision(models.Model):

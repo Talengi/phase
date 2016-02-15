@@ -6,11 +6,11 @@ from categories.factories import CategoryFactory
 from documents.factories import DocumentFactory
 
 
-review_button = '<a href="#" class="dropdown-submit">Start review</a>'
+delete_button = '<a id="action-delete-document"'
 
 
 class DocumentDetailTests(TestCase):
-    """Test buttons presence for an admin / doc controller"""
+    """Test action menu items"""
     def setUp(self):
         self.category = CategoryFactory()
         self.user = UserFactory(
@@ -31,56 +31,13 @@ class DocumentDetailTests(TestCase):
             self.doc.document_key
         ])
 
-    def test_review_not_started(self):
+    def test_admin_can_delete_document(self):
         res = self.client.get(self.url)
-        self.assertContains(res, review_button, html=True)
-        self.assertNotContains(res, 'Cancel review')
+        self.assertContains(res, delete_button)
 
-    def test_review_started(self):
-        self.doc.latest_revision.start_review()
+    def test_simple_user_cannot_delete_document(self):
+        self.user.is_superuser = False
+        self.user.save()
+
         res = self.client.get(self.url)
-        self.assertNotContains(res, review_button, html=True)
-        self.assertContains(res, 'Cancel review')
-
-    def test_review_canceled(self):
-        self.doc.latest_revision.start_review()
-        self.doc.latest_revision.cancel_review()
-        res = self.client.get(self.url)
-        self.assertContains(res, review_button, html=True)
-        self.assertNotContains(res, 'Cancel review')
-
-
-class SimpleUserDocumentDetailTests(TestCase):
-    """Simple users cannot start reviews."""
-
-    def setUp(self):
-        self.category = CategoryFactory()
-        self.user = UserFactory(
-            name='User',
-            password='pass',
-            is_superuser=False,
-            category=self.category)
-        self.client.login(username=self.user.email, password='pass')
-        self.doc = DocumentFactory(
-            category=self.category,
-            revision={
-                'leader': self.user,
-            }
-        )
-        self.url = reverse("document_detail", args=[
-            self.category.organisation.slug,
-            self.category.slug,
-            self.doc.document_key
-        ])
-
-    def test_start_review_button_is_present(self):
-        res = self.client.get(self.url)
-        self.assertNotContains(res, review_button, html=True)
-
-    def test_cancel_review_button(self):
-        res = self.client.get(self.url)
-        self.assertNotContains(res, 'Cancel review')
-
-        self.doc.latest_revision.start_review()
-        res = self.client.get(self.url)
-        self.assertNotContains(res, 'Cancel review')
+        self.assertNotContains(res, delete_button)

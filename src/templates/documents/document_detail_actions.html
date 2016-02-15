@@ -1,8 +1,4 @@
-{% comment %}
-    This is probably the worst template in the whole project.
-
-    Here, we display the possible actions depending on the user's permissions.
-{% endcomment %}
+{% load documents %}
 
 <div class="form-actions">
     <a class="btn btn-default" href="{% url "category_document_list" organisation_slug category_slug %}">Close</a>
@@ -10,7 +6,6 @@
     {% if perms.documents.change_document %}
 
         <div class="btn-group {{ dropdirection }} pull-right last-button">
-
             {% url "document_edit" organisation_slug category_slug document.document_key as edit_url %}
             <a class="btn btn-primary" href="{{ edit_url }}">{{ _('Edit latest revision') }}</a>
             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
@@ -25,58 +20,15 @@
             </ul>
         </div>
 
-        <div class="btn-group {{ dropdirection}} pull-right">
-            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                {{ _('Action') }} <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-right" role="menu">
+        <form method="post" action="" class="pull-right">
+            {% csrf_token %}
+            <div class="btn-group {{ dropdirection}}">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                    {{ _('Action') }} <span class="caret"></span>
+                </button>
+                {% action_menu document latest_revision user %}
+            </div>
+        </form>
 
-                {% if latest_revision.is_under_review %}
-                    <li class="disabled"><a href="#">{{ _('Create revision') }}</a></li>
-                {% else %}
-                    {% url "document_revise" organisation_slug category_slug document.document_key as revise_url %}
-                    <li><a href="{{ revise_url }}">{{ _('Create revision') }}</a></li>
-                {% endif %}
-
-                {% if latest_revision.is_under_review and perms.documents.can_control_document %}
-                    <li><a href="#" data-toggle="modal" data-target="#cancel-review-modal">{{ _('Cancel review') }}</a></li>
-                {% endif %}
-
-                {% if not latest_revision.is_under_review %}
-                    {% if latest_revision.can_be_reviewed and perms.documents.can_control_document %}
-                        {% url "document_start_review" organisation_slug category_slug document.document_key as start_review_url %}
-                        <li>
-                            <form class="" method="post" action="{{ start_review_url }}">
-                                {% csrf_token %}
-                            </form>
-                            <a href="#" class="dropdown-submit">{{ _('Start review') }}</a>
-                        </li>
-                        <li><a href="#" data-toggle="modal" data-target="#start-comment-review">{{ _('Start review w/ remarks') }}</a></li>
-                    {% endif %}
-                {% endif %}
-
-                {% if latest_revision.is_under_review and review_closed_on %}
-                    {% url "review_document" document.document_key as review_url %}
-                    <li><a href="{{ review_url }}">{{ _('Modify your comment') }}</a></li>
-                {% endif %}
-
-                {% if perms.documents.can_control_document %}
-                    <li class="divider"></li>
-                    {% if latest_revision.revision > 1 %}
-                        <li><a href="#" data-toggle="modal" data-target="#delete-revision-modal">
-                            {{ _('Delete latest revision') }}
-                        </a></li>
-                    {% else %}
-                        <li class="disabled"><a href="#">
-                            {{ _('Delete latest revision') }}
-                        </a></li>
-                    {% endif %}
-                    <li><a href="#" data-toggle="modal" data-target="#delete-document-modal">
-                        {{ _('Delete document') }}
-                    </a></li>
-                {% endif %}
-
-            </ul>
-        </div>
     {% endif %}
 </div>
