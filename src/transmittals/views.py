@@ -313,4 +313,4 @@ class AckOfTransmittalReceipt(LoginRequiredMixin,
 
         transmittal = self.get_object()
         transmittal.ack_receipt(self.request.user, save=True)
-        return HttpResponseRedirect(transmittal.document.get_edit_url())
+        return HttpResponseRedirect(transmittal.document.get_absolute_url())

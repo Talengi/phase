@@ -123,13 +123,13 @@ def stringify(val):
 
 
 @register.simple_tag()
-def action_menu(metadata, user):
-    actions = metadata.get_actions(user)
+def action_menu(revision, user):
+    actions = revision.get_actions(user)
     menu = '''
     <ul class="action-menu dropdown-menu dropdown-menu-right">
         {}
     </ul>
-    '''.format(''.join(action.to_html() for action in actions.values()))
+    '''.format(''.join(action.to_html() for action in actions))
     return menu
 
 
@@ -145,9 +145,9 @@ def batch_action_menu(Metadata, category, user):
 
 
 @register.simple_tag(takes_context=True)
-def include_action_modals(context, metadata):
+def include_action_modals(context, revision):
     rendered = []
-    for tpl in metadata.get_action_modals():
+    for tpl in revision.get_action_modals():
         content = get_template(tpl)
         rendered.append(content.render(context))
     return '\n'.join(rendered)

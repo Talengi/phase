@@ -22,6 +22,7 @@ from model_utils import Choices
 
 from documents.utils import save_document_forms
 from documents.models import Document, Metadata, MetadataRevision
+from documents.templatetags.documents import MenuItem
 from reviews.models import CLASSES, ReviewMixin
 from search.utils import build_index_data, bulk_actions
 from metadata.fields import ConfigurableChoiceField
@@ -682,6 +683,22 @@ class OutgoingTransmittalRevision(MetadataRevision):
         pdf_content = transmittal_to_pdf(self)
         pdf_file = ContentFile(pdf_content)
         return pdf_file
+
+    def get_actions(self, user):
+        actions = super(OutgoingTransmittalRevision, self).get_actions(user)
+        category = self.document.category
+
+        if user.is_external:
+            actions.insert(-3, MenuItem(
+                'ack-transmittal',
+                _('Acknowledge receipt'),
+                reverse('transmittal_ack_of_receipt', args=[
+                    category.organisation.slug,
+                    category.slug,
+                    self.document.document_key])
+            ))
+
+        return actions
 
 
 class ExportedRevision(models.Model):

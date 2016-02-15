@@ -291,105 +291,6 @@ class Metadata(six.with_metaclass(MetadataBase, models.Model)):
     def current_revision_date(self):
         return self.latest_revision.created_on
 
-    def get_actions(self, user):
-        """Define actions that apply to a single document.
-
-        This list is used to builde the "Actions" menu in the
-        document form.
-
-        """
-        actions = OrderedDict()
-        category = self.document.category
-
-        actions['create-revision'] = MenuItem(
-            'create-revision',
-            _('Create revision'),
-            reverse('document_revise', args=[
-                category.organisation.slug,
-                category.slug,
-                self.document.document_key]),
-            disabled=self.latest_revision.is_under_review(),
-            method='GET',
-        )
-
-        if self.latest_revision.is_under_review():
-
-            if user.has_perm('documents.can_control_document'):
-                actions['cancel-review'] = MenuItem(
-                    'cancel-review',
-                    _('Cancel review'),
-                    reverse('document_cancel_review', args=[
-                        self.document.document_key]),
-                    modal='cancel-review-modal'
-                )
-
-            user_review = self.latest_revision.get_review(user)
-            review_closed_on = user_review.closed_on if user_review else None
-            if review_closed_on:
-                actions['update-comment'] = MenuItem(
-                    'update-comment',
-                    _('Modify your comment'),
-                    reverse('review_document', args=[
-                        self.document.document_key]),
-                    method='GET',
-                )
-
-        else:  # revision is not under review
-            if self.latest_revision.can_be_reviewed and \
-                    user.has_perm('can_control_document'):
-
-                actions['start-review'] = MenuItem(
-                    'start-review',
-                    _('Start review'),
-                    reverse('document_start_review', args=[
-                        category.organisation.slug,
-                        category.slug,
-                        self.document.document_key]),
-                )
-
-                actions['start-review-remark'] = MenuItem(
-                    'start-review-remark',
-                    _('Start review w/ remark'),
-                    reverse('document_start_review', args=[
-                        category.organisation.slug,
-                        category.slug,
-                        self.document.document_key]),
-                    modal='start-comment-review'
-                )
-
-        if user.has_perm('can_control_document'):
-            actions['separator'] = DividerMenuItem()
-
-            actions['delete_revision'] = MenuItem(
-                'delete-revision',
-                _('Delete latest revision'),
-                reverse('document_revision_delete', args=[
-                    category.organisation.slug,
-                    category.slug,
-                    self.document.document_key]),
-                modal='delete-revision-modal',
-                disabled=self.latest_revision.revision <= 1
-            )
-
-            actions['delete_document'] = MenuItem(
-                'delete-document',
-                _('Delete document'),
-                reverse('document_delete', args=[
-                    category.organisation.slug,
-                    category.slug,
-                    self.document.document_key]),
-                modal='delete-document-modal'
-            )
-
-        return actions
-
-    def get_action_modals(self):
-        return [
-            'documents/document_detail_delete_revision_modal.html',
-            'reviews/document_detail_cancel_review_modal.html',
-            'reviews/document_detail_start_review_with_comments.html',
-        ]
-
     @classmethod
     def get_batch_actions(cls, category, user):
         """Define actions that apply on lists of documents.
@@ -655,3 +556,57 @@ class MetadataRevision(models.Model):
         the document detail template context.
         """
         return {}
+
+    def get_actions(self, user):
+        """Define actions that apply to a single document.
+
+        This list is used to builde the "Actions" menu in the
+        document form.
+
+        """
+        actions = []
+        category = self.document.category
+
+        actions.append(MenuItem(
+            'create-revision',
+            _('Create revision'),
+            reverse('document_revise', args=[
+                category.organisation.slug,
+                category.slug,
+                self.document.document_key]),
+            disabled=self.is_under_review(),
+            method='GET',
+        ))
+
+        if user.has_perm('can_control_document'):
+            actions.append(DividerMenuItem())
+
+            actions.append(MenuItem(
+                'delete-revision',
+                _('Delete latest revision'),
+                reverse('document_revision_delete', args=[
+                    category.organisation.slug,
+                    category.slug,
+                    self.document.document_key]),
+                modal='delete-revision-modal',
+                disabled=self.revision <= 1
+            ))
+
+            actions.append(MenuItem(
+                'delete-document',
+                _('Delete document'),
+                reverse('document_delete', args=[
+                    category.organisation.slug,
+                    category.slug,
+                    self.document.document_key]),
+                modal='delete-document-modal'
+            ))
+
+        return actions
+
+    def get_action_modals(self):
+        return [
+            'documents/document_detail_delete_revision_modal.html',
+            'reviews/document_detail_cancel_review_modal.html',
+            'reviews/document_detail_start_review_with_comments.html',
+        ]
