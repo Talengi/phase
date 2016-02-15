@@ -4,7 +4,6 @@
     <a class="btn btn-default" href="{% url "category_document_list" organisation_slug category_slug %}">Close</a>
 
     {% if perms.documents.change_document %}
-
         <div class="btn-group {{ dropdirection }} pull-right last-button">
             {% url "document_edit" organisation_slug category_slug document.document_key as edit_url %}
             <a class="btn btn-primary" href="{{ edit_url }}">{{ _('Edit latest revision') }}</a>
@@ -19,6 +18,7 @@
                 {% endfor %}
             </ul>
         </div>
+    {% endif %}
 
         <form method="post" action="" class="pull-right">
             {% csrf_token %}
@@ -30,5 +30,4 @@
             </div>
         </form>
 
-    {% endif %}
 </div>

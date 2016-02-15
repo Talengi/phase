@@ -567,16 +567,17 @@ class MetadataRevision(models.Model):
         actions = []
         category = self.document.category
 
-        actions.append(MenuItem(
-            'create-revision',
-            _('Create revision'),
-            reverse('document_revise', args=[
-                category.organisation.slug,
-                category.slug,
-                self.document.document_key]),
-            disabled=self.is_under_review(),
-            method='GET',
-        ))
+        if user.has_perm('can_change_document'):
+            actions.append(MenuItem(
+                'create-revision',
+                _('Create revision'),
+                reverse('document_revise', args=[
+                    category.organisation.slug,
+                    category.slug,
+                    self.document.document_key]),
+                disabled=self.is_under_review(),
+                method='GET',
+            ))
 
         if user.has_perm('can_control_document'):
             actions.append(DividerMenuItem())
