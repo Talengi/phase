@@ -79,7 +79,7 @@ class ContractorDeliverableRevisionForm(TransmittableFormMixin, BaseDocumentForm
     class Meta:
         model = ContractorDeliverableRevision
         exclude = ('document', 'revision', 'updated_on', 'review_end_date',
-                   'reviewers_step_closed', 'leader_step_closed')
+                   'reviewers_step_closed', 'leader_step_closed', 'transmittal')
 
 
 class CorrespondenceForm(BaseDocumentForm):

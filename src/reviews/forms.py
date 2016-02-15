@@ -180,17 +180,17 @@ class ReviewFormMixin(DistributionListValidationMixin, forms.ModelForm):
 
         super(ReviewFormMixin, self).prepare_form(*args, **kwargs)
 
-    def prepare_field_trs_comments(self):
-        self.fields['trs_comments'].widget = RevisionClearableFileInput()
-        if self.instance.trs_comments:
+    def prepare_field_file_transmitted(self):
+        self.fields['file_transmitted'].widget = RevisionClearableFileInput()
+        if self.instance.file_transmitted:
             url = reverse('document_file_download', args=[
                 self.category.organisation.slug,
                 self.category.slug,
                 self.instance.document.document_key,
                 self.instance.revision,
-                'trs_comments',
+                'file_transmitted',
             ])
-            self.fields['trs_comments'].widget.value_url = url
+            self.fields['file_transmitted'].widget.value_url = url
 
     def clean_reviewers(self):
         """Validate the reviewers
@@ -277,7 +277,7 @@ class ReviewFormMixin(DistributionListValidationMixin, forms.ModelForm):
                     YesNoLayout('is_under_review'),
                     YesNoLayout('is_overdue'),
                     'trs_return_code',
-                    'trs_comments'),
+                    'file_transmitted'),
                 DocumentFieldset(
                     _('Distribution list'),
                     ReviewsLayout()))
@@ -293,7 +293,7 @@ class ReviewFormMixin(DistributionListValidationMixin, forms.ModelForm):
                     YesNoLayout('is_under_review'),
                     YesNoLayout('is_overdue'),
                     'trs_return_code',
-                    'trs_comments'),
+                    'file_transmitted'),
                 DocumentFieldset(
                     _('Distribution list'),
                     QuickDistributionListWidgetLayout(),
