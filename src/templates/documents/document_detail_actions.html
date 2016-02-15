@@ -6,7 +6,6 @@
     {% if perms.documents.change_document %}
 
         <div class="btn-group {{ dropdirection }} pull-right last-button">
-
             {% url "document_edit" organisation_slug category_slug document.document_key as edit_url %}
             <a class="btn btn-primary" href="{{ edit_url }}">{{ _('Edit latest revision') }}</a>
             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
@@ -21,11 +20,15 @@
             </ul>
         </div>
 
-        <div class="btn-group {{ dropdirection}} pull-right">
-            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                {{ _('Action') }} <span class="caret"></span>
-            </button>
-            {% action_menu document user %}
-        </div>
+        <form method="post" action="" class="pull-right">
+            {% csrf_token %}
+            <div class="btn-group {{ dropdirection}}">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                    {{ _('Action') }} <span class="caret"></span>
+                </button>
+                {% action_menu document user %}
+            </div>
+        </form>
+
     {% endif %}
 </div>
