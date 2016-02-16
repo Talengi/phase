@@ -1,0 +1,42 @@
+Dear {{ user.username }},
+
+<br />
+<br />
+
+Please note that the following transmittals are pending your acknowledgment of receipt.
+<br />
+<br />
+
+<table style="border:1px solid black; border-collapse: collapse;">
+    <thead>
+    <tr>
+        <th style="border: solid 1px black;">Document number</th>
+        <th style="border: solid 1px black;">Creation date</th>
+    </tr>
+    </thead>
+    <tbody>
+        {% for transmittal in transmittals %}
+<tr>
+    <td style="border: solid 1px black;">
+        <a href="http://{{ site.domain }}{{ transmittal.document.get_absolute_url }}">
+        {{ transmittal.document.document_key }}
+        </a>
+    </td>
+    <td style="border: solid 1px black;">{{ transmittal.document.created_on|date:'SHORT_DATE_FORMAT' }}</td>
+</tr>
+{% endfor %}
+    </tbody>
+</table>
+
+<br />
+<br />
+
+<a href="http://{{ site.domain }}{% url 'category_list' %}">
+    You can download the documents on Phase.
+</a>
+
+<br />
+<br />
+
+The Phase team.
+
