@@ -260,7 +260,7 @@ class TransmittalDownload(LoginRequiredMixin, PermissionRequiredMixin, BaseZipVi
         return files
 
 
-class PrepareTransmittal(LoginRequiredMixin, BaseDocumentBatchActionView):
+class PrepareTransmittal(BaseDocumentBatchActionView):
     """Mark selected revisions as "under preparation"""
     http_method_names = ['post']
 
@@ -278,7 +278,7 @@ class PrepareTransmittal(LoginRequiredMixin, BaseDocumentBatchActionView):
         return HttpResponseRedirect(self.get_redirect_url())
 
 
-class BatchAckOfTransmittalReceipt(LoginRequiredMixin, BaseDocumentBatchActionView):
+class BatchAckOfTransmittalReceipt(BaseDocumentBatchActionView):
     """Ack receipt of several transmittals at once."""
     http_method_names = ['post']
 
