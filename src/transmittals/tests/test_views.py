@@ -257,3 +257,37 @@ class AckReceiptOfTransmittalTests(TestCase):
 
         res = self.client.post(self.url, follow=True)
         self.assertEqual(res.status_code, 403)
+
+
+class BatchAckOfTransmittalsTests(TestCase):
+    def setUp(self):
+        self.trs = create_transmittal()
+        self.category = self.trs.document.category
+        self.user = UserFactory(
+            email='testadmin@phase.fr',
+            password='pass',
+            is_superuser=True,
+            category=self.category)
+        self.client.login(email=self.user.email, password='pass')
+        self.url = reverse('transmittal_batch_ack_of_receipt', args=[
+            self.category.organisation.slug,
+            self.category.slug,
+        ])
+
+    def test_internal_user_cannot_ack_transmittal(self):
+        res = self.client.post(self.url, {'document_ids': [self.trs.document_id]})
+        self.assertEqual(res.status_code, 403)
+
+    def test_acks_receipt(self):
+        self.user.is_external = True
+        self.user.save()
+
+        res = self.client.post(
+            self.url,
+            {'document_ids': [self.trs.document_id]},
+            follow=True)
+        self.assertEqual(res.status_code, 200)
+
+        self.trs.refresh_from_db()
+        self.assertIsNotNone(self.trs.ack_of_receipt_date)
+        self.assertEqual(self.trs.ack_of_receipt_author, self.user)

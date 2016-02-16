@@ -7,7 +7,7 @@ from django.conf.urls import patterns, url
 from transmittals.views import (
     TransmittalList, TransmittalDiff, TransmittalRevisionDiff,
     TransmittalDownload, PrepareTransmittal, CreateTransmittal,
-    AckOfTransmittalReceipt)
+    AckOfTransmittalReceipt, BatchAckOfTransmittalReceipt)
 
 urlpatterns = patterns(
     '',
@@ -17,6 +17,9 @@ urlpatterns = patterns(
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/create/$',
         CreateTransmittal.as_view(),
         name="transmittal_create"),
+    url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/ack/$',
+        BatchAckOfTransmittalReceipt.as_view(),
+        name="transmittal_batch_ack_of_receipt"),
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/(?P<document_key>[\w-]+)/ack/$',
         AckOfTransmittalReceipt.as_view(),
         name="transmittal_ack_of_receipt"),
