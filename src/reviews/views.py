@@ -150,8 +150,9 @@ class CancelReview(PermissionRequiredMixin,
         return HttpResponseRedirect(self.get_redirect_url())
 
 
-class BatchStartReviews(BaseDocumentBatchActionView):
+class BatchStartReviews(PermissionRequiredMixin, BaseDocumentBatchActionView):
     """Starts the review process for multiple documents at once."""
+    permission_required = 'documents.can_control_document'
 
     def start_job(self, contenttype, document_ids):
         remark = self.request.POST.get('remark', None)
@@ -164,8 +165,9 @@ class BatchStartReviews(BaseDocumentBatchActionView):
         return job
 
 
-class BatchCancelReviews(BaseDocumentBatchActionView):
+class BatchCancelReviews(PermissionRequiredMixin, BaseDocumentBatchActionView):
     """Cancel several reviews at once."""
+    permission_required = 'documents.can_control_document'
 
     def start_job(self, contenttype, document_ids):
         job = batch_cancel_reviews.delay(

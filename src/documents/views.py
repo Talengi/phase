@@ -109,7 +109,7 @@ class BaseDocumentList(LoginRequiredMixin, DocumentListMixin, ListView):
     pass
 
 
-class BaseDocumentBatchActionView(PermissionRequiredMixin, BaseDocumentList):
+class BaseDocumentBatchActionView(BaseDocumentList):
     """Performs a task on several documents at once.
 
     This operation can be quite time consuming when many documents are reviewed
@@ -121,8 +121,6 @@ class BaseDocumentBatchActionView(PermissionRequiredMixin, BaseDocumentList):
     is in sync.
 
     """
-    permission_required = 'documents.can_control_document'
-
     def get_redirect_url(self, *args, **kwargs):
         """Redirects to document list after that."""
         return reverse('category_document_list', args=[

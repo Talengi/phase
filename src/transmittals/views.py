@@ -260,9 +260,8 @@ class TransmittalDownload(LoginRequiredMixin, PermissionRequiredMixin, BaseZipVi
         return files
 
 
-class PrepareTransmittal(BaseDocumentBatchActionView):
+class PrepareTransmittal(LoginRequiredMixin, BaseDocumentBatchActionView):
     """Mark selected revisions as "under preparation"""
-
     http_method_names = ['post']
 
     def post(self, request, *args, **kwargs):
@@ -279,9 +278,8 @@ class PrepareTransmittal(BaseDocumentBatchActionView):
         return HttpResponseRedirect(self.get_redirect_url())
 
 
-class BatchAckOfTransmittalReceipt(BaseDocumentBatchActionView):
+class BatchAckOfTransmittalReceipt(LoginRequiredMixin, BaseDocumentBatchActionView):
     """Ack receipt of several transmittals at once."""
-
     http_method_names = ['post']
 
     def post(self, request, *args, **kwargs):
@@ -319,9 +317,9 @@ class BatchAckOfTransmittalReceipt(BaseDocumentBatchActionView):
         return HttpResponseRedirect(self.get_redirect_url())
 
 
-class CreateTransmittal(BaseDocumentBatchActionView):
+class CreateTransmittal(PermissionRequiredMixin, BaseDocumentBatchActionView):
     """Create a transmittal embedding the given documents"""
-
+    permission_required = 'documents.can_control_document'
     http_method_names = ['post']
 
     def start_job(self, contenttype, document_ids):

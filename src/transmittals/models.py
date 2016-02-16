@@ -518,6 +518,7 @@ class OutgoingTransmittal(Metadata):
         ordering = ('document_number',)
         verbose_name = _('Outgoing transmittal')
         verbose_name_plural = _('Outgoing transmittals')
+        permissions = (('can_ack_receipt', 'Can ack receipt'),)
 
     class PhaseConfig:
         filter_fields = ('recipient', 'ack_of_receipt')
