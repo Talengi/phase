@@ -518,6 +518,7 @@ class OutgoingTransmittal(Metadata):
         ordering = ('document_number',)
         verbose_name = _('Outgoing transmittal')
         verbose_name_plural = _('Outgoing transmittals')
+        permissions = (('can_ack_receipt', 'Can ack receipt'),)
 
     class PhaseConfig:
         filter_fields = ('recipient', 'ack_of_receipt')
@@ -660,6 +661,24 @@ class OutgoingTransmittal(Metadata):
                     ))
 
             bulk_actions(index_data)
+
+    @classmethod
+    def get_batch_actions(cls, category, user):
+        actions = super(OutgoingTransmittal, cls).get_batch_actions(
+            category, user)
+
+        if user.is_external:
+            actions['ack_transmittals'] = MenuItem(
+                'ack-transmittals',
+                _('Ack receipt'),
+                reverse('transmittal_batch_ack_of_receipt', args=[
+                    category.organisation.slug,
+                    category.slug]),
+                ajax=False,
+                icon='eye-open',
+            )
+
+        return actions
 
     @classmethod
     def get_batch_actions_modals(cls):

@@ -8,6 +8,7 @@ from django.views.generic import ListView, DetailView
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect, HttpResponseForbidden
+from django.utils import timezone
 
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 from zipview.views import BaseZipView
@@ -261,7 +262,6 @@ class TransmittalDownload(LoginRequiredMixin, PermissionRequiredMixin, BaseZipVi
 
 class PrepareTransmittal(BaseDocumentBatchActionView):
     """Mark selected revisions as "under preparation"""
-
     http_method_names = ['post']
 
     def post(self, request, *args, **kwargs):
@@ -278,9 +278,48 @@ class PrepareTransmittal(BaseDocumentBatchActionView):
         return HttpResponseRedirect(self.get_redirect_url())
 
 
-class CreateTransmittal(BaseDocumentBatchActionView):
-    """Create a transmittal embedding the given documents"""
+class BatchAckOfTransmittalReceipt(BaseDocumentBatchActionView):
+    """Ack receipt of several transmittals at once."""
+    http_method_names = ['post']
 
+    def post(self, request, *args, **kwargs):
+        if not self.request.user.is_external:
+            return HttpResponseForbidden(
+                'Only contractors can acknowledge receipt of transmittals')
+
+        document_ids = request.POST.getlist('document_ids')
+        transmittals = self.get_queryset() \
+            .filter(document_id__in=document_ids) \
+            .filter(ack_of_receipt_date__isnull=True)
+        revision_ids = list(
+            transmittals.values_list('latest_revision_id', flat=True))
+
+        # Update transmittal data
+        transmittals.update(
+            ack_of_receipt_date=timezone.now(),
+            ack_of_receipt_author=self.request.user)
+
+        # Update ES index
+        _revision_class = self.category.revision_class()
+        revisions = _revision_class.objects.filter(id__in=revision_ids)
+        index_revisions(revisions)
+
+        update_count = len(revision_ids)
+
+        if update_count > 0:
+            msg = _('You have successfully acknowledged receipt '
+                    'of %s transmittals.') % update_count
+        else:
+            msg = _('We failed to acknowledge receipt of any transmittal.')
+
+        notify(self.request.user, msg)
+
+        return HttpResponseRedirect(self.get_redirect_url())
+
+
+class CreateTransmittal(PermissionRequiredMixin, BaseDocumentBatchActionView):
+    """Create a transmittal embedding the given documents"""
+    permission_required = 'documents.can_control_document'
     http_method_names = ['post']
 
     def start_job(self, contenttype, document_ids):
