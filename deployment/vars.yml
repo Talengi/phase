@@ -7,5 +7,3 @@ venv_dir: "{{ install_root }}/.virtualenvs/{{ project_name }}"
 python_bin: "{{ venv_dir }}/bin/python"
 django_settings: "core.settings.production"
 project_version: master
-
-document_apps:
