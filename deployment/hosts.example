@@ -1,0 +1,17 @@
+[hosts]
+mycompany.com
+
+[staging]
+phasetest.mycompany.com
+
+[prod]
+phase.mycompany.com
+
+[vms:children]
+staging
+prod
+
+[servers:children]
+hosts
+vms
+

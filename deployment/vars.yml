@@ -1,0 +1,11 @@
+project_name: phase
+project_repo: git@github.com:Talengi/phase.git
+install_root: /home/phase
+project_root: "{{ install_root }}/{{ project_name }}"
+django_root: "{{ project_root }}/src"
+venv_dir: "{{ install_root }}/.virtualenvs/{{ project_name }}"
+python_bin: "{{ venv_dir }}/bin/python"
+django_settings: "core.settings.production"
+project_version: master
+
+document_apps:
