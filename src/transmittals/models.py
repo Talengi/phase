@@ -9,6 +9,7 @@ import uuid
 import zipfile
 import tempfile
 import datetime
+from collections import OrderedDict
 
 from django.db import models
 from django.db.models import Case, Value, When
@@ -529,6 +530,17 @@ class OutgoingTransmittal(Metadata):
             ('Recipient', 'recipient'),
             ('Acknowledgment of receipt', 'ack_of_receipt'),
         )
+        export_fields = OrderedDict((
+            ('Document number', 'document_number'),
+            ('Contract Number', 'contract_number'),
+            ('Originator', 'originator'),
+            ('Recipient', 'recipient'),
+            ('Ack. of receipt', 'ack_of_receipt'),
+            ('Ack. of receipt date', 'ack_of_receipt_date'),
+            ('Ack. of receipt author', 'ack_of_receipt_author'),
+            ('Revision', 'revision_name'),
+            ('Received date', 'received_date'),
+        ))
 
     def __unicode__(self):
         return self.document_key
