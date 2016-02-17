@@ -11,15 +11,16 @@ import tempfile
 import datetime
 from collections import OrderedDict
 
-from django.db import models
+from django import forms
+from django.db import models, transaction
 from django.db.models import Case, Value, When
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
-from django.db import transaction
 from django.core.files.base import ContentFile
 from django.utils import timezone
 
 from model_utils import Choices
+from elasticsearch_dsl import F
 
 from documents.utils import save_document_forms
 from documents.models import Document, Metadata, MetadataRevision
@@ -522,6 +523,24 @@ class OutgoingTransmittal(Metadata):
 
     class PhaseConfig:
         filter_fields = ('recipient', 'ack_of_receipt')
+        custom_filters = OrderedDict((
+            ('has_errors', {
+                'field': forms.ChoiceField,
+                'field_kwargs': {
+                    'choices': (
+                        ('', '----------'),
+                        ('true', 'Yes'),
+                        ('false', 'No'),
+                    )
+                },
+                'label': _('Has errors?'),
+                'filters': {
+                    '': None,
+                    'true': F('term', has_error=True),
+                    'false': F('term', has_error=False)
+                }
+            }),)
+        )
         column_fields = (
             ('Reference', 'document_number'),
             ('Created', 'created_on'),
