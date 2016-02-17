@@ -1,0 +1,18 @@
+---
+- hosts: vms
+  remote_user: root
+  become: yes
+  become_user: "{{ project_name }}"
+  gather_facts: false
+  vars_files:
+    - vars.yml
+
+  tasks:
+
+    - name: Reindex elasticsearch data
+      django_manage:
+        command: "reindex_all --noinput"
+        app_path: "{{ django_root }}"
+        virtualenv: "{{ venv_dir }}"
+        settings: "{{ django_settings }}"
+      notify: restart phase

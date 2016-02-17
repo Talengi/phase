@@ -1,0 +1,33 @@
+---
+- hosts: vms
+  remote_user: root
+  gather_facts: false
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: install the sudo command
+      apt: name=sudo state=present
+
+    - name: Make sure ssh agent forwarding works
+      lineinfile:
+        dest: /etc/sudoers
+        state: present
+        regexp: SSH_AUTH_SOCK
+        line: Defaults env_keep+=SSH_AUTH_SOCK
+
+    - name: Add media files clearing cron entry
+      cron:
+        name: "Phase media cleanup"
+        user: "{{ project_name }}"
+        minute: "0"
+        hour: "4"
+        job: "cd {{ django_root }} && {{ python_bin }} manage.py clearmedia --settings={{ django_settings }}"
+
+    - name: Add pending review reminder cron entry
+      cron:
+        name: "Phase pending reviews reminder"
+        user: "{{ project_name }}"
+        minute: "0"
+        hour: "7"
+        job: "cd {{ django_root }} && {{ python_bin }} manage.py send_review_reminders --settings={{ django_settings }}"

@@ -1,0 +1,13 @@
+---
+- hosts: servers
+  remote_user: root
+  gather_facts: false
+
+  tasks:
+    - name: update debian packages
+      apt: update_cache=true
+      notify: upgrade debian packages
+
+  handlers:
+    - name: upgrade debian packages
+      apt: upgrade=safe
