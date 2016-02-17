@@ -30,6 +30,9 @@ PG = {
 
 DATABASES = PG
 
+SEND_EMAIL_REMINDERS = True
+SEND_NEW_ACCOUNTS_EMAILS = True
+
 # ######### CACHE CONFIGURATION
 # This is the default value, but we redefine it because
 # explicit is better than implicit.
