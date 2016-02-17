@@ -98,7 +98,9 @@ def filterform_factory(model):
     # Add custom filters to filter form
     custom_filters = getattr(config, 'custom_filters', {})
     for field_name, filter_config in custom_filters.items():
-        field = filter_config['field'](**kwargs)
+        field_kwargs = filter_config.get('field_kwargs', {})
+        field_kwargs.update(kwargs)
+        field = filter_config['field'](**field_kwargs)
         field.required = False
         field.label = filter_config['label']
         field_list.append((field_name, field))
