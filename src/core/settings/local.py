@@ -26,6 +26,8 @@ TEMPLATE_LOADERS = (
 # ######### EMAIL CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+SEND_EMAIL_REMINDERS = True
+SEND_NEW_ACCOUNTS_EMAILS = True
 # ######### END EMAIL CONFIGURATION
 
 

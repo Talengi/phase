@@ -9,6 +9,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib import messages
+from django.conf import settings
 
 from categories.admin import UserCategoryInline, GroupCategoryInline
 from accounts.models import User, Entity
@@ -60,7 +61,7 @@ class UserAdmin(django_UserAdmin):
 
         """
         obj.save()
-        if not change:
+        if not change and settings.SEND_NEW_ACCOUNTS_EMAILS:
             token = default_token_generator.make_token(obj)
             obj.send_account_activation_email(token)
             messages.info(request, 'The account activation mail was sent')
