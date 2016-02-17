@@ -735,6 +735,12 @@ class OutgoingTransmittalRevision(MetadataRevision):
     class Meta:
         app_label = 'transmittals'
 
+    def get_initial_empty(self):
+        empty_fields = super(OutgoingTransmittalRevision, self).get_initial_empty()
+        return empty_fields + (
+            'error_msg',
+        )
+
     def has_error(self):
         return bool(self.error_msg)
     has_error.short_description = _('Has error')
