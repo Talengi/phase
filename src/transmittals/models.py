@@ -528,6 +528,7 @@ class OutgoingTransmittal(Metadata):
             ('Originator', 'originator'),
             ('Recipient', 'recipient'),
             ('Acknowledgment of receipt', 'ack_of_receipt'),
+            ('Has error', 'has_error'),
         )
         export_fields = OrderedDict((
             ('Document number', 'document_number'),
@@ -539,6 +540,7 @@ class OutgoingTransmittal(Metadata):
             ('Ack. of receipt author', 'ack_of_receipt_author'),
             ('Revision', 'revision_name'),
             ('Received date', 'received_date'),
+            ('Has error', 'has_error'),
         ))
 
     def __unicode__(self):
@@ -706,8 +708,17 @@ class OutgoingTransmittal(Metadata):
 
 
 class OutgoingTransmittalRevision(MetadataRevision):
+    error_msg = models.TextField(
+        _('Error message'),
+        help_text=_('Report an error to the DC'),
+        null=True, blank=True)
+
     class Meta:
         app_label = 'transmittals'
+
+    @property
+    def has_error(self):
+        return bool(self.error_msg)
 
     def generate_pdf_file(self):
         pdf_content = transmittal_to_pdf(self)
