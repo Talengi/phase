@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.utils.translation import ugettext_lazy as _
 
-from notifications.models import notify
+from notifications.models import mass_notify
 from transmittals import signals
 from transmittals.tasks import do_notify_transmittal_recipients
 
@@ -33,5 +33,4 @@ def notify_transmittal_on_errors(document, metadata, revision, **kwargs):
                     'url': document.get_absolute_url(),
                     'name': document.title}
 
-        for user in recipients:
-            notify(user, msg)
+        mass_notify(recipients, msg)
