@@ -716,9 +716,9 @@ class OutgoingTransmittalRevision(MetadataRevision):
     class Meta:
         app_label = 'transmittals'
 
-    @property
     def has_error(self):
         return bool(self.error_msg)
+    has_error.short_description = _('Has error')
 
     def generate_pdf_file(self):
         pdf_content = transmittal_to_pdf(self)
