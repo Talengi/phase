@@ -15,18 +15,18 @@ on.
 
 Deploy code to all active Phase instances in a few commands:
 
-ansible-playbook -i hosts configure.yml
-ansible-playbook -i hosts deploy.yml
+    ansible-playbook -i hosts configure.yml
+    ansible-playbook -i hosts deploy.yml
 
 To only deploy to staging installations:
 
-ansible-playbook -i hosts -l staging configure.yml
-ansible-playbook -i hosts -l staging deploy.yml
+    ansible-playbook -i hosts -l staging configure.yml
+    ansible-playbook -i hosts -l staging deploy.yml
 
 To deploy to a single host:
 
-ansible-playbook -i hosts -l phase.mycompany.com configure.yml
-ansible-playbook -i hosts -l phase.mycompany.com deploy.yml
+    ansible-playbook -i hosts -l phase.mycompany.com configure.yml
+    ansible-playbook -i hosts -l phase.mycompany.com deploy.yml
 
 
 ## Playbooks
