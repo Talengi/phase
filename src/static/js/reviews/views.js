@@ -201,4 +201,32 @@ var Phase = Phase || {};
         }
     });
 
+    Phase.Views.InternalReviewView = Backbone.View.extend({
+        /* On document creation and edit, we have to disable or enable purpose
+        of issue widget according to internal review widget state.
+        Poi is disabled if document is for internal review only. */
+        el: '#fieldset-outgoing-transmittal',
+            events: {
+            "change #id_internal_review": "handleChange"
+        },
+        initialize: function() {
+            // When editing a form, initialize the proper widget state
+            this.poiField= $('#id_purpose_of_issue');
+            this.togglePoi($('#id_internal_review').val());
+        },
+        togglePoi: function(disable) {
+            if (disable === 'True') {
+                this.poiField.prop('disabled', true);
+            }else{
+                this.poiField.prop('disabled', false);
+            }
+        },
+        handleChange: function(el){
+            this.togglePoi(el.target.value);
+            // We set the poi select value to empty, only on internal
+            // review change event.
+            this.poiField.val('');
+        }
+    });
+
 })(this, Phase, Backbone, _);
