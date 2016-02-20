@@ -16,12 +16,11 @@ def move_dirs(*args):
         os.makedirs(protected_root)
 
     private_root = settings.PRIVATE_ROOT
-    if not os.path.exists(protected_root):
+    if not os.path.exists(private_root):
         os.makedirs(private_root)
 
     exports_dir = os.path.join(protected_root, 'transmittals')
     new_dir = os.path.join(private_root, 'transmittals')
-
     if os.path.exists(exports_dir):
         os.rename(exports_dir, new_dir)
 

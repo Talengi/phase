@@ -560,14 +560,13 @@ class MetadataRevision(models.Model):
     def get_actions(self, metadata, user):
         """Define actions that apply to a single document.
 
-        This list is used to builde the "Actions" menu in the
+        This list is used to build the "Actions" menu in the
         document form.
 
         """
         actions = []
         category = self.document.category
-
-        if user.has_perm('can_change_document'):
+        if user.has_perm('documents.change_document'):
             actions.append(MenuItem(
                 'create-revision',
                 _('Create revision'),
@@ -579,7 +578,7 @@ class MetadataRevision(models.Model):
                 method='GET',
             ))
 
-        if user.has_perm('can_control_document'):
+        if user.has_perm('documents.can_control_document'):
             actions.append(DividerMenuItem())
 
             actions.append(MenuItem(

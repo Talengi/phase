@@ -2,11 +2,13 @@
 from __future__ import unicode_literals
 
 import datetime
+from django.contrib.auth.models import Permission
 from django.test import TestCase
 from django.utils.timezone import utc
 
 from documents.factories import DocumentFactory
-
+from accounts.models import User
+from accounts.factories import UserFactory
 
 class DocumentTest(TestCase):
     maxDiff = None
@@ -65,3 +67,38 @@ class DocumentTest(TestCase):
                 u'document_number': 'FAC09001-FWF-000-HSE-REP-0004',
             }
         )
+
+    def test_get_actions(self):
+        date = datetime.datetime(2013, 04, 20, 12, 0, 0, tzinfo=utc)
+
+        document = DocumentFactory(
+            document_key='FAC09001-FWF-000-HSE-REP-0004',
+            created_on=date,
+            current_revision_date=date,
+            metadata={
+                'title': 'HAZOP report',
+            },
+            revision={
+                'status': 'STD',
+                'revision_date': date,
+                'created_on': date,
+                'updated_on': date,
+            }
+        )
+
+        user = UserFactory()
+        metadata = document.metadata
+        metadata_revision = document.latest_revision
+        actions = metadata_revision.get_actions(metadata, user)
+        self.assertEqual(len(actions), 0)
+        change_doc_perm = Permission.objects.get(
+            codename='change_document')
+        can_control_perm = Permission.objects.get(
+            codename='can_control_document')
+        user.user_permissions.add(change_doc_perm)
+        user.user_permissions.add(can_control_perm)
+        # Refresh object
+        user = User.objects.get(pk=user.pk)
+        actions = metadata_revision.get_actions(metadata, user)
+        # Actions must contain 3 MenuItem and a DividerMenuItem
+        self.assertEqual(len(actions), 4)
