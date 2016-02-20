@@ -7,4 +7,5 @@ jQuery(function($) {
     new Phase.Views.LeaderWidgetView();
     new Phase.Views.ApproverWidgetView();
     new Phase.Views.ReviewersWidgetView();
+    new Phase.Views.InternalReviewView();
 });
