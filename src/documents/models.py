@@ -584,7 +584,7 @@ class MetadataRevision(models.Model):
 
             actions.append(MenuItem(
                 'delete-revision',
-                _('Delete latest revision'),
+                _('Delete last revision'),
                 reverse('document_revision_delete', args=[
                     category.organisation.slug,
                     category.slug,
