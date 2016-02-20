@@ -216,9 +216,9 @@ var Phase = Phase || {};
         },
         togglePoi: function(disable) {
             if (disable === 'True') {
-                this.poiField.prop('disabled', true)
+                this.poiField.prop('disabled', true);
             }else{
-                this.poiField.prop('disabled', false)
+                this.poiField.prop('disabled', false);
             }
         },
         handleChange: function(el){
