@@ -25,7 +25,7 @@ Please note that the following documents are pending your review in Phase.
 {% for review in reviews %}
 <tr
     {% if review.is_overdue %}
-        style="border: solid 2px black"
+        style="font-weight: bold;"
     {% endif %}>
     <td style="border: solid 1px black;">
         <a href="http://{{ site.domain }}{% url 'review_document' review.document.document_key %}">
