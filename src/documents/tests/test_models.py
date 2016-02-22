@@ -10,6 +10,7 @@ from documents.factories import DocumentFactory
 from accounts.models import User
 from accounts.factories import UserFactory
 
+
 class DocumentTest(TestCase):
     maxDiff = None
 
