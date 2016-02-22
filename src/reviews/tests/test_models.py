@@ -398,39 +398,6 @@ class ReviewMixinTests(TestCase):
         revision.end_review()
         self.assertFalse(revision.is_overdue())
 
-    def test_days_of_delay(self):
-        doc = DocumentFactory(category=self.category)
-        revision = doc.latest_revision
-        revision.leader = self.user
-        revision.save()
-
-        # Review has not started
-        self.assertIsNone(revision.days_of_delay())
-
-        # Review is ongoing, due date in the future
-        today = timezone.now().date()
-        tomorrow = today + datetime.timedelta(days=1)
-        revision.start_review(due_date=tomorrow)
-        self.assertEqual(revision.days_of_delay(), -1)
-
-        # Review is ongoing, due date today
-        revision.review_due_date = today
-        self.assertEqual(revision.days_of_delay(), 0)
-
-        # Review is ongoing, overdue
-        yesterday = today + datetime.timedelta(days=-1)
-        revision.review_due_date = yesterday
-        self.assertEqual(revision.days_of_delay(), 1)
-
-        # Review is over, completed on time
-        revision.review_due_date = today
-        revision.end_review(at_date=yesterday)
-        self.assertEqual(revision.days_of_delay(), -1)
-
-        # Review is over, overdue
-        revision.review_end_date = tomorrow
-        self.assertEqual(revision.days_of_delay(), 1)
-
     def test_current_step(self):
         revision = self.create_reviewable_document()
 
@@ -466,3 +433,46 @@ class ReviewMixinTests(TestCase):
         self.assertEqual(review.closed_on, reviewed_on)
         self.assertIsNotNone(review.amended_on)
         self.assertEqual(review.return_code, '2')
+
+
+class ReviewTests(TestCase):
+    def setUp(self):
+        self.category = CategoryFactory()
+        self.user = UserFactory(
+            email='testadmin@phase.fr',
+            password='pass',
+            is_superuser=True,
+            category=self.category)
+
+    def test_days_of_delay(self):
+        doc = DocumentFactory(category=self.category)
+        revision = doc.latest_revision
+        revision.leader = self.user
+        revision.save()
+        revision.start_review()
+        review = revision.get_leader_review()
+
+        today = timezone.now().date()
+        tomorrow = today + datetime.timedelta(days=1)
+        yesterday = today + datetime.timedelta(days=-1)
+
+        # Review is ongoing, due date in the future
+        review.due_date = tomorrow
+        self.assertEqual(review.days_of_delay(), -1)
+
+        # Review is ongoing, due date today
+        review.due_date = today
+        self.assertEqual(review.days_of_delay(), 0)
+
+        # Review is ongoing, overdue
+        review.due_date = yesterday
+        self.assertEqual(review.days_of_delay(), 1)
+
+        # Review is over, completed on time
+        review.due_date = today
+        review.closed_on = yesterday
+        self.assertEqual(review.days_of_delay(), -1)
+
+        # Review is over, overdue
+        review.closed_on = tomorrow
+        self.assertEqual(review.days_of_delay(), 1)
