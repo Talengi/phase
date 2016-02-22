@@ -731,6 +731,9 @@ class OutgoingTransmittalRevision(MetadataRevision):
         _('Error message'),
         help_text=_('Report an error to the DC'),
         null=True, blank=True)
+    error_notified = models.BooleanField(
+        _('Was error already notified?'),
+        default=False)
 
     class Meta:
         app_label = 'transmittals'
