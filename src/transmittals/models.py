@@ -738,6 +738,18 @@ class OutgoingTransmittalRevision(MetadataRevision):
     class Meta:
         app_label = 'transmittals'
 
+    def save(self, *args, **kwargs):
+        if not self.has_error():
+            self.error_notified = False
+
+        if self.has_error() and not self.error_notified:
+            # This var will be checked in the post_save signal
+            # We send notification in the signal because it has all
+            # the required data already available
+            self._send_error_notifications = True
+            self.error_notified = True
+        super(OutgoingTransmittalRevision, self).save(*args, **kwargs)
+
     def get_initial_empty(self):
         empty_fields = super(OutgoingTransmittalRevision, self).get_initial_empty()
         return empty_fields + (

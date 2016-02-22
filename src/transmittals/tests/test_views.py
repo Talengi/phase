@@ -17,6 +17,8 @@ from accounts.factories import UserFactory
 from transmittals.factories import (
     TransmittalFactory, TrsRevisionFactory, create_transmittal)
 from transmittals.models import TrsRevision
+from transmittals.forms import (
+    OutgoingTransmittalForm, OutgoingTransmittalRevisionForm)
 
 
 class TransmittalListTests(TestCase):
@@ -291,3 +293,68 @@ class BatchAckOfTransmittalsTests(TestCase):
         self.trs.refresh_from_db()
         self.assertIsNotNone(self.trs.ack_of_receipt_date)
         self.assertEqual(self.trs.ack_of_receipt_author, self.user)
+
+
+class TransmittalErrorNotificationTests(TestCase):
+    def setUp(self):
+        self.trs = create_transmittal()
+        self.rev = self.trs.latest_revision
+        self.category = self.trs.document.category
+        self.user = UserFactory(
+            email='testadmin@phase.fr',
+            password='pass',
+            is_superuser=True,
+            category=self.category)
+        self.trs.recipient.users.add(self.user)
+        self.client.login(email=self.user.email, password='pass')
+        self.url = self.trs.document.get_edit_url()
+
+        form = OutgoingTransmittalForm(
+            self.trs.__dict__,
+            category=self.category,
+            instance=self.trs)
+        form.full_clean()
+        self.form_data = form.cleaned_data
+        rev_form = OutgoingTransmittalRevisionForm(
+            self.rev.__dict__,
+            category=self.category,
+            instance=self.rev)
+        rev_form.full_clean()
+        self.form_data.update(rev_form.cleaned_data)
+
+    def test_no_error_no_notification(self):
+        self.assertEqual(self.user.notification_set.count(), 0)
+        res = self.client.post(self.url, self.form_data)
+        self.assertEqual(res.status_code, 302)
+        self.assertEqual(self.user.notification_set.count(), 0)
+
+    def test_on_error_send_notification(self):
+        self.form_data['error_msg'] = 'This is an error'
+
+        self.assertEqual(self.user.notification_set.count(), 0)
+        res = self.client.post(self.url, self.form_data)
+        self.assertEqual(res.status_code, 302)
+        self.assertEqual(self.user.notification_set.count(), 1)
+
+    def test_notifications_are_sent_only_once(self):
+        self.form_data['error_msg'] = 'This is an error'
+
+        self.assertEqual(self.user.notification_set.count(), 0)
+        self.client.post(self.url, self.form_data)
+        self.client.post(self.url, self.form_data)
+        self.client.post(self.url, self.form_data)
+
+        self.assertEqual(self.user.notification_set.count(), 1)
+
+    def test_cancel_error_and_error_again(self):
+        self.form_data['error_msg'] = 'This is an error'
+        self.client.post(self.url, self.form_data)
+        self.assertEqual(self.user.notification_set.count(), 1)
+
+        self.form_data['error_msg'] = ''
+        self.client.post(self.url, self.form_data)
+        self.assertEqual(self.user.notification_set.count(), 1)
+
+        self.form_data['error_msg'] = 'Another error'
+        self.client.post(self.url, self.form_data)
+        self.assertEqual(self.user.notification_set.count(), 2)

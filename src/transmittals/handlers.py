@@ -26,7 +26,7 @@ def notify_transmittal_recipients(document, metadata, revision, **kwargs):
 
 
 def notify_transmittal_on_errors(document, metadata, revision, **kwargs):
-    if revision.has_error():
+    if hasattr(revision, '_send_error_notifications'):
         recipients = metadata.recipient.users.all()
         msg = _('There is an error on transmittal '
                 '<a href="%(url)s">%(name)s</a>') % {
