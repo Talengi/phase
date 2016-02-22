@@ -527,6 +527,27 @@ class ReviewMixin(models.Model):
 
     is_overdue.short_description = _('Overdue')
 
+    def days_of_delay(self):
+        """Gets the number of days between the due date and the review end.
+
+        If the review has ended, returns delay between the due date and
+        the completion date.
+
+        If the review is ongoing, returns delay between the due date and the
+        present day.
+
+        """
+        if not self.review_start_date:
+            return None
+
+        if self.review_end_date:
+            checked_date = self.review_end_date
+        else:
+            checked_date = timezone.now().date()
+
+        delta = checked_date - self.review_due_date
+        return delta.days
+
     def current_review_step(self):
         """Return a string representing the current step."""
         if self.review_start_date is None:

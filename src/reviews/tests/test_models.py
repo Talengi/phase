@@ -398,6 +398,39 @@ class ReviewMixinTests(TestCase):
         revision.end_review()
         self.assertFalse(revision.is_overdue())
 
+    def test_days_of_delay(self):
+        doc = DocumentFactory(category=self.category)
+        revision = doc.latest_revision
+        revision.leader = self.user
+        revision.save()
+
+        # Review has not started
+        self.assertIsNone(revision.days_of_delay())
+
+        # Review is ongoing, due date in the future
+        today = timezone.now().date()
+        tomorrow = today + datetime.timedelta(days=1)
+        revision.start_review(due_date=tomorrow)
+        self.assertEqual(revision.days_of_delay(), -1)
+
+        # Review is ongoing, due date today
+        revision.review_due_date = today
+        self.assertEqual(revision.days_of_delay(), 0)
+
+        # Review is ongoing, overdue
+        yesterday = today + datetime.timedelta(days=-1)
+        revision.review_due_date = yesterday
+        self.assertEqual(revision.days_of_delay(), 1)
+
+        # Review is over, completed on time
+        revision.review_due_date = today
+        revision.end_review(at_date=yesterday)
+        self.assertEqual(revision.days_of_delay(), -1)
+
+        # Review is over, overdue
+        revision.review_end_date = tomorrow
+        self.assertEqual(revision.days_of_delay(), 1)
+
     def test_current_step(self):
         revision = self.create_reviewable_document()
 
