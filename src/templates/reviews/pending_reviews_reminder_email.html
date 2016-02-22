@@ -15,13 +15,17 @@ Please note that the following documents are pending your review in Phase.
         <th style="border: solid 1px black;">Title</th>
         <th style="border: solid 1px black;">Rev.</th>
         <th style="border: solid 1px black;">Status</th>
-        <th style="border: solid 1px black;">Due date</th>
         <th style="border: solid 1px black;">Role</th>
+        <th style="border: solid 1px black;">Due date</th>
+        <th style="border: solid 1px black;">Overdue</th>
     </tr>
     </thead>
     <tbody>
 {% for review in reviews %}
-<tr>
+<tr
+    {% if review.is_overdue %}
+        style="border: solid 2px black"
+    {% endif %}>
     <td style="border: solid 1px black;">
         <a href="http://{{ site.domain }}{% url 'review_document' review.document.document_key %}">
         {{ review.document.document_key }}
@@ -30,8 +34,9 @@ Please note that the following documents are pending your review in Phase.
     <td style="border: solid 1px black;">{{ review.document.title }}</td>
     <td style="border: solid 1px black;">{{ review.revision_name }}</td>
     <td style="border: solid 1px black;">{{ review.get_status_display }}</td>
-    <td style="border: solid 1px black;">{{ review.due_date|date:'SHORT_DATE_FORMAT' }}</td>
     <td style="border: solid 1px black;">{{ review.get_role_display }}</td>
+    <td style="border: solid 1px black;">{{ review.due_date|date:'SHORT_DATE_FORMAT' }}</td>
+    <td style="border: solid 1px black;">{{ review.is_overdue|yesno:"Yes,No" }}</td>
 </tr>
 {% endfor %}
     </tbody>
