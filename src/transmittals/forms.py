@@ -84,7 +84,6 @@ class OutgoingTransmittalForm(GenericBaseDocumentForm):
             DocumentFieldset(
                 _('General information'),
                 Field('document_key', type='hidden'),
-                Field('revisions_category', type='hidden'),
                 PropertyLayout('document_number'),
                 PropertyLayout('contract_number'),
                 PropertyLayout('originator'),
@@ -101,7 +100,8 @@ class OutgoingTransmittalForm(GenericBaseDocumentForm):
         model = OutgoingTransmittal
         exclude = ('document', 'latest_revision', 'related_documents',
                    'document_number', 'contract_number', 'originator',
-                   'recipient', 'ack_of_receipt_date', 'ack_of_receipt_author')
+                   'recipient', 'ack_of_receipt_date', 'ack_of_receipt_author',
+                   'revisions_category')
 
 
 class OutgoingTransmittalRevisionForm(GenericBaseDocumentForm):
