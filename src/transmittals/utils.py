@@ -107,7 +107,6 @@ def create_transmittal(from_category, to_category, revisions, contract_nb,
     originator = from_category.organisation.trigram
     sequential_number = find_next_trs_number(originator, recipient, contract_nb)
     form_data.update({
-        'revisions_category': from_category.id,
         'sequential_number': sequential_number,
         'created_on': timezone.now(),
         'received_date': timezone.now(),
@@ -116,6 +115,7 @@ def create_transmittal(from_category, to_category, revisions, contract_nb,
     # Some fields are excluded from the form, so we have to
     # provide a base instance instead
     base_instance = OutgoingTransmittal(
+        revisions_category=from_category,
         contract_number=contract_nb,
         originator=originator,
         recipient=recipient,

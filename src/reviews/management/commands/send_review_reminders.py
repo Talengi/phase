@@ -40,6 +40,7 @@ class Command(BaseCommand):
 
     def remind_user_of_pending_reviews(self, user, reviews):
         """Send the reminder email."""
+        import pdb; pdb.set_trace()
         send_mail(
             self.get_subject(user, reviews),
             self.get_body(user, reviews),
