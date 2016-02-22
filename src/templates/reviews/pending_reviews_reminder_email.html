@@ -1,3 +1,4 @@
+{% load i18n %}
 Dear {{ user.username }},
 
 <br />
@@ -36,7 +37,14 @@ Please note that the following documents are pending your review in Phase.
     <td style="border: solid 1px black;">{{ review.get_status_display }}</td>
     <td style="border: solid 1px black;">{{ review.get_role_display }}</td>
     <td style="border: solid 1px black;">{{ review.due_date|date:'SHORT_DATE_FORMAT' }}</td>
-    <td style="border: solid 1px black;">{{ review.is_overdue|yesno:"Yes,No" }}</td>
+    <td style="border: solid 1px black;">
+        {{ review.is_overdue|yesno:"Yes,No" }}
+        {% if review.is_overdue %}
+        {% blocktrans with review.days_of_delay as delay %}
+            ({{ delay}} days)
+        {% endblocktrans %}
+        {% endif %}
+    </td>
 </tr>
 {% endfor %}
     </tbody>
