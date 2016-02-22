@@ -11,15 +11,16 @@ import tempfile
 import datetime
 from collections import OrderedDict
 
-from django.db import models
+from django import forms
+from django.db import models, transaction
 from django.db.models import Case, Value, When
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
-from django.db import transaction
 from django.core.files.base import ContentFile
 from django.utils import timezone
 
 from model_utils import Choices
+from elasticsearch_dsl import F
 
 from documents.utils import save_document_forms
 from documents.models import Document, Metadata, MetadataRevision
@@ -519,16 +520,34 @@ class OutgoingTransmittal(Metadata):
         ordering = ('document_number',)
         verbose_name = _('Outgoing transmittal')
         verbose_name_plural = _('Outgoing transmittals')
-        permissions = (('can_ack_receipt', 'Can ack receipt'),)
 
     class PhaseConfig:
         filter_fields = ('recipient', 'ack_of_receipt')
+        custom_filters = OrderedDict((
+            ('has_errors', {
+                'field': forms.ChoiceField,
+                'field_kwargs': {
+                    'choices': (
+                        ('', '----------'),
+                        ('true', 'Yes'),
+                        ('false', 'No'),
+                    )
+                },
+                'label': _('Has errors?'),
+                'filters': {
+                    '': None,
+                    'true': F('term', has_error=True),
+                    'false': F('term', has_error=False)
+                }
+            }),)
+        )
         column_fields = (
             ('Reference', 'document_number'),
             ('Created', 'created_on'),
             ('Originator', 'originator'),
             ('Recipient', 'recipient'),
             ('Acknowledgment of receipt', 'ack_of_receipt'),
+            ('Has error', 'has_error'),
         )
         export_fields = OrderedDict((
             ('Document number', 'document_number'),
@@ -540,6 +559,7 @@ class OutgoingTransmittal(Metadata):
             ('Ack. of receipt author', 'ack_of_receipt_author'),
             ('Revision', 'revision_name'),
             ('Received date', 'received_date'),
+            ('Has error', 'has_error'),
         ))
 
     def __unicode__(self):
@@ -707,8 +727,38 @@ class OutgoingTransmittal(Metadata):
 
 
 class OutgoingTransmittalRevision(MetadataRevision):
+    error_msg = models.TextField(
+        _('Error message'),
+        help_text=_('Report an error to the DC'),
+        null=True, blank=True)
+    error_notified = models.BooleanField(
+        _('Was error already notified?'),
+        default=False)
+
     class Meta:
         app_label = 'transmittals'
+
+    def save(self, *args, **kwargs):
+        if not self.has_error():
+            self.error_notified = False
+
+        if self.has_error() and not self.error_notified:
+            # This var will be checked in the post_save signal
+            # We send notification in the signal because it has all
+            # the required data already available
+            self._send_error_notifications = True
+            self.error_notified = True
+        super(OutgoingTransmittalRevision, self).save(*args, **kwargs)
+
+    def get_initial_empty(self):
+        empty_fields = super(OutgoingTransmittalRevision, self).get_initial_empty()
+        return empty_fields + (
+            'error_msg',
+        )
+
+    def has_error(self):
+        return bool(self.error_msg)
+    has_error.short_description = _('Has error')
 
     def generate_pdf_file(self):
         pdf_content = transmittal_to_pdf(self)

@@ -470,6 +470,9 @@ class MetadataRevision(models.Model):
                             key, document.document_key, document.document_type())
                         raise RuntimeError(error)
 
+            if callable(value):
+                value = value()
+
             if isinstance(value, models.Model):
                 field = (
                     (unicode(key), value.__unicode__()),

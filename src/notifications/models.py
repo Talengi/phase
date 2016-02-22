@@ -46,3 +46,11 @@ def notify(user, message):
         user = user.id
     notification = Notification.objects.create(user_id=user, body=message)
     return notification
+
+
+def mass_notify(users, message):
+    """Efficiently notify several users at once."""
+    notifications = [
+        Notification(user=user, body=message) for user in users
+    ]
+    Notification.objects.bulk_create(notifications)
