@@ -195,14 +195,14 @@ def get_all_document_classes():
 
 
 def get_all_revision_types():
-    """Return all MetadataRevision content types."""
-    from documents.models import MetadataRevision
+    """Return all MetadataRevisionBase content types."""
+    from documents.models import MetadataRevisionBase
     qs = ContentType.objects.all()
-    types = (ct for ct in qs if issubclass(ct.model_class(), MetadataRevision))
+    types = (ct for ct in qs if issubclass(ct.model_class(), MetadataRevisionBase))
     return types
 
 
 def get_all_revision_classes():
-    """Return all MetadataRevision subclasses available."""
+    """Return all MetadataRevisionBase subclasses available."""
     classes = [ct.model_class() for ct in get_all_revision_types()]
     return classes
