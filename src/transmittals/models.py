@@ -558,7 +558,6 @@ class OutgoingTransmittal(Metadata):
             ('Ack. of receipt date', 'ack_of_receipt_date'),
             ('Ack. of receipt author', 'ack_of_receipt_author'),
             ('Revision', 'revision_name'),
-            ('Received date', 'received_date'),
             ('Has error', 'has_error'),
         ))
 
