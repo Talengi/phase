@@ -133,6 +133,7 @@ class Entity(models.Model):
     TYPES = Choices(
         ('contractor', _('Contractor')),
         ('supplier', _('Supplier')),
+        ('originator', _('Originator')),
         ('other', _('Other')),
     )
     name = models.CharField(
