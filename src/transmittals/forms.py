@@ -108,7 +108,6 @@ class OutgoingTransmittalRevisionForm(GenericBaseDocumentForm):
     def build_layout(self):
         fields = (
             _('Revision'),
-            DateField('received_date'),
             Field('created_on', readonly='readonly'),
             Field('error_msg', rows=2))
 
