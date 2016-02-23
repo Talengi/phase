@@ -23,7 +23,7 @@ from model_utils import Choices
 from elasticsearch_dsl import F
 
 from documents.utils import save_document_forms
-from documents.models import Document, Metadata, MetadataRevision
+from documents.models import Document, Metadata, MetadataRevision, MetadataRevisionBase
 from documents.templatetags.documents import MenuItem
 from reviews.models import CLASSES, ReviewMixin
 from search.utils import build_index_data, bulk_actions
@@ -558,7 +558,6 @@ class OutgoingTransmittal(Metadata):
             ('Ack. of receipt date', 'ack_of_receipt_date'),
             ('Ack. of receipt author', 'ack_of_receipt_author'),
             ('Revision', 'revision_name'),
-            ('Received date', 'received_date'),
             ('Has error', 'has_error'),
         ))
 
@@ -726,7 +725,7 @@ class OutgoingTransmittal(Metadata):
             self.save()
 
 
-class OutgoingTransmittalRevision(MetadataRevision):
+class OutgoingTransmittalRevision(MetadataRevisionBase):
     error_msg = models.TextField(
         _('Error message'),
         help_text=_('Report an error to the DC'),

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from documents.models import MetadataRevision
+from documents.models import MetadataRevisionBase
 from transmittals.utils import FieldWrapper
 from documents.utils import stringify_value as stringify
 
@@ -42,7 +42,7 @@ class CSVFormatter(BaseFormatter):
     def format_doc(self, doc):
         if isinstance(doc, list):
             data = doc
-        elif isinstance(doc, MetadataRevision):
+        elif isinstance(doc, MetadataRevisionBase):
             doc = FieldWrapper((
                 doc,
                 doc.document.metadata,
@@ -58,4 +58,7 @@ class CSVFormatter(BaseFormatter):
 
     def get_field(self, doc, field):
         data = getattr(doc, field, '')
+        # Attributes and method can be passed
+        if callable(data):
+            data = data()
         return stringify(data, none_val='')

@@ -37,10 +37,14 @@ class DocumentFactory(factory.DjangoModelFactory):
             'document': obj,
             'revision': obj.current_revision,
             'revision_date': obj.current_revision_date,
-            'received_date': obj.current_revision_date,
             'created_on': obj.current_revision_date,
             'updated_on': obj.current_revision_date,
         }
+        # When instanciating factories for OutgoingTransmitalls, we must not
+        # pass `received_date` which has been removed from the model.
+        # It's why we check if we can safely pass it in kwargs.
+        if 'received_date' in cls.revision_factory_class._get_model_class()._meta.get_all_field_names():
+            revision_kwargs['received_date'] = obj.current_revision_date
         revision_kwargs.update(cls.revision_kwargs)
         revision = cls.revision_factory_class(**revision_kwargs)
 

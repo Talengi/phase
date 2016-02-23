@@ -358,7 +358,7 @@ class Metadata(six.with_metaclass(MetadataBase, models.Model)):
         return temp_file
 
 
-class MetadataRevision(models.Model):
+class MetadataRevisionBase(models.Model):
     document = models.ForeignKey(Document)
 
     revision = models.PositiveIntegerField(_('Revision'))
@@ -371,8 +371,7 @@ class MetadataRevision(models.Model):
     pdf_file = RevisionFileField(
         verbose_name=u"PDF File",
         null=True, blank=True)
-    received_date = models.DateField(
-        _('Received date'))
+
     created_on = models.DateField(
         _('Created on'),
         default=timezone.now)
@@ -392,7 +391,7 @@ class MetadataRevision(models.Model):
             self.revision)
 
     def save(self, update_document=False, *args, **kwargs):
-        super(MetadataRevision, self).save(*args, **kwargs)
+        super(MetadataRevisionBase, self).save(*args, **kwargs)
 
         if update_document:
             self.document.updated_on = timezone.now()
@@ -613,3 +612,14 @@ class MetadataRevision(models.Model):
             'reviews/document_detail_cancel_review_modal.html',
             'reviews/document_detail_start_review_with_comments.html',
         ]
+
+
+class MetadataRevision(MetadataRevisionBase):
+    received_date = models.DateField(
+        _('Received date'))
+
+    class Meta:
+        abstract = True
+        ordering = ('-revision',)
+        get_latest_by = 'revision'
+        unique_together = ('document', 'revision')
