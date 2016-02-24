@@ -78,7 +78,7 @@ class ContractorDeliverableRevisionForm(TransmittableFormMixin, BaseDocumentForm
 
     class Meta:
         model = ContractorDeliverableRevision
-        exclude = ('document', 'revision', 'updated_on', 'review_end_date',
+        exclude = ('metadata', 'revision', 'updated_on', 'review_end_date',
                    'reviewers_step_closed', 'leader_step_closed', 'transmittal')
 
 
@@ -133,7 +133,7 @@ class CorrespondenceRevisionForm(BaseDocumentForm):
 
     class Meta:
         model = CorrespondenceRevision
-        exclude = ('document', 'revision', 'updated_on')
+        exclude = ('metadata', 'revision', 'updated_on')
 
 
 class MinutesOfMeetingForm(BaseDocumentForm):
@@ -186,7 +186,7 @@ class MinutesOfMeetingRevisionForm(BaseDocumentForm):
 
     class Meta:
         model = MinutesOfMeetingRevision
-        exclude = ('document', 'revision', 'updated_on')
+        exclude = ('metadata', 'revision', 'updated_on')
 
 
 class DemoMetadataForm(BaseDocumentForm):
@@ -209,7 +209,7 @@ class DemoMetadataForm(BaseDocumentForm):
 class DemoMetadataRevisionForm(BaseDocumentForm):
     class Meta:
         model = DemoMetadataRevision
-        exclude = ('document', 'revision', 'updated_on')
+        exclude = ('metadata', 'revision', 'updated_on')
 
     def build_layout(self):
         return Layout(

@@ -62,7 +62,7 @@ class TransmittalRevisionForm(GenericBaseDocumentForm):
 
     class Meta:
         model = TransmittalRevision
-        exclude = ('document', 'revision', 'trs_status', 'updated_on')
+        exclude = ('metadata', 'revision', 'trs_status', 'updated_on')
 
 
 class OutgoingTransmittalForm(GenericBaseDocumentForm):
@@ -119,7 +119,7 @@ class OutgoingTransmittalRevisionForm(GenericBaseDocumentForm):
 
     class Meta:
         model = OutgoingTransmittalRevision
-        exclude = ('document', 'revision', 'error_notified', 'revision_date',
+        exclude = ('metadata', 'revision', 'error_notified', 'revision_date',
                    'updated_on')
 
 
