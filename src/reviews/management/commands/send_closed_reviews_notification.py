@@ -17,19 +17,19 @@ class Command(EmailCommand):
 
     def handle(self, *args, **options):
 
-        reviewed_docs = []
+        reviewed_revisions = []
         yesterday = timezone.now().date() - timedelta(days=1)
         classes = get_all_reviewable_classes()
-        for _class in classes:
-            docs = _class.objects.filter(review_end_date=yesterday)
-            reviewed_docs += list(docs)
+        for class_ in classes:
+            revs = class_.objects.filter(review_end_date=yesterday)
+            reviewed_revisions += list(revs)
 
-        originators = groupby(reviewed_docs, lambda doc: doc.originator)
+        originators = groupby(reviewed_revisions, lambda doc: doc.originator)
         for originator, docs in originators:
-            print originator, docs
+            self.send_notification(originator=originator, documents=list(docs))
 
     def get_subject(self, **kwargs):
         return 'Phase - Pending reviews'
 
     def get_recipient_list(self, **kwargs):
-        return [kwargs['user'].email]
+        return ['test@toto.com']

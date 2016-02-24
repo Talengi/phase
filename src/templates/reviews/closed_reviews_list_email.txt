@@ -1,0 +1,10 @@
+Dear {{ user.username }},
+
+Here is the list of all reviews that ended yesterday.
+
+{% for doc in documents %}
+ - {{ doc.document.document_key }}
+{% endfor %}
+
+The Phase team.
+
