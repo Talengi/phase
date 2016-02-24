@@ -379,8 +379,6 @@ class RevisionBase(ModelBase):
 
 
 class MetadataRevisionBase(models.Model):
-    document = models.ForeignKey(Document)
-
     revision = models.PositiveIntegerField(_('Revision'))
     revision_date = models.DateField(
         null=True, blank=True,
@@ -435,14 +433,13 @@ class MetadataRevisionBase(models.Model):
         return False
 
     @property
-    def metadata(self):
-        """Get the metadata object.
+    def document(self):
+        """Shortcut to get the document object.
 
-        TODO refactor to replace with a foreign key in each
-        MetadataRevision subclass.
+        This exists for back compatibility purpose.
 
         """
-        return self.document.get_metadata()
+        return self.metadata.document
 
     @property
     def name(self):
