@@ -244,6 +244,9 @@ class Transmittal(Metadata):
 
 
 class TransmittalRevision(MetadataRevision):
+    metadata = models.ForeignKey(
+        Transmittal,
+        null=True, blank=True)
     trs_status = ConfigurableChoiceField(
         _('Status'),
         max_length=20,
@@ -726,6 +729,9 @@ class OutgoingTransmittal(Metadata):
 
 
 class OutgoingTransmittalRevision(MetadataRevisionBase):
+    metadata = models.ForeignKey(
+        OutgoingTransmittal,
+        null=True, blank=True)
     error_msg = models.TextField(
         _('Error message'),
         help_text=_('Report an error to the DC'),
