@@ -127,13 +127,20 @@ class Document(models.Model):
 
         XXX WARNING XXX
 
-        This method is a useful shortcut that makes tests writing easier.  It
+        This method is a useful shortcut that makes tests writing easier. It
         should not be used if it can be avoided because it's not optimal, since
         it generates a new query.
 
         """
-        Model = self.category.category_template.metadata_model
-        metadata = Model.get_object_for_this_type(document=self)
+        Model = self.category.document_class()
+        metadata = Model.objects \
+            .select_related() \
+            .select_related(
+                'latest_revision__metadata__document__category',
+                'latest_revision__metadata__document__category__category_template',
+                'latest_revision__metadata__document__category__organisation',
+            ) \
+            .get(document=self)
         return metadata
 
     @property
@@ -454,8 +461,8 @@ class MetadataRevisionBase(models.Model):
         unicode and id values.
         """
         fields = tuple()
-        document = self.document
         metadata = self.metadata
+        document = metadata.document
 
         def add_to_fields(key):
             # Search the value of `key` in the revision, metadata and document,
