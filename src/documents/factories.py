@@ -33,8 +33,17 @@ class DocumentFactory(factory.DjangoModelFactory):
 
     @classmethod
     def _after_postgeneration(cls, obj, create, results=None):
-        revision_kwargs = {
+        metadata_kwargs = {
             'document': obj,
+            'document_key': obj.document_key,
+            'document_number': obj.document_number,
+            'latest_revision': None,
+        }
+        metadata_kwargs.update(cls.metadata_kwargs)
+        metadata = cls.metadata_factory_class(**metadata_kwargs)
+
+        revision_kwargs = {
+            'metadata': metadata,
             'revision': obj.current_revision,
             'revision_date': obj.current_revision_date,
             'created_on': obj.current_revision_date,
@@ -48,14 +57,8 @@ class DocumentFactory(factory.DjangoModelFactory):
         revision_kwargs.update(cls.revision_kwargs)
         revision = cls.revision_factory_class(**revision_kwargs)
 
-        metadata_kwargs = {
-            'document': obj,
-            'document_key': obj.document_key,
-            'document_number': obj.document_number,
-            'latest_revision': revision
-        }
-        metadata_kwargs.update(cls.metadata_kwargs)
-        cls.metadata_factory_class(**metadata_kwargs)
+        metadata.latest_revision = revision
+        metadata.save()
 
         if create and results:
             obj.save()
