@@ -416,7 +416,7 @@ class ContractorDeliverable(ScheduleMixin, Metadata):
 class ContractorDeliverableRevision(TransmittableMixin, MetadataRevision):
     # Revision
     metadata = models.ForeignKey(
-        ContractorDeliverable,
+        'ContractorDeliverable',
         null=True, blank=True)
     status = ConfigurableChoiceField(
         verbose_name=u"Status",
@@ -566,7 +566,7 @@ class Correspondence(Metadata):
 
 class CorrespondenceRevision(MetadataRevision):
     metadata = models.ForeignKey(
-        Correspondence,
+        'Correspondence',
         null=True, blank=True)
     status = ConfigurableChoiceField(
         _('Status'),
@@ -699,7 +699,7 @@ class MinutesOfMeeting(Metadata):
 
 class MinutesOfMeetingRevision(MetadataRevision):
     metadata = models.ForeignKey(
-        MinutesOfMeeting,
+        'MinutesOfMeeting',
         null=True, blank=True)
     status = ConfigurableChoiceField(
         _('Status'),
@@ -764,7 +764,7 @@ class DemoMetadata(Metadata):
 
 class DemoMetadataRevision(ReviewMixin, MetadataRevision):
     metadata = models.ForeignKey(
-        DemoMetadata,
+        'DemoMetadata',
         null=True, blank=True)
     STATUSES = (
         ('STD', 'Started'),
