@@ -8,6 +8,7 @@ from django.db import models
 from django.db.models.base import ModelBase
 from django.utils import timezone, six
 from django.utils.translation import ugettext_lazy as _
+from django.core.exceptions import FieldDoesNotExist
 from django.core.urlresolvers import reverse
 
 from annoying.functions import get_object_or_None
@@ -356,6 +357,25 @@ class Metadata(six.with_metaclass(MetadataBase, models.Model)):
                         compress_type=zipfile.ZIP_DEFLATED
                     )
         return temp_file
+
+
+class RevisionBase(ModelBase):
+    """Custom metaclass for MetadataRevision.
+
+    Checks that required fields are present.
+
+    """
+    def __new__(cls, name, bases, attrs):
+        new_class = super(RevisionBase, cls).__new__(cls, name, bases, attrs)
+
+        if name not in ('NewBase', 'MetadataRevision', 'MetadataRevisionBase'):
+            try:
+                new_class._meta.get_field('metadata')
+            except FieldDoesNotExist:
+                raise TypeError('The {} class definition is incorrect. '
+                                'The "metadata" field is missing'.format(name))
+
+        return new_class
 
 
 class MetadataRevisionBase(models.Model):
