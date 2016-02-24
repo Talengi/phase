@@ -240,16 +240,6 @@ class Metadata(six.with_metaclass(MetadataBase, models.Model)):
     def get_absolute_url(self):
         return self.document.get_absolute_url()
 
-    def save(self, *args, **kwargs):
-        """Make sure the document has a document key."""
-        super(Metadata, self).save(*args, **kwargs)
-
-        self.document.updated_on = timezone.now()
-        self.document.current_revision = self.latest_revision.revision
-        self.document.current_revision_date = self.latest_revision.updated_on
-        self.document.title = self.title
-        self.document.save()
-
     def generate_document_key(self):
         """Returns a uniquely identifying key."""
         raise NotImplementedError()
