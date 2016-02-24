@@ -242,7 +242,7 @@ class ReviewMixin(models.Model):
         abstract = True
 
     def save(self, *args, **kwargs):
-        cache_key = 'all_reviews_{}'.format(self.document_id)
+        cache_key = 'all_reviews_{}'.format(self.metadata.document_id)
         cache.delete(cache_key)
         super(ReviewMixin, self).save(*args, **kwargs)
 
