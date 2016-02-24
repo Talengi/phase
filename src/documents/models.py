@@ -158,7 +158,7 @@ class Document(models.Model):
         """Return all revisions data of this document."""
         RevisionClass = self.get_revision_class()
         revisions = RevisionClass.objects \
-            .filter(document=self) \
+            .filter(metadata__document=self) \
             .select_related() \
             .order_by('-id')
         return revisions
@@ -263,7 +263,7 @@ class Metadata(six.with_metaclass(MetadataBase, models.Model)):
         """Return all revisions data of this document."""
         Revision = self.get_revision_class()
         revisions = Revision.objects \
-            .filter(document=self.document) \
+            .filter(metadata=self) \
             .select_related() \
             .order_by('-id')
         return revisions
@@ -272,7 +272,7 @@ class Metadata(six.with_metaclass(MetadataBase, models.Model)):
         """Returns the rivision with the specified number."""
         Revision = self.get_revision_class()
         qs = Revision.objects \
-            .filter(document=self.document) \
+            .filter(metadata=self) \
             .select_related('document')
         revision = get_object_or_None(qs, revision=revision)
         return revision
