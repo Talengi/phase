@@ -638,8 +638,5 @@ class MetadataRevision(MetadataRevisionBase):
     received_date = models.DateField(
         _('Received date'))
 
-    class Meta:
+    class Meta(MetadataRevisionBase.Meta):
         abstract = True
-        ordering = ('-revision',)
-        get_latest_by = 'revision'
-        unique_together = ('document', 'revision')
