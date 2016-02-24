@@ -18,6 +18,8 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('documents', '0006_create_protected_dir'),
+        ('default_documents', '0050_auto_20160224_1147'),
+        ('transmittals', '0045_auto_20160224_1147'),
     ]
 
     operations = [
