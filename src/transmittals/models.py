@@ -55,6 +55,7 @@ class Transmittal(Metadata):
 
     latest_revision = models.ForeignKey(
         'TransmittalRevision',
+        null=True,
         verbose_name=_('Latest revision'))
 
     transmittal_key = models.CharField(
@@ -481,6 +482,7 @@ class OutgoingTransmittal(Metadata):
 
     latest_revision = models.ForeignKey(
         'OutgoingTransmittalRevision',
+        null=True,
         verbose_name=_('Latest revision'))
 
     revisions_category = models.ForeignKey(

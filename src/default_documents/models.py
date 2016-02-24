@@ -25,6 +25,7 @@ from .validators import StringNumberValidator
 class ContractorDeliverable(ScheduleMixin, Metadata):
     latest_revision = models.ForeignKey(
         'ContractorDeliverableRevision',
+        null=True,
         verbose_name=_('Latest revision'))
 
     # General information
@@ -436,6 +437,7 @@ class ContractorDeliverableRevision(TransmittableMixin, MetadataRevision):
 class Correspondence(Metadata):
     latest_revision = models.ForeignKey(
         'CorrespondenceRevision',
+        null=True,
         verbose_name=_('Latest revision'))
 
     # General information
@@ -590,6 +592,7 @@ class CorrespondenceRevision(MetadataRevision):
 class MinutesOfMeeting(Metadata):
     latest_revision = models.ForeignKey(
         'MinutesOfMeetingRevision',
+        null=True,
         verbose_name=_('Latest revision'))
 
     # General information
