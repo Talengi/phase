@@ -14,8 +14,7 @@ def update_schedule_section(document, metadata, revision, **kwargs):
     See #172
 
     """
-    sender = kwargs.pop('sender')
-    if not issubclass(sender, ScheduleMixin):
+    if not isinstance(metadata, ScheduleMixin):
         return
 
     list_index = revision._meta.get_field('status').list_index
