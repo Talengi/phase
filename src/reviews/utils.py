@@ -59,13 +59,13 @@ def get_all_reviews(document):
 
 def get_dummy_reviews(revision):
     """Return a dictionary of Review objects for."""
-    cache_key = 'dummy_reviews_{}'.format(revision.document_id)
+    cache_key = 'dummy_reviews_{}'.format(revision.metadata.document_id)
     dummy_reviews = cache.get(cache_key, None)
 
     if dummy_reviews is None:
 
         revisions = revision.__class__.objects \
-            .filter(document=revision.document) \
+            .filter(metadata__document=revision.document) \
             .filter(review_start_date=None) \
             .select_related('leader', 'approver') \
             .prefetch_related('reviewers')
@@ -79,21 +79,21 @@ def get_dummy_reviews(revision):
                     role='reviewer',
                     status=Review.STATUSES.void,
                     reviewer=reviewer,
-                    document_id=revision.document_id))
+                    document_id=revision.metadata.document_id))
 
             if revision.leader:
                 revision_reviews.append(Review(
                     role='leader',
                     status=Review.STATUSES.void,
                     reviewer=revision.leader,
-                    document_id=revision.document_id))
+                    document_id=revision.metadata.document_id))
 
             if revision.approver:
                 revision_reviews.append(Review(
                     role='approver',
                     status=Review.STATUSES.void,
                     reviewer=revision.approver,
-                    document_id=revision.document_id))
+                    document_id=revision.metadata.document_id))
 
             dummy_reviews[revision.revision] = revision_reviews
 
