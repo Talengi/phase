@@ -412,8 +412,8 @@ class MetadataRevisionBase(models.Model):
         super(MetadataRevisionBase, self).save(*args, **kwargs)
 
         if update_document:
-            self.document.updated_on = timezone.now()
-            self.document.save()
+            self.metadata.document.updated_on = timezone.now()
+            self.metadata.document.save()
 
     def get_first_revision_number(self):
         """The default value for the "revision" field.

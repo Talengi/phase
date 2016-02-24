@@ -78,16 +78,17 @@ def create_document_from_forms(metadata_form, revision_form, category, **doc_kwa
         current_revision_date=revision.revision_date,
         **doc_kwargs)
 
-    revision.document = document
-    revision.save()
-    revision_form.save_m2m()
-
     metadata.document = document
-    metadata.latest_revision = revision
     metadata.document_key = doc_key
     metadata.document_number = doc_number
     metadata.save()
     metadata_form.save_m2m()
+
+    revision.metadata = metadata
+    revision.save()
+    revision_form.save_m2m()
+
+    metadata.latest_revision = revision
 
     signals.document_created.send(
         document=document,
@@ -105,7 +106,7 @@ def create_revision_from_forms(metadata_form, revision_form, category):
     document = metadata.document
 
     revision.revision = metadata.latest_revision.revision + 1
-    revision.document = document
+    revision.metadata = metadata
     revision.save()
     revision_form.save_m2m()
 
