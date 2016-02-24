@@ -49,7 +49,7 @@ def save_document_forms(metadata_form, revision_form, category, **doc_kwargs):
         document=doc,
         metadata=meta,
         revision=rev,
-        sender=meta.__class__)
+        sender=doc.__class__)
 
     return doc, meta, rev
 
@@ -92,6 +92,7 @@ def create_document_from_forms(metadata_form, revision_form, category, **doc_kwa
     revision_form.save_m2m()
 
     metadata.latest_revision = revision
+    metadata.save()
 
     signals.document_created.send(
         document=document,
