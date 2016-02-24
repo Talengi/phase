@@ -262,8 +262,7 @@ class Metadata(six.with_metaclass(MetadataBase, models.Model)):
         """Returns the rivision with the specified number."""
         Revision = self.get_revision_class()
         qs = Revision.objects \
-            .filter(metadata=self) \
-            .select_related('document')
+            .filter(metadata=self)
         revision = get_object_or_None(qs, revision=revision)
         return revision
 
