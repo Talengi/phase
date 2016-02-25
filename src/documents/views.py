@@ -585,8 +585,8 @@ class DocumentFileDownload(LoginRequiredMixin,
         revision = self.kwargs.get('revision')
 
         qs = self.category.revision_class().objects \
-            .filter(document__document_key=key) \
-            .filter(document__category=self.category) \
+            .filter(metadata__document__document_key=key) \
+            .filter(metadata__document__category=self.category) \
             .filter(revision=revision)
         revision = get_object_or_404(qs)
         return revision
