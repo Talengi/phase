@@ -44,6 +44,10 @@ class ContractorDeliverable(ScheduleMixin, Metadata):
         default=u"FWF",
         max_length=3,
         list_index='ORIGINATORS')
+    originator_new = models.ForeignKey(
+        'accounts.Entity',
+        verbose_name=_('Originator'),
+        null=True)
     unit = ConfigurableChoiceField(
         verbose_name=u"Unit",
         default="000",
