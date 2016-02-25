@@ -8,6 +8,7 @@ from django.db import models
 from django.db.models.base import ModelBase
 from django.utils import timezone, six
 from django.utils.translation import ugettext_lazy as _
+from django.core.exceptions import FieldDoesNotExist
 from django.core.urlresolvers import reverse
 
 from annoying.functions import get_object_or_None
@@ -126,13 +127,20 @@ class Document(models.Model):
 
         XXX WARNING XXX
 
-        This method is a useful shortcut that makes tests writing easier.  It
+        This method is a useful shortcut that makes tests writing easier. It
         should not be used if it can be avoided because it's not optimal, since
         it generates a new query.
 
         """
-        Model = self.category.category_template.metadata_model
-        metadata = Model.get_object_for_this_type(document=self)
+        Model = self.category.document_class()
+        metadata = Model.objects \
+            .select_related() \
+            .select_related(
+                'latest_revision__metadata__document__category',
+                'latest_revision__metadata__document__category__category_template',
+                'latest_revision__metadata__document__category__organisation',
+            ) \
+            .get(document=self)
         return metadata
 
     @property
@@ -157,7 +165,7 @@ class Document(models.Model):
         """Return all revisions data of this document."""
         RevisionClass = self.get_revision_class()
         revisions = RevisionClass.objects \
-            .filter(document=self) \
+            .filter(metadata__document=self) \
             .select_related() \
             .order_by('-id')
         return revisions
@@ -217,7 +225,14 @@ class MetadataBase(ModelBase):
         return super(MetadataBase, cls).__new__(cls, name, bases, attrs)
 
 
+class MetadataManager(models.Manager):
+    def get_by_natural_key(self, document_key):
+        return self.get(document_key=document_key)
+
+
 class Metadata(six.with_metaclass(MetadataBase, models.Model)):
+    objects = MetadataManager()
+
     document = models.OneToOneField(Document)
     document_key = models.SlugField(
         _('Document key'),
@@ -239,16 +254,6 @@ class Metadata(six.with_metaclass(MetadataBase, models.Model)):
     def get_absolute_url(self):
         return self.document.get_absolute_url()
 
-    def save(self, *args, **kwargs):
-        """Make sure the document has a document key."""
-        super(Metadata, self).save(*args, **kwargs)
-
-        self.document.updated_on = timezone.now()
-        self.document.current_revision = self.latest_revision.revision
-        self.document.current_revision_date = self.latest_revision.updated_on
-        self.document.title = self.title
-        self.document.save()
-
     def generate_document_key(self):
         """Returns a uniquely identifying key."""
         raise NotImplementedError()
@@ -262,7 +267,7 @@ class Metadata(six.with_metaclass(MetadataBase, models.Model)):
         """Return all revisions data of this document."""
         Revision = self.get_revision_class()
         revisions = Revision.objects \
-            .filter(document=self.document) \
+            .filter(metadata=self) \
             .select_related() \
             .order_by('-id')
         return revisions
@@ -271,8 +276,7 @@ class Metadata(six.with_metaclass(MetadataBase, models.Model)):
         """Returns the rivision with the specified number."""
         Revision = self.get_revision_class()
         qs = Revision.objects \
-            .filter(document=self.document) \
-            .select_related('document')
+            .filter(metadata=self)
         revision = get_object_or_None(qs, revision=revision)
         return revision
 
@@ -358,9 +362,26 @@ class Metadata(six.with_metaclass(MetadataBase, models.Model)):
         return temp_file
 
 
-class MetadataRevisionBase(models.Model):
-    document = models.ForeignKey(Document)
+class RevisionBase(ModelBase):
+    """Custom metaclass for MetadataRevision.
 
+    Checks that required fields are present.
+
+    """
+    def __new__(cls, name, bases, attrs):
+        new_class = super(RevisionBase, cls).__new__(cls, name, bases, attrs)
+
+        if name not in ('NewBase', 'MetadataRevision', 'MetadataRevisionBase'):
+            try:
+                new_class._meta.get_field('metadata')
+            except FieldDoesNotExist:
+                raise TypeError('The {} class definition is incorrect. '
+                                'The "metadata" field is missing'.format(name))
+
+        return new_class
+
+
+class MetadataRevisionBase(models.Model):
     revision = models.PositiveIntegerField(_('Revision'))
     revision_date = models.DateField(
         null=True, blank=True,
@@ -394,8 +415,8 @@ class MetadataRevisionBase(models.Model):
         super(MetadataRevisionBase, self).save(*args, **kwargs)
 
         if update_document:
-            self.document.updated_on = timezone.now()
-            self.document.save()
+            self.metadata.document.updated_on = timezone.now()
+            self.metadata.document.save()
 
     def get_first_revision_number(self):
         """The default value for the "revision" field.
@@ -415,14 +436,13 @@ class MetadataRevisionBase(models.Model):
         return False
 
     @property
-    def metadata(self):
-        """Get the metadata object.
+    def document(self):
+        """Shortcut to get the document object.
 
-        TODO refactor to replace with a foreign key in each
-        MetadataRevision subclass.
+        This exists for back compatibility purpose.
 
         """
-        return self.document.get_metadata()
+        return self.metadata.document
 
     @property
     def name(self):
@@ -448,8 +468,8 @@ class MetadataRevisionBase(models.Model):
         unicode and id values.
         """
         fields = tuple()
-        document = self.document
         metadata = self.metadata
+        document = metadata.document
 
         def add_to_fields(key):
             # Search the value of `key` in the revision, metadata and document,
@@ -618,8 +638,5 @@ class MetadataRevision(MetadataRevisionBase):
     received_date = models.DateField(
         _('Received date'))
 
-    class Meta:
+    class Meta(MetadataRevisionBase.Meta):
         abstract = True
-        ordering = ('-revision',)
-        get_latest_by = 'revision'
-        unique_together = ('document', 'revision')

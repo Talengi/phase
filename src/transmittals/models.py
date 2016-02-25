@@ -55,6 +55,7 @@ class Transmittal(Metadata):
 
     latest_revision = models.ForeignKey(
         'TransmittalRevision',
+        null=True,
         verbose_name=_('Latest revision'))
 
     transmittal_key = models.CharField(
@@ -244,6 +245,7 @@ class Transmittal(Metadata):
 
 
 class TransmittalRevision(MetadataRevision):
+    metadata = models.ForeignKey('Transmittal')
     trs_status = ConfigurableChoiceField(
         _('Status'),
         max_length=20,
@@ -480,6 +482,7 @@ class OutgoingTransmittal(Metadata):
 
     latest_revision = models.ForeignKey(
         'OutgoingTransmittalRevision',
+        null=True,
         verbose_name=_('Latest revision'))
 
     revisions_category = models.ForeignKey(
@@ -726,6 +729,7 @@ class OutgoingTransmittal(Metadata):
 
 
 class OutgoingTransmittalRevision(MetadataRevisionBase):
+    metadata = models.ForeignKey('OutgoingTransmittal')
     error_msg = models.TextField(
         _('Error message'),
         help_text=_('Report an error to the DC'),

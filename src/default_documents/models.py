@@ -25,6 +25,7 @@ from .validators import StringNumberValidator
 class ContractorDeliverable(ScheduleMixin, Metadata):
     latest_revision = models.ForeignKey(
         'ContractorDeliverableRevision',
+        null=True,
         verbose_name=_('Latest revision'))
 
     # General information
@@ -302,8 +303,9 @@ class ContractorDeliverable(ScheduleMixin, Metadata):
         revisions = super(ContractorDeliverable, self) \
             .get_all_revisions() \
             .select_related(
-                'document',
-                'document__category__organisation',
+                'metadata',
+                'metadata__document',
+                'metadata__document__category__organisation',
                 'leader',
                 'approver',
                 'approver',
@@ -415,6 +417,7 @@ class ContractorDeliverable(ScheduleMixin, Metadata):
 
 class ContractorDeliverableRevision(TransmittableMixin, MetadataRevision):
     # Revision
+    metadata = models.ForeignKey('ContractorDeliverable')
     status = ConfigurableChoiceField(
         verbose_name=u"Status",
         default="STD",
@@ -434,6 +437,7 @@ class ContractorDeliverableRevision(TransmittableMixin, MetadataRevision):
 class Correspondence(Metadata):
     latest_revision = models.ForeignKey(
         'CorrespondenceRevision',
+        null=True,
         verbose_name=_('Latest revision'))
 
     # General information
@@ -562,6 +566,7 @@ class Correspondence(Metadata):
 
 
 class CorrespondenceRevision(MetadataRevision):
+    metadata = models.ForeignKey('Correspondence')
     status = ConfigurableChoiceField(
         _('Status'),
         max_length=20,
@@ -587,6 +592,7 @@ class CorrespondenceRevision(MetadataRevision):
 class MinutesOfMeeting(Metadata):
     latest_revision = models.ForeignKey(
         'MinutesOfMeetingRevision',
+        null=True,
         verbose_name=_('Latest revision'))
 
     # General information
@@ -692,6 +698,7 @@ class MinutesOfMeeting(Metadata):
 
 
 class MinutesOfMeetingRevision(MetadataRevision):
+    metadata = models.ForeignKey('MinutesOfMeeting')
     status = ConfigurableChoiceField(
         _('Status'),
         max_length=20,
@@ -754,6 +761,7 @@ class DemoMetadata(Metadata):
 
 
 class DemoMetadataRevision(ReviewMixin, MetadataRevision):
+    metadata = models.ForeignKey('DemoMetadata')
     STATUSES = (
         ('STD', 'Started'),
         ('IDC', 'Inter Discipline Check'),

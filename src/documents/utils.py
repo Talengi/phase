@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.contrib.contenttypes.models import ContentType
 from django.utils.encoding import force_text
+from django.utils import timezone
 from django.db import transaction
 
 from documents import signals
@@ -48,7 +49,7 @@ def save_document_forms(metadata_form, revision_form, category, **doc_kwargs):
         document=doc,
         metadata=meta,
         revision=rev,
-        sender=meta.__class__)
+        sender=doc.__class__)
 
     return doc, meta, rev
 
@@ -76,18 +77,22 @@ def create_document_from_forms(metadata_form, revision_form, category, **doc_kwa
         category=category,
         current_revision=revision.revision,
         current_revision_date=revision.revision_date,
+        updated_on=timezone.now(),
+        title=metadata.title,
         **doc_kwargs)
 
-    revision.document = document
-    revision.save()
-    revision_form.save_m2m()
-
     metadata.document = document
-    metadata.latest_revision = revision
     metadata.document_key = doc_key
     metadata.document_number = doc_number
     metadata.save()
     metadata_form.save_m2m()
+
+    revision.metadata = metadata
+    revision.save()
+    revision_form.save_m2m()
+
+    metadata.latest_revision = revision
+    metadata.save()
 
     signals.document_created.send(
         document=document,
@@ -105,7 +110,7 @@ def create_revision_from_forms(metadata_form, revision_form, category):
     document = metadata.document
 
     revision.revision = metadata.latest_revision.revision + 1
-    revision.document = document
+    revision.metadata = metadata
     revision.save()
     revision_form.save_m2m()
 
@@ -113,10 +118,12 @@ def create_revision_from_forms(metadata_form, revision_form, category):
     metadata.save()
     metadata_form.save_m2m()
 
-    document.current_revision = revision.revision
-    document.current_revision_date = revision.revision_date
     document.document_key = metadata.document_key
     document.document_number = metadata.document_number
+    document.current_revision = revision.revision
+    document.current_revision_date = revision.revision_date
+    document.title = metadata.title
+    document.updated_on = timezone.now()
     document.save()
 
     signals.document_revised.send(
@@ -136,6 +143,8 @@ def update_revision_from_forms(metadata_form, revision_form, category):
     document = metadata.document
     document.document_key = metadata.document_key
     document.document_number = metadata.document_number
+    document.title = metadata.title
+    document.updated_on = timezone.now()
     document.save()
 
     signals.revision_edited.send(

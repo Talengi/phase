@@ -84,7 +84,7 @@ class BaseTransmittalDiffViewTests(TestCase):
         # Existing revisions
         for i in range(nb_existing):
             rev = ContractorDeliverableRevisionFactory(
-                document=doc)
+                metadata=metadata)
 
             arguments.update({'revision': rev.revision})
             TrsRevisionFactory(**arguments)

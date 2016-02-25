@@ -464,7 +464,7 @@ class DocumentRevisionDelete(DocumentDelete):
     def delete(self, request, *args, **kwargs):
         all_revisions = list(self.object.get_all_revisions())
 
-        if len(all_revisions) < 2:
+        if len(all_revisions) <= 1:
             return HttpResponseForbidden('Cannot delete a single latest revision')
 
         latest_revision = all_revisions[0]
@@ -472,6 +472,11 @@ class DocumentRevisionDelete(DocumentDelete):
 
         self.object.latest_revision = previous_revision
         self.object.save()
+
+        self.object.document.current_revision = previous_revision.revision
+        self.object.document.current_revision_date = previous_revision.revision_date
+        self.object.document.updated_on = timezone.now()
+        self.object.document.save()
 
         latest_revision.delete()
 
@@ -580,8 +585,8 @@ class DocumentFileDownload(LoginRequiredMixin,
         revision = self.kwargs.get('revision')
 
         qs = self.category.revision_class().objects \
-            .filter(document__document_key=key) \
-            .filter(document__category=self.category) \
+            .filter(metadata__document__document_key=key) \
+            .filter(metadata__document__category=self.category) \
             .filter(revision=revision)
         revision = get_object_or_404(qs)
         return revision

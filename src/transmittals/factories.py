@@ -19,14 +19,6 @@ from transmittals.models import (
     OutgoingTransmittalRevision)
 
 
-class TransmittalRevisionFactory(factory.DjangoModelFactory):
-    class Meta:
-        model = TransmittalRevision
-
-    received_date = datetime.date.today()
-    revision = factory.sequence(lambda n: n + 1)
-
-
 class TransmittalFactory(factory.DjangoModelFactory):
     class Meta:
         model = Transmittal
@@ -43,9 +35,14 @@ class TransmittalFactory(factory.DjangoModelFactory):
     document = factory.SubFactory(
         DocumentFactory,
         document_key=factory.SelfAttribute('..document_key'))
-    latest_revision = factory.SubFactory(
-        TransmittalRevisionFactory,
-        document=factory.SelfAttribute('..document'))
+
+
+class TransmittalRevisionFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = TransmittalRevision
+
+    received_date = datetime.date.today()
+    revision = factory.sequence(lambda n: n + 1)
 
 
 class TrsRevisionFactory(factory.DjangoModelFactory):

@@ -86,7 +86,6 @@ class FieldTests(TestCase):
             revision=self.doc.current_revision,
             comments=SimpleUploadedFile(sample_file, sample_path + sample_file),
         )
-
         self.assertEqual(
             review.comments.name,
             'reviews/HAZOP-related_01_GTG_comments.zip'

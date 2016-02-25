@@ -91,7 +91,7 @@ class ImportTests(TestCase):
         imp.save()
 
         revisions = DemoMetadataRevision.objects \
-            .filter(document__document_key='toto')
+            .filter(metadata__document__document_key='toto')
         self.assertEqual(revisions.count(), 1)
 
         # Importing other revisions
@@ -120,7 +120,7 @@ class ImportTests(TestCase):
         imp.save()
 
         revisions = DemoMetadataRevision.objects \
-            .filter(document__document_key='toto')
+            .filter(metadata__document__document_key='toto')
         self.assertEqual(revisions.count(), 3)
 
     def test_import_multiple_revisions_updates_document_fields(self):

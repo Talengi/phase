@@ -11,7 +11,9 @@ from django.test import TestCase
 from django.utils import timezone
 
 from accounts.factories import UserFactory
-from transmittals.factories import TransmittalFactory, create_transmittal
+from documents.factories import DocumentFactory
+from transmittals.factories import (
+    TransmittalFactory, TransmittalRevisionFactory, create_transmittal)
 
 
 def touch(path):
@@ -32,13 +34,19 @@ class TransmittalModelTests(TestCase):
         os.mkdir(self.rejected)
         os.mkdir(self.tobechecked)
 
-        self.transmittal = TransmittalFactory(
+        doc = DocumentFactory(
             document_key='FAC10005-CTR-CLT-TRS-00001',
-            status='tobechecked',
-            tobechecked_dir=self.tobechecked,
-            accepted_dir=self.accepted,
-            rejected_dir=self.rejected,
-            contractor='test')
+            metadata_factory_class=TransmittalFactory,
+            revision_factory_class=TransmittalRevisionFactory,
+            metadata={
+                'status': 'tobechecked',
+                'tobechecked_dir': self.tobechecked,
+                'accepted_dir': self.accepted,
+                'rejected_dir': self.rejected,
+                'contractor': 'test'
+            }
+        )
+        self.transmittal = doc.get_metadata()
         os.mkdir(self.transmittal.full_tobechecked_name)
 
     def tearDown(self):

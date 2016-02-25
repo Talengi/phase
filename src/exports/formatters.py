@@ -45,8 +45,8 @@ class CSVFormatter(BaseFormatter):
         elif isinstance(doc, MetadataRevisionBase):
             doc = FieldWrapper((
                 doc,
-                doc.document.metadata,
-                doc.document))
+                doc.metadata,
+                doc.metadata.document))
             fields = self.fields.values()
             data = [self.get_field(doc, field) for field in fields]
 

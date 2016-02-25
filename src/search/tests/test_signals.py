@@ -10,8 +10,9 @@ from mock import patch
 
 from accounts.factories import UserFactory
 from categories.factories import CategoryFactory
-from documents.factories import DocumentFactory
+from documents.utils import save_document_forms
 from search.signals import connect_signals
+from default_documents.forms import DemoMetadataForm, DemoMetadataRevisionForm
 
 
 @override_settings(ELASTIC_AUTOINDEX=True)
@@ -40,38 +41,58 @@ class SignalTests(TestCase):
 
     @patch('search.signals.index_document')
     def test_created_document_is_indexed(self, index_mock):
-        DocumentFactory(
-            category=self.category,
-            document_key='FAC09001-FWF-000-HSE-REP-0004',
-        )
+        form = DemoMetadataForm({
+            'title': 'Title',
+        }, category=self.category)
+        rev_form = DemoMetadataRevisionForm({
+            'docclass': '1',
+            'received_date': '2015-01-01',
+            'created_on': '2015-01-01',
+        }, category=self.category)
+        save_document_forms(form, rev_form, self.category)
         self.assertEqual(index_mock.call_count, 1)
 
     @patch('search.signals.index_document')
     @patch('search.signals.unindex_document')
     def test_deleted_document_is_unindexed(self, index_mock, unindex_mock):
-        doc = DocumentFactory(
-            category=self.category,
-            document_key='FAC09001-FWF-000-HSE-REP-0004',
-        )
+        form = DemoMetadataForm({
+            'title': 'Title',
+        }, category=self.category)
+        rev_form = DemoMetadataRevisionForm({
+            'docclass': '1',
+            'received_date': '2015-01-01',
+            'created_on': '2015-01-01',
+        }, category=self.category)
+        doc, meta, rev = save_document_forms(form, rev_form, self.category)
         doc.delete()
         self.assertEqual(unindex_mock.call_count, 1)
 
     @patch('search.signals.index_document')
     def test_updated_document_is_indexed(self, index_mock):
-        doc = DocumentFactory(
-            category=self.category,
-            document_key='FAC09001-FWF-000-HSE-REP-0004',
-        )
+        form = DemoMetadataForm({
+            'title': 'Title',
+        }, category=self.category)
+        rev_form = DemoMetadataRevisionForm({
+            'docclass': '1',
+            'received_date': '2015-01-01',
+            'created_on': '2015-01-01',
+        }, category=self.category)
+        doc, meta, rev = save_document_forms(form, rev_form, self.category)
         doc.title = 'foobar'
         doc.save()
         self.assertEqual(index_mock.call_count, 2)
 
     @patch('search.signals.index_document')
     def test_revised_document_is_indexed(self, index_mock):
-        doc = DocumentFactory(
-            category=self.category,
-            document_key='FAC09001-FWF-000-HSE-REP-0004',
-        )
+        form = DemoMetadataForm({
+            'title': 'Title',
+        }, category=self.category)
+        rev_form = DemoMetadataRevisionForm({
+            'docclass': '1',
+            'received_date': '2015-01-01',
+            'created_on': '2015-01-01',
+        }, category=self.category)
+        doc, meta, rev = save_document_forms(form, rev_form, self.category)
         revision = doc.latest_revision
         revision.pk = None
         revision.save()

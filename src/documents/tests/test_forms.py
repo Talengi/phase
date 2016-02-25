@@ -431,7 +431,7 @@ class DocumentReviseTest(TestCase):
         self.assertContains(res, 'You created revision 02')
 
         revision = DemoMetadataRevision.objects \
-            .filter(document=document) \
+            .filter(metadata__document=document) \
             .order_by('-id')[0]
         self.assertEqual(revision.revision, 2)
 
@@ -471,7 +471,7 @@ class DocumentReviseTest(TestCase):
                 }, follow=True)
 
         revision = DemoMetadataRevision.objects \
-            .filter(document=document) \
+            .filter(metadata__document=document) \
             .order_by('-id')[0]
         # Check the right file name creation KEY_REVISION_STATUS[HASH].EXT
         fn_begin = "revisions/{key}_{revision}_{status}".format(
