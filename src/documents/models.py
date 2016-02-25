@@ -225,7 +225,14 @@ class MetadataBase(ModelBase):
         return super(MetadataBase, cls).__new__(cls, name, bases, attrs)
 
 
+class MetadataManager(models.Manager):
+    def get_by_natural_key(self, document_key):
+        return self.get(document_key=document_key)
+
+
 class Metadata(six.with_metaclass(MetadataBase, models.Model)):
+    objects = MetadataManager()
+
     document = models.OneToOneField(Document)
     document_key = models.SlugField(
         _('Document key'),
