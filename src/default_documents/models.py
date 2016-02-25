@@ -303,9 +303,8 @@ class ContractorDeliverable(ScheduleMixin, Metadata):
         revisions = super(ContractorDeliverable, self) \
             .get_all_revisions() \
             .select_related(
-                'metadata',
-                'metadata__document',
-                'metadata__document__category__organisation',
+                'document',
+                'document__category__organisation',
                 'leader',
                 'approver',
                 'approver',
