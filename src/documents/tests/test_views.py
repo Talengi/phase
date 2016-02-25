@@ -203,13 +203,13 @@ class DocumentDownloadTest(TestCase):
         pdf_doc = b'sample_doc_pdf.pdf'
 
         MetadataRevisionFactory(
-            document=document,
+            metadata=document.get_metadata(),
             revision=2,
             native_file=SimpleUploadedFile(native_doc, sample_path + native_doc),
             pdf_file=SimpleUploadedFile(pdf_doc, sample_path + pdf_doc),
         )
         MetadataRevisionFactory(
-            document=document,
+            metadata=document.get_metadata(),
             revision=3,
             native_file=SimpleUploadedFile(native_doc, sample_path + native_doc),
             pdf_file=SimpleUploadedFile(pdf_doc, sample_path + pdf_doc),
@@ -299,7 +299,7 @@ class DocumentDeleteTests(TestCase):
         metadata = DemoMetadata.objects.filter(document=document)
         self.assertEqual(metadata.count(), 0)
 
-        revisions = DemoMetadataRevision.objects.filter(document=document)
+        revisions = DemoMetadataRevision.objects.filter(metadata=metadata)
         self.assertEqual(revisions.count(), 0)
 
     def test_cannot_revise_document_in_review(self):
@@ -353,9 +353,10 @@ class DocumentRevisionDeleteTests(TestCase):
 
     def create_doc(self, nb_revisions=1):
         doc = DocumentFactory(category=self.category)
+        meta = doc.get_metadata()
         for rev in range(2, nb_revisions + 1):
             MetadataRevisionFactory(
-                document=doc,
+                metadata=meta,
                 revision=rev
             )
         url = reverse('document_revision_delete', args=[
@@ -400,16 +401,18 @@ class DocumentRevisionDeleteTests(TestCase):
 
     def test_delete_latest_revision(self):
         doc, url = self.create_doc(nb_revisions=5)
+        doc.refresh_from_db()
         self.assertEqual(doc.get_all_revisions().count(), 5)
+        self.assertEqual(doc.current_revision, 5)
 
         self.client.post(url)
-        self.assertEqual(doc.get_all_revisions().count(), 4)
         doc.refresh_from_db()
+        self.assertEqual(doc.get_all_revisions().count(), 4)
         self.assertEqual(doc.current_revision, 4)
 
         self.client.post(url)
-        self.assertEqual(doc.get_all_revisions().count(), 3)
         doc.refresh_from_db()
+        self.assertEqual(doc.get_all_revisions().count(), 3)
         self.assertEqual(doc.current_revision, 3)
 
 

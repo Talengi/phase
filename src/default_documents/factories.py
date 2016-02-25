@@ -156,6 +156,12 @@ class MetadataRevisionFactory(factory.DjangoModelFactory):
             for reviewer in extracted:
                 self.reviewers.add(reviewer)
 
+    @factory.post_generation
+    def document_revision(self, create, extracted, **kwargs):
+        self.metadata.document.current_revision = self.revision
+        if create:
+            self.metadata.document.save()
+
 
 class ContractorDeliverableFactory(MetadataFactory):
     class Meta:
