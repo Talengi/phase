@@ -63,13 +63,11 @@ class ProcessTransmittalTests(TestCase):
             category=self.category)
         self.metadata = self.document.metadata
 
-        rev2 = ContractorDeliverableRevisionFactory(
-            document=self.document,
+        ContractorDeliverableRevisionFactory(
+            metadata=self.metadata,
             revision=2,
             docclass=1,
             status='SPD')
-        self.metadata.latest_revision = rev2
-        self.metadata.save()
 
         sample_path = b'documents/tests/'
         native_doc = b'sample_doc_native.docx'
