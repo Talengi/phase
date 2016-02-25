@@ -12,7 +12,8 @@ from accounts.factories import UserFactory
 from categories.factories import CategoryFactory
 from documents.factories import DocumentFactory
 from search.signals import connect_signals, disconnect_signals
-from search.utils import create_index, delete_index, put_category_mapping
+from search.utils import (create_index, delete_index, put_category_mapping,
+                          index_document)
 
 
 @override_settings(PAGINATE_BY=5)
@@ -30,10 +31,11 @@ class DocumentListTests(CasperTestCase):
 
         connect_signals()
         for doc_id in xrange(20):
-            DocumentFactory(
+            doc = DocumentFactory(
                 document_key='hazop-report-%d' % doc_id,
                 category=self.category,
             )
+            index_document(doc.id)
 
         # ES needs some time to finish indexing
         time.sleep(1)
