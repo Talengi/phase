@@ -21,12 +21,14 @@ class Command(EmailCommand):
         yesterday = timezone.now().date() - timedelta(days=1)
         classes = get_all_reviewable_classes()
         for class_ in classes:
-            revs = class_.objects.filter(review_end_date=yesterday)
+            revs = class_.objects \
+                .select_related() \
+                .filter(review_end_date=yesterday)
             reviewed_revisions += list(revs)
 
-        originators = groupby(reviewed_revisions, lambda doc: doc.originator)
-        for originator, docs in originators:
-            self.send_notification(originator=originator, documents=list(docs))
+        originators = groupby(reviewed_revisions, lambda rev: rev.metadata.originator)
+        for originator, revs in originators:
+            self.send_notification(originator=originator, revisions=list(revs))
 
     def get_subject(self, **kwargs):
         return 'Phase - Pending reviews'
