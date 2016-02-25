@@ -33,8 +33,9 @@ from django.core.management.base import BaseCommand
 from django.core.management import call_command
 from django.utils.six.moves import input
 
-from categories.models import Category
+from documents.utils import get_all_revision_classes
 from search import elastic
+from search.utils import build_index_data
 from django.conf import settings
 
 logger = logging.getLogger(__name__)
@@ -70,33 +71,20 @@ Type 'yes' to continue, or 'no' to cancel: """)
         call_command('create_index', **options)
         call_command('set_mappings', **options)
 
-        categories = Category.objects \
-            .select_related(
-                'organisation',
-                'category_template',
-                'category_template__metadata_model') \
-            .order_by('organisation__name', 'category_template__name')
-
         logger.info('Preparing index data')
-        for category in categories:
-            document_type = category.document_type()
-            RevisionClass = category.revision_class()
-            revisions = RevisionClass.objects \
-                .select_related() \
-                .filter(document__category=category)
+
+        classes = get_all_revision_classes()
+        for class_ in classes:
+            revisions = class_.objects \
+                .filter(metadata__document__is_indexable=True) \
+                .select_related()
 
             count = 0
             actions = []
-            logger.info('Starting bulk index of category {}'.format(category))
+            logger.info('Starting bulk index of documents of type {}'.format(class_.__name__))
             for revision in revisions:
                 if revision.document.is_indexable:
-                    actions.append({
-                        '_index': settings.ELASTIC_INDEX,
-                        '_type': document_type,
-                        '_id': revision.unique_id,
-                        '_source': revision.to_json(),
-                    })
-
+                    actions.append(build_index_data(revision))
                     count += 1
                     if count % settings.ELASTIC_BULK_SIZE == 0:
                         bulk(

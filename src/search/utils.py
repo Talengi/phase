@@ -92,7 +92,7 @@ def bulk_actions(actions):
 def build_index_data(revision):
     return {
         '_index': settings.ELASTIC_INDEX,
-        '_type': revision.document.document_type(),
+        '_type': revision.metadata.document.document_type(),
         '_id': revision.unique_id,
         '_source': revision.to_json(),
     }
