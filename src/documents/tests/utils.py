@@ -24,6 +24,7 @@ def generate_random_documents(nb_of_docs, category):
         document = DocumentFactory(
             category=category,
         )
+        metadata = document.get_metadata()
         max_revision = choice(range(1, 5))
         for revision_number in range(2, max_revision):
             MetadataRevisionFactory(
@@ -33,5 +34,5 @@ def generate_random_documents(nb_of_docs, category):
                     month=choice(range(1, 13)),
                     day=choice(range(1, 29)),
                 ),
-                document=document,
+                metadata=metadata
             )
