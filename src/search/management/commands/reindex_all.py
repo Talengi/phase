@@ -79,26 +79,16 @@ Type 'yes' to continue, or 'no' to cancel: """)
                 .filter(metadata__document__is_indexable=True) \
                 .select_related()
 
-            count = 0
             actions = []
-            logger.info('Starting bulk index of documents of type {}'.format(class_.__name__))
+            logger.info('Starting gathering data for documents of type {}'.format(class_.__name__))
             for revision in revisions:
-                if revision.document.is_indexable:
-                    actions.append(build_index_data(revision))
-                    count += 1
-                    if count % settings.ELASTIC_BULK_SIZE == 0:
-                        bulk(
-                            elastic,
-                            actions,
-                            chunk_size=settings.ELASTIC_BULK_SIZE,
-                            request_timeout=600)
-                        actions = []
+                actions.append(build_index_data(revision))
 
             bulk(
                 elastic,
                 actions,
                 chunk_size=settings.ELASTIC_BULK_SIZE,
-                request_timeout=60)
+                request_timeout=600)
 
         end_reindex = datetime.datetime.now()
         logger.info('Reindex ending at %s' % end_reindex)
