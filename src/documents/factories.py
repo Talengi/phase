@@ -1,5 +1,7 @@
 import datetime
 
+from django.contrib.contenttypes.models import ContentType
+
 import factory
 from factory.fuzzy import FuzzyDate
 
@@ -59,6 +61,10 @@ class DocumentFactory(factory.DjangoModelFactory):
 
         metadata.latest_revision = revision
         metadata.save()
+
+        Model = ContentType.objects.get_for_model(metadata)
+        obj.category.category_template.metadata_model = Model
+        obj.category.category_template.metadata_model.save()
 
         if create and results:
             obj.save()
