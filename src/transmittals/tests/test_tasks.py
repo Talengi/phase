@@ -15,6 +15,7 @@ from categories.factories import CategoryFactory
 from default_documents.factories import (
     ContractorDeliverableFactory, ContractorDeliverableRevisionFactory)
 from default_documents.models import ContractorDeliverable
+from accounts.factories import EntityFactory
 from transmittals.factories import TransmittalFactory, TrsRevisionFactory
 from transmittals.tasks import process_transmittal
 
@@ -47,7 +48,7 @@ class ProcessTransmittalTests(TestCase):
             metadata={
                 'title': 'Cause & Effect Chart',
                 'contract_number': 'FAC10005',
-                'originator': 'CTR',
+                'originator': EntityFactory(),
                 'unit': '000',
                 'discipline': 'EXP',
                 'document_type': 'LAY',
@@ -88,7 +89,7 @@ class ProcessTransmittalTests(TestCase):
             'category': self.category,
             'title': 'Cause & Effect Chart',
             'contract_number': 'FAC10005',
-            'originator': 'CTR',
+            'originator': EntityFactory(trigram='CTR'),
             'unit': '000',
             'discipline': 'EXP',
             'document_type': 'LAY',

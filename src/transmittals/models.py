@@ -422,8 +422,9 @@ class TrsRevision(models.Model):
         fields_dict = dict([(field, getattr(self, field)) for field in fields])
 
         # XXX
-        # This is a HACK
+        # This is a HACK and should be refactored somehow
         fields_dict.update({
+            'originator': self.originator.id,
             'sequential_number': '{:04}'.format(int(self.sequential_number))
         })
 
