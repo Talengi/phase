@@ -31,7 +31,7 @@ class Command(EmailCommand):
             self.send_notification(originator=originator, revisions=list(revs))
 
     def get_subject(self, **kwargs):
-        return 'Phase - Pending reviews'
+        return 'Phase - Reviews completed yesterday in Phase'
 
     def get_recipient_list(self, **kwargs):
         originator = kwargs['originator']

@@ -1,9 +1,9 @@
 Dear {{ user.username }},
 
-Here is the list of all reviews that ended yesterday.
+Please note that the following documents have been reviewed in Phase yesterday.
 
-{% for doc in documents %}
- - {{ doc.document.document_key }}
+{% for rev in revisions %}
+ - {{ rev.metadata.document_key }} (rev.name)
 {% endfor %}
 
 The Phase team.
