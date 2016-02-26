@@ -101,7 +101,7 @@ class GenericBaseDocumentForm(forms.ModelForm):
 
     def prepare_field_native_file(self):
         if self.instance.native_file:
-            url = reverse('document_file_download', args=[
+            url = reverse('revision_file_download', args=[
                 self.category.organisation.slug,
                 self.category.slug,
                 self.instance.document.document_key,
@@ -111,8 +111,9 @@ class GenericBaseDocumentForm(forms.ModelForm):
             self.fields['native_file'].widget.value_url = url
 
     def prepare_field_pdf_file(self):
+
         if self.instance.pdf_file:
-            url = reverse('document_file_download', args=[
+            url = reverse('revision_file_download', args=[
                 self.category.organisation.slug,
                 self.category.slug,
                 self.instance.document.document_key,

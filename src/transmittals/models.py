@@ -30,7 +30,7 @@ from search.utils import build_index_data, bulk_actions
 from metadata.fields import ConfigurableChoiceField
 from default_documents.validators import StringNumberValidator
 from privatemedia.fields import ProtectedFileField, PrivateFileField
-from transmittals.fields import TransmittalFileField
+from transmittals.fields import TransmittalFileField, OgtFileField
 from transmittals.fileutils import file_transmitted_file_path
 from transmittals.pdf import transmittal_to_pdf
 
@@ -517,6 +517,9 @@ class OutgoingTransmittal(Metadata):
         verbose_name=_('Acknowledgment of receipt author'),
         null=True, blank=True,
         on_delete=models.PROTECT)
+    archived_pdf = OgtFileField(
+        verbose_name=_("Archived PDF"),
+        null=True, blank=True)
 
     class Meta:
         app_label = 'transmittals'

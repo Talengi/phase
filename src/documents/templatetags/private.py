@@ -29,7 +29,7 @@ def download_link(revision, fieldname):
     if not field:
         return ''
 
-    url = reverse('document_file_download', args=[
+    url = reverse('revision_file_download', args=[
         revision.document.category.organisation.slug,
         revision.document.category.slug,
         revision.document.document_key,

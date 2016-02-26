@@ -179,7 +179,7 @@ class ReviewFormMixin(DistributionListValidationMixin, forms.ModelForm):
     def prepare_field_file_transmitted(self):
         self.fields['file_transmitted'].widget = RevisionClearableFileInput()
         if self.instance.file_transmitted:
-            url = reverse('document_file_download', args=[
+            url = reverse('revision_file_download', args=[
                 self.category.organisation.slug,
                 self.category.slug,
                 self.instance.document.document_key,
