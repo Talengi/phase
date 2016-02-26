@@ -34,4 +34,5 @@ class Command(EmailCommand):
         return 'Phase - Pending reviews'
 
     def get_recipient_list(self, **kwargs):
-        return ['test@toto.com']
+        originator = kwargs['originator']
+        return [u.email for u in originator.users.all()]

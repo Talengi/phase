@@ -12,7 +12,7 @@ from django.utils import timezone
 from categories.factories import CategoryFactory
 from documents.factories import DocumentFactory
 from default_documents.tests.test import ContractorDeliverableTestCase
-from accounts.factories import UserFactory
+from accounts.factories import UserFactory, EntityFactory
 from reviews.models import Review
 
 
@@ -67,6 +67,14 @@ class ClosedReviewsEmailTests(ContractorDeliverableTestCase):
         super(ClosedReviewsEmailTests, self).setUp()
         self.today = timezone.now()
         self.yesterday = timezone.now() - datetime.timedelta(days=1)
+        self.originator = EntityFactory(
+            type='originator',
+            users=[
+                UserFactory(),
+                UserFactory(),
+                UserFactory(),
+            ]
+        )
 
     def test_end_review_today(self):
         data = {
@@ -83,8 +91,26 @@ class ClosedReviewsEmailTests(ContractorDeliverableTestCase):
         call_command('send_closed_reviews_notifications')
         self.assertEqual(len(mail.outbox), 0)
 
-    def test_send_email(self):
+    def test_send_email_to_empty_originator(self):
         data = {
+            'revision': {
+                'leader': self.user,
+            }
+        }
+        doc = self.create_doc(**data)
+        rev = doc.get_latest_revision()
+        rev.start_review(at_date=self.yesterday)
+        rev.end_review(at_date=self.yesterday)
+
+        self.assertEqual(len(mail.outbox), 0)
+        call_command('send_closed_reviews_notifications')
+        self.assertEqual(len(mail.outbox), 0)
+
+    def test_send_email_to_originator_with_recipients(self):
+        data = {
+            'metadata': {
+                'originator': self.originator,
+            },
             'revision': {
                 'leader': self.user,
             }
