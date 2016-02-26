@@ -128,6 +128,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [self.email])
 
 
+class EntityManager(models.Manager):
+    def get_by_natural_key(self, trigram):
+        return self.get(trigram=trigram)
+
+
 class Entity(models.Model):
     """Defines a contractual third party."""
     TYPES = Choices(
@@ -136,6 +141,8 @@ class Entity(models.Model):
         ('originator', _('Originator')),
         ('other', _('Other')),
     )
+    objects = EntityManager()
+
     name = models.CharField(
         _('name'),
         max_length=80,
