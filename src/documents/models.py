@@ -502,7 +502,7 @@ class MetadataRevisionBase(models.Model):
 
             return field
 
-        config = metadata.PhaseConfig
+        config = document.category.document_class().PhaseConfig
         filter_fields = list(config.filter_fields)
         column_fields = dict(config.column_fields).values()
         indexable_fields = getattr(config, 'indexable_fields', [])
