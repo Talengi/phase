@@ -6,6 +6,7 @@ import datetime
 from django.utils.timezone import utc
 from django.core.urlresolvers import reverse
 
+from accounts.factories import EntityFactory
 from default_documents.tests.test import ContractorDeliverableTestCase
 from documents.models import Document
 
@@ -26,7 +27,7 @@ class ScheduleFieldsTests(ContractorDeliverableTestCase):
             'title': 'title',
             'document_number': 'KEY',
             'contract_number': 'FAC09001',
-            'originator': 'CTR',
+            'originator': EntityFactory(trigram='ORG').id,
             'unit': '001',
             'discipline': 'PRT',
             'document_type': 'LAY',

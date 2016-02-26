@@ -303,11 +303,9 @@ class TrsRevision(models.Model):
     contract_number = models.CharField(
         verbose_name='Contract Number',
         max_length=50)
-    originator = ConfigurableChoiceField(
-        _('Originator'),
-        default='FWF',
-        max_length=3,
-        list_index='ORIGINATORS')
+    originator = models.ForeignKey(
+        'accounts.Entity',
+        verbose_name=_('Originator'))
     unit = ConfigurableChoiceField(
         verbose_name=_('Unit'),
         default='000',
@@ -424,8 +422,9 @@ class TrsRevision(models.Model):
         fields_dict = dict([(field, getattr(self, field)) for field in fields])
 
         # XXX
-        # This is a HACK
+        # This is a HACK and should be refactored somehow
         fields_dict.update({
+            'originator': self.originator.id,
             'sequential_number': '{:04}'.format(int(self.sequential_number))
         })
 

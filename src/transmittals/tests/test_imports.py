@@ -19,7 +19,7 @@ from transmittals.models import Transmittal, TrsRevision
 class TestImports(TestCase):
     fixtures = [
         'initial_categories', 'initial_values_lists', 'initial_accounts',
-        'initial_documents']
+        'initial_documents', 'initial_entities']
 
     def setUp(self):
         document = Document.objects.get(document_key='FAC10005-CTR-000-EXP-LAY-4891')
@@ -103,7 +103,7 @@ class TestImports(TestCase):
 
         revision = TrsRevision.objects.order_by('revision').all()[0]
         self.assertEqual(revision.document_key, 'FAC10005-CTR-000-EXP-LAY-4891')
-        self.assertEqual(revision.originator, 'CTR')
+        self.assertEqual(revision.originator.trigram, 'CTR')
         self.assertEqual(revision.unit, '000')
         self.assertEqual(revision.discipline, 'EXP')
         self.assertEqual(revision.document_type, 'LAY')

@@ -1,0 +1,10 @@
+Dear {{ user.username }},
+
+Please note that the following documents have been reviewed in Phase yesterday.
+
+{% for rev in revisions %}
+ - {{ rev.metadata.document_key }} (rev.name)
+{% endfor %}
+
+The Phase team.
+

@@ -40,3 +40,12 @@ class EntityFactory(factory.DjangoModelFactory):
 
     name = factory.fuzzy.FuzzyText(length=20)
     trigram = factory.fuzzy.FuzzyText(length=3)
+
+    @factory.post_generation
+    def users(self, create, extracted, **kwargs):
+        if not create:
+            return
+
+        if extracted:
+            for user in extracted:
+                self.users.add(user)

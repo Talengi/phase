@@ -39,11 +39,9 @@ class ContractorDeliverable(ScheduleMixin, Metadata):
     contract_number = models.CharField(
         verbose_name='Contract Number',
         max_length=50)
-    originator = ConfigurableChoiceField(
-        verbose_name=u"Originator",
-        default=u"FWF",
-        max_length=3,
-        list_index='ORIGINATORS')
+    originator = models.ForeignKey(
+        'accounts.Entity',
+        verbose_name=_('Originator'))
     unit = ConfigurableChoiceField(
         verbose_name=u"Unit",
         default="000",
@@ -291,7 +289,7 @@ class ContractorDeliverable(ScheduleMixin, Metadata):
             u"{document_type}-{sequential_number}"
             .format(
                 contract_number=self.contract_number,
-                originator=self.originator,
+                originator=self.originator.trigram,
                 unit=self.unit,
                 discipline=self.discipline,
                 document_type=self.document_type,

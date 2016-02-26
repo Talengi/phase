@@ -3,6 +3,8 @@ from __future__ import unicode_literals
 
 from default_documents.tests.test import ContractorDeliverableTestCase
 
+from accounts.factories import EntityFactory
+
 
 class DocumentKeyTests(ContractorDeliverableTestCase):
 
@@ -12,7 +14,7 @@ class DocumentKeyTests(ContractorDeliverableTestCase):
             'metadata': {
                 'contract_number': 'FAC09001',
                 'title': 'HAZOP report',
-                'originator': 'FWF',
+                'originator': EntityFactory(trigram='FWF'),
                 'sequential_number': '0004',
                 'discipline': 'HSE',
                 'document_type': 'REP',

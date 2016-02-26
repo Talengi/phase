@@ -1,6 +1,24 @@
 [
 {
   "pk": 1,
+  "model": "accounts.entity",
+  "fields": {
+    "type": "originator",
+    "name": "CTR",
+    "trigram": "CTR"
+  }
+},
+{
+  "pk": 2,
+  "model": "accounts.entity",
+  "fields": {
+    "type": "originator",
+    "name": "FWF",
+    "trigram": "FWF"
+  }
+},
+{
+  "pk": 1,
   "model": "documents.document",
   "fields": {
     "category": ["acme", "contractor-deliverables"],
@@ -7026,7 +7044,7 @@
       "FAC09001-FWF-202-SAF-FAT-3538"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-202-SAF-FAT-3538",
@@ -7072,7 +7090,7 @@
       "FAC09001-CTR-106-VES-SOR-2177"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-106-VES-SOR-2177",
@@ -7118,7 +7136,7 @@
       "FAC10005-CTR-107-COM-DTS-9294"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-107-COM-DTS-9294",
@@ -7164,7 +7182,7 @@
       "FAC09001-CTR-301-TEL-PRO-5751"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-301-TEL-PRO-5751",
@@ -7210,7 +7228,7 @@
       "FAC09001-CTR-400-ISP-LAY-6438"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-400-ISP-LAY-6438",
@@ -7256,7 +7274,7 @@
       "FAC10005-FWF-007-PMT-NCR-3614"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-007-PMT-NCR-3614",
@@ -7302,7 +7320,7 @@
       "FAC09001-FWF-BMT-COM-PID-0388"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-BMT-COM-PID-0388",
@@ -7348,7 +7366,7 @@
       "FAC10005-CTR-000-ROT-ESD-0555"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-000-ROT-ESD-0555",
@@ -7394,7 +7412,7 @@
       "FAC10005-CTR-005-DRI-MSD-0345"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-005-DRI-MSD-0345",
@@ -7440,7 +7458,7 @@
       "FAC10005-FWF-EXT-MUL-UFD-3044"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-EXT-MUL-UFD-3044",
@@ -7486,7 +7504,7 @@
       "FAC10005-CTR-003-PCO-UFD-9039"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-003-PCO-UFD-9039",
@@ -7532,7 +7550,7 @@
       "FAC10005-CTR-CO2-ARC-DWG-7257"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-CO2-ARC-DWG-7257",
@@ -7578,7 +7596,7 @@
       "FAC09001-FWF-AST-ICS-MSD-3875"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-AST-ICS-MSD-3875",
@@ -7624,7 +7642,7 @@
       "FAC10005-FWF-000-HVA-WIR-4412"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-000-HVA-WIR-4412",
@@ -7670,7 +7688,7 @@
       "FAC09001-FWF-004-MAI-PEP-9745"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-004-MAI-PEP-9745",
@@ -7716,7 +7734,7 @@
       "FAC10005-FWF-CSA-PIP-MTO-4646"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-CSA-PIP-MTO-4646",
@@ -7762,7 +7780,7 @@
       "FAC09001-FWF-406-PCS-UFD-3221"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-406-PCS-UFD-3221",
@@ -7808,7 +7826,7 @@
       "FAC10005-CTR-AST-PCS-ITP-4703"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-AST-PCS-ITP-4703",
@@ -7854,7 +7872,7 @@
       "FAC10005-CTR-201-SAF-FG-1060"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-201-SAF-FG-1060",
@@ -7900,7 +7918,7 @@
       "FAC09001-FWF-CMP-TEL-DCN-7931"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-CMP-TEL-DCN-7931",
@@ -7946,7 +7964,7 @@
       "FAC09001-CTR-CO1-ISP-CAL-0715"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-CO1-ISP-CAL-0715",
@@ -7992,7 +8010,7 @@
       "FAC10005-FWF-CSC-ISP-UFD-8947"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-CSC-ISP-UFD-8947",
@@ -8038,7 +8056,7 @@
       "FAC09001-CTR-309-ROT-PRM-9776"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-309-ROT-PRM-9776",
@@ -8084,7 +8102,7 @@
       "FAC10005-CTR-010-CIV-DWG-1667"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-010-CIV-DWG-1667",
@@ -8130,7 +8148,7 @@
       "FAC10005-CTR-013-SAF-REP-6216"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-013-SAF-REP-6216",
@@ -8176,7 +8194,7 @@
       "FAC10005-CTR-012-COM-PRO-6884"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-012-COM-PRO-6884",
@@ -8222,7 +8240,7 @@
       "FAC09001-CTR-110-ARC-PSD-9142"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-110-ARC-PSD-9142",
@@ -8268,7 +8286,7 @@
       "FAC10005-CTR-004-DRI-NCR-7400"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-004-DRI-NCR-7400",
@@ -8314,7 +8332,7 @@
       "FAC10005-FWF-006-VES-CHT-9779"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-006-VES-CHT-9779",
@@ -8360,7 +8378,7 @@
       "FAC10005-FWF-CMG-OPE-CER-2405"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-CMG-OPE-CER-2405",
@@ -8406,7 +8424,7 @@
       "FAC10005-FWF-110-ROT-SCH-7156"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-110-ROT-SCH-7156",
@@ -8452,7 +8470,7 @@
       "FAC09001-FWF-012-ICS-STD-4653"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-012-ICS-STD-4653",
@@ -8498,7 +8516,7 @@
       "FAC09001-CTR-CWH-SAF-CER-4275"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-CWH-SAF-CER-4275",
@@ -8544,7 +8562,7 @@
       "FAC09001-FWF-700-MAI-LIS-0927"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-700-MAI-LIS-0927",
@@ -8590,7 +8608,7 @@
       "FAC09001-CTR-502-OPE-BAS-2355"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-502-OPE-BAS-2355",
@@ -8636,7 +8654,7 @@
       "FAC09001-CTR-CGC-PRT-DCN-4701"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-CGC-PRT-DCN-4701",
@@ -8682,7 +8700,7 @@
       "FAC09001-CTR-CSC-CIV-BAS-9191"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-CSC-CIV-BAS-9191",
@@ -8728,7 +8746,7 @@
       "FAC10005-CTR-004-OPE-ISO-7880"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-004-OPE-ISO-7880",
@@ -8774,7 +8792,7 @@
       "FAC09001-FWF-308-DRI-REQ-9479"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-308-DRI-REQ-9479",
@@ -8820,7 +8838,7 @@
       "FAC10005-FWF-005-QAC-PLA-6925"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-005-QAC-PLA-6925",
@@ -8866,7 +8884,7 @@
       "FAC09001-CTR-110-ROT-FG-7394"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-110-ROT-FG-7394",
@@ -8912,7 +8930,7 @@
       "FAC09001-FWF-300-COR-STD-4778"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-300-COR-STD-4778",
@@ -8958,7 +8976,7 @@
       "FAC10005-CTR-CSA-HVA-TSD-3869"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-CSA-HVA-TSD-3869",
@@ -9004,7 +9022,7 @@
       "FAC10005-FWF-012-EXP-DCN-2840"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-012-EXP-DCN-2840",
@@ -9050,7 +9068,7 @@
       "FAC09001-FWF-406-STR-TSD-2297"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-406-STR-TSD-2297",
@@ -9096,7 +9114,7 @@
       "FAC09001-FWF-008-ISP-PEP-7282"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-008-ISP-PEP-7282",
@@ -9142,7 +9160,7 @@
       "FAC09001-CTR-304-CON-ESD-2585"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-304-CON-ESD-2585",
@@ -9188,7 +9206,7 @@
       "FAC09001-FWF-201-STR-NCR-4063"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-201-STR-NCR-4063",
@@ -9234,7 +9252,7 @@
       "FAC10005-FWF-CWO-OPE-PEP-7923"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-CWO-OPE-PEP-7923",
@@ -9280,7 +9298,7 @@
       "FAC10005-CTR-306-VES-ESD-3659"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-306-VES-ESD-3659",
@@ -9326,7 +9344,7 @@
       "FAC09001-FWF-200-INS-UFD-5088"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-200-INS-UFD-5088",
@@ -9372,7 +9390,7 @@
       "FAC09001-CTR-ACC-STR-STD-5883"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-ACC-STR-STD-5883",
@@ -9418,7 +9436,7 @@
       "FAC09001-CTR-EXT-PIP-SRV-3001"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-EXT-PIP-SRV-3001",
@@ -9464,7 +9482,7 @@
       "FAC09001-CTR-307-SAF-SCH-8588"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-307-SAF-SCH-8588",
@@ -9510,7 +9528,7 @@
       "FAC09001-CTR-307-PRT-CAL-4740"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-307-PRT-CAL-4740",
@@ -9556,7 +9574,7 @@
       "FAC10005-CTR-406-ROT-MTO-0552"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-406-ROT-MTO-0552",
@@ -9602,7 +9620,7 @@
       "FAC09001-CTR-600-DRI-CAL-2553"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-600-DRI-CAL-2553",
@@ -9648,7 +9666,7 @@
       "FAC10005-CTR-400-DRI-WIR-3712"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-400-DRI-WIR-3712",
@@ -9694,7 +9712,7 @@
       "FAC10005-FWF-CSA-VES-HAZ-0498"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-CSA-VES-HAZ-0498",
@@ -9740,7 +9758,7 @@
       "FAC10005-FWF-307-ELE-CHT-8838"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-307-ELE-CHT-8838",
@@ -9786,7 +9804,7 @@
       "FAC10005-CTR-EXT-INS-PRO-9513"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-EXT-INS-PRO-9513",
@@ -9832,7 +9850,7 @@
       "FAC10005-CTR-003-ROT-PRO-3248"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-003-ROT-PRO-3248",
@@ -9878,7 +9896,7 @@
       "FAC10005-FWF-ROA-SAF-STU-5639"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-ROA-SAF-STU-5639",
@@ -9924,7 +9942,7 @@
       "FAC09001-FWF-106-PCO-LIS-4765"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-106-PCO-LIS-4765",
@@ -9970,7 +9988,7 @@
       "FAC10005-FWF-009-HSE-ITP-2348"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-009-HSE-ITP-2348",
@@ -10016,7 +10034,7 @@
       "FAC10005-FWF-CMP-QAC-PHY-3622"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-CMP-QAC-PHY-3622",
@@ -10062,7 +10080,7 @@
       "FAC10005-FWF-005-STR-PHY-8029"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-005-STR-PHY-8029",
@@ -10108,7 +10126,7 @@
       "FAC10005-FWF-110-CIV-PEP-3711"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-110-CIV-PEP-3711",
@@ -10154,7 +10172,7 @@
       "FAC10005-CTR-404-PMT-SPE-2724"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-404-PMT-SPE-2724",
@@ -10200,7 +10218,7 @@
       "FAC09001-FWF-405-PMT-REQ-5904"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-405-PMT-REQ-5904",
@@ -10246,7 +10264,7 @@
       "FAC10005-FWF-CMG-SAF-FAT-2310"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-CMG-SAF-FAT-2310",
@@ -10292,7 +10310,7 @@
       "FAC09001-FWF-LAB-MUL-REG-0738"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-LAB-MUL-REG-0738",
@@ -10338,7 +10356,7 @@
       "FAC10005-FWF-404-ICS-REQ-0410"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-404-ICS-REQ-0410",
@@ -10384,7 +10402,7 @@
       "FAC10005-CTR-106-TEL-STU-2687"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-106-TEL-STU-2687",
@@ -10430,7 +10448,7 @@
       "FAC10005-CTR-001-PRT-ESD-1979"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-001-PRT-ESD-1979",
@@ -10476,7 +10494,7 @@
       "FAC09001-FWF-012-INS-PHY-1863"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-012-INS-PHY-1863",
@@ -10522,7 +10540,7 @@
       "FAC09001-CTR-CMG-ISP-FG-5156"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-CMG-ISP-FG-5156",
@@ -10568,7 +10586,7 @@
       "FAC09001-CTR-CMG-HSE-CHT-7153"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-CMG-HSE-CHT-7153",
@@ -10614,7 +10632,7 @@
       "FAC09001-FWF-CAB-PIP-PID-4923"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-CAB-PIP-PID-4923",
@@ -10660,7 +10678,7 @@
       "FAC09001-FWF-500-ROT-HMB-7999"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-500-ROT-HMB-7999",
@@ -10706,7 +10724,7 @@
       "FAC10005-CTR-100-INS-PRO-0531"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-100-INS-PRO-0531",
@@ -10752,7 +10770,7 @@
       "FAC10005-CTR-003-INS-HAZ-5520"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-003-INS-HAZ-5520",
@@ -10798,7 +10816,7 @@
       "FAC10005-FWF-TMP-ELE-FG-8850"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-TMP-ELE-FG-8850",
@@ -10844,7 +10862,7 @@
       "FAC09001-FWF-105-COM-MTO-1412"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-105-COM-MTO-1412",
@@ -10890,7 +10908,7 @@
       "FAC10005-FWF-CO2-PCS-MAN-8556"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-CO2-PCS-MAN-8556",
@@ -10936,7 +10954,7 @@
       "FAC10005-FWF-CWH-PIP-FG-4831"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-CWH-PIP-FG-4831",
@@ -10982,7 +11000,7 @@
       "FAC10005-CTR-502-DRI-MAN-0628"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-502-DRI-MAN-0628",
@@ -11028,7 +11046,7 @@
       "FAC10005-FWF-013-HVA-ESD-2193"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-013-HVA-ESD-2193",
@@ -11074,7 +11092,7 @@
       "FAC09001-FWF-500-CON-MAN-0651"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-500-CON-MAN-0651",
@@ -11120,7 +11138,7 @@
       "FAC09001-CTR-403-COM-PFD-5122"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-403-COM-PFD-5122",
@@ -11166,7 +11184,7 @@
       "FAC09001-CTR-105-MAI-BAS-3806"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-105-MAI-BAS-3806",
@@ -11212,7 +11230,7 @@
       "FAC10005-FWF-105-EXP-OPM-3245"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-105-EXP-OPM-3245",
@@ -11258,7 +11276,7 @@
       "FAC09001-FWF-000-ARC-HMB-7287"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-000-ARC-HMB-7287",
@@ -11304,7 +11322,7 @@
       "FAC09001-CTR-CHC-MAI-FG-2706"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-CHC-MAI-FG-2706",
@@ -11350,7 +11368,7 @@
       "FAC10005-FWF-003-VES-UFD-1311"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-003-VES-UFD-1311",
@@ -11396,7 +11414,7 @@
       "FAC09001-FWF-AST-PCS-MST-0705"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-AST-PCS-MST-0705",
@@ -11442,7 +11460,7 @@
       "FAC10005-CTR-406-ICS-WIR-7792"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-406-ICS-WIR-7792",
@@ -11488,7 +11506,7 @@
       "FAC09001-CTR-305-PIP-REG-3701"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-305-PIP-REG-3701",
@@ -11534,7 +11552,7 @@
       "FAC09001-CTR-104-CON-LIS-3170"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-104-CON-LIS-3170",
@@ -11580,7 +11598,7 @@
       "FAC10005-FWF-401-PCO-REP-6336"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-401-PCO-REP-6336",
@@ -11626,7 +11644,7 @@
       "FAC10005-CTR-308-INS-PRM-1164"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-308-INS-PRM-1164",
@@ -11672,7 +11690,7 @@
       "FAC10005-FWF-012-ARC-ANA-4460"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-012-ARC-ANA-4460",
@@ -11718,7 +11736,7 @@
       "FAC10005-FWF-EXT-ELE-PRO-8325"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-EXT-ELE-PRO-8325",
@@ -11764,7 +11782,7 @@
       "FAC10005-CTR-700-WEL-CER-5495"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-700-WEL-CER-5495",
@@ -11810,7 +11828,7 @@
       "FAC09001-FWF-200-HVA-REG-8733"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-200-HVA-REG-8733",
@@ -11856,7 +11874,7 @@
       "FAC09001-FWF-000-HSE-SLD-1532"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-000-HSE-SLD-1532",
@@ -11902,7 +11920,7 @@
       "FAC09001-FWF-002-OPE-SLD-9220"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-002-OPE-SLD-9220",
@@ -11948,7 +11966,7 @@
       "FAC09001-CTR-010-PCO-MTO-3436"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-010-PCO-MTO-3436",
@@ -11994,7 +12012,7 @@
       "FAC09001-FWF-008-ARC-PRM-9062"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-008-ARC-PRM-9062",
@@ -12040,7 +12058,7 @@
       "FAC10005-FWF-CGC-ELE-REQ-5730"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-CGC-ELE-REQ-5730",
@@ -12086,7 +12104,7 @@
       "FAC09001-CTR-011-PCO-PRM-9273"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-011-PCO-PRM-9273",
@@ -12132,7 +12150,7 @@
       "FAC10005-CTR-CGC-PCO-PEP-2648"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-CGC-PCO-PEP-2648",
@@ -12178,7 +12196,7 @@
       "FAC09001-FWF-303-PMT-SOR-3362"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-303-PMT-SOR-3362",
@@ -12224,7 +12242,7 @@
       "FAC10005-FWF-005-ELE-PRM-3842"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-005-ELE-PRM-3842",
@@ -12270,7 +12288,7 @@
       "FAC09001-FWF-201-STR-PRO-9274"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-201-STR-PRO-9274",
@@ -12316,7 +12334,7 @@
       "FAC10005-FWF-500-MAI-PLA-3882"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-500-MAI-PLA-3882",
@@ -12362,7 +12380,7 @@
       "FAC09001-FWF-502-TEL-SAT-0871"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-502-TEL-SAT-0871",
@@ -12408,7 +12426,7 @@
       "FAC09001-CTR-109-COR-OPM-8522"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-109-COR-OPM-8522",
@@ -12454,7 +12472,7 @@
       "FAC10005-FWF-306-PCS-SRV-7749"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-306-PCS-SRV-7749",
@@ -12500,7 +12518,7 @@
       "FAC10005-FWF-402-CON-SRV-8699"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-402-CON-SRV-8699",
@@ -12546,7 +12564,7 @@
       "FAC10005-CTR-010-HSE-REP-6542"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-010-HSE-REP-6542",
@@ -12592,7 +12610,7 @@
       "FAC09001-FWF-BMT-ISP-PSD-3814"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-BMT-ISP-PSD-3814",
@@ -12638,7 +12656,7 @@
       "FAC09001-FWF-CHC-COM-CAL-8244"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-CHC-COM-CAL-8244",
@@ -12684,7 +12702,7 @@
       "FAC10005-CTR-305-PMT-SRV-3701"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-305-PMT-SRV-3701",
@@ -12730,7 +12748,7 @@
       "FAC09001-FWF-700-PCO-SLD-0975"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-700-PCO-SLD-0975",
@@ -12776,7 +12794,7 @@
       "FAC10005-CTR-301-HSE-NCR-0952"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-301-HSE-NCR-0952",
@@ -12822,7 +12840,7 @@
       "FAC10005-CTR-BMT-PIP-LIS-8787"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-BMT-PIP-LIS-8787",
@@ -12868,7 +12886,7 @@
       "FAC09001-FWF-CCP-PCS-FG-1850"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-CCP-PCS-FG-1850",
@@ -12914,7 +12932,7 @@
       "FAC10005-FWF-AST-PCO-PFD-6189"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-AST-PCO-PFD-6189",
@@ -12960,7 +12978,7 @@
       "FAC10005-CTR-302-TEL-WIR-7449"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-302-TEL-WIR-7449",
@@ -13006,7 +13024,7 @@
       "FAC09001-CTR-CO1-INS-PEP-0807"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-CO1-INS-PEP-0807",
@@ -13052,7 +13070,7 @@
       "FAC09001-CTR-001-ROT-BAS-8740"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-001-ROT-BAS-8740",
@@ -13098,7 +13116,7 @@
       "FAC09001-FWF-600-HSE-SLD-2209"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-600-HSE-SLD-2209",
@@ -13144,7 +13162,7 @@
       "FAC10005-CTR-CO1-TEL-PEP-3169"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-CO1-TEL-PEP-3169",
@@ -13190,7 +13208,7 @@
       "FAC10005-FWF-ACC-MUL-PRO-9737"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-ACC-MUL-PRO-9737",
@@ -13236,7 +13254,7 @@
       "FAC10005-CTR-CHC-COM-DCN-9059"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-CHC-COM-DCN-9059",
@@ -13282,7 +13300,7 @@
       "FAC09001-FWF-002-CON-MTO-2404"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-002-CON-MTO-2404",
@@ -13328,7 +13346,7 @@
       "FAC09001-FWF-402-TEL-SLD-5924"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-402-TEL-SLD-5924",
@@ -13374,7 +13392,7 @@
       "FAC10005-FWF-AIR-DRI-SAT-7914"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-AIR-DRI-SAT-7914",
@@ -13420,7 +13438,7 @@
       "FAC09001-CTR-CMP-ELE-ANA-5746"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-CMP-ELE-ANA-5746",
@@ -13466,7 +13484,7 @@
       "FAC10005-FWF-CAB-EXP-PRM-1121"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-CAB-EXP-PRM-1121",
@@ -13512,7 +13530,7 @@
       "FAC09001-FWF-CHC-HSE-SRV-7420"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-CHC-HSE-SRV-7420",
@@ -13558,7 +13576,7 @@
       "FAC10005-CTR-200-COR-WIR-3183"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-200-COR-WIR-3183",
@@ -13604,7 +13622,7 @@
       "FAC09001-CTR-CAB-ARC-LAY-9319"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-CAB-ARC-LAY-9319",
@@ -13650,7 +13668,7 @@
       "FAC10005-CTR-304-COM-SPE-3917"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-304-COM-SPE-3917",
@@ -13696,7 +13714,7 @@
       "FAC10005-FWF-405-SAF-DWG-5255"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-405-SAF-DWG-5255",
@@ -13742,7 +13760,7 @@
       "FAC10005-FWF-LAB-ARC-CHT-5359"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-LAB-ARC-CHT-5359",
@@ -13788,7 +13806,7 @@
       "FAC10005-CTR-502-MAI-SCH-5667"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-502-MAI-SCH-5667",
@@ -13834,7 +13852,7 @@
       "FAC09001-CTR-008-WEL-FAT-9742"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-008-WEL-FAT-9742",
@@ -13880,7 +13898,7 @@
       "FAC09001-FWF-501-PMT-PEP-2658"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-501-PMT-PEP-2658",
@@ -13926,7 +13944,7 @@
       "FAC10005-CTR-104-PMT-PRM-2001"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-104-PMT-PRM-2001",
@@ -13972,7 +13990,7 @@
       "FAC10005-CTR-308-MUL-MST-0807"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-308-MUL-MST-0807",
@@ -14018,7 +14036,7 @@
       "FAC10005-FWF-CAB-SAF-REQ-6019"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-CAB-SAF-REQ-6019",
@@ -14064,7 +14082,7 @@
       "FAC10005-FWF-010-ICS-DTS-9606"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-010-ICS-DTS-9606",
@@ -14110,7 +14128,7 @@
       "FAC10005-CTR-309-PPL-BAS-9468"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-309-PPL-BAS-9468",
@@ -14156,7 +14174,7 @@
       "FAC10005-CTR-LAB-CON-MSD-3707"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-LAB-CON-MSD-3707",
@@ -14202,7 +14220,7 @@
       "FAC09001-FWF-102-VES-FG-9467"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-102-VES-FG-9467",
@@ -14248,7 +14266,7 @@
       "FAC09001-FWF-CGC-EXP-TSD-2546"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-CGC-EXP-TSD-2546",
@@ -14294,7 +14312,7 @@
       "FAC09001-FWF-501-EXP-MSD-0601"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-501-EXP-MSD-0601",
@@ -14340,7 +14358,7 @@
       "FAC10005-CTR-006-PPL-SRV-1495"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-006-PPL-SRV-1495",
@@ -14386,7 +14404,7 @@
       "FAC09001-FWF-100-PCS-HMB-7363"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-100-PCS-HMB-7363",
@@ -14432,7 +14450,7 @@
       "FAC09001-CTR-501-PCO-PID-7370"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-501-PCO-PID-7370",
@@ -14478,7 +14496,7 @@
       "FAC10005-FWF-110-PIP-FG-4345"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-110-PIP-FG-4345",
@@ -14524,7 +14542,7 @@
       "FAC10005-CTR-CO1-ICS-DWG-6404"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-CO1-ICS-DWG-6404",
@@ -14570,7 +14588,7 @@
       "FAC09001-CTR-CSC-ICS-HMB-9382"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-CSC-ICS-HMB-9382",
@@ -14616,7 +14634,7 @@
       "FAC09001-FWF-109-ARC-FAT-0062"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-109-ARC-FAT-0062",
@@ -14662,7 +14680,7 @@
       "FAC10005-CTR-300-STR-ITP-7169"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-300-STR-ITP-7169",
@@ -14708,7 +14726,7 @@
       "FAC09001-FWF-AST-QAC-FG-4798"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-AST-QAC-FG-4798",
@@ -14754,7 +14772,7 @@
       "FAC09001-CTR-110-MAI-REQ-7434"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-110-MAI-REQ-7434",
@@ -14800,7 +14818,7 @@
       "FAC10005-FWF-400-PPL-DTS-8312"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-400-PPL-DTS-8312",
@@ -14846,7 +14864,7 @@
       "FAC10005-CTR-CSA-PIP-SCH-2762"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-CSA-PIP-SCH-2762",
@@ -14892,7 +14910,7 @@
       "FAC09001-CTR-CWS-HVA-FAT-6373"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-CWS-HVA-FAT-6373",
@@ -14938,7 +14956,7 @@
       "FAC09001-FWF-CMG-COM-FG-7283"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-CMG-COM-FG-7283",
@@ -14984,7 +15002,7 @@
       "FAC10005-FWF-009-HVA-CAL-4307"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-009-HVA-CAL-4307",
@@ -15030,7 +15048,7 @@
       "FAC09001-CTR-009-HSE-REG-0616"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-009-HSE-REG-0616",
@@ -15076,7 +15094,7 @@
       "FAC10005-FWF-010-MAI-REG-8092"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-010-MAI-REG-8092",
@@ -15122,7 +15140,7 @@
       "FAC09001-CTR-502-HSE-REG-8134"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-502-HSE-REG-8134",
@@ -15168,7 +15186,7 @@
       "FAC10005-FWF-102-PCO-ESD-9382"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-102-PCO-ESD-9382",
@@ -15214,7 +15232,7 @@
       "FAC10005-FWF-012-PMT-PRM-6029"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-012-PMT-PRM-6029",
@@ -15260,7 +15278,7 @@
       "FAC10005-FWF-106-TEL-UFD-4076"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-106-TEL-UFD-4076",
@@ -15306,7 +15324,7 @@
       "FAC09001-CTR-CHC-ELE-STU-4792"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-CHC-ELE-STU-4792",
@@ -15352,7 +15370,7 @@
       "FAC10005-CTR-010-VES-PID-4829"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-010-VES-PID-4829",
@@ -15398,7 +15416,7 @@
       "FAC09001-CTR-CAB-PCS-REP-7396"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-CAB-PCS-REP-7396",
@@ -15444,7 +15462,7 @@
       "FAC10005-FWF-CHC-DRI-MAN-5241"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-CHC-DRI-MAN-5241",
@@ -15490,7 +15508,7 @@
       "FAC09001-CTR-109-EXP-FG-5153"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-109-EXP-FG-5153",
@@ -15536,7 +15554,7 @@
       "FAC09001-CTR-501-CON-SCH-2346"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-501-CON-SCH-2346",
@@ -15582,7 +15600,7 @@
       "FAC10005-FWF-EXT-QAC-REG-3445"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-EXT-QAC-REG-3445",
@@ -15628,7 +15646,7 @@
       "FAC09001-FWF-101-ELE-NCR-0222"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-101-ELE-NCR-0222",
@@ -15674,7 +15692,7 @@
       "FAC09001-FWF-104-PRT-SLD-6232"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-104-PRT-SLD-6232",
@@ -15720,7 +15738,7 @@
       "FAC10005-FWF-BCC-QAC-STU-0292"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-BCC-QAC-STU-0292",
@@ -15766,7 +15784,7 @@
       "FAC10005-FWF-700-PRT-PID-4522"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-700-PRT-PID-4522",
@@ -15812,7 +15830,7 @@
       "FAC10005-CTR-700-WEL-MST-8749"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-700-WEL-MST-8749",
@@ -15858,7 +15876,7 @@
       "FAC10005-FWF-106-STR-CAL-4440"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-106-STR-CAL-4440",
@@ -15904,7 +15922,7 @@
       "FAC10005-FWF-BMT-MAI-REP-9136"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-BMT-MAI-REP-9136",
@@ -15950,7 +15968,7 @@
       "FAC10005-FWF-CMG-PCO-WIR-0117"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-CMG-PCO-WIR-0117",
@@ -15996,7 +16014,7 @@
       "FAC09001-FWF-AST-COR-SAT-5273"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-AST-COR-SAT-5273",
@@ -16042,7 +16060,7 @@
       "FAC10005-FWF-109-COM-LAY-0769"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-109-COM-LAY-0769",
@@ -16088,7 +16106,7 @@
       "FAC10005-CTR-302-HVA-SCH-1566"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-302-HVA-SCH-1566",
@@ -16134,7 +16152,7 @@
       "FAC10005-CTR-CWO-MUL-PSD-0776"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-CWO-MUL-PSD-0776",
@@ -16180,7 +16198,7 @@
       "FAC09001-CTR-AST-ROT-HAZ-4289"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-AST-ROT-HAZ-4289",
@@ -16226,7 +16244,7 @@
       "FAC09001-FWF-BMT-ARC-MAN-2793"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-BMT-ARC-MAN-2793",
@@ -16272,7 +16290,7 @@
       "FAC10005-CTR-CWO-OPE-PHY-0595"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-CWO-OPE-PHY-0595",
@@ -16318,7 +16336,7 @@
       "FAC09001-FWF-304-ICS-FAT-8828"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-304-ICS-FAT-8828",
@@ -16364,7 +16382,7 @@
       "FAC09001-FWF-202-ISP-MSD-9356"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-202-ISP-MSD-9356",
@@ -16410,7 +16428,7 @@
       "FAC10005-FWF-700-PCS-STD-3867"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-700-PCS-STD-3867",
@@ -16456,7 +16474,7 @@
       "FAC10005-FWF-301-PCS-MST-8066"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-301-PCS-MST-8066",
@@ -16502,7 +16520,7 @@
       "FAC10005-CTR-003-COR-FAT-9851"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-003-COR-FAT-9851",
@@ -16548,7 +16566,7 @@
       "FAC10005-FWF-000-VES-ITP-4558"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-000-VES-ITP-4558",
@@ -16594,7 +16612,7 @@
       "FAC09001-FWF-CSA-QAC-ITP-3203"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-CSA-QAC-ITP-3203",
@@ -16640,7 +16658,7 @@
       "FAC09001-CTR-304-MAI-SOR-8652"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-304-MAI-SOR-8652",
@@ -16686,7 +16704,7 @@
       "FAC10005-CTR-601-PIP-REQ-6033"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-601-PIP-REQ-6033",
@@ -16732,7 +16750,7 @@
       "FAC09001-CTR-CHC-COM-DCN-4655"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-CHC-COM-DCN-4655",
@@ -16778,7 +16796,7 @@
       "FAC10005-CTR-CMP-SAF-SLD-0153"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-CMP-SAF-SLD-0153",
@@ -16824,7 +16842,7 @@
       "FAC10005-FWF-404-MUL-PEP-6164"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-404-MUL-PEP-6164",
@@ -16870,7 +16888,7 @@
       "FAC10005-CTR-007-PRT-PFD-5931"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-007-PRT-PFD-5931",
@@ -16916,7 +16934,7 @@
       "FAC09001-FWF-009-PRT-DTS-2377"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-009-PRT-DTS-2377",
@@ -16962,7 +16980,7 @@
       "FAC10005-FWF-CCP-SAF-LIS-2596"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-CCP-SAF-LIS-2596",
@@ -17008,7 +17026,7 @@
       "FAC10005-FWF-304-PCS-PLA-9183"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-304-PCS-PLA-9183",
@@ -17054,7 +17072,7 @@
       "FAC09001-CTR-008-PRT-UFD-7762"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-008-PRT-UFD-7762",
@@ -17100,7 +17118,7 @@
       "FAC10005-FWF-301-CON-STD-8046"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-301-CON-STD-8046",
@@ -17146,7 +17164,7 @@
       "FAC09001-CTR-101-SAF-ITP-7858"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-101-SAF-ITP-7858",
@@ -17192,7 +17210,7 @@
       "FAC10005-CTR-601-ICS-OPM-7585"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-601-ICS-OPM-7585",
@@ -17238,7 +17256,7 @@
       "FAC10005-FWF-CHC-INS-FG-6738"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-CHC-INS-FG-6738",
@@ -17284,7 +17302,7 @@
       "FAC10005-CTR-700-ARC-PID-6225"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-700-ARC-PID-6225",
@@ -17330,7 +17348,7 @@
       "FAC09001-CTR-105-TEL-REG-0500"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-105-TEL-REG-0500",
@@ -17376,7 +17394,7 @@
       "FAC10005-CTR-101-ISP-PID-1304"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-101-ISP-PID-1304",
@@ -17422,7 +17440,7 @@
       "FAC09001-CTR-ROA-PIP-ISO-9961"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-ROA-PIP-ISO-9961",
@@ -17468,7 +17486,7 @@
       "FAC10005-CTR-200-VES-REQ-3227"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-200-VES-REQ-3227",
@@ -17514,7 +17532,7 @@
       "FAC10005-CTR-307-WEL-PSD-5503"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-307-WEL-PSD-5503",
@@ -17560,7 +17578,7 @@
       "FAC10005-FWF-ROA-STR-PFD-2846"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-ROA-STR-PFD-2846",
@@ -17606,7 +17624,7 @@
       "FAC09001-CTR-CMP-OPE-CHT-4360"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-CMP-OPE-CHT-4360",
@@ -17652,7 +17670,7 @@
       "FAC09001-FWF-110-VES-REP-3650"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-110-VES-REP-3650",
@@ -17698,7 +17716,7 @@
       "FAC09001-CTR-001-ROT-MAN-2139"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-001-ROT-MAN-2139",
@@ -17744,7 +17762,7 @@
       "FAC09001-FWF-404-MUL-STU-7527"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-404-MUL-STU-7527",
@@ -17790,7 +17808,7 @@
       "FAC09001-CTR-BCC-SAF-ITP-9469"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-BCC-SAF-ITP-9469",
@@ -17836,7 +17854,7 @@
       "FAC09001-CTR-105-STR-DTS-6173"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-105-STR-DTS-6173",
@@ -17882,7 +17900,7 @@
       "FAC09001-CTR-008-ISP-ITP-7393"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-008-ISP-ITP-7393",
@@ -17928,7 +17946,7 @@
       "FAC10005-CTR-307-ISP-SPE-7014"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-307-ISP-SPE-7014",
@@ -17974,7 +17992,7 @@
       "FAC10005-FWF-ACC-ELE-PRO-4832"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-ACC-ELE-PRO-4832",
@@ -18020,7 +18038,7 @@
       "FAC09001-FWF-AST-PMT-PLA-9968"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-AST-PMT-PLA-9968",
@@ -18066,7 +18084,7 @@
       "FAC09001-FWF-201-VES-ANA-0372"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-201-VES-ANA-0372",
@@ -18112,7 +18130,7 @@
       "FAC10005-FWF-CMG-STR-SRV-4565"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-CMG-STR-SRV-4565",
@@ -18158,7 +18176,7 @@
       "FAC09001-CTR-601-COR-CAL-7997"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-601-COR-CAL-7997",
@@ -18204,7 +18222,7 @@
       "FAC09001-FWF-307-INS-PRM-1484"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-307-INS-PRM-1484",
@@ -18250,7 +18268,7 @@
       "FAC09001-FWF-109-PCO-DTS-4428"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-109-PCO-DTS-4428",
@@ -18296,7 +18314,7 @@
       "FAC10005-CTR-012-MAI-MST-8576"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-012-MAI-MST-8576",
@@ -18342,7 +18360,7 @@
       "FAC09001-CTR-CSA-QAC-STD-5229"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-CSA-QAC-STD-5229",
@@ -18388,7 +18406,7 @@
       "FAC09001-CTR-007-PMT-ISO-7281"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-007-PMT-ISO-7281",
@@ -18434,7 +18452,7 @@
       "FAC10005-FWF-006-HVA-LIS-2205"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-006-HVA-LIS-2205",
@@ -18480,7 +18498,7 @@
       "FAC09001-CTR-102-COR-REG-6173"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-102-COR-REG-6173",
@@ -18526,7 +18544,7 @@
       "FAC10005-FWF-403-WEL-OPM-8255"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-403-WEL-OPM-8255",
@@ -18572,7 +18590,7 @@
       "FAC09001-FWF-CO1-MUL-PHY-9145"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-CO1-MUL-PHY-9145",
@@ -18618,7 +18636,7 @@
       "FAC10005-FWF-500-TEL-SLD-5268"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-500-TEL-SLD-5268",
@@ -18664,7 +18682,7 @@
       "FAC09001-CTR-309-PIP-MAN-1818"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-309-PIP-MAN-1818",
@@ -18710,7 +18728,7 @@
       "FAC10005-CTR-BMT-MAI-SCH-2764"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-BMT-MAI-SCH-2764",
@@ -18756,7 +18774,7 @@
       "FAC10005-FWF-010-CON-NCR-1197"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-010-CON-NCR-1197",
@@ -18802,7 +18820,7 @@
       "FAC09001-FWF-006-COM-REQ-9653"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-006-COM-REQ-9653",
@@ -18848,7 +18866,7 @@
       "FAC09001-FWF-600-CIV-STD-2756"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-600-CIV-STD-2756",
@@ -18894,7 +18912,7 @@
       "FAC09001-FWF-CO1-PCS-MSD-7616"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-CO1-PCS-MSD-7616",
@@ -18940,7 +18958,7 @@
       "FAC09001-FWF-102-MAI-LAY-2852"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-102-MAI-LAY-2852",
@@ -18986,7 +19004,7 @@
       "FAC10005-FWF-405-STR-PFD-7327"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-405-STR-PFD-7327",
@@ -19032,7 +19050,7 @@
       "FAC10005-CTR-008-ISP-HMB-2891"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-008-ISP-HMB-2891",
@@ -19078,7 +19096,7 @@
       "FAC09001-FWF-012-COM-PSD-3803"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-012-COM-PSD-3803",
@@ -19124,7 +19142,7 @@
       "FAC09001-CTR-103-QAC-REQ-0841"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-103-QAC-REQ-0841",
@@ -19170,7 +19188,7 @@
       "FAC10005-CTR-109-STR-FAT-2595"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-109-STR-FAT-2595",
@@ -19216,7 +19234,7 @@
       "FAC09001-CTR-003-PCO-SRV-9072"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-003-PCO-SRV-9072",
@@ -19262,7 +19280,7 @@
       "FAC09001-CTR-003-CIV-MAN-6043"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-003-CIV-MAN-6043",
@@ -19308,7 +19326,7 @@
       "FAC10005-CTR-104-PPL-PFD-5099"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-104-PPL-PFD-5099",
@@ -19354,7 +19372,7 @@
       "FAC10005-CTR-601-STR-UFD-6897"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-601-STR-UFD-6897",
@@ -19400,7 +19418,7 @@
       "FAC10005-CTR-001-INS-PRM-8630"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-001-INS-PRM-8630",
@@ -19446,7 +19464,7 @@
       "FAC10005-CTR-600-MAI-PEP-1194"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-600-MAI-PEP-1194",
@@ -19492,7 +19510,7 @@
       "FAC09001-CTR-CSC-SAF-WIR-5033"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-CSC-SAF-WIR-5033",
@@ -19538,7 +19556,7 @@
       "FAC10005-FWF-013-HVA-ANA-6166"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-013-HVA-ANA-6166",
@@ -19584,7 +19602,7 @@
       "FAC10005-FWF-110-MUL-MSD-5229"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-110-MUL-MSD-5229",
@@ -19630,7 +19648,7 @@
       "FAC09001-CTR-400-ISP-LAY-9493"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-400-ISP-LAY-9493",
@@ -19676,7 +19694,7 @@
       "FAC10005-CTR-307-MAI-SAT-2258"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-307-MAI-SAT-2258",
@@ -19722,7 +19740,7 @@
       "FAC10005-FWF-301-SAF-CAL-9256"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-301-SAF-CAL-9256",
@@ -19768,7 +19786,7 @@
       "FAC09001-FWF-105-WEL-ESD-0803"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-105-WEL-ESD-0803",
@@ -19814,7 +19832,7 @@
       "FAC09001-FWF-CHC-OPE-SPE-6519"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-CHC-OPE-SPE-6519",
@@ -19860,7 +19878,7 @@
       "FAC10005-FWF-501-PRT-SCH-4212"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-501-PRT-SCH-4212",
@@ -19906,7 +19924,7 @@
       "FAC10005-CTR-300-PRT-LIS-1308"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-300-PRT-LIS-1308",
@@ -19952,7 +19970,7 @@
       "FAC10005-CTR-309-ELE-DTS-6577"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-309-ELE-DTS-6577",
@@ -19998,7 +20016,7 @@
       "FAC09001-CTR-106-PCO-LAY-0701"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-106-PCO-LAY-0701",
@@ -20044,7 +20062,7 @@
       "FAC09001-FWF-CTP-HVA-MSD-8754"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-CTP-HVA-MSD-8754",
@@ -20090,7 +20108,7 @@
       "FAC10005-FWF-004-VES-PID-7319"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-004-VES-PID-7319",
@@ -20136,7 +20154,7 @@
       "FAC09001-CTR-307-PIP-HAZ-2527"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-307-PIP-HAZ-2527",
@@ -20182,7 +20200,7 @@
       "FAC09001-CTR-CGC-SAF-SAT-4572"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-CGC-SAF-SAT-4572",
@@ -20228,7 +20246,7 @@
       "FAC10005-FWF-107-EXP-PLA-3728"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-107-EXP-PLA-3728",
@@ -20274,7 +20292,7 @@
       "FAC10005-CTR-601-ELE-LIS-4435"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-601-ELE-LIS-4435",
@@ -20320,7 +20338,7 @@
       "FAC10005-CTR-308-COR-SRV-0946"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-308-COR-SRV-0946",
@@ -20366,7 +20384,7 @@
       "FAC09001-CTR-303-MAI-OPM-4069"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-303-MAI-OPM-4069",
@@ -20412,7 +20430,7 @@
       "FAC09001-FWF-CTP-ICS-OPM-2040"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-CTP-ICS-OPM-2040",
@@ -20458,7 +20476,7 @@
       "FAC10005-FWF-103-PIP-WIR-3693"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-103-PIP-WIR-3693",
@@ -20504,7 +20522,7 @@
       "FAC09001-FWF-304-EXP-MST-1517"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-304-EXP-MST-1517",
@@ -20550,7 +20568,7 @@
       "FAC09001-FWF-ROA-EXP-CHT-7267"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-ROA-EXP-CHT-7267",
@@ -20596,7 +20614,7 @@
       "FAC09001-FWF-000-PMT-WIR-8745"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-000-PMT-WIR-8745",
@@ -20642,7 +20660,7 @@
       "FAC10005-CTR-ACC-COR-REP-2286"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-ACC-COR-REP-2286",
@@ -20688,7 +20706,7 @@
       "FAC09001-FWF-202-PCO-CER-8515"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-202-PCO-CER-8515",
@@ -20734,7 +20752,7 @@
       "FAC09001-FWF-700-WEL-PHY-4764"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-700-WEL-PHY-4764",
@@ -20780,7 +20798,7 @@
       "FAC10005-FWF-008-WEL-ITP-4371"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-008-WEL-ITP-4371",
@@ -20826,7 +20844,7 @@
       "FAC10005-CTR-501-ARC-HAZ-8902"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-501-ARC-HAZ-8902",
@@ -20872,7 +20890,7 @@
       "FAC09001-FWF-402-VES-TSD-9247"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-402-VES-TSD-9247",
@@ -20918,7 +20936,7 @@
       "FAC09001-FWF-502-PPL-FG-8052"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-502-PPL-FG-8052",
@@ -20964,7 +20982,7 @@
       "FAC10005-FWF-ROA-PPL-PEP-1090"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-ROA-PPL-PEP-1090",
@@ -21010,7 +21028,7 @@
       "FAC09001-FWF-502-PIP-ITP-4334"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-502-PIP-ITP-4334",
@@ -21056,7 +21074,7 @@
       "FAC10005-CTR-303-COM-HAZ-7118"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-303-COM-HAZ-7118",
@@ -21102,7 +21120,7 @@
       "FAC09001-CTR-001-PRT-LAY-0186"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-001-PRT-LAY-0186",
@@ -21148,7 +21166,7 @@
       "FAC09001-FWF-202-STR-ESD-7495"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-202-STR-ESD-7495",
@@ -21194,7 +21212,7 @@
       "FAC09001-FWF-010-OPE-LAY-9004"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-010-OPE-LAY-9004",
@@ -21240,7 +21258,7 @@
       "FAC10005-CTR-BAT-ICS-MST-3763"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-BAT-ICS-MST-3763",
@@ -21286,7 +21304,7 @@
       "FAC10005-CTR-307-MUL-SOR-2313"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-307-MUL-SOR-2313",
@@ -21332,7 +21350,7 @@
       "FAC09001-CTR-103-PIP-STU-4495"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-103-PIP-STU-4495",
@@ -21378,7 +21396,7 @@
       "FAC10005-FWF-004-INS-PSD-4431"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-004-INS-PSD-4431",
@@ -21424,7 +21442,7 @@
       "FAC09001-FWF-103-STR-FG-7497"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-103-STR-FG-7497",
@@ -21470,7 +21488,7 @@
       "FAC10005-CTR-503-ISP-FG-6128"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-503-ISP-FG-6128",
@@ -21516,7 +21534,7 @@
       "FAC09001-CTR-013-PRT-PFD-8909"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-013-PRT-PFD-8909",
@@ -21562,7 +21580,7 @@
       "FAC10005-CTR-101-PPL-CHT-1441"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-101-PPL-CHT-1441",
@@ -21608,7 +21626,7 @@
       "FAC09001-FWF-005-HSE-MST-0568"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-005-HSE-MST-0568",
@@ -21654,7 +21672,7 @@
       "FAC09001-CTR-CMG-ISP-PHY-5467"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-CMG-ISP-PHY-5467",
@@ -21700,7 +21718,7 @@
       "FAC09001-FWF-BAT-INS-TSD-1917"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-BAT-INS-TSD-1917",
@@ -21746,7 +21764,7 @@
       "FAC10005-CTR-300-VES-ITP-1548"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-300-VES-ITP-1548",
@@ -21792,7 +21810,7 @@
       "FAC10005-CTR-700-INS-SAT-0004"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-700-INS-SAT-0004",
@@ -21838,7 +21856,7 @@
       "FAC09001-FWF-013-OPE-ITP-5386"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-013-OPE-ITP-5386",
@@ -21884,7 +21902,7 @@
       "FAC10005-CTR-002-HSE-REP-7736"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-002-HSE-REP-7736",
@@ -21930,7 +21948,7 @@
       "FAC09001-FWF-CSC-EXP-BAS-2704"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-CSC-EXP-BAS-2704",
@@ -21976,7 +21994,7 @@
       "FAC10005-CTR-309-MUL-SOR-8049"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-309-MUL-SOR-8049",
@@ -22022,7 +22040,7 @@
       "FAC09001-FWF-402-MAI-PRO-5745"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-402-MAI-PRO-5745",
@@ -22068,7 +22086,7 @@
       "FAC10005-FWF-301-VES-PSD-9441"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-301-VES-PSD-9441",
@@ -22114,7 +22132,7 @@
       "FAC09001-CTR-CTP-VES-LIS-5505"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-CTP-VES-LIS-5505",
@@ -22160,7 +22178,7 @@
       "FAC09001-FWF-110-SAF-WIR-5977"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-110-SAF-WIR-5977",
@@ -22206,7 +22224,7 @@
       "FAC10005-FWF-EXT-HVA-SAT-5733"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-EXT-HVA-SAT-5733",
@@ -22252,7 +22270,7 @@
       "FAC10005-FWF-CSC-COM-REG-8873"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-CSC-COM-REG-8873",
@@ -22298,7 +22316,7 @@
       "FAC10005-CTR-CWH-PPL-MST-9195"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-CWH-PPL-MST-9195",
@@ -22344,7 +22362,7 @@
       "FAC09001-CTR-304-PIP-STU-5010"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-304-PIP-STU-5010",
@@ -22390,7 +22408,7 @@
       "FAC10005-FWF-305-HVA-CER-3214"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-305-HVA-CER-3214",
@@ -22436,7 +22454,7 @@
       "FAC09001-FWF-400-TEL-CER-0626"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-400-TEL-CER-0626",
@@ -22482,7 +22500,7 @@
       "FAC10005-FWF-300-ICS-PRO-1387"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-300-ICS-PRO-1387",
@@ -22528,7 +22546,7 @@
       "FAC09001-FWF-CO1-INS-SAT-1114"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-CO1-INS-SAT-1114",
@@ -22574,7 +22592,7 @@
       "FAC09001-CTR-001-TEL-BAS-5530"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-001-TEL-BAS-5530",
@@ -22620,7 +22638,7 @@
       "FAC09001-CTR-CAB-ELE-LIS-5315"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-CAB-ELE-LIS-5315",
@@ -22666,7 +22684,7 @@
       "FAC10005-CTR-CGC-TEL-ISO-4259"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-CGC-TEL-ISO-4259",
@@ -22712,7 +22730,7 @@
       "FAC09001-CTR-010-STR-SRV-6256"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-010-STR-SRV-6256",
@@ -22758,7 +22776,7 @@
       "FAC09001-CTR-104-SAF-REP-9612"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-104-SAF-REP-9612",
@@ -22804,7 +22822,7 @@
       "FAC09001-FWF-CMP-MAI-FG-1895"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-CMP-MAI-FG-1895",
@@ -22850,7 +22868,7 @@
       "FAC09001-CTR-BCC-STR-MTO-6717"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-BCC-STR-MTO-6717",
@@ -22896,7 +22914,7 @@
       "FAC10005-CTR-306-PCO-SLD-6904"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-306-PCO-SLD-6904",
@@ -22942,7 +22960,7 @@
       "FAC10005-CTR-307-PPL-REG-1504"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-307-PPL-REG-1504",
@@ -22988,7 +23006,7 @@
       "FAC10005-CTR-109-VES-HMB-6360"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-109-VES-HMB-6360",
@@ -23034,7 +23052,7 @@
       "FAC10005-FWF-005-EXP-HMB-0144"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-005-EXP-HMB-0144",
@@ -23080,7 +23098,7 @@
       "FAC10005-CTR-401-WEL-MSD-4776"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-401-WEL-MSD-4776",
@@ -23126,7 +23144,7 @@
       "FAC10005-CTR-301-CIV-HMB-2692"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-301-CIV-HMB-2692",
@@ -23172,7 +23190,7 @@
       "FAC09001-CTR-006-SAF-MST-1446"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-006-SAF-MST-1446",
@@ -23218,7 +23236,7 @@
       "FAC10005-FWF-CSC-ISP-DCN-1363"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-CSC-ISP-DCN-1363",
@@ -23264,7 +23282,7 @@
       "FAC10005-CTR-304-COM-NCR-0164"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-304-COM-NCR-0164",
@@ -23310,7 +23328,7 @@
       "FAC09001-FWF-302-PCO-FG-7866"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-302-PCO-FG-7866",
@@ -23356,7 +23374,7 @@
       "FAC09001-CTR-CWS-ARC-ESD-9862"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-CWS-ARC-ESD-9862",
@@ -23402,7 +23420,7 @@
       "FAC10005-CTR-002-PMT-ITP-5017"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-002-PMT-ITP-5017",
@@ -23448,7 +23466,7 @@
       "FAC09001-CTR-200-PRT-TSD-7916"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-200-PRT-TSD-7916",
@@ -23494,7 +23512,7 @@
       "FAC10005-FWF-ACC-COM-DWG-9404"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-ACC-COM-DWG-9404",
@@ -23540,7 +23558,7 @@
       "FAC09001-FWF-LAB-CON-PLA-6869"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-LAB-CON-PLA-6869",
@@ -23586,7 +23604,7 @@
       "FAC10005-CTR-300-DRI-PLA-5914"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-300-DRI-PLA-5914",
@@ -23632,7 +23650,7 @@
       "FAC09001-FWF-601-HVA-NCR-1157"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-601-HVA-NCR-1157",
@@ -23678,7 +23696,7 @@
       "FAC09001-CTR-303-HSE-PRO-0911"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-303-HSE-PRO-0911",
@@ -23724,7 +23742,7 @@
       "FAC09001-CTR-401-QAC-MSD-7694"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-401-QAC-MSD-7694",
@@ -23770,7 +23788,7 @@
       "FAC09001-FWF-201-ICS-REG-8827"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-201-ICS-REG-8827",
@@ -23816,7 +23834,7 @@
       "FAC10005-FWF-005-HVA-PHY-9081"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-005-HVA-PHY-9081",
@@ -23862,7 +23880,7 @@
       "FAC09001-CTR-309-STR-SLD-5750"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-309-STR-SLD-5750",
@@ -23908,7 +23926,7 @@
       "FAC10005-FWF-007-VES-TSD-0291"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-007-VES-TSD-0291",
@@ -23954,7 +23972,7 @@
       "FAC10005-FWF-700-ARC-BAS-7850"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-700-ARC-BAS-7850",
@@ -24000,7 +24018,7 @@
       "FAC09001-FWF-BAT-PCO-ESD-5818"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-BAT-PCO-ESD-5818",
@@ -24046,7 +24064,7 @@
       "FAC09001-CTR-201-VES-PEP-4506"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-201-VES-PEP-4506",
@@ -24092,7 +24110,7 @@
       "FAC09001-CTR-005-PPL-REG-4368"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-005-PPL-REG-4368",
@@ -24138,7 +24156,7 @@
       "FAC09001-FWF-306-SAF-HMB-3946"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-306-SAF-HMB-3946",
@@ -24184,7 +24202,7 @@
       "FAC10005-CTR-CO1-PPL-NCR-5121"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-CO1-PPL-NCR-5121",
@@ -24230,7 +24248,7 @@
       "FAC10005-FWF-001-PCO-PEP-0026"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-001-PCO-PEP-0026",
@@ -24276,7 +24294,7 @@
       "FAC09001-FWF-007-PIP-SAT-7121"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-007-PIP-SAT-7121",
@@ -24322,7 +24340,7 @@
       "FAC10005-CTR-006-CIV-PEP-7829"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-006-CIV-PEP-7829",
@@ -24368,7 +24386,7 @@
       "FAC10005-FWF-012-EXP-ANA-4478"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-012-EXP-ANA-4478",
@@ -24414,7 +24432,7 @@
       "FAC10005-FWF-004-EXP-REQ-0815"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-004-EXP-REQ-0815",
@@ -24460,7 +24478,7 @@
       "FAC09001-CTR-CWO-STR-ESD-2393"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-CWO-STR-ESD-2393",
@@ -24506,7 +24524,7 @@
       "FAC10005-CTR-011-ARC-STU-2583"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-011-ARC-STU-2583",
@@ -24552,7 +24570,7 @@
       "FAC10005-FWF-ROA-EXP-SRV-7773"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-ROA-EXP-SRV-7773",
@@ -24598,7 +24616,7 @@
       "FAC09001-FWF-304-ISP-MSD-4897"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-304-ISP-MSD-4897",
@@ -24644,7 +24662,7 @@
       "FAC09001-FWF-BMT-PCO-FAT-2201"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-BMT-PCO-FAT-2201",
@@ -24690,7 +24708,7 @@
       "FAC10005-FWF-102-DRI-CHT-5775"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-102-DRI-CHT-5775",
@@ -24736,7 +24754,7 @@
       "FAC10005-FWF-007-CON-SRV-0445"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-007-CON-SRV-0445",
@@ -24782,7 +24800,7 @@
       "FAC10005-FWF-006-ARC-PSD-1432"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-006-ARC-PSD-1432",
@@ -24828,7 +24846,7 @@
       "FAC09001-CTR-BMT-QAC-MST-5068"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-BMT-QAC-MST-5068",
@@ -24874,7 +24892,7 @@
       "FAC10005-FWF-103-WEL-DTS-5351"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-103-WEL-DTS-5351",
@@ -24920,7 +24938,7 @@
       "FAC10005-CTR-CWO-PMT-MAN-6045"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-CWO-PMT-MAN-6045",
@@ -24966,7 +24984,7 @@
       "FAC09001-CTR-CSA-WEL-FG-6893"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-CSA-WEL-FG-6893",
@@ -25012,7 +25030,7 @@
       "FAC09001-CTR-ROA-HSE-CHT-8247"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-ROA-HSE-CHT-8247",
@@ -25058,7 +25076,7 @@
       "FAC09001-FWF-001-STR-PRM-2922"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-001-STR-PRM-2922",
@@ -25104,7 +25122,7 @@
       "FAC09001-FWF-301-CIV-PHY-1880"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-301-CIV-PHY-1880",
@@ -25150,7 +25168,7 @@
       "FAC09001-FWF-501-CON-SLD-3646"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-501-CON-SLD-3646",
@@ -25196,7 +25214,7 @@
       "FAC10005-FWF-AST-TEL-BAS-7462"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-AST-TEL-BAS-7462",
@@ -25242,7 +25260,7 @@
       "FAC09001-FWF-306-PCS-PHY-3561"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-306-PCS-PHY-3561",
@@ -25288,7 +25306,7 @@
       "FAC09001-FWF-309-PCS-SLD-6469"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-309-PCS-SLD-6469",
@@ -25334,7 +25352,7 @@
       "FAC09001-CTR-403-PIP-SOR-2896"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-403-PIP-SOR-2896",
@@ -25380,7 +25398,7 @@
       "FAC10005-FWF-CWS-HSE-DTS-3780"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-CWS-HSE-DTS-3780",
@@ -25426,7 +25444,7 @@
       "FAC10005-CTR-202-MAI-CAL-7913"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-202-MAI-CAL-7913",
@@ -25472,7 +25490,7 @@
       "FAC10005-FWF-201-HSE-UFD-4142"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-201-HSE-UFD-4142",
@@ -25518,7 +25536,7 @@
       "FAC09001-CTR-404-PCS-SLD-5178"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-404-PCS-SLD-5178",
@@ -25564,7 +25582,7 @@
       "FAC09001-CTR-009-MAI-DTS-7143"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-009-MAI-DTS-7143",
@@ -25610,7 +25628,7 @@
       "FAC10005-CTR-000-EXP-LAY-4891"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-000-EXP-LAY-4891",
@@ -25656,7 +25674,7 @@
       "FAC09001-FWF-600-PCS-MAN-0686"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-600-PCS-MAN-0686",
@@ -25702,7 +25720,7 @@
       "FAC09001-CTR-110-SAF-SAT-7811"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-110-SAF-SAT-7811",
@@ -25748,7 +25766,7 @@
       "FAC09001-CTR-202-WEL-MAN-7269"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-202-WEL-MAN-7269",
@@ -25794,7 +25812,7 @@
       "FAC10005-FWF-308-ROT-ESD-1166"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-308-ROT-ESD-1166",
@@ -25840,7 +25858,7 @@
       "FAC09001-FWF-BCC-MAI-CHT-2065"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-BCC-MAI-CHT-2065",
@@ -25886,7 +25904,7 @@
       "FAC09001-FWF-CO2-ISP-DWG-3995"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-CO2-ISP-DWG-3995",
@@ -25932,7 +25950,7 @@
       "FAC09001-CTR-601-TEL-REQ-7775"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-601-TEL-REQ-7775",
@@ -25978,7 +25996,7 @@
       "FAC09001-CTR-200-PRT-STD-0809"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-200-PRT-STD-0809",
@@ -26024,7 +26042,7 @@
       "FAC09001-CTR-BCC-PRT-HMB-6363"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-BCC-PRT-HMB-6363",
@@ -26070,7 +26088,7 @@
       "FAC09001-CTR-012-COR-ANA-9082"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-012-COR-ANA-9082",
@@ -26116,7 +26134,7 @@
       "FAC10005-CTR-700-ICS-SLD-7881"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-700-ICS-SLD-7881",
@@ -26162,7 +26180,7 @@
       "FAC09001-CTR-AST-PMT-MSD-2790"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-AST-PMT-MSD-2790",
@@ -26208,7 +26226,7 @@
       "FAC10005-CTR-012-OPE-SAT-2263"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-012-OPE-SAT-2263",
@@ -26254,7 +26272,7 @@
       "FAC09001-FWF-306-DRI-PRM-9898"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-306-DRI-PRM-9898",
@@ -26300,7 +26318,7 @@
       "FAC09001-CTR-202-PRT-FAT-6718"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-202-PRT-FAT-6718",
@@ -26346,7 +26364,7 @@
       "FAC10005-CTR-600-SAF-DTS-4415"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-600-SAF-DTS-4415",
@@ -26392,7 +26410,7 @@
       "FAC10005-CTR-401-TEL-PLA-3343"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-401-TEL-PLA-3343",
@@ -26438,7 +26456,7 @@
       "FAC09001-CTR-110-QAC-NCR-7214"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-110-QAC-NCR-7214",
@@ -26484,7 +26502,7 @@
       "FAC10005-CTR-500-INS-FG-2300"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-500-INS-FG-2300",
@@ -26530,7 +26548,7 @@
       "FAC10005-CTR-106-ELE-TSD-6741"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-106-ELE-TSD-6741",
@@ -26576,7 +26594,7 @@
       "FAC10005-FWF-CO1-PRT-DCN-7638"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-CO1-PRT-DCN-7638",
@@ -26622,7 +26640,7 @@
       "FAC09001-CTR-CMG-INS-REG-3378"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-CMG-INS-REG-3378",
@@ -26668,7 +26686,7 @@
       "FAC09001-CTR-003-PCS-HMB-8495"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-003-PCS-HMB-8495",
@@ -26714,7 +26732,7 @@
       "FAC10005-CTR-305-PIP-HMB-2004"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-305-PIP-HMB-2004",
@@ -26760,7 +26778,7 @@
       "FAC09001-CTR-104-HVA-MAN-3063"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-104-HVA-MAN-3063",
@@ -26806,7 +26824,7 @@
       "FAC10005-FWF-AST-INS-REQ-5222"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-AST-INS-REQ-5222",
@@ -26852,7 +26870,7 @@
       "FAC09001-FWF-305-COR-MST-3288"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-305-COR-MST-3288",
@@ -26898,7 +26916,7 @@
       "FAC10005-CTR-AIR-MAI-DTS-9128"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-AIR-MAI-DTS-9128",
@@ -26944,7 +26962,7 @@
       "FAC10005-FWF-000-ROT-UFD-3977"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-000-ROT-UFD-3977",
@@ -26990,7 +27008,7 @@
       "FAC09001-FWF-013-TEL-ITP-7323"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-013-TEL-ITP-7323",
@@ -27036,7 +27054,7 @@
       "FAC09001-FWF-CWO-STR-ESD-3839"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-CWO-STR-ESD-3839",
@@ -27082,7 +27100,7 @@
       "FAC10005-FWF-404-STR-ISO-1071"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-404-STR-ISO-1071",
@@ -27128,7 +27146,7 @@
       "FAC10005-CTR-306-PMT-UFD-8181"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-306-PMT-UFD-8181",
@@ -27174,7 +27192,7 @@
       "FAC09001-CTR-102-ICS-TSD-1779"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-102-ICS-TSD-1779",
@@ -27220,7 +27238,7 @@
       "FAC09001-FWF-CO2-DRI-BAS-4979"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-CO2-DRI-BAS-4979",
@@ -27266,7 +27284,7 @@
       "FAC10005-CTR-600-ELE-DTS-5674"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-600-ELE-DTS-5674",
@@ -27312,7 +27330,7 @@
       "FAC10005-CTR-004-HSE-NCR-6530"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-004-HSE-NCR-6530",
@@ -27358,7 +27376,7 @@
       "FAC09001-CTR-201-STR-DTS-5876"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-201-STR-DTS-5876",
@@ -27404,7 +27422,7 @@
       "FAC09001-CTR-000-MAI-SCH-6063"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-000-MAI-SCH-6063",
@@ -27450,7 +27468,7 @@
       "FAC10005-CTR-309-PPL-SPE-4017"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-309-PPL-SPE-4017",
@@ -27496,7 +27514,7 @@
       "FAC10005-CTR-ACC-COR-PRM-6209"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-ACC-COR-PRM-6209",
@@ -27542,7 +27560,7 @@
       "FAC10005-CTR-001-STR-SPE-0199"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-001-STR-SPE-0199",
@@ -27588,7 +27606,7 @@
       "FAC10005-CTR-004-DRI-MST-5439"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-004-DRI-MST-5439",
@@ -27634,7 +27652,7 @@
       "FAC10005-FWF-ACC-WEL-UFD-8557"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-ACC-WEL-UFD-8557",
@@ -27680,7 +27698,7 @@
       "FAC10005-CTR-109-INS-SPE-0611"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-109-INS-SPE-0611",
@@ -27726,7 +27744,7 @@
       "FAC09001-FWF-503-PCO-HMB-5471"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-503-PCO-HMB-5471",
@@ -27772,7 +27790,7 @@
       "FAC10005-FWF-305-COR-CER-7027"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-305-COR-CER-7027",
@@ -27818,7 +27836,7 @@
       "FAC10005-CTR-CTP-CON-REG-1933"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-CTP-CON-REG-1933",
@@ -27864,7 +27882,7 @@
       "FAC09001-FWF-301-PMT-BAS-0580"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-301-PMT-BAS-0580",
@@ -27910,7 +27928,7 @@
       "FAC09001-CTR-CO2-HVA-SCH-7125"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-CO2-HVA-SCH-7125",
@@ -27956,7 +27974,7 @@
       "FAC10005-FWF-700-ICS-ESD-4375"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-700-ICS-ESD-4375",
@@ -28002,7 +28020,7 @@
       "FAC10005-CTR-007-PRT-BAS-2302"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-007-PRT-BAS-2302",
@@ -28048,7 +28066,7 @@
       "FAC10005-FWF-403-PIP-PEP-0919"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-403-PIP-PEP-0919",
@@ -28094,7 +28112,7 @@
       "FAC10005-CTR-BCC-CON-STD-5157"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-BCC-CON-STD-5157",
@@ -28140,7 +28158,7 @@
       "FAC09001-CTR-107-PIP-REQ-7253"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-107-PIP-REQ-7253",
@@ -28186,7 +28204,7 @@
       "FAC10005-CTR-503-ISP-ANA-6429"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-503-ISP-ANA-6429",
@@ -28232,7 +28250,7 @@
       "FAC10005-FWF-103-PCS-DWG-3431"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-103-PCS-DWG-3431",
@@ -28278,7 +28296,7 @@
       "FAC10005-FWF-101-PCO-ISO-3691"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-101-PCO-ISO-3691",
@@ -28324,7 +28342,7 @@
       "FAC09001-CTR-010-WEL-FG-7380"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-010-WEL-FG-7380",
@@ -28370,7 +28388,7 @@
       "FAC09001-FWF-301-DRI-PLA-1757"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-301-DRI-PLA-1757",
@@ -28416,7 +28434,7 @@
       "FAC10005-CTR-105-MUL-PFD-5401"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-105-MUL-PFD-5401",
@@ -28462,7 +28480,7 @@
       "FAC09001-CTR-303-HSE-CHT-5955"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-303-HSE-CHT-5955",
@@ -28508,7 +28526,7 @@
       "FAC09001-CTR-402-ICS-DTS-4698"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-402-ICS-DTS-4698",
@@ -28554,7 +28572,7 @@
       "FAC09001-FWF-011-QAC-HAZ-0512"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-011-QAC-HAZ-0512",
@@ -28600,7 +28618,7 @@
       "FAC10005-FWF-CTP-CON-SOR-8686"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-CTP-CON-SOR-8686",
@@ -28646,7 +28664,7 @@
       "FAC09001-CTR-CWS-TEL-DCN-4483"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-CWS-TEL-DCN-4483",
@@ -28692,7 +28710,7 @@
       "FAC09001-CTR-503-TEL-BAS-5019"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-503-TEL-BAS-5019",
@@ -28738,7 +28756,7 @@
       "FAC10005-CTR-002-ROT-PRO-5516"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-002-ROT-PRO-5516",
@@ -28784,7 +28802,7 @@
       "FAC10005-CTR-009-ROT-LIS-7874"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-009-ROT-LIS-7874",
@@ -28830,7 +28848,7 @@
       "FAC09001-FWF-000-STR-MAN-2829"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-000-STR-MAN-2829",
@@ -28876,7 +28894,7 @@
       "FAC09001-FWF-BCC-SAF-ITP-0173"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-BCC-SAF-ITP-0173",
@@ -28922,7 +28940,7 @@
       "FAC10005-CTR-103-VES-UFD-9875"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-103-VES-UFD-9875",
@@ -28968,7 +28986,7 @@
       "FAC10005-CTR-404-SAF-LAY-3335"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-404-SAF-LAY-3335",
@@ -29014,7 +29032,7 @@
       "FAC09001-CTR-LAB-CON-MAN-6683"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-LAB-CON-MAN-6683",
@@ -29060,7 +29078,7 @@
       "FAC09001-FWF-400-PMT-FAT-3804"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-400-PMT-FAT-3804",
@@ -29106,7 +29124,7 @@
       "FAC10005-CTR-104-COM-STD-1712"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-104-COM-STD-1712",
@@ -29152,7 +29170,7 @@
       "FAC09001-CTR-306-ICS-MSD-9802"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-306-ICS-MSD-9802",
@@ -29198,7 +29216,7 @@
       "FAC09001-CTR-503-INS-DTS-9068"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-503-INS-DTS-9068",
@@ -29244,7 +29262,7 @@
       "FAC10005-CTR-012-COR-LIS-5278"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-012-COR-LIS-5278",
@@ -29290,7 +29308,7 @@
       "FAC10005-CTR-CCP-INS-FAT-5698"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-CCP-INS-FAT-5698",
@@ -29336,7 +29354,7 @@
       "FAC09001-CTR-CHC-CON-OPM-4895"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-CHC-CON-OPM-4895",
@@ -29382,7 +29400,7 @@
       "FAC10005-CTR-107-CIV-STU-1270"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-107-CIV-STU-1270",
@@ -29428,7 +29446,7 @@
       "FAC09001-CTR-200-PRT-HMB-5367"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-200-PRT-HMB-5367",
@@ -29474,7 +29492,7 @@
       "FAC10005-FWF-009-TEL-MSD-4163"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-009-TEL-MSD-4163",
@@ -29520,7 +29538,7 @@
       "FAC09001-CTR-EXT-STR-CAL-8241"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-EXT-STR-CAL-8241",
@@ -29566,7 +29584,7 @@
       "FAC09001-CTR-BMT-HSE-CER-4690"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-BMT-HSE-CER-4690",
@@ -29612,7 +29630,7 @@
       "FAC10005-CTR-400-STR-REG-8888"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-400-STR-REG-8888",
@@ -29658,7 +29676,7 @@
       "FAC10005-FWF-001-SAF-LAY-4825"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-001-SAF-LAY-4825",
@@ -29704,7 +29722,7 @@
       "FAC09001-FWF-BCC-PCO-PFD-1056"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-BCC-PCO-PFD-1056",
@@ -29750,7 +29768,7 @@
       "FAC10005-CTR-107-CON-CHT-8520"
     ],
     "contract_number": "FAC10005",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-CTR-107-CON-CHT-8520",
@@ -29796,7 +29814,7 @@
       "FAC10005-FWF-303-VES-HMB-2788"
     ],
     "contract_number": "FAC10005",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC10005-FWF-303-VES-HMB-2788",
@@ -29842,7 +29860,7 @@
       "FAC09001-CTR-501-COM-SPE-3242"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-501-COM-SPE-3242",
@@ -29901,7 +29919,7 @@
       "FAC09001-CTR-302-OPE-ESD-4035"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-302-OPE-ESD-4035",
@@ -30011,7 +30029,7 @@
       "FAC09001-FWF-CO1-TEL-HAZ-0788"
     ],
     "contract_number": "FAC09001",
-    "originator": "FWF",
+    "originator": ["FWF"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-FWF-CO1-TEL-HAZ-0788",
@@ -30079,7 +30097,7 @@
       "FAC09001-CTR-406-INS-REQ-1269"
     ],
     "contract_number": "FAC09001",
-    "originator": "CTR",
+    "originator": ["CTR"],
     "status_ifa_forecast_date": null,
     "status_ifd_forecast_date": null,
     "document_key": "FAC09001-CTR-406-INS-REQ-1269",

@@ -112,6 +112,7 @@ class GroupAdmin(django_GroupAdmin):
 
 
 class EntityAdmin(admin.ModelAdmin):
+    list_display = ('name', 'trigram', 'type')
     filter_horizontal = ('users',)
 
 

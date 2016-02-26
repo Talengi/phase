@@ -5,8 +5,9 @@ from __future__ import unicode_literals
 from itertools import groupby
 
 from django.core.cache import cache
+from django.contrib.contenttypes.models import ContentType
 
-from reviews.models import Review
+from reviews.models import Review, ReviewMixin
 
 
 def get_cached_reviews(revision):
@@ -100,3 +101,16 @@ def get_dummy_reviews(revision):
         cache.set(cache_key, dummy_reviews, 5)
 
     return dummy_reviews
+
+
+def get_all_reviewable_types():
+    """Return all inheriting ReviewMixin classes content types."""
+    qs = ContentType.objects.all()
+    types = (ct for ct in qs if issubclass(ct.model_class(), ReviewMixin))
+    return types
+
+
+def get_all_reviewable_classes():
+    """Return all available ReviewMixin subclasses."""
+    classes = [ct.model_class() for ct in get_all_reviewable_types()]
+    return classes

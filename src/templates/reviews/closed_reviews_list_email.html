@@ -1,0 +1,39 @@
+{% load i18n %}
+Dear {{ user.username }},
+
+<br />
+<br />
+
+Please note that the following documents have been reviewed in Phase yesterday.
+
+<br />
+<br />
+
+<table style="border:1px solid black; border-collapse: collapse;">
+    <thead>
+    <tr>
+        <th style="border: solid 1px black;">Document number</th>
+        <th style="border: solid 1px black;">Title</th>
+        <th style="border: solid 1px black;">Rev.</th>
+    </tr>
+    </thead>
+    <tbody>
+{% for rev in revisions %}
+<tr>
+    <td style="border: solid 1px black;">
+        <a href="http://{{ site.domain }}{{ rev.metadata.document.get_absolute_url }}">
+            {{ rev.metadata.document.document_key }}
+        </a>
+    </td>
+    <td style="border: solid 1px black;">{{ rev.metadata.document.title }}</td>
+    <td style="border: solid 1px black;">{{ rev.name }}</td>
+</tr>
+{% endfor %}
+    </tbody>
+</table>
+
+<br />
+<br />
+
+The Phase team.
+
