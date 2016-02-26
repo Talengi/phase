@@ -2,12 +2,13 @@
 from __future__ import unicode_literals
 
 from django.db import migrations
-from documents.utils import get_all_revision_classes
+from documents.utils import get_all_revision_types
 
 
-def set_metadata_values(*args):
-    classes = get_all_revision_classes()
-    for class_ in classes:
+def set_metadata_values(apps, schema_editor):
+    types = get_all_revision_types()
+    for type_ in types:
+        class_ = apps.get_model(type_.app_label, type_.model_class().__name__)
         revisions = class_.objects.all()
         for revision in revisions:
             revision.metadata = revision.document.get_metadata()
