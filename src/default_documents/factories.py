@@ -6,7 +6,8 @@ import datetime
 import factory
 from factory import fuzzy
 
-from .models import (
+from accounts.factories import EntityFactory
+from default_documents.models import (
     DemoMetadata, DemoMetadataRevision, ContractorDeliverable,
     ContractorDeliverableRevision)
 
@@ -67,7 +68,7 @@ class ContractorDeliverableFactory(MetadataFactory):
         model = ContractorDeliverable
 
     contract_number = fuzzy.FuzzyChoice(CONTRACT_NB_CHOICES)
-    originator = 'CTR'
+    originator = factory.SubFactory(EntityFactory)
     unit = '000'
     discipline = fuzzy.FuzzyChoice(DISCIPLINE_CHOICES)
     document_type = fuzzy.FuzzyChoice(DOC_TYPE_CHOICES)
