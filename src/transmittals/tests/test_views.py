@@ -69,6 +69,7 @@ class BaseTransmittalDiffViewTests(TestCase):
             metadata_factory_class=ContractorDeliverableFactory,
             revision_factory_class=ContractorDeliverableRevisionFactory,
             category=self.category)
+        rev = doc.get_latest_revision()
         metadata = doc.metadata
 
         arguments = {
@@ -78,6 +79,7 @@ class BaseTransmittalDiffViewTests(TestCase):
             'title': doc.title,
             'is_new_revision': False,
             'category': self.category,
+            'revision': rev.revision,
         }
         arguments.update(kwargs)
 

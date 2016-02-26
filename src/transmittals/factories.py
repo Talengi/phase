@@ -55,6 +55,7 @@ class TrsRevisionFactory(factory.DjangoModelFactory):
     revision = factory.Sequence(lambda n: n)
     is_new_revision = True
     received_date = datetime.date.today()
+    originator = factory.SubFactory(EntityFactory)
 
 
 class OutgoingTransmittalRevisionFactory(factory.DjangoModelFactory):
