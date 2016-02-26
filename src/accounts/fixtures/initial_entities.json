@@ -1,0 +1,21 @@
+[
+{
+  "pk": 1,
+  "model": "accounts.entity",
+  "fields": {
+    "type": "originator",
+    "name": "CTR",
+    "trigram": "CTR"
+  }
+},
+{
+  "pk": 2,
+  "model": "accounts.entity",
+  "fields": {
+    "type": "originator",
+    "name": "FWF",
+    "trigram": "FWF"
+  }
+}
+]
+

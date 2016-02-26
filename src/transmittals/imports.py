@@ -19,6 +19,7 @@ from documents.utils import save_document_forms
 from transmittals.validation import (
     TrsValidator, CSVLineValidator, RevisionsValidator)
 from transmittals.reports import ErrorReport
+from accounts.models import Entity
 
 
 logger = logging.getLogger(__name__)
@@ -307,7 +308,7 @@ class TrsImport(object):
 
         nb_line = 0
         for line in self:
-            data = line.csv_data
+            data = line.cleaned_data
             metadata = line.get_metadata()
             document = getattr(metadata, 'document', None)
 
@@ -355,6 +356,30 @@ class TrsImportLine(object):
         self._errors = None
         self._document = None
         self._metadata = None
+
+    @property
+    def form_data(self):
+        """Iterate over every field and prepare them if it's needed."""
+        if not hasattr(self, '_form_data'):
+            _form_data = dict()
+            for key, value in self.csv_data.items():
+                clean_method_name = 'clean_{}'.format(key)
+                if hasattr(self, clean_method_name):
+                    form_value = getattr(self, clean_method_name)(value)
+                else:
+                    form_value = value
+                _form_data[key] = form_value
+            self._form_data = _form_data
+        return self._form_data
+
+    def clean_originator(self, value):
+        try:
+            originator = Entity.objects \
+                .get(trigram=value)
+        except:
+            return None
+
+        return originator.id
 
     @property
     def errors(self):
@@ -438,7 +463,7 @@ class TrsImportLine(object):
 
         MetadataForm = self.get_metadata_form_class()
         metadata_form = MetadataForm(
-            self.csv_data,
+            self.form_data,
             instance=metadata,
             category=self.trs_import.doc_category)
 
@@ -447,8 +472,25 @@ class TrsImportLine(object):
 
         RevisionForm = self.get_revision_form_class()
         revision_form = RevisionForm(
-            self.csv_data,
+            self.form_data,
             instance=revision,
             category=self.trs_import.doc_category)
 
         return metadata_form, revision_form
+
+    @property
+    def cleaned_data(self):
+        """Get csv data cleaned by document forms."""
+        data = self.csv_data
+
+        metadata_form, revision_form = self.get_forms()
+        if metadata_form.is_valid() and revision_form.is_valid():
+            form_data = metadata_form.cleaned_data
+            form_data.update(revision_form.cleaned_data)
+        else:
+            form_data = {}
+
+        for k, v in form_data.items():
+            if k in data:
+                data[k] = v
+        return data
