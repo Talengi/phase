@@ -17,7 +17,6 @@ from django.views.generic.edit import (
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
-from django.db import transaction
 from django.contrib.contenttypes.models import ContentType
 
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
@@ -355,7 +354,6 @@ class DocumentCreate(BaseDocumentFormView):
         })
         return context
 
-    @transaction.atomic
     def form_valid(self, document_form, revision_form):
         """Saves both the document and it's revision."""
         doc, metadata, revision = save_document_forms(
@@ -519,7 +517,6 @@ class DocumentRevise(DocumentEdit):
 
         return document_form, revision_form
 
-    @transaction.atomic
     def form_valid(self, document_form, revision_form):
         """Saves both the document and it's revision."""
         document, self.object, self.revision = save_document_forms(

@@ -9,7 +9,6 @@ from django.db import transaction
 from documents import signals
 
 
-@transaction.atomic
 def save_document_forms(metadata_form, revision_form, category, **doc_kwargs):
     """Creates or updates a document from it's different forms.
 
@@ -58,41 +57,42 @@ def create_document_from_forms(metadata_form, revision_form, category, **doc_kwa
     """Creates a brand new document"""
     from documents.models import Document
 
-    revision = revision_form.save(commit=False)
-    revision.revision = revision.get_first_revision_number()
-    metadata = metadata_form.save(commit=False)
+    with transaction.atomic():
+        revision = revision_form.save(commit=False)
+        revision.revision = revision.get_first_revision_number()
+        metadata = metadata_form.save(commit=False)
 
-    # Extract the manually submitted document key, or generate one
-    # if the field was left empty.
-    doc_number = metadata.document_number
-    if doc_number:
-        doc_key = metadata.document_key
-    else:
-        doc_number = metadata.generate_document_key()
-        doc_key = doc_number
+        # Extract the manually submitted document key, or generate one
+        # if the field was left empty.
+        doc_number = metadata.document_number
+        if doc_number:
+            doc_key = metadata.document_key
+        else:
+            doc_number = metadata.generate_document_key()
+            doc_key = doc_number
 
-    document = Document.objects.create(
-        document_key=doc_key,
-        document_number=doc_number,
-        category=category,
-        current_revision=revision.revision,
-        current_revision_date=revision.revision_date,
-        updated_on=timezone.now(),
-        title=metadata.title,
-        **doc_kwargs)
+        document = Document.objects.create(
+            document_key=doc_key,
+            document_number=doc_number,
+            category=category,
+            current_revision=revision.revision,
+            current_revision_date=revision.revision_date,
+            updated_on=timezone.now(),
+            title=metadata.title,
+            **doc_kwargs)
 
-    metadata.document = document
-    metadata.document_key = doc_key
-    metadata.document_number = doc_number
-    metadata.save()
-    metadata_form.save_m2m()
+        metadata.document = document
+        metadata.document_key = doc_key
+        metadata.document_number = doc_number
+        metadata.save()
+        metadata_form.save_m2m()
 
-    revision.metadata = metadata
-    revision.save()
-    revision_form.save_m2m()
+        revision.metadata = metadata
+        revision.save()
+        revision_form.save_m2m()
 
-    metadata.latest_revision = revision
-    metadata.save()
+        metadata.latest_revision = revision
+        metadata.save()
 
     signals.document_created.send(
         document=document,
@@ -105,26 +105,27 @@ def create_document_from_forms(metadata_form, revision_form, category, **doc_kwa
 
 def create_revision_from_forms(metadata_form, revision_form, category):
     """Updates an existing document and creates a new revision."""
-    revision = revision_form.save(commit=False)
-    metadata = metadata_form.save(commit=False)
-    document = metadata.document
+    with transaction.atomic():
+        revision = revision_form.save(commit=False)
+        metadata = metadata_form.save(commit=False)
+        document = metadata.document
 
-    revision.revision = metadata.latest_revision.revision + 1
-    revision.metadata = metadata
-    revision.save()
-    revision_form.save_m2m()
+        revision.revision = metadata.latest_revision.revision + 1
+        revision.metadata = metadata
+        revision.save()
+        revision_form.save_m2m()
 
-    metadata.latest_revision = revision
-    metadata.save()
-    metadata_form.save_m2m()
+        metadata.latest_revision = revision
+        metadata.save()
+        metadata_form.save_m2m()
 
-    document.document_key = metadata.document_key
-    document.document_number = metadata.document_number
-    document.current_revision = revision.revision
-    document.current_revision_date = revision.revision_date
-    document.title = metadata.title
-    document.updated_on = timezone.now()
-    document.save()
+        document.document_key = metadata.document_key
+        document.document_number = metadata.document_number
+        document.current_revision = revision.revision
+        document.current_revision_date = revision.revision_date
+        document.title = metadata.title
+        document.updated_on = timezone.now()
+        document.save()
 
     signals.document_revised.send(
         document=document,
@@ -137,15 +138,16 @@ def create_revision_from_forms(metadata_form, revision_form, category):
 
 def update_revision_from_forms(metadata_form, revision_form, category):
     """Updates and existing document and revision."""
-    revision = revision_form.save()
-    metadata = metadata_form.save()
+    with transaction.atomic():
+        revision = revision_form.save()
+        metadata = metadata_form.save()
 
-    document = metadata.document
-    document.document_key = metadata.document_key
-    document.document_number = metadata.document_number
-    document.title = metadata.title
-    document.updated_on = timezone.now()
-    document.save()
+        document = metadata.document
+        document.document_key = metadata.document_key
+        document.document_number = metadata.document_number
+        document.title = metadata.title
+        document.updated_on = timezone.now()
+        document.save()
 
     signals.revision_edited.send(
         document=document,
