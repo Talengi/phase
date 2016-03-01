@@ -215,7 +215,9 @@ class Import(models.Model):
         try:
             if form.is_valid() and revision_form.is_valid():
                 doc, metadata, revision = save_document_forms(
-                    form, revision_form, self.batch.category)
+                    form, revision_form,
+                    self.batch.category,
+                    rewrite_schedule=False)
                 self.document = doc
                 self.status = self.STATUSES.success
             else:
