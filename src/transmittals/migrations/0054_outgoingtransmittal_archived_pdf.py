@@ -9,7 +9,7 @@ import privatemedia.storage
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('transmittals', '0048_auto_20160224_1526'),
+        ('transmittals', '0053_auto_20160226_1128'),
     ]
 
     operations = [
