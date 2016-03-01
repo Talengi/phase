@@ -432,7 +432,7 @@ class PrivateDownloadTests(TestCase):
         sample_path = b'documents/tests/'
         pdf_doc = b'sample_doc_pdf.pdf'
         self.sample_pdf = SimpleUploadedFile(pdf_doc, sample_path + pdf_doc)
-        self.url = reverse('document_file_download', args=[
+        self.url = reverse('revision_file_download', args=[
             self.category.organisation.slug,
             self.category.slug,
             self.doc.document_key,

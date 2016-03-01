@@ -3,6 +3,8 @@
 from __future__ import unicode_literals
 
 from django import forms
+from django.core.urlresolvers import reverse
+
 from documents.forms.utils import DocumentDownloadForm
 from django.utils.translation import ugettext_lazy as _
 from crispy_forms.layout import Layout, Field
@@ -92,9 +94,32 @@ class OutgoingTransmittalForm(GenericBaseDocumentForm):
                 PropertyLayout('get_ack_of_receipt_display'),
                 PropertyLayout('ack_of_receipt_date'),
                 PropertyLayout('ack_of_receipt_author'),
+                Field('archived_pdf'),
                 self.get_related_documents_layout(),
             )
         )
+
+    def prepare_field_archived_pdf(self):
+        if self.instance.archived_pdf:
+            url = reverse('document_file_download', args=[
+                self.category.organisation.slug,
+                self.category.slug,
+                self.instance.document.document_key,
+                'archived_pdf',
+            ])
+            print url
+            self.fields['archived_pdf'].widget.value_url = url
+
+    def clean_archived_pdf(self):
+        """Do not allow a non PDF file to be uploaded as an archived pdf.
+        """
+        archived_pdf = self.cleaned_data['archived_pdf']
+        if archived_pdf is not None:
+            if not archived_pdf.name.endswith('.pdf'):
+                raise forms.ValidationError(
+                    'This field only accepts PDF files.'
+                )
+        return archived_pdf
 
     class Meta:
         model = OutgoingTransmittal

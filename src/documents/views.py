@@ -570,25 +570,47 @@ class DocumentDownload(BaseDocumentList):
         return response
 
 
-class DocumentFileDownload(LoginRequiredMixin,
-                           CategoryMixin,
-                           DetailView):
-    """Download files from a MetadataRevision FileField."""
+class BaseFileDownload(LoginRequiredMixin, CategoryMixin, DetailView):
+    """Base class to download files from a Metadata or
+    MetadataRevision FileField."""
+
     http_method_names = ['get']
 
     def get_object(self, queryset=None):
         """Get a single MetadataRevision FileField instance."""
+        qs = self.get_queryset()
+        doc_or_revision = get_object_or_404(qs)
+        return doc_or_revision
+
+    def get(self, request, *args, **kwargs):
+        """Get a single MetadataRevision FileField instance."""
+
+        doc_or_revision = self.get_object()
+        field_name = self.kwargs.get('field_name')
+        return serve_model_file_field(doc_or_revision, field_name)
+
+
+class RevisionFileDownload(BaseFileDownload):
+    """Download files from a MetadataRevision FileField."""
+
+    def get_queryset(self):
         key = self.kwargs.get('document_key')
         revision = self.kwargs.get('revision')
 
-        qs = self.category.revision_class().objects \
-            .filter(metadata__document__document_key=key) \
-            .filter(metadata__document__category=self.category) \
-            .filter(revision=revision)
-        revision = get_object_or_404(qs)
-        return revision
+        qs_kwargs = {'metadata__document__document_key': key,
+                     'metadata__document__category': self.category,
+                     'revision': revision}
 
-    def get(self, request, *args, **kwargs):
-        revision = self.get_object()
-        field_name = self.kwargs.get('field_name')
-        return serve_model_file_field(revision, field_name)
+        return self.category.revision_class().objects.filter(**qs_kwargs)
+
+
+class DocumentFileDownload(BaseFileDownload):
+    """Download files from a Metadata FileField."""
+
+    def get_queryset(self):
+        key = self.kwargs.get('document_key')
+
+        qs_kwargs = {'document__document_key': key,
+                     'document__category': self.category}
+
+        return self.category.document_class().objects.filter(**qs_kwargs)
