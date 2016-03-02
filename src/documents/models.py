@@ -206,7 +206,6 @@ class MetadataBase(ModelBase):
 
             filter_fields = getattr(phase_config, 'filter_fields', None)
             column_fields = getattr(phase_config, 'column_fields', None)
-            import_fields = getattr(phase_config, 'import_fields', None)
             filter_fields_order = getattr(
                 phase_config, 'filter_fields_order', None)
 

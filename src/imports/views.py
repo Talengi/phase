@@ -5,11 +5,13 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from braces.views import LoginRequiredMixin
 
+from categories.models import Category
 from notifications.models import notify
 from imports.models import ImportBatch
 from imports.forms import FileUploadForm, CsvTemplateGenerationForm
 from imports.tasks import do_import
 from utils import make_csv_template
+
 
 class ImportMixin(object):
 
@@ -38,8 +40,7 @@ class FileUpload(ImportMixin, LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         response = super(FileUpload, self).form_valid(form)
-        # do_import.delay(self.object.uid)
-        do_import(self.object.uid)
+        do_import.delay(self.object.uid)
 
         message_text = '''You required the import of a new file. Results
                        <a href="%(url)s">should be available in a few
@@ -66,6 +67,9 @@ class ImportStatus(ImportMixin, LoginRequiredMixin, DetailView):
 
 
 class CsvTemplate(ImportMixin, LoginRequiredMixin, FormView):
+    """Renders a csv template which header is populated with PhaseConfig
+    import fields """
+
     template_name = 'imports/csv_template_generation.html'
     form_class = CsvTemplateGenerationForm
 
@@ -78,7 +82,8 @@ class CsvTemplate(ImportMixin, LoginRequiredMixin, FormView):
 
     def form_valid(self, form):
         response = super(CsvTemplate, self).form_valid(form)
-        category = form.cleaned_data['category']
+        category_pk = form.cleaned_data['category']
+        category = Category.objects.get(pk=category_pk)
         model_class = category.category_template.metadata_model.model_class()
         config = getattr(model_class, 'PhaseConfig')
         import_fields = getattr(config, 'import_fields', None)

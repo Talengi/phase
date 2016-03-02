@@ -205,19 +205,23 @@ class Import(models.Model):
             return value
 
         model_str = field_config.get('model', False)
-        query_field = field_config.get('query_field', False)
+        lookup_field = field_config.get('lookup_field', False)
 
-        if not model_str or not query_field:
+        if not model_str or not lookup_field:
             return value
 
         app_label, model_name = model_str.split('.')
         model = apps.get_model(app_label=app_label, model_name=model_name)
-        params = {query_field: value}
+        params = {lookup_field: value}
         try:
             obj = model.objects.get(**params).pk
+            return obj
+
         except ObjectDoesNotExist:
-            raise
-        return obj
+            self.errors = json.dumps({
+                'An error occurred': ["Unable to retrieve {} field".format(field_name)]
+            })
+            self.status = self.STATUSES.error
 
     def denormalize_data(self, category):
         """This method processes data to get foreign key objects."""
@@ -257,6 +261,9 @@ class Import(models.Model):
 
         # Processing csv data to denormalize foreign keys
         self.denormalize_data(self.batch.category)
+        # In case of denormalization error, we exit
+        if self.status == self.STATUSES.error:
+            return
 
         # Checking if the revision already exists
         revision_num = self.data.get('revision', None)

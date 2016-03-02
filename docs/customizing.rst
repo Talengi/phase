@@ -104,4 +104,38 @@ In the document list, a document filter form is displayed to search and filter d
     searchable_fields = ('document_key', 'title')
 
 
+Import fields
+-------------
+
+In *PhaseConfig*, the optionnal *import_fields* is used to define how to retrieve foreign keys
+when importing documents and how to generate import templates.
+
+.. code:: python
+
+    import_fields = OrderedDict(('document_key', {}),
+        ('title', {}),
+        ('originator', {
+            'model': 'accounts.Entity',
+            'lookup_field': 'trigram'}),
+        ('discipline', {}),
+        ('document_type', {}),
+        ('vd_code', {}),
+        ('received_date', {}),
+        ('docclass', {}),
+        ('client_document_number', {}),
+        ('status_idc_planned_date', {}),
+        ('status_ifr_planned_date', {}),
+        ('status_afc_planned_date', {}),
+        # Revision fields
+        ('revision', {}),
+        ('status', {}),
+        ('created_on', {}),
+        ('purpose_of_issue', {}),)
+
+
+Simple fields like *title* or *vd_code* are populated by inserted the imported value.
+For foreign key, like *originator*, we specifiy a dcit conatining the referenced model (here *'accounts.Entity'*) and
+the lookup field (*'trigram'*).
+
+
 .. _virtualenvwrapper: http://virtualenvwrapper.readthedocs.org/
