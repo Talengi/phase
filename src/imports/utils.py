@@ -1,7 +1,9 @@
 import csv
 
 from django.http import HttpResponse
+from .models import normal_dialect
 
+csv.register_dialect('normal', normal_dialect)
 
 def make_csv_template(import_fields, filename):
     response = HttpResponse(content_type='text/csv')

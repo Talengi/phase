@@ -6,11 +6,14 @@ import csv
 import json
 from itertools import izip_longest
 
+from django.apps import apps
+from django.db import models
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.urlresolvers import reverse
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils import timezone
-from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from django.core.urlresolvers import reverse
+
 from django_extensions.db.fields import UUIDField
 from model_utils import Choices
 from annoying.functions import get_object_or_None
@@ -189,12 +192,57 @@ class Import(models.Model):
 
     def __init__(self, *args, **kwargs):
         self.data = kwargs.pop('data', None)
+        self.denormalized = {}
         super(Import, self).__init__(*args, **kwargs)
+
+    def get_denormalized_value(self, import_fields, field_name, value):
+        """" Returns the related object pk if the field is a foreign key.
+        The PhaseConfig `import_fields` must be configured."""
+
+        field_config = import_fields.get(field_name, None)
+
+        if not field_config:
+            return value
+
+        model_str = field_config.get('model', False)
+        query_field = field_config.get('query_field', False)
+
+        if not model_str or not query_field:
+            return value
+
+        app_label, model_name = model_str.split('.')
+        model = apps.get_model(app_label=app_label, model_name=model_name)
+        params = {query_field: value}
+        try:
+            obj = model.objects.get(**params).pk
+        except ObjectDoesNotExist:
+            raise
+        return obj
+
+    def denormalize_data(self, category):
+        """This method processes data to get foreign key objects."""
+
+        # Check the `PhaseConfig` attribute
+        model_class = category.category_template.metadata_model.model_class()
+        config = getattr(model_class, 'PhaseConfig')
+
+        # If `import_fields`is not set, we simply use the initial data
+        if not hasattr(config, 'import_fields'):
+            self.denormalized = self.data
+            return
+
+        import_fields = config.import_fields
+
+        # Process each field_name/value to get the fk pk if any
+        for field_name, value in self.data.items():
+            val = self.get_denormalized_value(import_fields, field_name, value)
+            # We fill the dict
+            self.denormalized[field_name] = val
 
     def get_forms(self, metadata_instance=None, revision_instance=None):
         return (
-            self.batch.get_form(self.data, instance=metadata_instance),
-            self.batch.get_revisionform(self.data, instance=revision_instance)
+            self.batch.get_form(self.denormalized, instance=metadata_instance),
+            self.batch.get_revisionform(self.denormalized, instance=revision_instance)
         )
 
     def do_import(self, line):
@@ -207,6 +255,9 @@ class Import(models.Model):
         doc = get_object_or_None(Document, document_key=key)
         metadata = doc.metadata if doc else None
 
+        # Processing csv data to denormalize foreign keys
+        self.denormalize_data(self.batch.category)
+
         # Checking if the revision already exists
         revision_num = self.data.get('revision', None)
         revision = metadata.get_revision(revision_num) if metadata and revision_num else None
@@ -214,6 +265,10 @@ class Import(models.Model):
         form, revision_form = self.get_forms(metadata, revision)
         try:
             if form.is_valid() and revision_form.is_valid():
+                # The `save_document_forms` function sends a signal triggering
+                # ES indexing and schedule field rewriting. Setting
+                # `rewrite_schedule` to False disables rewriting
+                #  (ES indexing is still enabled)
                 doc, metadata, revision = save_document_forms(
                     form, revision_form,
                     self.batch.category,

@@ -38,7 +38,8 @@ class FileUpload(ImportMixin, LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         response = super(FileUpload, self).form_valid(form)
-        do_import.delay(self.object.uid)
+        # do_import.delay(self.object.uid)
+        do_import(self.object.uid)
 
         message_text = '''You required the import of a new file. Results
                        <a href="%(url)s">should be available in a few
