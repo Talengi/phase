@@ -15,3 +15,9 @@ class FileUploadForm(forms.ModelForm):
     class Meta:
         model = ImportBatch
         fields = ('category', 'file')
+
+
+class CsvTemplateGenerationForm(FileUploadForm):
+    class Meta:
+        model = ImportBatch
+        fields = ('category',)
