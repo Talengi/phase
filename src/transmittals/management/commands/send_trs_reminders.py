@@ -35,6 +35,8 @@ class Command(EmailCommand):
         for recipient, transmittals in recipients:
             logger.info('Sending reminders for recipient {}'.format(recipient.name))
             for user in recipient.users.all():
+                if not user.send_trs_reminders_mails:
+                    continue
                 self.send_notification(
                     user=user, transmittals=list(transmittals))
 

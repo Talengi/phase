@@ -61,6 +61,17 @@ class PendingReviewsReminderTests(TestCase):
         call_command('send_review_reminders')
         self.assertEqual(len(mail.outbox), 0)
 
+    def test_do_not_send_reminder(self):
+        """Reminders are not send to users if their mail config says so."""
+        self.doc1.get_latest_revision().start_review()
+        self.assertEqual(Review.objects.all().count(), 1)
+
+        self.user.send_pending_reviews_mails = False
+        self.user.save()
+
+        call_command('send_review_reminders')
+        self.assertEqual(len(mail.outbox), 0)
+
 
 class ClosedReviewsEmailTests(ContractorDeliverableTestCase):
     def setUp(self):
@@ -73,6 +84,7 @@ class ClosedReviewsEmailTests(ContractorDeliverableTestCase):
                 UserFactory(),
                 UserFactory(),
                 UserFactory(),
+                UserFactory(send_closed_reviews_mails=False),
             ]
         )
 
@@ -123,3 +135,6 @@ class ClosedReviewsEmailTests(ContractorDeliverableTestCase):
         self.assertEqual(len(mail.outbox), 0)
         call_command('send_closed_reviews_notifications')
         self.assertEqual(len(mail.outbox), 1)
+        # We have 4 potential recipients but one has `
+        # `send_closed_reviews_mails set to False
+        self.assertEqual(len(mail.outbox[0].to), 3)

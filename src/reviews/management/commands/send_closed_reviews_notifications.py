@@ -35,4 +35,4 @@ class Command(EmailCommand):
 
     def get_recipient_list(self, **kwargs):
         originator = kwargs['originator']
-        return [u.email for u in originator.users.all()]
+        return [u.email for u in originator.users.all() if u.send_closed_reviews_mails]

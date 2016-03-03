@@ -90,6 +90,16 @@ class User(AbstractBaseUser, PermissionsMixin):
         _('date joined'),
         default=timezone.now)
 
+    send_closed_reviews_mails = models.BooleanField(
+        _('Send mails when reviews are closed'),
+        default=True)
+    send_pending_reviews_mails = models.BooleanField(
+        _('Send pending reviews reminders'),
+        default=True)
+    send_trs_reminders_mails = models.BooleanField(
+        _('Send reminders for trs with missing ack of receipt'),
+        default=True)
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name', 'username']
 
