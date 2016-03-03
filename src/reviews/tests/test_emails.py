@@ -73,6 +73,7 @@ class ClosedReviewsEmailTests(ContractorDeliverableTestCase):
                 UserFactory(),
                 UserFactory(),
                 UserFactory(),
+                UserFactory(send_closed_reviews_mails=False),
             ]
         )
 
@@ -123,3 +124,6 @@ class ClosedReviewsEmailTests(ContractorDeliverableTestCase):
         self.assertEqual(len(mail.outbox), 0)
         call_command('send_closed_reviews_notifications')
         self.assertEqual(len(mail.outbox), 1)
+        # We have 4 potential recipients but one has `
+        # `send_closed_reviews_mails set to False
+        self.assertEqual(len(mail.outbox[0].to), 3)
