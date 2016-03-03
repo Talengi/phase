@@ -19,6 +19,8 @@ class Command(EmailCommand):
             .order_by('reviewer', 'role')
         users = groupby(pending_reviews, lambda rev: rev.reviewer)
         for user, reviews in users:
+            if not user.send_pending_reviews_mails:
+                continue
             self.send_notification(user=user, reviews=list(reviews))
 
     def get_subject(self, **kwargs):
