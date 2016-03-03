@@ -39,6 +39,9 @@ class TransmittalReminderTests(TestCase):
         self.trs.recipient.users.add(UserFactory(email='riri@duck.com'))
         self.trs.recipient.users.add(UserFactory(email='fifi@duck.com'))
         self.trs.recipient.users.add(UserFactory(email='loulou@duck.com'))
+        self.trs.recipient.users.add(UserFactory(
+            email='scrooge@duck.com',
+            send_trs_reminders_mails=False))
 
     def test_send_reminder_before_timer(self):
         call_command('send_trs_reminders')
