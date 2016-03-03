@@ -5,7 +5,7 @@ from metadata.fields import get_choices_from_list
 from schedules.models import ScheduleMixin
 
 
-def update_schedule_section(document, metadata, revision, **kwargs):
+def update_schedule_section(document, metadata, revision, rewrite_schedule=True, **kwargs):
     """Update the "actual" dates of the schedule section.
 
     The "<status> Actual Date" fields must be updated automatically depending
@@ -14,6 +14,9 @@ def update_schedule_section(document, metadata, revision, **kwargs):
     See #172
 
     """
+    if not rewrite_schedule:
+        return
+
     if not isinstance(metadata, ScheduleMixin):
         return
 

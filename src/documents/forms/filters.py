@@ -67,7 +67,6 @@ def filterform_factory(model):
     revision_model = model.latest_revision.get_queryset().model
     all_fields = dict((field.name, field) for field in (
         model._meta.concrete_fields + revision_model._meta.concrete_fields))
-    # import pdb;pdb.set_trace()
     # Get the list of all configured fields
     config = getattr(model, 'PhaseConfig')
     field_list = []

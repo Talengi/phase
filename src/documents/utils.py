@@ -9,7 +9,7 @@ from django.db import transaction
 from documents import signals
 
 
-def save_document_forms(metadata_form, revision_form, category, **doc_kwargs):
+def save_document_forms(metadata_form, revision_form, category, rewrite_schedule=True, **doc_kwargs):
     """Creates or updates a document from it's different forms.
 
     Two forms are necessary to edit a document : the metadata and revision forms.
@@ -48,6 +48,7 @@ def save_document_forms(metadata_form, revision_form, category, **doc_kwargs):
         document=doc,
         metadata=meta,
         revision=rev,
+        rewrite_schedule=rewrite_schedule,
         sender=doc.__class__)
 
     return doc, meta, rev
@@ -99,7 +100,6 @@ def create_document_from_forms(metadata_form, revision_form, category, **doc_kwa
         metadata=metadata,
         revision=revision,
         sender=metadata.__class__)
-
     return document, metadata, revision
 
 

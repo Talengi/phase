@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+<div class="col-sm-8 col-md-offset-2">
+    <h1>{{ _('Csv import template') }}</h1>
+    <form method="post" action="" class="form">
+        {% csrf_token %}
+
+        {% include 'form_snippet.html' with form=form %}
+        <hr />
+        <input class="btn btn-primary pull-right last-button"
+               type="submit"
+               value="{{ _('Download csv import template') }}">
+    </form>
+</div>
+</div>
+{% endblock %}
