@@ -1,5 +1,5 @@
 """Development settings and globals."""
-from unipath import Path # Avoid pyflakes complains
+from unipath import Path  # Avoid pyflakes complains
 
 import warnings
 
