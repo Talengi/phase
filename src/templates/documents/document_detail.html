@@ -37,6 +37,9 @@
         csrfToken: "{{ csrf_token }}",
         currentUrl: "{% url "document_detail" organisation_slug category_slug document.document_key %}"
     });
+    $(function() {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
 </script>
 {% javascript "document_detail" %}
 {% endblock extra_js %}

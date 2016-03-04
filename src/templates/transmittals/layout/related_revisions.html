@@ -22,8 +22,9 @@
                 <td>{{ rev.status }}</td>
                 <td>{{ rev.get_final_return_code }}</td>
                 <td>{{ rev.purpose_of_issue }}</td>
-                <td>{% download_link rev 'file_transmitted' %}</td>
+                <td>{% short_download_link rev 'file_transmitted' %}</td>
             </tr>
+
             {% empty %}
             <tr>
                 <td colspan="6">{{ _('There is nothing here. Please contact tech support.') }}</td>

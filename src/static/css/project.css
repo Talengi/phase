@@ -289,26 +289,12 @@ button.ui-multiselect {
     line-height: 25px;
     font-size: 12px;
 }
-.sidebar-form select,
-.sidebar-form input[type="text"] {
-}
-.sidebar-form .form-group-show_cld_spd {
-
-}
-.sidebar-form .form-group-show_cld_spd .control-label,
-.sidebar-form .form-group-show_cld_spd .control-group {
-}
-.sidebar-form .form-group-show_cld_spd label {
-}
-
 
 /* document details */
 .nav-tabs {
     margin-bottom: 15px;
 }
 #form-schedule-table tbody td {
-    padding-left: 20px;
-    padding-right: 20px;
     padding: 10px 20px;
 }
 #document-sidebar {
@@ -459,7 +445,6 @@ table.reviewers tr td.small {
 }
 .sidebar-offcanvas {
     position: fixed;
-    display: block;
     right: 0;
     bottom: 0;
     padding: 15px;
@@ -472,7 +457,6 @@ table.reviewers tr td.small {
     position: fixed;
     right: 0;
     top: 0px;
-    width: 16.67%;
     bottom: 0;
     overflow-y: auto;
     width: 350px;
@@ -515,4 +499,9 @@ table.reviewers tr td.small {
 }
 .discussion-body span.mention {
     background-color: #ccc;
+}
+
+/*Overrides bootstrap tooltip to handle long text*/
+div.tooltip-inner {
+    max-width: 600px;
 }
