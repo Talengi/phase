@@ -1,6 +1,9 @@
-A new account has been created in Phase for the user {{ username }}.
+Dear {{ username }},
 
-Click on the following link to personalise your password:
+Welcome to Phase!
+Your account is now ready to use.
+
+Click on the following link to personalise your password and start using the application:
 
 {% url 'password_reset_confirm' uidb64 token as the_url %}
 http://{{ site.domain }}{{ the_url }}
