@@ -40,6 +40,6 @@ class NoteSerializer(serializers.ModelSerializer):
         formatted = mentions_re.sub(replace, formatted)
         formatted = filters.safe(formatted)
         formatted = filters.linebreaksbr(formatted)
+        formatted = filters.urlize(formatted)
         ret['formatted_body'] = formatted
-
         return ret
