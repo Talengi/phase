@@ -516,3 +516,8 @@ table.reviewers tr td.small {
 .discussion-body span.mention {
     background-color: #ccc;
 }
+
+/*Overrides bootstrap tooltip to handle long text*/
+div.tooltip-inner {
+    max-width: 600px;
+}
