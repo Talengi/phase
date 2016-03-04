@@ -97,7 +97,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         _('Send pending reviews reminders'),
         default=True)
     send_trs_reminders_mails = models.BooleanField(
-        _('Send reminders for trs with missing ack of receipt'),
+        _('Send reminders for outgoing transmittals with missing '
+          'acknowledgement of receipt'),
         default=True)
 
     USERNAME_FIELD = 'email'
