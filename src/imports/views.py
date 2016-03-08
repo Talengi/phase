@@ -8,9 +8,9 @@ from braces.views import LoginRequiredMixin
 from categories.models import Category
 from notifications.models import notify
 from imports.models import ImportBatch
-from imports.forms import FileUploadForm, CsvTemplateGenerationForm
+from imports.forms import FileUploadForm, ImportTemplateGenerationForm
 from imports.tasks import do_import
-from utils import make_csv_template
+from utils import make_csv_template, make_xlsx_template
 
 
 class ImportMixin(object):
@@ -66,22 +66,27 @@ class ImportStatus(ImportMixin, LoginRequiredMixin, DetailView):
         return context
 
 
-class CsvTemplate(ImportMixin, LoginRequiredMixin, FormView):
+class ImportTemplate(ImportMixin, LoginRequiredMixin, FormView):
     """Renders a csv template which header is populated with PhaseConfig
     import fields """
 
     template_name = 'imports/csv_template_generation.html'
-    form_class = CsvTemplateGenerationForm
+    form_class = ImportTemplateGenerationForm
 
     def breadcrumb_object(self):
-        return _('Upload file'), reverse('import_file')
+        return _('Import templates'), reverse('import_template')
 
     def get_success_url(self):
         """Avoiding circular imports caused by writing `success_url`"""
-        return reverse('csv_template')
+        return reverse('import_template')
+
+    def get_template_maker(self):
+        if 'format_csv' in self.request.POST.keys():
+            return make_csv_template
+        return make_xlsx_template
 
     def form_valid(self, form):
-        response = super(CsvTemplate, self).form_valid(form)
+        response = super(ImportTemplate, self).form_valid(form)
         category_pk = form.cleaned_data['category']
         category = Category.objects.get(pk=category_pk)
         model_class = category.category_template.metadata_model.model_class()
@@ -89,5 +94,6 @@ class CsvTemplate(ImportMixin, LoginRequiredMixin, FormView):
         import_fields = getattr(config, 'import_fields', None)
         if import_fields:
             filename = category.category_template.slug
-            response = make_csv_template(import_fields, filename=filename)
+            response = self.get_template_maker()(
+                import_fields, filename=filename)
         return response
