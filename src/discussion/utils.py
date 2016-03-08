@@ -13,7 +13,7 @@ def get_discussion_length(revision):
     """Get the number of remarkes on a revision.
 
     This is a helper method to return a cached value. Settings the cache must
-    be done elsewhere.
+    be done elsewhere. (Currently in discussion/signals.py/update_cache.)
 
     """
     cache_key = get_cache_key(revision.document, revision.revision)
