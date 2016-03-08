@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 import csv
+import datetime as dt
 import json
 from itertools import izip_longest
 
@@ -46,6 +47,9 @@ def xls_to_django(value):
     We need to convert numbers into strings since this is the format expected
     by django forms
 
+    We also have to handle datetime objects returned by openpyxl to convert
+    them to the relevant format : YYYY-MM-DD.
+
     I feel like this is an awful hack. But Excel is a gigantic hack, so it's
     the best I can do.
 
@@ -54,9 +58,10 @@ def xls_to_django(value):
         value = ''
     elif hasattr(value, 'is_integer') and value.is_integer():
         value = '%s' % int(value)
+    elif type(value) in (dt.datetime, dt.date):
+        value = value.strftime('%Y-%m-%d')
     else:
         value = '%s' % value
-
     return value
 
 

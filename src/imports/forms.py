@@ -17,11 +17,11 @@ class FileUploadForm(forms.ModelForm):
         fields = ('category', 'file')
 
 
-class CsvTemplateGenerationForm(forms.Form):
+class ImportTemplateGenerationForm(forms.Form):
     category = forms.ChoiceField()
 
     def __init__(self, *args, **kwargs):
-        super(CsvTemplateGenerationForm, self).__init__(*args, **kwargs)
+        super(ImportTemplateGenerationForm, self).__init__(*args, **kwargs)
         # We only want categories whose metadata model has `import_fields`
         # configured
         choices = [(c.pk, c) for c in Category.objects.all() if hasattr(
