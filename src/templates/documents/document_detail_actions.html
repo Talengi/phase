@@ -20,14 +20,6 @@
         </div>
     {% endif %}
 
-        <form method="post" action="" class="pull-right">
-            {% csrf_token %}
-            <div class="btn-group {{ dropdirection}}">
-                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                    {{ _('Action') }} <span class="caret"></span>
-                </button>
-                {% action_menu document latest_revision user %}
-            </div>
-        </form>
+    {% action_menu_button document latest_revision user %}
 
 </div>
