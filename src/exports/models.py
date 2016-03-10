@@ -119,12 +119,12 @@ class Export(models.Model):
         else:
             process_export(unicode(self.pk))
 
-    def csv_file_writer(self,data_generator, formatter):
+    def csv_file_writer(self, data_generator, formatter):
         with self.open_file() as the_file:
             for data_chunk in data_generator:
                 the_file.write(formatter.format(data_chunk))
 
-    def xlsx_file_writer(self,data_generator, formatter):
+    def xlsx_file_writer(self, data_generator, formatter):
         wb = Workbook()
         ws = wb.active
         for data_chunk in data_generator:

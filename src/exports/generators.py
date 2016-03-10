@@ -102,4 +102,3 @@ class CSVGenerator(ExportGenerator):
 
 class XLSXGenerator(CSVGenerator):
     pass
-
