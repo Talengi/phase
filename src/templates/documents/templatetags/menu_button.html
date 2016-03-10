@@ -1,0 +1,16 @@
+{% if  actions_list %}
+    <form method="post" action="" class="pull-right">
+        {% csrf_token %}
+        <div class="btn-group {{ dropdirection }}">
+            <button type="button" class="btn btn-primary dropdown-toggle"
+                    data-toggle="dropdown">
+                {{ _('Action') }} <span class="caret"></span>
+            </button>
+            <ul class="action-menu dropdown-menu dropdown-menu-right">
+                {% for action in actions_list %}
+                    {{ action.to_html|safe }}
+                {% endfor %}
+            </ul>
+        </div>
+    </form>
+{% endif %}
