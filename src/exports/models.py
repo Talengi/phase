@@ -14,6 +14,7 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 
 from model_utils import Choices
+from openpyxl import Workbook
 
 from exports.tasks import process_export
 
@@ -29,7 +30,7 @@ class Export(models.Model):
         ('processing', _('Processing')),
         ('done', _('Done')),
     )
-    FORMATS = Choices('csv', 'pdf')
+    FORMATS = Choices('csv', 'pdf', 'xlsx')
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     owner = models.ForeignKey(
@@ -113,21 +114,33 @@ class Export(models.Model):
     def start_export(self, async=True):
         """Asynchronously starts the export"""
         logger.info('Starting export {}'.format(self.id))
-
         if async:
             process_export.delay(unicode(self.pk))
         else:
             process_export(unicode(self.pk))
+
+    def csv_file_writer(self, data_generator, formatter):
+        with self.open_file() as the_file:
+            for data_chunk in data_generator:
+                the_file.write(formatter.format(data_chunk))
+
+    def xlsx_file_writer(self, data_generator, formatter):
+        wb = Workbook()
+        ws = wb.active
+        for data_chunk in data_generator:
+            formatted = formatter.format(data_chunk)
+            for el in formatted:
+                ws.append(el)
+        wb.save(self.get_filepath())
 
     def write_file(self):
         """Generates and write the file."""
         data_generator = self.get_data_generator()
         formatter = self.get_data_formatter()
 
-        with self.open_file() as the_file:
-            for data_chunk in data_generator:
-                the_file.write(formatter.format(data_chunk))
-
+        file_writer_name = '{}_file_writer'.format(self.format)
+        file_writer = getattr(self, file_writer_name)
+        file_writer(data_generator, formatter)
         logger.info('Import {} done'.format(self.id))
 
     def open_file(self):
