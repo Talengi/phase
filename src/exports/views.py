@@ -53,6 +53,7 @@ class ExportCreate(LoginRequiredMixin, DocumentListMixin, UpdateView):
         export = Export(
             owner=self.request.user,
             category=self.category)
+        # export.format = 'xlsx'
         return export
 
     def get_success_url(self):

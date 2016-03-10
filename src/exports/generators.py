@@ -98,3 +98,8 @@ class ExportGenerator(object):
 class CSVGenerator(ExportGenerator):
     def data_header(self):
         return [self.fields.keys()]
+
+
+class XLSXGenerator(CSVGenerator):
+    pass
+
