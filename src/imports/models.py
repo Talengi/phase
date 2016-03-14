@@ -126,6 +126,8 @@ class ImportBatch(models.Model):
 
     def get_revisionform(self, data=None, **kwargs):
         kwargs.update({'category': self.category})
+        # We update `created_on` field with current date.
+        data.update({'created_on': timezone.now()})
         return self.get_revisionform_class()(data, **kwargs)
 
     def __iter__(self):

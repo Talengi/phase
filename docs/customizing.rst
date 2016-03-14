@@ -129,13 +129,14 @@ when importing documents and how to generate import templates.
         # Revision fields
         ('revision', {}),
         ('status', {}),
-        ('created_on', {}),
         ('purpose_of_issue', {}),)
 
 
 Simple fields like *title* or *vd_code* are populated by inserted the imported value.
-For foreign key, like *originator*, we specifiy a dcit conatining the referenced model (here *'accounts.Entity'*) and
+For foreign key, like *originator*, we specifiy a dict containing the referenced model (here *'accounts.Entity'*) and
 the lookup field (*'trigram'*).
+
+For revisions, the `created_on` field is always filled with the import date and should not belong to `import_fields`.
 
 
 .. _virtualenvwrapper: http://virtualenvwrapper.readthedocs.org/

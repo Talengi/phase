@@ -208,6 +208,7 @@ class MetadataBase(ModelBase):
             column_fields = getattr(phase_config, 'column_fields', None)
             filter_fields_order = getattr(
                 phase_config, 'filter_fields_order', None)
+            import_fields = getattr(phase_config, 'import_fields', None)
 
             if not all((filter_fields, column_fields)):
                 raise TypeError('Your "PhaseConfig" definition is incorrect '
@@ -221,6 +222,13 @@ class MetadataBase(ModelBase):
                         'elements as "filter_fields" and the base'
                         ' visible fields from'
                         ' "documents.forms.BaseDocumentFilterForm"')
+
+            if import_fields:
+                if 'created_on' in import_fields:
+                    raise TypeError(
+                        'Your "PhaseConfig" definition is incorrect: '
+                        'created_on field must not be in import_field '
+                        'parameter')
 
         return super(MetadataBase, cls).__new__(cls, name, bases, attrs)
 
