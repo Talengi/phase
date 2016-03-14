@@ -233,6 +233,7 @@ LOCAL_APPS = (
     'tools',
     'exports',
     'schedules',
+    'audit_trail',
 )
 
 # Load custom documents
