@@ -53,7 +53,7 @@ class ExportGenerator(object):
             self.category,
             self.filters,
             filter_on_entities=entities)
-        result = builder.scan_results(['pk'], only_latest_revisions=False)
+        result = builder.scan_results(['pk'], only_latest_revisions=True)
         pks = [doc['pk'][0] for doc in result]
         total = len(pks)
         return pks, total
