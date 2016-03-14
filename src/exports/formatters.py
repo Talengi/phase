@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+import datetime as dt
 
 from documents.models import MetadataRevisionBase
 from transmittals.utils import FieldWrapper
 from documents.utils import stringify_value as stringify
+
+# Only used in this module, it makes no sense to put it elsewhere for now
+FR_DATE_FORMAT = '%d-%m-%Y'
+FR_DATETIME_FORMAT = '%d-%m-%Y %H:%M'
 
 
 class BaseFormatter(object):
@@ -66,6 +71,14 @@ class CSVFormatter(BaseFormatter):
         # Attributes and method can be passed
         if callable(data):
             data = data()
+
+        # We want dd-mm-yyy format for exports whereas
+        if type(data) == dt.date:
+            data = data.strftime(FR_DATE_FORMAT)
+
+        if type(data) == dt.datetime:
+            data = data.strftime(FR_DATETIME_FORMAT)
+
         return stringify(data, none_val='')
 
 
