@@ -226,9 +226,9 @@ class MetadataBase(ModelBase):
             if import_fields:
                 if 'created_on' in import_fields:
                     raise TypeError(
-                         'Your "PhaseConfig" definition is incorrect: '
-                         'created_on field must not be in import_field '
-                         'parameter')
+                        'Your "PhaseConfig" definition is incorrect: '
+                        'created_on field must not be in import_field '
+                        'parameter')
 
         return super(MetadataBase, cls).__new__(cls, name, bases, attrs)
 
