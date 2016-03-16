@@ -8,7 +8,7 @@ class ActivityAdmin(NonEditableAdminMixin, admin.ModelAdmin):
     actions = None
     list_display = ('created_on', 'get_actor', 'verb', 'get_target', 'get_action_object')
 
-    def has_delete_permission(self, obj):
+    def has_delete_permission(self, request, obj=None):
         return False
 
     def get_actor(self, obj):
