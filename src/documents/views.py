@@ -408,6 +408,15 @@ class DocumentEdit(BaseDocumentFormView):
         self.revision = self.get_revision()
         return super(DocumentEdit, self).post(request, *args, **kwargs)
 
+    def form_valid(self, document_form, revision_form):
+        response = super(DocumentEdit, self).form_valid(document_form,
+                                                        revision_form)
+        activity_log.send(verb='updated',
+                          target=self.object,
+                          sender=None,
+                          actor=self.request.user)
+        return response
+
     def get_context_data(self, **kwargs):
         context = super(DocumentEdit, self).get_context_data(**kwargs)
         # Add a context var to make the difference with creation view

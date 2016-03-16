@@ -105,18 +105,21 @@ class DocumentCreateTest(TestCase):
         Tests that a document can be created with required fields.
         """
         c = self.client
+        doc_title = u'a glorious title'
         c.post(self.create_url, {
-            'title': u'a title',
+            'title': doc_title,
             'docclass': 1,
             'created_on': '2015-10-10',
             'received_date': '2015-10-10',
         }, follow=True)
         doc = Document.objects.all().order_by('-id')[0]
-        self.assertEqual(doc.document_number, 'a-title')
-        self.assertEqual(doc.document_key, 'a-title')
+        self.assertEqual(doc.document_number, 'a-glorious-title')
+        self.assertEqual(doc.document_key, 'a-glorious-title')
 
+        # Check that creation was logged in audit trail
         activity = Activity.objects.latest('created_on')
-        self.assertEqual(activity.target.title, 'a title')
+        self.assertEqual(activity.verb, Activity.VERB_CREATED)
+        self.assertEqual(activity.target.title, doc_title)
         self.assertEqual(activity.actor, self.user)
 
     def test_create_with_document_key(self):
@@ -234,7 +237,7 @@ class DocumentCreateTest(TestCase):
 class DocumentEditTest(TestCase):
     def setUp(self):
         self.category = CategoryFactory()
-        user = UserFactory(
+        self.user = UserFactory(
             email='testadmin@phase.fr',
             password='pass',
             is_superuser=True,
@@ -244,7 +247,7 @@ class DocumentEditTest(TestCase):
             self.category.organisation.slug,
             self.category.slug,
         ])
-        self.client.login(email=user.email, password='pass')
+        self.client.login(email=self.user.email, password='pass')
         self.sample_path = join(settings.DJANGO_ROOT, 'documents', 'tests')
 
     def test_edition_errors(self):
@@ -346,6 +349,11 @@ class DocumentEditTest(TestCase):
                 url=self.category.get_absolute_url(),
             ), 302)]
         )
+        # Check that update was logged in audit trail
+        activity = Activity.objects.latest('created_on')
+        self.assertEqual(activity.verb, Activity.VERB_UPDATED)
+        self.assertEqual(activity.target.title, u'a new new title')
+        self.assertEqual(activity.actor, self.user)
 
     def test_edition_updates_document_key(self):
         doc = DocumentFactory(
