@@ -5,7 +5,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                 <h4 class="modal-title" >{{ _('Delete document') }}</h4>
-            </div
+            </div>
             <div class="modal-body">
                 {% if latest_revision.is_under_review %}
                     <p>{{ _('This document is currently under review. Please cancel the review to delete this document.') }}</p>
@@ -25,5 +25,5 @@
             </div>
         </div>
     </div>
-<form>
+</form>
 </script>

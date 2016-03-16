@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.contrib.contenttypes.models import ContentType
 from django.dispatch import Signal, receiver
 from accounts.models import User
 
