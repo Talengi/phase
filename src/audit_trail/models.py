@@ -79,7 +79,7 @@ class Activity(models.Model):
             return _('{actor} {verb} {action_object} on {target} at '
                      '{created_on}').format(**ctx)
         elif self.action_object:
-            return _('{actor} {verb} {action_object} at{created_on}').format(**ctx)
+            return _('{actor} {verb} {action_object} at {created_on}').format(**ctx)
         elif self.target:
             return _('{actor} {verb} {target} at {created_on}').format(**ctx)
         return _('{actor} {verb} at {created_on}').format(**ctx)
