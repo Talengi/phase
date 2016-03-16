@@ -43,6 +43,6 @@ def activity_handler(verb, target, **kwargs):
     action_object = kwargs.pop('action_object', None)
     if action_object:
         activity.action_object = action_object
-        action_object.action_object_str = str(action_object)
+        activity.action_object_str = str(action_object)
 
     activity.save()

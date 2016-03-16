@@ -388,13 +388,13 @@ class DocumentEditTest(TestCase):
 class DocumentReviseTest(TestCase):
     def setUp(self):
         self.category = CategoryFactory()
-        user = UserFactory(
+        self.user = UserFactory(
             email='testadmin@phase.fr',
             password='pass',
             is_superuser=True,
             category=self.category,
         )
-        self.client.login(email=user.email, password='pass')
+        self.client.login(email=self.user.email, password='pass')
 
     def test_new_revision_form_is_empty(self):
         document = DocumentFactory(
@@ -447,6 +447,13 @@ class DocumentReviseTest(TestCase):
             .filter(metadata__document=document) \
             .order_by('-id')[0]
         self.assertEqual(revision.revision, 2)
+
+        # Check that revision creation was logged in audit trail
+        activity = Activity.objects.latest('created_on')
+        self.assertEqual(activity.verb, Activity.VERB_CREATED)
+        self.assertEqual(activity.target, revision)
+        self.assertEqual(activity.action_object, document)
+        self.assertEqual(activity.actor, self.user)
 
     def test_new_revision_files(self):
         """

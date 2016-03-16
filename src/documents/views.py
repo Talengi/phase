@@ -554,6 +554,12 @@ class DocumentRevise(DocumentEdit):
         }
         notify(self.request.user, _(message_text) % message_data)
 
+        activity_log.send(verb=Activity.VERB_CREATED,
+                          target=self.revision,
+                          action_object=document,
+                          sender=None,
+                          actor=self.request.user)
+
         return HttpResponseRedirect(self.get_success_url())
 
     def get_context_data(self, **kwargs):
