@@ -15,7 +15,7 @@ activity_log = Signal(
 )
 
 
-@receiver(activity_log)
+@receiver(activity_log, dispatch_uid='activity_log_uid')
 def activity_handler(verb, target, **kwargs):
     from .models import Activity
 

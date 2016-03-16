@@ -310,8 +310,6 @@ class DocumentDeleteTests(TestCase):
         revisions = DemoMetadataRevision.objects.filter(metadata=metadata)
         self.assertEqual(revisions.count(), 0)
 
-
-
     def test_cannot_revise_document_in_review(self):
         document = DocumentFactory(
             category=self.category,

@@ -489,6 +489,7 @@ class DocumentRevisionDelete(DocumentDelete):
 
         latest_revision = all_revisions[0]
         previous_revision = all_revisions[1]
+        latest_revision_str = str(latest_revision)
 
         self.object.latest_revision = previous_revision
         self.object.save()
@@ -497,8 +498,13 @@ class DocumentRevisionDelete(DocumentDelete):
         self.object.document.current_revision_date = previous_revision.revision_date
         self.object.document.updated_on = timezone.now()
         self.object.document.save()
-
         latest_revision.delete()
+        activity_log.send(verb=Activity.VERB_DELETED,
+                          target=None,
+                          target_object_str=latest_revision_str,
+                          action_object=self.object,
+                          sender=self.__class__,
+                          actor=self.request.user)
 
         success_url = self.get_success_url()
         return HttpResponseRedirect(success_url)
