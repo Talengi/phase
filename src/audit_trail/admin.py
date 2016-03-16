@@ -27,4 +27,3 @@ class ActivityAdmin(NonEditableAdminMixin, admin.ModelAdmin):
     get_action_object.short_description = 'Action Object'
 
 admin.site.register(Activity, ActivityAdmin)
-

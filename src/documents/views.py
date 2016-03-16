@@ -23,6 +23,7 @@ from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 from rest_framework.renderers import JSONRenderer
 
 from accounts.models import get_entities
+from audit_trail.signals import activity_log
 from favorites.models import Favorite
 from favorites.api.serializers import FavoriteSerializer
 from bookmarks.models import get_user_bookmarks
@@ -367,6 +368,9 @@ class DocumentCreate(BaseDocumentFormView):
             'title': doc.title
         }
         notify(self.request.user, _(message_text) % message_data)
+
+        activity_log.send(
+            verb='created', target=doc, sender=None, actor=self.request.user)
 
         return HttpResponseRedirect(self.get_success_url())
 

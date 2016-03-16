@@ -47,4 +47,3 @@ def activity_handler(verb, target, **kwargs):
         action_object.action_object_str = str(action_object)
 
     activity.save()
-

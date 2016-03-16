@@ -9,6 +9,7 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 
 from accounts.factories import UserFactory
+from audit_trail.models import Activity
 from categories.factories import CategoryFactory
 from default_documents.models import DemoMetadataRevision, \
     ContractorDeliverable
@@ -21,7 +22,7 @@ from ..forms.filters import filterform_factory
 class DocumentCreateTest(TestCase):
     def setUp(self):
         self.category = CategoryFactory()
-        user = UserFactory(
+        self.user = UserFactory(
             email='testadmin@phase.fr',
             password='pass',
             is_superuser=True,
@@ -31,7 +32,7 @@ class DocumentCreateTest(TestCase):
             self.category.organisation.slug,
             self.category.slug,
         ])
-        self.client.login(email=user.email, password='pass')
+        self.client.login(email=self.user.email, password='pass')
         self.sample_path = join(settings.DJANGO_ROOT, 'documents', 'tests')
 
     def tearDown(self):
@@ -113,6 +114,10 @@ class DocumentCreateTest(TestCase):
         doc = Document.objects.all().order_by('-id')[0]
         self.assertEqual(doc.document_number, 'a-title')
         self.assertEqual(doc.document_key, 'a-title')
+
+        activity = Activity.objects.latest('created_on')
+        self.assertEqual(activity.target.title, 'a title')
+        self.assertEqual(activity.actor, self.user)
 
     def test_create_with_document_key(self):
         c = self.client
