@@ -23,6 +23,7 @@ from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 from rest_framework.renderers import JSONRenderer
 
 from accounts.models import get_entities
+from audit_trail.models import Activity
 from audit_trail.signals import activity_log
 from favorites.models import Favorite
 from favorites.api.serializers import FavoriteSerializer
@@ -411,7 +412,7 @@ class DocumentEdit(BaseDocumentFormView):
     def form_valid(self, document_form, revision_form):
         response = super(DocumentEdit, self).form_valid(document_form,
                                                         revision_form)
-        activity_log.send(verb='updated',
+        activity_log.send(verb=Activity.VERB_UPDATED,
                           target=self.object,
                           sender=None,
                           actor=self.request.user)
@@ -442,7 +443,7 @@ class DocumentDelete(LoginRequiredMixin,
                      PermissionRequiredMixin,
                      DocumentListMixin,
                      DeleteView):
-    """Edit a document and a selected revision."""
+    """Delete a document and its revisions."""
     permission_required = 'documents.can_control_document'
     raise_exception = True
     http_method_names = ['post']
@@ -455,8 +456,16 @@ class DocumentDelete(LoginRequiredMixin,
 
         """
         document = self.object.document
+        document_str = str(document)
         success_url = self.get_success_url()
         document.delete()
+
+        activity_log.send(verb=Activity.VERB_DELETED,
+                          target=None,
+                          target_object_str=document_str,
+                          sender=None,
+                          actor=self.request.user)
+
         return HttpResponseRedirect(success_url)
 
     def post(self, request, *args, **kwargs):

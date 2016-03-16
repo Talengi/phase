@@ -28,12 +28,11 @@ def activity_handler(verb, target, **kwargs):
     activity.verb = verb
 
     activity.target = target
-    activity.target_object_str = str(target)
+    activity.target_object_str = kwargs.get('target_object_str', None) or str(target)
 
     actor = kwargs.pop('actor')
     if isinstance(actor, User):
-        activity.actor_content_type = ContentType.objects.get_for_model(actor)
-        activity.actor_object_id = actor.pk
+        activity.actor = actor
         activity.actor_object_str = str(actor)
     elif actor in Activity.NON_DB_USERS:
         activity.actor_object_str = actor
