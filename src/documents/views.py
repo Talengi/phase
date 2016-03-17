@@ -413,7 +413,7 @@ class DocumentEdit(BaseDocumentFormView):
         response = super(DocumentEdit, self).form_valid(document_form,
                                                         revision_form)
         activity_log.send(verb=Activity.VERB_UPDATED,
-                          target=self.object,
+                          target=self.object.document,
                           sender=None,
                           actor=self.request.user)
         return response
@@ -502,7 +502,7 @@ class DocumentRevisionDelete(DocumentDelete):
         activity_log.send(verb=Activity.VERB_DELETED,
                           target=None,
                           target_object_str=latest_revision_str,
-                          action_object=self.object,
+                          action_object=self.object.document,
                           sender=self.__class__,
                           actor=self.request.user)
 
