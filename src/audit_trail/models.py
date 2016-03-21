@@ -72,14 +72,12 @@ class Activity(models.Model):
             'actor': self.actor or self.actor_object_str,
             'verb': self.get_verb_display(),
             'action_object': self.action_object or self.action_object_str,
-            'target': self.target or self.target_object_str,
-            'created_on': self.created_on,
+            'target': self.target or self.target_object_str
         }
         if self.action_object and self.target:
-            return _('{actor} {verb} {action_object} on {target} at '
-                     '{created_on}').format(**ctx)
+            return _('{actor} {verb} {target} on {action_object}').format(**ctx)
         elif self.action_object:
-            return _('{actor} {verb} {action_object} at {created_on}').format(**ctx)
+            return _('{actor} {verb} {action_object}').format(**ctx)
         elif self.target:
-            return _('{actor} {verb} {target} at {created_on}').format(**ctx)
-        return _('{actor} {verb} at {created_on}').format(**ctx)
+            return _('{actor} {verb} {target}').format(**ctx)
+        return _('{actor} {verb}').format(**ctx)
