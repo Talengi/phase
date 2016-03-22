@@ -695,7 +695,8 @@ class OutgoingTransmittal(Metadata):
                         When(purpose_of_issue='FR', then=Value(later)),
                         When(purpose_of_issue='FI', then=Value(None)),
                     ))
-
+            for rev in Revision.objects.filter(id__in=ids):
+                rev.transmittals.add(self)
             bulk_actions(index_data)
 
     @classmethod
@@ -900,6 +901,13 @@ class TransmittableMixin(ReviewMixin):
         return all((
             not self.internal_review,
             not self.transmittal,
+            self.document.current_revision == self.revision))
+
+    def can_be_transmitted_to_recipient(self, recipient):
+        """Is this rev ready to be embedded in an outgoing trs?"""
+        return all((
+            not self.internal_review,
+            recipient not in [trs.recipient for trs in self.transmittals.all()],
             self.document.current_revision == self.revision))
 
     def get_initial_empty(self):
