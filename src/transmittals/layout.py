@@ -29,10 +29,11 @@ class OutgoingTrsLayout(LayoutObject):
 
     def render(self, form, form_style, context, template_pack=None):
         transmittal = form.instance.transmittal
-
+        transmittals = form.instance.transmittals.all()
         return render_to_string(
             self.template,
             Context({
                 'transmittal': transmittal,
+                'transmittals': transmittals,
                 'form_style': form_style,
             }))

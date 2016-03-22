@@ -96,9 +96,9 @@ def create_transmittal(from_category, to_category, revisions, contract_nb,
             raise errors.InvalidRevisionsError(
                 'At least one of the revisions is invalid.')
 
-        if not rev.can_be_transmitted:
+        if not rev.can_be_transmitted_to_recipient(recipient=recipient):
             raise errors.InvalidRevisionsError(
-                'At least one of the rivisions cannot be transmitted')
+                'At least one of the revisions cannot be transmitted')
 
         if not rev.document.category == from_category:
             raise errors.InvalidRevisionsError(

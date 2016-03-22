@@ -107,7 +107,6 @@ class OutgoingTransmittalForm(GenericBaseDocumentForm):
                 self.instance.document.document_key,
                 'archived_pdf',
             ])
-            print url
             self.fields['archived_pdf'].widget.value_url = url
 
     def clean_archived_pdf(self):

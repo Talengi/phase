@@ -10,5 +10,25 @@
         {% else %}
             {{ _('There is no associated outgoing transmittal.') }}
         {% endif %}
+        <hr>
+
+    </div>
+    <div class="controls">
+
+    <label class="control-label">
+        {{ _('Outgoing transmittals') }}
+    </label>
+        {% if transmittals %}
+            {% for trs in transmittals %}
+                <div>
+                    <a href="{{ transmittal.get_absolute_url }}">
+                        {{ transmittal }}
+                    </a> ({{ transmittal.document.created_on|date:'Y-m-d' }})
+                </div>
+            {% endfor %}
+        {% else %}
+            {{ _('There is no associated outgoing transmittal.') }}
+        {% endif %}
+        <hr>
     </div>
 </div>
