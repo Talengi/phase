@@ -157,9 +157,22 @@ var Phase = Phase || {};
             this.form = this.$el.find('form');
             this.show();
         },
+        isValid: function(form){
+            var checkboxes = form.find(".js-required-checkbox");
+            if (checkboxes.length > 0){
+                if (!checkboxes.is(":checked")){
+                    alert('At least one checkbox must be checked');
+                    return false;
+                }
+            }
+            return true;
+        },
         submit: function(event) {
             event.preventDefault();
             var form = $(event.currentTarget);
+
+            if (!this.isValid(form)){return false}
+
             var customFormData = form.serializeArray();
             var finalFormData = this.formData.concat(customFormData);
             this.hide();

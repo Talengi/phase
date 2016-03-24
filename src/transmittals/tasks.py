@@ -42,7 +42,7 @@ def do_notify_transmittal_recipients(metadata_id, revision_id):
 @app.task
 def do_create_transmittal(
         user_id, from_category_id, to_category_id, document_ids,
-        contract_number, recipient_id):
+        contract_number, recipients_ids):
 
     # Display a small amount of progression
     # so the user won't get impatient
@@ -52,7 +52,7 @@ def do_create_transmittal(
 
     from_category = Category.objects.get(pk=from_category_id)
     to_category = Category.objects.get(pk=to_category_id)
-    recipient = Entity.objects.get(pk=recipient_id)
+    recipients = Entity.objects.filter(pk__in=recipients_ids)
     documents = Document.objects \
         .select_related() \
         .filter(id__in=document_ids)
@@ -61,15 +61,16 @@ def do_create_transmittal(
         revisions.append(doc.get_latest_revision())
 
     try:
-        doc, _, _ = create_transmittal(
-            from_category,
-            to_category,
-            revisions,
-            contract_number,
-            recipient)
-        msg = '''You successfully created transmittal
-                 <a href="{}">{}</a>'''.format(doc.get_absolute_url(), doc)
-        notify(user_id, msg)
+        for recipient in recipients:
+            doc, _, _ = create_transmittal(
+                from_category,
+                to_category,
+                revisions,
+                contract_number,
+                recipient)
+            msg = '''You successfully created transmittal
+                     <a href="{}">{}</a>'''.format(doc.get_absolute_url(), doc)
+            notify(user_id, msg)
     except TransmittalError as e:
         msg = '''We failed to create a transmittal for the
                  following reason: "{}".'''.format(e)

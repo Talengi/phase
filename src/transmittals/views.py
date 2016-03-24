@@ -323,10 +323,9 @@ class CreateTransmittal(PermissionRequiredMixin, BaseDocumentBatchActionView):
     http_method_names = ['post']
 
     def start_job(self, contenttype, document_ids):
-
         from_category_id = self.category.id
         to_category_id = self.request.POST.get('destination_category')
-        recipient_id = self.request.POST.get('recipient')
+        recipients_ids = self.request.POST.getlist('recipients')
         contract_number = self.request.POST.get('contract_number')
 
         job = do_create_transmittal.delay(
@@ -335,7 +334,7 @@ class CreateTransmittal(PermissionRequiredMixin, BaseDocumentBatchActionView):
             to_category_id,
             document_ids,
             contract_number,
-            recipient_id)
+            recipients_ids)
         return job
 
 
