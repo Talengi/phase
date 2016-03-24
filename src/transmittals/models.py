@@ -571,7 +571,7 @@ class OutgoingTransmittal(Metadata):
 
     def get_revisions(self):
         _class = self.get_revisions_class()
-        revisions = _class.objects.filter(transmittal=self).select_related()
+        revisions = _class.objects.filter(transmittals=self).select_related()
         return revisions
 
     def get_revisions_class(self):

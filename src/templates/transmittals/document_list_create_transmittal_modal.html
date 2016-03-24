@@ -12,14 +12,16 @@
         <div class="modal-body">
             <p class="alert alert-info">{{ _('Create a new transmittal with the selected documents.') }}</p>
             <div class="form-group">
-                <label for="recipient-select">{{ _('Recipient') }}</label>
-                <select id="recipient-select" name="recipient" class="form-control">
-                    {% for recipient in category.third_parties.all %}
-                    <option value="{{ recipient.id }}">
-                        {{ recipient }}
-                    </option>
-                    {% endfor %}
-                </select>
+                <strong>{{ _('Recipients') }}</strong>
+                <p>(At least one is required)</p>
+                {% for recipient in category.third_parties.all %}
+                    <div class="checkbox">
+                        <label>
+                            <input class="js-required-checkbox" type="checkbox" name="recipients" value="{{ recipient.id }}" />
+                            {{ recipient }}
+                        </label>
+                    </div>
+                {% endfor %}
             </div>
 
             <div class="form-group">
