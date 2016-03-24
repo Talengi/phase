@@ -171,7 +171,7 @@ var Phase = Phase || {};
             event.preventDefault();
             var form = $(event.currentTarget);
 
-            if (!this.isValid(form)){return false}
+            if (!this.isValid(form)){return false;}
 
             var customFormData = form.serializeArray();
             var finalFormData = this.formData.concat(customFormData);
