@@ -340,8 +340,15 @@ PIPELINE_CSS = {
             # must be loaded after jquery-ui js to avoid conflicts
             'css/datepicker.css',
             'css/project.css',
+
         ),
         'output_filename': 'css/base.css',
+    },
+    'list': {
+        'source_filenames': (
+            'css/selectize.css',
+        ),
+        'output_filename': 'css/list.css',
     },
     'detail': {
         'source_filenames': (
@@ -383,6 +390,7 @@ PIPELINE_JS = {
     },
     'list': {
         'source_filenames': (
+            'js/vendor/selectize.js',
             'js/vendor/jquery.inview.js',
             'js/querystring.js',
             'js/documents/models.js',

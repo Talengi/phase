@@ -156,16 +156,24 @@ var Phase = Phase || {};
             this.$el.html(modalContent);
             this.form = this.$el.find('form');
             this.show();
+
+            $('.js-recipients-selectize').selectize({
+                mode: 'multi',
+                maxItems: 100,
+                searchField: ['text']
+            });
         },
         isValid: function(form){
-            var checkboxes = form.find(".js-required-checkbox");
-            if (checkboxes.length > 0){
-                if (!checkboxes.is(":checked")){
-                    alert('At least one checkbox must be checked');
-                    return false;
+            var required = form.find(":input.js-required");
+            var valid = true;
+            required.each(function(i, el){
+                if (el.value.length < 1){
+                    alert('At least one value must be set on ' + el.name + ' field');
+                    valid = false;
                 }
-            }
-            return true;
+            });
+
+            return valid;
         },
         submit: function(event) {
             event.preventDefault();

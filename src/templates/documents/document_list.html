@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load pipeline %}
 
+{% block extra_css %}
+    {% stylesheet "list" %}
+{% endblock extra_css %}
+
 {% block custombodyclass %}documentlist fullwidth{% endblock %}
 
 {% block additional_navbar %}

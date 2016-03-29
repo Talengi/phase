@@ -1,29 +1,16 @@
 <div class="form-group">
-    <label class="control-label">
-        {{ _('Outgoing transmittal') }}
-    </label>
-    <div class="controls">
-        {% if transmittal %}
-            <a href="{{ transmittal.get_absolute_url }}">
-                {{ transmittal }}
-            </a> ({{ transmittal.document.created_on|date:'Y-m-d' }})
-        {% else %}
-            {{ _('There is no associated outgoing transmittal.') }}
-        {% endif %}
-        <hr>
 
-    </div>
     <div class="controls">
 
-    <label class="control-label">
-        {{ _('Outgoing transmittals') }}
-    </label>
+        <label class="control-label">
+            {{ _('Outgoing transmittals') }}
+        </label>
         {% if transmittals %}
             {% for trs in transmittals %}
                 <div>
-                    <a href="{{ transmittal.get_absolute_url }}">
-                        {{ transmittal }}
-                    </a> ({{ transmittal.document.created_on|date:'Y-m-d' }})
+                    <a href="{{ trs.get_absolute_url }}">
+                        {{ trs }}
+                    </a> ({{ trs.document.created_on|date:'Y-m-d' }})
                 </div>
             {% endfor %}
         {% else %}
