@@ -755,7 +755,7 @@ class ReviewMixin(models.Model):
 
         else:  # revision is not under review
             if self.can_be_reviewed and \
-                    user.has_perm('can_control_document'):
+                    user.has_perm('documents.can_control_document'):
 
                 actions.insert(-3, MenuItem(
                     'start-review',
