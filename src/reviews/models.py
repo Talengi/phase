@@ -790,15 +790,18 @@ class DistributionList(models.Model):
         User,
         verbose_name=_('Reviewers'),
         related_name='related_lists_as_reviewer',
+        limit_choices_to={'is_external': False},
         blank=True)
     leader = models.ForeignKey(
         User,
         verbose_name=_('Leader'),
-        related_name='related_lists_as_leader')
+        related_name='related_lists_as_leader',
+        limit_choices_to={'is_external': False})
     approver = models.ForeignKey(
         User,
         verbose_name=_('Approver'),
         related_name='related_lists_as_approver',
+        limit_choices_to={'is_external': False},
         null=True, blank=True)
 
     class Meta:
