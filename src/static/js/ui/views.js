@@ -161,7 +161,7 @@ var Phase = Phase || {};
                 mode: 'multi',
                 maxItems: 100,
                 searchField: ['text']
-            })
+            });
         },
         isValid: function(form){
             var required = form.find(":input.js-required");
