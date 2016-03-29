@@ -893,14 +893,14 @@ class TransmittableMixin(ReviewMixin):
         # an infinite recursion error.
         return all((
             super(TransmittableMixin, self).can_be_reviewed,
-            not self.transmittal))
+            not self.transmittals.count()))
 
     @property
     def can_be_transmitted(self):
         """Is this rev ready to be embedded in an outgoing trs?"""
         return all((
             not self.internal_review,
-            not self.transmittal,
+            not self.transmittals.count(),
             self.document.current_revision == self.revision))
 
     def can_be_transmitted_to_recipient(self, recipient):
