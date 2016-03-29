@@ -123,11 +123,13 @@ def stringify(val):
 
 
 @register.inclusion_tag('documents/templatetags/menu_button.html', takes_context=True)
-def action_menu_button(context, metadata, revision, user):
+def action_menu_button(context, metadata, revision, user, dropdirection):
     """Renders the dropdown button and associated form. If `actions` is
     empty, nothing is rendered."""
     actions = revision.get_actions(metadata, user)
-    return {'context': context, 'actions_list': actions}
+    return {'context': context,
+            'actions_list': actions,
+            'dropdirection': dropdirection}
 
 
 @register.simple_tag()
