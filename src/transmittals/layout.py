@@ -14,8 +14,7 @@ class RelatedRevisionsLayout(LayoutObject):
         self.field = field
 
     def render(self, form, form_style, context, template_pack=None):
-        revisions = form.instance.get_revisions()
-
+        revisions = form.instance.get_last_revisions()
         return render_to_string(
             self.template,
             Context({
@@ -28,12 +27,10 @@ class OutgoingTrsLayout(LayoutObject):
     template = 'layout/outgoing_trs.html'
 
     def render(self, form, form_style, context, template_pack=None):
-        transmittal = form.instance.transmittal
         transmittals = form.instance.transmittals.all()
         return render_to_string(
             self.template,
             Context({
-                'transmittal': transmittal,
                 'transmittals': transmittals,
                 'form_style': form_style,
             }))

@@ -76,7 +76,7 @@ class BaseTransmittalPdf(object):
         self.document = revision.document
         self.transmittal = revision.metadata
         self.category = self.document.category
-        self.revisions = self.transmittal.get_revisions()
+        self.revisions = self.transmittal.get_last_revisions()
         self.trigram = revision.metadata.originator
         self.company_logo_settings = self.get_logo_settings()
         self.build_document()

@@ -574,6 +574,15 @@ class OutgoingTransmittal(Metadata):
         revisions = _class.objects.filter(transmittals=self).select_related()
         return revisions
 
+    def get_last_revisions(self):
+        """This is ugly. Should find a better way.
+            Return last revision of each linked document
+        """
+        revisions = self.get_revisions()
+        docs = [rev.metadata for rev in revisions]
+        last_revs = [doc.get_all_revisions().first() for doc in docs]
+        return list(set(last_revs))
+
     def get_revisions_class(self):
         return self.revisions_category.revision_class()
 
@@ -679,7 +688,6 @@ class OutgoingTransmittal(Metadata):
             index_datum = build_index_data(revision)
             index_datum['_source']['can_be_transmitted'] = False
             index_data.append(index_datum)
-
         with transaction.atomic():
             today = timezone.now()
             later = today + datetime.timedelta(days=self.EXTERNAL_REVIEW_DURATION)
