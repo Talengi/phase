@@ -7,7 +7,7 @@ from documents.signals import document_revised, revision_edited
 from transmittals.signals import transmittal_created, transmittal_pdf_generated
 from transmittals.handlers import (
     generate_transmittal_pdf, notify_transmittal_recipients,
-    notify_transmittal_on_errors)
+    notify_transmittal_on_errors, update_related_revisions)
 from transmittals.models import OutgoingTransmittal, OutgoingTransmittalRevision
 
 
@@ -16,6 +16,12 @@ class TransmittalsConfig(AppConfig):
     verbose_name = 'Transmittals'
 
     def ready(self):
+        # Update related revisions when outgoing trs is revised
+        document_revised.connect(
+            update_related_revisions,
+            sender=OutgoingTransmittal,
+            dispatch_uid='on_revise_trs_update_related_revisions')
+
         # Generate transmittal pdf
         transmittal_created.connect(
             generate_transmittal_pdf,

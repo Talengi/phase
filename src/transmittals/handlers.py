@@ -34,3 +34,16 @@ def notify_transmittal_on_errors(document, metadata, revision, **kwargs):
                     'name': document.title}
 
         mass_notify(recipients, msg)
+
+
+def update_related_revisions(document, **kwargs):
+    """"When a revision is created on an outgoing transmittal, we append the
+    last related documents revisions to it and we perform the due date
+    computation by calling `link_to_revisions` method."""
+    revisions_class = document.metadata.get_revisions_class()
+    rev_list = []
+    linked_revs = revisions_class.objects.filter(transmittals=document.metadata)
+    for rev in linked_revs:
+        rev_list.append(rev.metadata.latest_revision)
+    rev_list = list(set(rev_list))
+    document.metadata.link_to_revisions(rev_list)

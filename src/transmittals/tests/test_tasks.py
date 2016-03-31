@@ -10,14 +10,18 @@ from django.test import TestCase
 from django.contrib.contenttypes.models import ContentType
 from django.core.files.uploadedfile import SimpleUploadedFile
 
+from accounts.factories import UserFactory
 from documents.factories import DocumentFactory
-from categories.factories import CategoryFactory
+from categories.factories import CategoryFactory, ContractFactory, \
+    CategoryTemplateFactory
 from default_documents.factories import (
     ContractorDeliverableFactory, ContractorDeliverableRevisionFactory)
 from default_documents.models import ContractorDeliverable
 from accounts.factories import EntityFactory
+from notifications.models import Notification
+from transmittals.models import OutgoingTransmittal
 from transmittals.factories import TransmittalFactory, TrsRevisionFactory
-from transmittals.tasks import process_transmittal
+from transmittals.tasks import process_transmittal, do_create_transmittal
 
 
 def touch(path):
@@ -167,3 +171,55 @@ class ProcessTransmittalTests(TestCase):
 
         self.assertFalse(os.path.exists(tobechecked_file))
         self.assertTrue(os.path.exists(accepted_file))
+
+
+class OutgoingTransmittalTests(TestCase):
+
+    def setUp(self):
+        self.category = CategoryFactory()
+        self.user = UserFactory(
+            email='testadmin@phase.fr',
+            password='pass',
+            is_superuser=True,
+            category=self.category)
+        self.client.login(email=self.user.email, password='pass')
+        Model = ContentType.objects.get_for_model(ContractorDeliverable)
+        self.category = CategoryFactory(category_template__metadata_model=Model)
+        self.docs = [
+            DocumentFactory(
+                metadata_factory_class=ContractorDeliverableFactory,
+                revision_factory_class=ContractorDeliverableRevisionFactory,
+                category=self.category)
+            for _ in range(1, 3)]
+        self.revisions = [doc.get_latest_revision() for doc in self.docs]
+        self.contract = ContractFactory.create(
+            categories=[self.category])
+
+    def test_otg_creation(self):
+        ct = ContentType.objects.get_for_model(OutgoingTransmittal)
+        cat_template = CategoryTemplateFactory(
+            metadata_model=ct)
+        dest_cat = CategoryFactory(category_template=cat_template)
+        ctr1 = EntityFactory(type='contractor')
+        ctr2 = EntityFactory(type='contractor')
+        # We have to link third parties to categories
+        self.category.third_parties.add(ctr1, ctr2)
+        dest_cat.third_parties.add(ctr1, ctr2)
+
+        recipients_ids = [ctr1.pk, ctr2.pk]
+        document_ids = [doc.pk for doc in self.docs]
+        do_create_transmittal.delay(
+            self.user,
+            self.category.id,
+            dest_cat.id,
+            document_ids,
+            self.contract.number,
+            recipients_ids
+        )
+        # We have 2 docs and 2 recipients, so we expect 2 outgoing trs
+        # and 2 notifications
+        self.assertEqual(OutgoingTransmittal.objects.count(), 2)
+        self.assertEqual(Notification.objects.count(), 2)
+        # Check each doc revision links to both transmittals
+        for rev in self.revisions:
+            self.assertEqual(rev.transmittals.count(), 2)
