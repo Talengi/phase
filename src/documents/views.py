@@ -80,10 +80,13 @@ class DocumentListMixin(CategoryMixin):
         qs = DocumentClass.objects \
             .select_related() \
             .filter(document__category=self.category)
-
         entities = self.get_external_filtering()
+
+        if not hasattr(DocumentClass, 'recipient'):
+            # Recipient only belongs to Transmittals
+            return qs
+
         if self.request.user.is_external and entities:
-            # todo: check qs has recipient_id
             qs = qs.filter(recipient_id__in=entities)
         return qs
 
