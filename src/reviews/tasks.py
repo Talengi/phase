@@ -162,7 +162,11 @@ def batch_close_reviews(user_id, review_ids):
                 if waiting_reviews.count() == latest_revision.reviewers.count():
                     logger.info('Closing reviewers step')
                     latest_revision.end_reviewers_step(save=False)
-
+                    user = User.objects.get(pk=user_id)
+                    activity_log.send(verb=Activity.VERB_CLOSED_REVIEWER_STEP,
+                                      target=latest_revision,
+                                      sender=do_batch_import,
+                                      actor=user)
             ok.append(review.document)
         except:
             nok.append(review.document)
