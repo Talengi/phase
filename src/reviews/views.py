@@ -526,6 +526,7 @@ class ReviewFormView(LoginRequiredMixin, UpdateView):
         if return_code:
             self.revision.return_code = return_code
 
+        verb = None
         # If every reviewer has posted comments, close the reviewers step
         if self.object.role == 'reviewer':
             qs = Review.objects \
@@ -535,16 +536,25 @@ class ReviewFormView(LoginRequiredMixin, UpdateView):
                 .exclude(closed_on=None)
             if qs.count() == self.revision.reviewers.count():
                 self.revision.end_reviewers_step(save=False)
+                verb = Activity.VERB_CLOSED_REVIEWER_STEP
 
         # If leader, end leader step
         elif self.object.role == 'leader':
             self.revision.end_leader_step(save=False)
+            verb = Activity.VERB_CLOSED_LEADER_STEP
 
         # If approver, end approver step
         elif self.object.role == 'approver':
             self.revision.end_review(save=False)
+            verb = Activity.VERB_CLOSED_APPROVER_STEP
 
         self.revision.save(update_document=True)
+
+        if verb:
+            activity_log.send(verb=verb,
+                              target=self.revision,
+                              sender=do_batch_import,
+                              actor=self.request.user)
 
 
 class CommentsDownload(LoginRequiredMixin, DetailView):
