@@ -14,12 +14,16 @@ class Activity(models.Model):
     VERB_UPDATED = 'updated'
     VERB_DELETED = 'deleted'
     VERB_JOINED = 'joined'
+    VERB_STARTED_REVIEW = 'started_review'
+    VERB_CANCELLED_REVIEW = 'cancelled_review'
 
     VERB_CHOICES = (
         (VERB_CREATED, _("created")),
         (VERB_UPDATED, _("updated")),
         (VERB_DELETED, _("deleted")),
         (VERB_JOINED, _("joined Phase")),
+        (VERB_STARTED_REVIEW, _("started review")),
+        (VERB_CANCELLED_REVIEW, _("cancelled review")),
     )
 
     SYSTEM_USER = _("System")

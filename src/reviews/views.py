@@ -19,6 +19,8 @@ from django.utils import timezone
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 from zipview.views import BaseZipView
 
+from audit_trail.models import Activity
+from audit_trail.signals import activity_log
 from documents.models import Document
 from documents.views import DocumentListMixin, BaseDocumentBatchActionView
 from discussion.models import Note
@@ -78,6 +80,11 @@ class StartReview(PermissionRequiredMixin,
                 'title': document.title
             }
             notify(request.user, _(message_text) % message_data)
+            activity_log.send(verb=Activity.VERB_STARTED_REVIEW,
+                              target=revision,
+                              action_object=document,
+                              sender=None,
+                              actor=self.request.user)
         else:
             message_text = '''The review on revision %(rev)s of the document
                            <a href="%(url)s">%(key)s (%(title)s)</a>
