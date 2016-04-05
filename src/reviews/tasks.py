@@ -217,6 +217,11 @@ def batch_cancel_reviews(user_id, category_id, contenttype_id, document_ids):
                 raise RuntimeError()
 
             doc.latest_revision.cancel_review()
+            user = User.objects.get(pk=user_id)
+            activity_log.send(verb=Activity.VERB_CANCELLED_REVIEW,
+                              target=doc.latest_revision,
+                              sender=None,
+                              actor=user)
             ok.append(doc)
         except:
             nok.append(doc)
