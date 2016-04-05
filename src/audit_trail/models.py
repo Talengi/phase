@@ -79,9 +79,9 @@ class Activity(models.Model):
             'target': self.target or self.target_object_str
         }
         if self.action_object and self.target:
-            return _('{actor} {verb} {target} on {action_object}').format(**ctx)
+            return _('{actor} {verb} {action_object} on {target}').format(**ctx)
         elif self.action_object:
             return _('{actor} {verb} {action_object}').format(**ctx)
         elif self.target:
-            return _('{actor} {verb} {target}').format(**ctx)
+            return _('{actor} {verb} on {target}').format(**ctx)
         return _('{actor} {verb}').format(**ctx)

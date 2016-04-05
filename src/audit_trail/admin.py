@@ -4,10 +4,10 @@ from documents.admin import NonEditableAdminMixin
 from .models import Activity
 
 
-class ActivityAdmin(NonEditableAdminMixin, admin.ModelAdmin):
+class ActivityAdmin(  admin.ModelAdmin):
     actions = None
     list_display = (
-        'created_on', 'get_actor', 'verb', 'get_target', 'get_action_object')
+        'created_on', 'get_actor', 'verb', 'get_action_object', 'get_target',)
 
     def has_delete_permission(self, request, obj=None):
         return False
@@ -32,4 +32,3 @@ class ActivityAdmin(NonEditableAdminMixin, admin.ModelAdmin):
 
 
 admin.site.register(Activity, ActivityAdmin)
-

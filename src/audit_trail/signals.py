@@ -15,7 +15,7 @@ activity_log = Signal(
 
 
 @receiver(activity_log, dispatch_uid='activity_log_uid')
-def activity_handler(verb, target, **kwargs):
+def activity_handler(verb, action_object=None, target=None, **kwargs):
     from .models import Activity
 
     kwargs.pop('signal', None)
@@ -39,7 +39,6 @@ def activity_handler(verb, target, **kwargs):
         raise ValueError("Actor must be a user instance or belong to "
                          "Activity NON_DB_USERS")
 
-    action_object = kwargs.pop('action_object', None)
     if action_object:
         activity.action_object = action_object
         activity.action_object_str = str(action_object)

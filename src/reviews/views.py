@@ -82,7 +82,6 @@ class StartReview(PermissionRequiredMixin,
             notify(request.user, _(message_text) % message_data)
             activity_log.send(verb=Activity.VERB_STARTED_REVIEW,
                               target=revision,
-                              action_object=document,
                               sender=None,
                               actor=self.request.user)
         else:
@@ -153,7 +152,10 @@ class CancelReview(PermissionRequiredMixin,
                 'title': document.title
             }
             notify(request.user, _(message_text) % message_data)
-
+            activity_log.send(verb=Activity.VERB_CANCELLED_REVIEW,
+                              target=revision,
+                              sender=None,
+                              actor=self.request.user)
         return HttpResponseRedirect(self.get_redirect_url())
 
 

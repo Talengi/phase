@@ -371,7 +371,11 @@ class DocumentCreate(BaseDocumentFormView):
         notify(self.request.user, _(message_text) % message_data)
 
         activity_log.send(
-            verb='created', target=doc, sender=None, actor=self.request.user)
+            verb='created',
+            target=None,
+            action_object=doc,
+            sender=None,
+            actor=self.request.user)
 
         return HttpResponseRedirect(self.get_success_url())
 
@@ -413,7 +417,8 @@ class DocumentEdit(BaseDocumentFormView):
         response = super(DocumentEdit, self).form_valid(document_form,
                                                         revision_form)
         activity_log.send(verb=Activity.VERB_UPDATED,
-                          target=self.object.document,
+                          target=self.revision,
+                          action_object=self.object.document,
                           sender=None,
                           actor=self.request.user)
         return response
@@ -462,7 +467,7 @@ class DocumentDelete(LoginRequiredMixin,
 
         activity_log.send(verb=Activity.VERB_DELETED,
                           target=None,
-                          target_object_str=document_str,
+                          action_object_str=document_str,
                           sender=None,
                           actor=self.request.user)
 
@@ -500,9 +505,8 @@ class DocumentRevisionDelete(DocumentDelete):
         self.object.document.save()
         latest_revision.delete()
         activity_log.send(verb=Activity.VERB_DELETED,
-                          target=None,
-                          target_object_str=latest_revision_str,
-                          action_object=self.object.document,
+                          action_object_str=latest_revision_str,
+                          target=self.object.document,
                           sender=self.__class__,
                           actor=self.request.user)
 
@@ -561,8 +565,8 @@ class DocumentRevise(DocumentEdit):
         notify(self.request.user, _(message_text) % message_data)
 
         activity_log.send(verb=Activity.VERB_CREATED,
-                          target=self.revision,
-                          action_object=document,
+                          action_object=self.revision,
+                          target=document,
                           sender=None,
                           actor=self.request.user)
 
