@@ -59,7 +59,7 @@ def do_batch_import(user_id, category_id, contenttype_id, document_ids,
             user = User.objects.get(pk=user_id)
             activity_log.send(verb=Activity.VERB_STARTED_REVIEW,
                               target=doc.latest_revision,
-                              sender=None,
+                              sender=do_batch_import,
                               actor=user)
             # In case of batch review start with a remark,
             # the same remark is added for every review.
@@ -220,7 +220,7 @@ def batch_cancel_reviews(user_id, category_id, contenttype_id, document_ids):
             user = User.objects.get(pk=user_id)
             activity_log.send(verb=Activity.VERB_CANCELLED_REVIEW,
                               target=doc.latest_revision,
-                              sender=None,
+                              sender=batch_cancel_reviews,
                               actor=user)
             ok.append(doc)
         except:

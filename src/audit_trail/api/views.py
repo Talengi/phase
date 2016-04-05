@@ -28,7 +28,6 @@ class AuditTrailList(CategoryAPIViewMixin, generics.ListAPIView):
         qs = Activity.objects.filter(
             Q(action_object_content_type=ct, action_object_object_id=document.pk) |
             Q(target_content_type=ct, target_object_id=document.pk) |
-            Q(action_object_content_type=rev_ct, action_object_object_id__in=revisions_pk)|
-            Q(target_content_type = rev_ct, target_object_id__in=revisions_pk))
-        print qs.values_list('pk', flat=True)
+            Q(action_object_content_type=rev_ct, action_object_object_id__in=revisions_pk) |
+            Q(target_content_type=rev_ct, target_object_id__in=revisions_pk))
         return qs
