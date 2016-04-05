@@ -9,6 +9,9 @@ from django.utils.translation import ugettext
 from django.contrib.contenttypes.models import ContentType
 from celery import current_task
 
+from accounts.models import User
+from audit_trail.models import Activity
+from audit_trail.signals import activity_log
 from core.celery import app
 from reviews.signals import pre_batch_review, post_batch_review, batch_item_indexed
 from reviews.models import Review
@@ -53,7 +56,11 @@ def do_batch_import(user_id, category_id, contenttype_id, document_ids,
                 raise RuntimeError()
 
             doc.latest_revision.start_review()
-
+            user = User.objects.get(pk=user_id)
+            activity_log.send(verb=Activity.VERB_STARTED_REVIEW,
+                              target=doc.latest_revision,
+                              sender=None,
+                              actor=user)
             # In case of batch review start with a remark,
             # the same remark is added for every review.
             # Note: using "bulk_create" to create all the discussion
