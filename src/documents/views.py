@@ -416,7 +416,7 @@ class DocumentEdit(BaseDocumentFormView):
     def form_valid(self, document_form, revision_form):
         response = super(DocumentEdit, self).form_valid(document_form,
                                                         revision_form)
-        activity_log.send(verb=Activity.VERB_UPDATED,
+        activity_log.send(verb=Activity.VERB_EDITED,
                           action_object=self.revision,
                           target=self.object.document,
                           sender=None,

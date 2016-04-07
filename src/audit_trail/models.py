@@ -11,7 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 class Activity(models.Model):
 
     VERB_CREATED = 'created'
-    VERB_UPDATED = 'updated'
+    VERB_EDITED = 'edited'
     VERB_DELETED = 'deleted'
     VERB_JOINED = 'joined'
     VERB_STARTED_REVIEW = 'started_review'
@@ -21,7 +21,7 @@ class Activity(models.Model):
     VERB_CLOSED_APPROVER_STEP = 'closed_approver_step'
     VERB_CHOICES = (
         (VERB_CREATED, _("created")),
-        (VERB_UPDATED, _("updated")),
+        (VERB_EDITED, _("edited")),
         (VERB_DELETED, _("deleted")),
         (VERB_JOINED, _("joined Phase")),
         (VERB_STARTED_REVIEW, _("started review")),

@@ -351,7 +351,7 @@ class DocumentEditTest(TestCase):
         )
         # Check that update was logged in audit trail
         activity = Activity.objects.latest('created_on')
-        self.assertEqual(activity.verb, Activity.VERB_UPDATED)
+        self.assertEqual(activity.verb, Activity.VERB_EDITED)
         self.assertEqual(activity.target.title, u'a new new title')
         self.assertEqual(activity.actor, self.user)
 
