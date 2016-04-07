@@ -417,8 +417,8 @@ class DocumentEdit(BaseDocumentFormView):
         response = super(DocumentEdit, self).form_valid(document_form,
                                                         revision_form)
         activity_log.send(verb=Activity.VERB_UPDATED,
-                          target=self.revision,
-                          action_object=self.object.document,
+                          action_object=self.revision,
+                          target=self.object.document,
                           sender=None,
                           actor=self.request.user)
         return response
@@ -464,7 +464,6 @@ class DocumentDelete(LoginRequiredMixin,
         document_str = str(document)
         success_url = self.get_success_url()
         document.delete()
-
         activity_log.send(verb=Activity.VERB_DELETED,
                           target=None,
                           action_object_str=document_str,

@@ -27,7 +27,8 @@ def activity_handler(verb, action_object=None, target=None, **kwargs):
     activity.verb = verb
 
     activity.target = target
-    activity.target_object_str = kwargs.get('target_object_str', None) or str(target)
+    target_str = str(target) if target else ''
+    activity.target_object_str = kwargs.get('target_object_str', None) or target_str
 
     actor = kwargs.pop('actor')
     if isinstance(actor, User):
@@ -41,6 +42,7 @@ def activity_handler(verb, action_object=None, target=None, **kwargs):
 
     if action_object:
         activity.action_object = action_object
-        activity.action_object_str = str(action_object)
+
+    activity.action_object_str = kwargs.get('action_object_str', None) or str(action_object)
 
     activity.save()
