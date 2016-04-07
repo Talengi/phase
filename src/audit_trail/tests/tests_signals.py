@@ -12,10 +12,10 @@ class ActivitySignalTests(TestCase):
         doc = DocumentFactory()
         user = UserFactory()
         self.assertEqual(Activity.objects.count(), 0)
-        activity_log.send(verb='updated', target=doc, sender='self', actor=user)
+        activity_log.send(verb=Activity.VERB_EDITED, target=doc, sender='self', actor=user)
 
         latest_activity = Activity.objects.all().get()
-        self.assertEqual(latest_activity.verb, 'updated')
+        self.assertEqual(latest_activity.verb, 'edited')
         self.assertEqual(latest_activity.actor, user)
         self.assertEqual(latest_activity.actor_object_str, str(user))
         self.assertEqual(latest_activity.target, doc)

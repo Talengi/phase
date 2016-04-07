@@ -4,7 +4,7 @@ from documents.admin import NonEditableAdminMixin
 from .models import Activity
 
 
-class ActivityAdmin(  admin.ModelAdmin):
+class ActivityAdmin(NonEditableAdminMixin, admin.ModelAdmin):
     actions = None
     list_display = (
         'created_on', 'get_actor', 'verb', 'get_action_object', 'get_target',)

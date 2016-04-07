@@ -16,4 +16,3 @@ class ActivitySerializer(serializers.ModelSerializer):
 
     def get_text(self, obj):
         return str(obj)
-

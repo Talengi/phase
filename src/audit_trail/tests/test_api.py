@@ -7,7 +7,8 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 
 from accounts.factories import UserFactory
-from audit_trail.signals import activity_log
+from ..models import Activity
+from ..signals import activity_log
 from documents.factories import DocumentFactory
 
 
@@ -24,7 +25,7 @@ class ActivityApiTests(TestCase):
         doc = DocumentFactory()
         doc.category.users.add(self.user)
 
-        activity_log.send(verb='updated', target=doc, sender=None, actor=self.user)
+        activity_log.send(verb=Activity.VERB_EDITED, target=doc, sender=None, actor=self.user)
         activity_log.send(
             verb='updated', target=None, action_object=doc, sender=None, actor=self.user)
 

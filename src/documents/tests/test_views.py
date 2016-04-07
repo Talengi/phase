@@ -298,7 +298,7 @@ class DocumentDeleteTests(TestCase):
         # Check that deletion was logged in audit trail
         activity = Activity.objects.latest('created_on')
         self.assertEqual(activity.verb, Activity.VERB_DELETED)
-        self.assertEqual(activity.target_object_str, document_str)
+        self.assertEqual(activity.action_object_str, document_str)
         self.assertEqual(activity.actor, self.user)
 
         res = self.client.post(delete_url)

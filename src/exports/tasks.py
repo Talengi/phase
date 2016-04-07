@@ -2,12 +2,12 @@
 from __future__ import unicode_literals
 
 from django.conf import settings
-from mock import self
+
+from core.celery import app
 
 from accounts.models import User
 from audit_trail.models import Activity
 from audit_trail.signals import activity_log
-from core.celery import app
 
 
 @app.task

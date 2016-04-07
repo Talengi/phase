@@ -119,7 +119,7 @@ class DocumentCreateTest(TestCase):
         # Check that creation was logged in audit trail
         activity = Activity.objects.latest('created_on')
         self.assertEqual(activity.verb, Activity.VERB_CREATED)
-        self.assertEqual(activity.target.title, doc_title)
+        self.assertEqual(activity.action_object.title, doc_title)
         self.assertEqual(activity.actor, self.user)
 
     def test_create_with_document_key(self):
@@ -451,8 +451,8 @@ class DocumentReviseTest(TestCase):
         # Check that revision creation was logged in audit trail
         activity = Activity.objects.latest('created_on')
         self.assertEqual(activity.verb, Activity.VERB_CREATED)
-        self.assertEqual(activity.target, revision)
-        self.assertEqual(activity.action_object, document)
+        self.assertEqual(activity.action_object, revision)
+        self.assertEqual(activity.target, document)
         self.assertEqual(activity.actor, self.user)
 
     def test_new_revision_files(self):
