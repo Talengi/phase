@@ -16,9 +16,12 @@ class Activity(models.Model):
     VERB_JOINED = 'joined'
     VERB_STARTED_REVIEW = 'started_review'
     VERB_CANCELLED_REVIEW = 'cancelled_review'
+    VERB_REVIEWED = 'reviewed'
     VERB_CLOSED_REVIEWER_STEP = 'closed_reviewer_step'
     VERB_CLOSED_LEADER_STEP = 'closed_leader_step'
     VERB_CLOSED_APPROVER_STEP = 'closed_approver_step'
+    VERB_SENT_BACK_TO_LEADER_STEP = 'sent_back_to_leader_step'
+
     VERB_CHOICES = (
         (VERB_CREATED, _("created")),
         (VERB_EDITED, _("edited")),
@@ -26,9 +29,11 @@ class Activity(models.Model):
         (VERB_JOINED, _("joined Phase")),
         (VERB_STARTED_REVIEW, _("started review")),
         (VERB_CANCELLED_REVIEW, _("cancelled review")),
+        (VERB_REVIEWED, _("reviewed")),
         (VERB_CLOSED_REVIEWER_STEP, _("closed reviewer step")),
         (VERB_CLOSED_LEADER_STEP, _("closed leader step")),
         (VERB_CLOSED_APPROVER_STEP, _("closed approver step")),
+        (VERB_SENT_BACK_TO_LEADER_STEP, _("sent review back to leader")),
     )
 
     SYSTEM_USER = _("System")

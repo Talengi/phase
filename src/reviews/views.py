@@ -81,7 +81,7 @@ class StartReview(PermissionRequiredMixin,
             }
             notify(request.user, _(message_text) % message_data)
             activity_log.send(verb=Activity.VERB_STARTED_REVIEW,
-                              target=revision,
+                              action_object=revision,
                               sender=None,
                               actor=self.request.user)
         else:
@@ -471,6 +471,12 @@ class ReviewFormView(LoginRequiredMixin, UpdateView):
             if not can_comment:
                 return HttpResponseForbidden()
 
+            activity_log.send(verb=Activity.VERB_REVIEWED,
+                              action_object=self.revision,
+                              target=self.document,
+                              sender=None,
+                              actor=self.request.user)
+
             self.post_review(form)
 
             comments_file = form.cleaned_data.get('comments', None)
@@ -491,22 +497,33 @@ class ReviewFormView(LoginRequiredMixin, UpdateView):
             }
             notify(user, _(message_text) % message_data)
 
+        verb = None
         if 'close_reviewers_step' in self.request.POST and user in (
                 self.revision.leader, self.revision.approver):
             self.revision.end_reviewers_step()
+            verb = Activity.VERB_CLOSED_REVIEWER_STEP
 
         if 'close_leader_step' in self.request.POST and user == self.revision.approver:
             self.revision.end_leader_step()
+            verb = Activity.VERB_CLOSED_LEADER_STEP
 
         if 'back_to_leader_step' in self.request.POST and user == self.revision.approver:
             self.revision.send_back_to_leader_step()
             body = self.request.POST.get('body', None)
+            verb = Activity.VERB_SENT_BACK_TO_LEADER_STEP
+
             if body:
                 Note.objects.create(
                     author=user,
                     document=self.document,
                     revision=self.revision,
                     body=body)
+
+        if verb:
+            activity_log.send(verb=verb,
+                              target=self.revision,
+                              sender=None,
+                              actor=self.request.user)
 
         url = self.get_success_url()
         return HttpResponseRedirect(url)
