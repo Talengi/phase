@@ -1,0 +1,55 @@
+---
+- name: Allow sudo_user to access Ansible's SSH_AUTH_SOCK
+  become: no
+  shell: >
+    setfacl -m phase:x  $(dirname "$SSH_AUTH_SOCK") ;
+    setfacl -m phase:rwx "$SSH_AUTH_SOCK"
+  changed_when: false
+
+- name: Create required user
+  user: name={{ project_name }}
+
+- name: Create .profile file
+  template: src=profile.j2 dest={{ install_root }}/.profile owner=phase
+
+- name: Pull / clone main project repo
+  git:
+    repo: "{{ project_repo }}"
+    dest: "{{ project_root }}"
+    version: "{{ project_version }}"
+    accept_hostkey: yes
+  notify:
+    - Collect static
+    - Restart phase
+
+- name: Install additional document apps
+  git:
+    repo: "{{ item.repo }}"
+    dest: "{{ install_root }}/{{ item.name }}"
+    accept_hostkey: yes
+    version: "{{ project_version }}"
+  with_items: "{{ document_apps }}"
+  notify:
+    - Collect static
+    - Restart phase
+
+- name: Install python packages
+  pip: requirements={{ project_root }}/requirements.txt virtualenv={{ venv_dir }}
+  notify:
+    - Collect static
+    - Restart phase
+
+- name: Run Django database migrations
+  django_manage:
+    command: migrate
+    app_path: "{{ django_root }}"
+    virtualenv: "{{ venv_dir }}"
+    settings: "{{ django_settings }}"
+  notify: Restart phase
+
+- name: Clear Django cache
+  django_manage:
+    command: clearcache
+    app_path: "{{ django_root }}"
+    virtualenv: "{{ venv_dir }}"
+    settings: "{{ django_settings }}"
