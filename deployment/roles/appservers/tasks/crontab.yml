@@ -1,0 +1,24 @@
+---
+- name: Add media files clearing cron entry
+  cron:
+    name: "Phase media cleanup"
+    user: "{{ project_name }}"
+    minute: "0"
+    hour: "4"
+    job: "cd {{ django_root }} && {{ python_bin }} manage.py clearmedia --settings={{ django_settings }}"
+
+- name: Add pending review reminder cron entry
+  cron:
+    name: "Phase pending reviews reminder"
+    user: "{{ project_name }}"
+    minute: "0"
+    hour: "7"
+    job: "cd {{ django_root }} && {{ python_bin }} manage.py send_review_reminders --settings={{ django_settings }}"
+
+- name: Add transmittals waiting acknowlegment of receiept reminder cron entry
+  cron:
+    name: "Phase transmittals waiting ack of receipt"
+    user: "{{ project_name }}"
+    minute: "0"
+    hour: "8"
+    job: "cd {{ django_root }} && {{ python_bin }} manage.py send_trs_reminders --settings={{ django_settings }}"

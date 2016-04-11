@@ -1,0 +1,23 @@
+---
+- name: Pull / clone main project repo
+  git:
+    repo: "{{ project_repo }}"
+    dest: "{{ project_root }}"
+    version: "{{ project_version }}"
+    accept_hostkey: yes
+  notify:
+    - Collect static
+    - Restart phase
+
+- name: Install additional document apps
+  git:
+    repo: "{{ item.repo }}"
+    dest: "{{ install_root }}/{{ item.name }}"
+    accept_hostkey: yes
+    version: "{{ project_version }}"
+  with_items: "{{ document_apps }}"
+  notify:
+    - Collect static
+    - Restart phase
+
+

@@ -8,3 +8,10 @@
   with_items:
     - sudo
     - postgresql
+
+- name: Make sure ssh agent forwarding works
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: SSH_AUTH_SOCK
+    line: Defaults env_keep+=SSH_AUTH_SOCK
