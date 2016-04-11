@@ -5,7 +5,7 @@ with Phase hosting management and deployment.
 
 ## Quickstart
 
-Use `./hosts_demo` as a blueprint for an [Ansible inventory
+Use `./hosts.example` as a blueprint for an [Ansible inventory
 file](http://docs.ansible.com/ansible/intro_inventory.html). You can edit the
 `/etc/ansible/hosts` file (Ansible default) or create a local `hosts` file and
 reference it with the `-i` option.
@@ -47,11 +47,12 @@ Aptitude update *everything*:
 
     ansible-playbook -i hosts aptitude_update.yml
 
-Update only physical hosts:
+Update only physical hosts, i.e bare metal servers hosting lxc virtual
+machines:
 
     ansible-playbook -i hosts -l hosts aptitude_update.yml
 
-Update only virtual machines:
+Update only virtual machines, i.e actual phase installations in lxc containers:
 
     ansible-playbook -i hosts -l vms aptitude_update.yml
 
@@ -71,7 +72,8 @@ Some of Phase dependencies are hosted as private git repositories (e.g
 additional document apps) on Github.
 
 We think asking for a Githb login / password every time the deployment playbook
-would be tedious, and so would be generating ssh keys for every Phase instance.
+runs would be tedious, and so would be generating ssh keys for every Phase
+instance.
 
 Hence we use [SSH Agent
 Forwarding](https://developer.github.com/guides/using-ssh-agent-forwarding/),
