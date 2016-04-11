@@ -1,0 +1,13 @@
+---
+- name: Allow sudo_user to access Ansible's SSH_AUTH_SOCK
+  become: no
+  shell: >
+    setfacl -m phase:x  $(dirname "$SSH_AUTH_SOCK") ;
+    setfacl -m phase:rwx "$SSH_AUTH_SOCK"
+  changed_when: false
+
+- name: Create required user
+  user: name={{ project_name }}
+
+- name: Create .profile file
+  template: src=profile.j2 dest={{ install_root }}/.profile owner=phase

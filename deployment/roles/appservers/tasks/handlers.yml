@@ -1,0 +1,17 @@
+---
+- name: Collect static
+  django_manage:
+    command: collectstatic
+    app_path: "{{ django_root }}"
+    virtualenv: "{{ venv_dir }}"
+    settings: "{{ django_settings }}"
+  notify: restart phase
+
+- name: Restart phase
+  become: no
+  supervisorctl: name=phase state=restarted
+  notify: restart celery
+
+- name: Restart celery
+  become: no
+  supervisorctl: name=celery state=restarted

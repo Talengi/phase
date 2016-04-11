@@ -1,17 +1,20 @@
-[hosts]
-mycompany.com
+[appservers]
+# Every single one Phase installation
+www.phase-demo.mycompany.com
+staging.phase-demo.mycompany.com
+www.phase-myclient.mycompany.com
+staging.phase-myclient.mycompany.com
 
 [staging]
-phasetest.mycompany.com
+# Optional grouping to ease deployment filtering (with the -l option)
+staging.phase-demo.mycompany.com
+staging.phase-myclient.mycompany.com
 
 [prod]
-phase.mycompany.com
+www.phase-demo.mycompany.com
+www.phase-myclient.mycompany.com
 
-[vms:children]
-staging
-prod
-
-[servers:children]
-hosts
-vms
-
+[client_firstclient]
+# Optional grouping to define custom variable in the group_vars directory
+www.phase-myclient.mycompany.com
+staging.phase-myclient.mycompany.com
