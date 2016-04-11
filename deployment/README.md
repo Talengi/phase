@@ -79,7 +79,7 @@ In `/etc/ansible/hosts`:
 In `/etc/ansible/group_vars/myclient.yml`:
 
     project_version: master
-    document_apps: []
+    document_apps:
       - { repo: "git@github.com:mycompany/myclientapps.git", name: "myclientapps" }
 
 
@@ -111,7 +111,7 @@ In `/etc/ansible/hosts`:
 
 In `/etc/ansible/group_vars/myclient.yml`:
 
-    document_apps: []
+    document_apps:
       - { repo: "git@github.com:mycompany/myclientapps.git", name: "myclientapps" }
 
 In `/etc/ansible/host_vars/myclient-phase.mycompany.com.yml`:
