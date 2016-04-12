@@ -3,14 +3,14 @@ from __future__ import unicode_literals
 
 from django.conf.urls import patterns, url
 
-from alerts.views import AlertList, AlertNewDocument
+from alerts.views import AlertHome, AlertNewDocument
 
 
 urlpatterns = patterns(
     '',
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/$',
-        AlertList.as_view(),
-        name='alert_list'),
+        AlertHome.as_view(),
+        name='alert_home'),
 
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/new_documents/$',
         AlertNewDocument.as_view(),

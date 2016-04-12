@@ -1,1 +1,18 @@
 {% extends 'base.html' %}
+
+{% block content %}
+<div id="alerts">
+{% for alert in alerts %}
+<div class="panel panel-default">
+<div class="panel-heading">
+    <a href="{{ alert.link }}">
+        {{ alert.title }}
+    </a> — <strong>{{ alert.pubdate|date }}</strong>
+</div>
+    <div class="panel-body">
+        {{ alert.description }}
+    </div>
+</div>
+{% endfor %}
+</div>
+{% endblock %}
