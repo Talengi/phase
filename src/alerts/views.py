@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from datetime import datetime, time
+
 from django.views.generic import TemplateView, ListView
+from django.contrib.syndication.views import Feed
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.conf import settings
@@ -73,3 +76,30 @@ class AlertNewDocument(BaseAlertList):
 
     def get_alert_title(self, obj):
         return 'New document: {}'.format(obj.title)
+
+
+class RSSAlertNewDocument(CategoryMixin, Feed):
+    title = _('Latest documents')
+    link = '/alerts/'
+    description = _('List of newly created documents in the category')
+
+    def __call__(self, request, *args, **kwargs):
+        self.request = request
+        self.kwargs = kwargs
+        self.extract_category()
+        return super(RSSAlertNewDocument, self).__call__(request, *args, **kwargs)
+
+    def items(self, *args, **kwargs):
+        qs = Document.objects \
+            .filter(category=self.category) \
+            .order_by('-created_on')[:settings.ALERT_ELEMENTS]
+        return qs
+
+    def item_title(self, item):
+        return item.title
+
+    def item_description(self, item):
+        return ''
+
+    def item_pubdate(self, item):
+        return datetime.combine(item.created_on, time())
