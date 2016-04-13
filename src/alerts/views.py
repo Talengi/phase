@@ -1,21 +1,21 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from datetime import datetime, time
-
 from django.views.generic import TemplateView, ListView
-from django.contrib.syndication.views import Feed
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
-from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
 
 from braces.views import LoginRequiredMixin
 
-from documents.models import Document
 from categories.views import CategoryMixin
+from alerts import feeds
 
 
-class BaseAlert(LoginRequiredMixin, CategoryMixin):
+class AlertHome(LoginRequiredMixin, CategoryMixin, TemplateView):
+    """Simply links to available alerts."""
+    template_name = 'alerts/alert_home.html'
+
     def breadcrumb_section(self):
         return (_('Alerts'), '#')
 
@@ -23,83 +23,63 @@ class BaseAlert(LoginRequiredMixin, CategoryMixin):
         return self.category
 
 
-class AlertHome(BaseAlert, TemplateView):
-    """Simply links to available alerts."""
-    template_name = 'alerts/alert_home.html'
+class FeedConverterMixin(object):
+    """Displays a Django Feed directly in html."""
+    feed_class = None
+
+    def dispatch(self, request, *args, **kwargs):
+        self.feed = self.get_feed()
+        return super(FeedConverterMixin, self).dispatch(request, *args, **kwargs)
+
+    def get_feed(self):
+        """Get the feed to display."""
+        if self.feed_class is None:
+            raise ImproperlyConfigured('Missing `feed` field')
+
+        feed = self.feed_class()
+        feed.populate(self.request, **self.kwargs)
+        feed_object = feed.get_object(self.request, *self.args, **self.kwargs)
+        rss_feed = feed.get_feed(feed_object, self.request)
+        return rss_feed
 
 
-class BaseAlertList(BaseAlert, ListView):
+class BaseAlert(LoginRequiredMixin,
+                FeedConverterMixin,
+                CategoryMixin,
+                ListView):
+
+    template_name = 'alerts/alert_list.html'
+    context_object_name = 'alerts'
+
+    def breadcrumb_section(self):
+        return (_('Alerts'), '#')
+
+    def breadcrumb_subsection(self):
+        return (self.category, reverse('alert_home', args=[
+            self.category.organisation.slug,
+            self.category.slug
+        ]))
+
+    def get_queryset(self):
+        items = self.get_feed().items
+        return items
+
     def get_context_data(self, **kwargs):
         context = super(BaseAlert, self).get_context_data(**kwargs)
         context.update({
-            'alerts': self.get_alerts(context['object_list']),
+            'title': self.feed.feed['title'],
+            'description': self.feed.feed['description'],
+            'feed_url': self.feed.feed['link'],
         })
         return context
 
-    def get_alerts(self, qs):
-        return map(self.get_alert, qs)
 
-    def get_alert(self, obj):
-        return {
-            'title': self.get_alert_title(obj),
-            'description': self.get_alert_description(obj),
-            'link': self.get_alert_link(obj),
-            'pubdate': self.get_alert_pubdate(obj)
-        }
-
-    def get_alert_title(self, obj):
-        return obj.title
-
-    def get_alert_description(self, obj):
-        return ''
-
-    def get_alert_link(self, obj):
-        return obj.get_absolute_url()
-
-    def get_alert_pubdate(self, obj):
-        return obj.created_on
-
-
-class AlertNewDocument(BaseAlertList):
+class AlertNewDocuments(BaseAlert):
     """List newly created documents."""
-    template_name = 'alerts/alert_new_document.html'
-    context_object_name = 'alerts'
+    feed_class = feeds.FeedNewDocuments
 
-    def breadcrumb_objet(self):
-        return (_('New document'), reverse('alert_new_document'))
-
-    def get_queryset(self):
-        qs = Document.objects \
-            .filter(category=self.category) \
-            .order_by('-created_on')[:settings.ALERT_ELEMENTS]
-        return qs
-
-    def get_alert_title(self, obj):
-        return 'New document: {}'.format(obj.title)
-
-
-class RSSAlertNewDocument(CategoryMixin, Feed):
-    title = _('Latest documents')
-    link = '/alerts/'
-    description = _('List of newly created documents in the category')
-
-    def __call__(self, request, *args, **kwargs):
-        self.request = request
-        self.kwargs = kwargs
-        self.extract_category()
-        return super(RSSAlertNewDocument, self).__call__(request, *args, **kwargs)
-
-    def items(self, *args, **kwargs):
-        qs = Document.objects \
-            .filter(category=self.category) \
-            .order_by('-created_on')[:settings.ALERT_ELEMENTS]
-        return qs
-
-    def item_title(self, item):
-        return item.title
-
-    def item_description(self, item):
-        return ''
-
-    def item_pubdate(self, item):
-        return datetime.combine(item.created_on, time())
+    def breadcrumb_object(self):
+        return (_('New documents'), reverse('alert_new_documents', args=[
+            self.category.organisation.slug,
+            self.category.slug
+        ]))

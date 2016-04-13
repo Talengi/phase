@@ -19,7 +19,7 @@ class AlertNewDocumentTests(TestCase):
             category=self.category
         )
         self.client.login(email=self.user.email, password='pass')
-        self.url = reverse('alert_new_document', args=[
+        self.url = reverse('alert_new_documents', args=[
             self.category.organisation.slug,
             self.category.slug,
         ])

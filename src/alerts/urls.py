@@ -3,7 +3,8 @@ from __future__ import unicode_literals
 
 from django.conf.urls import patterns, url
 
-from alerts.views import AlertHome, AlertNewDocument, RSSAlertNewDocument
+from alerts.views import AlertHome, AlertNewDocuments
+from alerts.feeds import FeedNewDocuments
 
 
 urlpatterns = patterns(
@@ -13,9 +14,9 @@ urlpatterns = patterns(
         name='alert_home'),
 
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/new_documents/$',
-        AlertNewDocument.as_view(),
-        name='alert_new_document'),
+        AlertNewDocuments.as_view(),
+        name='alert_new_documents'),
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/new_documents.rss$',
-        RSSAlertNewDocument(),
-        name='alert_new_document_rss'),
+        FeedNewDocuments(),
+        name='feed_new_documents'),
 )
