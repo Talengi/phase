@@ -115,10 +115,10 @@ You can install ES by downloading the apt package on the elastic site::
     dpkg -i elasticsearch-1.6.2.deb
 
 The default Elasticsearch installation is enough, but remember that ES listens
-on 0.0.0.0 by default, which can be inconveniant.
+on 0.0.0.0 by default, which can be inconvenient.
 
 To limit ES connections to localhost, one can update the config file
-``/etc/elasticsearch/elasticsearch.yml`` as is::
+``/etc/elasticsearch/elasticsearch.yml`` as this::
 
     …
     network.host: 127.0.0.1
