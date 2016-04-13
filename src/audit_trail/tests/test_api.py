@@ -25,13 +25,20 @@ class ActivityApiTests(TestCase):
         doc = DocumentFactory()
         doc.category.users.add(self.user)
 
-        activity_log.send(verb=Activity.VERB_EDITED, target=doc, sender=None, actor=self.user)
-        activity_log.send(
-            verb='updated', target=None, action_object=doc, sender=None, actor=self.user)
-
+        activity_log.send(verb=Activity.VERB_CREATED,
+                          target=doc,
+                          sender=None,
+                          actor=self.user)
+        activity_log.send(verb=Activity.VERB_EDITED,
+                          target=None,
+                          action_object=doc,
+                          sender=None,
+                          actor=self.user)
         url = reverse(
             'document_audit_trail',
-            args=[doc.category.organisation.slug, doc.category.slug, doc.document_key])
+            args=[doc.category.organisation.slug,
+                  doc.category.slug,
+                  doc.document_key])
         res = self.apiclient.get(url)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(len(res.data), 2)
