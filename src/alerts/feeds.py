@@ -93,3 +93,37 @@ class FeedClosedReviews(BaseAlertFeed):
         # created date. Thus, we have to convert the value to an actual
         # datetime.
         return datetime.combine(item.review_end_date, time())
+
+
+class FeedStartedReviews(BaseAlertFeed):
+    title = _('Documents under reviews')
+    description = _('Documents that just went under review.')
+
+    def link(self):
+        return reverse('feed_started_reviews', args=[
+            self.category.organisation.slug,
+            self.category.slug
+        ])
+
+    def items(self, *args, **kwargs):
+        qs = self.category.revision_class().objects \
+            .filter(metadata__document__category=self.category) \
+            .filter(review_start_date__isnull=False) \
+            .select_related('metadata__document') \
+            .order_by('-review_start_date')[:settings.ALERT_ELEMENTS]
+        return qs
+
+    def item_link(self, item):
+        return item.metadata.document.get_absolute_url()
+
+    def item_title(self, item):
+        return item.metadata.title
+
+    def item_description(self, item):
+        return ''
+
+    def item_pubdate(self, item):
+        # Feeds expect a full datetime obj but documents only store
+        # created date. Thus, we have to convert the value to an actual
+        # datetime.
+        return datetime.combine(item.review_start_date, time())

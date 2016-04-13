@@ -94,3 +94,14 @@ class AlertClosedReviews(BaseAlert):
             self.category.organisation.slug,
             self.category.slug
         ]))
+
+
+class AlertStartedReviews(BaseAlert):
+    """List newly created reviews."""
+    feed_class = feeds.FeedStartedReviews
+
+    def breadcrumb_object(self):
+        return (_('Started reviews'), reverse('alert_started_reviews', args=[
+            self.category.organisation.slug,
+            self.category.slug
+        ]))
