@@ -124,8 +124,9 @@ class DocumentCreateTest(TestCase):
 
     def test_create_with_document_key(self):
         c = self.client
+        doc_title = u'another title'
         c.post(self.create_url, {
-            'title': u'another title',
+            'title': doc_title,
             'document_number': u'Gloubi Boulga',
             'docclass': 1,
             'created_on': '2015-10-10',
@@ -134,6 +135,12 @@ class DocumentCreateTest(TestCase):
         doc = Document.objects.all().order_by('-id')[0]
         self.assertEqual(doc.document_number, 'Gloubi Boulga')
         self.assertEqual(doc.document_key, 'GLOUBI-BOULGA')
+
+        # Check audit trail
+        activity = Activity.objects.latest('created_on')
+        self.assertEqual(activity.verb, Activity.VERB_CREATED)
+        self.assertEqual(activity.action_object.title, doc_title)
+        self.assertEqual(activity.actor, self.user)
 
     def test_creation_success_with_files(self):
         """
