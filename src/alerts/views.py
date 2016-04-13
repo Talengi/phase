@@ -105,3 +105,14 @@ class AlertStartedReviews(BaseAlert):
             self.category.organisation.slug,
             self.category.slug
         ]))
+
+
+class AlertOverdueDocuments(BaseAlert):
+    """List overdue documents."""
+    feed_class = feeds.FeedOverdueDocuments
+
+    def breadcrumb_object(self):
+        return (_('Overdue documents'), reverse('alert_overdue_documents', args=[
+            self.category.organisation.slug,
+            self.category.slug
+        ]))
