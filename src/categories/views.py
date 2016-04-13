@@ -41,3 +41,12 @@ class CategoryMixin(object):
         self.category = get_object_or_None(qs)
         if self.category is None:
             raise Http404('Category not found')
+
+    def get_context_data(self, **kwargs):
+        context = super(CategoryMixin, self).get_context_data(**kwargs)
+        context.update({
+            'category': self.category,
+            'organisation_slug': self.kwargs['organisation'],
+            'category_slug': self.kwargs['category'],
+        })
+        return context
