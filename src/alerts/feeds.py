@@ -85,7 +85,8 @@ class FeedClosedReviews(BaseAlertFeed):
         return item.metadata.title
 
     def item_description(self, item):
-        return 'Return code = {}'.format(item.return_code)
+        return 'Revision = {}. Return code = {}'.format(
+            item.revision, item.return_code)
 
     def item_pubdate(self, item):
         # Feeds expect a full datetime obj but documents only store
