@@ -5,7 +5,7 @@
     app_path: "{{ django_root }}"
     virtualenv: "{{ venv_dir }}"
     settings: "{{ django_settings }}"
-  notify: restart phase
+  notify: Restart phase
 
 - name: Restart phase
   become: no
