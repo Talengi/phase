@@ -83,3 +83,14 @@ class AlertNewDocuments(BaseAlert):
             self.category.organisation.slug,
             self.category.slug
         ]))
+
+
+class AlertClosedReviews(BaseAlert):
+    """List newly closed reviews."""
+    feed_class = feeds.FeedClosedReviews
+
+    def breadcrumb_object(self):
+        return (_('New documents'), reverse('alert_closed_reviews', args=[
+            self.category.organisation.slug,
+            self.category.slug
+        ]))
