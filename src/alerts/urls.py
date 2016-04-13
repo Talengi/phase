@@ -17,6 +17,6 @@ urlpatterns = patterns(
         AlertNewDocuments.as_view(),
         name='alert_new_documents'),
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/new_documents.rss$',
-        FeedNewDocuments(),
+        FeedNewDocuments.as_view(),
         name='feed_new_documents'),
 )

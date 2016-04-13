@@ -4,26 +4,33 @@ from __future__ import unicode_literals
 from datetime import datetime, time
 
 from django.contrib.syndication.views import Feed
+from django.views.generic import View
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.conf import settings
+
+from braces.views import LoginRequiredMixin
 
 from documents.models import Document
 from categories.views import CategoryMixin
 
 
-class BaseAlertFeed(CategoryMixin, Feed):
+class BaseAlertFeed(LoginRequiredMixin, CategoryMixin, Feed, View):
+    raise_exception = True
+
     def populate(self, request, *args, **kwargs):
         self.request = request
         self.kwargs = kwargs
         self.extract_category()
 
-    def __call__(self, request, *args, **kwargs):
+    def dispatch(self, request, *args, **kwargs):
+        return super(BaseAlertFeed, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
         self.populate(request, *args, **kwargs)
-        return super(FeedNewDocuments, self).__call__(request, *args, **kwargs)
+        return self(request, *args, **kwargs)
 
 
-# TODO Missing auth
 class FeedNewDocuments(BaseAlertFeed):
     title = _('Latest documents')
     description = _('List of newly created documents in the category')
