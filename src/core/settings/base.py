@@ -38,19 +38,6 @@ DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 # ######### END DEBUG CONFIGURATION
 
-
-# ######### MANAGER CONFIGURATION
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
-ADMINS = (
-    ('Matthieu Lamy', 'matthieu@talengi.fr'),
-    ('Thibault Jouannic', 'thibault@jouannic.fr'),
-)
-
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#managers
-MANAGERS = ADMINS
-# ######### END MANAGER CONFIGURATION
-
-
 # ######### DATABASE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
@@ -499,6 +486,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 CRISPY_FAIL_SILENTLY = False
 REVIEW_DURATION = 13
 DISPLAY_NOTIFICATION_COUNT = 5
+ALERT_ELEMENTS = 10
 
 # Files that only logged user can download
 PROTECTED_ROOT = SITE_ROOT.child('protected')
