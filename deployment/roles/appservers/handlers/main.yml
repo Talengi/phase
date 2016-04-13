@@ -10,7 +10,7 @@
 - name: Restart phase
   become: no
   supervisorctl: name=phase state=restarted
-  notify: restart celery
+  notify: Restart celery
 
 - name: Restart celery
   become: no
