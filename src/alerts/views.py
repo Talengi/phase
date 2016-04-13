@@ -28,24 +28,24 @@ class FeedConverterMixin(object):
     feed_class = None
 
     def dispatch(self, request, *args, **kwargs):
-        self.feed = self.get_feed()
+        self.extract_feed()
         return super(FeedConverterMixin, self).dispatch(request, *args, **kwargs)
 
-    def get_feed(self):
+    def extract_feed(self):
         """Get the feed to display."""
         if self.feed_class is None:
             raise ImproperlyConfigured('Missing `feed` field')
 
         feed = self.feed_class()
         feed.populate(self.request, **self.kwargs)
+        self.category = feed.category
         feed_object = feed.get_object(self.request, *self.args, **self.kwargs)
         rss_feed = feed.get_feed(feed_object, self.request)
-        return rss_feed
+        self.feed = rss_feed
 
 
 class BaseAlert(LoginRequiredMixin,
                 FeedConverterMixin,
-                CategoryMixin,
                 ListView):
 
     template_name = 'alerts/alert_list.html'
@@ -61,7 +61,7 @@ class BaseAlert(LoginRequiredMixin,
         ]))
 
     def get_queryset(self):
-        items = self.get_feed().items
+        items = self.feed.items
         return items
 
     def get_context_data(self, **kwargs):
