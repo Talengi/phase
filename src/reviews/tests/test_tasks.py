@@ -7,6 +7,7 @@ import datetime
 from django.test import TestCase
 from django.contrib.contenttypes.models import ContentType
 
+from audit_trail.models import Activity
 from reviews.tasks import do_batch_import, batch_cancel_reviews
 
 from documents.models import Document
@@ -68,9 +69,15 @@ class BatchReviewTests(TestCase):
         doc2 = Document.objects.get(pk=self.doc2.pk)
         self.assertTrue(doc2.metadata.latest_revision.is_under_review())
 
+        # Check audit trail
+        activities = Activity.objects.order_by('created_on')
+        self.assertEqual(activities[0].verb, Activity.VERB_STARTED_REVIEW)
+        self.assertEqual(activities[0].target, self.doc1.metadata.latest_revision)
+        self.assertEqual(activities[1].verb, Activity.VERB_STARTED_REVIEW)
+        self.assertEqual(activities[1].target, self.doc2.metadata.latest_revision)
+
     def test_batch_review_errors(self):
         self.assertFalse(self.doc3.metadata.latest_revision.is_under_review())
-
         do_batch_import.delay(
             self.user.id,
             self.category.id,
@@ -79,6 +86,8 @@ class BatchReviewTests(TestCase):
 
         doc3 = Document.objects.get(pk=self.doc3.pk)
         self.assertFalse(doc3.metadata.latest_revision.is_under_review())
+        # No activity was logged
+        self.assertEqual(Activity.objects.count(), 0)
 
     def test_batch_review_half_success(self):
         self.assertFalse(self.doc1.metadata.latest_revision.is_under_review())
@@ -117,3 +126,13 @@ class BatchReviewTests(TestCase):
         self.assertFalse(doc1.get_latest_revision().is_under_review())
         self.assertFalse(doc2.get_latest_revision().is_under_review())
         self.assertFalse(doc3.get_latest_revision().is_under_review())
+
+        # Check audit trail
+        activities = Activity.objects.order_by('created_on')
+        # Only two reviews were canceled
+        self.assertEqual(activities.count(), 2)
+        for i, doc in enumerate([doc1, doc2]):
+            self.assertEqual(activities[i].verb,
+                             Activity.VERB_CANCELLED_REVIEW)
+            self.assertEqual(activities[i].target,
+                             doc.get_latest_revision())
