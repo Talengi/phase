@@ -19,5 +19,3 @@
   notify:
     - Collect static
     - Restart phase
-
-
