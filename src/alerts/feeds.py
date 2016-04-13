@@ -5,6 +5,7 @@ from datetime import datetime, time
 
 from django.contrib.syndication.views import Feed
 from django.utils.translation import ugettext_lazy as _
+from django.core.urlresolvers import reverse
 from django.conf import settings
 
 from documents.models import Document
@@ -25,8 +26,13 @@ class BaseAlertFeed(CategoryMixin, Feed):
 # TODO Missing auth
 class FeedNewDocuments(BaseAlertFeed):
     title = _('Latest documents')
-    link = '/alerts/'
     description = _('List of newly created documents in the category')
+
+    def link(self):
+        return reverse('feed_new_documents', args=[
+            self.category.organisation.slug,
+            self.category.slug
+        ])
 
     def items(self, *args, **kwargs):
         qs = Document.objects \

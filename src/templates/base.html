@@ -8,9 +8,11 @@
         <link href="{{ STATIC_URL }}/img/favicon.ico" rel="icon" type="image/x-icon" />
         {% stylesheet "base" %}
 
-        <!-- Use this to quickly test CSS changes in a template,
-                then move to project.css -->
+        {% comment %}
+        The next block is for test purpose only. Move your css into project.css.
+        {% endcomment %}
         {% block extra_css %}{% endblock extra_css %}
+        {% block extra_head %}{% endblock extra_head %}
     </head>
 
     <body class="{% block custombodyclass %}{% endblock %}">
