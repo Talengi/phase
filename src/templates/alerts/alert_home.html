@@ -1,1 +1,24 @@
 {% extends 'base.html' %}
+
+{% block content %}
+<h1>Available alerts</h1>
+
+<ul>
+    <li><a
+        href="{% url 'alert_new_documents' organisation_slug category_slug %}">
+        {{ _('New documents') }}
+    </a></li>
+    <li><a
+        href="{% url 'alert_closed_reviews' organisation_slug category_slug %}">
+        {{ _('Closed reviews') }}
+    </a></li>
+    <li><a
+        href="{% url 'alert_started_reviews' organisation_slug category_slug %}">
+        {{ _('Started reviews') }}
+    </a></li>
+    <li><a
+        href="{% url 'alert_overdue_documents' organisation_slug category_slug %}">
+        {{ _('Overdue documents') }}
+    </a></li>
+</ul>
+{% endblock %}
