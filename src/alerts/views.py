@@ -90,7 +90,7 @@ class AlertClosedReviews(BaseAlert):
     feed_class = feeds.FeedClosedReviews
 
     def breadcrumb_object(self):
-        return (_('New documents'), reverse('alert_closed_reviews', args=[
+        return (_('Closed reviews'), reverse('alert_closed_reviews', args=[
             self.category.organisation.slug,
             self.category.slug
         ]))
