@@ -90,7 +90,29 @@ class AlertClosedReviews(BaseAlert):
     feed_class = feeds.FeedClosedReviews
 
     def breadcrumb_object(self):
-        return (_('New documents'), reverse('alert_closed_reviews', args=[
+        return (_('Closed reviews'), reverse('alert_closed_reviews', args=[
+            self.category.organisation.slug,
+            self.category.slug
+        ]))
+
+
+class AlertStartedReviews(BaseAlert):
+    """List newly created reviews."""
+    feed_class = feeds.FeedStartedReviews
+
+    def breadcrumb_object(self):
+        return (_('Started reviews'), reverse('alert_started_reviews', args=[
+            self.category.organisation.slug,
+            self.category.slug
+        ]))
+
+
+class AlertOverdueDocuments(BaseAlert):
+    """List overdue documents."""
+    feed_class = feeds.FeedOverdueDocuments
+
+    def breadcrumb_object(self):
+        return (_('Overdue documents'), reverse('alert_overdue_documents', args=[
             self.category.organisation.slug,
             self.category.slug
         ]))

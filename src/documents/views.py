@@ -61,9 +61,6 @@ class DocumentListMixin(CategoryMixin):
         self.get_external_filtering()
         context = super(DocumentListMixin, self).get_context_data(**kwargs)
         context.update({
-            'organisation_slug': self.kwargs['organisation'],
-            'category_slug': self.kwargs['category'],
-            'category': self.category,
             'document_type': self.category.document_type(),
             'favorites': self.get_favorites(),
             'bookmarks': self.get_bookmarks(self.request.user, self.category),
