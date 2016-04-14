@@ -1,31 +1,74 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import base64
 from datetime import datetime, time
 
 from django.contrib.syndication.views import Feed
 from django.views.generic import View
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
+from django.core.exceptions import PermissionDenied
+from django.contrib.auth import authenticate, login
+from django.http import HttpResponse
 from django.utils import timezone
 from django.conf import settings
-
-from braces.views import LoginRequiredMixin
 
 from documents.models import Document
 from categories.views import CategoryMixin
 
 
-class BaseAlertFeed(LoginRequiredMixin, CategoryMixin, Feed, View):
-    raise_exception = True
+class HttpResponseUnauthorized(HttpResponse):
+    status_code = 401
+
+    def __init__(self, *args, **kwargs):
+        super(HttpResponseUnauthorized, self).__init__(*args, **kwargs)
+        self['WWW-Authenticate'] = 'Basic realm="Phase feeds"'
+
+
+class BaseAlertFeed(CategoryMixin, Feed, View):
+    """Base class for all alert rss feeds.
+
+    Since those views are made to be fetched by feed readers, we need to
+    handle authentication differently here.
+
+    Most readers only accept basic http authentication. We need to make sure
+    that the request is secure (e.g uses ssl) before asking for non-encrypted
+    login + password.
+
+    """
+    def authenticate_user(self, request):
+        try:
+            auth = request.META['HTTP_AUTHORIZATION'].split()
+            decoded_auth = base64.b64decode(auth[1])
+            username, password = decoded_auth.split(':')
+        except:
+            # Invalid authorization header sent by client
+            # Let's block everything.
+            raise PermissionDenied()
+
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+
+    def dispatch(self, request, *args, **kwargs):
+        if 'HTTP_AUTHORIZATION' in request.META:
+            self.authenticate_user(request)
+
+        if not self.request.user.is_authenticated():
+            if self.request.is_secure():
+                return HttpResponseUnauthorized('Unauthorized')
+            else:
+                msg = _('This url cannot be accessed through a non-secure protocol')
+                raise PermissionDenied(msg)
+        else:
+            return super(BaseAlertFeed, self).dispatch(request, *args, **kwargs)
 
     def populate(self, request, *args, **kwargs):
         self.request = request
         self.kwargs = kwargs
         self.extract_category()
-
-    def dispatch(self, request, *args, **kwargs):
-        return super(BaseAlertFeed, self).dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         self.populate(request, *args, **kwargs)

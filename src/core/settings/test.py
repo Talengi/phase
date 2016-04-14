@@ -90,3 +90,5 @@ TRS_IMPORTS_CONFIG = {
         'EMAIL_LIST': ['test@phase.fr'],
     }
 }
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

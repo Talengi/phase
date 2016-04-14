@@ -1,12 +1,90 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import base64
+
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 
 from categories.factories import CategoryFactory
 from documents.factories import DocumentFactory
 from accounts.factories import UserFactory
+
+
+class FeedAuthenticationTests(TestCase):
+    def setUp(self):
+        self.category = CategoryFactory()
+        self.user = UserFactory(
+            email='testadmin@phase.fr',
+            password='pass',
+            is_superuser=True,
+            category=self.category
+        )
+        self.url = reverse('feed_new_documents', args=[
+            self.category.organisation.slug,
+            self.category.slug,
+        ])
+        DocumentFactory(
+            title='document 1',
+            category=self.category,
+        )
+
+    def test_authenticated_user(self):
+        self.client.login(email=self.user.email, password='pass')
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 200)
+
+    def test_unsecure_unauthenticated_user(self):
+        res = self.client.get(self.url, **{'wsgi.url_scheme': 'http'})
+        self.assertEqual(res.status_code, 403)
+
+    def test_secure_unauthenticated_user(self):
+        res = self.client.get(self.url, **{'wsgi.url_scheme': 'https'})
+        self.assertEqual(res.status_code, 401)
+        self.assertTrue('WWW-AUTHENTICATE' in res)
+
+    def test_login_with_invalid_credentials(self):
+        res = self.client.get(self.url, **{
+            'wsgi.url_scheme': 'https',
+            'HTTP_AUTHORIZATION': 'portenawak'
+        })
+        self.assertEqual(res.status_code, 403)
+
+    def test_login_unactive_user(self):
+        self.user.is_active = False
+        self.user.save()
+
+        credentials = '{}:pass'.format(self.user.email)
+        b64_credentials = base64.b64encode(credentials)
+        full_credentials = 'Basic: {}'.format(b64_credentials)
+
+        res = self.client.get(self.url, **{
+            'wsgi.url_scheme': 'https',
+            'HTTP_AUTHORIZATION': full_credentials
+        })
+        self.assertEqual(res.status_code, 401)
+
+    def test_login_with_wrong_password(self):
+        credentials = '{}:wrongpassword'.format(self.user.email)
+        b64_credentials = base64.b64encode(credentials)
+        full_credentials = 'Basic: {}'.format(b64_credentials)
+
+        res = self.client.get(self.url, **{
+            'wsgi.url_scheme': 'https',
+            'HTTP_AUTHORIZATION': full_credentials
+        })
+        self.assertEqual(res.status_code, 401)
+
+    def test_sucessfull_login_user(self):
+        credentials = '{}:pass'.format(self.user.email)
+        b64_credentials = base64.b64encode(credentials)
+        full_credentials = 'Basic: {}'.format(b64_credentials)
+
+        res = self.client.get(self.url, **{
+            'wsgi.url_scheme': 'https',
+            'HTTP_AUTHORIZATION': full_credentials
+        })
+        self.assertEqual(res.status_code, 200)
 
 
 class AlertNewDocumentTests(TestCase):
