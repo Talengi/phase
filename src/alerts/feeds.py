@@ -96,7 +96,7 @@ class FeedNewDocuments(BaseAlertFeed):
         return item.title
 
     def item_description(self, item):
-        return ''
+        return render_to_string('alerts/revision_document.html', {'item': item})
 
     def item_pubdate(self, item):
         # Feeds expect a full datetime obj but documents only store
@@ -164,7 +164,7 @@ class FeedStartedReviews(BaseAlertFeed):
         return item.metadata.title
 
     def item_description(self, item):
-        return ''
+        return render_to_string('alerts/revision_item.html', {'item': item})
 
     def item_pubdate(self, item):
         # Feeds expect a full datetime obj but documents only store
@@ -201,7 +201,7 @@ class FeedOverdueDocuments(BaseAlertFeed):
         return item.metadata.title
 
     def item_description(self, item):
-        return ''
+        return render_to_string('alerts/revision_item.html', {'item': item})
 
     def item_pubdate(self, item):
         return datetime.combine(item.review_due_date, time())
