@@ -95,3 +95,8 @@ except ImproperlyConfigured:
 if USE_SSL:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
+    # You *will* open critical security holes if you set this
+    # without knowing what you are doing. Read dj doc carefully.
+    # https://docs.djangoproject.com/en/dev/ref/settings/#secure-proxy-ssl-header
+    SECURE_PROXY_SSL_HEADER = get_prod_setting(
+        'SECURE_PROXY_SSL_HEADER', optional_import=True)
