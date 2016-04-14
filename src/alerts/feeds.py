@@ -12,6 +12,7 @@ from django.core.exceptions import PermissionDenied
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
 from django.utils import timezone
+from django.template.loader import render_to_string
 from django.conf import settings
 
 from documents.models import Document
@@ -95,7 +96,7 @@ class FeedNewDocuments(BaseAlertFeed):
         return item.title
 
     def item_description(self, item):
-        return ''
+        return render_to_string('alerts/revision_document.html', {'item': item})
 
     def item_pubdate(self, item):
         # Feeds expect a full datetime obj but documents only store
@@ -129,8 +130,7 @@ class FeedClosedReviews(BaseAlertFeed):
         return item.metadata.title
 
     def item_description(self, item):
-        return 'Revision = {}. Return code = {}'.format(
-            item.revision, item.return_code)
+        return render_to_string('alerts/revision_item.html', {'item': item})
 
     def item_pubdate(self, item):
         # Feeds expect a full datetime obj but documents only store
@@ -164,7 +164,7 @@ class FeedStartedReviews(BaseAlertFeed):
         return item.metadata.title
 
     def item_description(self, item):
-        return ''
+        return render_to_string('alerts/revision_item.html', {'item': item})
 
     def item_pubdate(self, item):
         # Feeds expect a full datetime obj but documents only store
@@ -201,7 +201,7 @@ class FeedOverdueDocuments(BaseAlertFeed):
         return item.metadata.title
 
     def item_description(self, item):
-        return ''
+        return render_to_string('alerts/revision_item.html', {'item': item})
 
     def item_pubdate(self, item):
         return datetime.combine(item.review_due_date, time())
