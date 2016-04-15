@@ -110,7 +110,7 @@ class Review(models.Model):
         max_length=3,
         null=True, blank=True,
         list_index='REVIEW_RETURN_CODES')
-    created_on = models.DateField(
+    created_on = models.DateTimeField(
         _('Created on'),
         default=timezone.now)
 
