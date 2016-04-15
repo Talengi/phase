@@ -27,7 +27,7 @@ class HttpResponseUnauthorized(HttpResponse):
         self['WWW-Authenticate'] = 'Basic realm="Phase feeds"'
 
 
-class BaseAlertFeed(CategoryMixin, Feed, View):
+class AlertMixin(object):
     """Base class for all alert rss feeds.
 
     Since those views are made to be fetched by feed readers, we need to
@@ -64,8 +64,17 @@ class BaseAlertFeed(CategoryMixin, Feed, View):
                 msg = _('This url cannot be accessed through a non-secure protocol')
                 raise PermissionDenied(msg)
         else:
-            return super(BaseAlertFeed, self).dispatch(request, *args, **kwargs)
+            return super(AlertMixin, self).dispatch(request, *args, **kwargs)
 
+
+class BaseAlertFeed(AlertMixin, Feed, View):
+    def get(self, request, *args, **kwargs):
+        # Feed.__call__(…)
+        return self(request, *args, **kwargs)
+
+
+class BaseCategoryAlertFeed(AlertMixin, CategoryMixin, Feed, View):
+    """Base class for alerts in a single category."""
     def populate(self, request, *args, **kwargs):
         self.request = request
         self.kwargs = kwargs
@@ -73,10 +82,10 @@ class BaseAlertFeed(CategoryMixin, Feed, View):
 
     def get(self, request, *args, **kwargs):
         self.populate(request, *args, **kwargs)
-        return self(request, *args, **kwargs)
+        return super(BaseCategoryAlertFeed, self).get(request, *args, **kwargs)
 
 
-class FeedNewDocuments(BaseAlertFeed):
+class FeedNewDocuments(BaseCategoryAlertFeed):
     title = _('Latest documents')
     description = _('List of newly created documents in the category')
 
@@ -105,7 +114,7 @@ class FeedNewDocuments(BaseAlertFeed):
         return datetime.combine(item.created_on, time())
 
 
-class FeedClosedReviews(BaseAlertFeed):
+class FeedClosedReviews(BaseCategoryAlertFeed):
     title = _('Closed reviews')
     description = _('List of recently closed reviews')
 
@@ -139,7 +148,7 @@ class FeedClosedReviews(BaseAlertFeed):
         return datetime.combine(item.review_end_date, time())
 
 
-class FeedStartedReviews(BaseAlertFeed):
+class FeedStartedReviews(BaseCategoryAlertFeed):
     title = _('Documents under reviews')
     description = _('Documents that just went under review.')
 
@@ -173,7 +182,7 @@ class FeedStartedReviews(BaseAlertFeed):
         return datetime.combine(item.review_start_date, time())
 
 
-class FeedOverdueDocuments(BaseAlertFeed):
+class FeedOverdueDocuments(BaseCategoryAlertFeed):
     title = _('Overdue documents')
     description = _('Overdue documents.')
 
