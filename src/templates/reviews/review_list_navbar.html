@@ -10,6 +10,12 @@
     {% endblocktrans %}
     </p>
 
+    {% if feed_url %}
+    <a class="btn btn-primary navbar-btn navbar-left" href="{{ feed_url }}">
+        {{ _('Subscribe') }}
+    </a>
+    {% endif %}
+
     <button class="btn btn-primary navbar-btn navbar-right toggle-content-button"
             data-target="#search-sidebar-container"
             alt="{{ _('Search') }}">
