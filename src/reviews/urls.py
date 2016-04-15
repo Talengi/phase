@@ -6,6 +6,8 @@ from reviews.views import (
     BatchCancelReviews, PrioritiesDocumentList, ReviewHome, CommentsDownload,
     CommentsArchiveDownload,
 )
+from reviews.feeds import (
+    FeedReviewersDocumentList, FeedLeaderDocumentList, FeedApproverDocumentList)
 
 urlpatterns = patterns(
     '',
@@ -44,6 +46,17 @@ urlpatterns = patterns(
     url(r'^approver/$',
         ApproverDocumentList.as_view(),
         name="approver_review_document_list"),
+
+    # Review steps feeds
+    url(r'^reviewers.rss$',
+        FeedReviewersDocumentList.as_view(),
+        name="feed_reviewers_review_document_list"),
+    url(r'^leader.rss$',
+        FeedLeaderDocumentList.as_view(),
+        name="feed_leader_review_document_list"),
+    url(r'^approver.rss$',
+        FeedApproverDocumentList.as_view(),
+        name="feed_approver_review_document_list"),
 
     # Review form
     url(r'^(?P<document_key>[\w-]+)/$',
