@@ -200,6 +200,10 @@ class BaseReviewDocumentList(LoginRequiredMixin, ListView):
             'current_url': self.request.path,
             'search_form': self.search_form,
         })
+        if hasattr(self, 'feed_url'):
+            context.update({
+                'feed_url': reverse(self.feed_url),
+            })
         return context
 
     def step_filter(self, qs):
@@ -258,6 +262,7 @@ class PrioritiesDocumentList(BaseReviewDocumentList):
 class ReviewersDocumentList(BaseReviewDocumentList):
     """Display the list of documents at the first review step."""
     review_step = 'reviewer'
+    feed_url = 'feed_reviewers_review_document_list'
 
     def breadcrumb_subsection(self):
         return _('Reviewer')
@@ -279,6 +284,7 @@ class ReviewersDocumentList(BaseReviewDocumentList):
 class LeaderDocumentList(BaseReviewDocumentList):
     """Display the list of documents at the two first review steps."""
     review_step = 'leader'
+    feed_url = 'feed_leader_review_document_list'
 
     def breadcrumb_subsection(self):
         return _('Leader')
@@ -291,6 +297,7 @@ class LeaderDocumentList(BaseReviewDocumentList):
 class ApproverDocumentList(BaseReviewDocumentList):
     """Display the list of documents at the third review steps."""
     review_step = 'approver'
+    feed_url = 'feed_approver_review_document_list'
 
     def breadcrumb_subsection(self):
         return _('Approver')
