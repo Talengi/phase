@@ -82,7 +82,8 @@ class BaseCategoryAlertFeed(AlertMixin, CategoryMixin, Feed, View):
 
     def get(self, request, *args, **kwargs):
         self.populate(request, *args, **kwargs)
-        return super(BaseCategoryAlertFeed, self).get(request, *args, **kwargs)
+        # Feed.__call__(…)
+        return self(request, *args, **kwargs)
 
 
 class FeedNewDocuments(BaseCategoryAlertFeed):
