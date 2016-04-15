@@ -103,7 +103,7 @@ class FeedNewDocuments(BaseCategoryAlertFeed):
         return qs
 
     def item_title(self, item):
-        return item.title
+        return item.document_number
 
     def item_description(self, item):
         return render_to_string('alerts/revision_document.html', {'item': item})
@@ -137,7 +137,7 @@ class FeedClosedReviews(BaseCategoryAlertFeed):
         return item.metadata.document.get_absolute_url()
 
     def item_title(self, item):
-        return item.metadata.title
+        return item.metadata.document_number
 
     def item_description(self, item):
         return render_to_string('alerts/revision_item.html', {'item': item})
