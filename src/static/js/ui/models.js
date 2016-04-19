@@ -54,15 +54,15 @@ var Phase = Phase || {};
         this.url = props.url;
     },
     parse: function(response){
-        if(response.next &&  response.next != this.url){
-            this.url = response.next
+        if(response.next &&  response.next !== this.url){
+            this.url = response.next;
         }else{
             this.url= null;
         }
         return response.results;
     },
     getNext: function(pageLimit){
-        this.fetch({add: true, page_limit : pageLimit, remove: false})
+        this.fetch({add: true, page_limit : pageLimit, remove: false});
     }
 });
 

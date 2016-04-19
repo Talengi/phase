@@ -90,7 +90,7 @@ var Phase = Phase || {};
                     menuItem: menuItem,
                     formAction: actionHref,
                     formData: formData,
-                    modalId: modalId,
+                    modalId: modalId
                 });
             }
         },
@@ -228,17 +228,17 @@ var Phase = Phase || {};
              var self = this;
 
              this.activities.fetch({data:{page_limit : this.pageLimit}}).done(function(){
-                self.refresh()
+                self.refresh();
              });
             this.$el.html(modalContent.html());
             this.show();
         },
         getNext: function(){
-            this.activities.getNext(this.pageLimit)
+            this.activities.getNext(this.pageLimit);
         },
         refresh: function(){
           this.$el.find('.modal-body').html(this.tpl({value: this.activities.toJSON(), nextUrl: this.activities.url }));
         }
-    })
+    });
 
 })(this, Phase, Backbone, _);
