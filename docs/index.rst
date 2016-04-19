@@ -11,5 +11,6 @@ Welcome to Phase's documentation!
    deployment.rst
    cron.rst
    transmittals.rst
+   audit_trail.rst
    colophon.rst
 
