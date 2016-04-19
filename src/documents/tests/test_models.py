@@ -101,5 +101,5 @@ class DocumentTest(TestCase):
         # Refresh object
         user = User.objects.get(pk=user.pk)
         actions = metadata_revision.get_actions(metadata, user)
-        # Actions must contain 3 MenuItem and a DividerMenuItem
-        self.assertEqual(len(actions), 4)
+        # Actions must contain 4 MenuItem and 2 DividerMenuItem
+        self.assertEqual(len(actions), 6)

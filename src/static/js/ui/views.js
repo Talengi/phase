@@ -66,7 +66,6 @@ var Phase = Phase || {};
             var actionHref = menuItem.attr('href');
             var isAjax = menuItem.data('ajax');
             var method = menuItem.data('method');
-
             var formData = [];
             if (this.actionForm.length > 0) {
                 formData = this.actionForm.serializeArray();
@@ -78,7 +77,15 @@ var Phase = Phase || {};
              */
             if (modalId === '') {
                 this.actionSubmit(actionHref, formData, method, isAjax);
-            } else {
+            } else if  (modalId === 'audit-trail-modal') {
+                dispatcher.trigger('onAuditModalDisplayRequired', {
+                    menuItem: menuItem,
+                    formAction: actionHref,
+                    formData: formData,
+                    modalId: modalId
+                });
+            }
+            else {
                 dispatcher.trigger('onModalDisplayRequired', {
                     menuItem: menuItem,
                     formAction: actionHref,
@@ -192,4 +199,46 @@ var Phase = Phase || {};
             dispatcher.trigger('onModalFormSubmitted', data);
         }
     });
+
+    Phase.Views.AuditModalView = Backbone.View.extend({
+        el: '#base-modal',
+        initialize: function() {
+            this.listenTo(dispatcher, 'onAuditModalDisplayRequired', this.display);
+            this.pageLimit = 10;
+        },
+        events:{
+            'click .get_next_activities' : 'getNext'
+        },
+        tpl: _.template($('#tpl-audit-trail').html()),
+        show: function() {
+            this.$el.modal('show');
+        },
+        hide: function() {
+            this.$el.modal('hide');
+        },
+         display: function(data) {
+            this.menuItem = data.menuItem;
+            this.formAction = data.formAction;
+            this.formData = data.formData;
+            var modalId = data.modalId;
+            var modalContent = $('#' + modalId);
+
+          this.activities =  new Phase.Models.Activities({url:this.formAction});
+            this.activities.bind('add', this.refresh, this);
+             var self = this;
+
+             this.activities.fetch({data:{page_limit : this.pageLimit}}).done(function(){
+                self.refresh()
+             });
+            this.$el.html(modalContent.html());
+            this.show();
+        },
+        getNext: function(){
+            this.activities.getNext(this.pageLimit)
+        },
+        refresh: function(){
+          this.$el.find('.modal-body').html(this.tpl({value: this.activities.toJSON(), nextUrl: this.activities.url }));
+        }
+    })
+
 })(this, Phase, Backbone, _);

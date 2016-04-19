@@ -19,6 +19,8 @@ from django.utils import timezone
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 from zipview.views import BaseZipView
 
+from audit_trail.models import Activity
+from audit_trail.signals import activity_log
 from documents.models import Document
 from documents.views import DocumentListMixin, BaseDocumentBatchActionView
 from discussion.models import Note
@@ -78,6 +80,10 @@ class StartReview(PermissionRequiredMixin,
                 'title': document.title
             }
             notify(request.user, _(message_text) % message_data)
+            activity_log.send(verb=Activity.VERB_STARTED_REVIEW,
+                              action_object=revision,
+                              sender=None,
+                              actor=self.request.user)
         else:
             message_text = '''The review on revision %(rev)s of the document
                            <a href="%(url)s">%(key)s (%(title)s)</a>
@@ -146,7 +152,10 @@ class CancelReview(PermissionRequiredMixin,
                 'title': document.title
             }
             notify(request.user, _(message_text) % message_data)
-
+            activity_log.send(verb=Activity.VERB_CANCELLED_REVIEW,
+                              target=revision,
+                              sender=None,
+                              actor=self.request.user)
         return HttpResponseRedirect(self.get_redirect_url())
 
 
@@ -469,6 +478,12 @@ class ReviewFormView(LoginRequiredMixin, UpdateView):
             if not can_comment:
                 return HttpResponseForbidden()
 
+            activity_log.send(verb=Activity.VERB_REVIEWED,
+                              action_object=self.revision,
+                              target=self.document,
+                              sender=None,
+                              actor=self.request.user)
+
             self.post_review(form)
 
             comments_file = form.cleaned_data.get('comments', None)
@@ -489,22 +504,33 @@ class ReviewFormView(LoginRequiredMixin, UpdateView):
             }
             notify(user, _(message_text) % message_data)
 
+        verb = None
         if 'close_reviewers_step' in self.request.POST and user in (
                 self.revision.leader, self.revision.approver):
             self.revision.end_reviewers_step()
+            verb = Activity.VERB_CLOSED_REVIEWER_STEP
 
         if 'close_leader_step' in self.request.POST and user == self.revision.approver:
             self.revision.end_leader_step()
+            verb = Activity.VERB_CLOSED_LEADER_STEP
 
         if 'back_to_leader_step' in self.request.POST and user == self.revision.approver:
             self.revision.send_back_to_leader_step()
             body = self.request.POST.get('body', None)
+            verb = Activity.VERB_SENT_BACK_TO_LEADER_STEP
+
             if body:
                 Note.objects.create(
                     author=user,
                     document=self.document,
                     revision=self.revision,
                     body=body)
+
+        if verb:
+            activity_log.send(verb=verb,
+                              target=self.revision,
+                              sender=None,
+                              actor=self.request.user)
 
         url = self.get_success_url()
         return HttpResponseRedirect(url)
@@ -524,6 +550,7 @@ class ReviewFormView(LoginRequiredMixin, UpdateView):
         if return_code:
             self.revision.return_code = return_code
 
+        verb = None
         # If every reviewer has posted comments, close the reviewers step
         if self.object.role == 'reviewer':
             qs = Review.objects \
@@ -533,16 +560,25 @@ class ReviewFormView(LoginRequiredMixin, UpdateView):
                 .exclude(closed_on=None)
             if qs.count() == self.revision.reviewers.count():
                 self.revision.end_reviewers_step(save=False)
+                verb = Activity.VERB_CLOSED_REVIEWER_STEP
 
         # If leader, end leader step
         elif self.object.role == 'leader':
             self.revision.end_leader_step(save=False)
+            verb = Activity.VERB_CLOSED_LEADER_STEP
 
         # If approver, end approver step
         elif self.object.role == 'approver':
             self.revision.end_review(save=False)
+            verb = Activity.VERB_CLOSED_APPROVER_STEP
 
         self.revision.save(update_document=True)
+
+        if verb:
+            activity_log.send(verb=verb,
+                              target=self.revision,
+                              sender=do_batch_import,
+                              actor=self.request.user)
 
 
 class CommentsDownload(LoginRequiredMixin, DetailView):

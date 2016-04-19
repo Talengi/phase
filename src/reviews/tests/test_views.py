@@ -10,6 +10,7 @@ from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.core.files.uploadedfile import SimpleUploadedFile
 
+from audit_trail.models import Activity
 from metadata.factories import ValuesListFactory
 from categories.factories import CategoryFactory
 from documents.factories import DocumentFactory
@@ -770,6 +771,12 @@ class StartReviewTests(TestCase):
             follow=True)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(self.doc.note_set.all().count(), 1)
+
+        activities = Activity.objects.all()
+        self.assertEqual(activities.count(), 1)
+        self.assertEqual(activities.get().verb, Activity.VERB_STARTED_REVIEW)
+        self.assertEqual(activities.get().action_object,
+                         self.doc.get_latest_revision())
 
     def test_start_review_with_empty_remark(self):
         self.assertEqual(self.doc.note_set.all().count(), 0)

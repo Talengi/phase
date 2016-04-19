@@ -9,6 +9,9 @@ from django.utils.translation import ugettext
 from django.contrib.contenttypes.models import ContentType
 from celery import current_task
 
+from accounts.models import User
+from audit_trail.models import Activity
+from audit_trail.signals import activity_log
 from core.celery import app
 from reviews.signals import pre_batch_review, post_batch_review, batch_item_indexed
 from reviews.models import Review
@@ -53,7 +56,11 @@ def do_batch_import(user_id, category_id, contenttype_id, document_ids,
                 raise RuntimeError()
 
             doc.latest_revision.start_review()
-
+            user = User.objects.get(pk=user_id)
+            activity_log.send(verb=Activity.VERB_STARTED_REVIEW,
+                              target=doc.latest_revision,
+                              sender=do_batch_import,
+                              actor=user)
             # In case of batch review start with a remark,
             # the same remark is added for every review.
             # Note: using "bulk_create" to create all the discussion
@@ -155,7 +162,11 @@ def batch_close_reviews(user_id, review_ids):
                 if waiting_reviews.count() == latest_revision.reviewers.count():
                     logger.info('Closing reviewers step')
                     latest_revision.end_reviewers_step(save=False)
-
+                    user = User.objects.get(pk=user_id)
+                    activity_log.send(verb=Activity.VERB_CLOSED_REVIEWER_STEP,
+                                      target=latest_revision,
+                                      sender=do_batch_import,
+                                      actor=user)
             ok.append(review.document)
         except:
             nok.append(review.document)
@@ -210,6 +221,11 @@ def batch_cancel_reviews(user_id, category_id, contenttype_id, document_ids):
                 raise RuntimeError()
 
             doc.latest_revision.cancel_review()
+            user = User.objects.get(pk=user_id)
+            activity_log.send(verb=Activity.VERB_CANCELLED_REVIEW,
+                              target=doc.latest_revision,
+                              sender=batch_cancel_reviews,
+                              actor=user)
             ok.append(doc)
         except:
             nok.append(doc)

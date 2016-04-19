@@ -61,7 +61,8 @@ class ExportCreate(LoginRequiredMixin, DocumentListMixin, UpdateView):
 
     def form_valid(self, form):
         return_value = super(ExportCreate, self).form_valid(form)
-        self.object.start_export()
+        self.object.start_export(user_pk=self.request.user.pk)
+
         message = _("Your export is being processed and will be available "
                     "soon.")
         notify(self.object.owner, message)

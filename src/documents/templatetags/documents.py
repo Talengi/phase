@@ -24,7 +24,7 @@ class MenuItem(object):
         - label: the displayed text.
         - action: the action url.
         - method: as it says.
-        - ajax: should the action be submitted diretly or through an ajax request?
+        - ajax: should the action be submitted directly or through an ajax request?
         - modal: the #id of the modal to display before submitting (if any)
         - progression_modal: should a progression bar be displayed?
         - icon: which glyphicon to display as the item icon?
