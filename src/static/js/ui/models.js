@@ -41,4 +41,29 @@ var Phase = Phase || {};
         }
     });
 
+     Phase.Models.Activity = Backbone.Model.extend({
+         defaults: {
+            text: '',
+            created_on: ''
+        }
+     });
+
+    Phase.Models.Activities = Backbone.Collection.extend({
+    model: Phase.Models.Activity,
+    initialize: function(props) {
+        this.url = props.url;
+    },
+    parse: function(response){
+        if(response.next &&  response.next !== this.url){
+            this.url = response.next;
+        }else{
+            this.url= null;
+        }
+        return response.results;
+    },
+    getNext: function(pageLimit){
+        this.fetch({add: true, page_limit : pageLimit, remove: false});
+    }
+});
+
 })(this, Phase, Backbone, _);

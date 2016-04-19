@@ -632,6 +632,19 @@ class MetadataRevisionBase(models.Model):
                 modal='delete-document-modal'
             ))
 
+            actions.append(DividerMenuItem())
+
+            actions.append(MenuItem(
+                'audit-trail',
+                _('Audit Trail'),
+                reverse('document_audit_trail', args=[
+                    category.organisation.slug,
+                    category.slug,
+                    self.document.document_key]),
+                modal='audit-trail-modal',
+                disabled=False,
+                method='GET',
+            ))
         return actions
 
     def get_action_modals(self):

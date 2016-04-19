@@ -23,6 +23,8 @@ from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 from rest_framework.renderers import JSONRenderer
 
 from accounts.models import get_entities
+from audit_trail.models import Activity
+from audit_trail.signals import activity_log
 from favorites.models import Favorite
 from favorites.api.serializers import FavoriteSerializer
 from bookmarks.models import get_user_bookmarks
@@ -368,6 +370,13 @@ class DocumentCreate(BaseDocumentFormView):
         }
         notify(self.request.user, _(message_text) % message_data)
 
+        activity_log.send(
+            verb='created',
+            target=None,
+            action_object=doc,
+            sender=None,
+            actor=self.request.user)
+
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
@@ -404,6 +413,16 @@ class DocumentEdit(BaseDocumentFormView):
         self.revision = self.get_revision()
         return super(DocumentEdit, self).post(request, *args, **kwargs)
 
+    def form_valid(self, document_form, revision_form):
+        response = super(DocumentEdit, self).form_valid(document_form,
+                                                        revision_form)
+        activity_log.send(verb=Activity.VERB_EDITED,
+                          action_object=self.revision,
+                          target=self.object.document,
+                          sender=None,
+                          actor=self.request.user)
+        return response
+
     def get_context_data(self, **kwargs):
         context = super(DocumentEdit, self).get_context_data(**kwargs)
         # Add a context var to make the difference with creation view
@@ -429,7 +448,7 @@ class DocumentDelete(LoginRequiredMixin,
                      PermissionRequiredMixin,
                      DocumentListMixin,
                      DeleteView):
-    """Edit a document and a selected revision."""
+    """Delete a document and its revisions."""
     permission_required = 'documents.can_control_document'
     raise_exception = True
     http_method_names = ['post']
@@ -442,8 +461,15 @@ class DocumentDelete(LoginRequiredMixin,
 
         """
         document = self.object.document
+        document_str = str(document)
         success_url = self.get_success_url()
         document.delete()
+        activity_log.send(verb=Activity.VERB_DELETED,
+                          target=None,
+                          action_object_str=document_str,
+                          sender=None,
+                          actor=self.request.user)
+
         return HttpResponseRedirect(success_url)
 
     def post(self, request, *args, **kwargs):
@@ -467,6 +493,7 @@ class DocumentRevisionDelete(DocumentDelete):
 
         latest_revision = all_revisions[0]
         previous_revision = all_revisions[1]
+        latest_revision_str = str(latest_revision)
 
         self.object.latest_revision = previous_revision
         self.object.save()
@@ -475,8 +502,12 @@ class DocumentRevisionDelete(DocumentDelete):
         self.object.document.current_revision_date = previous_revision.revision_date
         self.object.document.updated_on = timezone.now()
         self.object.document.save()
-
         latest_revision.delete()
+        activity_log.send(verb=Activity.VERB_DELETED,
+                          action_object_str=latest_revision_str,
+                          target=self.object.document,
+                          sender=self.__class__,
+                          actor=self.request.user)
 
         success_url = self.get_success_url()
         return HttpResponseRedirect(success_url)
@@ -531,6 +562,12 @@ class DocumentRevise(DocumentEdit):
             'title': self.object.title
         }
         notify(self.request.user, _(message_text) % message_data)
+
+        activity_log.send(verb=Activity.VERB_CREATED,
+                          action_object=self.revision,
+                          target=document,
+                          sender=None,
+                          actor=self.request.user)
 
         return HttpResponseRedirect(self.get_success_url())
 

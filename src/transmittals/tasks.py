@@ -9,8 +9,10 @@ from django.db import transaction
 
 from celery import current_task
 
+from audit_trail.models import Activity
+from audit_trail.signals import activity_log
 from core.celery import app
-from accounts.models import Entity
+from accounts.models import Entity, User
 from categories.models import Category
 from documents.models import Document
 from notifications.models import notify
@@ -59,7 +61,6 @@ def do_create_transmittal(
     revisions = []
     for doc in documents:
         revisions.append(doc.get_latest_revision())
-
     try:
         for recipient in recipients:
             doc, _, _ = create_transmittal(
@@ -71,6 +72,13 @@ def do_create_transmittal(
             msg = '''You successfully created transmittal
                      <a href="{}">{}</a>'''.format(doc.get_absolute_url(), doc)
             notify(user_id, msg)
+
+            user = User.objects.get(pk=user_id.pk)
+            activity_log.send(verb=Activity.VERB_CREATED,
+                              action_object=doc,
+                              sender=None,
+                              actor=user)
+
     except TransmittalError as e:
         msg = '''We failed to create a transmittal for the
                  following reason: "{}".'''.format(e)

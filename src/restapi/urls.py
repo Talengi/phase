@@ -28,6 +28,7 @@ urlpatterns = patterns(
     url(r'^discussion/', include('discussion.api.urls')),
     url(r'^accounts/', include('accounts.api.urls')),
     url(r'^distribution-lists/', include('reviews.api.distribution_list_urls')),
+    url(r'^audit-trail/', include('audit_trail.api.urls')),
 
     # Task progress polling url
     url(r'^poll/(?P<job_id>[\w-]+)/$',

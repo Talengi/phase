@@ -12,6 +12,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.conf import settings
 
 from accounts.factories import UserFactory
+from audit_trail.models import Activity
 from categories.factories import CategoryFactory
 from default_documents.factories import MetadataRevisionFactory
 from default_documents.models import DemoMetadata, DemoMetadataRevision
@@ -264,13 +265,13 @@ class DocumentDeleteTests(TestCase):
 
     def setUp(self):
         self.category = CategoryFactory()
-        user = UserFactory(
+        self.user = UserFactory(
             email='testadmin@phase.fr',
             password='pass',
             is_superuser=True,
             category=self.category,
         )
-        self.client.login(email=user.email, password='pass')
+        self.client.login(email=self.user.email, password='pass')
         self.doc_list_url = self.category.get_absolute_url()
 
     def test_delete_page_only_post(self):
@@ -285,6 +286,7 @@ class DocumentDeleteTests(TestCase):
 
     def test_delete_document(self):
         document = DocumentFactory(category=self.category)
+        document_str = str(document)
         delete_url = reverse('document_delete', args=[
             self.category.organisation.slug,
             self.category.slug,
@@ -292,6 +294,12 @@ class DocumentDeleteTests(TestCase):
         ])
         res = self.client.post(delete_url)
         self.assertRedirects(res, self.category.get_absolute_url())
+
+        # Check that deletion was logged in audit trail
+        activity = Activity.objects.latest('created_on')
+        self.assertEqual(activity.verb, Activity.VERB_DELETED)
+        self.assertEqual(activity.action_object_str, document_str)
+        self.assertEqual(activity.actor, self.user)
 
         res = self.client.post(delete_url)
         self.assertEqual(res.status_code, 404)

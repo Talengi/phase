@@ -11,6 +11,9 @@ jQuery(function($) {
     });
 
     var modalView = new Phase.Views.ModalView();
+
+    var auditModalView = new Phase.Views.AuditModalView();
+
     var actionMenus = $('ul.action-menu');
     actionMenus.each(function(counter, menu) {
         new Phase.Views.ActionMenuView({ el: menu });
