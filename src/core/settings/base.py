@@ -221,6 +221,7 @@ LOCAL_APPS = (
     'exports',
     'schedules',
     'audit_trail',
+    'reporting',
 )
 
 # Load custom documents
@@ -328,7 +329,6 @@ PIPELINE_CSS = {
             # must be loaded after jquery-ui js to avoid conflicts
             'css/datepicker.css',
             'css/project.css',
-
         ),
         'output_filename': 'css/base.css',
     },
@@ -447,6 +447,14 @@ PIPELINE_JS = {
             'js/transmittals/app.js',
         ),
         'output_filename': 'js/transmittal-list.js',
+    },
+    'reporting': {
+        'source_filenames': (
+            'js/vendor/d3.min.js',
+            'js/vendor/uvcharts.min.js',
+            'js/vendor/Chart.min.js',
+        ),
+        'output_filename': 'js/reporting.js',
     },
 }
 # ######### END PIPELINE CONFIGURATION
