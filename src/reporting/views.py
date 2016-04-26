@@ -24,7 +24,7 @@ class Extract(Func):
 
     Returns:
         class: Func() expression class, representing 'EXTRACT(`what_to_extract` FROM `*expressions`)'.
-        
+
     See: http://stackoverflow.com/questions/35368274/django-count-grouping-by-year-month-without-extra
     """
 
@@ -50,7 +50,7 @@ def format_results(by_ended_reviews):
     last_dt = by_ended_reviews[-1]['date']
     # How many month in date range
     months = (last_dt.year - first_dt.year) * 12 + \
-             last_dt.month - first_dt.month
+        last_dt.month - first_dt.month
     # We iterate over months to fill missing values with 0
     curr_date = first_dt
     for month in xrange(months):
