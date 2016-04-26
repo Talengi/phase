@@ -1,4 +1,4 @@
-<li class="active">
+<li {% if reporting_active %} class="active"{% endif %}>
     <a href="#nav-reporting"
        data-toggle="collapse"
        data-parent="#sidebar-nav">
@@ -18,7 +18,7 @@
                 {% for category in organisation.list %}
                     {% if category.category_template.use_creation_form %}
                         <li>
-                            <a href="{{ category.get_absolute_url }}">
+                            <a href="{%  url 'category_report' category.organisation.slug category.slug %}">
                                 {{ category.name }}
                             </a>
                         </li>
