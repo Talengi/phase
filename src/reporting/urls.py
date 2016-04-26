@@ -4,9 +4,8 @@ from views import Report
 
 urlpatterns = patterns(
     '',
-
-    # Report home page
-    url(r'^$',
+    # Reports page
+    url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/$',
         Report.as_view(),
-        name='reports'),
+        name='category_report'),
 )

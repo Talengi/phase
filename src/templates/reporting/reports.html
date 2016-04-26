@@ -49,27 +49,18 @@
         }
     </style>
 
-    {#    {{ by_month }}#}
-    {#    <hr>#}
-    {#    {{ by_revs }}#}
-    {#    <hr>#}
-    {#    {{ by_status }}#}
-    {#    <hr>#}
-    {#    {{ by_rc }}#}
-    {#    <hr>#}
-    {#    {{ by_ended_reviews }}#}
-    <div id="chart00">
+    <div id="chart_by_month_">
     </div>
-    <div id="chart0">
+    <div id="chart_by_status">
     </div>
     <hr>
-    <div id="chart1">
+    <div id="chart_by_rc">
     </div>
     <hr>
-    <div id="chart2">
+    <div id="chart_by_revs">
     </div>
     <hr>
-    <div id="chart3">
+    <div id="chart_by_reviews">
     </div>
 
 
@@ -78,10 +69,6 @@
 {% block extra_js %}
     {% javascript "reporting" %}
 
-    <script>
-        {#        var data = {{ docs|safe }};#}
-        {#  TODO: change that ! #}
-    </script>
     <script>
 
         function makePie(dataset, id, title) {
@@ -293,28 +280,27 @@
                         .style("opacity", 0);
             });
 
-
         }
 
     </script>
 
     <script>
-        var byStatus = {{ by_status|safe }};
-        makePie(byStatus, '#chart0', "Number of documents by status");
+        $(function () {
+            var byStatus = {{ by_status|safe }};
+            makePie(byStatus, '#chart_by_status', "Number of documents by status");
 
-        var byRc = {{ by_rc|safe }};
-        makeBarChart(byRc, '#chart1', 'Number of documents by return code');
+            var byRc = {{ by_rc|safe }};
+            makeBarChart(byRc, '#chart_by_rc', 'Number of documents by return code');
 
-        var byRevs = {{ by_revs|safe }};
-        makePie(byRevs, '#chart2', 'Number of documents by revision');
-
-
-        var byMonth = {{ by_month|safe }};
-        makeLineChart(byMonth, '#chart00', 'Number of documents received by month');
-
-        var byEndedReviews = {{ by_ended_reviews|safe }};
-        makeLineChart(byEndedReviews, '#chart3', 'Number of documents reviewed by month');
+            var byRevs = {{ by_revs|safe }};
+            makePie(byRevs, '#chart_by_revs', 'Number of documents by revision');
 
 
+            var byMonth = {{ by_month|safe }};
+            makeLineChart(byMonth, '#chart_by_month', 'Number of documents received by month');
+
+            var byEndedReviews = {{ by_ended_reviews|safe }};
+            makeLineChart(byEndedReviews, '#chart_by_reviews', 'Number of documents reviewed by month');
+        });
     </script>
 {% endblock %}

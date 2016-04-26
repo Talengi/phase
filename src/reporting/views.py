@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
+
 import datetime
 import json
 from collections import Counter
 
 from braces.views import LoginRequiredMixin
 from django.db.models import Func, Count
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView
-from sileo_documents.models import SileoDeliverable, SileoDeliverableRevision
+
+from categories.views import CategoryMixin
 
 
 class Extract(Func):
@@ -27,16 +30,19 @@ class Extract(Func):
 
 
 def format_sth(by_ended_reviews):
+    if not by_ended_reviews:
+        return []
+
     def el_to_date(elt):
         return datetime.date(month=int(elt['month']),
                              year=int(elt['year']),
                              day=1)
 
     by_ended_reviews = map(
-        lambda el: {'value': el['pk__count'], 'date': el_to_date(el)},
+        lambda e: {'value': e['pk__count'], 'date': el_to_date(e)},
         by_ended_reviews)
     # We need to fill with 0
-    by_ended_reviews = sorted(by_ended_reviews, key=lambda el: el['date'])
+    by_ended_reviews = sorted(by_ended_reviews, key=lambda e: e['date'])
     first_dt = by_ended_reviews[0]['date']
     last_dt = by_ended_reviews[-1]['date']
     # How many month in date range
@@ -64,7 +70,7 @@ def format_sth(by_ended_reviews):
     return by_ended_reviews
 
 
-class Report(LoginRequiredMixin, TemplateView):
+class Report(LoginRequiredMixin, CategoryMixin, TemplateView):
     template_name = 'reporting/reports.html'
 
     @staticmethod
@@ -72,22 +78,40 @@ class Report(LoginRequiredMixin, TemplateView):
         return [{'value': (lambda x: x or 'None')(k), 'count': v} for k, v in
                 values.items()]
 
+    def breadcrumb_section(self):
+        return _('Reporting')
+
+    def breadcrumb_subsection(self):
+        return self.category
+
     def get_metadata_class(self):
-        return SileoDeliverable
+        return self.category.document_class()
 
     def get_revision_class(self):
-        return SileoDeliverableRevision
+        return self.category.revision_class()
+
+    def get_documents(self):
+        docs = self.get_metadata_class().objects.filter(
+            document__category=self.category,
+            document__category__organisation=self.category.organisation)
+        return docs
+
+    def get_revisions(self):
+        revs = self.get_revision_class().objects.filter(
+            metadata__document__category=self.category,
+            metadata__document__category__organisation=self.category.organisation)
+        return revs
 
     def get_docs_by_status(self):
         """Count documents by status"""
-        docs_by_status = self.get_metadata_class().objects.values_list(
+        docs_by_status = self.get_documents().values_list(
             'latest_revision__status', flat=True)
         by_status = Counter(docs_by_status)
         return self.build_list(by_status)
 
     def get_docs_by_month(self):
         """Count documents received by month"""
-        docs_by_month = self.get_revision_class().objects.annotate(
+        docs_by_month = self.get_revisions().annotate(
             year=Extract('received_date', what_to_extract='year'),
             month=Extract('received_date', what_to_extract='month')
         ).values('year', 'month').annotate(Count('pk'))
@@ -96,14 +120,15 @@ class Report(LoginRequiredMixin, TemplateView):
     def get_docs_by_revs(self):
         """Count documents received by numbers of revs"""
         related_name = self.get_revision_class().__name__.lower()
-        docs_by_revs = self.get_metadata_class().objects.annotate(
+        docs_by_revs = self.get_documents().annotate(
             nb_rev=Count(related_name)). \
             values_list('nb_rev', flat=True)
         by_revs = Counter(docs_by_revs)
         return self.build_list(by_revs)
 
     def get_docs_by_ended_reviews(self):
-        docs_by_ended_reviews = self.get_revision_class().objects.exclude(
+        """Count revisions ended in each month"""
+        docs_by_ended_reviews = self.get_revisions().exclude(
             review_end_date__isnull=True).annotate(
             year=Extract('review_end_date', what_to_extract='year'),
             month=Extract('review_end_date', what_to_extract='month')
@@ -112,10 +137,13 @@ class Report(LoginRequiredMixin, TemplateView):
         return format_sth(docs_by_ended_reviews)
 
     def get_docs_by_rc(self):
-        docs_by_rc = self.get_metadata_class().objects.values_list(
+        docs_by_rc = self.get_documents().values_list(
             'latest_revision__return_code', flat=True)
         by_rc = Counter(docs_by_rc)
         return self.build_list(by_rc)
+
+    def get(self, request, *args, **kwargs):
+        return super(Report, self).get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         ctx = super(Report, self).get_context_data(**kwargs)
@@ -129,11 +157,10 @@ class Report(LoginRequiredMixin, TemplateView):
 
         by_ended_reviews = self.get_docs_by_ended_reviews()
 
-        ctx.update({'by_month': json.dumps(by_month),
+        ctx.update({'reporting_active': True,
+                    'by_month': json.dumps(by_month),
                     'by_revs': json.dumps(by_revs),
                     'by_status': json.dumps(by_status),
                     'by_rc': json.dumps(by_rc),
-                    'by_ended_reviews': json.dumps(by_ended_reviews),
-                    }
-                   )
+                    'by_ended_reviews': json.dumps(by_ended_reviews)})
         return ctx
