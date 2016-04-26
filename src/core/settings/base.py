@@ -346,6 +346,12 @@ PIPELINE_CSS = {
         ),
         'output_filename': 'css/detail.css',
     },
+    'charts': {
+        'source_filenames': (
+            'css/charts.css',
+        ),
+        'output_filename': 'css/charts.css',
+    },
 }
 
 PIPELINE_JS = {

@@ -1,63 +1,29 @@
 {% extends 'base.html' %}
 {% load pipeline %}
 
+{% block extra_css %}
+    {% stylesheet "charts" %}
+{% endblock extra_css %}
+
 {% block content %}
-    <style>
-        path.linechart {
-            stroke: steelblue;
-            stroke-width: 1;
-            fill: none;
-        }
 
-        path.domain {
-            stroke-width: 1;
-            stroke: black;
-            fill: none;
-        }
-
-        line {
-            stroke: black;
-            stroke-width: 1;
-            fill: none;
-
-        }
-
-        .linechart {
-            stroke-width: 3;
-        }
-
-        .circle {
-            fill: white;
-            stroke: steelblue;
-            stroke-width: 2px;
-        }
-
-        .circle:hover {
-            fill: red;
-        }
-
-        div.tooltip {
-            position: absolute;
-            text-align: center;
-            width: 120px;
-            height: 36px;
-            padding: 2px;
-            background: lightsteelblue;
-            border: 0;
-            border-radius: 2px;
-            pointer-events: none;
-        }
-    </style>
-
-    <div id="chart_by_month">
+    <div id="js_chart_by_month" class="chart">
     </div>
-    <div id="chart_by_status">
+    <div id="js_chart_by_rc" class="chart">
     </div>
-    <div id="chart_by_rc">
-    </div>
-    <div id="chart_by_revs">
-    </div>
-    <div id="chart_by_reviews">
+    <table width="100%">
+        <tr>
+            <td>
+                <div id="js_chart_by_status" class="chart chart-cell-left">
+                </div>
+            </td>
+            <td>
+                <div id="js_chart_by_revs" class="chart chart-cell-right">
+                </div>
+            </td>
+        </tr>
+    </table>
+    <div id="js_chart_by_reviews" class="chart">
     </div>
 
 {% endblock %}
@@ -67,19 +33,19 @@
     <script>
         $(function () {
             var byStatus = {{ by_status|safe }};
-            makePie(byStatus, '#chart_by_status', "Number of documents by status");
+            makePie(byStatus, '#js_chart_by_status', "Number of documents by status", "Status");
 
             var byRc = {{ by_rc|safe }};
-            makeBarChart(byRc, '#chart_by_rc', 'Number of documents by return code');
+            makeBarChart(byRc, '#js_chart_by_rc', 'Number of documents by return code', "RC");
 
             var byRevs = {{ by_revs|safe }};
-            makePie(byRevs, '#chart_by_revs', 'Number of documents by revision');
+            makePie(byRevs, '#js_chart_by_revs', 'Number of documents by revision', "Revisions");
 
             var byMonth = {{ by_month|safe }};
-            makeLineChart(byMonth, '#chart_by_month', 'Number of documents received by month');
+            makeLineChart(byMonth, '#js_chart_by_month', 'Number of documents received by month');
 
             var byEndedReviews = {{ by_ended_reviews|safe }};
-            makeLineChart(byEndedReviews, '#chart_by_reviews', 'Number of documents reviewed by month');
+            makeLineChart(byEndedReviews, '#js_chart_by_reviews', 'Number of documents reviewed by month');
         });
     </script>
 {% endblock %}
