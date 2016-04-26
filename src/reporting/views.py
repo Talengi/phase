@@ -63,7 +63,7 @@ def format_results(by_ended_reviews):
         # If date does not exist, we fill with a 0
         if not any(curr_date in d.values() for d in by_ended_reviews):
             by_ended_reviews.append({'date': curr_date, 'value': 0})
-    # Sorting again fo client side processing
+    # Sorting again for client side processing
     by_ended_reviews = sorted(by_ended_reviews, key=lambda el: el['date'])
     # Formatting for js date instanciation
     by_ended_reviews = [

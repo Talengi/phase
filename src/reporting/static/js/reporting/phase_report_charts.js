@@ -1,4 +1,40 @@
-function makePie(dataset, id, title) {
+function addTitle(elt, title, width, marginTop) {
+    elt.append("text")
+        .attr("x", (width / 2))
+        .attr("y", marginTop / 2)
+        .attr("text-anchor", "middle")
+        .style("font-size", "24px")
+        .text(title);
+}
+function bindTooltip(elt, id, formatContent) {
+    var tooltip = d3.select(id).append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+    elt.on('mouseover', function (el) {
+        d3.select(this).transition()
+            .duration(200).style("opacity", 0.9);
+        tooltip.transition()
+            .duration(200)
+            .style("opacity", 0.9);
+        tooltip.html(formatContent(el))
+            .style("left", (d3.event.pageX) + "px")
+            .style("top", (d3.event.pageY - 10) + "px");
+    });
+
+    elt.on('mousemove', function (el) {
+        tooltip.style("left", (d3.event.pageX) + "px")
+            .style("top", (d3.event.pageY - 10) + "px");
+    });
+
+    elt.on("mouseout", function (d) {
+        d3.select(this).transition()
+            .duration(200).style("opacity", 1);
+        tooltip.transition()
+            .duration(200)
+            .style("opacity", 0);
+    });
+}
+function makePie(dataset, id, title, categoryName) {
     if (dataset.length === 0) {
         return false;
     }
@@ -10,6 +46,7 @@ function makePie(dataset, id, title) {
     var arc = d3.svg.arc()
         .outerRadius(radius)
         .innerRadius(0);
+;
     var pie = d3.layout.pie()
         .sort(null)
         .value(function (d) {
@@ -17,14 +54,9 @@ function makePie(dataset, id, title) {
         });
     var svg = d3.select(id).append("svg")
         .attr("width", w + margin.left + margin.right)
-        .attr("height", h + margin.top + margin.bottom)
+        .attr("height", h + margin.top + margin.bottom);
 
-    svg.append("text")
-        .attr("x", (w / 2))
-        .attr("y", margin.top / 2)
-        .attr("text-anchor", "middle")
-        .style("font-size", "16px")
-        .text(title);
+    addTitle(svg, title, w, margin.top);
 
     var g = svg.append("g")
         .attr("transform", "translate(" + (w / 2 + margin.left) +
@@ -34,6 +66,7 @@ function makePie(dataset, id, title) {
 
     var slice = g.append('path')
         .attr('d', arc)
+        .attr('class', 'slice')
         .attr('fill', function (d) {
             return color(d.data.value);
         });
@@ -42,29 +75,6 @@ function makePie(dataset, id, title) {
         .attr("class", "tooltip")
         .style("opacity", 0);
 
-    slice.on('mouseover', function (el) {
-        d3.select(this).transition()
-            .duration(200).style("opacity", 0.9);
-        tooltip.transition()
-            .duration(200)
-            .style("opacity", 0.9);
-        tooltip.html("Number: " + el.value)
-            .style("left", (d3.event.pageX) + "px")
-            .style("top", (d3.event.pageY - 10) + "px");
-    });
-
-    slice.on('mousemove', function (el) {
-        tooltip.style("left", (d3.event.pageX) + "px")
-            .style("top", (d3.event.pageY - 10) + "px");
-    });
-
-    slice.on("mouseout", function (d) {
-        d3.select(this).transition()
-            .duration(200).style("opacity", 1);
-        tooltip.transition()
-            .duration(200)
-            .style("opacity", 0);
-    });
 
     g.append("text")
         .attr("transform", function (d) {
@@ -72,11 +82,20 @@ function makePie(dataset, id, title) {
         })
         .attr("text-anchor", "middle")
         .text(function (d) {
+            if (!isNaN(d.data.value)){
+                return '0'+ d.data.value;
+            }
             return d.data.value;
         });
+    function formatContent(el) {
+        return categoryName + ": " + el.data.value + "<br>" + "Number: " + el.value;
+
+    }
+
+    bindTooltip(slice, id, formatContent);
 
 }
-function makeBarChart(dataset, id, title) {
+function makeBarChart(dataset, id, title, categoryName) {
     if (dataset.length === 0) {
         return false;
     }
@@ -91,9 +110,10 @@ function makeBarChart(dataset, id, title) {
         .range([h, 0]);
     var svg = d3.select(id).append("svg")
         .attr("width", w + margin.left + margin.right)
-        .attr("height", h + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
+        .attr("height", h + margin.top + margin.bottom);
+    addTitle(svg, title, w, margin.top);
+    var graph = svg.append('g').attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
+
     var sum = 0;
     dataset.forEach(function (d) {
         sum += d.count;
@@ -107,19 +127,17 @@ function makeBarChart(dataset, id, title) {
     var xAxis = d3.svg.axis()
         .scale(x)
         .orient("bottom");
-    var tooltip = d3.select(id).append("div")
-        .attr("class", "tooltip")
-        .style("opacity", 0);
-    svg.append("g")
+
+    graph.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0, " + h + ")")
         .call(xAxis);
 
-    var g = svg.selectAll(".bar")
+    var b = graph.selectAll(".bar")
         .data(dataset)
         .enter();
 
-    var bar = g.append("rect")
+    var bar = b.append("rect")
         .attr("class", "bar")
         .attr("x", function (d) {
             return x(d.value);
@@ -135,44 +153,22 @@ function makeBarChart(dataset, id, title) {
             return color(d.value);
         });
 
-    bar.on('mouseover', function (el) {
-        d3.select(this).transition()
-            .duration(200).style("opacity", 0.9);
-        tooltip.transition()
-            .duration(200)
-            .style("opacity", 0.9);
-        tooltip.html("Number: " + el.count)
-            .style("left", (d3.event.pageX) + "px")
-            .style("top", (d3.event.pageY - 10) + "px");
-    });
+    function formatContent(el) {
+        return categoryName + ": " + el.value + "<br>" + "Number: " + el.count;
 
-    bar.on('mousemove', function (el) {
-        tooltip.style("left", (d3.event.pageX) + "px")
-            .style("top", (d3.event.pageY - 10) + "px");
-    });
+    }
 
-    bar.on("mouseout", function (d) {
-        d3.select(this).transition()
-            .duration(200).style("opacity", 1);
-        tooltip.transition()
-            .duration(200)
-            .style("opacity", 0);
-    });
-    svg.append("text")
-        .attr("x", (w / 2))
-        .attr("y", 0 - (margin.top / 2))
-        .attr("text-anchor", "middle")
-        .style("font-size", "16px")
-        .text(title);
+    bindTooltip(bar, id, formatContent);
+
 
 }
-function makeLineChart(dataset, id, title) {
-    // if (dataset.length === 0) {
-    //     return false;
-    // }
+function makeLineChart(dataset, id, title, categoryName) {
+    if (dataset.length === 0) {
+        return false;
+    }
     var width = 1000;
-    var height = 350;
-    var margin = {top: 70, right: 40, bottom: 30, left: 40},
+    var height = 400;
+    var margin = {top: 100, right: 40, bottom: 30, left: 40},
         w = width - margin.left - margin.right,
         h = height - margin.top - margin.bottom;
     var formatDate = d3.time.format("%B %Y");
@@ -180,13 +176,13 @@ function makeLineChart(dataset, id, title) {
         return {
             "value": el.value,
             "date": new Date(el.year, el.month - 1, 1)
-        }
+        };
     });
     var firstDate = values[0].date;
     var lastElt = values[values.length - 1];
     var lastDate = lastElt.date;
     var maxValue = _.max(values, function (el) {
-        return el.value
+        return el.value;
     }).value;
 
 
@@ -194,12 +190,7 @@ function makeLineChart(dataset, id, title) {
         .attr("width", width)
         .attr("height", height);
 
-    svg.append("text")
-        .attr("x", (w / 2))
-        .attr("y", margin.top)
-        .attr("text-anchor", "middle")
-        .style("font-size", "16px")
-        .text(title);
+    addTitle(svg, title, w, margin.top);
     var g = svg.append("g")
         .attr("transform", "translate(" + (10 + margin.left) + ", " + (h + margin.top) + ")");
 
@@ -250,19 +241,14 @@ function makeLineChart(dataset, id, title) {
         })
         .attr("cy", function (d) {
             return -1 * y(d.value);
-        }).attr('class', 'circle')
+        }).attr('class', 'circle');
 
-    circle.on('mouseover', function (el) {
-        tooltip.transition()
-            .duration(200)
-            .style("opacity", 0.9);
-        tooltip.html(formatDate(el.date) + "<br/>" + el.value)
-            .style("left", (d3.event.pageX) + "px")
-            .style("top", (d3.event.pageY - 28) + "px");
-    }).on("mouseout", function (d) {
-        tooltip.transition()
-            .duration(500)
-            .style("opacity", 0);
-    });
+
+    function formatContent(el) {
+        return formatDate(el.date) + "<br/>Number: " + el.value;
+
+    }
+
+    bindTooltip(circle, id, formatContent);
 
 }
