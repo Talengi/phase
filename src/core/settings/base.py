@@ -451,8 +451,7 @@ PIPELINE_JS = {
     'reporting': {
         'source_filenames': (
             'js/vendor/d3.min.js',
-            'js/vendor/uvcharts.min.js',
-            'js/vendor/Chart.min.js',
+            'js/reporting/phase_report_charts.js',
         ),
         'output_filename': 'js/reporting.js',
     },
