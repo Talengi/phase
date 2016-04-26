@@ -49,7 +49,7 @@
         }
     </style>
 
-    <div id="chart_by_month_">
+    <div id="chart_by_month">
     </div>
     <div id="chart_by_status">
     </div>
@@ -74,7 +74,6 @@
 
             var byRevs = {{ by_revs|safe }};
             makePie(byRevs, '#chart_by_revs', 'Number of documents by revision');
-
 
             var byMonth = {{ by_month|safe }};
             makeLineChart(byMonth, '#chart_by_month', 'Number of documents received by month');

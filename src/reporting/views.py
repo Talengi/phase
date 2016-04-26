@@ -24,13 +24,15 @@ class Extract(Func):
 
     Returns:
         class: Func() expression class, representing 'EXTRACT(`what_to_extract` FROM `*expressions`)'.
+        
+    See: http://stackoverflow.com/questions/35368274/django-count-grouping-by-year-month-without-extra
     """
 
     function = 'EXTRACT'
     template = '%(function)s(%(what_to_extract)s FROM %(expressions)s)'
 
 
-def format_sth(by_ended_reviews):
+def format_results(by_ended_reviews):
     if not by_ended_reviews:
         return []
 
@@ -116,7 +118,7 @@ class Report(LoginRequiredMixin, CategoryMixin, TemplateView):
             year=Extract('received_date', what_to_extract='year'),
             month=Extract('received_date', what_to_extract='month')
         ).values('year', 'month').annotate(Count('pk'))
-        return format_sth(docs_by_month)
+        return format_results(docs_by_month)
 
     def get_docs_by_revs(self):
         """Count documents received by numbers of revs"""
@@ -137,12 +139,13 @@ class Report(LoginRequiredMixin, CategoryMixin, TemplateView):
             ).values('year', 'month').annotate(Count('pk'))
         except FieldError:
             return[]
-        return format_sth(docs_by_ended_reviews)
+        return format_results(docs_by_ended_reviews)
 
     def get_docs_by_rc(self):
         try:
             docs_by_rc = self.get_documents().values_list(
                 'latest_revision__return_code', flat=True)
+
         except FieldError:
             return[]
         by_rc = Counter(docs_by_rc)
