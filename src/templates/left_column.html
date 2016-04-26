@@ -23,6 +23,9 @@
         {%  endif %}
         {% include 'exports/export_menu.html' %}
         {% include 'dashboards/dashboard_menu.html' %}
+        {% if user.is_superuser or perms.documents.add_document %}
+            {% include 'reporting/reporting_menu.html' %}
+        {% endif %}
     </ul>
     {% endif %}
 </nav>

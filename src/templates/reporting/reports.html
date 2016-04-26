@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load pipeline %}
+
+{% block content %}
+    <style>
+        path.linechart {
+            stroke: steelblue;
+            stroke-width: 1;
+            fill: none;
+        }
+
+        path.domain {
+            stroke-width: 1;
+            stroke: black;
+            fill: none;
+        }
+
+        line {
+            stroke: black;
+            stroke-width: 1;
+            fill: none;
+
+        }
+
+        .linechart {
+            stroke-width: 3;
+        }
+
+        .circle {
+            fill: white;
+            stroke: steelblue;
+            stroke-width: 2px;
+        }
+
+        .circle:hover {
+            fill: red;
+        }
+
+        div.tooltip {
+            position: absolute;
+            text-align: center;
+            width: 120px;
+            height: 36px;
+            padding: 2px;
+            background: lightsteelblue;
+            border: 0;
+            border-radius: 2px;
+            pointer-events: none;
+        }
+    </style>
+
+    <div id="chart_by_month">
+    </div>
+    <div id="chart_by_status">
+    </div>
+    <div id="chart_by_rc">
+    </div>
+    <div id="chart_by_revs">
+    </div>
+    <div id="chart_by_reviews">
+    </div>
+
+{% endblock %}
+{% block extra_js %}
+    {% javascript "reporting" %}
+
+    <script>
+        $(function () {
+            var byStatus = {{ by_status|safe }};
+            makePie(byStatus, '#chart_by_status', "Number of documents by status");
+
+            var byRc = {{ by_rc|safe }};
+            makeBarChart(byRc, '#chart_by_rc', 'Number of documents by return code');
+
+            var byRevs = {{ by_revs|safe }};
+            makePie(byRevs, '#chart_by_revs', 'Number of documents by revision');
+
+            var byMonth = {{ by_month|safe }};
+            makeLineChart(byMonth, '#chart_by_month', 'Number of documents received by month');
+
+            var byEndedReviews = {{ by_ended_reviews|safe }};
+            makeLineChart(byEndedReviews, '#chart_by_reviews', 'Number of documents reviewed by month');
+        });
+    </script>
+{% endblock %}

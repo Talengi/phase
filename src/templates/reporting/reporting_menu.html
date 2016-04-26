@@ -1,0 +1,30 @@
+<li {% if reporting_active %} class="active"{% endif %}>
+    <a href="#nav-reporting"
+       data-toggle="collapse"
+       data-parent="#sidebar-nav">
+        <span class="glyphicon glyphicon-stats"></span>
+        Reports <b class="caret"></b>
+    </a>
+
+    <ul id="nav-reporting" class="nav nav-stacked collapse">
+        {% load cache %}
+        {% cache 500 report_menu request.user.email %}
+
+            {% regroup user_categories by organisation as organisation_list %}
+
+            {% for organisation in organisation_list %}
+                <li class="disabled"><a href="#">{{ organisation.grouper }}</a>
+                </li>
+                {% for category in organisation.list %}
+                    {% if category.category_template.use_creation_form %}
+                        <li>
+                            <a href="{%  url 'category_report' category.organisation.slug category.slug %}">
+                                {{ category.name }}
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        {% endcache %}
+    </ul>
+</li>

@@ -24,6 +24,7 @@ urlpatterns = patterns(
     url(r'^protected/(?P<file_path>[-\w./]+)?$',
         ProtectedDownload.as_view(),
         name="protected_download"),
+    url(r'^reporting/', include('reporting.urls')),
     url(r'^', include('categories.urls')),
     url(r'^', include('dashboards.urls')),
     url(r'^', include('documents.urls')),
