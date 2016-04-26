@@ -5,6 +5,7 @@ import json
 from collections import Counter
 
 from braces.views import LoginRequiredMixin
+from django.core.exceptions import FieldError
 from django.db.models import Func, Count
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView
@@ -128,17 +129,22 @@ class Report(LoginRequiredMixin, CategoryMixin, TemplateView):
 
     def get_docs_by_ended_reviews(self):
         """Count revisions ended in each month"""
-        docs_by_ended_reviews = self.get_revisions().exclude(
-            review_end_date__isnull=True).annotate(
-            year=Extract('review_end_date', what_to_extract='year'),
-            month=Extract('review_end_date', what_to_extract='month')
-        ).values('year', 'month').annotate(Count('pk'))
-
+        try:
+            docs_by_ended_reviews = self.get_revisions().exclude(
+                review_end_date__isnull=True).annotate(
+                year=Extract('review_end_date', what_to_extract='year'),
+                month=Extract('review_end_date', what_to_extract='month')
+            ).values('year', 'month').annotate(Count('pk'))
+        except FieldError:
+            return[]
         return format_sth(docs_by_ended_reviews)
 
     def get_docs_by_rc(self):
-        docs_by_rc = self.get_documents().values_list(
-            'latest_revision__return_code', flat=True)
+        try:
+            docs_by_rc = self.get_documents().values_list(
+                'latest_revision__return_code', flat=True)
+        except FieldError:
+            return[]
         by_rc = Counter(docs_by_rc)
         return self.build_list(by_rc)
 

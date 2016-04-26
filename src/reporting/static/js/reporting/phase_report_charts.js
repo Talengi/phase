@@ -1,4 +1,7 @@
 function makePie(dataset, id, title) {
+    if (dataset.length === 0) {
+        return false;
+    }
     var margin = {top: 70, right: 20, bottom: 30, left: 40},
         w = 500 - margin.left - margin.right,
         h = 400 - margin.top - margin.bottom;
@@ -74,6 +77,9 @@ function makePie(dataset, id, title) {
 
 }
 function makeBarChart(dataset, id, title) {
+    if (dataset.length === 0) {
+        return false;
+    }
     var margin = {top: 70, right: 20, bottom: 30, left: 40},
         w = 500 - margin.left - margin.right,
         h = 350 - margin.top - margin.bottom;
@@ -161,6 +167,9 @@ function makeBarChart(dataset, id, title) {
 
 }
 function makeLineChart(dataset, id, title) {
+    if (dataset.length === 0) {
+        return false;
+    }
     var width = 1000;
     var height = 350;
     var margin = {top: 70, right: 40, bottom: 30, left: 40},
