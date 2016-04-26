@@ -29,11 +29,39 @@ function makePie(dataset, id, title) {
         .data(pie(dataset))
         .enter();
 
-    g.append('path')
+    var slice = g.append('path')
         .attr('d', arc)
         .attr('fill', function (d) {
             return color(d.data.value);
         });
+
+    var tooltip = d3.select(id).append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
+    slice.on('mouseover', function (el) {
+        d3.select(this).transition()
+            .duration(200).style("opacity", 0.9);
+        tooltip.transition()
+            .duration(200)
+            .style("opacity", 0.9);
+        tooltip.html("Number: " + el.value)
+            .style("left", (d3.event.pageX) + "px")
+            .style("top", (d3.event.pageY - 10) + "px");
+    });
+
+    slice.on('mousemove', function (el) {
+        tooltip.style("left", (d3.event.pageX) + "px")
+            .style("top", (d3.event.pageY - 10) + "px");
+    });
+
+    slice.on("mouseout", function (d) {
+        d3.select(this).transition()
+            .duration(200).style("opacity", 1);
+        tooltip.transition()
+            .duration(200)
+            .style("opacity", 0);
+    });
 
     g.append("text")
         .attr("transform", function (d) {
@@ -52,7 +80,7 @@ function makeBarChart(dataset, id, title) {
     var color = d3.scale.category20c();
 
     var x = d3.scale.ordinal()
-        .rangeRoundBands([0, w], .1);
+        .rangeRoundBands([0, w], 0.1);
     var y = d3.scale.linear()
         .range([h, 0]);
     var svg = d3.select(id).append("svg")
@@ -73,7 +101,9 @@ function makeBarChart(dataset, id, title) {
     var xAxis = d3.svg.axis()
         .scale(x)
         .orient("bottom");
-
+    var tooltip = d3.select(id).append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
     svg.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0, " + h + ")")
@@ -83,7 +113,7 @@ function makeBarChart(dataset, id, title) {
         .data(dataset)
         .enter();
 
-    g.append("rect")
+    var bar = g.append("rect")
         .attr("class", "bar")
         .attr("x", function (d) {
             return x(d.value);
@@ -99,6 +129,29 @@ function makeBarChart(dataset, id, title) {
             return color(d.value);
         });
 
+    bar.on('mouseover', function (el) {
+        d3.select(this).transition()
+            .duration(200).style("opacity", 0.9);
+        tooltip.transition()
+            .duration(200)
+            .style("opacity", 0.9);
+        tooltip.html("Number: " + el.count)
+            .style("left", (d3.event.pageX) + "px")
+            .style("top", (d3.event.pageY - 10) + "px");
+    });
+
+    bar.on('mousemove', function (el) {
+        tooltip.style("left", (d3.event.pageX) + "px")
+            .style("top", (d3.event.pageY - 10) + "px");
+    });
+
+    bar.on("mouseout", function (d) {
+        d3.select(this).transition()
+            .duration(200).style("opacity", 1);
+        tooltip.transition()
+            .duration(200)
+            .style("opacity", 0);
+    });
     svg.append("text")
         .attr("x", (w / 2))
         .attr("y", 0 - (margin.top / 2))
@@ -108,6 +161,11 @@ function makeBarChart(dataset, id, title) {
 
 }
 function makeLineChart(dataset, id, title) {
+    var width = 1000;
+    var height = 350;
+    var margin = {top: 70, right: 40, bottom: 30, left: 40},
+        w = width - margin.left - margin.right,
+        h = height - margin.top - margin.bottom;
     var formatDate = d3.time.format("%B %Y");
     var values = _.map(dataset, function (el) {
         return {
@@ -121,11 +179,7 @@ function makeLineChart(dataset, id, title) {
     var maxValue = _.max(values, function (el) {
         return el.value
     }).value;
-    var width = 1000;
-    var height = 350;
-    var margin = {top: 70, right: 40, bottom: 30, left: 40},
-        w = width - margin.left - margin.right,
-        h = height - margin.top - margin.bottom;
+
 
     var svg = d3.select(id).append("svg")
         .attr("width", width)
@@ -170,12 +224,11 @@ function makeLineChart(dataset, id, title) {
     svg.append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
         .call(yAxis);
-    // draw x axis with labels and move to the bottom of the chart area
     svg.append("g")
-        .attr("class", "xaxis")   // give it a class so it can be used to select only xaxis labels  below
+        .attr("class", "xaxis")
         .attr("transform", "translate(" + margin.left + "," + (h + margin.top ) + ")")
         .call(xAxis);
-    var tooltip = d3.select("body").append("div")
+    var tooltip = d3.select(id).append("div")
         .attr("class", "tooltip")
         .style("opacity", 0);
     g.append("path").attr("d", line(values)).attr('class', 'linechart');
@@ -193,7 +246,7 @@ function makeLineChart(dataset, id, title) {
     circle.on('mouseover', function (el) {
         tooltip.transition()
             .duration(200)
-            .style("opacity", .9);
+            .style("opacity", 0.9);
         tooltip.html(formatDate(el.date) + "<br/>" + el.value)
             .style("left", (d3.event.pageX) + "px")
             .style("top", (d3.event.pageY - 28) + "px");
