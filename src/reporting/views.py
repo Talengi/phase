@@ -78,8 +78,9 @@ class Report(LoginRequiredMixin, CategoryMixin, TemplateView):
 
     @staticmethod
     def build_list(values):
-        return [{'value': (lambda x: x or 'None')(k), 'count': v} for k, v in
-                values.items()]
+        val_list = [{'value': (lambda x: x or 'None')(k), 'count': v} for k, v
+                    in sorted(values.items())]
+        return val_list
 
     def breadcrumb_section(self):
         return _('Reporting')
@@ -154,11 +155,13 @@ class Report(LoginRequiredMixin, CategoryMixin, TemplateView):
     def _filter_docs_by_reviews(self, filter_dict):
         """This generic method is called by concrete ones below."""
         users = self.category.users.all()
+        docs = []
+
         try:
             revisions = self.get_revisions().filter(**filter_dict)
         except FieldError:
-            return []
-        docs = []
+            return docs
+
         for user in users:
             revs = revisions.filter(
                 Q(reviewers=user) |
@@ -198,7 +201,6 @@ class Report(LoginRequiredMixin, CategoryMixin, TemplateView):
         under_review = self.get_docs_under_reviews()
 
         overdue_review = self.get_docs_with_overdue_review()
-
         ctx.update({'reporting_active': True,
                     'by_month': json.dumps(by_month),
                     'by_revs': json.dumps(by_revs),

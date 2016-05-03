@@ -61,10 +61,10 @@
             makeLineChart(byEndedReviews, '#js_chart_by_reviews', 'Number of documents reviewed by month');
 
             var underReview = {{ under_review|safe }};
-            makeBarChart(underReview, '#js_chart_under_review', 'Documents under review', 'Name');
+            makeBarChart(underReview, '#js_chart_under_review', 'Documents under review', 'Name', true);
 
             var overdueReview = {{ overdue_review|safe }};
-            makeBarChart(overdueReview, '#js_chart_with_overdue_review', 'Documents overdue', 'Name');
+            makeBarChart(overdueReview, '#js_chart_with_overdue_review', 'Documents overdue', 'Name', true);
         });
     </script>
 {% endblock %}
