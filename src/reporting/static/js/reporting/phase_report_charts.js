@@ -208,7 +208,7 @@ function makeLineChart(dataset, id, title, categoryName) {
     var yAxis = d3.svg.axis()
         .orient("left")
         .scale(y2);
-
+    yAxis.tickFormat(d3.format("d"));
     // define the x axis
     var xAxis = d3.svg.axis()
         .orient("bottom")
@@ -228,7 +228,6 @@ function makeLineChart(dataset, id, title, categoryName) {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
         .call(yAxis);
     svg.append("g")
-        .attr("class", "xaxis")
         .attr("transform", "translate(" + margin.left + "," + (h + margin.top ) + ")")
         .call(xAxis).selectAll("text")
         .style("text-anchor", "end")
