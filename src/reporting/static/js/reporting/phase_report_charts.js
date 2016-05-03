@@ -108,6 +108,8 @@ function makeBarChart(dataset, id, title, categoryName) {
         .rangeRoundBands([0, w], 0.1);
     var y = d3.scale.linear()
         .range([h, 0]);
+    var y2 = d3.scale.linear()
+        .range([h, 0]);
     var svg = d3.select(id).append("svg")
         .attr("width", w + margin.left + margin.right)
         .attr("height", h + margin.top + margin.bottom);
@@ -124,15 +126,26 @@ function makeBarChart(dataset, id, title, categoryName) {
     y.domain([0, d3.max(dataset, function (d) {
         return d.count / sum;
     })]);
+    y2.domain([0, d3.max(dataset, function (d) {
+        return d.count;
+    })]);
+
+
     var xAxis = d3.svg.axis()
         .scale(x)
         .orient("bottom");
+    var yAxis = d3.svg.axis()
+        .scale(y2)
+        .orient("left");
+    yAxis.tickFormat(d3.format("d"));
 
     graph.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0, " + h + ")")
         .call(xAxis);
-
+  svg.append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+        .call(yAxis);
     var b = graph.selectAll(".bar")
         .data(dataset)
         .enter();
@@ -208,7 +221,6 @@ function makeLineChart(dataset, id, title, categoryName) {
     var yAxis = d3.svg.axis()
         .orient("left")
         .scale(y2);
-    yAxis.tickFormat(d3.format("d"));
     // define the x axis
     var xAxis = d3.svg.axis()
         .orient("bottom")
@@ -238,7 +250,7 @@ function makeLineChart(dataset, id, title, categoryName) {
         });
     g.append("path")
         .attr("d", line(values)).attr('class', 'linechart')
-    .attr("transform", "translate(" + xOffset + "," + 0 + ")");
+        .attr("transform", "translate(" + xOffset + "," + 0 + ")");
 
     var tooltip = d3.select(id).append("div")
         .attr("class", "tooltip")
@@ -254,7 +266,6 @@ function makeLineChart(dataset, id, title, categoryName) {
             return -1 * y(d.value);
         }).attr('class', 'circle')
         .attr("transform", "translate(" + xOffset + "," + 0 + ")");
-
 
 
     function formatContent(el) {

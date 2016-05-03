@@ -51,8 +51,8 @@ line {
 div.tooltip {
     position: absolute;
     text-align: center;
-    width: 120px;
-    height: 36px;
+    min-width: 120px;
+    min-height: 36px;
     padding: 2px;
     background: lightsteelblue;
     border: 0;
