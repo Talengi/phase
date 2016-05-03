@@ -151,49 +151,37 @@ class Report(LoginRequiredMixin, CategoryMixin, TemplateView):
         by_rc = Counter(docs_by_rc)
         return self.build_list(by_rc)
 
-    def get_docs_under_reviews(self):
-        """Returns docs under review by user."""
-
+    def _filter_docs_by_reviews(self, filter_dict):
+        """This generic method is called by concrete ones below."""
         users = self.category.users.all()
         try:
-            revisions_under_review = self.get_revisions().filter(
-                review_start_date__isnull=False,
-                review_end_date__isnull=True)
+            revisions = self.get_revisions().filter(**filter_dict)
         except FieldError:
             return []
-        docs_under_reviews = []
+        docs = []
         for user in users:
-            revs = revisions_under_review.filter(
+            revs = revisions.filter(
                 Q(reviewers=user) |
-                Q(reviewers=user) |
-                Q(reviewers=user))
+                Q(leader=user) |
+                Q(approver=user))
             count = revs.count()
             if count:
-                docs_under_reviews.append({'value': user.name, 'count': count})
-        return docs_under_reviews
+                docs.append({'value': user.name, 'count': count})
+        return docs
+
+    def get_docs_under_reviews(self):
+        """Returns docs under review by user."""
+        return self._filter_docs_by_reviews({
+            'review_start_date__isnull': False,
+            'review_end_date__isnull': True})
 
     def get_docs_with_overdue_review(self):
         """Returns docs under review which date is overdue by user."""
         today = datetime.datetime.today()
-        users = self.category.users.all()
-        try:
-            revisions_with_overdue_review = self.get_revisions().filter(
-                review_start_date__isnull=False,
-                review_end_date__isnull=False,
-                review_due_date__lt=today)
-        except FieldError:
-            return []
-        docs_with_overdue_review = []
-        for user in users:
-            revs = revisions_with_overdue_review.filter(
-                Q(reviewers=user) |
-                Q(reviewers=user) |
-                Q(reviewers=user))
-            count = revs.count()
-            if count:
-                docs_with_overdue_review.append(
-                    {'value': user.name, 'count': count})
-        return docs_with_overdue_review
+        return self._filter_docs_by_reviews({
+            'review_start_date__isnull': False,
+            'review_end_date__isnull': False,
+            'review_due_date__lt': today})
 
     def get_context_data(self, **kwargs):
         ctx = super(Report, self).get_context_data(**kwargs)
