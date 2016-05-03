@@ -46,7 +46,7 @@ function makePie(dataset, id, title, categoryName) {
     var arc = d3.svg.arc()
         .outerRadius(radius)
         .innerRadius(0);
-;
+    ;
     var pie = d3.layout.pie()
         .sort(null)
         .value(function (d) {
@@ -82,8 +82,8 @@ function makePie(dataset, id, title, categoryName) {
         })
         .attr("text-anchor", "middle")
         .text(function (d) {
-            if (!isNaN(d.data.value)){
-                return '0'+ d.data.value;
+            if (!isNaN(d.data.value)) {
+                return '0' + d.data.value;
             }
             return d.data.value;
         });
@@ -167,10 +167,14 @@ function makeLineChart(dataset, id, title, categoryName) {
         return false;
     }
     var width = 1000;
-    var height = 400;
-    var margin = {top: 100, right: 40, bottom: 30, left: 40},
+    var height = 440;
+    var margin = {top: 100, right: 40, bottom: 60, left: 40},
         w = width - margin.left - margin.right,
         h = height - margin.top - margin.bottom;
+
+    var margin2 = {top: 430, right: 10, bottom: 20, left: 40};
+    var height2 = 500 - margin2.top - margin2.bottom;
+
     var formatDate = d3.time.format("%B %Y");
     var values = _.map(dataset, function (el) {
         return {
@@ -196,12 +200,11 @@ function makeLineChart(dataset, id, title, categoryName) {
 
     var y = d3.scale.linear().domain([0, maxValue]).range([0, h]);
     var y2 = d3.scale.linear().domain([0, maxValue]).range([h, 0]);
-
-
+    y3 = d3.scale.linear().range([height2, 0]);
     var x = d3.time.scale().domain([firstDate, lastDate]).rangeRound([0, w]);
+    var x2 = d3.time.scale().domain([firstDate, lastDate]).rangeRound([0, w]);
 
     // define the y axis
-
     var yAxis = d3.svg.axis()
         .orient("left")
         .scale(y2);
@@ -227,7 +230,13 @@ function makeLineChart(dataset, id, title, categoryName) {
     svg.append("g")
         .attr("class", "xaxis")
         .attr("transform", "translate(" + margin.left + "," + (h + margin.top ) + ")")
-        .call(xAxis);
+        .call(xAxis).selectAll("text")
+        .style("text-anchor", "end")
+        .attr("dx", "-.8em")
+        .attr("dy", ".15em")
+        .attr("transform", function (d) {
+            return "rotate(-65)";
+        });
     var tooltip = d3.select(id).append("div")
         .attr("class", "tooltip")
         .style("opacity", 0);
@@ -251,4 +260,13 @@ function makeLineChart(dataset, id, title, categoryName) {
 
     bindTooltip(circle, id, formatContent);
 
+    var brush = d3.svg.brush()
+        .x(x2)
+        .on("brush", brushed);
+
+    function brushed() {
+        x.domain(brush.empty() ? x2.domain() : brush.extent());
+        focus.select(".area").attr("d", area);
+        focus.select(".x.axis").call(xAxis);
+    }
 }
