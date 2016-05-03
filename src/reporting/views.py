@@ -3,7 +3,6 @@
 import datetime
 import json
 from collections import Counter
-from operator import itemgetter
 
 from braces.views import LoginRequiredMixin
 from django.core.exceptions import FieldError
