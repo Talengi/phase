@@ -99,9 +99,9 @@ function makeBarChart(dataset, id, title, categoryName) {
     if (dataset.length === 0) {
         return false;
     }
-    var margin = {top: 70, right: 20, bottom: 30, left: 40},
-        w = 500 - margin.left - margin.right,
-        h = 350 - margin.top - margin.bottom;
+    var margin = {top: 70, right: 20, bottom: 130, left: 40},
+        w = 550 - margin.left - margin.right,
+        h = 450 - margin.top - margin.bottom;
     var color = d3.scale.category20c();
 
     var x = d3.scale.ordinal()
@@ -142,8 +142,16 @@ function makeBarChart(dataset, id, title, categoryName) {
     graph.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0, " + h + ")")
-        .call(xAxis);
-  svg.append("g")
+        .call(xAxis)
+        .selectAll("text")
+        .style("text-anchor", "end")
+        .attr("dx", "-.8em")
+        .attr("dy", ".15em")
+        .attr("transform", function (d) {
+            return "rotate(-65)";
+        });
+
+    svg.append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
         .call(yAxis);
     var b = graph.selectAll(".bar")
@@ -241,7 +249,8 @@ function makeLineChart(dataset, id, title, categoryName) {
         .call(yAxis);
     svg.append("g")
         .attr("transform", "translate(" + (margin.left + xOffset) + "," + (h + margin.top ) + ")")
-        .call(xAxis).selectAll("text")
+        .call(xAxis)
+        .selectAll("text")
         .style("text-anchor", "end")
         .attr("dx", "-.8em")
         .attr("dy", ".15em")
