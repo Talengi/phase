@@ -7,7 +7,7 @@
 
 {% block content %}
 
-    <div id="js_chart_by_month" class="chart">
+    <div id="js_chart_by_month" class="chart linechart">
     </div>
     <div id="js_chart_by_rc" class="chart">
     </div>
@@ -23,8 +23,21 @@
             </td>
         </tr>
     </table>
-    <div id="js_chart_by_reviews" class="chart">
+    <div id="js_chart_by_reviews" class="chart linechart">
     </div>
+    <table width="100%">
+        <tr>
+            <td>
+                <div id="js_chart_under_review" class="chart chart-cell-left">
+                </div>
+            </td>
+            <td>
+                <div id="js_chart_with_overdue_review" class="chart chart-cell-right">
+                </div>
+            </td>
+        </tr>
+    </table>
+
 
 {% endblock %}
 {% block extra_js %}
@@ -46,6 +59,12 @@
 
             var byEndedReviews = {{ by_ended_reviews|safe }};
             makeLineChart(byEndedReviews, '#js_chart_by_reviews', 'Number of documents reviewed by month');
+
+            var underReview = {{ under_review|safe }};
+            makeBarChart(underReview, '#js_chart_under_review', 'Documents under review', 'Name');
+
+            var overdueReview = {{ overdue_review|safe }};
+            makeBarChart(overdueReview, '#js_chart_with_overdue_review', 'Documents overdue', 'Name');
         });
     </script>
 {% endblock %}

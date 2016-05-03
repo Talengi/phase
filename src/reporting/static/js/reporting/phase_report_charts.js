@@ -46,7 +46,7 @@ function makePie(dataset, id, title, categoryName) {
     var arc = d3.svg.arc()
         .outerRadius(radius)
         .innerRadius(0);
-;
+    ;
     var pie = d3.layout.pie()
         .sort(null)
         .value(function (d) {
@@ -82,8 +82,8 @@ function makePie(dataset, id, title, categoryName) {
         })
         .attr("text-anchor", "middle")
         .text(function (d) {
-            if (!isNaN(d.data.value)){
-                return '0'+ d.data.value;
+            if (!isNaN(d.data.value)) {
+                return '0' + d.data.value;
             }
             return d.data.value;
         });
@@ -108,6 +108,8 @@ function makeBarChart(dataset, id, title, categoryName) {
         .rangeRoundBands([0, w], 0.1);
     var y = d3.scale.linear()
         .range([h, 0]);
+    var y2 = d3.scale.linear()
+        .range([h, 0]);
     var svg = d3.select(id).append("svg")
         .attr("width", w + margin.left + margin.right)
         .attr("height", h + margin.top + margin.bottom);
@@ -124,15 +126,26 @@ function makeBarChart(dataset, id, title, categoryName) {
     y.domain([0, d3.max(dataset, function (d) {
         return d.count / sum;
     })]);
+    y2.domain([0, d3.max(dataset, function (d) {
+        return d.count;
+    })]);
+
+
     var xAxis = d3.svg.axis()
         .scale(x)
         .orient("bottom");
+    var yAxis = d3.svg.axis()
+        .scale(y2)
+        .orient("left");
+    yAxis.tickFormat(d3.format("d"));
 
     graph.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0, " + h + ")")
         .call(xAxis);
-
+  svg.append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+        .call(yAxis);
     var b = graph.selectAll(".bar")
         .data(dataset)
         .enter();
@@ -167,10 +180,14 @@ function makeLineChart(dataset, id, title, categoryName) {
         return false;
     }
     var width = 1000;
-    var height = 400;
-    var margin = {top: 100, right: 40, bottom: 30, left: 40},
+    var height = 440;
+    var margin = {top: 100, right: 40, bottom: 60, left: 40},
         w = width - margin.left - margin.right,
         h = height - margin.top - margin.bottom;
+
+    var margin2 = {top: 430, right: 10, bottom: 20, left: 40};
+    var height2 = 500 - margin2.top - margin2.bottom;
+    var xOffset = 20;
     var formatDate = d3.time.format("%B %Y");
     var values = _.map(dataset, function (el) {
         return {
@@ -192,27 +209,25 @@ function makeLineChart(dataset, id, title, categoryName) {
 
     addTitle(svg, title, w, margin.top);
     var g = svg.append("g")
-        .attr("transform", "translate(" + (10 + margin.left) + ", " + (h + margin.top) + ")");
+        .attr("transform", "translate(" + (margin.left) + ", " + (h + margin.top) + ")");
 
     var y = d3.scale.linear().domain([0, maxValue]).range([0, h]);
     var y2 = d3.scale.linear().domain([0, maxValue]).range([h, 0]);
-
-
+    y3 = d3.scale.linear().range([height2, 0]);
     var x = d3.time.scale().domain([firstDate, lastDate]).rangeRound([0, w]);
+    var x2 = d3.time.scale().domain([firstDate, lastDate]).rangeRound([0, w]);
 
     // define the y axis
-
     var yAxis = d3.svg.axis()
         .orient("left")
         .scale(y2);
-
     // define the x axis
     var xAxis = d3.svg.axis()
         .orient("bottom")
         .scale(x);
 
     xAxis.ticks(d3.time.month, 1);
-    xAxis.tickFormat(d3.time.format("%m/%Y"));
+    xAxis.tickFormat(d3.time.format("%b %y"));
 
     var line = d3.svg.line()
         .x(function (d) {
@@ -225,13 +240,21 @@ function makeLineChart(dataset, id, title, categoryName) {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
         .call(yAxis);
     svg.append("g")
-        .attr("class", "xaxis")
-        .attr("transform", "translate(" + margin.left + "," + (h + margin.top ) + ")")
-        .call(xAxis);
+        .attr("transform", "translate(" + (margin.left + xOffset) + "," + (h + margin.top ) + ")")
+        .call(xAxis).selectAll("text")
+        .style("text-anchor", "end")
+        .attr("dx", "-.8em")
+        .attr("dy", ".15em")
+        .attr("transform", function (d) {
+            return "rotate(-65)";
+        });
+    g.append("path")
+        .attr("d", line(values)).attr('class', 'linechart')
+        .attr("transform", "translate(" + xOffset + "," + 0 + ")");
+
     var tooltip = d3.select(id).append("div")
         .attr("class", "tooltip")
         .style("opacity", 0);
-    g.append("path").attr("d", line(values)).attr('class', 'linechart');
     var circle = g.selectAll("circle")
         .data(values)
         .enter().append("circle")
@@ -241,7 +264,8 @@ function makeLineChart(dataset, id, title, categoryName) {
         })
         .attr("cy", function (d) {
             return -1 * y(d.value);
-        }).attr('class', 'circle');
+        }).attr('class', 'circle')
+        .attr("transform", "translate(" + xOffset + "," + 0 + ")");
 
 
     function formatContent(el) {
@@ -251,4 +275,13 @@ function makeLineChart(dataset, id, title, categoryName) {
 
     bindTooltip(circle, id, formatContent);
 
+    var brush = d3.svg.brush()
+        .x(x2)
+        .on("brush", brushed);
+
+    function brushed() {
+        x.domain(brush.empty() ? x2.domain() : brush.extent());
+        focus.select(".area").attr("d", area);
+        focus.select(".x.axis").call(xAxis);
+    }
 }

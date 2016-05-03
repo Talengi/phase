@@ -6,7 +6,7 @@ from collections import Counter
 
 from braces.views import LoginRequiredMixin
 from django.core.exceptions import FieldError
-from django.db.models import Func, Count
+from django.db.models import Func, Count, Q
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView
 
@@ -53,7 +53,7 @@ def format_results(by_ended_reviews):
         last_dt.month - first_dt.month
     # We iterate over months to fill missing values with 0
     curr_date = first_dt
-    for month in xrange(months):
+    for month in range(months):
         if curr_date.month == 12:
             curr_date = datetime.date(month=1, year=curr_date.year + 1,
                                       day=1)
@@ -138,7 +138,7 @@ class Report(LoginRequiredMixin, CategoryMixin, TemplateView):
                 month=Extract('review_end_date', what_to_extract='month')
             ).values('year', 'month').annotate(Count('pk'))
         except FieldError:
-            return[]
+            return []
         return format_results(docs_by_ended_reviews)
 
     def get_docs_by_rc(self):
@@ -147,12 +147,53 @@ class Report(LoginRequiredMixin, CategoryMixin, TemplateView):
                 'latest_revision__return_code', flat=True)
 
         except FieldError:
-            return[]
+            return []
         by_rc = Counter(docs_by_rc)
         return self.build_list(by_rc)
 
-    def get(self, request, *args, **kwargs):
-        return super(Report, self).get(request, *args, **kwargs)
+    def get_docs_under_reviews(self):
+        """Returns docs under review by user."""
+
+        users = self.category.users.all()
+        try:
+            revisions_under_review = self.get_revisions().filter(
+                review_start_date__isnull=False,
+                review_end_date__isnull=True)
+        except FieldError:
+            return []
+        docs_under_reviews = []
+        for user in users:
+            revs = revisions_under_review.filter(
+                Q(reviewers=user) |
+                Q(reviewers=user) |
+                Q(reviewers=user))
+            count = revs.count()
+            if count:
+                docs_under_reviews.append({'value': user.name, 'count': count})
+        return docs_under_reviews
+
+    def get_docs_with_overdue_review(self):
+        """Returns docs under review which date is overdue by user."""
+        today = datetime.datetime.today()
+        users = self.category.users.all()
+        try:
+            revisions_with_overdue_review = self.get_revisions().filter(
+                review_start_date__isnull=False,
+                review_end_date__isnull=False,
+                review_due_date__lt=today)
+        except FieldError:
+            return []
+        docs_with_overdue_review = []
+        for user in users:
+            revs = revisions_with_overdue_review.filter(
+                Q(reviewers=user) |
+                Q(reviewers=user) |
+                Q(reviewers=user))
+            count = revs.count()
+            if count:
+                docs_with_overdue_review.append(
+                    {'value': user.name, 'count': count})
+        return docs_with_overdue_review
 
     def get_context_data(self, **kwargs):
         ctx = super(Report, self).get_context_data(**kwargs)
@@ -166,10 +207,16 @@ class Report(LoginRequiredMixin, CategoryMixin, TemplateView):
 
         by_ended_reviews = self.get_docs_by_ended_reviews()
 
+        under_review = self.get_docs_under_reviews()
+
+        overdue_review = self.get_docs_with_overdue_review()
+
         ctx.update({'reporting_active': True,
                     'by_month': json.dumps(by_month),
                     'by_revs': json.dumps(by_revs),
                     'by_status': json.dumps(by_status),
                     'by_rc': json.dumps(by_rc),
-                    'by_ended_reviews': json.dumps(by_ended_reviews)})
+                    'under_review': json.dumps(under_review),
+                    'by_ended_reviews': json.dumps(by_ended_reviews),
+                    'overdue_review': json.dumps(overdue_review)})
         return ctx
