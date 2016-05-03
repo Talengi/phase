@@ -174,7 +174,7 @@ function makeLineChart(dataset, id, title, categoryName) {
 
     var margin2 = {top: 430, right: 10, bottom: 20, left: 40};
     var height2 = 500 - margin2.top - margin2.bottom;
-
+    var xOffset = 20;
     var formatDate = d3.time.format("%B %Y");
     var values = _.map(dataset, function (el) {
         return {
@@ -196,7 +196,7 @@ function makeLineChart(dataset, id, title, categoryName) {
 
     addTitle(svg, title, w, margin.top);
     var g = svg.append("g")
-        .attr("transform", "translate(" + (10 + margin.left) + ", " + (h + margin.top) + ")");
+        .attr("transform", "translate(" + (margin.left) + ", " + (h + margin.top) + ")");
 
     var y = d3.scale.linear().domain([0, maxValue]).range([0, h]);
     var y2 = d3.scale.linear().domain([0, maxValue]).range([h, 0]);
@@ -215,7 +215,7 @@ function makeLineChart(dataset, id, title, categoryName) {
         .scale(x);
 
     xAxis.ticks(d3.time.month, 1);
-    xAxis.tickFormat(d3.time.format("%m/%Y"));
+    xAxis.tickFormat(d3.time.format("%b %y"));
 
     var line = d3.svg.line()
         .x(function (d) {
@@ -228,7 +228,7 @@ function makeLineChart(dataset, id, title, categoryName) {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
         .call(yAxis);
     svg.append("g")
-        .attr("transform", "translate(" + margin.left + "," + (h + margin.top ) + ")")
+        .attr("transform", "translate(" + (margin.left + xOffset) + "," + (h + margin.top ) + ")")
         .call(xAxis).selectAll("text")
         .style("text-anchor", "end")
         .attr("dx", "-.8em")
@@ -236,10 +236,13 @@ function makeLineChart(dataset, id, title, categoryName) {
         .attr("transform", function (d) {
             return "rotate(-65)";
         });
+    g.append("path")
+        .attr("d", line(values)).attr('class', 'linechart')
+    .attr("transform", "translate(" + xOffset + "," + 0 + ")");
+
     var tooltip = d3.select(id).append("div")
         .attr("class", "tooltip")
         .style("opacity", 0);
-    g.append("path").attr("d", line(values)).attr('class', 'linechart');
     var circle = g.selectAll("circle")
         .data(values)
         .enter().append("circle")
@@ -249,7 +252,9 @@ function makeLineChart(dataset, id, title, categoryName) {
         })
         .attr("cy", function (d) {
             return -1 * y(d.value);
-        }).attr('class', 'circle');
+        }).attr('class', 'circle')
+        .attr("transform", "translate(" + xOffset + "," + 0 + ")");
+
 
 
     function formatContent(el) {
