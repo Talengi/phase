@@ -95,7 +95,7 @@ function makePie(dataset, id, title, categoryName) {
     bindTooltip(slice, id, formatContent);
 
 }
-function makeBarChart(dataset, id, title, categoryName) {
+function makeBarChart(dataset, id, title, categoryName, rotateLabel) {
     if (dataset.length === 0) {
         return false;
     }
@@ -139,18 +139,19 @@ function makeBarChart(dataset, id, title, categoryName) {
         .orient("left");
     yAxis.tickFormat(d3.format("d"));
 
-    graph.append("g")
+    var svgAxis = graph.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0, " + h + ")")
-        .call(xAxis)
-        .selectAll("text")
-        .style("text-anchor", "end")
-        .attr("dx", "-.8em")
-        .attr("dy", ".15em")
-        .attr("transform", function (d) {
-            return "rotate(-65)";
-        });
-
+        .call(xAxis);
+    if (rotateLabel === true) {
+        svgAxis.selectAll("text")
+            .style("text-anchor", "end")
+            .attr("dx", "-.8em")
+            .attr("dy", ".15em")
+            .attr("transform", function (d) {
+                return "rotate(-65)";
+            });
+    }
     svg.append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
         .call(yAxis);
@@ -233,10 +234,8 @@ function makeLineChart(dataset, id, title, categoryName) {
     var xAxis = d3.svg.axis()
         .orient("bottom")
         .scale(x);
-
     xAxis.ticks(d3.time.month, 1);
     xAxis.tickFormat(d3.time.format("%b %y"));
-
     var line = d3.svg.line()
         .x(function (d) {
             return x(d.date);
@@ -248,7 +247,7 @@ function makeLineChart(dataset, id, title, categoryName) {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
         .call(yAxis);
     svg.append("g")
-        .attr("transform", "translate(" + (margin.left + xOffset) + "," + (h + margin.top ) + ")")
+        .attr("transform", "translate(" + margin.left + "," + (h + margin.top ) + ")")
         .call(xAxis)
         .selectAll("text")
         .style("text-anchor", "end")

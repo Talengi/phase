@@ -3,6 +3,7 @@
 import datetime
 import json
 from collections import Counter
+from operator import itemgetter
 
 from braces.views import LoginRequiredMixin
 from django.core.exceptions import FieldError
@@ -78,8 +79,10 @@ class Report(LoginRequiredMixin, CategoryMixin, TemplateView):
 
     @staticmethod
     def build_list(values):
-        return [{'value': (lambda x: x or 'None')(k), 'count': v} for k, v in
-                values.items()]
+        val_list = [{'value': (lambda x: x or 'None')(k), 'count': v} for k, v
+                    in values.items()]
+
+        return sorted(val_list, key=itemgetter('value'))
 
     def breadcrumb_section(self):
         return _('Reporting')
