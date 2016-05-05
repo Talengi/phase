@@ -38,15 +38,16 @@ function makePie(dataset, id, title, categoryName) {
     if (dataset.length === 0) {
         return false;
     }
+    var fullWidth = 500;
     var margin = {top: 70, right: 20, bottom: 30, left: 40},
-        w = 500 - margin.left - margin.right,
+        w = fullWidth - margin.left - margin.right,
         h = 400 - margin.top - margin.bottom;
     var color = d3.scale.category20c();
     var radius = Math.min(w, h) / 2;
     var arc = d3.svg.arc()
         .outerRadius(radius)
         .innerRadius(0);
-    ;
+
     var pie = d3.layout.pie()
         .sort(null)
         .value(function (d) {
@@ -56,7 +57,7 @@ function makePie(dataset, id, title, categoryName) {
         .attr("width", w + margin.left + margin.right)
         .attr("height", h + margin.top + margin.bottom);
 
-    addTitle(svg, title, w, margin.top);
+    addTitle(svg, title, 500, margin.top);
 
     var g = svg.append("g")
         .attr("transform", "translate(" + (w / 2 + margin.left) +
@@ -99,8 +100,9 @@ function makeBarChart(dataset, id, title, categoryName, rotateLabel) {
     if (dataset.length === 0) {
         return false;
     }
+    var fullWidth = 550;
     var margin = {top: 70, right: 20, bottom: 130, left: 40},
-        w = 550 - margin.left - margin.right,
+        w = fullWidth - margin.left - margin.right,
         h = 450 - margin.top - margin.bottom;
     var color = d3.scale.category20c();
 
@@ -111,9 +113,9 @@ function makeBarChart(dataset, id, title, categoryName, rotateLabel) {
     var y2 = d3.scale.linear()
         .range([h, 0]);
     var svg = d3.select(id).append("svg")
-        .attr("width", w + margin.left + margin.right)
+        .attr("width", fullWidth)
         .attr("height", h + margin.top + margin.bottom);
-    addTitle(svg, title, w, margin.top);
+    addTitle(svg, title, fullWidth, margin.top);
     var graph = svg.append('g').attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
 
     var sum = 0;
@@ -296,7 +298,7 @@ function makeLineChart(dataset, id, title, categoryName) {
     focus.append("g")
         .attr("transform", "translate(" + -100 + "," + -height + ")")
         .append("rect")
-        .attr('fill', '#f2f0f0')
+        .attr('fill', '#fff')
         .attr('height', height)
         .attr('width', 100);
 
@@ -317,7 +319,7 @@ function makeLineChart(dataset, id, title, categoryName) {
         .attr("transform", function (d) {
             return "rotate(-65)";
         });
-    focus.append("g")
+    focus.append("g");
     // draw context chart
     context.append("path")
         .datum(values)
@@ -337,7 +339,7 @@ function makeLineChart(dataset, id, title, categoryName) {
         .attr("y", -height2)
         .attr("height", height2);
     // adding chart title
-    addTitle(svg, title, width, margin.top);
+    addTitle(svg, title, fullWidth, margin.top);
 
     // tooltips instanciation
     var tooltip = d3.select(id).append("div")

@@ -1,8 +1,9 @@
 .chart {
-    background-color: #f2f0f0;
+    background-color: #fff;
     margin-bottom: 30px;
     padding: 20px 0;
     border-radius: 2px;
+    border: 1px solid #f2f0f0;
     text-align: center;
 }
 
