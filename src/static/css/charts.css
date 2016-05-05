@@ -1,13 +1,15 @@
 .chart {
     background-color: #f2f0f0;
     margin-bottom: 30px;
-    padding: 30px 0;
+    padding: 20px 0;
     border-radius: 2px;
     text-align: center;
 }
-.linechart{
-    overflow-y: auto;
+
+.linechart {
+    overflow-y: hidden;
 }
+
 .chart-cell-left {
     margin-right: 10px;
 }
@@ -20,23 +22,20 @@ path.linechart {
     stroke: steelblue;
     stroke-width: 1;
     fill: none;
+
 }
 
 path.domain {
     stroke-width: 1;
     stroke: black;
     fill: none;
+
 }
 
 line {
     stroke: black;
     stroke-width: 1;
     fill: none;
-
-}
-
-.linechart {
-    stroke-width: 3;
 }
 
 .circle {
@@ -61,6 +60,16 @@ div.tooltip {
     pointer-events: none;
 }
 
-.bar, .circle, .slice{
+.bar, .circle, .slice {
     cursor: pointer;
+}
+
+.brush .extent {
+    stroke: #fff;
+    fill-opacity: .125;
+    shape-rendering: crispEdges;
+}
+
+.line, .area {
+    fill: steelblue;
 }
