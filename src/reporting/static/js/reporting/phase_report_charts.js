@@ -188,15 +188,17 @@ function makeLineChart(dataset, id, title, categoryName) {
     if (dataset.length === 0) {
         return false;
     }
-    var width = 1000;
-    var height = 440;
-    var margin = {top: 100, right: 40, bottom: 60, left: 40},
-        w = width - margin.left - margin.right,
-        h = height - margin.top - margin.bottom;
+    var fullWidth = 1000;
 
-    var margin2 = {top: 430, right: 10, bottom: 20, left: 40};
-    var height2 = 500 - margin2.top - margin2.bottom;
-    var xOffset = 20;
+    var focusHeight = 500;
+    var contextHeight = 100;
+    var fullHeight = focusHeight + contextHeight;
+    var margin = {top: 100, right: 40, bottom: 60, left: 40},
+        width = fullWidth - margin.left - margin.right,
+        height = focusHeight - margin.top - margin.bottom;
+
+    var margin2 = {top: 20, right: 40, bottom: 20, left: 40};
+    var height2 = contextHeight - margin2.top - margin2.bottom;
     var formatDate = d3.time.format("%B %Y");
     var values = _.map(dataset, function (el) {
         return {
@@ -204,38 +206,43 @@ function makeLineChart(dataset, id, title, categoryName) {
             "date": new Date(el.year, el.month - 1, 1)
         };
     });
-    var firstDate = values[0].date;
-    var lastElt = values[values.length - 1];
-    var lastDate = lastElt.date;
     var maxValue = _.max(values, function (el) {
         return el.value;
     }).value;
 
-
     var svg = d3.select(id).append("svg")
-        .attr("width", width)
-        .attr("height", height);
+        .attr("width", fullWidth)
+        .attr("height", fullHeight);
+    var extents = d3.extent(values, function (d) {
+        return d.date;
+    });
 
-    addTitle(svg, title, w, margin.top);
-    var g = svg.append("g")
-        .attr("transform", "translate(" + (margin.left) + ", " + (h + margin.top) + ")");
 
-    var y = d3.scale.linear().domain([0, maxValue]).range([0, h]);
-    var y2 = d3.scale.linear().domain([0, maxValue]).range([h, 0]);
-    y3 = d3.scale.linear().range([height2, 0]);
-    var x = d3.time.scale().domain([firstDate, lastDate]).rangeRound([0, w]);
-    var x2 = d3.time.scale().domain([firstDate, lastDate]).rangeRound([0, w]);
+    var x = d3.time.scale().domain(extents).rangeRound([0, width]);
 
+    var y = d3.scale.linear().domain([0, maxValue]).range([0, height]);
+    var y2 = d3.scale.linear().domain([0, maxValue]).range([height, 0]);
+
+    var xContext = d3.time.scale().domain(extents).rangeRound([0, width]);
+    var yContext = d3.scale.linear().domain([0, maxValue]).range([0, height2]);
     // define the y axis
     var yAxis = d3.svg.axis()
         .orient("left")
         .scale(y2);
-    // define the x axis
+
+    // define the focus x axis
     var xAxis = d3.svg.axis()
         .orient("bottom")
         .scale(x);
     xAxis.ticks(d3.time.month, 1);
     xAxis.tickFormat(d3.time.format("%b %y"));
+
+    // define the context x axis
+    var xAxis2 = d3.svg.axis()
+        .orient("bottom")
+        .scale(x);
+
+    //  focus chart function
     var line = d3.svg.line()
         .x(function (d) {
             return x(d.date);
@@ -243,27 +250,38 @@ function makeLineChart(dataset, id, title, categoryName) {
         .y(function (d) {
             return -1 * y(d.value);
         });
-    svg.append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-        .call(yAxis);
-    svg.append("g")
-        .attr("transform", "translate(" + margin.left + "," + (h + margin.top ) + ")")
-        .call(xAxis)
-        .selectAll("text")
-        .style("text-anchor", "end")
-        .attr("dx", "-.8em")
-        .attr("dy", ".15em")
-        .attr("transform", function (d) {
-            return "rotate(-65)";
-        });
-    g.append("path")
-        .attr("d", line(values)).attr('class', 'linechart')
-        .attr("transform", "translate(" + xOffset + "," + 0 + ")");
 
-    var tooltip = d3.select(id).append("div")
-        .attr("class", "tooltip")
-        .style("opacity", 0);
-    var circle = g.selectAll("circle")
+    //  context chart function
+    var line2 = d3.svg.line()
+        .x(function (d) {
+            return x(d.date);
+        })
+        .y(function (d) {
+            return -1 * yContext(d.value);
+        });
+
+    // brush for navigation
+    var brush = d3.svg.brush()
+        .x(xContext)
+        .on("brush", brushed);
+
+    // creating 2 chart groups
+    var focus = svg.append("g")
+        .attr("class", "focus")
+        .attr("transform", "translate(" + margin.left + ", " + (height + margin.top) + ")");
+    var context = svg.append("g")
+        .attr("class", "context")
+        .attr("transform", "translate(" + margin2.left + "," + (focusHeight + contextHeight - margin2.bottom) + ")");
+
+    // concrete chart drawing
+    focus
+        .append("path")
+        .datum(values)
+        .attr("d", line(values))
+        .attr('class', 'linechart');
+
+    // adding dots
+    var circle = focus.selectAll(".circle")
         .data(values)
         .enter().append("circle")
         .attr("r", 5)
@@ -272,24 +290,80 @@ function makeLineChart(dataset, id, title, categoryName) {
         })
         .attr("cy", function (d) {
             return -1 * y(d.value);
-        }).attr('class', 'circle')
-        .attr("transform", "translate(" + xOffset + "," + 0 + ")");
+        }).attr('class', 'circle');
 
+    // add a rect to hide chart on the left
+    focus.append("g")
+        .attr("transform", "translate(" + -100 + "," + -height + ")")
+        .append("rect")
+        .attr('fill', '#f2f0f0')
+        .attr('height', height)
+        .attr('width', 100);
+
+    // add y axis
+    focus.append("g")
+        .attr("transform", "translate(" + 0 + "," + -height + ")")
+        .attr("class", "y axis")
+        .call(yAxis);
+
+    // add x axis and rotate labels
+    focus.append("g")
+        .attr("class", "x axis")
+        .call(xAxis)
+        .selectAll("text")
+        .style("text-anchor", "end")
+        .attr("dx", "-.8em")
+        .attr("dy", ".15em")
+        .attr("transform", function (d) {
+            return "rotate(-65)";
+        });
+    focus.append("g")
+    // draw context chart
+    context.append("path")
+        .datum(values)
+        .attr('class', 'linechart')
+        .attr("d", line2(values));
+    // add context x axis
+    context.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(" + 0 + "," + (0) + ")")
+        .call(xAxis2);
+
+    // adding brush
+    context.append("g")
+        .attr("class", "x brush")
+        .call(brush)
+        .selectAll("rect")
+        .attr("y", -height2)
+        .attr("height", height2);
+    // adding chart title
+    addTitle(svg, title, width, margin.top);
+
+    // tooltips instanciation
+    var tooltip = d3.select(id).append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
 
     function formatContent(el) {
         return formatDate(el.date) + "<br/>Number: " + el.value;
-
     }
 
     bindTooltip(circle, id, formatContent);
 
-    var brush = d3.svg.brush()
-        .x(x2)
-        .on("brush", brushed);
-
+    // brush callback function
     function brushed() {
-        x.domain(brush.empty() ? x2.domain() : brush.extent());
-        focus.select(".area").attr("d", area);
-        focus.select(".x.axis").call(xAxis);
+        x.domain(brush.empty() ? xContext.domain() : brush.extent());
+        focus.select(".linechart").attr("d", line);
+        focus.select(".x.axis").call(xAxis).selectAll("text")
+            .style("text-anchor", "end")
+            .attr("dx", "-.8em")
+            .attr("dy", ".15em")
+            .attr("transform", function (d) {
+                return "rotate(-65)";
+            });
+        focus.selectAll(".circle")
+            .attr("cx", function (d) {
+                return x(d.date);
+            });
     }
 }
