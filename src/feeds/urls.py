@@ -15,7 +15,7 @@ urlpatterns = patterns(
     '',
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/$',
         AlertHome.as_view(),
-        name='alert_home'),
+        name='category_feeds'),
 
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/new_documents/$',
         AlertNewDocuments.as_view(),
