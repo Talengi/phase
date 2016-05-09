@@ -87,7 +87,7 @@ class BaseCategoryAlertFeed(AlertMixin, CategoryMixin, Feed, View):
 
 
 class FeedNewDocuments(BaseCategoryAlertFeed):
-    title = _('Latest documents')
+    title = _('New documents')
     description = _('List of newly created documents in the category')
 
     def link(self):
