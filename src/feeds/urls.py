@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from __future__ import unicode_literals, absolute_import
 
 from django.conf.urls import patterns, url
 
-from alerts.views import (
+from feeds.views import (
     AlertHome, AlertNewDocuments, AlertClosedReviews, AlertStartedReviews,
     AlertOverdueDocuments)
-from alerts.feeds import (
+from feeds.feeds import (
     FeedNewDocuments, FeedClosedReviews, FeedStartedReviews,
     FeedOverdueDocuments)
 
@@ -15,7 +15,7 @@ urlpatterns = patterns(
     '',
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/$',
         AlertHome.as_view(),
-        name='alert_home'),
+        name='category_feeds'),
 
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/new_documents/$',
         AlertNewDocuments.as_view(),
@@ -31,10 +31,10 @@ urlpatterns = patterns(
         FeedClosedReviews.as_view(),
         name='feed_closed_reviews'),
 
-    url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/started_reviews/$',
+    url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/under_review/$',
         AlertStartedReviews.as_view(),
         name='alert_started_reviews'),
-    url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/started_reviews.rss$',
+    url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/under_review.rss$',
         FeedStartedReviews.as_view(),
         name='feed_started_reviews'),
 

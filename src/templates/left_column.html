@@ -18,6 +18,7 @@
             {% include 'transmittals/transmittal_menu.html' %}
         {% endif %}
         {% include 'favorites/favorites_menu.html' %}
+        {% include 'feeds/feeds_menu.html' %}
         {%  if user.is_superuser or perms.documents.add_document %}
             {% include 'imports/import_menu.html' %}
         {%  endif %}

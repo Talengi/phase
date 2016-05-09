@@ -1,0 +1,28 @@
+<li{% if feeds_active %} class="active"{% endif %}>
+    <a href="#nav-feeds"
+       id="feeds-link"
+       data-toggle="collapse"
+       data-parent="#sidebar-nav">
+        <span class="glyphicon glyphicon-bookmark"></span>
+        Feeds <b class="caret"></b>
+    </a>
+
+    {% load cache %}
+    {% cache 500 feeds_menu request.user.email %}
+
+    {% regroup user_categories by organisation as organisation_list %}
+    <ul id="nav-feeds" class="nav nav-stacked collapse">
+    {% for organisation in organisation_list %}
+        <li class="disabled"><a href="#">{{ organisation.grouper }}</a></li>
+        {% for category in organisation.list %}
+            <li>
+                <a href="{% url 'category_feeds' category.organisation.slug category.slug %}">
+                    {{ category.name }}
+                </a>
+            </li>
+        {% endfor %}
+    {% endfor %}
+    </ul>
+
+    {% endcache %}
+</li>

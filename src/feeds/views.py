@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from __future__ import unicode_literals, absolute_import
 
 from django.views.generic import TemplateView, ListView
 from django.utils.translation import ugettext_lazy as _
@@ -9,18 +9,21 @@ from django.core.exceptions import ImproperlyConfigured
 from braces.views import LoginRequiredMixin
 
 from categories.views import CategoryMixin
-from alerts import feeds
+from feeds import feeds
 
 
 class AlertHome(LoginRequiredMixin, CategoryMixin, TemplateView):
-    """Simply links to available alerts."""
-    template_name = 'alerts/alert_home.html'
+    """Simply links to available feeds."""
+    template_name = 'feeds/alert_home.html'
 
     def breadcrumb_section(self):
-        return (_('Alerts'), '#')
+        return (_('Feeds'), '#')
 
     def breadcrumb_subsection(self):
-        return self.category
+        return (self.category, reverse('category_feeds', args=[
+            self.category.organisation.slug,
+            self.category.slug
+        ]))
 
 
 class FeedConverterMixin(object):
@@ -48,14 +51,14 @@ class BaseAlert(LoginRequiredMixin,
                 FeedConverterMixin,
                 ListView):
 
-    template_name = 'alerts/alert_list.html'
+    template_name = 'feeds/alert_list.html'
     context_object_name = 'alerts'
 
     def breadcrumb_section(self):
-        return (_('Alerts'), '#')
+        return (_('Feeds'), '#')
 
     def breadcrumb_subsection(self):
-        return (self.category, reverse('alert_home', args=[
+        return (self.category, reverse('category_feeds', args=[
             self.category.organisation.slug,
             self.category.slug
         ]))

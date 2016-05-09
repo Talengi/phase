@@ -74,7 +74,7 @@ class BaseAlertFeed(AlertMixin, Feed, View):
 
 
 class BaseCategoryAlertFeed(AlertMixin, CategoryMixin, Feed, View):
-    """Base class for alerts in a single category."""
+    """Base class for feeds in a single category."""
     def populate(self, request, *args, **kwargs):
         self.request = request
         self.kwargs = kwargs
@@ -87,7 +87,7 @@ class BaseCategoryAlertFeed(AlertMixin, CategoryMixin, Feed, View):
 
 
 class FeedNewDocuments(BaseCategoryAlertFeed):
-    title = _('Latest documents')
+    title = _('New documents')
     description = _('List of newly created documents in the category')
 
     def link(self):
@@ -106,7 +106,7 @@ class FeedNewDocuments(BaseCategoryAlertFeed):
         return item.document_number
 
     def item_description(self, item):
-        return render_to_string('alerts/revision_document.html', {'item': item})
+        return render_to_string('feeds/revision_document.html', {'item': item})
 
     def item_pubdate(self, item):
         # Feeds expect a full datetime obj but documents only store
@@ -140,7 +140,7 @@ class FeedClosedReviews(BaseCategoryAlertFeed):
         return item.metadata.document_number
 
     def item_description(self, item):
-        return render_to_string('alerts/revision_item.html', {'item': item})
+        return render_to_string('feeds/revision_item.html', {'item': item})
 
     def item_pubdate(self, item):
         # Feeds expect a full datetime obj but documents only store
@@ -150,7 +150,7 @@ class FeedClosedReviews(BaseCategoryAlertFeed):
 
 
 class FeedStartedReviews(BaseCategoryAlertFeed):
-    title = _('Documents under reviews')
+    title = _('Documents under review')
     description = _('Documents that just went under review.')
 
     def link(self):
@@ -174,7 +174,7 @@ class FeedStartedReviews(BaseCategoryAlertFeed):
         return item.metadata.title
 
     def item_description(self, item):
-        return render_to_string('alerts/revision_item.html', {'item': item})
+        return render_to_string('feeds/revision_item.html', {'item': item})
 
     def item_pubdate(self, item):
         # Feeds expect a full datetime obj but documents only store
@@ -211,7 +211,7 @@ class FeedOverdueDocuments(BaseCategoryAlertFeed):
         return item.metadata.title
 
     def item_description(self, item):
-        return render_to_string('alerts/revision_item.html', {'item': item})
+        return render_to_string('feeds/revision_item.html', {'item': item})
 
     def item_pubdate(self, item):
         return datetime.combine(item.review_due_date, time())
