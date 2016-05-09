@@ -362,6 +362,9 @@ class DistributionListForm(DistributionListValidationMixin, forms.ModelForm):
 
     def validate_user_categories(self, user):
         """Check that user belongs to the selected categories."""
+        if 'categories' not in self.cleaned_data:
+            return
+
         user_categories = set(user.categories.all())
         categories = set(self.cleaned_data['categories'])
 
