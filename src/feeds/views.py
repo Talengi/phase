@@ -55,7 +55,7 @@ class BaseAlert(LoginRequiredMixin,
         return (_('Feeds'), '#')
 
     def breadcrumb_subsection(self):
-        return (self.category, reverse('alert_home', args=[
+        return (self.category, reverse('category_feeds', args=[
             self.category.organisation.slug,
             self.category.slug
         ]))
