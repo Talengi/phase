@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from __future__ import unicode_literals, absolute_import
 
 from django.conf.urls import patterns, url
 
-from alerts.views import (
+from feeds.views import (
     AlertHome, AlertNewDocuments, AlertClosedReviews, AlertStartedReviews,
     AlertOverdueDocuments)
-from alerts.feeds import (
+from feeds.feeds import (
     FeedNewDocuments, FeedClosedReviews, FeedStartedReviews,
     FeedOverdueDocuments)
 
