@@ -20,7 +20,10 @@ class AlertHome(LoginRequiredMixin, CategoryMixin, TemplateView):
         return (_('Feeds'), '#')
 
     def breadcrumb_subsection(self):
-        return self.category
+        return (self.category, reverse('category_feeds', args=[
+            self.category.organisation.slug,
+            self.category.slug
+        ]))
 
 
 class FeedConverterMixin(object):
