@@ -150,7 +150,7 @@ class FeedClosedReviews(BaseCategoryAlertFeed):
 
 
 class FeedStartedReviews(BaseCategoryAlertFeed):
-    title = _('Documents under reviews')
+    title = _('Documents under review')
     description = _('Documents that just went under review.')
 
     def link(self):

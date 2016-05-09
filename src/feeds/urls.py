@@ -31,10 +31,10 @@ urlpatterns = patterns(
         FeedClosedReviews.as_view(),
         name='feed_closed_reviews'),
 
-    url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/started_reviews/$',
+    url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/under_review/$',
         AlertStartedReviews.as_view(),
         name='alert_started_reviews'),
-    url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/started_reviews.rss$',
+    url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/under_review.rss$',
         FeedStartedReviews.as_view(),
         name='feed_started_reviews'),
 
