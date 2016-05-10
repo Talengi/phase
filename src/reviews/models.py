@@ -785,7 +785,8 @@ class ReviewMixin(models.Model):
 class DistributionList(models.Model):
     name = models.CharField(
         _('Name'),
-        max_length=250)
+        max_length=250,
+        unique=True)
     categories = models.ManyToManyField(
         'categories.Category',
         verbose_name=_('Category'))
