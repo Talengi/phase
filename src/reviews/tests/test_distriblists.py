@@ -21,9 +21,12 @@ class DistributionListsImportTests(TestCase):
             UserFactory(email='user4@test.com', category=self.category),
             UserFactory(email='user5@test.com', category=self.category),
         ]
+        UserFactory(email='user6@test.com')
 
     def test_successful_import(self):
-        self.assertEqual(DistributionList.objects.all().count(), 0)
+        """Importing the file creates the distribution lists."""
+        qs = DistributionList.objects.all()
+        self.assertEqual(qs.count(), 0)
 
         xls_file = os.path.join(
             os.path.dirname(__file__),
@@ -31,7 +34,6 @@ class DistributionListsImportTests(TestCase):
             'valid_distrib_list.xlsx')
         import_lists(xls_file, self.category)
 
-        qs = DistributionList.objects.all()
         self.assertEqual(qs.count(), 5)
 
         self.assertEqual(qs[0].name, 'Liste 1')
@@ -42,3 +44,64 @@ class DistributionListsImportTests(TestCase):
         self.assertEqual(qs[2].name, 'Liste 3')
         self.assertEqual(qs[2].leader.email, 'user5@test.com')
         self.assertIsNone(qs[2].approver)
+
+    def test_import_overrides_existing_content(self):
+        """Importing is an idempotent action (PUT, not POST)."""
+        qs = DistributionList.objects.all()
+        self.assertEqual(qs.count(), 0)
+
+        xls_file = os.path.join(
+            os.path.dirname(__file__),
+            'fixtures',
+            'valid_distrib_list.xlsx')
+        import_lists(xls_file, self.category)
+
+        self.assertEqual(qs.count(), 5)
+
+        import_lists(xls_file, self.category)
+        self.assertEqual(qs.count(), 5)
+
+        qs[0].delete()
+        self.assertEqual(qs.count(), 4)
+
+        import_lists(xls_file, self.category)
+        self.assertEqual(qs.count(), 5)
+
+    def test_invalid_data_no_leader(self):
+        """Cannot import lists without a leader."""
+        qs = DistributionList.objects.all()
+        self.assertEqual(qs.count(), 0)
+
+        xls_file = os.path.join(
+            os.path.dirname(__file__),
+            'fixtures',
+            'distrib_list_missing_leader.xlsx')
+        import_lists(xls_file, self.category)
+
+        self.assertEqual(qs.count(), 1)
+
+    def test_invalid_data_unknown_user(self):
+        """Can only create lists with known users."""
+        qs = DistributionList.objects.all()
+        self.assertEqual(qs.count(), 0)
+
+        xls_file = os.path.join(
+            os.path.dirname(__file__),
+            'fixtures',
+            'distrib_list_unknown_user.xlsx')
+        import_lists(xls_file, self.category)
+
+        self.assertEqual(qs.count(), 1)
+
+    def test_invalid_data_invalid_category(self):
+        """Users have to belong to the category."""
+        qs = DistributionList.objects.all()
+        self.assertEqual(qs.count(), 0)
+
+        xls_file = os.path.join(
+            os.path.dirname(__file__),
+            'fixtures',
+            'distrib_list_wrong_category.xlsx')
+        import_lists(xls_file, self.category)
+
+        self.assertEqual(qs.count(), 1)
