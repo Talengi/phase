@@ -6,6 +6,23 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 from distriblists.models import DistributionList
+from categories.models import Category
+
+
+class DistributionListImportForm(forms.Form):
+    category = forms.ModelChoiceField(
+        label=_('Category'),
+        queryset=Category.objects.all(),
+    )
+    xls_file = forms.FileField(
+        label=_('Select your file'),
+        help_text=_('It must be in xls or xlsx format'))
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user')
+        categories = kwargs.pop('categories')
+        super(DistributionListImportForm, self).__init__(*args, **kwargs)
+        self.fields['category'].queryset = categories
 
 
 class DistributionListValidationMixin(object):

@@ -1,3 +1,36 @@
-from django.shortcuts import render
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 
-# Create your views here.
+from django.views.generic import FormView
+from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext_lazy as _
+from braces.views import LoginRequiredMixin
+
+from distriblists.forms import DistributionListImportForm
+from distriblists.utils import import_lists
+
+
+class DistributionListImport(LoginRequiredMixin, FormView):
+    form_class = DistributionListImportForm
+    template_name = 'distriblists/import.html'
+
+    def breadcrumb_section(self):
+        return _('Distribution lists import'), reverse('distrib_list_import')
+
+    def get_form_kwargs(self):
+        kwargs = super(DistributionListImport, self).get_form_kwargs()
+        kwargs.update({
+            'user': self.request.user,
+            'categories': self.request.user_categories
+        })
+        return kwargs
+
+    def get_success_url(self):
+        return reverse('distrib_list_import')
+
+    def form_valid(self, form):
+        category = form.cleaned_data['category']
+        xls_file = form.files['xls_file']
+        import_lists(xls_file, category)
+
+        return super(DistributionListImport, self).form_valid(form)
