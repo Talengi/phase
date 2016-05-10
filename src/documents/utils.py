@@ -187,7 +187,6 @@ def stringify_value(val, none_val='NC'):
 def get_all_document_types():
     """Return all Metadata content types."""
     from documents.models import Metadata
-    return []
     qs = ContentType.objects.all()
     types = [ct for ct in qs if issubclass(ct.model_class(), Metadata)]
     return types
