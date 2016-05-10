@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 import openpyxl
 
 from accounts.models import User
-from reviews.models import DistributionList
+from reviews.forms import DistributionListForm
 
 
 def import_lists(filepath, category):
@@ -63,9 +63,14 @@ def _import_list(row, users, category):
             elif role == 'A':
                 approver = user
 
-    distrib_list = DistributionList.objects.create(
-        name=list_name,
-        leader=leader,
-        approver=approver)
-    distrib_list.categories.add(category)
-    distrib_list.reviewers.add(*reviewers)
+    data = {
+        'name': list_name,
+        'categories': [category.id],
+        'reviewers': [r.id for r in reviewers],
+        'leader': leader.id if leader else None,
+        'approver': approver.id if approver else None,
+    }
+    form = DistributionListForm(data)
+    if form.is_valid():
+        distribution_list = form.save()
+        return distribution_list
