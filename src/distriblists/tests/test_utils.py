@@ -7,8 +7,8 @@ from django.test import TestCase
 
 from categories.factories import CategoryFactory
 from accounts.factories import UserFactory
-from reviews.distriblists import import_lists
-from reviews.models import DistributionList
+from distriblists.utils import import_lists
+from distriblists.models import DistributionList
 
 
 class DistributionListsImportTests(TestCase):

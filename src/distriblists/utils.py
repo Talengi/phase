@@ -4,8 +4,8 @@ from __future__ import unicode_literals
 import openpyxl
 
 from accounts.models import User
-from reviews.models import DistributionList
-from reviews.forms import DistributionListForm
+from distriblists.models import DistributionList
+from distriblists.forms import DistributionListForm
 
 
 def import_lists(filepath, category):
