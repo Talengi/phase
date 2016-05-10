@@ -12,12 +12,14 @@ def import_lists(filepath, category):
     wb = openpyxl.load_workbook(filepath)
     ws = wb.active
 
+    # Extracts the user list from the header row
     user_emails = _extract_users(ws)
     user_qs = User.objects.filter(email__in=user_emails)
     users = list(user_qs)
+    # Let's make sure we keep user order
     users.sort(key=lambda user: user_emails.index(user.email))
 
-    max_col = len(users) + 1
+    max_col = len(users) + 1  # Don't use ws.max_column, it's not reliable
     rows = ws.iter_rows(min_row=2, max_row=ws.max_row, max_col=max_col)
     for row in rows:
         _import_list(row, users, category)
@@ -43,6 +45,7 @@ def _extract_users(ws):
 
 
 def _import_list(row, users, category):
+    """Saves a distribution list for a single row."""
     list_name = row[0].value
     reviewers = []
     leader = None
