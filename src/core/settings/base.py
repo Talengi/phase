@@ -204,6 +204,7 @@ LOCAL_APPS = (
     'documents',
     'discussion',
     'notifications',
+    'distriblists',
     'reviews',
     'default_documents',
     'metadata',
