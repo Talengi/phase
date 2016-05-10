@@ -23,6 +23,9 @@ class DistributionListsImportTests(TestCase):
         ]
         UserFactory(email='user6@test.com')
 
+        self.other_category = CategoryFactory()
+        self.other_category.users.add(*self.users)
+
     def test_successful_import(self):
         """Importing the file creates the distribution lists."""
         qs = DistributionList.objects.all()
@@ -44,6 +47,20 @@ class DistributionListsImportTests(TestCase):
         self.assertEqual(qs[2].name, 'Liste 3')
         self.assertEqual(qs[2].leader.email, 'user5@test.com')
         self.assertIsNone(qs[2].approver)
+
+    def test_importing_twice_with_different_categories(self):
+        qs = DistributionList.objects.all()
+        self.assertEqual(qs.count(), 0)
+
+        xls_file = os.path.join(
+            os.path.dirname(__file__),
+            'fixtures',
+            'valid_distrib_list.xlsx')
+        import_lists(xls_file, self.category)
+        import_lists(xls_file, self.other_category)
+
+        self.assertEqual(qs.count(), 5)
+        self.assertEqual(len(qs[0].categories.all()), 2)
 
     def test_import_overrides_existing_content(self):
         """Importing is an idempotent action (PUT, not POST)."""
