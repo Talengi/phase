@@ -15,9 +15,6 @@ class DistributionListImport(LoginRequiredMixin, FormView):
     template_name = 'distriblists/import.html'
     model_admin = None
 
-    def breadcrumb_section(self):
-        return _('Distribution lists import'), reverse('distrib_list_import')
-
     def get_form_kwargs(self):
         kwargs = super(DistributionListImport, self).get_form_kwargs()
         kwargs.update({
@@ -35,7 +32,7 @@ class DistributionListImport(LoginRequiredMixin, FormView):
         return context
 
     def get_success_url(self):
-        return reverse('distrib_list_import')
+        return reverse('admin:distriblists_distriblist_import')
 
     def form_valid(self, form):
         category = form.cleaned_data['category']

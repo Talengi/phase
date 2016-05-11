@@ -17,8 +17,11 @@ class DistributionListAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super(DistributionListAdmin, self).get_urls()
         return [
-            url(r'^import/$', self.admin_site.admin_view(
-                DistributionListImport.as_view(model_admin=self)))
+            url(r'^import/$',
+                self.admin_site.admin_view(
+                    DistributionListImport.as_view(model_admin=self)
+                ),
+                name='distriblists_distriblist_import')
         ] + urls
 
 
