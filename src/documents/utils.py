@@ -188,7 +188,9 @@ def get_all_document_types():
     """Return all Metadata content types."""
     from documents.models import Metadata
     qs = ContentType.objects.all()
-    types = [ct for ct in qs if issubclass(ct.model_class(), Metadata)]
+    types = (ct for ct in qs if
+             ct.model_class() is not None and
+             issubclass(ct.model_class(), Metadata))
     return types
 
 
@@ -209,7 +211,9 @@ def get_all_revision_types():
     """Return all MetadataRevisionBase content types."""
     from documents.models import MetadataRevisionBase
     qs = ContentType.objects.all()
-    types = (ct for ct in qs if issubclass(ct.model_class(), MetadataRevisionBase))
+    types = (ct for ct in qs
+             if ct.model_class() is not None and
+             issubclass(ct.model_class(), MetadataRevisionBase))
     return types
 
 
