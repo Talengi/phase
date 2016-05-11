@@ -1,7 +1,10 @@
 {% extends 'admin/base_site.html' %}
 {% load i18n admin_urls admin_static %}
 
-{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />{% endblock %}
+{% block extrastyle %}{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "admin/css/changelists.css" %}" />
+{% endblock %}
 
 {% block bodyclass %}{{ block.super }} app-{{ opts.app_label }} model-{{ opts.model_name }} change-form{% endblock %}
 
@@ -15,7 +18,6 @@
 {% endblock %}
 
 {% block content %}<div id="content-main">
-<h1>{{ _('Import distribution lists') }}</h1>
 <form method="post" action="" enctype="multipart/form-data">
     {% csrf_token %}
 
@@ -48,5 +50,9 @@
     {% endblock %}
 
 </form>
+
+{% if results %}
+{% include 'distriblists/import_results.html' with forms=list_forms %}
+{% endif %}
 
 </div>{% endblock %}

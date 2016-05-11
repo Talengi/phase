@@ -27,6 +27,7 @@ class DistributionListImport(LoginRequiredMixin, FormView):
         context = super(DistributionListImport, self).get_context_data(**kwargs)
         context.update(self.model_admin.admin_site.each_context(self.request))
         context.update({
+            'title': _('Import distribution lists'),
             'opts': self.model_admin.model._meta,
         })
         return context
@@ -37,6 +38,11 @@ class DistributionListImport(LoginRequiredMixin, FormView):
     def form_valid(self, form):
         category = form.cleaned_data['category']
         xls_file = form.files['xls_file']
-        import_lists(xls_file, category)
+        results = import_lists(xls_file, category)
 
-        return super(DistributionListImport, self).form_valid(form)
+        context = self.get_context_data(form=form)
+        context.update({
+            'results': results
+        })
+
+        return self.render_to_response(context)

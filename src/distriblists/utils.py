@@ -3,6 +3,8 @@ from __future__ import unicode_literals
 
 import openpyxl
 
+from django.utils.translation import ugettext_lazy as _
+
 from accounts.models import User
 from distriblists.models import DistributionList
 from distriblists.forms import DistributionListForm
@@ -14,12 +16,17 @@ def import_lists(filepath, category):
     ws = wb.active
 
     # Extracts the user list from the header row
-    user_ids = _extract_users(ws)
+    emails, user_ids = _extract_users(ws)
 
     max_col = len(user_ids) + 1  # Don't use ws.max_column, it's not reliable
     rows = ws.iter_rows(min_row=2, max_row=ws.max_row, max_col=max_col)
-    for row in rows:
-        _import_list(row, user_ids, category)
+    results = []
+    for idx, row in enumerate(rows):
+        result = _import_list(row, emails, user_ids, category)
+        result['line'] = idx + 2
+        results.append(result)
+
+    return results
 
 
 def _extract_users(ws):
@@ -45,20 +52,24 @@ def _extract_users(ws):
     user_dict = dict(qs)
 
     user_ids = map(lambda email: user_dict.get(email, None), emails)
-    return user_ids
+    return emails, user_ids
 
 
-def _import_list(row, user_ids, category):
+def _import_list(row, emails, user_ids, category):
     """Saves a distribution list for a single row."""
+    errors = []
+
     # Fetch existing list if it exists
     list_name = row[0].value
     try:
         instance = DistributionList.objects.get(name=list_name)
         categories = list(instance.categories.all())
         categories.append(category)
+        action = _('Update')
     except DistributionList.DoesNotExist:
         instance = None
         categories = [category]
+        action = _('Create')
 
     # Extract user roles from xls
     reviewers = []
@@ -68,6 +79,8 @@ def _import_list(row, user_ids, category):
         role = cell.value
         if role:
             user_id = user_ids[idx]
+            if user_id is None:
+                errors.append('Unknown user {}'.format(emails[idx]))
 
             if role == 'R':
                 reviewers.append(user_id)
@@ -87,3 +100,10 @@ def _import_list(row, user_ids, category):
     form = DistributionListForm(data, instance=instance)
     if form.is_valid():
         form.save()
+
+    return {
+        'list_name': list_name,
+        'action': action,
+        'success': form.is_valid(),
+        'errors': errors,
+    }
