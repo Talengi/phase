@@ -28,7 +28,7 @@
         <td>{{ res.line }}</td>
         <td>{{ res.list_name }}</td>
         <td>{{ res.action }}</td>
-        <td>{{ res.success }}</td>
+        <td>{{ res.success|yesno:_('Yes,No') }}</td>
         <td>
             {% if res.errors %}
             <ul>
