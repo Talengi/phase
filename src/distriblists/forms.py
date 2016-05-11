@@ -10,6 +10,8 @@ from categories.models import Category
 
 
 class DistributionListImportForm(forms.Form):
+    required_css_class = 'required'
+
     category = forms.ModelChoiceField(
         label=_('Category'),
         queryset=Category.objects.all(),

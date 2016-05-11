@@ -1,19 +1,52 @@
-{% extends 'base.html' %}
+{% extends 'admin/base_site.html' %}
+{% load i18n admin_urls admin_static %}
 
-{% block content %}
-<div class="row">
-<div class="col-sm-8 col-md-offset-2">
-    <h1>{{ _('Import distribution lists') }}</h1>
-    <form method="post" action="" enctype="multipart/form-data">
-        {% csrf_token %}
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />{% endblock %}
 
-        {% include 'form_snippet.html' with form=form %}
+{% block bodyclass %}{{ block.super }} app-{{ opts.app_label }} model-{{ opts.model_name }} change-form{% endblock %}
 
-        <hr />
-        <input class="btn btn-primary pull-right last-button"
-               type="submit"
-               value="{{ _('Upload your file') }}">
-    </form>
-</div>
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+&rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+&rsaquo; <a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>
+&rsaquo; {{ _('Import') }}
 </div>
 {% endblock %}
+
+{% block content %}<div id="content-main">
+<h1>{{ _('Import distribution lists') }}</h1>
+<form method="post" action="" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {% if form.errors %}
+        <p class="errornote">
+        {% if form.errors|length == 1 %}{% trans "Please correct the error below." %}{% else %}{% trans "Please correct the errors below." %}{% endif %}
+        </p>
+        {{ form.non_field_errors }}
+    {% endif %}
+
+    <fieldset class="module aligned">
+        {% for field in form %}
+        <div class="form-row{% if field.errors %} errors{% endif %} field-{{ field.field.name }}">
+            {{ field.errors }}
+            <div>
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.field.help_text %}
+                    <p class="help">{{ field.field.help_text|safe }}</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </fieldset>
+
+    {% block submit_buttons_bottom %}
+    <div class="submit-row">
+        <input class="default" type="submit" value="{{ _('Upload') }}" />
+    </div>
+    {% endblock %}
+
+</form>
+
+</div>{% endblock %}

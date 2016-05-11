@@ -13,6 +13,7 @@ from distriblists.utils import import_lists
 class DistributionListImport(LoginRequiredMixin, FormView):
     form_class = DistributionListImportForm
     template_name = 'distriblists/import.html'
+    model_admin = None
 
     def breadcrumb_section(self):
         return _('Distribution lists import'), reverse('distrib_list_import')
@@ -24,6 +25,14 @@ class DistributionListImport(LoginRequiredMixin, FormView):
             'categories': self.request.user_categories
         })
         return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super(DistributionListImport, self).get_context_data(**kwargs)
+        context.update(self.model_admin.admin_site.each_context(self.request))
+        context.update({
+            'opts': self.model_admin.model._meta,
+        })
+        return context
 
     def get_success_url(self):
         return reverse('distrib_list_import')
