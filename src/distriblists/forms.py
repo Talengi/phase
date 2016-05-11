@@ -60,6 +60,12 @@ class DistributionListForm(DistributionListValidationMixin, forms.ModelForm):
         model = DistributionList
         exclude = []
 
+    def __init__(self, *args, **kwargs):
+        super(DistributionListForm, self).__init__(*args, **kwargs)
+        self.fields['leader'].error_messages = {
+            'required': _('You must define a leader'),
+        }
+
     def clean_leader(self):
         """Leader must be a member of all selected categories."""
         leader = self.cleaned_data['leader']

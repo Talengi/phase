@@ -100,6 +100,11 @@ def _import_list(row, emails, user_ids, category):
     form = DistributionListForm(data, instance=instance)
     if form.is_valid():
         form.save()
+    else:
+        form_errors = map(
+            lambda field_errors: field_errors[0],
+            form.errors.values())
+        errors.append(*form_errors)
 
     return {
         'list_name': list_name,
