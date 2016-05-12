@@ -2,12 +2,57 @@
 from __future__ import unicode_literals
 
 import openpyxl
+from openpyxl.writer.excel import save_virtual_workbook
 
 from django.utils.translation import ugettext_lazy as _
 
 from accounts.models import User
 from distriblists.models import DistributionList
 from distriblists.forms import DistributionListForm
+
+
+def export_lists(category):
+    lists = DistributionList.objects \
+        .filter(categories=category) \
+        .select_related() \
+        .prefetch_related('reviewers')
+    all_users = []
+
+    for dlist in lists:
+        all_users += list(dlist.reviewers.all())
+        all_users.append(dlist.leader)
+        all_users.append(dlist.approver)
+        all_users = filter(None, all_users)
+    all_users = list(set(all_users))
+    all_users.sort(key=lambda user: user.email)
+
+    wb = openpyxl.Workbook()
+    ws = wb.active
+
+    header_row = ws.get_squared_range(
+        min_col=2,
+        min_row=1,
+        max_col=len(all_users) + 1,
+        max_row=1).next()
+    for idx, cell in enumerate(header_row):
+        cell.value = all_users[idx].email
+
+    for idx, dlist in enumerate(lists):
+        line = idx + 2
+        ws.cell(row=line, column=1).value = dlist.name
+
+        leader_index = all_users.index(dlist.leader)
+        ws.cell(row=line, column=leader_index + 2).value = 'L'
+
+        if dlist.approver:
+            approver_index = all_users.index(dlist.approver)
+            ws.cell(row=line, column=approver_index + 2).value = 'A'
+
+        for reviewer in dlist.reviewers.all():
+            reviewer_index = all_users.index(reviewer)
+            ws.cell(row=line, column=reviewer_index + 2).value = 'R'
+
+    return save_virtual_workbook(wb)
 
 
 def import_lists(filepath, category):
