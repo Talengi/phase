@@ -4,10 +4,12 @@ from __future__ import unicode_literals
 from django.views.generic import FormView
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
+from django.http import HttpResponse
 from braces.views import LoginRequiredMixin
 
-from distriblists.forms import DistributionListImportForm
-from distriblists.utils import import_lists
+from distriblists.forms import (
+    DistributionListImportForm, DistributionListExportForm)
+from distriblists.utils import import_lists, export_lists
 
 
 class DistributionListImport(LoginRequiredMixin, FormView):
@@ -53,3 +55,39 @@ class DistributionListImport(LoginRequiredMixin, FormView):
             })
 
         return self.render_to_response(context)
+
+
+class DistributionListExport(LoginRequiredMixin, FormView):
+    form_class = DistributionListExportForm
+    template_name = 'distriblists/export.html'
+    model_admin = None
+
+    def get_form_kwargs(self):
+        kwargs = super(DistributionListExport, self).get_form_kwargs()
+        kwargs.update({
+            'user': self.request.user,
+            'categories': self.request.user_categories
+        })
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super(DistributionListExport, self).get_context_data(**kwargs)
+        context.update(self.model_admin.admin_site.each_context(self.request))
+        context.update({
+            'title': _('Export distribution lists'),
+            'opts': self.model_admin.model._meta,
+        })
+        return context
+
+    def get_success_url(self):
+        return reverse('admin:distriblists_distriblist_export')
+
+    def form_valid(self, form):
+        category = form.cleaned_data['category']
+        exported_file = export_lists(category)
+
+        response = HttpResponse(
+            exported_file,
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=lists.xlsx'
+        return response

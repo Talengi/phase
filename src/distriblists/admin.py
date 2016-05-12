@@ -6,7 +6,7 @@ from django.conf.urls import url
 
 from distriblists.models import DistributionList
 from distriblists.forms import DistributionListForm
-from distriblists.views import DistributionListImport
+from distriblists.views import DistributionListImport, DistributionListExport
 
 
 class DistributionListAdmin(admin.ModelAdmin):
@@ -21,7 +21,12 @@ class DistributionListAdmin(admin.ModelAdmin):
                 self.admin_site.admin_view(
                     DistributionListImport.as_view(model_admin=self)
                 ),
-                name='distriblists_distriblist_import')
+                name='distriblists_distriblist_import'),
+            url(r'^export/$',
+                self.admin_site.admin_view(
+                    DistributionListExport.as_view(model_admin=self)
+                ),
+                name='distriblists_distriblist_export')
         ] + urls
 
 
