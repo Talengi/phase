@@ -28,6 +28,10 @@
         {{ form.non_field_errors }}
     {% endif %}
 
+    {% if non_form_errors %}
+        <p class="errornote"> {{ non_form_errors }} </p>
+    {% endif %}
+
     <fieldset class="module aligned">
         {% for field in form %}
         <div class="form-row{% if field.errors %} errors{% endif %} field-{{ field.field.name }}">

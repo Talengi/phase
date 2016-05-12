@@ -38,11 +38,18 @@ class DistributionListImport(LoginRequiredMixin, FormView):
     def form_valid(self, form):
         category = form.cleaned_data['category']
         xls_file = form.files['xls_file']
-        results = import_lists(xls_file, category)
 
         context = self.get_context_data(form=form)
-        context.update({
-            'results': results
-        })
+        try:
+            results = import_lists(xls_file, category)
+            context.update({
+                'results': results
+            })
+        except:
+            # Any error occurred, file must be inparsable
+            error_msg = _("We could'nt parse your file. Is this a valid xlsx file?")
+            context.update({
+                'non_form_errors': error_msg
+            })
 
         return self.render_to_response(context)
