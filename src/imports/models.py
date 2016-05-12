@@ -139,7 +139,7 @@ class ImportBatch(models.Model):
                     imp = Import(batch=self, data=row)
                     yield imp
         else:
-            wb = load_workbook(filename=self.file.path, use_iterators=True)
+            wb = load_workbook(filename=self.file.path, read_only=True)
             sheet = wb.active
             header_row = None
             for row in sheet.iter_rows():
