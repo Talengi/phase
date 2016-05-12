@@ -16,6 +16,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('distriblists', '0001_initial'),
+        ('reviews', '0020_auto_20160510_1104'),
     ]
 
     operations = [
