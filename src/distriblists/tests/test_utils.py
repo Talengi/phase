@@ -59,7 +59,7 @@ class DistributionListsExportTests(TestCase):
         wb = openpyxl.load_workbook(buf)
         ws = wb.active
 
-        self.assertEqual(ws.max_column, 5)
+        self.assertEqual(ws.max_column, 6)
 
         # Nb rows = total lists + 1
         self.assertEqual(ws.max_row, 4)
@@ -70,6 +70,7 @@ class DistributionListsExportTests(TestCase):
         self.assertEqual(ws.cell(column=4, row=2).value, 'R')
         self.assertEqual(ws.cell(column=5, row=2).value, 'R')
         self.assertEqual(ws.cell(column=6, row=2).value, None)
+        self.assertEqual(ws.cell(column=7, row=2).value, None)
 
         # Second row
         self.assertEqual(ws.cell(column=2, row=3).value, None)
@@ -77,6 +78,7 @@ class DistributionListsExportTests(TestCase):
         self.assertEqual(ws.cell(column=4, row=3).value, 'L')
         self.assertEqual(ws.cell(column=5, row=3).value, None)
         self.assertEqual(ws.cell(column=6, row=3).value, None)
+        self.assertEqual(ws.cell(column=7, row=3).value, None)
 
         # Third row
         self.assertEqual(ws.cell(column=2, row=4).value, 'R')
@@ -84,6 +86,7 @@ class DistributionListsExportTests(TestCase):
         self.assertEqual(ws.cell(column=4, row=4).value, 'L')
         self.assertEqual(ws.cell(column=5, row=4).value, 'R')
         self.assertEqual(ws.cell(column=6, row=4).value, None)
+        self.assertEqual(ws.cell(column=7, row=4).value, None)
 
 
 class DistributionListsImportTests(TestCase):

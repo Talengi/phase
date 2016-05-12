@@ -12,19 +12,13 @@ from distriblists.forms import DistributionListForm
 
 
 def export_lists(category):
+    """Export distribution lists in a single category as xlsx file."""
     lists = DistributionList.objects \
         .filter(categories=category) \
-        .select_related() \
+        .select_related('leader', 'approver') \
         .prefetch_related('reviewers')
-    all_users = []
-
-    for dlist in lists:
-        all_users += list(dlist.reviewers.all())
-        all_users.append(dlist.leader)
-        all_users.append(dlist.approver)
-        all_users = filter(None, all_users)
-    all_users = list(set(all_users))
-    all_users.sort(key=lambda user: user.email)
+    users_qs = User.objects.filter(categories=category).order_by('email')
+    all_users = list(users_qs)
 
     wb = openpyxl.Workbook()
     ws = wb.active
