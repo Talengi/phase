@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from rest_framework import serializers
 
 from accounts.models import User
-from reviews.models import DistributionList
+from distriblists.models import DistributionList
 
 
 class UserSerializer(serializers.ModelSerializer):

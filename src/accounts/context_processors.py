@@ -1,6 +1,5 @@
-from django.contrib.auth.models import AnonymousUser
-
-from categories.models import Category
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 
 
 def navigation(request):
@@ -10,17 +9,9 @@ def navigation(request):
     Here is the query to fetch them.
 
     """
-    user = getattr(request, 'user')
     context = {}
-
-    if not isinstance(user, AnonymousUser):
-        user_categories = Category.objects \
-            .filter(users=user) \
-            .select_related('category_template', 'organisation') \
-            .order_by('organisation__name', 'category_template__name')
-
+    if hasattr(request, 'user_categories'):
         context.update({
-            'user_categories': user_categories,
+            'user_categories': request.user_categories,
         })
-
     return context

@@ -13,10 +13,10 @@ from documents.factories import DocumentFactory
 from default_documents.models import ContractorDeliverable
 from default_documents.factories import (
     ContractorDeliverableFactory, ContractorDeliverableRevisionFactory)
-from reviews.factories import DistributionListFactory
+from distriblists.factories import DistributionListFactory
 
 
-class DistributionListWidgetTestDistributionListWidgetTests(CasperTestCase):
+class DistributionListWidgetTests(CasperTestCase):
     def setUp(self):
         Model = ContentType.objects.get_for_model(ContractorDeliverable)
         self.category = CategoryFactory(

@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 import factory
 
 from accounts.factories import UserFactory
-from reviews.models import DistributionList
+from distriblists.models import DistributionList
 
 
 class DistributionListReviewerFactory(factory.DjangoModelFactory):

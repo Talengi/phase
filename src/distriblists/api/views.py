@@ -4,8 +4,8 @@ from __future__ import unicode_literals
 from rest_framework import generics
 
 from restapi.views import CategoryAPIViewMixin
-from reviews.models import DistributionList
-from reviews.api.serializers import DistributionListSerializer
+from distriblists.models import DistributionList
+from distriblists.api.serializers import DistributionListSerializer
 
 
 class DistributionListList(CategoryAPIViewMixin, generics.ListAPIView):

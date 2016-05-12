@@ -162,6 +162,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+
+    'accounts.middleware.CategoryMiddleware',
 )
 # ######### END MIDDLEWARE CONFIGURATION
 
@@ -204,6 +206,7 @@ LOCAL_APPS = (
     'documents',
     'discussion',
     'notifications',
+    'distriblists',
     'reviews',
     'default_documents',
     'metadata',

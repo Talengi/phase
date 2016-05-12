@@ -1,0 +1,46 @@
+{% load imports %}
+<h2>{{ _('Import results') }}</h2>
+<div id="changelist" class="module">
+<div id="changelist-form">
+<table id="result_list">
+<thead>
+    <tr>
+        <th><div class="text">
+            <span>{{ _('Line') }}</span>
+        </div></th>
+        <th><div class="text">
+            <span>{{ _('List name') }}</span>
+        </div></th>
+        <th><div class="text">
+            <span>{{ _('Action') }}</span>
+        </div></th>
+        <th><div class="text">
+            <span>{{ _('Success?') }}</span>
+        </div></th>
+        <th><div class="text">
+            <span>{{ _('Errors') }}</span>
+        </div></th>
+    </tr>
+</thead>
+<tbody>
+{% for res in results %}
+    <tr class="{% cycle 'row1' 'row2' %}">
+        <td>{{ res.line }}</td>
+        <td>{{ res.list_name }}</td>
+        <td>{{ res.action }}</td>
+        <td>{{ res.success|yesno:_('Yes,No') }}</td>
+        <td>
+            {% if res.errors %}
+            <ul>
+                {% for err in res.errors %}
+                <li>{{ err }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </td>
+    </tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+</div>
