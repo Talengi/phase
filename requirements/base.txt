@@ -21,4 +21,4 @@ python-dateutil==2.4.2
 urllib3==1.10.4
 raven==5.7.2
 reportlab==3.2.0
-openpyxl==2.3.5
+openpyxl==2.4.0a1
