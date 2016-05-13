@@ -7,5 +7,11 @@
 <li><a href="{% url 'admin:distriblists_distriblist_export' %}" class="">
     {{ _('Export lists') }}
 </a></li>
+<li><a href="{% url 'admin:distriblists_reviewmembers_import' %}" class="">
+    {{ _('Import review members') }}
+</a></li>
+<li><a href="{% url 'admin:distriblists_reviewmembers_export' %}" class="">
+    {{ _('Export review members') }}
+</a></li>
 {{ block.super }}
 {% endblock %}
