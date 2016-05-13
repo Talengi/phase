@@ -37,13 +37,13 @@ class BaseListExport(LoginRequiredMixin, FormView):
         return context
 
 
-class ReviewMembersImport(LoginRequiredMixin, FormView):
+class BaseListImport(LoginRequiredMixin, FormView):
     form_class = DistributionListImportForm
     template_name = 'distriblists/import.html'
     model_admin = None
 
     def get_form_kwargs(self):
-        kwargs = super(ReviewMembersImport, self).get_form_kwargs()
+        kwargs = super(BaseListImport, self).get_form_kwargs()
         kwargs.update({
             'user': self.request.user,
             'categories': self.request.user_categories
@@ -51,13 +51,20 @@ class ReviewMembersImport(LoginRequiredMixin, FormView):
         return kwargs
 
     def get_context_data(self, **kwargs):
-        context = super(ReviewMembersImport, self).get_context_data(**kwargs)
+        context = super(BaseListImport, self).get_context_data(**kwargs)
         context.update(self.model_admin.admin_site.each_context(self.request))
         context.update({
-            'title': _('Import review members'),
+            'title': self.page_title,
             'opts': self.model_admin.model._meta,
+            'download_button_label': self.form_button_label,
         })
         return context
+
+
+class ReviewMembersImport(BaseListImport):
+    page_title = _('Import review members')
+    form_button_label = _('Upload file')
+    template_name = 'distriblists/import_review_members.html'
 
     def get_success_url(self):
         return reverse('admin:distriblists_distriblist_review_members_import')
@@ -104,27 +111,10 @@ class ReviewMembersExport(BaseListExport):
         return response
 
 
-class DistributionListImport(LoginRequiredMixin, FormView):
-    form_class = DistributionListImportForm
-    template_name = 'distriblists/import.html'
-    model_admin = None
-
-    def get_form_kwargs(self):
-        kwargs = super(DistributionListImport, self).get_form_kwargs()
-        kwargs.update({
-            'user': self.request.user,
-            'categories': self.request.user_categories
-        })
-        return kwargs
-
-    def get_context_data(self, **kwargs):
-        context = super(DistributionListImport, self).get_context_data(**kwargs)
-        context.update(self.model_admin.admin_site.each_context(self.request))
-        context.update({
-            'title': _('Import distribution lists'),
-            'opts': self.model_admin.model._meta,
-        })
-        return context
+class DistributionListImport(BaseListImport):
+    page_title = _('Import distribution list')
+    form_button_label = _('Import distribution list')
+    template_name = 'distriblists/import_distribution_lists.html'
 
     def get_success_url(self):
         return reverse('admin:distriblists_distriblist_import')
