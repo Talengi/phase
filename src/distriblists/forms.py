@@ -18,7 +18,9 @@ class DistributionListImportForm(forms.Form):
     )
     xls_file = forms.FileField(
         label=_('Select your file'),
-        help_text=_('It must be in xls or xlsx format'))
+        help_text=_('To create a valid import file, please use the export '
+                    'functionality. Each cell can contain one of the following '
+                    'values: R (Reviewer), L (Leader), A (Approver).'))
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
