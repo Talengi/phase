@@ -29,6 +29,51 @@ cell_border = Border(
 )
 
 
+def export_review_members(category):
+    """Export members of the review for all documents in the category."""
+    documents = category.document_class().objects \
+        .filter(document__category=category) \
+        .select_related(
+            'document',
+            'latest_revision',
+            'latest_revision__leader',
+            'latest_revision__approver') \
+        .prefetch_related('latest_revision__reviewers') \
+        .order_by('document__document_number')
+    users_qs = User.objects.filter(categories=category).order_by('email')
+    all_users = list(users_qs)
+
+    wb = openpyxl.Workbook()
+    ws = wb.active
+
+    _export_header(ws, all_users)
+    for idx, doc in enumerate(documents):
+        _export_members(ws, idx, doc, all_users)
+
+    return save_virtual_workbook(wb)
+
+
+def _export_members(ws, idx, doc, all_users):
+    """Add a single line to the exported file."""
+    line = idx + 2
+    ws.cell(row=line, column=1).value = doc.document.document_number
+
+    rev = doc.latest_revision
+
+    if rev.leader:
+        _export_role(ws, line, all_users, rev.leader, 'L')
+
+    if rev.approver:
+        _export_role(ws, line, all_users, rev.approver, 'A')
+
+    for reviewer in rev.reviewers.all():
+        _export_role(ws, line, all_users, reviewer, 'R')
+
+    # Set borders for all cells
+    for column in range(1, len(all_users) + 2):
+        ws.cell(row=line, column=column).border = cell_border
+
+
 def export_lists(category):
     """Export distribution lists in a single category as xlsx file."""
     lists = DistributionList.objects \
