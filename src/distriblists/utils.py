@@ -2,12 +2,90 @@
 from __future__ import unicode_literals
 
 import openpyxl
+from openpyxl.writer.excel import save_virtual_workbook
+from openpyxl.styles import Alignment, Border, Side
 
 from django.utils.translation import ugettext_lazy as _
 
 from accounts.models import User
 from distriblists.models import DistributionList
 from distriblists.forms import DistributionListForm
+
+
+header_alignment = Alignment(
+    horizontal='center',
+    textRotation=45,
+)
+
+role_alignment = Alignment(
+    horizontal='center'
+)
+cell_border = Border(
+    top=Side(style='thin'),
+    bottom=Side(style='thin'),
+    left=Side(style='thin'),
+    right=Side(style='thin'),
+    vertical=Side(style='thin')
+)
+
+
+def export_lists(category):
+    """Export distribution lists in a single category as xlsx file."""
+    lists = DistributionList.objects \
+        .filter(categories=category) \
+        .select_related('leader', 'approver') \
+        .prefetch_related('reviewers')
+    users_qs = User.objects.filter(categories=category).order_by('email')
+    all_users = list(users_qs)
+
+    wb = openpyxl.Workbook()
+    ws = wb.active
+
+    _export_header(ws, all_users)
+
+    for idx, dlist in enumerate(lists):
+        _export_list(ws, idx, dlist, all_users)
+
+    return save_virtual_workbook(wb)
+
+
+def _export_header(ws, all_users):
+    """Add header row to exported file."""
+    header_row = ws.get_squared_range(
+        min_col=2,
+        min_row=1,
+        max_col=len(all_users) + 1,
+        max_row=1).next()
+    for idx, cell in enumerate(header_row):
+        cell.value = all_users[idx].email
+        cell.alignment = header_alignment
+        cell.border = cell_border
+
+
+def _export_list(ws, idx, dlist, all_users):
+    """Add a single line to the exported file."""
+    line = idx + 2
+    ws.cell(row=line, column=1).value = dlist.name
+
+    _export_role(ws, line, all_users, dlist.leader, 'L')
+
+    if dlist.approver:
+        _export_role(ws, line, all_users, dlist.approver, 'A')
+
+    for reviewer in dlist.reviewers.all():
+        _export_role(ws, line, all_users, reviewer, 'R')
+
+    # Set borders for all cells
+    for column in range(1, len(all_users) + 2):
+        ws.cell(row=line, column=column).border = cell_border
+
+
+def _export_role(ws, line, all_users, user, role):
+    """Set a single cell in exported file."""
+    user_index = all_users.index(user)
+    cell = ws.cell(row=line, column=user_index + 2)
+    cell.value = role
+    cell.alignment = role_alignment
 
 
 def import_lists(filepath, category):

@@ -27,6 +27,21 @@ class DistributionListImportForm(forms.Form):
         self.fields['category'].queryset = categories
 
 
+class DistributionListExportForm(forms.Form):
+    required_css_class = 'required'
+
+    category = forms.ModelChoiceField(
+        label=_('Category'),
+        queryset=Category.objects.all(),
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user')
+        categories = kwargs.pop('categories')
+        super(DistributionListExportForm, self).__init__(*args, **kwargs)
+        self.fields['category'].queryset = categories
+
+
 class DistributionListValidationMixin(object):
     """Common code for validating forms with distrib lists."""
     def clean(self):
