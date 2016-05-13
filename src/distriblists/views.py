@@ -85,9 +85,13 @@ class DistributionListExport(LoginRequiredMixin, FormView):
     def form_valid(self, form):
         category = form.cleaned_data['category']
         exported_file = export_lists(category)
+        filename = 'lists_{}_{}.xlsx'.format(
+            category.organisation.slug,
+            category.slug
+        )
 
         response = HttpResponse(
             exported_file,
             content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=lists.xlsx'
+        response['Content-Disposition'] = 'attachment; filename={}'.format(filename)
         return response
