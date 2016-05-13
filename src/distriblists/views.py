@@ -13,13 +13,13 @@ from distriblists.utils import (import_lists, export_lists,
                                 export_review_members)
 
 
-class ReviewMembersExport(LoginRequiredMixin, FormView):
+class BaseListExport(LoginRequiredMixin, FormView):
     form_class = DistributionListExportForm
     template_name = 'distriblists/export.html'
     model_admin = None
 
     def get_form_kwargs(self):
-        kwargs = super(ReviewMembersExport, self).get_form_kwargs()
+        kwargs = super(BaseListExport, self).get_form_kwargs()
         kwargs.update({
             'user': self.request.user,
             'categories': self.request.user_categories
@@ -27,14 +27,19 @@ class ReviewMembersExport(LoginRequiredMixin, FormView):
         return kwargs
 
     def get_context_data(self, **kwargs):
-        context = super(ReviewMembersExport, self).get_context_data(**kwargs)
+        context = super(BaseListExport, self).get_context_data(**kwargs)
         context.update(self.model_admin.admin_site.each_context(self.request))
         context.update({
-            'title': _('Export review members'),
+            'title': self.page_title,
             'opts': self.model_admin.model._meta,
-            'download_button_label': _('Download review members'),
+            'download_button_label': self.form_button_label,
         })
         return context
+
+
+class ReviewMembersExport(BaseListExport):
+    page_title = _('Export review members')
+    form_button_label = _('Export review members')
 
     def get_success_url(self):
         return reverse('admin:distriblists_reviewmembers_export')
@@ -99,28 +104,9 @@ class DistributionListImport(LoginRequiredMixin, FormView):
         return self.render_to_response(context)
 
 
-class DistributionListExport(LoginRequiredMixin, FormView):
-    form_class = DistributionListExportForm
-    template_name = 'distriblists/export.html'
-    model_admin = None
-
-    def get_form_kwargs(self):
-        kwargs = super(DistributionListExport, self).get_form_kwargs()
-        kwargs.update({
-            'user': self.request.user,
-            'categories': self.request.user_categories
-        })
-        return kwargs
-
-    def get_context_data(self, **kwargs):
-        context = super(DistributionListExport, self).get_context_data(**kwargs)
-        context.update(self.model_admin.admin_site.each_context(self.request))
-        context.update({
-            'title': _('Export distribution lists'),
-            'opts': self.model_admin.model._meta,
-            'download_button_label': _('Download distribution lists'),
-        })
-        return context
+class DistributionListExport(BaseListExport):
+    page_title = _('Export distribution lists')
+    form_button_label = _('Export distribution lists')
 
     def get_success_url(self):
         return reverse('admin:distriblists_distriblist_export')
