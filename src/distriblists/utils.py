@@ -29,6 +29,16 @@ def export_lists(category):
     wb = openpyxl.Workbook()
     ws = wb.active
 
+    _export_header(ws, all_users)
+
+    for idx, dlist in enumerate(lists):
+        _export_list(ws, idx, dlist, all_users)
+
+    return save_virtual_workbook(wb)
+
+
+def _export_header(ws, all_users):
+    """Add header row to exported file."""
     header_row = ws.get_squared_range(
         min_col=2,
         min_row=1,
@@ -38,22 +48,22 @@ def export_lists(category):
         cell.value = all_users[idx].email
         cell.alignment = text_alignment
 
-    for idx, dlist in enumerate(lists):
-        line = idx + 2
-        ws.cell(row=line, column=1).value = dlist.name
 
-        leader_index = all_users.index(dlist.leader)
-        ws.cell(row=line, column=leader_index + 2).value = 'L'
+def _export_list(ws, idx, dlist, all_users):
+    """Add a single line to the exported file."""
+    line = idx + 2
+    ws.cell(row=line, column=1).value = dlist.name
 
-        if dlist.approver:
-            approver_index = all_users.index(dlist.approver)
-            ws.cell(row=line, column=approver_index + 2).value = 'A'
+    leader_index = all_users.index(dlist.leader)
+    ws.cell(row=line, column=leader_index + 2).value = 'L'
 
-        for reviewer in dlist.reviewers.all():
-            reviewer_index = all_users.index(reviewer)
-            ws.cell(row=line, column=reviewer_index + 2).value = 'R'
+    if dlist.approver:
+        approver_index = all_users.index(dlist.approver)
+        ws.cell(row=line, column=approver_index + 2).value = 'A'
 
-    return save_virtual_workbook(wb)
+    for reviewer in dlist.reviewers.all():
+        reviewer_index = all_users.index(reviewer)
+        ws.cell(row=line, column=reviewer_index + 2).value = 'R'
 
 
 def import_lists(filepath, category):
