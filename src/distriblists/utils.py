@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 import openpyxl
 from openpyxl.writer.excel import save_virtual_workbook
+from openpyxl.styles import Alignment, Border, Side
 
 from django.utils.translation import ugettext_lazy as _
 
@@ -11,13 +12,20 @@ from distriblists.models import DistributionList
 from distriblists.forms import DistributionListForm
 
 
-header_alignment = openpyxl.styles.Alignment(
-    horizontal='left',
+header_alignment = Alignment(
+    horizontal='center',
     textRotation=45,
 )
 
-role_alignment = openpyxl.styles.Alignment(
+role_alignment = Alignment(
     horizontal='center'
+)
+cell_border = Border(
+    top=Side(style='thin'),
+    bottom=Side(style='thin'),
+    left=Side(style='thin'),
+    right=Side(style='thin'),
+    vertical=Side(style='thin')
 )
 
 
@@ -51,6 +59,7 @@ def _export_header(ws, all_users):
     for idx, cell in enumerate(header_row):
         cell.value = all_users[idx].email
         cell.alignment = header_alignment
+        cell.border = cell_border
 
 
 def _export_list(ws, idx, dlist, all_users):
@@ -65,6 +74,10 @@ def _export_list(ws, idx, dlist, all_users):
 
     for reviewer in dlist.reviewers.all():
         _export_role(ws, line, all_users, reviewer, 'R')
+
+    # Set borders for all cells
+    for column in range(1, len(all_users) + 2):
+        ws.cell(row=line, column=column).border = cell_border
 
 
 def _export_role(ws, line, all_users, user, role):
