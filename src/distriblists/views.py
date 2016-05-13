@@ -10,7 +10,7 @@ from braces.views import LoginRequiredMixin
 from distriblists.forms import (
     DistributionListImportForm, DistributionListExportForm)
 from distriblists.utils import (import_lists, export_lists,
-                                export_review_members)
+                                import_review_members, export_review_members)
 
 
 class BaseListExport(LoginRequiredMixin, FormView):
@@ -35,6 +35,51 @@ class BaseListExport(LoginRequiredMixin, FormView):
             'download_button_label': self.form_button_label,
         })
         return context
+
+
+class ReviewMembersImport(LoginRequiredMixin, FormView):
+    form_class = DistributionListImportForm
+    template_name = 'distriblists/import.html'
+    model_admin = None
+
+    def get_form_kwargs(self):
+        kwargs = super(ReviewMembersImport, self).get_form_kwargs()
+        kwargs.update({
+            'user': self.request.user,
+            'categories': self.request.user_categories
+        })
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super(ReviewMembersImport, self).get_context_data(**kwargs)
+        context.update(self.model_admin.admin_site.each_context(self.request))
+        context.update({
+            'title': _('Import review members'),
+            'opts': self.model_admin.model._meta,
+        })
+        return context
+
+    def get_success_url(self):
+        return reverse('admin:distriblists_distriblist_review_members_import')
+
+    def form_valid(self, form):
+        category = form.cleaned_data['category']
+        xls_file = form.files['xls_file']
+
+        context = self.get_context_data(form=form)
+        try:
+            results = import_review_members(xls_file, category)
+            context.update({
+                'results': results
+            })
+        except:
+            # Any error occurred, file must be inparsable
+            error_msg = _("We could'nt parse your file. Is this a valid xlsx file?")
+            context.update({
+                'non_form_errors': error_msg
+            })
+
+        return self.render_to_response(context)
 
 
 class ReviewMembersExport(BaseListExport):

@@ -12,7 +12,7 @@ from categories.factories import CategoryFactory
 from default_documents.tests.test import ContractorDeliverableTestCase
 from accounts.factories import UserFactory
 from distriblists.utils import (import_lists, export_lists,
-                                export_review_members)
+                                export_review_members, import_review_members)
 from distriblists.factories import DistributionListFactory
 from distriblists.models import DistributionList
 
@@ -248,3 +248,34 @@ class ReviewMembersExportTests(ContractorDeliverableTestCase):
         self.assertEqual(ws.cell(column=2, row=3).value, None)
         self.assertEqual(ws.cell(column=3, row=3).value, 'A')
         self.assertEqual(ws.cell(column=4, row=3).value, 'L')
+
+
+class ReviewMembersImportTests(ContractorDeliverableTestCase):
+    def setUp(self):
+        super(ReviewMembersImportTests, self).setUp()
+        self.users = [
+            UserFactory(email='user000@test.com', category=self.category),
+            UserFactory(email='user001@test.com', category=self.category),
+            UserFactory(email='user002@test.com', category=self.category),
+            UserFactory(email='user003@test.com', category=self.category),
+            UserFactory(email='user004@test.com', category=self.category),
+        ]
+        self.docs = [
+            self.create_doc(document_key='document0001'),
+            self.create_doc(document_key='document0002'),
+            self.create_doc(document_key='document0003'),
+            self.create_doc(document_key='document0004'),
+        ]
+
+    def test_successful_import(self):
+        """Importing the file creates the distribution lists."""
+        self.assertIsNone(self.docs[0].latest_revision.leader)
+
+        xls_file = os.path.join(
+            os.path.dirname(__file__),
+            'fixtures',
+            'valid_review_members.xlsx')
+        import_review_members(xls_file, self.category)
+        self.assertEqual(self.docs[0].latest_revision.leader, self.users[0])
+        self.assertEqual(self.docs[0].latest_revision.approver, self.users[1])
+        self.assertEqual(self.docs[0].latest_revision.reviewers.all().count(), 3)
