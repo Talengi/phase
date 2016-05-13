@@ -70,7 +70,9 @@ def _export_list(ws, idx, dlist, all_users):
 def _export_role(ws, line, all_users, user, role):
     """Set a single cell in exported file."""
     user_index = all_users.index(user)
-    ws.cell(row=line, column=user_index + 2).value = role
+    cell = ws.cell(row=line, column=user_index + 2)
+    cell.value = role
+    cell.alignment = role_alignment
 
 
 def import_lists(filepath, category):
