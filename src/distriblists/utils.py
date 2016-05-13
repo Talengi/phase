@@ -11,9 +11,13 @@ from distriblists.models import DistributionList
 from distriblists.forms import DistributionListForm
 
 
-text_alignment = openpyxl.styles.Alignment(
+header_alignment = openpyxl.styles.Alignment(
     horizontal='left',
     textRotation=45,
+)
+
+role_alignment = openpyxl.styles.Alignment(
+    horizontal='center'
 )
 
 
@@ -46,7 +50,7 @@ def _export_header(ws, all_users):
         max_row=1).next()
     for idx, cell in enumerate(header_row):
         cell.value = all_users[idx].email
-        cell.alignment = text_alignment
+        cell.alignment = header_alignment
 
 
 def _export_list(ws, idx, dlist, all_users):
@@ -54,16 +58,19 @@ def _export_list(ws, idx, dlist, all_users):
     line = idx + 2
     ws.cell(row=line, column=1).value = dlist.name
 
-    leader_index = all_users.index(dlist.leader)
-    ws.cell(row=line, column=leader_index + 2).value = 'L'
+    _export_role(ws, line, all_users, dlist.leader, 'L')
 
     if dlist.approver:
-        approver_index = all_users.index(dlist.approver)
-        ws.cell(row=line, column=approver_index + 2).value = 'A'
+        _export_role(ws, line, all_users, dlist.approver, 'A')
 
     for reviewer in dlist.reviewers.all():
-        reviewer_index = all_users.index(reviewer)
-        ws.cell(row=line, column=reviewer_index + 2).value = 'R'
+        _export_role(ws, line, all_users, reviewer, 'R')
+
+
+def _export_role(ws, line, all_users, user, role):
+    """Set a single cell in exported file."""
+    user_index = all_users.index(user)
+    ws.cell(row=line, column=user_index + 2).value = role
 
 
 def import_lists(filepath, category):
