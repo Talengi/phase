@@ -158,7 +158,7 @@ def _import_list(row, emails, user_ids, category):
         if role:
             user_id = user_ids[idx]
             if user_id is None:
-                errors.append('Unknown user {}'.format(emails[idx]))
+                errors.append('Unknown user "{}"'.format(emails[idx]))
 
             if role == 'R':
                 reviewers.append(user_id)
@@ -166,6 +166,8 @@ def _import_list(row, emails, user_ids, category):
                 leader = user_id
             elif role == 'A':
                 approver = user_id
+            else:
+                errors.append('Unknown role "{}"'.format(role))
 
     # Use the model form to validate and save the data
     data = {
@@ -176,9 +178,10 @@ def _import_list(row, emails, user_ids, category):
         'approver': approver if approver else None,
     }
     form = DistributionListForm(data, instance=instance)
-    if form.is_valid():
+    if form.is_valid() and not errors:
         form.save()
-    else:
+
+    if not form.is_valid():
         form_errors = map(
             lambda field_errors: field_errors[0],
             form.errors.values())
@@ -187,6 +190,6 @@ def _import_list(row, emails, user_ids, category):
     return {
         'list_name': list_name,
         'action': action,
-        'success': form.is_valid(),
+        'success': form.is_valid() and not errors,
         'errors': errors,
     }
