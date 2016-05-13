@@ -11,6 +11,12 @@ from distriblists.models import DistributionList
 from distriblists.forms import DistributionListForm
 
 
+text_alignment = openpyxl.styles.Alignment(
+    horizontal='left',
+    textRotation=45,
+)
+
+
 def export_lists(category):
     """Export distribution lists in a single category as xlsx file."""
     lists = DistributionList.objects \
@@ -30,6 +36,7 @@ def export_lists(category):
         max_row=1).next()
     for idx, cell in enumerate(header_row):
         cell.value = all_users[idx].email
+        cell.alignment = text_alignment
 
     for idx, dlist in enumerate(lists):
         line = idx + 2
