@@ -29,6 +29,125 @@ cell_border = Border(
 )
 
 
+def import_review_members(filepath, category):
+    """Import review members from an excel file."""
+    wb = openpyxl.load_workbook(filepath)
+    ws = wb.active
+
+    # Extracts the user list from the header row
+    emails, user_ids = _extract_users(ws)
+
+    max_col = len(user_ids) + 1  # Don't use ws.max_column, it's not reliable
+    rows = ws.iter_rows(min_row=2, max_row=ws.max_row, max_col=max_col)
+    results = []
+    for idx, row in enumerate(rows):
+        result = _import_review_members(row, emails, user_ids, category)
+        result['line'] = idx + 2
+        results.append(result)
+
+    return results
+
+
+def _import_review_members(row, emails, user_ids, category):
+    """Saves a review member list for a single row."""
+    errors = []
+
+    key = row[0].value
+    try:
+        instance = category.document_class().objects \
+            .filter(document__category=category) \
+            .select_related('latest_revision') \
+            .get(document__document_key=key)
+    except:
+        instance = None
+        errors.append(_('Document {} does not exist').format(key))
+
+    if instance.latest_revision.is_under_review():
+        errors.append(_('This document is under review'))
+
+    # Extract user roles from xls
+    reviewers = []
+    leader = None
+    approver = None
+    for idx, cell in enumerate(row[1:]):
+        role = cell.value
+        if role:
+            user_id = user_ids[idx]
+            if user_id is None:
+                errors.append('Unknown user "{}"'.format(emails[idx]))
+
+            if role == 'R':
+                reviewers.append(user_id)
+            elif role == 'L':
+                leader = user_id
+            elif role == 'A':
+                approver = user_id
+            else:
+                errors.append('Unknown role "{}"'.format(role))
+
+    if instance and not errors:
+        rev = instance.latest_revision
+        if leader:
+            rev.leader_id = leader
+
+        if approver:
+            rev.approver_id = approver
+        rev.reviewers.clear()
+        rev.reviewers.add(*reviewers)
+        rev.save()
+
+    return {
+        'document_key': key,
+        'success': not errors,
+        'errors': errors,
+    }
+
+
+def export_review_members(category):
+    """Export members of the review for all documents in the category."""
+    documents = category.document_class().objects \
+        .filter(document__category=category) \
+        .select_related(
+            'document',
+            'latest_revision',
+            'latest_revision__leader',
+            'latest_revision__approver') \
+        .prefetch_related('latest_revision__reviewers') \
+        .order_by('document__document_number')
+    users_qs = User.objects.filter(categories=category).order_by('email')
+    all_users = list(users_qs)
+
+    wb = openpyxl.Workbook()
+    ws = wb.active
+
+    _export_header(ws, all_users)
+    for idx, doc in enumerate(documents):
+        _export_members(ws, idx, doc, all_users)
+
+    return save_virtual_workbook(wb)
+
+
+def _export_members(ws, idx, doc, all_users):
+    """Add a single line to the exported file."""
+    line = idx + 2
+    ws.cell(row=line, column=1).value = doc.document.document_number
+
+    rev = doc.latest_revision
+
+    if rev.leader:
+        _export_role(ws, line, all_users, rev.leader, 'L')
+
+    if rev.approver:
+        _export_role(ws, line, all_users, rev.approver, 'A')
+
+    for reviewer in rev.reviewers.all():
+        _export_role(ws, line, all_users, reviewer, 'R')
+
+    # Set borders for all cells
+    for column in range(1, len(all_users) + 2):
+        ws.cell(row=line, column=column).border = cell_border
+
+
 def export_lists(category):
     """Export distribution lists in a single category as xlsx file."""
     lists = DistributionList.objects \

@@ -49,14 +49,12 @@
 
     {% block submit_buttons_bottom %}
     <div class="submit-row">
-        <input class="default" type="submit" value="{{ _('Upload') }}" />
+        <input class="default" type="submit" value="{{ download_button_label }}" />
     </div>
     {% endblock %}
 
 </form>
 
-{% if results %}
-{% include 'distriblists/import_results.html' with forms=list_forms %}
-{% endif %}
+{% block results %}{% endblock %}
 
 </div>{% endblock %}

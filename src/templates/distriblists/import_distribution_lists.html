@@ -1,0 +1,7 @@
+{% extends 'distriblists/import.html' %}
+
+{% block results %}
+{% if results %}
+{% include 'distriblists/import_distribution_lists_results.html' with forms=list_forms %}
+{% endif %}
+{% endblock %}
