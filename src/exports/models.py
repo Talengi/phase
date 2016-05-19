@@ -53,6 +53,10 @@ class Export(models.Model):
         max_length=5,
         choices=FORMATS,
         default=FORMATS.csv)
+    export_all_revisions = models.BooleanField(
+        _('Export all revisions'),
+        default=False,
+        help_text=_('If False, only last revisions are included.'))
     created_on = models.DateTimeField(
         _('Created on'),
         default=timezone.now)
@@ -157,7 +161,12 @@ class Export(models.Model):
         """Returns a generator that yields chunks of data to export."""
         generator_class = 'exports.generators.{}Generator'.format(self.format.upper())
         Generator = import_string(generator_class)
-        generator = Generator(self.category, self.get_filters(), self.get_fields())
+        generator = Generator(
+            self.category,
+            self.get_filters(),
+            self.get_fields(),
+            export_all_revisions=self.export_all_revisions
+        )
         return generator
 
     def get_data_formatter(self):

@@ -23,60 +23,49 @@
 
         <div id="document-list-form" class="collapse navbar-collapse">
 
-        <form
-            method="post"
-            action="{% url "document_download" organisation_slug category_slug %}"
-            class="navbar-form navbar-left">
-            {% csrf_token %}
+            <form
+                method="post"
+                action="{% url "document_download" organisation_slug category_slug %}"
+                class="navbar-form navbar-left">
+                {% csrf_token %}
 
-            <div class="btn-group form-group" id="batch-action-buttons">
-                <button
-                    type="button"
-                    class="btn btn-primary disabled dropdown-toggle navbar-action"
-                    data-toggle="dropdown">
-                    Actions <span class="caret"></span>
-                </button>
-                {% batch_action_menu document_class category user %}
-           </div>
-
-            {% if category.use_creation_form and perms.documents.add_document %}
-            <div class="form-group hidden-xs hidden-sm">
-                <div class="hidden-xs hidden-sm">
-                    <a class="btn btn-primary"
-                        href="{% url "document_create" organisation_slug category_slug %}">
-                        <span class="glyphicon glyphicon-plus icon-white"></span> New document
-                    </a>
+                <div class="btn-group form-group" id="batch-action-buttons">
+                    <button
+                        type="button"
+                        class="btn btn-primary disabled dropdown-toggle navbar-action"
+                        data-toggle="dropdown">
+                        Actions <span class="caret"></span>
+                    </button>
+                    {% batch_action_menu document_class category user %}
                 </div>
-            </div>
-            {% endif %}
-        </form>
 
-        <form
-            id="export-form"
-            method="post"
-            action="{% url "export_create" organisation_slug category_slug %}"
-            class="navbar-form navbar-left hidden-xs hidden-sm">
-            {% csrf_token %}
+                {% if category.use_creation_form and perms.documents.add_document %}
+                    <div class="form-group hidden-xs hidden-sm">
+                        <div class="hidden-xs hidden-sm">
+                            <a class="btn btn-primary"
+                                href="{% url "document_create" organisation_slug category_slug %}">
+                                <span class="glyphicon glyphicon-plus icon-white"></span> New document
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
 
-            <div class="dropdown">
-                <button
-                    type="button"
-                    class="btn btn-primary dropdown-toggle navbar-action"
-                    data-toggle="dropdown">
-                     {{ _('Export current list') }}
-                        <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                    <li class="abc">
-                        <input type="submit" class="btn btn-link dropdown-input" name="csv_format" value="{{ _('CSV format') }}">
-                    </li>
-                    <li>
-                        <input type="submit" class="btn btn-link dropdown-input" name="xlsx_format" value="{{ _('Excel format') }}">
-                    </li>
-                </ul>
-            </div>
-        </form>
-
+                <div class="btn-group form-group" >
+                    <div class="hidden-xs hidden-sm" id="csv-xls-export-button">
+                        <a id="export-button"
+                                type="button"
+                                data-ajax="true"
+                                data-method="POST"
+                                data-keyboard="false"
+                                data-form-action="{% url "export_create" organisation_slug category_slug %}"
+                                class="btn btn-primary"
+                                data-toggle="modal"
+                                data-modal="documents-export-modal">
+                            {{ _('Export current list') }}
+                        </a>
+                    </div>
+                </div>
+            </form>
 
         </div>
     </div>

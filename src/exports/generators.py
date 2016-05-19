@@ -16,9 +16,10 @@ class ExportGenerator(object):
     Yields data in chunks.
 
     """
-    def __init__(self, category, filters, fields, owner=None):
+    def __init__(self, category, filters, fields, owner=None, export_all_revisions=False):
         self.category = category
         self.fields = fields
+        self.export_all_revisions = export_all_revisions
         self.filters = filters
         self.filters.update({
             'start': 0,
@@ -53,7 +54,9 @@ class ExportGenerator(object):
             self.category,
             self.filters,
             filter_on_entities=entities)
-        result = builder.scan_results(['pk'], only_latest_revisions=True)
+        result = builder.scan_results(
+            ['pk'],
+            only_latest_revisions=not self.export_all_revisions)
         pks = [doc['pk'][0] for doc in result]
         total = len(pks)
         return pks, total
