@@ -358,7 +358,10 @@ form.disabled .asteriskField {
 }
 form.disabled input[disabled],
 form.disabled select[disabled],
-form.disabled textarea[disabled] {
+form.disabled textarea[disabled],
+form.disabled input[readonly],
+form.disabled select[readonly],
+form.disabled textarea[readonly] {
     background-color: white;
     cursor: default;
     color: #555;
@@ -370,6 +373,11 @@ form.disabled select[disabled] {
 }
 form.disabled select[disabled]::-ms-expand {
     display: none;
+}
+#document-detail .uneditable-input{
+    background-color: #fff;
+    cursor: default;
+    border-radius: 4px;
 }
 td.center {
     text-align: center;
