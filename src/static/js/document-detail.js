@@ -1,29 +1,41 @@
 // TODO Use backbone to backbort this old behavior
 
-jQuery(function($) {
+jQuery(function ($) {
 
     "use strict";
 
-    /* Disable the whole form */
-    $('#document-detail input, #document-detail textarea, #document-detail select')
-        .each(function(ev) {
-        $(this).attr('disabled', true);
-    });
+    /* Disable the whole form and let value selectable and copy/pastable by users*/
+    var documentDetail = $('#document-detail');
+    documentDetail.find('input, textarea')
+        .each(function (el) {
+            $(this).attr('readonly', true);
+            $(this).attr('disabled', false);
+        });
+    var inputTpl = _.template('<input maxlength="250" class="form-control" value="<%= text  %>"/>');
+    documentDetail.find('select')
+        .each(function (el) {
+            var selected = $(this).find(":selected").text();
+            var text = inputTpl({text: selected});
+            $(this).after(text);
+            $(this).hide();
+        });
 
     /* Initialize datepickers and hide on select */
     $('.dateinput:not([readonly]):not(:disabled)').datepicker({
         format: 'yyyy-mm-dd'
-    }).on('changeDate', function(ev) {
+    }).on('changeDate', function (ev) {
         $(this).datepicker('hide');
     });
 
     /* Related documents multiselect */
     var labels = $.makeArray($("#id_related_documents option")
-                  .map(function(){ return $(this).text(); }));
+        .map(function () {
+            return $(this).text();
+        }));
     $('#id_related_documents').multiselect().multiselectfilter();
 
     /* File uploads */
-    $('[data-dismiss]').click(function(e) {
+    $('[data-dismiss]').click(function (e) {
         e.preventDefault();
         var target = $(this).data('dismiss');
         var field = $('[name="' + target + '"]');
@@ -37,19 +49,19 @@ jQuery(function($) {
     });
 
     /* Form in dropdown menu */
-    $('a.dropdown-submit').click(function(e) {
+    $('a.dropdown-submit').click(function (e) {
         var form = $(this).prev('form');
         form.submit();
     });
 
     // Hide and show "back to top" link on scroll events
-    var configureBackToTopLink = function() {
+    var configureBackToTopLink = function () {
         var $window = $(window);
         var topLink = $('#back-to-top');
 
         // Actual scroll event handler
-        var scrollHandler = function() {
-            if($window.scrollTop() === 0) {
+        var scrollHandler = function () {
+            if ($window.scrollTop() === 0) {
                 topLink.fadeOut();
             } else {
                 topLink.fadeIn();
@@ -61,7 +73,7 @@ jQuery(function($) {
     };
     configureBackToTopLink();
 
-    $('body').scrollspy({ target: '#document-sidebar' });
+    $('body').scrollspy({target: '#document-sidebar'});
 
     var tooltips = $('span[rel=tooltip]');
     tooltips.tooltip();
