@@ -325,7 +325,8 @@ class Metadata(six.with_metaclass(MetadataBase, models.Model)):
     @classmethod
     def get_batch_actions_modals(cls):
         """Returns a list of templates used in batch actions."""
-        return ['documents/document_list_download_modal.html']
+        return ['documents/document_list_download_modal.html',
+                'documents/document_list_export_modal.html']
 
     @classmethod
     def get_document_download_form(cls, data, queryset):

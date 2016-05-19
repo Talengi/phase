@@ -41,6 +41,8 @@ class ExportCreate(LoginRequiredMixin, DocumentListMixin, UpdateView):
         qd.pop('start', None)
         qd.pop('size', None)
         qd.pop('sort_by', None)
+        qd.pop('format', None)
+        qd.pop('revisions', None)
         kwargs = super(ExportCreate, self).get_form_kwargs()
         kwargs.update({'data': {
             'querystring': qd.urlencode()
@@ -49,11 +51,14 @@ class ExportCreate(LoginRequiredMixin, DocumentListMixin, UpdateView):
 
     def get_object(self):
         self.get_queryset()
-        export_format = 'xlsx' if 'xlsx_format' in self.request.POST.keys() else 'csv'
+        # export_format = 'xlsx' if 'xlsx_format' in self.request.POST.keys() else 'csv'
+        export_format = self.request.POST.get('format', 'csv')
+        all_revisions = self.request.POST.get('revisions', 'latest') == 'all'
         export = Export(
             owner=self.request.user,
             category=self.category,
-            format=export_format)
+            format=export_format,
+            export_all_revisions=all_revisions)
         return export
 
     def get_success_url(self):

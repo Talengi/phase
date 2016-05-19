@@ -14,10 +14,14 @@ jQuery(function($) {
 
     var auditModalView = new Phase.Views.AuditModalView();
 
+    var exportModalView = new Phase.Views.ExportModalView();
+
     var actionMenus = $('ul.action-menu');
     actionMenus.each(function(counter, menu) {
         new Phase.Views.ActionMenuView({ el: menu });
     });
+    
+    var exportMenu = new Phase.Views.ExportMenuView({ el: $('#csv-xls-export-button') });
 
     $(document).keyup(function(event) {
         if (event.keyCode === 27) {
