@@ -5,7 +5,6 @@ body {
 body.documentlist .main-navbar {
     margin-bottom: 0;
     z-index: 1000;
-    border: none;
 }
 .navbar ul.breadcrumbs {
     margin-left: 0;
@@ -15,7 +14,7 @@ body.documentlist .main-navbar {
     display: inline;
 }
 .navbar ul.breadcrumbs a {
-    color: white;
+    color: #000;
 }
 .navbar ul.breadcrumbs li:before {
     content: ">";
