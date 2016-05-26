@@ -5,7 +5,12 @@ body {
 body.documentlist .main-navbar {
     margin-bottom: 0;
     z-index: 1000;
-    border: none;
+}
+#top .navbar-hamburger{
+    color: #000;
+    font-size:18px;
+    line-height:18px;
+
 }
 .navbar ul.breadcrumbs {
     margin-left: 0;
@@ -15,7 +20,7 @@ body.documentlist .main-navbar {
     display: inline;
 }
 .navbar ul.breadcrumbs a {
-    color: white;
+    color: #000;
 }
 .navbar ul.breadcrumbs li:before {
     content: ">";

@@ -1,19 +1,19 @@
-<nav id="top" class="navbar main-navbar navbar-inverse navbar-static-top">
+<nav id="top" class="navbar main-navbar navbar-default navbar-static-top">
 <div class="container">
 
     {% if user.is_authenticated %}
 
-        <button class="btn btn-primary navbar-btn navbar-left toggle-content-button"
+        <button class="btn btn-link navbar-btn navbar-left toggle-content-button navbar-hamburger"
                 data-target="#left-sidebar-container"
                 alt="{{ _('Menu') }}">
-            <span class="glyphicon glyphicon-align-justify"></span>
+            <span class="glyphicon glyphicon-menu-hamburger"></span>
         </button>
 
         {% include 'navbar_breadcrumb.html' %}
 
         <button type="button"
                 id="notifications-button"
-                class="btn btn-{% if has_new_notifications %}danger{% else %}primary{% endif %} navbar-right navbar-btn
+                class="btn btn-{% if has_new_notifications %}danger{% else %}link{% endif %} navbar-right navbar-btn
                         toggle-content-button"
                 data-target="#right-sidebar-container">
             <span class="glyphicon glyphicon-bell"></span>
