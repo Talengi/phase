@@ -15,6 +15,7 @@ var Phase = Phase || {};
             this.content = $(this.$el.data('target'));
 
             this.listenTo(dispatcher, 'onEscKeyPressed', this.hideContent);
+            this.listenTo(dispatcher, 'onBackdropClicked', this.hideContent);
         },
         toggleContent: function () {
             this.content.toggle();
@@ -22,6 +23,19 @@ var Phase = Phase || {};
         hideContent: function () {
             this.content.hide();
         }
+    });
+
+    Phase.Views.BackdropView = Backbone.View.extend({
+        events: {
+            'click': 'react'
+        },
+        initialize: function () {
+
+        },
+        react: function () {
+            dispatcher.trigger('onBackdropClicked');
+        }
+         
     });
 
     /**

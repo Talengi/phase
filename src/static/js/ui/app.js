@@ -9,7 +9,9 @@ jQuery(function($) {
     toggleButtons.each(function(counter, button) {
         new Phase.Views.ToggleContentButton({ el: button });
     });
-
+    var backdrop = $('.modal-backdrop');
+    var backdropView = new Phase.Views.BackdropView({el: backdrop });
+    
     var modalView = new Phase.Views.ModalView();
 
     var auditModalView = new Phase.Views.AuditModalView();
