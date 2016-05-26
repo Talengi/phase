@@ -6,6 +6,12 @@ body.documentlist .main-navbar {
     margin-bottom: 0;
     z-index: 1000;
 }
+#top .navbar-hamburger{
+    color: #000;
+    font-size:18px;
+    line-height:18px;
+
+}
 .navbar ul.breadcrumbs {
     margin-left: 0;
     padding-left: 0;

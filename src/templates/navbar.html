@@ -3,10 +3,10 @@
 
     {% if user.is_authenticated %}
 
-        <button class="btn btn-link navbar-btn navbar-left toggle-content-button"
+        <button class="btn btn-link navbar-btn navbar-left toggle-content-button navbar-hamburger"
                 data-target="#left-sidebar-container"
                 alt="{{ _('Menu') }}">
-            <span class="glyphicon glyphicon-align-justify"></span>
+            <span class="glyphicon glyphicon-menu-hamburger"></span>
         </button>
 
         {% include 'navbar_breadcrumb.html' %}
