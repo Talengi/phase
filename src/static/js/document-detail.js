@@ -11,7 +11,7 @@ jQuery(function ($) {
             $(this).attr('readonly', true);
             $(this).attr('disabled', false);
         });
-    var inputTpl = _.template('<input maxlength="250" class="form-control" value="<%= text  %>"/>');
+    var inputTpl = _.template('<input maxlength="250" class="form-control" readonly="true" value="<%= text  %>"/>');
     documentDetail.find('select')
         .each(function (el) {
             var selected = $(this).find(":selected").text();
