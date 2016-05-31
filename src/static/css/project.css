@@ -8,8 +8,8 @@ body.documentlist .main-navbar {
 }
 #top .navbar-hamburger{
     color: #000;
-    font-size:18px;
-    line-height:18px;
+    font-size: 16px;
+    line-height: 16px;
 
 }
 .navbar ul.breadcrumbs {
@@ -34,6 +34,9 @@ body.documentlist .main-navbar {
   color: #999999;
   text-align: center;
   display: block;
+}
+#user-dropdown{
+    color: #000;
 }
 body.fullwidth > .container,
 .navbar > .container {
