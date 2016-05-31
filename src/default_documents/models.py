@@ -357,7 +357,7 @@ class ContractorDeliverable(ScheduleMixin, Metadata):
         actions = super(ContractorDeliverable, cls).get_batch_actions(
             category, user)
 
-        if user.has_perm('documents.can_control_document'):
+        if user.has_perm('documents.can_control_document') and user.has_perm('reviews.can_add_review'):
             actions['start_review'] = MenuItem(
                 'start-review',
                 _('Start review'),
@@ -380,6 +380,8 @@ class ContractorDeliverable(ScheduleMixin, Metadata):
                 progression_modal=True,
                 icon='eye-close',
             )
+
+        if user.has_perm('transmittals.add_outgoingtransmittal'):
             actions['prepare_transmittal'] = MenuItem(
                 'prepare-transmittal',
                 _('Prepare outgoing transmittal'),

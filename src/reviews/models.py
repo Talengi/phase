@@ -734,9 +734,11 @@ class ReviewMixin(models.Model):
         actions = super(ReviewMixin, self).get_actions(metadata, user)
         category = self.document.category
 
+        can_start_stop_review = user.has_perm('documents.can_start_stop_review')
+
         if self.is_under_review():
 
-            if user.has_perm('documents.can_control_document'):
+            if can_start_stop_review:
                 actions.insert(-3, MenuItem(
                     'cancel-review',
                     _('Cancel review'),
@@ -757,9 +759,8 @@ class ReviewMixin(models.Model):
                 ))
 
         else:  # revision is not under review
-            if self.can_be_reviewed and \
-                    user.has_perm('documents.can_control_document'):
 
+            if self.can_be_reviewed and can_start_stop_review:
                 actions.insert(-3, MenuItem(
                     'start-review',
                     _('Start review'),
