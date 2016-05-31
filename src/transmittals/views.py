@@ -319,7 +319,7 @@ class BatchAckOfTransmittalReceipt(BaseDocumentBatchActionView):
 
 class CreateTransmittal(PermissionRequiredMixin, BaseDocumentBatchActionView):
     """Create a transmittal embedding the given documents"""
-    permission_required = 'documents.can_control_document'
+    permission_required = 'transmittals.add_outgoingtransmittal'
     http_method_names = ['post']
 
     def start_job(self, contenttype, document_ids):

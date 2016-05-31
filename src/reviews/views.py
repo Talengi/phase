@@ -44,7 +44,7 @@ class StartReview(PermissionRequiredMixin,
                   SingleObjectMixin,
                   View):
     """Start the review process."""
-    permission_required = 'documents.can_control_document'
+    permission_required = 'documents.can_start_stop_review'
     context_object_name = 'metadata'
 
     def get_redirect_url(self, *args, **kwargs):
@@ -161,7 +161,7 @@ class CancelReview(PermissionRequiredMixin,
 
 class BatchStartReviews(PermissionRequiredMixin, BaseDocumentBatchActionView):
     """Starts the review process for multiple documents at once."""
-    permission_required = 'documents.can_control_document'
+    permission_required = 'documents.can_start_stop_review'
 
     def start_job(self, contenttype, document_ids):
         remark = self.request.POST.get('remark', None)
@@ -176,7 +176,7 @@ class BatchStartReviews(PermissionRequiredMixin, BaseDocumentBatchActionView):
 
 class BatchCancelReviews(PermissionRequiredMixin, BaseDocumentBatchActionView):
     """Cancel several reviews at once."""
-    permission_required = 'documents.can_control_document'
+    permission_required = 'documents.can_start_stop_review'
 
     def start_job(self, contenttype, document_ids):
         job = batch_cancel_reviews.delay(

@@ -68,7 +68,8 @@ class Document(models.Model):
         # Custom permission for document controllers
         # Permission used in sidebar template to check if user belongs to
         # doc controller group
-        permissions = (('can_control_document', 'Can control document'),)
+        permissions = (('can_control_document', 'Can control document'),
+                       ('can_start_stop_review', 'Can start stop review'),)
 
     def __unicode__(self):
         return self.document_number
