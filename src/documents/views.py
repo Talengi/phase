@@ -359,7 +359,10 @@ class DocumentCreate(BaseDocumentFormView):
     def form_valid(self, document_form, revision_form):
         """Saves both the document and it's revision."""
         doc, metadata, revision = save_document_forms(
-            document_form, revision_form, self.category)
+            document_form,
+            revision_form,
+            self.category,
+            created_by=self.request.user)
 
         message_text = '''You created the document
                        <a href="%(url)s">%(key)s (%(title)s)</a>'''

@@ -116,6 +116,8 @@ class DocumentCreateTest(TestCase):
         self.assertEqual(doc.document_number, 'a-glorious-title')
         self.assertEqual(doc.document_key, 'a-glorious-title')
 
+        self.assertIsNotNone(doc.created_by)
+
         # Check that creation was logged in audit trail
         activity = Activity.objects.latest('created_on')
         self.assertEqual(activity.verb, Activity.VERB_CREATED)

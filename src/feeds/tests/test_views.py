@@ -3,12 +3,12 @@ from __future__ import unicode_literals
 
 import base64
 
-from django.test import TestCase
 from django.core.urlresolvers import reverse
+from django.test import TestCase
 
+from accounts.factories import UserFactory
 from categories.factories import CategoryFactory
 from documents.factories import DocumentFactory
-from accounts.factories import UserFactory
 
 
 class FeedAuthenticationTests(TestCase):
@@ -104,6 +104,7 @@ class AlertNewDocumentTests(TestCase):
         DocumentFactory(
             title='document 1',
             category=self.category,
+            created_by=self.user,
         )
 
     def test_single_document(self):
@@ -126,4 +127,5 @@ class AlertNewDocumentTests(TestCase):
 
         res = self.client.get(self.url)
         self.assertContains(res, 'document 2')
-        self.assertContains(res, 'document 3')
+        self.assertContains(res, 'document 2')
+        self.assertContains(res, self.user.name)

@@ -1,6 +1,10 @@
 <dl>
     <dt>Document number:<dt>
     <dd>{{ item.document_number }}</dd>
+    {%  if item.created_by %}
+        <dt>Created by:<dt>
+        <dd>{{ item.created_by }}</dd>
+    {% endif %}
     <dt>Title:<dt>
     <dd>{{ item.title }}</dd>
 </dl>
