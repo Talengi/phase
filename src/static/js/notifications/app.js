@@ -11,7 +11,7 @@ jQuery(function($) {
 
     notifButton.one('click', function() {
         notifButton.removeClass('btn-danger');
-        notifButton.addClass('btn-primary');
+        notifButton.addClass('btn-link');
         $.post(markAsReadUrl, {});
     });
 

@@ -54,7 +54,13 @@ body.fullwidth > .container,
     margin-right: 5px;
 }
 .btn.navbar-right {
-    margin-right: 0px;
+    margin-right: 0;
+}
+#notifications-button{
+    color: #333;
+}
+#notifications-button.btn-danger{
+    color: #fff;
 }
 .date-error {
     color: #B94A48;
