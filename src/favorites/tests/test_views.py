@@ -22,7 +22,8 @@ class FavoriteTest(GenericViewTest):
     def test_favorite_list(self):
         """Tests that a favorite list is accessible if logged in. """
         res = self.client.get(self.url)
-        self.assertContains(res, '<p>You do not have any favorite document.</p>')
+        self.assertContains(
+            res, '<p>You do not have any document marked as favorite.</p>')
 
     def test_favorite_privacy(self):
         """Tests that a favorite is not shared accross users. """
@@ -36,7 +37,8 @@ class FavoriteTest(GenericViewTest):
         )
 
         res = self.client.get(self.url)
-        self.assertContains(res, '<p>You do not have any favorite document.</p>')
+        self.assertContains(
+            res, '<p>You do not have any document marked as favorite.</p>')
         self.assertNotContains(res, 'gloubigoulba')
 
         self.client.login(email=self.user2.email, password='pass')
