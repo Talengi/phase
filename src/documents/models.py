@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-
+import logging
+import os
 import zipfile
 import tempfile
 from collections import OrderedDict
@@ -17,6 +18,8 @@ from accounts.models import User
 from documents.fields import RevisionFileField
 from categories.models import Category
 from documents.templatetags.documents import MenuItem, DividerMenuItem
+
+logger = logging.getLogger(__name__)
 
 
 class DocumentManager(models.Manager):
@@ -363,11 +366,14 @@ class Metadata(six.with_metaclass(MetadataBase, models.Model)):
 
             for file_ in files:
                 if file_.name:
-                    zip_file.write(
-                        file_.path,
-                        file_.name,
-                        compress_type=zipfile.ZIP_DEFLATED
-                    )
+                    if os.path.isfile(file_.path):
+                        zip_file.write(
+                            file_.path,
+                            file_.name,
+                            compress_type=zipfile.ZIP_DEFLATED)
+                    else:
+                        msg = "Can't serve %s, the file is missing"
+                        logger.error(msg % file_.name)
         return temp_file
 
 
