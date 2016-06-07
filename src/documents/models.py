@@ -48,6 +48,13 @@ class Document(models.Model):
     created_on = models.DateField(
         _('Created on'),
         default=timezone.now)
+    created_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        verbose_name=_('Created by'),
+        related_name='documents_created',
+        blank=True,
+        null=True)
     updated_on = models.DateTimeField(
         _('Updated on'),
         default=timezone.now)
