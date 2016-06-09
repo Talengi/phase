@@ -30,15 +30,19 @@ class Command(EmailCommand):
             .filter(document__created_on__lt=delta) \
             .select_related() \
             .prefetch_related('recipient__users')
-
         recipients = groupby(transmittals, lambda trs: trs.recipient)
         for recipient, transmittals in recipients:
             logger.info('Sending reminders for recipient {}'.format(recipient.name))
+
+            # We prevent iterator exhaustion in case we have to send the
+            # `transmittals` content to several recipients.
+            trs = list(transmittals)
+
             for user in recipient.users.all():
                 if not user.send_trs_reminders_mails:
                     continue
-                self.send_notification(
-                    user=user, transmittals=list(transmittals))
+
+                self.send_notification(user=user, transmittals=trs)
 
     def get_subject(self, **kwargs):
         return 'Phase - Transmittals pending acknowledgment of receipt'
