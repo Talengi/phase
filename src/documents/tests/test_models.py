@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 import datetime
 from django.contrib.auth.models import Permission
 from django.test import TestCase
+from django.utils.encoding import force_text
 from django.utils.timezone import utc
 
 from documents.factories import DocumentFactory
@@ -101,5 +102,19 @@ class DocumentTest(TestCase):
         # Refresh object
         user = User.objects.get(pk=user.pk)
         actions = metadata_revision.get_actions(metadata, user)
-        # Actions must contain 4 MenuItem and 2 DividerMenuItem
+
+        self.assertEqual(len(actions), 2)
+        actions_labels = [force_text(action.label) for action in actions]
+        self.assertTrue('Create revision' in actions_labels)
+        self.assertTrue('Audit Trail' in actions_labels)
+
+        # Add delete permissions
+        delete_doc_perm = Permission.objects.get(
+            codename='delete_document')
+        user.user_permissions.add(delete_doc_perm)
+        user = User.objects.get(pk=user.pk)
+        actions = metadata_revision.get_actions(metadata, user)
         self.assertEqual(len(actions), 6)
+        actions_labels = [force_text(action.label) for action in actions if hasattr(action, 'label')]
+        self.assertTrue('Delete last revision' in actions_labels)
+        self.assertTrue('Delete document' in actions_labels)
