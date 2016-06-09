@@ -62,14 +62,15 @@ class Command(BaseCommand):
             for field in fields:
                 if isinstance(field, PrivateFileField):
                     private_fields += ((model_class, field.name),)
-
         # Get path for all files in db
         all_files = []
         for Model, field in private_fields:
+            # Some migrations seem to introduce null values in
+            # OutgoingTransmittal archived_pdf field, so we filter
+            # against them
             values = Model.objects \
-                .exclude(**{'%s' % field: ''}) \
+                .exclude(**{'%s' % field: '', '%s' % field: None}) \
                 .values_list(field, flat=True)
-
             all_files += values
 
         def prepend_private_root(path):
