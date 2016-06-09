@@ -623,7 +623,7 @@ class MetadataRevisionBase(models.Model):
                 method='GET',
             ))
 
-        if user.has_perm('documents.can_control_document'):
+        if user.has_perm('documents.delete_document'):
             actions.append(DividerMenuItem())
 
             actions.append(MenuItem(
@@ -636,7 +636,7 @@ class MetadataRevisionBase(models.Model):
                 modal='delete-revision-modal',
                 disabled=self.revision <= 1
             ))
-
+            actions.append(DividerMenuItem())
             actions.append(MenuItem(
                 'delete-document',
                 _('Delete document'),
@@ -647,8 +647,7 @@ class MetadataRevisionBase(models.Model):
                 modal='delete-document-modal'
             ))
 
-            actions.append(DividerMenuItem())
-
+        if user.has_perm('documents.can_control_document'):
             actions.append(MenuItem(
                 'audit-trail',
                 _('Audit Trail'),
