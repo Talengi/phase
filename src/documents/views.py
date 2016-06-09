@@ -452,7 +452,7 @@ class DocumentDelete(LoginRequiredMixin,
                      DocumentListMixin,
                      DeleteView):
     """Delete a document and its revisions."""
-    permission_required = 'documents.can_control_document'
+    permission_required = 'documents.delete_document'
     raise_exception = True
     http_method_names = ['post']
 
