@@ -5,11 +5,12 @@ import os
 from io import BytesIO
 from zipfile import ZipFile
 
+from django.conf import settings
+from django.contrib.auth.models import Permission
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core.urlresolvers import reverse
 from django.test import TestCase, override_settings
 from django.test.client import Client
-from django.core.urlresolvers import reverse
-from django.core.files.uploadedfile import SimpleUploadedFile
-from django.conf import settings
 
 from accounts.factories import UserFactory
 from audit_trail.models import Activity
@@ -21,7 +22,6 @@ from documents.models import Document
 
 
 class GenericViewTest(TestCase):
-
     def setUp(self):
         self.client = Client()
 
@@ -75,7 +75,6 @@ class GenericViewTest(TestCase):
 
 
 class DocumentDetailTest(TestCase):
-
     def setUp(self):
         self.category = CategoryFactory()
         self.user = UserFactory(
@@ -118,7 +117,6 @@ class DocumentDetailTest(TestCase):
 
 
 class DocumentDownloadTest(TestCase):
-
     def setUp(self):
         # Login as admin so we won't be bothered by missing permissions
         self.category = CategoryFactory()
@@ -150,7 +148,8 @@ class DocumentDownloadTest(TestCase):
             document_key=u'HAZOP-related',
             category=self.category,
             revision={
-                'native_file': SimpleUploadedFile(native_doc, sample_path + native_doc),
+                'native_file': SimpleUploadedFile(native_doc,
+                                                  sample_path + native_doc),
                 'pdf_file': SimpleUploadedFile(pdf_doc, sample_path + pdf_doc),
             }
         )
@@ -161,8 +160,10 @@ class DocumentDownloadTest(TestCase):
             'format': 'both',
         })
         self.assertEqual(r.status_code, 200)
-        self.assertEqual(r._headers['vary'], ('Vary', 'Cookie, Accept-Encoding'))
-        self.assertEqual(r._headers['content-type'], ('Content-Type', 'application/zip'))
+        self.assertEqual(r._headers['vary'],
+                         ('Vary', 'Cookie, Accept-Encoding'))
+        self.assertEqual(r._headers['content-type'],
+                         ('Content-Type', 'application/zip'))
         self.assertEqual(r._headers['content-disposition'], (
             'Content-Disposition',
             'attachment; filename=download.zip'))
@@ -206,13 +207,15 @@ class DocumentDownloadTest(TestCase):
         MetadataRevisionFactory(
             metadata=document.get_metadata(),
             revision=2,
-            native_file=SimpleUploadedFile(native_doc, sample_path + native_doc),
+            native_file=SimpleUploadedFile(native_doc,
+                                           sample_path + native_doc),
             pdf_file=SimpleUploadedFile(pdf_doc, sample_path + pdf_doc),
         )
         MetadataRevisionFactory(
             metadata=document.get_metadata(),
             revision=3,
-            native_file=SimpleUploadedFile(native_doc, sample_path + native_doc),
+            native_file=SimpleUploadedFile(native_doc,
+                                           sample_path + native_doc),
             pdf_file=SimpleUploadedFile(pdf_doc, sample_path + pdf_doc),
         )
         r = self.client.post(document.category.get_download_url(), {
@@ -228,7 +231,6 @@ class DocumentDownloadTest(TestCase):
 
 
 class DocumentReviseTests(TestCase):
-
     def setUp(self):
         self.category = CategoryFactory()
         user = UserFactory(
@@ -262,7 +264,6 @@ class DocumentReviseTests(TestCase):
 
 
 class DocumentDeleteTests(TestCase):
-
     def setUp(self):
         self.category = CategoryFactory()
         self.user = UserFactory(
@@ -356,9 +357,32 @@ class DocumentDeleteTests(TestCase):
 
         self.assertEqual(res.status_code, 403)
 
+    def test_user_with_delete_perms_can_delete_document(self):
+        user = UserFactory(
+            email='testuser@phase.fr',
+            password='pass',
+            is_superuser=False,
+            category=self.category,
+        )
+        delete_doc_perm = Permission.objects.get(
+            codename='delete_document')
+        user.user_permissions.add(delete_doc_perm)
+
+        self.client.login(email=user.email, password='pass')
+        document = DocumentFactory(category=self.category)
+        delete_url = reverse('document_delete', args=[
+            self.category.organisation.slug,
+            self.category.slug,
+            document.document_key
+        ])
+
+        res = self.client.post(delete_url)
+
+        self.assertRedirects(res, self.category.get_absolute_url())
+        self.assertFalse(Document.objects.filter(pk=document.pk).exists())
+
 
 class DocumentRevisionDeleteTests(TestCase):
-
     def create_doc(self, nb_revisions=1):
         doc = DocumentFactory(category=self.category)
         meta = doc.get_metadata()
@@ -422,6 +446,46 @@ class DocumentRevisionDeleteTests(TestCase):
         doc.refresh_from_db()
         self.assertEqual(doc.get_all_revisions().count(), 3)
         self.assertEqual(doc.current_revision, 3)
+
+    def test_simple_user_cannot_delete_revision(self):
+        doc, delete_url = self.create_doc(nb_revisions=2)
+        self.assertEqual(doc.get_all_revisions().count(), 2)
+        # User has not delete perms
+        user = UserFactory(
+            email='testuser@phase.fr',
+            password='pass',
+            is_superuser=False,
+            category=self.category,
+        )
+        self.client.logout()
+        self.client.login(email=user.email, password='pass')
+
+        res = self.client.post(delete_url)
+
+        self.assertEqual(res.status_code, 403)
+
+        doc.refresh_from_db()
+        self.assertEqual(doc.get_all_revisions().count(), 2)
+
+    def test_user_with_delete_perms_can_delete_revision(self):
+        doc, delete_url = self.create_doc(nb_revisions=2)
+        self.assertEqual(doc.get_all_revisions().count(), 2)
+        user = UserFactory(
+            email='testuser@phase.fr',
+            password='pass',
+            is_superuser=False,
+            category=self.category,
+        )
+        delete_doc_perm = Permission.objects.get(
+            codename='delete_document')
+        user.user_permissions.add(delete_doc_perm)
+        self.client.logout()
+        self.client.login(email=user.email, password='pass')
+
+        self.client.post(delete_url)
+
+        doc.refresh_from_db()
+        self.assertEqual(doc.get_all_revisions().count(), 1)
 
 
 @override_settings(USE_X_SENDFILE=True)
