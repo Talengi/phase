@@ -131,6 +131,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.messages.context_processors.messages',
     'django.core.context_processors.request',
     'accounts.context_processors.navigation',
+    'accounts.context_processors.branding_on_login',
     'notifications.context_processors.notifications',
     'reviews.context_processors.reviews',
     'dashboards.context_processors.dashboards',

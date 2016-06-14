@@ -292,7 +292,11 @@ button.ui-multiselect {
     padding: 2px 1px;
 }
 .sidebar-form .control-group .controls > input {
-    width: 85%; /* bottstrap enlarges input with margin and padding */
+    width: 85%; /* bootstrap enlarges input with margin and padding */
+}
+.sidebar-form .control-group .controls > [type='checkbox']{
+   /*Safari and Chrome left-align checkbox and we want to have it centered*/
+     width: auto;
 }
 .sidebar-form .control-group .controls > span {
     margin: 2px 0 0 2px;

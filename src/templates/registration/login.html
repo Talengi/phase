@@ -1,7 +1,13 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 <form class="central-form" action="" method="post">
+
+    {%  if display_branding %}
+        <img src="{% static 'img/branding/talengi-logo.png' %}" alt="Talengi logo">
+    {% endif %}
+
     {% csrf_token %}
     <h2 class="central-form-heading">Please sign in</h2>
 
