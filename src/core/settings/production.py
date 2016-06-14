@@ -86,6 +86,10 @@ COMPANY_LOGOS = get_prod_setting('COMPANY_LOGOS', optional_import=True)
 PDF_CONFIGURATION = get_prod_setting(
     'PDF_CONFIGURATION', optional_import=True)
 
+# ######### LOGIN BRANDING
+DISPLAY_LOGIN_BRANDING = get_prod_setting(
+    'DISPLAY_LOGIN_BRANDING', optional_import=True)
+
 # ######### SECURITY
 try:
     USE_SSL = get_prod_setting('USE_SSL')
