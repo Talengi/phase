@@ -28,7 +28,8 @@ class OrganisationAdmin(admin.ModelAdmin):
 
 
 class CategoryTemplateAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description')
+    list_display = (
+        'name', 'description', 'use_creation_form', 'display_reporting')
     prepopulated_fields = {'slug': ('name',)}
     form = CategoryTemplateAdminForm
 

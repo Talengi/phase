@@ -7,6 +7,7 @@ from collections import Counter
 from braces.views import LoginRequiredMixin
 from django.core.exceptions import FieldError
 from django.db.models import Func, Count, Q
+from django.http import Http404
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView
 
@@ -75,6 +76,11 @@ def format_results(by_ended_reviews):
 
 class Report(LoginRequiredMixin, CategoryMixin, TemplateView):
     template_name = 'reporting/reports.html'
+
+    def get(self, request, *args, **kwargs):
+        if not self.category.category_template.display_reporting:
+            raise Http404
+        return super(Report, self).get(request, *args, **kwargs)
 
     @staticmethod
     def build_list(values):
