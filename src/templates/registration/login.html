@@ -2,24 +2,42 @@
 {% load static %}
 
 {% block content %}
-<form class="central-form" action="" method="post">
+    <style>
+        .login-footer {
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+        }
 
-    {%  if display_branding %}
-        <img src="{% static 'img/branding/talengi-logo.png' %}" alt="Talengi logo">
-    {% endif %}
 
-    {% csrf_token %}
-    <h2 class="central-form-heading">Please sign in</h2>
+    </style>
 
-    {% include 'form_snippet.html' with form=form %}
+    <form class="central-form" action="" method="post">
 
-    {% url 'category_list' as home_url %}
-    <input type="hidden" name="next" value="{{ next|default:home_url }}" />
 
-    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        {% csrf_token %}
+        <h2 class="central-form-heading">Please sign in</h2>
 
-    <p class="alert alert-warning">
-        Please contact your Document Controller if you are unable to connect to Phase.
-    </p>
-</form>
+        {% include 'form_snippet.html' with form=form %}
+
+        {% url 'category_list' as home_url %}
+        <input type="hidden" name="next"
+               value="{{ next|default:home_url }}"/>
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign
+            in
+        </button>
+
+        <p class="alert alert-warning">
+            Please contact your Document Controller if you are unable to
+            connect to Phase.
+        </p>
+    </form>
+
+    <footer class="login-footer">
+        {% if display_branding %}
+            <img src="{% static 'img/branding/talengi-logo.png' %}"
+                 alt="Talengi logo">
+        {% endif %}
+    </footer>
 {% endblock %}

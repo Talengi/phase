@@ -19,7 +19,7 @@ body.documentlist .main-navbar {
 .navbar ul.breadcrumbs li {
     display: inline;
 }
-.navbar ul.breadcrumbs a {
+.navbar ul.breadcrumbs a, .navbar ul.breadcrumbs span  {
     color: #000;
 }
 .navbar ul.breadcrumbs li:before {
@@ -418,7 +418,7 @@ table.reviewers tr td.small {
     background-color: white;
     z-index: 1050;
     width: 450px;
-    padding: 0px;
+    padding: 0;
 }
 .left-sidebar {
     left: 0;
@@ -478,6 +478,9 @@ table.reviewers tr td.small {
     color: #666;
     font-size: 90%;
 }
+.modal-backdrop-transparent{
+    background-color: transparent;
+}
 .sidebar-offcanvas {
     position: fixed;
     right: 0;
@@ -488,6 +491,7 @@ table.reviewers tr td.small {
     display: none;
     width: 350px;
 }
+
 .sidebar-offcanvas .offcanvas-wrapper {
     position: fixed;
     right: 0;
@@ -495,14 +499,16 @@ table.reviewers tr td.small {
     bottom: 0;
     overflow-y: auto;
     width: 350px;
+    z-index: 1050;
+    background-color: #fff;
 }
 .sidebar-offcanvas.active {
     display: block;
     top: 0;
     border-left: 1px solid #e7e7e7;
-    -moz-box-shadow: -8px 0 5px -1px #666;
-    -webkit-box-shadow: -8px 0 5px -1px #666;
-    box-shadow: -8px 0 5px -1px #666;
+    -moz-box-shadow: -8px 0 5px -1px #AAA;
+    -webkit-box-shadow: -8px 0 5px -1px #AAA;
+    box-shadow: -8px 0 5px -1px #AAA;
 }
 
 /* Signin */
