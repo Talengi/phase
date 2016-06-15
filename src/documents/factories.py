@@ -143,6 +143,7 @@ class DocumentFactory(factory.DjangoModelFactory):
     def _after_postgeneration(cls, obj, create, results=None):
         metadata_kwargs = {
             'document': obj,
+            'title': obj.title,
             'document_key': obj.document_key,
             'document_number': obj.document_number,
             'latest_revision': None,
