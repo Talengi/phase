@@ -19,7 +19,7 @@ body.documentlist .main-navbar {
 .navbar ul.breadcrumbs li {
     display: inline;
 }
-.navbar ul.breadcrumbs a {
+.navbar ul.breadcrumbs a, .navbar ul.breadcrumbs span  {
     color: #000;
 }
 .navbar ul.breadcrumbs li:before {
