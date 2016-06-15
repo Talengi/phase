@@ -16,7 +16,7 @@
                 <li class="disabled"><a href="#">{{ organisation.grouper }}</a>
                 </li>
                 {% for category in organisation.list %}
-                    {% if category.category_template.use_creation_form %}
+                    {% if category.category_template.use_creation_form and category.category_template.display_reporting %}
                         <li>
                             <a href="{%  url 'category_report' category.organisation.slug category.slug %}">
                                 {{ category.name }}
