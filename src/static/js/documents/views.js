@@ -197,6 +197,7 @@ var Phase = Phase || {};
             this.listenTo(dispatcher, 'onRowSelected', this.rowSelected);
             this.listenTo(dispatcher, 'onDocumentsFetched', this.renderResults);
             this.listenTo(options.search, 'change', this.cleanupSelection);
+
         },
         configureForm: function() {
             // Prevent closing dropdown on any click
@@ -273,6 +274,7 @@ var Phase = Phase || {};
             this.listenTo(dispatcher, 'onEscKeyPressed', this.hideSearchForm);
             this.listenTo(dispatcher, 'onAggregationsFetched', this.updateFacets);
             this.listenTo(this.model, 'change', this.synchronizeForm);
+            this.listenTo(dispatcher, 'onBackdropClicked', this.hideSearchForm);
 
             this.synchronizeForm();
 
