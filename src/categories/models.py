@@ -64,6 +64,9 @@ class CategoryTemplate(models.Model):
     use_creation_form = models.BooleanField(
         _('Use document creation form'),
         default=True)
+    display_reporting = models.BooleanField(
+        _('Display reporting section'),
+        default=False)
 
     # We use a generic foreign key to reference
     # the type of document metadata this category
