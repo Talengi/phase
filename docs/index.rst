@@ -12,5 +12,6 @@ Welcome to Phase's documentation!
    cron.rst
    transmittals.rst
    audit_trail.rst
+   django_admin.rst
    colophon.rst
 
