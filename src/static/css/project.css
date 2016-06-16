@@ -44,6 +44,9 @@ body.fullwidth > .container,
     max-width: 100%;
     margin: 0 auto;
 }
+.main-content{
+    padding-top: 80px;
+}
 .last-button {
     margin-left: 15px;
 }
@@ -66,6 +69,7 @@ body.fullwidth > .container,
     color: #B94A48;
 }
 .additional-navbar {
+    margin-top: 50px;
     z-index: 500;
     background: #fff;
 }
@@ -152,6 +156,7 @@ body > .container > h2 {
 #review-list-row {
     top: 115px; /* Because of the two navbars */
 }
+
 #main-table thead th,
 .reviewers thead th {
     background-color: #f0f0f0;
