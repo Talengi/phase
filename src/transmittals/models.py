@@ -687,6 +687,7 @@ class OutgoingTransmittal(Metadata):
             # filter is up to date
             index_datum = build_index_data(revision)
             index_datum['_source']['can_be_transmitted'] = False
+            index_datum['_source']['last_review_closed'] = False
             index_data.append(index_datum)
         with transaction.atomic():
             today = timezone.now()
