@@ -687,6 +687,7 @@ class OutgoingTransmittal(Metadata):
             # filter is up to date
             index_datum = build_index_data(revision)
             index_datum['_source']['can_be_transmitted'] = False
+            index_datum['_source']['last_review_closed'] = False
             index_data.append(index_datum)
         with transaction.atomic():
             today = timezone.now()
@@ -910,6 +911,13 @@ class TransmittableMixin(ReviewMixin):
             not self.internal_review,
             not self.transmittals.count(),
             self.document.current_revision == self.revision))
+
+    @property
+    def last_review_closed(self):
+        return all((
+            not self.internal_review,
+            self.document.current_revision == self.revision,
+            self.review_end_date))
 
     def can_be_transmitted_to_recipient(self, recipient):
         """Is this rev ready to be embedded in an outgoing trs?"""
