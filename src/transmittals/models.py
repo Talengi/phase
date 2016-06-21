@@ -911,6 +911,13 @@ class TransmittableMixin(ReviewMixin):
             not self.transmittals.count(),
             self.document.current_revision == self.revision))
 
+    @property
+    def last_review_closed(self):
+        return all((
+            not self.internal_review,
+            self.document.current_revision == self.revision,
+            self.review_end_date))
+
     def can_be_transmitted_to_recipient(self, recipient):
         """Is this rev ready to be embedded in an outgoing trs?"""
         return all((
