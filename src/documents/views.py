@@ -567,8 +567,7 @@ class DocumentRevise(DocumentEdit):
         notify(self.request.user, _(message_text) % message_data)
 
         activity_log.send(verb=Activity.VERB_CREATED,
-                          action_object=self.revision,
-                          target=document,
+                          target=self.revision,
                           sender=None,
                           actor=self.request.user)
 

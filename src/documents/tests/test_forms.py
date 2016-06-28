@@ -460,8 +460,7 @@ class DocumentReviseTest(TestCase):
         # Check that revision creation was logged in audit trail
         activity = Activity.objects.latest('created_on')
         self.assertEqual(activity.verb, Activity.VERB_CREATED)
-        self.assertEqual(activity.action_object, revision)
-        self.assertEqual(activity.target, document)
+        self.assertEqual(activity.target, revision)
         self.assertEqual(activity.actor, self.user)
 
     def test_new_revision_files(self):

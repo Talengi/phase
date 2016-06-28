@@ -8,6 +8,15 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 
+def get_repr(obj):
+    if not obj:
+        return ''
+    method = getattr(obj, 'audit_trail_repr', None)
+    if not method:
+        return str(obj)
+    return method()
+
+
 class Activity(models.Model):
 
     VERB_CREATED = 'created'
@@ -27,12 +36,12 @@ class Activity(models.Model):
         (VERB_EDITED, _("edited")),
         (VERB_DELETED, _("deleted")),
         (VERB_JOINED, _("joined Phase")),
-        (VERB_STARTED_REVIEW, _("started review")),
-        (VERB_CANCELLED_REVIEW, _("cancelled review")),
+        (VERB_STARTED_REVIEW, _("started review on")),
+        (VERB_CANCELLED_REVIEW, _("cancelled review on")),
         (VERB_REVIEWED, _("reviewed")),
-        (VERB_CLOSED_REVIEWER_STEP, _("closed reviewer step")),
-        (VERB_CLOSED_LEADER_STEP, _("closed leader step")),
-        (VERB_CLOSED_APPROVER_STEP, _("closed approver step")),
+        (VERB_CLOSED_REVIEWER_STEP, _("closed reviewer step on")),
+        (VERB_CLOSED_LEADER_STEP, _("closed leader step on")),
+        (VERB_CLOSED_APPROVER_STEP, _("closed approver step on")),
         (VERB_SENT_BACK_TO_LEADER_STEP, _("sent review back to leader")),
     )
 
@@ -85,13 +94,13 @@ class Activity(models.Model):
         ctx = {
             'actor': self.actor or self.actor_object_str,
             'verb': self.get_verb_display(),
-            'action_object': self.action_object or self.action_object_str,
-            'target': self.target or self.target_object_str
+            'action_object': get_repr(self.action_object) or self.action_object_str,
+            'target': get_repr(self.target) or self.target_object_str
         }
-        if self.action_object and self.target:
+        if ctx['action_object'] and ctx['target']:
             return _('{actor} {verb} {action_object} on {target}').format(**ctx)
-        elif self.action_object:
+        elif ctx['action_object']:
             return _('{actor} {verb} {action_object}').format(**ctx)
-        elif self.target:
-            return _('{actor} {verb} on {target}').format(**ctx)
+        elif ctx['target']:
+            return _('{actor} {verb} {target}').format(**ctx)
         return _('{actor} {verb}').format(**ctx)

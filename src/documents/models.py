@@ -434,6 +434,11 @@ class MetadataRevisionBase(models.Model):
             self.document.document_key,
             self.revision)
 
+    def audit_trail_repr(self):
+        return '{} rev {}'.format(
+            self.document.document_key,
+            self.revision)
+
     def save(self, update_document=False, *args, **kwargs):
         super(MetadataRevisionBase, self).save(*args, **kwargs)
 
