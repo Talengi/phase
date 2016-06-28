@@ -16,7 +16,7 @@ activity_log = Signal(
 
 @receiver(activity_log, dispatch_uid='activity_log_uid')
 def activity_handler(verb, action_object=None, target=None, **kwargs):
-    from .models import Activity
+    from .models import Activity, get_repr
 
     kwargs.pop('signal', None)
 
@@ -27,7 +27,8 @@ def activity_handler(verb, action_object=None, target=None, **kwargs):
     activity.verb = verb
 
     activity.target = target
-    target_str = str(target) if target else ''
+    # target_str = str(target) if target else ''
+    target_str = get_repr(target)
     activity.target_object_str = kwargs.get('target_object_str', None) or target_str
 
     actor = kwargs.pop('actor')
@@ -43,6 +44,6 @@ def activity_handler(verb, action_object=None, target=None, **kwargs):
     if action_object:
         activity.action_object = action_object
 
-    activity.action_object_str = kwargs.get('action_object_str', None) or str(action_object)
-
+    # activity.action_object_str = kwargs.get('action_object_str', None) or str(action_object)
+    activity.action_object_str = kwargs.get('action_object_str', None) or get_repr(action_object)
     activity.save()

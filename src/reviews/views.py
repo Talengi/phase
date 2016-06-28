@@ -478,11 +478,11 @@ class ReviewFormView(LoginRequiredMixin, UpdateView):
             if not can_comment:
                 return HttpResponseForbidden()
 
-            activity_log.send(verb=Activity.VERB_REVIEWED,
-                              action_object=self.revision,
-                              target=self.document,
-                              sender=None,
-                              actor=self.request.user)
+            activity_log.send(
+                verb=Activity.VERB_REVIEWED,
+                target=self.revision,
+                sender=None,
+                actor=self.request.user)
 
             self.post_review(form)
 
