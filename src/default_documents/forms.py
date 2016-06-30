@@ -10,8 +10,8 @@ from .models import (
     ContractorDeliverable, ContractorDeliverableRevision,
     Correspondence, CorrespondenceRevision,
     MinutesOfMeeting, MinutesOfMeetingRevision,
-    DemoMetadata, DemoMetadataRevision
-)
+    DemoMetadata, DemoMetadataRevision,
+    GtgMetadata, GtgMetadataRevision)
 from transmittals.forms import TransmittableFormMixin
 from .layout import (
     DocumentFieldset, ScheduleLayout, ScheduleStatusLayout,
@@ -59,9 +59,7 @@ class ContractorDeliverableForm(BaseDocumentForm):
 
 
 class ContractorDeliverableRevisionForm(TransmittableFormMixin, BaseDocumentForm):
-
     def build_layout(self):
-
         return Layout(
             DocumentFieldset(
                 _('Revision'),
@@ -234,3 +232,57 @@ class DemoMetadataRevisionForm(BaseDocumentForm):
                 'approver',
             )
         )
+
+
+class GtgMetadataForm(BaseDocumentForm):
+    class Meta:
+        model = GtgMetadata
+        exclude = ('document', 'latest_revision')
+
+    def build_layout(self):
+        return Layout(
+            DocumentFieldset(
+                _('General information'),
+                Field('document_key', type='hidden'),
+                'document_number',
+                Field('title', rows=2),
+                'originator',
+                'unit',
+                'discipline',
+                'document_type',
+            ),
+            self.get_related_documents_layout(),
+            DocumentFieldset(
+                _('Schedule'),
+                ScheduleLayout(
+                    ScheduleStatusLayout('ifr'),
+                    ScheduleStatusLayout('ifa'),
+                    ScheduleStatusLayout('ifi'),
+                    ScheduleStatusLayout('ife'),
+                    ScheduleStatusLayout('ifp'),
+                    ScheduleStatusLayout('fin'),
+                    ScheduleStatusLayout('asb'), ))
+        )
+
+
+class GtgMetadataRevisionForm(TransmittableFormMixin, BaseDocumentForm):
+    def build_layout(self):
+        return Layout(
+            DocumentFieldset(
+                _('Revision'),
+                DateField('revision_date'),
+                Field('created_on', readonly='readonly'),
+                'docclass',
+                'status',
+                'final_revision',
+                'native_file',
+                'pdf_file',
+            ),
+            *(self.get_review_layout() + self.get_trs_layout())
+
+        )
+
+    class Meta:
+        model = GtgMetadataRevision
+        exclude = ('metadata', 'revision', 'updated_on', 'review_end_date',
+                   'reviewers_step_closed', 'leader_step_closed', 'transmittal', 'transmittals')

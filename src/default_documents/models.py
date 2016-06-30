@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import uuid
 from collections import OrderedDict
 
 from django.db import models
@@ -786,3 +787,271 @@ class DemoMetadataRevision(ReviewMixin, MetadataRevision):
 
     class Meta:
         app_label = 'default_documents'
+
+
+class GtgMetadata(Metadata):
+    latest_revision = models.ForeignKey(
+        'GtgMetadataRevision',
+        null=True,
+        verbose_name=_('Latest revision'))
+    title = models.TextField(_('title'))
+    originator = models.ForeignKey(
+        'accounts.Entity',
+        verbose_name=_('Originator'),
+        limit_choices_to={'type': 'originator'})
+    unit = ConfigurableChoiceField(
+        verbose_name=u"Unit",
+        default="000",
+        max_length=3,
+        list_index='GTG_UNITS')
+    discipline = ConfigurableChoiceField(
+        _('Discipline'),
+        max_length=6,
+        list_index='GTG_DISCIPLINES',
+        blank=True,
+        null=True)
+    document_type = ConfigurableChoiceField(
+        _('Document Type'),
+        max_length=3,
+        list_index='GTG_DOCUMENT_TYPES')
+
+    # Related docs
+    related_documents = models.ManyToManyField(
+        'documents.Document',
+        related_name='gtg_related_documents',
+        blank=True)
+
+    # Schedule
+    status_ifr_planned_date = models.DateField(
+        _('Status IFR Planned Date'),
+        null=True, blank=True)
+    status_ifr_forecast_date = models.DateField(
+        _('Status IFR Forecast Date'),
+        null=True, blank=True)
+    status_ifr_actual_date = models.DateField(
+        _('Status IFR Actual Date'),
+        null=True, blank=True)
+
+    status_ifa_planned_date = models.DateField(
+        _('Status IFA Planned Date'),
+        null=True, blank=True)
+    status_ifa_forecast_date = models.DateField(
+        _('Status IFA Forecast Date'),
+        null=True, blank=True)
+    status_ifa_actual_date = models.DateField(
+        _('Status IFA Actual Date'),
+        null=True, blank=True)
+
+    status_ifi_planned_date = models.DateField(
+        _('Status IFI Planned Date'),
+        null=True, blank=True)
+    status_ifi_forecast_date = models.DateField(
+        _('Status IFI Forecast Date'),
+        null=True, blank=True)
+    status_ifi_actual_date = models.DateField(
+        _('Status IFI Actual Date'),
+        null=True, blank=True)
+
+    status_ife_planned_date = models.DateField(
+        _('Status IFE Planned Date'),
+        null=True, blank=True)
+    status_ife_forecast_date = models.DateField(
+        _('Status IFE Forecast Date'),
+        null=True, blank=True)
+    status_ife_actual_date = models.DateField(
+        _('Status IFE Actual Date'),
+        null=True, blank=True)
+
+    status_ifp_planned_date = models.DateField(
+        _('Status IFP Planned Date'),
+        null=True, blank=True)
+    status_ifp_forecast_date = models.DateField(
+        _('Status IFP Forecast Date'),
+        null=True, blank=True)
+    status_ifp_actual_date = models.DateField(
+        _('Status IFP Actual Date'),
+        null=True, blank=True)
+
+    status_fin_planned_date = models.DateField(
+        _('Status FIN Planned Date'),
+        null=True, blank=True)
+    status_fin_forecast_date = models.DateField(
+        _('Status FIN Forecast Date'),
+        null=True, blank=True)
+    status_fin_actual_date = models.DateField(
+        _('Status FIN Actual Date'),
+        null=True, blank=True)
+
+    status_asb_planned_date = models.DateField(
+        _('Status ASB Planned Date'),
+        null=True, blank=True)
+    status_asb_forecast_date = models.DateField(
+        _('Status ASB Forecast Date'),
+        null=True, blank=True)
+    status_asb_actual_date = models.DateField(
+        _('Status ASB Actual Date'),
+        null=True, blank=True)
+
+    class Meta:
+        verbose_name = _('Gtg deliverable')
+        verbose_name_plural = _('Gtg deliverables')
+        ordering = ('document_number',)
+
+    class PhaseConfig:
+        filter_fields = [
+            'originator',
+            'discipline',
+            'document_type',
+            'status',
+            'unit',
+            'leader',
+            'approver',
+            'under_review',
+            'overdue']
+        filter_fields_order_ = [
+            'search_terms',
+            'originator',
+            'discipline',
+            'document_type',
+            'status',
+            'unit',
+            'leader',
+            'approver',
+            'under_review',
+            'overdue']
+
+        column_fields = (
+            ('Document Number', 'document_number'),
+            ('Title', 'title'),
+            ('Status', 'status'),
+            ('Rev.', 'current_revision'),
+            ('Document type', 'document_type'),
+            ('Originator', 'originator'),
+            ('Review start date', 'review_start_date'),
+            ('Review due date', 'review_due_date'),
+            ('Under review', 'under_review'),
+            ('Leader', 'leader'),
+            ('Approver', 'approver'),
+        )
+
+    def natural_key(self):
+        return self.document_key
+
+    def generate_document_key(self):
+        # If document key is not suppplied by user, we generate a uuid
+        return '{}'.format(uuid.uuid4())
+
+    @property
+    def status(self):
+        return self.latest_revision.status
+
+    @property
+    def final_revision(self):
+        return self.latest_revision.final_revision
+
+    @property
+    def review_start_date(self):
+        return self.latest_revision.review_start_date
+
+    @property
+    def review_due_date(self):
+        return self.latest_revision.review_due_date
+
+    @property
+    def under_review(self):
+        return self.latest_revision.is_under_review()
+
+    @property
+    def overdue(self):
+        return self.latest_revision.is_overdue()
+
+    @property
+    def leader(self):
+        return self.latest_revision.leader
+
+    @property
+    def approver(self):
+        return self.latest_revision.approver
+
+    @property
+    def received_date(self):
+        return self.latest_revision.received_date
+
+    @property
+    def leader_step_closed(self):
+        return self.latest_revision.leader_step_closed
+
+    @property
+    def review_end_date(self):
+        return self.latest_revision.review_end_date
+
+    @property
+    def return_code(self):
+        return self.latest_revision.return_code
+
+    @classmethod
+    def get_batch_actions(cls, category, user):
+        actions = super(GtgMetadata, cls).get_batch_actions(
+            category, user)
+        actions['start_review'] = MenuItem(
+            'start-review',
+            _('Start review'),
+            reverse('batch_start_reviews', args=[
+                category.organisation.slug,
+                category.slug]),
+            ajax=True,
+            modal='batch-review-modal',
+            progression_modal=True,
+            icon='eye-open',
+        )
+        actions['cancel_review'] = MenuItem(
+            'cancel-review',
+            'Cancel review',
+            reverse('batch_cancel_reviews', args=[
+                category.organisation.slug,
+                category.slug]),
+            ajax=True,
+            modal='cancel-review-modal',
+            progression_modal=True,
+            icon='eye-close',
+        )
+        if user.has_perm('transmittals.add_outgoingtransmittal'):
+            actions['create_transmittal'] = MenuItem(
+                'create-transmittal',
+                'Create transmittal',
+                reverse('transmittal_create', args=[
+                    category.organisation.slug,
+                    category.slug]),
+                ajax=True,
+                modal='create-transmittal-modal',
+                progression_modal=True,
+                icon='transfer',
+            )
+        return actions
+
+    @classmethod
+    def get_batch_actions_modals(cls):
+        templates = super(GtgMetadata, cls).get_batch_actions_modals()
+        return templates + [
+            'reviews/document_list_cancel_review_modal.html',
+            'reviews/document_list_batch_review_modal.html',
+            'transmittals/document_list_create_transmittal_modal.html'
+        ]
+
+
+class GtgMetadataRevision(TransmittableMixin, MetadataRevision):
+    metadata = models.ForeignKey('GtgMetadata')
+    status = ConfigurableChoiceField(
+        _('Status'),
+        max_length=3,
+        list_index='GTG_STATUSES',
+        null=True, blank=True)
+    final_revision = models.NullBooleanField(
+        _('Is final revision?'),
+        choices=BOOLEANS,
+        null=True,
+        blank=True)
+
+    def get_first_revision_number(self):
+        """See `MetadataRevision.get_first_revision_number`"""
+        return 1
