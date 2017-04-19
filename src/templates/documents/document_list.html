@@ -13,13 +13,13 @@
 
 {% block content %}
     <div id="document-list-row" class="row wide-table-row">
-        <div id="main-table" class="col-xs-12">
+         <div id="main-table" class="col-xs-12">
             {% include "documents/list_table.html" %}
         </div>
     </div>
 
     <div id="search-sidebar" class="sidebar-offcanvas">
-    <div class="modal-backdrop modal-backdrop-transparent in"></div>
+        <div class="modal-backdrop modal-backdrop-transparent in"></div>
 
         <div class="offcanvas-wrapper">
             {% include "documents/form_filtering.html" %}
@@ -30,22 +30,27 @@
 
 {% block extra_js %}
     <script>
-    _.extend(Phase.Config, {
-        userId: {% if request.user.is_authenticated %}{{ request.user.id }}{% else %}undefined{% endif %},
-        csrfToken: "{{ csrf_token }}",
-        currentUrl: "{% url "category_document_list" organisation_slug category_slug %}",
-        detailUrl: "{% url "document_detail" organisation_slug category_slug "document_key" %}",
-        searchUrl: "{% url "search_documents" organisation_slug category_slug %}",
-        paginateBy: {{ paginate_by }},
-        sortBy: "{{ sort_by }}",
-        documentType: "{{ document_type }}",
+        _.extend(Phase.Config, {
+            userId: {% if request.user.is_authenticated %}{{ request.user.id }}{% else %}undefined{% endif %},
+            csrfToken: "{{ csrf_token }}",
+            currentUrl: "{% url "category_document_list" organisation_slug category_slug %}",
+            detailUrl: "{% url "document_detail" organisation_slug category_slug "document_key" %}",
+            searchUrl: "{% url "search_documents" organisation_slug category_slug %}",
+            paginateBy: {{ paginate_by }},
+            sortBy: "{{ sort_by }}",
+            documentType: "{{ document_type }}",
 
-        favoriteUrl: "{% url "favorite-list" %}",
-        initialFavorites: {{ favorites|safe }},
+            favoriteUrl: "{% url "favorite-list" %}",
+            initialFavorites: {{ favorites|safe }},
 
-        bookmarksUrl: "{% url "bookmark-list" %}",
-        initialBookmarks: {{ bookmarks|safe }}
-    });
+            bookmarksUrl: "{% url "bookmark-list" %}",
+            initialBookmarks: {{ bookmarks|safe }}
+        });
     </script>
     {% javascript "list" %}
+    <script>
+        $(function () {
+            $('table#documents').stickyTableHeaders({scrollableArea: $('#document-list-row')});
+        })
+    </script>
 {% endblock extra_js %}

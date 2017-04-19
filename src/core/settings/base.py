@@ -391,6 +391,7 @@ PIPELINE_JS = {
             'js/vendor/selectize.js',
             'js/vendor/jquery.inview.js',
             'js/querystring.js',
+            'js/vendor/phase-stickytableheaders.js',
             'js/documents/models.js',
             'js/documents/collections.js',
             'js/documents/views.js',
