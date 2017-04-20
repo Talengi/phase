@@ -5,7 +5,7 @@ import datetime
 from uuid import UUID
 
 from django.test import TestCase
-from django.utils.timezone import UTC
+from django.utils.timezone import utc
 
 from categories.factories import CategoryFactory
 from accounts.factories import UserFactory
@@ -32,7 +32,7 @@ class ExportTests(TestCase):
 
     def test_get_filename(self):
         uuid = UUID('12345678-1234-5678-1234-567812345678')
-        date = datetime.datetime(2015, 1, 1, tzinfo=UTC())
+        date = datetime.datetime(2015, 1, 1, tzinfo=utc())
         export = self.create_export(id=uuid, created_on=date)
 
         filename = export.get_filename()
