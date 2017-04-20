@@ -834,12 +834,12 @@ class TransmittableMixin(ReviewMixin):
         ('FI', _('For information')))
 
     transmittal = models.ForeignKey(
-        'OutgoingTransmittal',
+        'transmittals.OutgoingTransmittal',
         verbose_name='transmittal',
         null=True, blank=True,
         on_delete=models.SET_NULL)
     transmittals = models.ManyToManyField(
-        'OutgoingTransmittal',
+        'transmittals.OutgoingTransmittal',
         verbose_name='transmittals',
         related_name="%(app_label)s_%(class)s_related"
     )
