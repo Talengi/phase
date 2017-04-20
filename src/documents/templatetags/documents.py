@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django import template
 from django.template.loader import get_template, select_template
 from django.core.exceptions import ImproperlyConfigured
+from django.utils.html import format_html
 
 from ..utils import stringify_value
 
@@ -51,7 +52,8 @@ class MenuItem(object):
         return self.to_html()
 
     def to_html(self):
-        menu_entry = '''
+        menu_entry = format_html(
+            '''
             <li class="{disabled}">
             <a id="action-{id}"
                 href="{action}"
@@ -64,7 +66,7 @@ class MenuItem(object):
                 {label}
             </a>
             </li>
-        '''.format(
+            ''',
             disabled='disabled' if self.disabled else '',
             id=self.id,
             action=self.action,
@@ -135,11 +137,13 @@ def action_menu_button(context, metadata, revision, user, dropdirection):
 @register.simple_tag()
 def batch_action_menu(Metadata, category, user):
     actions = Metadata.get_batch_actions(category, user)
-    menu = '''
-    <ul class="action-menu dropdown-menu">
-        {}
-    </ul>
-    '''.format(''.join(action.to_html() for action in actions.values()))
+    menu = format_html(
+        '''
+        <ul class="action-menu dropdown-menu">
+            {}
+        </ul>
+        ''',
+        ''.join(action.to_html() for action in actions.values()))
     return menu
 
 

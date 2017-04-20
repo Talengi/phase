@@ -1,4 +1,5 @@
 from django import template
+from django.utils.html import format_html
 from crispy_forms.layout import Fieldset
 
 
@@ -13,7 +14,8 @@ def crispy_menu(form, helper):
         fields = [field for field in helper.layout.fields if isinstance(field, Fieldset)]
 
         for field in fields:
-            menu.append('<li><a href="#%s">%s</a></li>' % (
+            menu.append(format_html(
+                '<li><a href="#{}">{}</a></li>',
                 field.css_id,
                 unicode(field.legend)
             ))

@@ -4,6 +4,7 @@ from __future__ import unicode_literals, absolute_import
 
 from django import template
 from django.contrib.contenttypes.models import ContentType
+from django.utils.html import format_html
 
 from transmittals.models import OutgoingTransmittal
 from categories.models import Category
@@ -32,8 +33,8 @@ def isnew_label(trs_revision):
         label_class = 'primary'
         label_text = 'Updated'
 
-    return '<span class="label label-{}">{}</span>'.format(
-        label_class, label_text)
+    return format_html(
+        '<span class="label label-{}">{}</span>', label_class, label_text)
 
 
 @register.assignment_tag

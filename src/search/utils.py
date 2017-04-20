@@ -176,10 +176,10 @@ def get_mapping(doc_class):
 
     for field_name in fields:
         try:
-            field = doc_class._meta.get_field_by_name(field_name)[0]
+            field = doc_class._meta.get_field(field_name)
         except FieldDoesNotExist:
             try:
-                field = revision_class._meta.get_field_by_name(field_name)[0]
+                field = revision_class._meta.get_field(field_name)
             except FieldDoesNotExist:
                 field = getattr(doc_class, field_name, None)
                 if field is None:

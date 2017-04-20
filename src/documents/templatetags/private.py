@@ -6,6 +6,7 @@ import os
 
 from django import template
 from django.core.urlresolvers import reverse
+from django.utils.html import format_html
 
 
 register = template.Library()
@@ -19,8 +20,7 @@ def private_link(file_field):
     relative_name = file_field.name
     basename = os.path.basename(relative_name)
     url = reverse('protected_download', args=[relative_name])
-    return '<a href="{}">{}</a>'.format(
-        url, basename)
+    return format_html('<a href="{}">{}</a>', url, basename)
 
 
 def get_download_link(revision, fieldname, make_short=False):
@@ -45,7 +45,7 @@ def get_download_link(revision, fieldname, make_short=False):
         tpl = '<a data-toggle="tooltip" data-placement="left" ' \
             'href="{0}" title="{1}" >{1:.10}…</a>'
 
-    return tpl.format(url, file_path)
+    return format_html(tpl, url, file_path)
 
 
 @register.simple_tag
