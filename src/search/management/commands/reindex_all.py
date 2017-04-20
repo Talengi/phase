@@ -25,7 +25,6 @@ from __future__ import unicode_literals
 import logging
 import datetime
 import sys
-from optparse import make_option
 
 from elasticsearch.helpers import bulk
 
@@ -42,12 +41,13 @@ logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
-    option_list = BaseCommand.option_list + (
-        make_option(
+
+    def add_arguments(self, parser):
+
+        parser.add_argument(
             '--noinput',
             action='store_false', dest='interactive', default=True,
-            help='Tells Django to NOT prompt the user for input of any kind.'),
-    )
+            help='Tells Django to NOT prompt the user for input of any kind.')
 
     def handle(self, *args, **options):
         interactive = options.get('interactive')
