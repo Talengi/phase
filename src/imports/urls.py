@@ -1,10 +1,9 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
 from imports.views import ImportList, FileUpload, ImportStatus, ImportTemplate
 
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
 
     url(r'^$',
         ImportList.as_view(),
@@ -18,4 +17,4 @@ urlpatterns = patterns(
     url(r'^(?P<uid>[\w-]+)/$',
         ImportStatus.as_view(),
         name='import_status')
-)
+]

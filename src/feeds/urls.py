@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, absolute_import
 
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
 from feeds.views import (
     AlertHome, AlertNewDocuments, AlertClosedReviews, AlertStartedReviews,
@@ -11,8 +11,7 @@ from feeds.feeds import (
     FeedOverdueDocuments)
 
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/$',
         AlertHome.as_view(),
         name='category_feeds'),
@@ -44,4 +43,4 @@ urlpatterns = patterns(
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/overdue_documents.rss$',
         FeedOverdueDocuments.as_view(),
         name='feed_overdue_documents'),
-)
+]

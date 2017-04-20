@@ -29,13 +29,7 @@ class DashboardProviderChoiceField(models.Field):
     def __init__(self, *args, **kwargs):
         kwargs['max_length'] = kwargs.get('max_length', 250)
         super(DashboardProviderChoiceField, self).__init__(*args, **kwargs)
-        self._choices = None
-
-    def _get_choices(self, *args, **kwargs):
-        if self._choices is None:
-            self._choices = self._get_all_dashboard_providers()
-        return self._choices
-    choices = property(_get_choices)
+        self.choices = self._get_all_dashboard_providers()
 
     def _get_all_dashboard_providers(self):
         """Return the list of all available dashboard providers.

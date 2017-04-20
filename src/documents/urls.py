@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
 from documents.views import (
     DocumentList, DocumentCreate, DocumentDetail, DocumentEdit,
@@ -6,8 +6,7 @@ from documents.views import (
     DocumentRevisionDelete, RevisionFileDownload, DocumentFileDownload
 )
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
 
     # Document short url
     url(r'^documents/(?P<document_key>[\w-]+)/$',
@@ -50,4 +49,4 @@ urlpatterns = patterns(
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/(?P<document_key>[\w-]+)/(?P<field_name>\w+)/$',
         DocumentFileDownload.as_view(),
         name="document_file_download"),
-)
+]

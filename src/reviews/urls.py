@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
 from reviews.views import (
     ReviewersDocumentList, LeaderDocumentList, ApproverDocumentList,
@@ -9,8 +9,7 @@ from reviews.views import (
 from reviews.feeds import (
     FeedReviewersDocumentList, FeedLeaderDocumentList, FeedApproverDocumentList)
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
 
     # Review home page
     url(r'^$',
@@ -70,4 +69,4 @@ urlpatterns = patterns(
     url(r'^(?P<document_key>[\w-]+)/(?P<revision>\d+)/comments/all.zip$',
         CommentsArchiveDownload.as_view(),
         name="download_review_comments_archive"),
-)
+]

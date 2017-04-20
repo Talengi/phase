@@ -1,9 +1,8 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from .forms import EmailAuthenticationForm
 
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url('^login/$',
         'django.contrib.auth.views.login',
         {'authentication_form': EmailAuthenticationForm},
@@ -21,4 +20,4 @@ urlpatterns = patterns(
         'django.contrib.auth.views.password_change',
         {'post_change_redirect': '/'},
         name='password_change')
-)
+]
