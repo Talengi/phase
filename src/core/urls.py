@@ -1,6 +1,7 @@
 from django.conf.urls import include, url
 from django.http import HttpResponse
 from django.contrib import admin
+from django.conf import settings
 
 from privatemedia.views import ProtectedDownload
 
@@ -32,3 +33,10 @@ urlpatterns = [
         "User-agent: *\nDisallow: /",
         content_type="text/plain")),
 ]
+
+if settings.DEBUG:
+    import debug_toolbar
+
+    urlpatterns += [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ]
