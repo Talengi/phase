@@ -8,7 +8,7 @@ from django.conf import settings
 from django.http import (
     HttpResponse, Http404, HttpResponseForbidden, HttpResponseRedirect
 )
-from django.core.servers.basehttp import FileWrapper
+from wsgiref.util import FileWrapper
 from django.core.exceptions import PermissionDenied
 from django.views.generic import (
     ListView, DetailView, RedirectView, DeleteView)
