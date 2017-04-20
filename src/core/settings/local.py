@@ -90,7 +90,13 @@ INTERNAL_IPS = ('127.0.0.1',)
 MIDDLEWARE_CLASSES = ('debug_toolbar.middleware.DebugToolbarMiddleware',) + MIDDLEWARE_CLASSES
 
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
+# Disable template panel because of this bug:
+# https://github.com/jazzband/django-debug-toolbar/issues/910
 DEBUG_TOOLBAR_CONFIG = {
+    'DISABLE_PANELS': {
+        'debug_toolbar.panels.templates.TemplatesPanel',
+        'debug_toolbar.panels.redirects.RedirectsPanel',
+    },
 }
 # ######### END TOOLBAR CONFIGURATION
 
