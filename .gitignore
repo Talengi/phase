@@ -36,3 +36,5 @@ docs/_build
 node_modules
 
 *#
+
+.cache
