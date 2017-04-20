@@ -10,17 +10,37 @@ from base import INSTALLED_APPS, MIDDLEWARE_CLASSES  # Avoid pyflake complains
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#debug
 DEBUG = True
 
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#template-debug
-TEMPLATE_DEBUG = DEBUG
 # ######### END DEBUG CONFIGURATION
 
 # Third party templates are cached.
-TEMPLATE_LOADERS = (
-    ('django.template.loaders.cached.Loader', [
-        'django.template.loaders.app_directories.Loader',
-    ]),
-    'django.template.loaders.filesystem.Loader',
-)
+# TEMPLATE_LOADERS = (
+#     ('django.template.loaders.cached.Loader', [
+#         'django.template.loaders.app_directories.Loader',
+#     ]),
+#     'django.template.loaders.filesystem.Loader',
+# )
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': ['templates'],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'debug': True,
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.static',
+                'accounts.context_processors.navigation',
+                'accounts.context_processors.branding_on_login',
+                'notifications.context_processors.notifications',
+                'reviews.context_processors.reviews',
+                'dashboards.context_processors.dashboards',
+            ],
+        },
+    },
+]
 
 
 # ######### EMAIL CONFIGURATION
@@ -67,10 +87,9 @@ INSTALLED_APPS += (
 INTERNAL_IPS = ('127.0.0.1',)
 
 # See: https://github.com/django-debug-toolbar/django-debug-toolbar#installation
-MIDDLEWARE_CLASSES += (
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
-)
+MIDDLEWARE_CLASSES = ('debug_toolbar.middleware.DebugToolbarMiddleware',) + MIDDLEWARE_CLASSES
 
+DEBUG_TOOLBAR_PATCH_SETTINGS = False
 DEBUG_TOOLBAR_CONFIG = {
 }
 # ######### END TOOLBAR CONFIGURATION

@@ -5,8 +5,6 @@ from base import LOGGING  # Avoid pyflakes complains
 
 DEBUG = False
 
-TEMPLATE_DEBUG = False
-
 
 # ######### IN-MEMORY TEST DATABASE
 SQLITE = {
