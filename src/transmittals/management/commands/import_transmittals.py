@@ -29,19 +29,19 @@ class Command(BaseCommand):
     args = '<contractor_id> <doc_category> <trs_category>'
     help = 'Import existing transmittals for a given contractor.'
 
-    option_list = BaseCommand.option_list + (
-        make_option(
+    def add_arguments(self, parser):
+        parser.add_argument(
             '--trs-validator',
             action='store',
             dest='trs_validator',
             default=False,
-            help='Choose a custom global validator class'),
-        make_option(
+            help='Choose a custom global validator class')
+        parser.add_argument(
             '--csv-line-validator',
             action='store',
             dest='csv_line_validator',
             default=False,
-            help='Choose a custom single csv line validator class'))
+            help='Choose a custom single csv line validator class')
 
     def handle(self, *args, **options):
         from transmittals.models import Transmittal
