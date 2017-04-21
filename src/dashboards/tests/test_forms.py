@@ -52,7 +52,7 @@ class DashboardFieldTests(TestCase):
             data_provider=EmptyDashboard)
         form = DashboardForm(instance=dashboard)
         widget = form['data_provider'].as_widget()
-        selected_option = 'option value="dashboards.dashboards.EmptyDashboard" selected="selected'
+        selected_option = 'option value="dashboards.dashboards.EmptyDashboard" selected'
         self.assertTrue(selected_option in widget)
 
     def test_settings_field_sets_data_on_instance(self):
