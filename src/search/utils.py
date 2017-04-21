@@ -168,6 +168,7 @@ def get_mapping(doc_class):
     }
 
     config = doc_class.PhaseConfig
+    field_types = getattr(config, 'es_field_types', {})
     filter_fields = list(config.filter_fields)
     column_fields = dict(config.column_fields).values()
     additional_fields = getattr(config, 'indexable_fields', [])
@@ -187,7 +188,7 @@ def get_mapping(doc_class):
                         warning = 'Field {} cannot be found and will not be indexed'.format(field_name)
                         logger.warning(warning)
 
-        es_type = get_mapping_type(field) if field else 'string'
+        es_type = get_mapping_type(field_name, field, field_types) if field else 'string'
 
         mapping['properties'].update({
             field_name: {
@@ -206,8 +207,11 @@ def get_mapping(doc_class):
     return mapping
 
 
-def get_mapping_type(field):
+def get_mapping_type(name, field, field_types):
     """Get the elasticsearch mapping type from a django field."""
+    if name in field_types:
+        return field_types[name]
+
     for typeinfo, typename in TYPE_MAPPING:
         if isinstance(field, typeinfo):
             return typename

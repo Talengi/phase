@@ -163,6 +163,9 @@ class ContractorDeliverable(ScheduleMixin, Metadata):
             'document_type', 'under_review', 'overdue', 'leader', 'approver'
         )
         indexable_fields = ['is_existing', 'can_be_transmitted']
+        es_field_types = {
+            'overdue': 'boolean',
+        }
         column_fields = (
             ('', 'under_preparation_by'),
             ('Document Number', 'document_number'),
