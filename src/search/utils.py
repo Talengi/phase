@@ -160,7 +160,7 @@ def get_mapping(doc_class):
     revision_class = doc_class.get_revision_class()
     mapping = {
         '_all': {
-            'index_analyzer': 'nGram_analyzer',
+            'analyzer': 'nGram_analyzer',
             'search_analyzer': 'whitespace_analyzer',
             'index': 'not_analyzed',
         },
