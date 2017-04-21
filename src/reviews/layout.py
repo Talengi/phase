@@ -1,7 +1,6 @@
 import operator
 
 from django.template.loader import render_to_string
-from django.template import Context
 from crispy_forms.layout import LayoutObject
 
 
@@ -21,24 +20,20 @@ class ReviewsLayout(LayoutObject):
         nb_comments = form.nb_comments
         can_discuss = form.can_discuss
 
-        return render_to_string(
-            self.template,
-            Context({
-                'document': revision.document,
-                'revision': revision,
-                'reviews': reviews,
-                'nb_comments': nb_comments,
-                'form_style': form_style,
-                'can_discuss': can_discuss,
-            }))
+        return render_to_string(self.template, {
+            'document': revision.document,
+            'revision': revision,
+            'reviews': reviews,
+            'nb_comments': nb_comments,
+            'form_style': form_style,
+            'can_discuss': can_discuss,
+        })
 
 
 class QuickDistributionListWidgetLayout(LayoutObject):
     template = 'layout/distribution_list_widget.html'
 
     def render(self, form, *args, **kwargs):
-        return render_to_string(
-            self.template,
-            Context({
-                'category': form.category
-            }))
+        return render_to_string(self.template, {
+            'category': form.category
+        })
