@@ -14,7 +14,6 @@ from .serializers import ActivitySerializer
 class AuditTrailList(CategoryAPIViewMixin, generics.ListAPIView):
     model = Activity
     serializer_class = ActivitySerializer
-    paginate_by_param = 'page_limit'
 
     def get_queryset(self):
         ct = ContentType.objects.get_for_model(Document)

@@ -12,7 +12,6 @@ from bookmarks.api.serializers import BookmarkSerializer
 class BookmarkViewSet(viewsets.ModelViewSet):
     model = Bookmark
     serializer_class = BookmarkSerializer
-    paginate_by_param = 'page_limit'
     permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):
