@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django import template
-from django.template.loader import get_template, select_template
+from django.template.loader import select_template
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.html import format_html, format_html_join
 from django.utils.safestring import mark_safe
@@ -151,7 +151,7 @@ def batch_action_menu(Metadata, category, user):
 def include_action_modals(context, revision):
     rendered = []
     for tpl in revision.get_action_modals():
-        content = get_template(tpl)
+        content = context.template.engine.get_template(tpl)
         rendered.append(content.render(context))
     return mark_safe('\n'.join(rendered))
 
