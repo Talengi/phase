@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 import csv
 import datetime as dt
 import json
-from itertools import izip_longest
+from itertools import zip_longest
 
 from django.apps import apps
 from django.db import models
@@ -147,7 +147,7 @@ class ImportBatch(models.Model):
                     header_row = [c.value for c in list(row)]
                     continue
                 values = [xls_to_django(c.value) for c in list(row)]
-                row = dict(izip_longest(header_row, values))
+                row = dict(zip_longest(header_row, values))
                 imp = Import(batch=self, data=row)
                 yield imp
 
