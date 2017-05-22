@@ -156,7 +156,7 @@ class PropertyLayout(LayoutObject):
 
         if iterator is not None:
             template = self.list_html
-            value = '<li>%s</li>' % '</li><li>'.join([unicode(i) for i in iterator])
+            value = '<li>%s</li>' % '</li><li>'.join([i for i in iterator])
         else:
             template = self.html
             value = prop
@@ -237,7 +237,7 @@ class DocumentFieldset(Fieldset):
     def __init__(self, *args, **kwargs):
         super(DocumentFieldset, self).__init__(*args, **kwargs)
         if self.css_id is None:
-            legend = unicode(self.legend)
+            legend = self.legend
             self.css_id = 'fieldset-%s' % slugify(legend)
 
 

@@ -170,7 +170,7 @@ def get_mapping(doc_class):
     config = doc_class.PhaseConfig
     field_types = getattr(config, 'es_field_types', {})
     filter_fields = list(config.filter_fields)
-    column_fields = dict(config.column_fields).values()
+    column_fields = list(dict(config.column_fields).values())
     additional_fields = getattr(config, 'indexable_fields', [])
     fields = set(filter_fields + column_fields + additional_fields)
 
