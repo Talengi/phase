@@ -15,7 +15,7 @@ class ReviewsLayout(LayoutObject):
         # retains their original order). First we sort items according to their
         #  pk, then according to the role name in order to get Reviewers,
         # then the Leader and finally The Approver (R, L, A)
-        reviews.sort(key=operator.attrgetter('pk'))
+        reviews.sort(key=operator.attrgetter('created_on'))
         reviews.sort(key=operator.attrgetter('role'), reverse=True)
         nb_comments = form.nb_comments
         can_discuss = form.can_discuss
