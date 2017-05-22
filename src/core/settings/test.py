@@ -1,7 +1,7 @@
 from unipath import Path  # Avoid pyflake complains
 
-from base import *  # noqa
-from base import LOGGING  # Avoid pyflakes complains
+from .base import *  # noqa
+from .base import LOGGING  # Avoid pyflakes complains
 
 DEBUG = False
 
