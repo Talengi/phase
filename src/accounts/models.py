@@ -123,7 +123,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         if not site:
             site = Site.objects.get_current()
         ctx = {
-            'uidb64': urlsafe_base64_encode('%s' % self.id),
+            'uidb64': urlsafe_base64_encode('{}'.format(self.id).encode()),
             'token': token,
             'username': self.name,
             'site': site,
