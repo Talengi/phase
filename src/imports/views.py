@@ -10,7 +10,7 @@ from notifications.models import notify
 from imports.models import ImportBatch
 from imports.forms import FileUploadForm, ImportTemplateGenerationForm
 from imports.tasks import do_import
-from utils import make_csv_template, make_xlsx_template
+from .utils import make_csv_template, make_xlsx_template
 
 
 class ImportMixin(object):
