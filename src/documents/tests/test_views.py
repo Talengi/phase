@@ -140,7 +140,6 @@ class DocumentDownloadTest(TestCase):
         """
         Tests that a document download returns a zip file of the latest revision.
         """
-        sample_path = b'documents/tests/'
         native_doc = b'sample_doc_native.docx'
         pdf_doc = b'sample_doc_pdf.pdf'
 
@@ -148,9 +147,8 @@ class DocumentDownloadTest(TestCase):
             document_key='HAZOP-related',
             category=self.category,
             revision={
-                'native_file': SimpleUploadedFile(native_doc,
-                                                  sample_path + native_doc),
-                'pdf_file': SimpleUploadedFile(pdf_doc, sample_path + pdf_doc),
+                'native_file': SimpleUploadedFile(native_doc, b'content'),
+                'pdf_file': SimpleUploadedFile(pdf_doc, b'content'),
             }
         )
         c = self.client
@@ -182,10 +180,12 @@ class DocumentDownloadTest(TestCase):
             'format': 'both',
         })
         self.assertEqual(r.status_code, 200)
-        self.assertEqual(r._headers, {
+        self.assertDictEqual(r._headers, {
             'content-length': ('Content-Length', '22'),
+            'content-language': ('Content-Language', 'en'),
             'content-type': ('Content-Type', 'application/zip'),
-            'vary': ('Vary', 'Cookie'),
+            'vary': ('Vary', 'Accept-Language, Cookie'),
+            'x-frame-options': ('X-Frame-Options', 'SAMEORIGIN'),
             'content-disposition': (
                 'Content-Disposition',
                 'attachment; filename=download.zip'
@@ -200,23 +200,20 @@ class DocumentDownloadTest(TestCase):
         document = DocumentFactory(
             category=self.category,
         )
-        sample_path = b'documents/tests/'
-        native_doc = b'sample_doc_native.docx'
-        pdf_doc = b'sample_doc_pdf.pdf'
+        native_doc = 'sample_doc_native.docx'
+        pdf_doc = 'sample_doc_pdf.pdf'
 
         MetadataRevisionFactory(
             metadata=document.get_metadata(),
             revision=2,
-            native_file=SimpleUploadedFile(native_doc,
-                                           sample_path + native_doc),
-            pdf_file=SimpleUploadedFile(pdf_doc, sample_path + pdf_doc),
+            native_file=SimpleUploadedFile(native_doc, b'content'),
+            pdf_file=SimpleUploadedFile(pdf_doc, b'content'),
         )
         MetadataRevisionFactory(
             metadata=document.get_metadata(),
             revision=3,
-            native_file=SimpleUploadedFile(native_doc,
-                                           sample_path + native_doc),
-            pdf_file=SimpleUploadedFile(pdf_doc, sample_path + pdf_doc),
+            native_file=SimpleUploadedFile(native_doc, b'content'),
+            pdf_file=SimpleUploadedFile(pdf_doc, b'content'),
         )
         r = self.client.post(document.category.get_download_url(), {
             'document_ids': document.id,
@@ -501,9 +498,8 @@ class PrivateDownloadTests(TestCase):
         self.doc = DocumentFactory(category=self.category)
         self.rev = self.doc.get_latest_revision()
 
-        sample_path = b'documents/tests/'
-        pdf_doc = b'sample_doc_pdf.pdf'
-        self.sample_pdf = SimpleUploadedFile(pdf_doc, sample_path + pdf_doc)
+        pdf_doc = 'sample_doc_pdf.pdf'
+        self.sample_pdf = SimpleUploadedFile(pdf_doc, b'content')
         self.url = reverse('revision_file_download', args=[
             self.category.organisation.slug,
             self.category.slug,

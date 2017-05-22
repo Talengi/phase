@@ -65,10 +65,8 @@ class DocumentCreateTest(TestCase):
         """
         extension_error = 'A PDF file is not allowed in this field.'
         c = self.client
-        with open(join(self.sample_path,
-                       'sample_doc_native.docx')) as native_file:
-            with open(
-                    join(self.sample_path, 'sample_doc_pdf.pdf')) as pdf_file:
+        with open(join(self.sample_path, 'sample_doc_native.docx'), mode='rb') as native_file:
+            with open(join(self.sample_path, 'sample_doc_pdf.pdf'), mode='rb') as pdf_file:
                 r = c.post(self.create_url, {
                     'title': 'a title',
                     'native_file': pdf_file,
@@ -150,10 +148,8 @@ class DocumentCreateTest(TestCase):
         """
         original_number_of_document = Document.objects.all().count()
         c = self.client
-        with open(join(self.sample_path,
-                       'sample_doc_native.docx')) as native_file:
-            with open(
-                    join(self.sample_path, 'sample_doc_pdf.pdf')) as pdf_file:
+        with open(join(self.sample_path, 'sample_doc_native.docx'), mode='rb') as native_file:
+            with open(join(self.sample_path, 'sample_doc_pdf.pdf'), mode='rb') as pdf_file:
                 r = c.post(self.create_url, {
                     'title': 'a title',
                     'native_file': native_file,
@@ -467,8 +463,8 @@ class DocumentReviseTest(TestCase):
         ])
         sample_path = join(settings.DJANGO_ROOT, 'documents', 'tests')
 
-        with open(join(sample_path, 'sample_doc_native.docx')) as native_file:
-            with open(join(sample_path, 'sample_doc_pdf.pdf')) as pdf_file:
+        with open(join(sample_path, 'sample_doc_native.docx'), mode='rb') as native_file:
+            with open(join(sample_path, 'sample_doc_pdf.pdf'), mode='rb') as pdf_file:
                 self.client.post(url, {
                     'document_key': document.document_key,
                     'title': document.metadata.title,
