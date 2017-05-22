@@ -30,7 +30,7 @@ class ValuesList(models.Model):
         verbose_name_plural = _('Values lists')
         app_label = 'metadata'
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -58,7 +58,7 @@ class ListEntry(models.Model):
         ordering = ('order', 'index')
         app_label = 'metadata'
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s - %s' % (self.index, self.value)
 
     def save(self, *args, **kwargs):

@@ -136,7 +136,7 @@ class Transmittal(Metadata):
             ('Status', 'status'),
         )
 
-    def __unicode__(self):
+    def __str__(self):
         return self.document_key
 
     def save(self, *args, **kwargs):
@@ -407,7 +407,7 @@ class TrsRevision(models.Model):
         verbose_name_plural = _('Trs Revisions')
         unique_together = ('transmittal', 'document_key', 'revision')
 
-    def __unicode__(self):
+    def __str__(self):
         return '{} ({:02d})'.format(self.document_key, self.revision)
 
     def get_absolute_url(self):
@@ -566,7 +566,7 @@ class OutgoingTransmittal(Metadata):
             ('Has error', 'has_error'),
         ))
 
-    def __unicode__(self):
+    def __str__(self):
         return self.document_key
 
     def get_revisions(self):

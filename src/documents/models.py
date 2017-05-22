@@ -82,7 +82,7 @@ class Document(models.Model):
         permissions = (('can_control_document', 'Can control document'),
                        ('can_start_stop_review', 'Can start stop review'),)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.document_number
 
     def get_absolute_url(self):
@@ -268,7 +268,7 @@ class Metadata(six.with_metaclass(MetadataBase, models.Model)):
     class Meta:
         abstract = True
 
-    def __unicode__(self):
+    def __str__(self):
         return self.document_key
 
     def get_absolute_url(self):
@@ -430,7 +430,7 @@ class MetadataRevisionBase(models.Model):
         get_latest_by = 'revision'
         unique_together = ('document', 'revision')
 
-    def __unicode__(self):
+    def __str__(self):
         return '{} ({})'.format(
             self.document.document_key,
             self.revision)
@@ -523,7 +523,7 @@ class MetadataRevisionBase(models.Model):
 
             if isinstance(value, models.Model):
                 field = (
-                    (str(key), value.__unicode__()),
+                    (str(key), value.__str__()),
                     ('%s_id' % key, value.pk)
                 )
             else:

@@ -46,9 +46,6 @@ class MenuItem(object):
             raise ImproperlyConfigured('Incorrect "method" value')
         self.method = method
 
-    def __unicode__(self):
-        return self.to_html()
-
     def __str__(self):
         return self.to_html()
 

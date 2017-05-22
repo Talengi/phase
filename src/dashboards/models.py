@@ -34,7 +34,7 @@ class Dashboard(models.Model):
         verbose_name_plural = _('Dashboard provider')
         unique_together = ('slug', 'category')
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
     def get_absolute_url(self):

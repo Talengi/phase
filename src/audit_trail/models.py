@@ -90,7 +90,7 @@ class Activity(models.Model):
         verbose_name_plural = _('Activities')
         ordering = ['-created_on']
 
-    def __unicode__(self):
+    def __str__(self):
         ctx = {
             'actor': self.actor or self.actor_object_str,
             'verb': self.get_verb_display(),

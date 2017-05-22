@@ -32,7 +32,7 @@ class Organisation(models.Model):
     class Meta:
         app_label = 'categories'
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def save(self, *args, **kwargs):
@@ -75,7 +75,7 @@ class CategoryTemplate(models.Model):
         verbose_name_plural = _('Category templates')
         app_label = 'categories'
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -114,7 +114,7 @@ class Category(models.Model):
         verbose_name = _('Category')
         verbose_name_plural = _('Categories')
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s > %s' % (self.organisation.name,
                             self.category_template.name)
 
@@ -172,5 +172,5 @@ class Contract(models.Model):
                                         related_name='contracts',
                                         verbose_name=_('Categories'))
 
-    def __unicode__(self):
+    def __str__(self):
         return self.number

@@ -109,7 +109,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = 'Users'
         app_label = 'accounts'
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def get_full_name(self):
@@ -176,7 +176,7 @@ class Entity(models.Model):
         verbose_name = _('Entity')
         verbose_name_plural = _('Entities')
 
-    def __unicode__(self):
+    def __str__(self):
         return '{} - {}'.format(self.trigram, self.name)
 
     def save(self, force_insert=False, force_update=False, using=None,
