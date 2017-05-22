@@ -140,8 +140,8 @@ class DocumentDownloadTest(TestCase):
         """
         Tests that a document download returns a zip file of the latest revision.
         """
-        native_doc = b'sample_doc_native.docx'
-        pdf_doc = b'sample_doc_pdf.pdf'
+        native_doc = 'sample_doc_native.docx'
+        pdf_doc = 'sample_doc_pdf.pdf'
 
         document = DocumentFactory(
             document_key='HAZOP-related',
@@ -158,10 +158,8 @@ class DocumentDownloadTest(TestCase):
             'format': 'both',
         })
         self.assertEqual(r.status_code, 200)
-        self.assertEqual(r._headers['vary'],
-                         ('Vary', 'Cookie, Accept-Encoding'))
-        self.assertEqual(r._headers['content-type'],
-                         ('Content-Type', 'application/zip'))
+        self.assertEqual(r._headers['vary'], ('Vary', 'Accept-Language, Cookie'))
+        self.assertEqual(r._headers['content-type'], ('Content-Type', 'application/zip'))
         self.assertEqual(r._headers['content-disposition'], (
             'Content-Disposition',
             'attachment; filename=download.zip'))

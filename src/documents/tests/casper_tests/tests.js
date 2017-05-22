@@ -117,16 +117,23 @@ casper.test.begin('Buttons are enabled on checkbox click', 0, function suite(tes
 
 casper.test.begin('Select all checkbox', 0, function suite(test) {
     casper.start(document_list_url, function() {
+        casper.wait(100);
         test.assertElementCount('#documents input:checked', 0);
     });
 
     casper.then(function() {
         casper.click('#select-all');
+    });
+
+    casper.then(function() {
         test.assertElementCount('#documents input:checked', 6);
     });
 
     casper.then(function() {
         casper.click('#select-all');
+    });
+
+    casper.then(function() {
         test.assertElementCount('#documents input:checked', 0);
 
     });
