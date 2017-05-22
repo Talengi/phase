@@ -27,11 +27,11 @@ from documents.utils import save_document_forms
 
 
 class normal_dialect(csv.Dialect):
-    delimiter = b';'
-    quotechar = b'"'
+    delimiter = ';'
+    quotechar = '"'
     doublequote = False
     skipinitialspace = True
-    lineterminator = b'\r\n'
+    lineterminator = '\r\n'
     quoting = csv.QUOTE_NONE
     strict = True
 csv.register_dialect('normal', normal_dialect)
