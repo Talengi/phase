@@ -11,8 +11,8 @@ Instead, we are using a private configuration file that MUST not be
 added to the git repository to protect private configuration data.
 """
 
-from base import *  # noqa
-from base import INSTALLED_APPS, SITE_NAME  # Avoid pyflakes complains
+from .base import *  # noqa
+from .base import INSTALLED_APPS, SITE_NAME  # Avoid pyflakes complains
 
 # Normally you should not import ANYTHING from Django directly
 # into your settings, but ImproperlyConfigured is an exception.

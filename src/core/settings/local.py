@@ -3,8 +3,8 @@ from unipath import Path  # Avoid pyflakes complains
 
 import warnings
 
-from base import *  # noqa
-from base import INSTALLED_APPS, MIDDLEWARE_CLASSES  # Avoid pyflake complains
+from .base import *  # noqa
+from .base import INSTALLED_APPS, MIDDLEWARE_CLASSES  # Avoid pyflake complains
 
 # ######### DEBUG CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#debug
