@@ -181,12 +181,7 @@ class DocumentCreateTest(TestCase):
             'received_date': '2015-10-10',
             'save-create': None,
         }, follow=True)
-        self.assertEqual(
-            r.redirect_chain,
-            [('http://testserver{url}'.format(
-                url=self.create_url,
-            ), 302)]
-        )
+        self.assertEqual(r.redirect_chain, [(self.create_url, 302)])
 
         r = c.post(self.create_url, {
             'title': u'another title',
@@ -194,11 +189,8 @@ class DocumentCreateTest(TestCase):
             'created_on': '2015-10-10',
             'received_date': '2015-10-10',
         }, follow=True)
-        self.assertEqual(
-            r.redirect_chain,
-            [('http://testserver{url}'.format(
-                url=self.category.get_absolute_url(),
-            ), 302)]
+        self.assertEqual(r.redirect_chain, [
+            (self.category.get_absolute_url(), 302)]
         )
 
     def test_document_related_documents(self):
@@ -338,12 +330,7 @@ class DocumentEditTest(TestCase):
             'received_date': '2015-10-10',
             'save-view': 'View',
         }, follow=True)
-        self.assertEqual(
-            r.redirect_chain,
-            [('http://testserver{url}'.format(
-                url=doc.get_absolute_url(),
-            ), 302)]
-        )
+        self.assertEqual(r.redirect_chain, [(doc.get_absolute_url(), 302)])
 
         r = c.post(doc.get_edit_url(), {
             'document_number': doc.document_key,
@@ -352,12 +339,8 @@ class DocumentEditTest(TestCase):
             'created_on': '2015-10-10',
             'received_date': '2015-10-10',
         }, follow=True)
-        self.assertEqual(
-            r.redirect_chain,
-            [('http://testserver{url}'.format(
-                url=self.category.get_absolute_url(),
-            ), 302)]
-        )
+        self.assertEqual(r.redirect_chain, [
+            (self.category.get_absolute_url(), 302)])
         # Check that update was logged in audit trail
         activity = Activity.objects.latest('created_on')
         self.assertEqual(activity.verb, Activity.VERB_EDITED)
