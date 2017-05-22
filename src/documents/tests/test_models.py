@@ -16,7 +16,7 @@ class DocumentTest(TestCase):
     maxDiff = None
 
     def test_metadata_property(self):
-        date = datetime.datetime(2013, 04, 20, 12, 0, 0, tzinfo=utc)
+        date = datetime.datetime(2013, 4, 20, 12, 0, 0, tzinfo=utc)
         document = DocumentFactory(
             document_key='FAC09001-FWF-000-HSE-REP-0004',
             created_on=date,
@@ -37,7 +37,7 @@ class DocumentTest(TestCase):
     def test_jsonification(self):
         """Tests that a jsonified document returns the appropriate values."""
 
-        date = datetime.datetime(2013, 04, 20, 12, 0, 0, tzinfo=utc)
+        date = datetime.datetime(2013, 4, 20, 12, 0, 0, tzinfo=utc)
 
         document = DocumentFactory(
             document_key='FAC09001-FWF-000-HSE-REP-0004',
@@ -71,7 +71,7 @@ class DocumentTest(TestCase):
         )
 
     def test_get_actions(self):
-        date = datetime.datetime(2013, 04, 20, 12, 0, 0, tzinfo=utc)
+        date = datetime.datetime(2013, 4, 20, 12, 0, 0, tzinfo=utc)
 
         document = DocumentFactory(
             document_key='FAC09001-FWF-000-HSE-REP-0004',
