@@ -32,6 +32,7 @@ casper.test.begin('Documents are fetched on page load', 0, function suite(test) 
         // Reduced viewport so the "see more docs" buttons
         // is not visible until we scroll to bottom
         casper.viewport(1024, 250);
+        casper.wait(100);
     });
 
     casper.then(function() {
@@ -51,9 +52,12 @@ casper.test.begin('Documents are fetched on page load', 0, function suite(test) 
 
     casper.then(function() {
         casper.click('#documents-pagination');
-        casper.wait(400);
+        casper.wait(500);
+    });
+
+    casper.then(function() {
         casper.click('#documents-pagination');
-        casper.wait(400);
+        casper.wait(500);
     });
 
     casper.then(function() {
@@ -69,6 +73,7 @@ casper.test.begin('Documents are fetched on page load', 0, function suite(test) 
 
 casper.test.begin('Clicking on a checkbox add a class to the tr', 0, function suite(test) {
     casper.start(document_list_url, function() {
+        casper.wait(100);
         test.assertDoesntExist('tr.selected');
     });
 
@@ -89,6 +94,7 @@ casper.test.begin('Clicking on a checkbox add a class to the tr', 0, function su
 
 casper.test.begin('Buttons are enabled on checkbox click', 0, function suite(test) {
     casper.start(document_list_url, function() {
+        casper.wait(100);
         test.assertExists('#batch-action-buttons>button.disabled');
     });
 
@@ -132,6 +138,7 @@ casper.test.begin('Select all checkbox', 0, function suite(test) {
 
 casper.test.begin('Selecting a row creates an input field in download form', 0, function suite(test) {
     casper.start(document_list_url, function() {
+        casper.wait(500);
         test.assertDoesntExist('input[name=document_ids]');
     });
 
@@ -153,6 +160,10 @@ casper.test.begin('Selecting a row creates an input field in download form', 0, 
 casper.test.begin('Clicking a row redirects to the document page', 0, function suite(test) {
     casper.start(document_list_url, function() {
         test.assertUrlMatch(/\/organisation_\d+\/category_\d+\/$/);
+        casper.wait(500);
+    });
+
+    casper.then(function() {
         casper.click('td.columndocument_number');
     });
 
@@ -203,6 +214,10 @@ casper.test.begin('The filter form cannot be submitted', 0, function suite(test)
 
 casper.test.begin('Clicking a column sorts stuff', 0, function suite(test) {
     casper.start(document_list_url, function() {
+        casper.wait(500);
+    });
+
+    casper.then(function() {
         test.assertExists('#columndocument_number span.glyphicon.glyphicon-chevron-down');
         test.assertSelectorHasText('tbody tr:first-of-type td:nth-of-type(3)', 'hazop-report-0');
     });
@@ -244,6 +259,10 @@ casper.test.begin('Clicking a column sorts stuff', 0, function suite(test) {
 
 casper.test.begin('The search form searches', 0, function suite(test) {
     casper.start(document_list_url, function() {
+        casper.wait(500);
+    });
+
+    casper.then(function() {
         test.assertElementCount('table#documents tbody tr', 5);
         casper.click('button#toggle-filters-button');
     });
@@ -264,14 +283,29 @@ casper.test.begin('The search form searches', 0, function suite(test) {
 
 casper.test.begin('Favorite tests', 0, function suite(test) {
     casper.start(document_list_url, function() {
+        casper.wait(500);
+    });
+
+    casper.then(function() {
         test.assertElementCount('td.columnfavorite span.glyphicon-star', 0);
         casper.click('tbody tr:nth-of-type(1) td.columnfavorite span');
+    });
+
+    casper.then(function() {
         casper.click('tbody tr:nth-of-type(3) td.columnfavorite span');
+    });
+
+    casper.then(function() {
         casper.click('tbody tr:nth-of-type(5) td.columnfavorite span');
         casper.reload();
     });
 
     casper.then(function() {
+        casper.wait(500);
+    });
+
+    casper.then(function() {
+        casper.capture('/tmp/phase.png');
         test.assertElementCount('td.columnfavorite span.glyphicon-star', 3);
     });
 
