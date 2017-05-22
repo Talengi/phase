@@ -102,7 +102,7 @@ class DistributionListForm(DistributionListValidationMixin, forms.ModelForm):
         for reviewer in reviewers:
             try:
                 self.validate_user_categories(reviewer)
-            except ValidationError, e:
+            except ValidationError as e:
                 errors.append(e.message)
 
         if len(errors) > 0:
