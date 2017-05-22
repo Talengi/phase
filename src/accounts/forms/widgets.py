@@ -28,7 +28,7 @@ class UserAutocomplete(BaseUserAutocomplete):
             obj = self.choices.queryset.get(pk=value)
             attrs.update({
                 'data-initial-id': value,
-                'data-initial-label': unicode(obj),
+                'data-initial-label': str(obj),
             })
         else:
             attrs.update({
@@ -50,7 +50,7 @@ class MultipleUserAutocomplete(BaseUserAutocomplete):
         objects = self.choices.queryset.filter(pk__in=value)\
             .values_list('id', 'name')
         attrs.update({
-            'data-initial-id': '[%s]' % ','.join(unicode(obj[0]) for obj in objects),
+            'data-initial-id': '[%s]' % ','.join(str(obj[0]) for obj in objects),
             'data-initial-label': '[%s]' % ','.join('"%s"' % obj[1] for obj in objects),
         })
         return super(AutocompleteTextInput, self).render(name, value, attrs)

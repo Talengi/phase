@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
+
 
 import csv
 import datetime as dt
@@ -245,7 +245,7 @@ class Import(models.Model):
         import_fields = config.import_fields
 
         # Process each field_name/value to get the fk pk if any
-        for field_name, value in self.data.items():
+        for field_name, value in list(self.data.items()):
             val = self.get_denormalized_value(import_fields, field_name, value)
             # We fill the dict
             self.denormalized[field_name] = val
@@ -290,7 +290,7 @@ class Import(models.Model):
                 self.document = doc
                 self.status = self.STATUSES.success
             else:
-                errors = dict(form.errors.items() + revision_form.errors.items())
+                errors = dict(list(form.errors.items()) + list(revision_form.errors.items()))
                 self.errors = json.dumps(errors)
                 self.status = self.STATUSES.error
         except Exception as e:

@@ -16,7 +16,7 @@ def crispy_menu(form, helper):
         menu = format_html_join(
             ' ',
             '<li><a href="#{}">{}</a></li>',
-            ((field.css_id, unicode(field.legend)) for field in fields)
+            ((field.css_id, str(field.legend)) for field in fields)
         )
 
     return menu

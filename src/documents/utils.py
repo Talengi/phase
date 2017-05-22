@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from django.contrib.contenttypes.models import ContentType
 from django.utils.encoding import force_text
@@ -177,7 +177,7 @@ def stringify_value(val, none_val='NC'):
     if val is None:
         unicode_val = none_val
     elif type(val) == bool:
-        unicode_val = u'Yes' if val else u'No'
+        unicode_val = 'Yes' if val else 'No'
     else:
         unicode_val = force_text(val)
 

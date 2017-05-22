@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 import csv
 
@@ -14,7 +14,7 @@ def make_csv_template(import_fields, filename):
     response = HttpResponse(content_type='text/csv')
     cd = 'attachment; filename="{}_template.csv"'.format(filename)
     response['Content-Disposition'] = cd
-    fields = import_fields.keys()
+    fields = list(import_fields.keys())
     writer = csv.writer(response, delimiter=b';')
     writer.writerow(fields)
     return response
@@ -26,7 +26,7 @@ def make_xlsx_template(import_fields, filename):
                      'spreadsheetml.sheet')
     cd = 'attachment; filename="{}_template.xlsx"'.format(filename)
     response['Content-Disposition'] = cd
-    fields = import_fields.keys()
+    fields = list(import_fields.keys())
     wb = Workbook()
     ws = wb.active
     ws.append(fields)

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from os.path import basename
 
@@ -18,9 +18,9 @@ class PhaseClearableFileInput(ClearableFileInput):
     change otherwise.
 
     """
-    url_markup_template = u'<a href="{0}">{1}</a> ({2})'
-    template_with_initial = u'<div class="fileinput">%(initial)s %(clear_template)s<br /><div class="change">%(input_text)s: %(input)s</div></div>'
-    template_with_clear = u'<div class="clear">%(clear)s <label for="%(clear_checkbox_id)s">%(clear_checkbox_label)s</label></div>'
+    url_markup_template = '<a href="{0}">{1}</a> ({2})'
+    template_with_initial = '<div class="fileinput">%(initial)s %(clear_template)s<br /><div class="change">%(input_text)s: %(input)s</div></div>'
+    template_with_clear = '<div class="clear">%(clear)s <label for="%(clear_checkbox_id)s">%(clear_checkbox_label)s</label></div>'
 
     def render(self, name, value, attrs=None):
         """Render the field.

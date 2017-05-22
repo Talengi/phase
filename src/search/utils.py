@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 
-from __future__ import unicode_literals
+
 
 import logging
 
@@ -61,7 +61,7 @@ def index_document(document_id):
         .select_related() \
         .get(pk=document_id)
     revisions = document.get_all_revisions()
-    actions = map(build_index_data, revisions)
+    actions = list(map(build_index_data, revisions))
 
     bulk(
         elastic,
@@ -72,7 +72,7 @@ def index_document(document_id):
 
 def index_revisions(revisions):
     """Index a bunch of revisions."""
-    actions = map(build_index_data, revisions)
+    actions = list(map(build_index_data, revisions))
     bulk(
         elastic,
         actions,
@@ -105,12 +105,12 @@ def unindex_document(document_id):
         .select_related() \
         .get(pk=document_id)
     revisions = document.get_all_revisions()
-    actions = map(lambda revision: {
+    actions = [{
         '_op_type': 'delete',
         '_index': settings.ELASTIC_INDEX,
         '_type': document.document_type(),
         '_id': revision.unique_id,
-    }, revisions)
+    } for revision in revisions]
 
     bulk(
         elastic,

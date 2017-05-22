@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 import os
 from os.path import join
@@ -48,7 +48,7 @@ class DocumentCreateTest(TestCase):
         """
         Tests that a document can't be created without required fields.
         """
-        required_error = u'This field is required.'
+        required_error = 'This field is required.'
         c = self.client
         r = c.get(self.create_url)
         self.assertEqual(r.status_code, 200)
@@ -63,14 +63,14 @@ class DocumentCreateTest(TestCase):
         """
         Tests that a document can't be created with wrong files.
         """
-        extension_error = u'A PDF file is not allowed in this field.'
+        extension_error = 'A PDF file is not allowed in this field.'
         c = self.client
         with open(join(self.sample_path,
                        'sample_doc_native.docx')) as native_file:
             with open(
                     join(self.sample_path, 'sample_doc_pdf.pdf')) as pdf_file:
                 r = c.post(self.create_url, {
-                    'title': u'a title',
+                    'title': 'a title',
                     'native_file': pdf_file,
                     'pdf_file': native_file,
                     'docclass': 1,
@@ -89,7 +89,7 @@ class DocumentCreateTest(TestCase):
         original_number_of_document = Document.objects.all().count()
         c = self.client
         r = c.post(self.create_url, {
-            'title': u'a title',
+            'title': 'a title',
         })
         if r.status_code == 302:
             self.assertEqual(
@@ -105,7 +105,7 @@ class DocumentCreateTest(TestCase):
         Tests that a document can be created with required fields.
         """
         c = self.client
-        doc_title = u'a glorious title'
+        doc_title = 'a glorious title'
         c.post(self.create_url, {
             'title': doc_title,
             'docclass': 1,
@@ -126,10 +126,10 @@ class DocumentCreateTest(TestCase):
 
     def test_create_with_document_key(self):
         c = self.client
-        doc_title = u'another title'
+        doc_title = 'another title'
         c.post(self.create_url, {
             'title': doc_title,
-            'document_number': u'Gloubi Boulga',
+            'document_number': 'Gloubi Boulga',
             'docclass': 1,
             'created_on': '2015-10-10',
             'received_date': '2015-10-10',
@@ -155,7 +155,7 @@ class DocumentCreateTest(TestCase):
             with open(
                     join(self.sample_path, 'sample_doc_pdf.pdf')) as pdf_file:
                 r = c.post(self.create_url, {
-                    'title': u'a title',
+                    'title': 'a title',
                     'native_file': native_file,
                     'pdf_file': pdf_file,
                 })
@@ -175,7 +175,7 @@ class DocumentCreateTest(TestCase):
         """
         c = self.client
         r = c.post(self.create_url, {
-            'title': u'a title',
+            'title': 'a title',
             'docclass': 1,
             'created_on': '2015-10-10',
             'received_date': '2015-10-10',
@@ -184,7 +184,7 @@ class DocumentCreateTest(TestCase):
         self.assertEqual(r.redirect_chain, [(self.create_url, 302)])
 
         r = c.post(self.create_url, {
-            'title': u'another title',
+            'title': 'another title',
             'docclass': 1,
             'created_on': '2015-10-10',
             'received_date': '2015-10-10',
@@ -200,7 +200,7 @@ class DocumentCreateTest(TestCase):
                 category=self.category,
                 document_key='FAC09001-FWF-000-HSE-REP-0004',
                 metadata={
-                    'title': u'HAZOP related 1',
+                    'title': 'HAZOP related 1',
                 },
                 revision={
                     'status': 'STD',
@@ -210,7 +210,7 @@ class DocumentCreateTest(TestCase):
                 category=self.category,
                 document_key='FAC09001-FWF-000-HSE-REP-0005',
                 metadata={
-                    'title': u'HAZOP related 2',
+                    'title': 'HAZOP related 2',
                 },
                 revision={
                     'status': 'STD',
@@ -219,7 +219,7 @@ class DocumentCreateTest(TestCase):
         ]
         c.post(self.create_url, {
             'document_number': 'FAC09001-FWF-000-HSE-REP-0006',
-            'title': u'HAZOP report',
+            'title': 'HAZOP report',
             'docclass': 1,
             'created_on': '2015-10-10',
             'received_date': '2015-10-10',
@@ -255,12 +255,12 @@ class DocumentEditTest(TestCase):
         """
         Tests that a document can't be edited without required fields.
         """
-        required_error = u'This field is required.'
+        required_error = 'This field is required.'
         doc = DocumentFactory(
             category=self.category,
             document_key='FAC09001-FWF-000-HSE-REP-0004',
             metadata={
-                'title': u'HAZOP related 1',
+                'title': 'HAZOP related 1',
             },
             revision={
                 'status': 'STD',
@@ -286,7 +286,7 @@ class DocumentEditTest(TestCase):
             category=self.category,
             document_key='FAC09001-FWF-000-HSE-REP-0004',
             metadata={
-                'title': u'HAZOP related 1',
+                'title': 'HAZOP related 1',
             },
             revision={
                 'status': 'STD',
@@ -295,7 +295,7 @@ class DocumentEditTest(TestCase):
         c = self.client
         r = c.post(doc.get_edit_url(), {
             'document_number': doc.document_key,
-            'title': u'a new title',
+            'title': 'a new title',
         })
         if r.status_code == 302:
             self.assertEqual(
@@ -315,7 +315,7 @@ class DocumentEditTest(TestCase):
             category=self.category,
             document_key='FAC09001-FWF-000-HSE-REP-0004',
             metadata={
-                'title': u'HAZOP related 1',
+                'title': 'HAZOP related 1',
             },
             revision={
                 'status': 'STD',
@@ -324,7 +324,7 @@ class DocumentEditTest(TestCase):
         c = self.client
         r = c.post(doc.get_edit_url(), {
             'document_number': doc.document_key,
-            'title': u'a new title',
+            'title': 'a new title',
             'docclass': 1,
             'created_on': '2015-10-10',
             'received_date': '2015-10-10',
@@ -334,7 +334,7 @@ class DocumentEditTest(TestCase):
 
         r = c.post(doc.get_edit_url(), {
             'document_number': doc.document_key,
-            'title': u'a new new title',
+            'title': 'a new new title',
             'docclass': 1,
             'created_on': '2015-10-10',
             'received_date': '2015-10-10',
@@ -344,7 +344,7 @@ class DocumentEditTest(TestCase):
         # Check that update was logged in audit trail
         activity = Activity.objects.latest('created_on')
         self.assertEqual(activity.verb, Activity.VERB_EDITED)
-        self.assertEqual(activity.target.title, u'a new new title')
+        self.assertEqual(activity.target.title, 'a new new title')
         self.assertEqual(activity.actor, self.user)
 
     def test_edition_updates_document_key(self):
@@ -352,7 +352,7 @@ class DocumentEditTest(TestCase):
             category=self.category,
             document_key='FAC09001-FWF-000-HSE-REP-0004',
             metadata={
-                'title': u'HAZOP related 1',
+                'title': 'HAZOP related 1',
             },
             revision={
                 'status': 'STD',
@@ -361,7 +361,7 @@ class DocumentEditTest(TestCase):
         c = self.client
         c.post(doc.get_edit_url(), {
             'document_number': 'New Document Number',
-            'title': u'a new title',
+            'title': 'a new title',
             'docclass': 1,
             'created_on': '2015-10-10',
             'received_date': '2015-10-10',
@@ -561,7 +561,7 @@ class FilterFormTest(TestCase):
         # We make alist from field ordered dict keys and get rid of the first
         # fields which are hidden and not defined in filter_fields_order
         # attribute
-        form_fields = form.fields.keys()[2:]
+        form_fields = list(form.fields.keys())[2:]
 
         # Checking fields are in the right order
         self.assertEqual(form_fields, fields_order)

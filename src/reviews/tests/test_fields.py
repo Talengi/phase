@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
+
 
 import os
 from shutil import rmtree
@@ -26,7 +26,7 @@ class FieldTests(TestCase):
             category=self.category
         )
         self.doc = DocumentFactory(
-            document_key=u'HAZOP-related',
+            document_key='HAZOP-related',
             category=self.category
         )
 

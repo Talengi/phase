@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
+
 
 import logging
 
@@ -47,9 +47,9 @@ class FieldWrapper(object):
         it = iter(self.objects)
 
         try:
-            obj = it.next()
+            obj = next(it)
             while not hasattr(obj, attr):
-                obj = it.next()
+                obj = next(it)
             return getattr(obj, attr)
         except StopIteration:
             raise AttributeError('Attribute {} not found'.format(attr))

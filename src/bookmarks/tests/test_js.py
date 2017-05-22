@@ -29,7 +29,7 @@ class DocumentListTests(CasperTestCase):
                            category=self.category)
 
         connect_signals()
-        for doc_id in xrange(20):
+        for doc_id in range(20):
             DocumentFactory(
                 document_key='hazop-report-%d' % doc_id,
                 category=self.category,

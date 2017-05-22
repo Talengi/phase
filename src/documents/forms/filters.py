@@ -16,7 +16,7 @@ class BaseDocumentFilterForm(forms.Form):
         required=False,
         initial=0)
     search_terms = forms.CharField(
-        label=u'Search all columns',
+        label='Search all columns',
         required=False)
 
 
@@ -96,7 +96,7 @@ def filterform_factory(model):
 
     # Add custom filters to filter form
     custom_filters = getattr(config, 'custom_filters', {})
-    for field_name, filter_config in custom_filters.items():
+    for field_name, filter_config in list(custom_filters.items()):
         field_kwargs = filter_config.get('field_kwargs', {})
         field_kwargs.update(kwargs)
         field = filter_config['field'](**field_kwargs)

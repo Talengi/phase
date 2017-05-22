@@ -19,7 +19,7 @@ from .base import INSTALLED_APPS, SITE_NAME  # Avoid pyflakes complains
 from django.core.exceptions import ImproperlyConfigured
 
 try:
-    import prod_private
+    from . import prod_private
 except ImportError:
     raise ImproperlyConfigured("Create a prod_private.py file in settings")
 

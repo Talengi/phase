@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
+
 
 from django.template import defaultfilters as filters
 from rest_framework import serializers

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from metadata.fields import get_choices_from_list
 from schedules.models import ScheduleMixin

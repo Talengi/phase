@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 import uuid
 from collections import OrderedDict
@@ -31,10 +31,10 @@ class ContractorDeliverable(ScheduleMixin, Metadata):
 
     # General information
     title = models.TextField(
-        verbose_name=u"Title")
+        verbose_name="Title")
     # Let's keep this field for a while
     contract_number_old = ConfigurableChoiceField(
-        verbose_name=u"Contract Number",
+        verbose_name="Contract Number",
         max_length=15,
         list_index='CONTRACT_NBS', null=True, blank=True)
     contract_number = models.CharField(
@@ -44,37 +44,37 @@ class ContractorDeliverable(ScheduleMixin, Metadata):
         'accounts.Entity',
         verbose_name=_('Originator'))
     unit = ConfigurableChoiceField(
-        verbose_name=u"Unit",
+        verbose_name="Unit",
         default="000",
         max_length=3,
         list_index='UNITS')
     discipline = ConfigurableChoiceField(
-        verbose_name=u"Discipline",
+        verbose_name="Discipline",
         default="PCS",
         max_length=3,
         list_index='DISCIPLINES')
     document_type = ConfigurableChoiceField(
-        verbose_name=u"Document Type",
+        verbose_name="Document Type",
         default="PID",
         max_length=3,
         list_index='DOCUMENT_TYPES')
     sequential_number = models.CharField(
-        verbose_name=u"sequential Number",
+        verbose_name="sequential Number",
         help_text=_('Select a four digit number'),
-        default=u"0001",
+        default="0001",
         max_length=4,
         validators=[StringNumberValidator(4)])
     system = ConfigurableChoiceField(
-        verbose_name=u"System",
+        verbose_name="System",
         list_index='SYSTEMS',
         null=True, blank=True)
     wbs = ConfigurableChoiceField(
-        verbose_name=u"WBS",
+        verbose_name="WBS",
         max_length=20,
         list_index='WBS',
         null=True, blank=True)
     weight = models.IntegerField(
-        verbose_name=u"Weight",
+        verbose_name="Weight",
         null=True, blank=True)
 
     # Related documents
@@ -85,76 +85,76 @@ class ContractorDeliverable(ScheduleMixin, Metadata):
 
     # Schedule
     status_std_planned_date = models.DateField(
-        verbose_name=u"Status STD Planned Date",
+        verbose_name="Status STD Planned Date",
         null=True, blank=True)
     status_std_forecast_date = models.DateField(
-        verbose_name=u"Status STD Forecast Date",
+        verbose_name="Status STD Forecast Date",
         null=True, blank=True)
     status_std_actual_date = models.DateField(
-        verbose_name=u"Status STD Actual Date",
+        verbose_name="Status STD Actual Date",
         null=True, blank=True)
     status_idc_planned_date = models.DateField(
-        verbose_name=u"Status IDC Planned Date",
+        verbose_name="Status IDC Planned Date",
         null=True, blank=True)
     status_idc_forecast_date = models.DateField(
-        verbose_name=u"Status IDC Forecast Date",
+        verbose_name="Status IDC Forecast Date",
         null=True, blank=True)
     status_idc_actual_date = models.DateField(
-        verbose_name=u"Status IDC Actual Date",
+        verbose_name="Status IDC Actual Date",
         null=True, blank=True)
     status_ifr_planned_date = models.DateField(
-        verbose_name=u"Status IFR Planned Date",
+        verbose_name="Status IFR Planned Date",
         null=True, blank=True)
     status_ifr_forecast_date = models.DateField(
-        verbose_name=u"Status IFR Forecast Date",
+        verbose_name="Status IFR Forecast Date",
         null=True, blank=True)
     status_ifr_actual_date = models.DateField(
-        verbose_name=u"Status IFR Actual Date",
+        verbose_name="Status IFR Actual Date",
         null=True, blank=True)
     status_ifa_planned_date = models.DateField(
-        verbose_name=u"Status IFA Planned Date",
+        verbose_name="Status IFA Planned Date",
         null=True, blank=True)
     status_ifa_forecast_date = models.DateField(
-        verbose_name=u"Status IFA Forecast Date",
+        verbose_name="Status IFA Forecast Date",
         null=True, blank=True)
     status_ifa_actual_date = models.DateField(
-        verbose_name=u"Status IFA Actual Date",
+        verbose_name="Status IFA Actual Date",
         null=True, blank=True)
     status_ifd_planned_date = models.DateField(
-        verbose_name=u"Status IFD Planned Date",
+        verbose_name="Status IFD Planned Date",
         null=True, blank=True)
     status_ifd_forecast_date = models.DateField(
-        verbose_name=u"Status IFD Forecast Date",
+        verbose_name="Status IFD Forecast Date",
         null=True, blank=True)
     status_ifd_actual_date = models.DateField(
-        verbose_name=u"Status IFD Actual Date",
+        verbose_name="Status IFD Actual Date",
         null=True, blank=True)
     status_ifc_planned_date = models.DateField(
-        verbose_name=u"Status IFC Planned Date",
+        verbose_name="Status IFC Planned Date",
         null=True, blank=True)
     status_ifc_forecast_date = models.DateField(
-        verbose_name=u"Status IFC Forecast Date",
+        verbose_name="Status IFC Forecast Date",
         null=True, blank=True)
     status_ifc_actual_date = models.DateField(
-        verbose_name=u"Status IFC Actual Date",
+        verbose_name="Status IFC Actual Date",
         null=True, blank=True)
     status_ifi_planned_date = models.DateField(
-        verbose_name=u"Status IFI Planned Date",
+        verbose_name="Status IFI Planned Date",
         null=True, blank=True)
     status_ifi_forecast_date = models.DateField(
-        verbose_name=u"Status IFI Forecast Date",
+        verbose_name="Status IFI Forecast Date",
         null=True, blank=True)
     status_ifi_actual_date = models.DateField(
-        verbose_name=u"Status IFI Actual Date",
+        verbose_name="Status IFI Actual Date",
         null=True, blank=True)
     status_asb_planned_date = models.DateField(
-        verbose_name=u"Status ASB Planned Date",
+        verbose_name="Status ASB Planned Date",
         null=True, blank=True)
     status_asb_forecast_date = models.DateField(
-        verbose_name=u"Status ASB Forecast Date",
+        verbose_name="Status ASB Forecast Date",
         null=True, blank=True)
     status_asb_actual_date = models.DateField(
-        verbose_name=u"Status ASB Actual Date",
+        verbose_name="Status ASB Actual Date",
         null=True, blank=True)
 
     class PhaseConfig:
@@ -289,8 +289,8 @@ class ContractorDeliverable(ScheduleMixin, Metadata):
 
     def generate_document_key(self):
         return slugify(
-            u"{contract_number}-{originator}-{unit}-{discipline}-"
-            u"{document_type}-{sequential_number}"
+            "{contract_number}-{originator}-{unit}-{discipline}-"
+            "{document_type}-{sequential_number}"
             .format(
                 contract_number=self.contract_number,
                 originator=self.originator.trigram,
@@ -423,7 +423,7 @@ class ContractorDeliverableRevision(TransmittableMixin, MetadataRevision):
     # Revision
     metadata = models.ForeignKey('ContractorDeliverable')
     status = ConfigurableChoiceField(
-        verbose_name=u"Status",
+        verbose_name="Status",
         default="STD",
         max_length=3,
         list_index='STATUSES',
@@ -470,9 +470,9 @@ class Correspondence(Metadata):
         max_length=3,
         list_index='DOCUMENT_TYPES')
     sequential_number = models.CharField(
-        verbose_name=u"sequential Number",
+        verbose_name="sequential Number",
         help_text=_('Type in a four digit number'),
-        default=u"0001",
+        default="0001",
         max_length=4,
         validators=[StringNumberValidator(4)])
     author = ConfigurableChoiceField(
@@ -535,8 +535,8 @@ class Correspondence(Metadata):
 
     def generate_document_key(self):
         return slugify(
-            u"{contract_number}-{originator}-{recipient}-"
-            u"{document_type}-{sequential_number}"
+            "{contract_number}-{originator}-{recipient}-"
+            "{document_type}-{sequential_number}"
             .format(
                 contract_number=self.contract_number,
                 originator=self.originator,
@@ -627,9 +627,9 @@ class MinutesOfMeeting(Metadata):
         max_length=3,
         list_index='DOCUMENT_TYPES')
     sequential_number = models.CharField(
-        verbose_name=u"sequential Number",
+        verbose_name="sequential Number",
         help_text=_('Type in a four digit number'),
-        default=u"0001",
+        default="0001",
         max_length=4,
         validators=[StringNumberValidator(4)])
     prepared_by = ConfigurableChoiceField(
@@ -679,8 +679,8 @@ class MinutesOfMeeting(Metadata):
 
     def generate_document_key(self):
         return slugify(
-            u"{contract_number}-{originator}-{recipient}"
-            u"{document_type}-{sequential_number}"
+            "{contract_number}-{originator}-{recipient}"
+            "{document_type}-{sequential_number}"
             .format(
                 contract_number=self.contract_number,
                 originator=self.originator,
@@ -803,7 +803,7 @@ class GtgMetadata(Metadata):
         verbose_name=_('Originator'),
         limit_choices_to={'type': 'originator'})
     unit = ConfigurableChoiceField(
-        verbose_name=u"Unit",
+        verbose_name="Unit",
         default="000",
         max_length=3,
         list_index='GTG_UNITS')

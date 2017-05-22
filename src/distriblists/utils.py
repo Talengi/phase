@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 import openpyxl
 from openpyxl.writer.excel import save_virtual_workbook
@@ -170,11 +170,11 @@ def export_lists(category):
 
 def _export_header(ws, all_users):
     """Add header row to exported file."""
-    header_row = ws.get_squared_range(
+    header_row = next(ws.get_squared_range(
         min_col=2,
         min_row=1,
         max_col=len(all_users) + 1,
-        max_row=1).next()
+        max_row=1))
     for idx, cell in enumerate(header_row):
         cell.value = all_users[idx].email
         cell.alignment = header_alignment
@@ -248,7 +248,7 @@ def _extract_users(ws):
         .values_list('email', 'id')
     user_dict = dict(qs)
 
-    user_ids = map(lambda email: user_dict.get(email, None), emails)
+    user_ids = [user_dict.get(email, None) for email in emails]
     return emails, user_ids
 
 
@@ -301,9 +301,7 @@ def _import_list(row, emails, user_ids, category):
         form.save()
 
     if not form.is_valid():
-        form_errors = map(
-            lambda field_errors: field_errors[0],
-            form.errors.values())
+        form_errors = [field_errors[0] for field_errors in list(form.errors.values())]
         errors.append(*form_errors)
 
     return {

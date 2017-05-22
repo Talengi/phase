@@ -16,7 +16,7 @@ class ValuesListFactory(factory.DjangoModelFactory):
         values_list = super(ValuesListFactory, cls)._prepare(create, **kwargs)
 
         if type(values) == dict:
-            for key, val in values.iteritems():
+            for key, val in values.items():
                 ListEntryFactory(
                     values_list=values_list,
                     index=key,

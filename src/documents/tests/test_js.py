@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 import os.path
 import time
@@ -30,7 +30,7 @@ class DocumentListTests(CasperTestCase):
                            category=self.category)
 
         connect_signals()
-        for doc_id in xrange(20):
+        for doc_id in range(20):
             doc = DocumentFactory(
                 document_key='hazop-report-%d' % doc_id,
                 category=self.category,

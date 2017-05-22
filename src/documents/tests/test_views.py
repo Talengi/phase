@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 import os
 from io import BytesIO
@@ -101,11 +101,11 @@ class DocumentDetailTest(TestCase):
 
     def test_document_related_documents(self):
         documents = [
-            DocumentFactory(document_key=u'HAZOP-related-1'),
-            DocumentFactory(document_key=u'HAZOP-related-2'),
+            DocumentFactory(document_key='HAZOP-related-1'),
+            DocumentFactory(document_key='HAZOP-related-2'),
         ]
         document = DocumentFactory(
-            document_key=u'HAZOP-report',
+            document_key='HAZOP-report',
             category=self.category)
         document.metadata.related_documents = documents
         document.metadata.save()
@@ -145,7 +145,7 @@ class DocumentDownloadTest(TestCase):
         pdf_doc = b'sample_doc_pdf.pdf'
 
         document = DocumentFactory(
-            document_key=u'HAZOP-related',
+            document_key='HAZOP-related',
             category=self.category,
             revision={
                 'native_file': SimpleUploadedFile(native_doc,
@@ -173,7 +173,7 @@ class DocumentDownloadTest(TestCase):
         Tests that a document download returns an empty zip file.
         """
         document = DocumentFactory(
-            document_key=u'HAZOP-related',
+            document_key='HAZOP-related',
             category=self.category,
         )
         r = self.client.post(self.download_url, {

@@ -20,7 +20,7 @@
 #
 #           ALL THE THINGS !!!
 
-from __future__ import unicode_literals
+
 
 import logging
 import datetime
@@ -52,12 +52,12 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         interactive = options.get('interactive')
         if interactive:
-            confirm = input("""
+            confirm = eval(input("""
 You have requested a flush of the search index.
 This will IRREVERSIBLY DESTROY all data currently indexed by Elasticsearch.
 Are you sure you want to do this?
 
-Type 'yes' to continue, or 'no' to cancel: """)
+Type 'yes' to continue, or 'no' to cancel: """))
         else:
             confirm = 'yes'
 

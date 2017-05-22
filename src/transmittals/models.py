@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
+
 
 import os
 import logging
@@ -322,9 +322,9 @@ class TrsRevision(models.Model):
         max_length=3,
         list_index='DOCUMENT_TYPES')
     sequential_number = models.CharField(
-        verbose_name=u"sequential Number",
+        verbose_name="sequential Number",
         help_text=_('Select a four digit number'),
-        default=u"0001",
+        default="0001",
         max_length=4,
         validators=[StringNumberValidator(4)],
         null=True, blank=True)
@@ -418,7 +418,7 @@ class TrsRevision(models.Model):
     def get_document_fields(self):
         """Return a dict of fields that will be passed to the document form."""
         columns = self.category.get_transmittal_columns()
-        fields = columns.values()
+        fields = list(columns.values())
         fields_dict = dict([(field, getattr(self, field)) for field in fields])
 
         # XXX
@@ -818,7 +818,7 @@ class ExportedRevision(models.Model):
     @property
     def name(self):
         """A revision identifier should be displayed with two digits"""
-        return u'%02d' % self.revision
+        return '%02d' % self.revision
 
 
 class TransmittableMixin(ReviewMixin):

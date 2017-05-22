@@ -42,9 +42,7 @@ def format_results(by_ended_reviews):
                              year=int(elt['year']),
                              day=1)
 
-    by_ended_reviews = map(
-        lambda e: {'value': e['pk__count'], 'date': el_to_date(e)},
-        by_ended_reviews)
+    by_ended_reviews = [{'value': e['pk__count'], 'date': el_to_date(e)} for e in by_ended_reviews]
     # We need to fill with 0
     by_ended_reviews = sorted(by_ended_reviews, key=lambda e: e['date'])
     first_dt = by_ended_reviews[0]['date']
@@ -62,7 +60,7 @@ def format_results(by_ended_reviews):
             curr_date = datetime.date(month=curr_date.month + 1,
                                       year=curr_date.year, day=1)
         # If date does not exist, we fill with a 0
-        if not any(curr_date in d.values() for d in by_ended_reviews):
+        if not any(curr_date in list(d.values()) for d in by_ended_reviews):
             by_ended_reviews.append({'date': curr_date, 'value': 0})
     # Sorting again for client side processing
     by_ended_reviews = sorted(by_ended_reviews, key=lambda el: el['date'])

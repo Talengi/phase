@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from django.conf import settings
 from django.forms import ModelChoiceField
@@ -86,7 +86,7 @@ class SearchBuilder(object):
         return s
 
     def _add_custom_filters(self, s):
-        for filter_key, filter_data in self.custom_filters.items():
+        for filter_key, filter_data in list(self.custom_filters.items()):
             value = self.filters.get(filter_key, None)
             f = filter_data['filters'].get(value, None)
             if f is not None:

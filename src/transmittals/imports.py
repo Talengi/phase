@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
+
 
 import os
 import csv
@@ -137,7 +137,7 @@ class TrsImport(object):
         if not self._csv_cols:
             try:
                 line = self.csv_lines()[0]
-                self._csv_cols = line.keys()
+                self._csv_cols = list(line.keys())
             except:
                 self._csv_cols = []
 
@@ -160,7 +160,7 @@ class TrsImport(object):
                     lines = []
                     for row in csvfile:
                         line_row = {}
-                        for key, value in row.items():
+                        for key, value in list(row.items()):
                             line_row[columns.get(key, key)] = value or None
 
                         lines.append(line_row)
@@ -362,7 +362,7 @@ class TrsImportLine(object):
         """Iterate over every field and prepare them if it's needed."""
         if not hasattr(self, '_form_data'):
             _form_data = dict()
-            for key, value in self.csv_data.items():
+            for key, value in list(self.csv_data.items()):
                 clean_method_name = 'clean_{}'.format(key)
                 if hasattr(self, clean_method_name):
                     form_value = getattr(self, clean_method_name)(value)
@@ -490,7 +490,7 @@ class TrsImportLine(object):
         else:
             form_data = {}
 
-        for k, v in form_data.items():
+        for k, v in list(form_data.items()):
             if k in data:
                 data[k] = v
         return data

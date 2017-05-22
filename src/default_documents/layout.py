@@ -4,7 +4,7 @@ See https://django-crispy-forms.readthedocs.org/en/d-0/layouts.html
 
 """
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 
 from django.template.loader import render_to_string

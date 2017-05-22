@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from django.db.models import F, Value as V
 from django.db.models.functions import Concat
@@ -26,6 +26,6 @@ def populate_values_list_cache(**kwargs):
             grouped[values_list] = []
         grouped[values_list].append((index, value))
 
-    for list_index, list_entries in grouped.items():
+    for list_index, list_entries in list(grouped.items()):
         cache_key = 'values_list_{}'.format(list_index)
         cache.set(cache_key, list_entries, None)

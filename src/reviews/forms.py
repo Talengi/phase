@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
+
 
 from django import forms
 from django.db.models import Q
@@ -50,10 +50,10 @@ class ReviewSearchForm(forms.Form):
 
         # Only display existing statuses
         statuses = self.reviews.values_list('revision_status', flat=True)
-        statuses = filter(None, statuses)
+        statuses = [_f for _f in statuses if _f]
         choices = [
             ('', '---------'),
-        ] + zip(statuses, statuses)
+        ] + list(zip(statuses, statuses))
         self.fields['status'].choices = choices
 
     def filter_reviews(self):
@@ -137,8 +137,8 @@ class ReviewFormMixin(DistributionListValidationMixin, forms.ModelForm):
             self.reviews = get_cached_reviews(self.instance)
 
             # Extract non null comments from reviews
-            all_comments = map(lambda x: x.comments or None, self.reviews)
-            comments = filter(lambda x: x, all_comments)
+            all_comments = [x.comments or None for x in self.reviews]
+            comments = [x for x in all_comments if x]
             self.nb_comments = len(comments)
 
             # Is the current user a member of the distribution list?

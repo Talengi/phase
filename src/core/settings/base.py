@@ -227,7 +227,7 @@ LOCAL_APPS = (
 # Load custom documents
 DOC_APPS = tuple()
 try:
-    import doc_apps
+    from . import doc_apps
     DOC_APPS = getattr(doc_apps, 'DOC_APPS')
 except:
     pass

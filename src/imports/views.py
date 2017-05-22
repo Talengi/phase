@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 
 from django.views.generic import CreateView, DetailView, ListView, FormView
 from django.utils.translation import ugettext_lazy as _
@@ -81,7 +81,7 @@ class ImportTemplate(ImportMixin, LoginRequiredMixin, FormView):
         return reverse('import_template')
 
     def get_template_maker(self):
-        if 'format_csv' in self.request.POST.keys():
+        if 'format_csv' in list(self.request.POST.keys()):
             return make_csv_template
         return make_xlsx_template
 

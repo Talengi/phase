@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 import os
 import uuid
@@ -119,9 +119,9 @@ class Export(models.Model):
         """Asynchronously starts the export"""
         logger.info('Starting export {}'.format(self.id))
         if async:
-            process_export.delay(unicode(self.pk), user_pk=user_pk)
+            process_export.delay(str(self.pk), user_pk=user_pk)
         else:
-            process_export(unicode(self.pk), user_pk=user_pk)
+            process_export(str(self.pk), user_pk=user_pk)
 
     def csv_file_writer(self, data_generator, formatter):
         with self.open_file() as the_file:

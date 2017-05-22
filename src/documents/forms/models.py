@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from django import forms
 from django.core.urlresolvers import reverse
@@ -70,7 +70,7 @@ class GenericBaseDocumentForm(forms.ModelForm):
     def prepare_form(self, *args, **kwargs):
         """Perform some common operations."""
 
-        for field_name, field in self.fields.items():
+        for field_name, field in list(self.fields.items()):
 
             # Initialize values lists choices
             # See metadata.fields.ConfigurableChoiceField

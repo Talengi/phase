@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from django import template
 from django.template.loader import select_template
@@ -142,7 +142,7 @@ def batch_action_menu(Metadata, category, user):
             {}
         </ul>
         ''',
-        ((action.to_html(),) for action in actions.values())
+        ((action.to_html(),) for action in list(actions.values()))
     )
     return menu
 

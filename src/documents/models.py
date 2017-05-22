@@ -18,6 +18,7 @@ from accounts.models import User
 from documents.fields import RevisionFileField
 from categories.models import Category
 from documents.templatetags.documents import MenuItem, DividerMenuItem
+import collections
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +41,7 @@ class Document(models.Model):
         _('Document number'),
         max_length=250)
     title = models.TextField(
-        verbose_name=u"Title")
+        verbose_name="Title")
     category = models.ForeignKey(
         Category,
         verbose_name=_('Category'),
@@ -66,10 +67,10 @@ class Document(models.Model):
         _('Indexable'),
         default=True)
     current_revision = models.PositiveIntegerField(
-        verbose_name=u"Revision")
+        verbose_name="Revision")
     current_revision_date = models.DateField(
         null=True, blank=True,
-        verbose_name=u"Revision Date")
+        verbose_name="Revision Date")
 
     class Meta:
         verbose_name = _('Document')
@@ -184,7 +185,7 @@ class Document(models.Model):
     @property
     def current_revision_name(self):
         """A revision identifier should be displayed with two digits"""
-        return u'%02d' % self.current_revision
+        return '%02d' % self.current_revision
 
     def to_json(self):
         return self.get_latest_revision().to_json()
@@ -408,12 +409,12 @@ class MetadataRevisionBase(models.Model):
     revision = models.PositiveIntegerField(_('Revision'))
     revision_date = models.DateField(
         null=True, blank=True,
-        verbose_name=u"Revision Date")
+        verbose_name="Revision Date")
     native_file = RevisionFileField(
-        verbose_name=u"Native File",
+        verbose_name="Native File",
         null=True, blank=True, max_length=255)
     pdf_file = RevisionFileField(
-        verbose_name=u"PDF File",
+        verbose_name="PDF File",
         null=True, blank=True)
 
     created_on = models.DateField(
@@ -475,7 +476,7 @@ class MetadataRevisionBase(models.Model):
     @property
     def name(self):
         """A revision identifier should be displayed with two digits"""
-        return u'%02d' % self.revision
+        return '%02d' % self.revision
 
     @property
     def revision_name(self):
@@ -517,22 +518,22 @@ class MetadataRevisionBase(models.Model):
                             key, document.document_key, document.document_type())
                         raise RuntimeError(error)
 
-            if callable(value):
+            if isinstance(value, collections.Callable):
                 value = value()
 
             if isinstance(value, models.Model):
                 field = (
-                    (unicode(key), value.__unicode__()),
-                    (u'%s_id' % key, value.pk)
+                    (str(key), value.__unicode__()),
+                    ('%s_id' % key, value.pk)
                 )
             else:
-                field = ((unicode(key), value),)
+                field = ((str(key), value),)
 
             return field
 
         config = document.category.document_class().PhaseConfig
         filter_fields = list(config.filter_fields)
-        column_fields = dict(config.column_fields).values()
+        column_fields = list(dict(config.column_fields).values())
         indexable_fields = getattr(config, 'indexable_fields', [])
         fields_to_index = set(filter_fields + column_fields + indexable_fields)
 
@@ -541,14 +542,14 @@ class MetadataRevisionBase(models.Model):
 
         fields_infos = dict(fields)
         fields_infos.update({
-            u'url': document.get_absolute_url(),
-            u'document_key': document.document_key,
-            u'document_number': document.document_number,
-            u'document_pk': document.pk,
-            u'metadata_pk': metadata.pk,
-            u'pk': self.pk,
-            u'revision': self.revision,
-            u'is_latest_revision': document.current_revision == self.revision,
+            'url': document.get_absolute_url(),
+            'document_key': document.document_key,
+            'document_number': document.document_number,
+            'document_pk': document.pk,
+            'metadata_pk': metadata.pk,
+            'pk': self.pk,
+            'revision': self.revision,
+            'is_latest_revision': document.current_revision == self.revision,
         })
         return fields_infos
 
@@ -572,8 +573,8 @@ class MetadataRevisionBase(models.Model):
 
         """
         # Build an array of initial data from current fields
-        fields = form.fields.keys()
-        initial_data = dict(map(lambda x: (x, getattr(self, x, None)), fields))
+        fields = list(form.fields.keys())
+        initial_data = dict([(x, getattr(self, x, None)) for x in fields])
 
         initial_ignored = self.get_initial_ignored_fields()
         for field in initial_ignored:
