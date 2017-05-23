@@ -14,5 +14,5 @@ class WidgetTests(TestCase):
         file_field = FieldFile(doc, field, 'revisions/toto.pdf')
         widget = PhaseClearableFileInput()
         rendered = widget.render('toto.pdf', file_field)
-        self.assertTrue('>toto.pdf<' in rendered)
-        self.assertTrue('>revisions/toto.pdf<' not in rendered)
+        self.assertTrue('>toto.pdf' in rendered)
+        self.assertTrue('>revisions/toto.pdf' not in rendered)

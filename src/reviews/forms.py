@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 
-
 from django import forms
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
@@ -13,7 +12,7 @@ from crispy_forms.layout import Field
 from accounts.forms import UserChoiceField, UserMultipleChoiceField
 from default_documents.layout import (
     DocumentFieldset, PropertyLayout, YesNoLayout, DateField)
-from documents.widgets import RevisionClearableFileInput
+from privatemedia.widgets import PhaseClearableFileInput
 from distriblists.forms import DistributionListValidationMixin
 from reviews.utils import get_cached_reviews
 from reviews.layout import ReviewsLayout, QuickDistributionListWidgetLayout
@@ -150,7 +149,7 @@ class ReviewFormMixin(DistributionListValidationMixin, forms.ModelForm):
         super(ReviewFormMixin, self).prepare_form(*args, **kwargs)
 
     def prepare_field_file_transmitted(self):
-        self.fields['file_transmitted'].widget = RevisionClearableFileInput()
+        self.fields['file_transmitted'].widget = PhaseClearableFileInput()
         if self.instance.file_transmitted:
             url = reverse('revision_file_download', args=[
                 self.category.organisation.slug,

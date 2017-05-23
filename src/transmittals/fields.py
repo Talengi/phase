@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
 
 
-
 import os
 
 from django.db.models import ManyToManyField
-
-from documents.fields import RevisionClearableFileField
-from privatemedia.fields import PrivateFileField
+from privatemedia.fields import PrivateFileField, PhaseClearableFileField
 
 
 def transmittal_upload_to(trs_revision, filename):
@@ -63,7 +60,7 @@ class OgtFileField(PrivateFileField):
 
     def formfield(self, **kwargs):
         defaults = {
-            'form_class': RevisionClearableFileField,
+            'form_class': PhaseClearableFileField,
         }
         defaults.update(kwargs)
         return super(OgtFileField, self).formfield(**defaults)
