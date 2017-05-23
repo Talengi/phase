@@ -28,7 +28,7 @@ class PhaseClearableFileInput(ClearableFileInput):
 
         if hasattr(self, 'value_url'):
             file_url = self.value_url
-        elif value:
+        elif value and hasattr(value, 'url'):
             file_url = value.url
         else:
             file_url = ''
