@@ -631,7 +631,7 @@ class ReviewMixin(models.Model):
 
     def get_filtered_reviews(self, filter):
         reviews = self.get_reviews()
-        filtered = [rev for rev in reviews if list(filter(rev))]
+        filtered = [rev for rev in reviews if filter(rev)]
         return filtered
 
     def get_reviewers_reviews(self):

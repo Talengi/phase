@@ -24,9 +24,8 @@ class PrivateMediaViewTests(TestCase):
         self.doc = DocumentFactory()
         self.rev = self.doc.get_latest_revision()
 
-        sample_path = b'documents/tests/'
-        pdf_doc = b'sample_doc_pdf.pdf'
-        self.sample_pdf = SimpleUploadedFile(pdf_doc, sample_path + pdf_doc)
+        pdf_doc = 'sample_doc_pdf.pdf'
+        self.sample_pdf = SimpleUploadedFile(pdf_doc, b'content')
 
     def test_serve_wrong_field(self):
         with self.assertRaises(Http404):

@@ -30,16 +30,14 @@ class CleanMediaTests(TestCase):
         document = DocumentFactory(
             category=self.category,
         )
-        sample_path = b'documents/tests/'
-        native_doc = b'sample_doc_native.docx'
-        pdf_doc = b'sample_doc_pdf.pdf'
+        native_doc = 'sample_doc_native.docx'
+        pdf_doc = 'sample_doc_pdf.pdf'
 
         MetadataRevisionFactory(
             metadata=document.get_metadata(),
             revision=2,
-            native_file=SimpleUploadedFile(native_doc,
-                                           sample_path + native_doc),
-            pdf_file=SimpleUploadedFile(pdf_doc, sample_path + pdf_doc),
+            native_file=SimpleUploadedFile(native_doc, b'content'),
+            pdf_file=SimpleUploadedFile(pdf_doc, b'content'),
         )
         # Document without files
         DocumentFactory(
