@@ -133,7 +133,7 @@ class ImportBatch(models.Model):
     def __iter__(self):
         """Loop over csv data."""
         if self.file.path.endswith('csv'):
-            with open(self.file.path, 'rb') as f:
+            with open(self.file.path, 'r') as f:
                 csvfile = csv.DictReader(f, dialect='normal')
                 for row in csvfile:
                     imp = Import(batch=self, data=row)
