@@ -143,6 +143,8 @@ TEMPLATES = [
     },
 ]
 
+FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
+
 # ######### END TEMPLATE CONFIGURATION
 
 
@@ -181,6 +183,7 @@ DJANGO_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    'django.forms',
 
     # Admin panel and documentation:
     'django.contrib.admin',
