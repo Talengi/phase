@@ -32,7 +32,7 @@ class ExportTests(TestCase):
 
     def test_get_filename(self):
         uuid = UUID('12345678-1234-5678-1234-567812345678')
-        date = datetime.datetime(2015, 1, 1, tzinfo=utc())
+        date = datetime.datetime(2015, 1, 1, tzinfo=utc)
         export = self.create_export(id=uuid, created_on=date)
 
         filename = export.get_filename()

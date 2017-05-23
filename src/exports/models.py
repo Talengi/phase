@@ -4,6 +4,7 @@
 import os
 import uuid
 import logging
+from collections import OrderedDict
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -78,10 +79,10 @@ class Export(models.Model):
 
     def get_fields(self):
         """Get the list of fields that must be exported."""
-        default_fields = {
-            'Document Number': 'document_key',
-            'Title': 'title',
-        }
+        default_fields = OrderedDict((
+            ('Document Number', 'document_key'),
+            ('Title', 'title'),
+        ))
         Model = self.category.document_class()
         fields = getattr(Model.PhaseConfig, 'export_fields', default_fields)
         return fields
