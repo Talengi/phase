@@ -42,10 +42,10 @@ class FormatterTests(TestCase):
         self.assertEqual(csv, expected_csv)
 
     def test_csv_formatter_foreign_key(self):
-        fields = {
-            'Document Number': 'document_key',
-            'Leader': 'leader',
-        }
+        fields = OrderedDict((
+            ('Document Number', 'document_key'),
+            ('Leader', 'leader'),
+        ))
         formatter = CSVFormatter(fields)
         metadata = self.docs[0].metadata
         revision = metadata.latest_revision
