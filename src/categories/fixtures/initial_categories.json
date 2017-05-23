@@ -69,5 +69,33 @@
     "category_template": ["transmittals"],
     "users": [1, 2, 3]
   }
+},
+{
+  "model": "categories.contract",
+  "pk": 1,
+  "fields": {
+    "number": "FAC09001",
+    "name": "FAC09001",
+    "categories": [
+      1,
+      2,
+      3,
+      4
+    ]
+  }
+},
+{
+  "model": "categories.contract",
+  "pk": 2,
+  "fields": {
+    "number": "FAC10005",
+    "name": "FAC10005",
+    "categories": [
+      1,
+      2,
+      3,
+      4
+    ]
+  }
 }
 ]
