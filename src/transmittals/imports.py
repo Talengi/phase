@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 
-
 import os
 import csv
 import shutil
@@ -155,7 +154,7 @@ class TrsImport(object):
         if not self._csv_lines:
             columns = self.expected_columns()
             try:
-                with open(self.csv_fullname, 'rb') as f:
+                with open(self.csv_fullname, 'r') as f:
                     csvfile = csv.DictReader(f, dialect='normal')
                     lines = []
                     for row in csvfile:
@@ -323,10 +322,10 @@ class TrsImport(object):
                 latest_revision = metadata.latest_revision.revision
                 is_new_revision = bool(int(data['revision']) > latest_revision)
 
-            pdf_file = File(open(line.pdf_fullname))
+            pdf_file = File(open(line.pdf_fullname, 'rb'))
             native_file = line.native_fullname
             if native_file:
-                native_file = File(open(native_file))
+                native_file = File(open(native_file, 'rb'))
 
             data.update({
                 'transmittal': transmittal,

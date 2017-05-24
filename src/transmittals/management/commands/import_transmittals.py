@@ -30,25 +30,22 @@ class Command(BaseCommand):
     help = 'Import existing transmittals for a given contractor.'
 
     def add_arguments(self, parser):
+        parser.add_argument('contractor_id')
+        parser.add_argument('doc_category')
+        parser.add_argument('trs_category')
         parser.add_argument(
             '--trs-validator',
-            action='store',
             dest='trs_validator',
             default=False,
             help='Choose a custom global validator class')
         parser.add_argument(
             '--csv-line-validator',
-            action='store',
             dest='csv_line_validator',
             default=False,
             help='Choose a custom single csv line validator class')
 
     def handle(self, *args, **options):
         from transmittals.models import Transmittal
-
-        if len(args) != 3:
-            error = 'Usage: python manage.py import_transmittals {}'.format(self.args)
-            raise CommandError(error)
 
         # Import validators
         TrsValidator = None
@@ -62,7 +59,7 @@ class Command(BaseCommand):
             CsvLineValidator = self.import_validator(csv_line_validator)
 
         # Get configuration for the given contractor
-        contractor_id = args[0]
+        contractor_id = options['contractor_id']
         config = settings.TRS_IMPORTS_CONFIG
         ctr_config = config.get(contractor_id, None)
         if ctr_config is None:
@@ -70,12 +67,12 @@ class Command(BaseCommand):
                                        'Check your configuration.' % contractor_id)
 
         # Get categories
-        doc_category = self.get_category(args[1])
+        doc_category = self.get_category(options['doc_category'])
         if doc_category is None:
             error = 'The document category is unknown. Check your configuration.'
             raise CommandError(error)
 
-        trs_category = self.get_category(args[2])
+        trs_category = self.get_category(options['trs_category'])
         if trs_category is None:
             error = 'The transmittal category is unknown. Check your configuration.'
             raise CommandError(error)

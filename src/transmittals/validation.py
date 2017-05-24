@@ -337,7 +337,7 @@ class RevisionsValidator(Validator):
 
         # Get latest revision for each document
         latest_revisions = Document.objects \
-            .filter(document_key__in=revisions.keys) \
+            .filter(document_key__in=revisions.keys()) \
             .values_list('document_key', 'current_revision')
         latest_revisions = dict(latest_revisions)
 
