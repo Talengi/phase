@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
 
 import os
 from shutil import rmtree
@@ -26,7 +25,7 @@ class FieldTests(TestCase):
             category=self.category
         )
         self.doc = DocumentFactory(
-            document_key=u'HAZOP-related',
+            document_key='HAZOP-related',
             category=self.category
         )
 
@@ -38,15 +37,14 @@ class FieldTests(TestCase):
 
     def test_reviewer_comment_file_name(self):
         """Test that comment files are renamed correctly."""
-        sample_path = b'documents/tests/'
-        sample_file = b'sample_doc_zip.zip'
+        sample_file = 'sample_doc_zip.zip'
 
         review = Review.objects.create(
             reviewer=self.user,
             role='reviewer',
             document=self.doc,
             revision=self.doc.current_revision,
-            comments=SimpleUploadedFile(sample_file, sample_path + sample_file),
+            comments=SimpleUploadedFile(sample_file, b'content'),
         )
 
         filename = 'reviews/HAZOP-related_{:02d}_{}_comments.zip'.format(
@@ -58,15 +56,14 @@ class FieldTests(TestCase):
 
     def test_leader_comment_file_name(self):
         """Test that comment files are renamed correctly."""
-        sample_path = b'documents/tests/'
-        sample_file = b'sample_doc_zip.zip'
+        sample_file = 'sample_doc_zip.zip'
 
         review = Review.objects.create(
             reviewer=self.user,
             role='leader',
             document=self.doc,
             revision=self.doc.current_revision,
-            comments=SimpleUploadedFile(sample_file, sample_path + sample_file),
+            comments=SimpleUploadedFile(sample_file, b'content'),
         )
 
         self.assertEqual(
@@ -76,15 +73,14 @@ class FieldTests(TestCase):
 
     def test_approver_comment_file_name(self):
         """Test that comment files are renamed correctly."""
-        sample_path = b'documents/tests/'
-        sample_file = b'sample_doc_zip.zip'
+        sample_file = 'sample_doc_zip.zip'
 
         review = Review.objects.create(
             reviewer=self.user,
             role='approver',
             document=self.doc,
             revision=self.doc.current_revision,
-            comments=SimpleUploadedFile(sample_file, sample_path + sample_file),
+            comments=SimpleUploadedFile(sample_file, b'content'),
         )
         self.assertEqual(
             review.comments.name,

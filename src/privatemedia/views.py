@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 import os
 from os.path import basename, join
 try:
     from urllib.parse import unquote
 except ImportError:
-    from urllib import unquote
+    from urllib.parse import unquote
 
 from django.http import Http404, HttpResponse
 from django.http.request import HttpRequest

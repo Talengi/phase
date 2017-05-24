@@ -11,15 +11,15 @@ Instead, we are using a private configuration file that MUST not be
 added to the git repository to protect private configuration data.
 """
 
-from base import *  # noqa
-from base import INSTALLED_APPS, SITE_NAME  # Avoid pyflakes complains
+from .base import *  # noqa
+from .base import INSTALLED_APPS, SITE_NAME  # Avoid pyflakes complains
 
 # Normally you should not import ANYTHING from Django directly
 # into your settings, but ImproperlyConfigured is an exception.
 from django.core.exceptions import ImproperlyConfigured
 
 try:
-    import prod_private
+    from . import prod_private
 except ImportError:
     raise ImproperlyConfigured("Create a prod_private.py file in settings")
 
@@ -36,12 +36,33 @@ def get_prod_setting(setting, optional_import=False):
 
 
 # Template configuration: enable compiled templates caching
-TEMPLATE_LOADERS = (
-    ('django.template.loaders.cached.Loader', (
-        'django.template.loaders.filesystem.Loader',
-        'django.template.loaders.app_directories.Loader',
-    )),
-)
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': ['templates'],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'loaders': [
+                ('django.template.loaders.cached.Loader', (
+                    'django.template.loaders.filesystem.Loader',
+                    'django.template.loaders.app_directories.Loader',
+                )),
+            ],
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.static',
+                'accounts.context_processors.navigation',
+                'accounts.context_processors.branding_on_login',
+                'notifications.context_processors.notifications',
+                'reviews.context_processors.reviews',
+                'dashboards.context_processors.dashboards',
+            ],
+        },
+    },
+]
 
 INSTALLED_APPS += (
     'gunicorn',

@@ -100,6 +100,8 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'pipeline.finders.CachedFileFinder',
+    'pipeline.finders.PipelineFinder',
 )
 # ######### END STATIC FILE CONFIGURATION
 
@@ -121,48 +123,46 @@ FIXTURE_DIRS = (
 
 # ######### TEMPLATE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-context-processors
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth',
-    'django.core.context_processors.debug',
-    'django.core.context_processors.i18n',
-    'django.core.context_processors.media',
-    'django.core.context_processors.static',
-    'django.core.context_processors.tz',
-    'django.contrib.messages.context_processors.messages',
-    'django.core.context_processors.request',
-    'accounts.context_processors.navigation',
-    'accounts.context_processors.branding_on_login',
-    'notifications.context_processors.notifications',
-    'reviews.context_processors.reviews',
-    'dashboards.context_processors.dashboards',
-)
 
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#template-loaders
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-)
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': ['templates'],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.static',
+                'accounts.context_processors.navigation',
+                'accounts.context_processors.branding_on_login',
+                'notifications.context_processors.notifications',
+                'reviews.context_processors.reviews',
+                'dashboards.context_processors.dashboards',
+            ],
+        },
+    },
+]
 
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#template-dirs
-TEMPLATE_DIRS = (
-    DJANGO_ROOT.child('templates'),
-)
+FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
+
 # ######### END TEMPLATE CONFIGURATION
 
 
 # ######### MIDDLEWARE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#middleware-classes
 MIDDLEWARE_CLASSES = (
-    # Performance middlewares
-    'django.middleware.gzip.GZipMiddleware',
-    'pipeline.middleware.MinifyHTMLMiddleware',
-
     # Default Django middleware.
-    'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.security.SecurityMiddleware',
 
     'accounts.middleware.CategoryMiddleware',
 )
@@ -185,6 +185,7 @@ DJANGO_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    'django.forms',
 
     # Admin panel and documentation:
     'django.contrib.admin',
@@ -192,7 +193,6 @@ DJANGO_APPS = (
 )
 
 THIRD_PARTY_APPS = (
-    # Database migration helpers:
     'pipeline',
     'widget_tweaks',
     'crispy_forms',
@@ -231,7 +231,7 @@ LOCAL_APPS = (
 # Load custom documents
 DOC_APPS = tuple()
 try:
-    import doc_apps
+    from . import doc_apps
     DOC_APPS = getattr(doc_apps, 'DOC_APPS')
 except:
     pass
@@ -321,151 +321,154 @@ WSGI_APPLICATION = 'wsgi.application'
 
 # ######### PIPELINE CONFIGURATION
 STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
-PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.uglifyjs.UglifyJSCompressor'
-PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.cssmin.CSSMinCompressor'
-PIPELINE_DISABLE_WRAPPER = True
 
-PIPELINE_CSS = {
-    'base': {
-        'source_filenames': (
-            'css/phase-bootstrap.css',
-            'css/jquery-ui.css',
-            # must be loaded after jquery-ui js to avoid conflicts
-            'css/datepicker.css',
-            'css/project.css',
-        ),
-        'output_filename': 'css/base.css',
+PIPELINE = {
+    'JS_COMPRESSOR': 'pipeline.compressors.uglifyjs.UglifyJSCompressor',
+    'CSS_COMPRESSOR': 'pipeline.compressors.cssmin.CSSMinCompressor',
+    'DISABLE_WRAPPER': True,
+    'STYLESHEETS': {
+        'base': {
+            'source_filenames': (
+                'css/phase-bootstrap.css',
+                'css/jquery-ui.css',
+                # must be loaded after jquery-ui js to avoid conflicts
+                'css/datepicker.css',
+                'css/project.css',
+            ),
+            'output_filename': 'css/base.css',
+        },
+        'list': {
+            'source_filenames': (
+                'css/selectize.css',
+            ),
+            'output_filename': 'css/list.css',
+        },
+        'detail': {
+            'source_filenames': (
+                'css/jquery.multiselect.css',
+                'css/jquery.multiselect.filter.css',
+                'css/selectize.css',
+            ),
+            'output_filename': 'css/detail.css',
+        },
+        'charts': {
+            'source_filenames': (
+                'css/charts.css',
+            ),
+            'output_filename': 'css/charts.css',
+        },
     },
-    'list': {
-        'source_filenames': (
-            'css/selectize.css',
-        ),
-        'output_filename': 'css/list.css',
-    },
-    'detail': {
-        'source_filenames': (
-            'css/jquery.multiselect.css',
-            'css/jquery.multiselect.filter.css',
-            'css/selectize.css',
-        ),
-        'output_filename': 'css/detail.css',
-    },
-    'charts': {
-        'source_filenames': (
-            'css/charts.css',
-        ),
-        'output_filename': 'css/charts.css',
-    },
+    'JAVASCRIPT': {
+        'base': {
+            'source_filenames': (
+                'js/vendor/jquery.js',
+                'js/vendor/jquery-ui.min.js',
+                # both bootstrap and bootstrap-datepicker must be loaded
+                # after jquery-ui js to avoid conflicts
+                'js/phase-bootstrap.js',
+                'js/vendor/bootstrap-datepicker.js',
+                'js/vendor/underscore.js',
+                'js/vendor/backbone.js',
+                'js/backbone-config.js',
+                'js/events.js',
+                'js/notifications/models.js',
+                'js/notifications/collections.js',
+                'js/notifications/views.js',
+                'js/notifications/app.js',
+                'js/ui/models.js',
+                'js/ui/views.js',
+                'js/ui/app.js',
+            ),
+            'output_filename': 'js/base.js',
+        },
+        'backbone': {
+            'source_filenames': (
+            ),
+            'output_filename': 'js/backbone.js',
+        },
+        'list': {
+            'source_filenames': (
+                'js/vendor/selectize.js',
+                'js/vendor/jquery.inview.js',
+                'js/querystring.js',
+                'js/documents/models.js',
+                'js/documents/collections.js',
+                'js/documents/views.js',
+                'js/favorites/models.js',
+                'js/favorites/collections.js',
+                'js/bookmarks/models.js',
+                'js/bookmarks/collections.js',
+                'js/bookmarks/views.js',
+                'js/documents/routers.js',
+                'js/documents/app.js',
+            ),
+            'output_filename': 'js/document-list.js',
+        },
+        'document_detail': {
+            'source_filenames': (
+                'js/vendor/jquery.multiselect.js',
+                'js/vendor/jquery.multiselect.filter.js',
+                'js/vendor/selectize.js',
+                'js/autocomplete.js',
+                'js/discussion/models.js',
+                'js/discussion/collections.js',
+                'js/discussion/views.js',
+                'js/documents/routers.js',
+                'js/documents/detail_app.js',
+                'js/document-detail.js',
+            ),
+            'output_filename': 'js/document_detail.js',
+        },
+        'document_edit': {
+            'source_filenames': (
+                'js/vendor/jquery.multiselect.js',
+                'js/vendor/jquery.multiselect.filter.js',
+                'js/vendor/selectize.js',
+                'js/vendor/selectize_no_results.js',
+                'js/autocomplete.js',
+                'js/document-detail.js',
+            ),
+            'output_filename': 'js/document_edit.js',
+        },
+        'review_list': {
+            'source_filenames': (
+                'js/reviews/models.js',
+                'js/reviews/collections.js',
+                'js/reviews/views.js',
+                'js/reviews/routers.js',
+                'js/reviews/list_app.js',
+                'js/review-list.js',
+            ),
+            'output_filename': 'js/review-list.js',
+        },
+        'review': {
+            'source_filenames': (
+                'js/discussion/models.js',
+                'js/discussion/collections.js',
+                'js/discussion/views.js',
+                'js/discussion/routers.js',
+                'js/reviews/app.js',
+            ),
+            'output_filename': 'js/review.js',
+        },
+        'transmittal_list': {
+            'source_filenames': (
+                'js/transmittals/views.js',
+                'js/transmittals/app.js',
+            ),
+            'output_filename': 'js/transmittal-list.js',
+        },
+        'reporting': {
+            'source_filenames': (
+                'js/vendor/d3.min.js',
+                'js/reporting/phase_report_charts.js',
+            ),
+            'output_filename': 'js/reporting.js',
+        },
+    }
 }
 
-PIPELINE_JS = {
-    'base': {
-        'source_filenames': (
-            'js/vendor/jquery.js',
-            'js/vendor/jquery-ui.min.js',
-            # both bootstrap and bootstrap-datepicker must be loaded
-            # after jquery-ui js to avoid conflicts
-            'js/phase-bootstrap.js',
-            'js/vendor/bootstrap-datepicker.js',
-            'js/vendor/underscore.js',
-            'js/vendor/backbone.js',
-            'js/backbone-config.js',
-            'js/events.js',
-            'js/notifications/models.js',
-            'js/notifications/collections.js',
-            'js/notifications/views.js',
-            'js/notifications/app.js',
-            'js/ui/models.js',
-            'js/ui/views.js',
-            'js/ui/app.js',
-        ),
-        'output_filename': 'js/base.js',
-    },
-    'backbone': {
-        'source_filenames': (
-        ),
-        'output_filename': 'js/backbone.js',
-    },
-    'list': {
-        'source_filenames': (
-            'js/vendor/selectize.js',
-            'js/vendor/jquery.inview.js',
-            'js/querystring.js',
-            'js/documents/models.js',
-            'js/documents/collections.js',
-            'js/documents/views.js',
-            'js/favorites/models.js',
-            'js/favorites/collections.js',
-            'js/bookmarks/models.js',
-            'js/bookmarks/collections.js',
-            'js/bookmarks/views.js',
-            'js/documents/routers.js',
-            'js/documents/app.js',
-        ),
-        'output_filename': 'js/document-list.js',
-    },
-    'document_detail': {
-        'source_filenames': (
-            'js/vendor/jquery.multiselect.js',
-            'js/vendor/jquery.multiselect.filter.js',
-            'js/vendor/selectize.js',
-            'js/autocomplete.js',
-            'js/discussion/models.js',
-            'js/discussion/collections.js',
-            'js/discussion/views.js',
-            'js/documents/routers.js',
-            'js/documents/detail_app.js',
-            'js/document-detail.js',
-        ),
-        'output_filename': 'js/document_detail.js',
-    },
-    'document_edit': {
-        'source_filenames': (
-            'js/vendor/jquery.multiselect.js',
-            'js/vendor/jquery.multiselect.filter.js',
-            'js/vendor/selectize.js',
-            'js/vendor/selectize_no_results.js',
-            'js/autocomplete.js',
-            'js/document-detail.js',
-        ),
-        'output_filename': 'js/document_edit.js',
-    },
-    'review_list': {
-        'source_filenames': (
-            'js/reviews/models.js',
-            'js/reviews/collections.js',
-            'js/reviews/views.js',
-            'js/reviews/routers.js',
-            'js/reviews/list_app.js',
-            'js/review-list.js',
-        ),
-        'output_filename': 'js/review-list.js',
-    },
-    'review': {
-        'source_filenames': (
-            'js/discussion/models.js',
-            'js/discussion/collections.js',
-            'js/discussion/views.js',
-            'js/discussion/routers.js',
-            'js/reviews/app.js',
-        ),
-        'output_filename': 'js/review.js',
-    },
-    'transmittal_list': {
-        'source_filenames': (
-            'js/transmittals/views.js',
-            'js/transmittals/app.js',
-        ),
-        'output_filename': 'js/transmittal-list.js',
-    },
-    'reporting': {
-        'source_filenames': (
-            'js/vendor/d3.min.js',
-            'js/reporting/phase_report_charts.js',
-        ),
-        'output_filename': 'js/reporting.js',
-    },
-}
+
 # ######### END PIPELINE CONFIGURATION
 
 # ######### EMAIL CONFIGURATION
@@ -478,7 +481,8 @@ SEND_NEW_ACCOUNTS_EMAILS = False
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
-    )
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'restapi.pagination.CustomPagination'
 }
 
 # ######### CELERY CONFIG
@@ -530,3 +534,5 @@ EXPORTS_TO_KEEP = 20
 IMPORT_ROOT = SITE_ROOT.child('import')
 
 # ######### END CUSTOM CONFIGURATION
+
+ALLOWED_HOSTS = ['phase']

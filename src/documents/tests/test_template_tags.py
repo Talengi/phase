@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
+
 
 import datetime
 from django.test import TestCase
@@ -14,7 +14,7 @@ class DocumentDetailTests(TestCase):
 
     def setUp(self):
         super(DocumentDetailTests, self).setUp()
-        date = datetime.datetime(2013, 04, 20, 12, 0, 0, tzinfo=utc)
+        date = datetime.datetime(2013, 4, 20, 12, 0, 0, tzinfo=utc)
         self.file_name = 'some-long-file-name-to-download.pdf'
         self.document = DocumentFactory(
             document_key='FAC09001-FWF-000-HSE-REP-0004',

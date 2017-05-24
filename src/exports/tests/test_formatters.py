@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
+from collections import OrderedDict
 
 from django.test import TestCase
 from django.contrib.contenttypes.models import ContentType
@@ -26,30 +27,30 @@ class FormatterTests(TestCase):
         self.revisions = [doc.get_latest_revision() for doc in self.docs]
 
     def test_csv_formatter(self):
-        fields = {
-            'Document Number': 'document_key',
-            'Title': 'title',
-        }
+        fields = OrderedDict((
+            ('Document Number', 'document_key'),
+            ('Title', 'title'),
+        ))
         formatter = CSVFormatter(fields)
         csv = formatter.format(self.revisions[0:2])
-        expected_csv = b'{};{}\n{};{}\n'.format(
+        expected_csv = '{};{}\n{};{}\n'.format(
             self.docs[0].document_key,
             self.docs[0].title,
             self.docs[1].document_key,
             self.docs[1].title,
-        )
+        ).encode()
         self.assertEqual(csv, expected_csv)
 
     def test_csv_formatter_foreign_key(self):
-        fields = {
-            'Document Number': 'document_key',
-            'Leader': 'leader',
-        }
+        fields = OrderedDict((
+            ('Document Number', 'document_key'),
+            ('Leader', 'leader'),
+        ))
         formatter = CSVFormatter(fields)
         metadata = self.docs[0].metadata
         revision = metadata.latest_revision
         revision.leader = UserFactory(name='Grand Schtroumpf')
         revision.save()
         csv = formatter.format([revision])
-        expected_csv = b'{};Grand Schtroumpf\n'.format(metadata.document_key)
+        expected_csv = '{};Grand Schtroumpf\n'.format(metadata.document_key).encode()
         self.assertEqual(csv, expected_csv)

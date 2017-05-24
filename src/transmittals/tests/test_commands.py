@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
+
 
 import os
 import stat
@@ -75,7 +75,7 @@ class ImportCommandTests(TestCase):
         with self.assertRaises(CommandError) as cm:
             call_command(IMPORT_COMMAND, stderr=f)
 
-        error = 'Usage: python manage.py import_transmittals <contractor_id> <doc_category> <trs_category>'
+        error = 'Error: the following arguments are required: contractor_id, doc_category, trs_category'
         self.assertEqual(str(cm.exception), error)
 
     def test_incorrect_ctr_parameter(self):

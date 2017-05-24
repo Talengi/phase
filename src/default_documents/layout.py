@@ -4,11 +4,11 @@ See https://django-crispy-forms.readthedocs.org/en/d-0/layouts.html
 
 """
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 
 from django.template.loader import render_to_string
-from django.template import Context, Template
+from django.template import Template
 from django.utils.text import slugify
 
 from crispy_forms.compatibility import text_type
@@ -57,15 +57,13 @@ class ScheduleStatusLayout(Field):
             template=self.field_template,
             **kwargs)
 
-        return render_to_string(
-            self.template,
-            Context({
-                'form_style': form_style,
-                'name': self.name,
-                'planned_field': planned,
-                'forecast_field': forecast,
-                'actual_field': actual,
-            }))
+        return render_to_string(self.template, {
+            'form_style': form_style,
+            'name': self.name,
+            'planned_field': planned,
+            'forecast_field': forecast,
+            'actual_field': actual,
+        })
 
 
 class ScheduleLayout(LayoutObject):
@@ -78,12 +76,10 @@ class ScheduleLayout(LayoutObject):
     def render(self, form, form_style, context, template_pack=TEMPLATE_PACK):
         fields = [render_field(field, form, form_style, context) for field in self.fields]
 
-        return render_to_string(
-            self.template,
-            Context({
-                'fields': ' '.join(fields),
-                'form_style': form_style,
-            }))
+        return render_to_string(self.template, {
+            'fields': ' '.join(fields),
+            'form_style': form_style,
+        })
 
 
 class FlatRelatedDocumentsLayout(LayoutObject):
@@ -95,12 +91,10 @@ class FlatRelatedDocumentsLayout(LayoutObject):
     def render(self, form, form_style, context, template_pack=None):
         documents = form.instance.related_documents.all()
 
-        return render_to_string(
-            self.template,
-            Context({
-                'documents': documents,
-                'form_style': form_style,
-            }))
+        return render_to_string(self.template, {
+            'documents': documents,
+            'form_style': form_style,
+        })
 
 
 class PropertyLayout(LayoutObject):
@@ -162,7 +156,7 @@ class PropertyLayout(LayoutObject):
 
         if iterator is not None:
             template = self.list_html
-            value = '<li>%s</li>' % '</li><li>'.join([unicode(i) for i in iterator])
+            value = '<li>%s</li>' % '</li><li>'.join([i for i in iterator])
         else:
             template = self.html
             value = prop
@@ -243,7 +237,7 @@ class DocumentFieldset(Fieldset):
     def __init__(self, *args, **kwargs):
         super(DocumentFieldset, self).__init__(*args, **kwargs)
         if self.css_id is None:
-            legend = unicode(self.legend)
+            legend = self.legend
             self.css_id = 'fieldset-%s' % slugify(legend)
 
 

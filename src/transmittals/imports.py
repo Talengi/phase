@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
 
 import os
 import csv
@@ -137,7 +136,7 @@ class TrsImport(object):
         if not self._csv_cols:
             try:
                 line = self.csv_lines()[0]
-                self._csv_cols = line.keys()
+                self._csv_cols = list(line.keys())
             except:
                 self._csv_cols = []
 
@@ -155,12 +154,12 @@ class TrsImport(object):
         if not self._csv_lines:
             columns = self.expected_columns()
             try:
-                with open(self.csv_fullname, 'rb') as f:
+                with open(self.csv_fullname, 'r') as f:
                     csvfile = csv.DictReader(f, dialect='normal')
                     lines = []
                     for row in csvfile:
                         line_row = {}
-                        for key, value in row.items():
+                        for key, value in list(row.items()):
                             line_row[columns.get(key, key)] = value or None
 
                         lines.append(line_row)
@@ -323,10 +322,10 @@ class TrsImport(object):
                 latest_revision = metadata.latest_revision.revision
                 is_new_revision = bool(int(data['revision']) > latest_revision)
 
-            pdf_file = File(open(line.pdf_fullname))
+            pdf_file = File(open(line.pdf_fullname, 'rb'))
             native_file = line.native_fullname
             if native_file:
-                native_file = File(open(native_file))
+                native_file = File(open(native_file, 'rb'))
 
             data.update({
                 'transmittal': transmittal,
@@ -362,7 +361,7 @@ class TrsImportLine(object):
         """Iterate over every field and prepare them if it's needed."""
         if not hasattr(self, '_form_data'):
             _form_data = dict()
-            for key, value in self.csv_data.items():
+            for key, value in list(self.csv_data.items()):
                 clean_method_name = 'clean_{}'.format(key)
                 if hasattr(self, clean_method_name):
                     form_value = getattr(self, clean_method_name)(value)
@@ -490,7 +489,7 @@ class TrsImportLine(object):
         else:
             form_data = {}
 
-        for k, v in form_data.items():
+        for k, v in list(form_data.items()):
             if k in data:
                 data[k] = v
         return data

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 import base64
 from datetime import datetime, time
@@ -41,7 +41,7 @@ class AlertMixin(object):
     def authenticate_user(self, request):
         try:
             auth = request.META['HTTP_AUTHORIZATION'].split()
-            decoded_auth = base64.b64decode(auth[1])
+            decoded_auth = base64.b64decode(auth[1]).decode()
             username, password = decoded_auth.split(':')
         except:
             # Invalid authorization header sent by client

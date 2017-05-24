@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from django import template
-from django.template.loader import get_template, select_template
+from django.template.loader import select_template
 from django.core.exceptions import ImproperlyConfigured
+from django.utils.html import format_html, format_html_join
+from django.utils.safestring import mark_safe
 
 from ..utils import stringify_value
 
@@ -11,7 +13,7 @@ from ..utils import stringify_value
 register = template.Library()
 
 
-HEADER_TPL = '<th id="column%s" data-sortby="%s">%s</th>'
+HEADER_TPL = '<th id="column{}" data-sortby="{}">{}</th>'
 TD_TPL = '<td class="column%s"><%%= %s %%></td>'
 
 
@@ -44,14 +46,12 @@ class MenuItem(object):
             raise ImproperlyConfigured('Incorrect "method" value')
         self.method = method
 
-    def __unicode__(self):
-        return self.to_html()
-
     def __str__(self):
         return self.to_html()
 
     def to_html(self):
-        menu_entry = '''
+        menu_entry = format_html(
+            '''
             <li class="{disabled}">
             <a id="action-{id}"
                 href="{action}"
@@ -64,7 +64,7 @@ class MenuItem(object):
                 {label}
             </a>
             </li>
-        '''.format(
+            ''',
             disabled='disabled' if self.disabled else '',
             id=self.id,
             action=self.action,
@@ -90,15 +90,12 @@ def generate_header_markup(document_class):
     """Generates the markup to be used in doc list table header."""
     columns = document_class.PhaseConfig.column_fields
 
-    headers = list()
-    for column in columns:
-        headers.append(HEADER_TPL % (
-            column[1],
-            column[1],
-            column[0],
-        ))
+    headers = format_html_join(
+        ' ', HEADER_TPL,
+        ((column[1], column[1], column[0]) for column in columns)
+    )
 
-    return ' '.join(headers)
+    return headers
 
 
 @register.simple_tag()
@@ -114,7 +111,7 @@ def generate_template_markup(document_class):
         content = tpl.render({'field_name': column[1]})
         tds.append(content)
 
-    return ' '.join(tds)
+    return mark_safe(' '.join(tds))
 
 
 @register.filter
@@ -135,11 +132,15 @@ def action_menu_button(context, metadata, revision, user, dropdirection):
 @register.simple_tag()
 def batch_action_menu(Metadata, category, user):
     actions = Metadata.get_batch_actions(category, user)
-    menu = '''
-    <ul class="action-menu dropdown-menu">
-        {}
-    </ul>
-    '''.format(''.join(action.to_html() for action in actions.values()))
+    menu = format_html_join(
+        '',
+        '''
+        <ul class="action-menu dropdown-menu">
+            {}
+        </ul>
+        ''',
+        ((action.to_html(),) for action in list(actions.values()))
+    )
     return menu
 
 
@@ -147,15 +148,15 @@ def batch_action_menu(Metadata, category, user):
 def include_action_modals(context, revision):
     rendered = []
     for tpl in revision.get_action_modals():
-        content = get_template(tpl)
+        content = context.template.engine.get_template(tpl)
         rendered.append(content.render(context))
-    return '\n'.join(rendered)
+    return mark_safe('\n'.join(rendered))
 
 
 @register.simple_tag(takes_context=True)
 def include_batch_action_modals(context, Metadata):
     rendered = []
     for tpl in Metadata.get_batch_actions_modals():
-        content = get_template(tpl)
+        content = context.template.engine.get_template(tpl)
         rendered.append(content.render(context))
-    return '\n'.join(rendered)
+    return mark_safe('\n'.join(rendered))

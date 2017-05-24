@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from django.test import TestCase
 
@@ -21,8 +21,8 @@ class ConfigurableChoiceFieldTest(TestCase):
 
     def test_choices_from_list(self):
         choices = get_choices_from_list(self.values_list.index)
-        self.assertItemsEqual(choices, [
-            (u'test1', u'test1 - Test 1'),
-            (u'test2', u'test2 - Test 2'),
-            (u'test3', u'test3 - Test 3'),
+        self.assertCountEqual(choices, [
+            ('test1', 'test1 - Test 1'),
+            ('test2', 'test2 - Test 2'),
+            ('test3', 'test3 - Test 3'),
         ])

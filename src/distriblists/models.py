@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -37,5 +37,5 @@ class DistributionList(models.Model):
         verbose_name = _('Distribution list')
         verbose_name_plural = _('Distribution lists')
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name

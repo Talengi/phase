@@ -69,5 +69,31 @@
     "category_template": ["transmittals"],
     "users": [1, 2, 3]
   }
+},
+{
+  "model": "categories.contract",
+  "fields": {
+    "number": "FAC09001",
+    "name": "FAC09001",
+    "categories": [
+        ["acme", "contractor-deliverables"],
+        ["acme", "correspondences"],
+        ["acme", "minutes-of-meeting"],
+        ["acme", "transmittals"]
+    ]
+  }
+},
+{
+  "model": "categories.contract",
+  "fields": {
+    "number": "FAC10005",
+    "name": "FAC10005",
+    "categories": [
+        ["acme", "contractor-deliverables"],
+        ["acme", "correspondences"],
+        ["acme", "minutes-of-meeting"],
+        ["acme", "transmittals"]
+    ]
+  }
 }
 ]

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 import datetime
 from django.contrib.auth.models import Permission
@@ -16,7 +16,7 @@ class DocumentTest(TestCase):
     maxDiff = None
 
     def test_metadata_property(self):
-        date = datetime.datetime(2013, 04, 20, 12, 0, 0, tzinfo=utc)
+        date = datetime.datetime(2013, 4, 20, 12, 0, 0, tzinfo=utc)
         document = DocumentFactory(
             document_key='FAC09001-FWF-000-HSE-REP-0004',
             created_on=date,
@@ -37,7 +37,7 @@ class DocumentTest(TestCase):
     def test_jsonification(self):
         """Tests that a jsonified document returns the appropriate values."""
 
-        date = datetime.datetime(2013, 04, 20, 12, 0, 0, tzinfo=utc)
+        date = datetime.datetime(2013, 4, 20, 12, 0, 0, tzinfo=utc)
 
         document = DocumentFactory(
             document_key='FAC09001-FWF-000-HSE-REP-0004',
@@ -57,21 +57,21 @@ class DocumentTest(TestCase):
         self.assertEqual(
             document.to_json(),
             {
-                u'status': u'STD',
-                u'title': u'HAZOP report',
-                u'url': document.get_absolute_url(),
-                u'revision': 1,
-                u'is_latest_revision': True,
-                u'pk': document.metadata.latest_revision.pk,
-                u'document_pk': document.pk,
-                u'metadata_pk': document.metadata.pk,
-                u'document_key': 'FAC09001-FWF-000-HSE-REP-0004',
-                u'document_number': 'FAC09001-FWF-000-HSE-REP-0004',
+                'status': 'STD',
+                'title': 'HAZOP report',
+                'url': document.get_absolute_url(),
+                'revision': 1,
+                'is_latest_revision': True,
+                'pk': document.metadata.latest_revision.pk,
+                'document_pk': document.pk,
+                'metadata_pk': document.metadata.pk,
+                'document_key': 'FAC09001-FWF-000-HSE-REP-0004',
+                'document_number': 'FAC09001-FWF-000-HSE-REP-0004',
             }
         )
 
     def test_get_actions(self):
-        date = datetime.datetime(2013, 04, 20, 12, 0, 0, tzinfo=utc)
+        date = datetime.datetime(2013, 4, 20, 12, 0, 0, tzinfo=utc)
 
         document = DocumentFactory(
             document_key='FAC09001-FWF-000-HSE-REP-0004',

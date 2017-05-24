@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from django.db import models, migrations
 import django.utils.timezone
@@ -8,8 +8,6 @@ import uuid
 
 
 class Migration(migrations.Migration):
-
-    replaces = [(b'exports', '0001_initial'), (b'exports', '0002_export_status'), (b'exports', '0003_auto_20150915_1132')]
 
     dependencies = [
         ('categories', '0001_initial'),

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from django.db.models import Q
 
@@ -21,7 +21,6 @@ class DCPermissions(BasePermission):
 class UserViewSet(CategoryAPIViewMixin, viewsets.ReadOnlyModelViewSet):
     model = User
     serializer_class = UserSerializer
-    paginate_by_param = 'page_limit'
     permission_classes = (IsAuthenticated, DCPermissions)
 
     def get_queryset(self):

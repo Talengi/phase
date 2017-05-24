@@ -1,11 +1,10 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
-from views import Report
+from .views import Report
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     # Reports page
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/$',
         Report.as_view(),
         name='category_report'),
-)
+]

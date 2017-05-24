@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from datetime import timedelta
 
@@ -27,7 +27,7 @@ class ExportCreateTests(TestCase):
 
     def test_export_create_cleanup_old_exports(self):
         now = timezone.now()
-        for delta in xrange(0, 25):
+        for delta in range(0, 25):
             ExportFactory(
                 owner=self.user,
                 category=self.category,

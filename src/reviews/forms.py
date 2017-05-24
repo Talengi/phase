@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
 
 from django import forms
 from django.db.models import Q
@@ -13,7 +12,7 @@ from crispy_forms.layout import Field
 from accounts.forms import UserChoiceField, UserMultipleChoiceField
 from default_documents.layout import (
     DocumentFieldset, PropertyLayout, YesNoLayout, DateField)
-from documents.widgets import RevisionClearableFileInput
+from privatemedia.widgets import PhaseClearableFileInput
 from distriblists.forms import DistributionListValidationMixin
 from reviews.utils import get_cached_reviews
 from reviews.layout import ReviewsLayout, QuickDistributionListWidgetLayout
@@ -50,10 +49,10 @@ class ReviewSearchForm(forms.Form):
 
         # Only display existing statuses
         statuses = self.reviews.values_list('revision_status', flat=True)
-        statuses = filter(None, statuses)
+        statuses = [_f for _f in statuses if _f]
         choices = [
             ('', '---------'),
-        ] + zip(statuses, statuses)
+        ] + list(zip(statuses, statuses))
         self.fields['status'].choices = choices
 
     def filter_reviews(self):
@@ -137,8 +136,8 @@ class ReviewFormMixin(DistributionListValidationMixin, forms.ModelForm):
             self.reviews = get_cached_reviews(self.instance)
 
             # Extract non null comments from reviews
-            all_comments = map(lambda x: x.comments or None, self.reviews)
-            comments = filter(lambda x: x, all_comments)
+            all_comments = [x.comments or None for x in self.reviews]
+            comments = [x for x in all_comments if x]
             self.nb_comments = len(comments)
 
             # Is the current user a member of the distribution list?
@@ -150,7 +149,7 @@ class ReviewFormMixin(DistributionListValidationMixin, forms.ModelForm):
         super(ReviewFormMixin, self).prepare_form(*args, **kwargs)
 
     def prepare_field_file_transmitted(self):
-        self.fields['file_transmitted'].widget = RevisionClearableFileInput()
+        self.fields['file_transmitted'].widget = PhaseClearableFileInput()
         if self.instance.file_transmitted:
             url = reverse('revision_file_download', args=[
                 self.category.organisation.slug,

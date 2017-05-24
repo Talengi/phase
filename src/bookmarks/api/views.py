@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
+
 
 from rest_framework import viewsets
 from rest_framework import permissions
@@ -12,7 +12,6 @@ from bookmarks.api.serializers import BookmarkSerializer
 class BookmarkViewSet(viewsets.ModelViewSet):
     model = Bookmark
     serializer_class = BookmarkSerializer
-    paginate_by_param = 'page_limit'
     permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):

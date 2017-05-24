@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 import datetime as dt
 
 from documents.models import MetadataRevisionBase
 from transmittals.utils import FieldWrapper
 from documents.utils import stringify_value as stringify
+import collections
 
 # Only used in this module, it makes no sense to put it elsewhere for now
 FR_DATE_FORMAT = '%d-%m-%Y'
@@ -53,7 +54,7 @@ class CSVFormatter(BaseFormatter):
                 doc,
                 doc.metadata,
                 doc.metadata.document))
-            fields = self.fields.values()
+            fields = list(self.fields.values())
             data = [self.get_field(doc, field) for field in fields]
         return data
 
@@ -69,7 +70,7 @@ class CSVFormatter(BaseFormatter):
     def get_field(self, doc, field):
         data = getattr(doc, field, '')
         # Attributes and method can be passed
-        if callable(data):
+        if isinstance(data, collections.Callable):
             data = data()
 
         # We want dd-mm-yyy format for exports whereas

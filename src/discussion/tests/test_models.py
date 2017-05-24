@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
+
 
 from django.test import TestCase
 
@@ -106,7 +106,7 @@ class CacheTests(TestCase):
         self.assertEqual(get_discussion_length(self.revision), 0)
 
     def test_new_remarks_update_cache(self):
-        for _ in xrange(10):
+        for _ in range(10):
             NoteFactory(
                 author=self.user1,
                 document=self.doc,
@@ -124,7 +124,7 @@ class CacheTests(TestCase):
         self.assertEqual(get_discussion_length(self.revision), 0)
 
     def test_cancel_review_updates_cache(self):
-        for _ in xrange(10):
+        for _ in range(10):
             NoteFactory(
                 author=self.user1,
                 document=self.doc,
@@ -159,7 +159,7 @@ class ReviewTests(TestCase):
         self.revision.start_review()
 
     def test_notes_are_deleted_when_review_is_canceled(self):
-        for _ in xrange(10):
+        for _ in range(10):
             NoteFactory(
                 author=self.user1,
                 document=self.doc,

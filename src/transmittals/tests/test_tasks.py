@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
 
 import os
 from os.path import join
@@ -48,7 +47,6 @@ class ProcessTransmittalTests(TestCase):
         self.category = CategoryFactory(category_template__metadata_model=Model)
         self.document = DocumentFactory(
             document_key='FAC10005-CTR-000-EXP-LAY-4891',
-            latest_revision=2,
             metadata={
                 'title': 'Cause & Effect Chart',
                 'contract_number': 'FAC10005',

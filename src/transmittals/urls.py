@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
 
-from django.conf.urls import patterns, url
+
+from django.conf.urls import url
 
 from transmittals.views import (
     TransmittalList, TransmittalDiff, TransmittalRevisionDiff,
     TransmittalDownload, PrepareTransmittal, CreateTransmittal,
     AckOfTransmittalReceipt, BatchAckOfTransmittalReceipt)
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/prepare/$',
         PrepareTransmittal.as_view(),
         name="transmittal_prepare"),
@@ -37,4 +36,4 @@ urlpatterns = patterns(
     url(r'^incoming/(?P<transmittal_pk>\d+)/(?P<document_key>[\w-]+)/(?P<revision_document_key>[\w-]+)/(?P<revision>\d+)/$',
         TransmittalRevisionDiff.as_view(),
         name='transmittal_revision_diff'),
-)
+]

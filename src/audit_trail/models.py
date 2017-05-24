@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
@@ -90,7 +90,7 @@ class Activity(models.Model):
         verbose_name_plural = _('Activities')
         ordering = ['-created_on']
 
-    def __unicode__(self):
+    def __str__(self):
         ctx = {
             'actor': self.actor or self.actor_object_str,
             'verb': self.get_verb_display(),

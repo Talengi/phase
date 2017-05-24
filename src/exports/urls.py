@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
 
-from django.conf.urls import patterns, url
+
+from django.conf.urls import url
 
 from exports.views import ExportCreate, ExportList, DownloadView
 
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
 
     url(r'^$',
         ExportList.as_view(),
@@ -18,4 +17,4 @@ urlpatterns = patterns(
     url(r'^(?P<uid>[-\w]+)/$',
         DownloadView.as_view(),
         name='export_download')
-)
+]

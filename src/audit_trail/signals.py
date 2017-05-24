@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from django.dispatch import Signal, receiver
 from accounts.models import User
@@ -20,7 +20,7 @@ def activity_handler(verb, action_object=None, target=None, **kwargs):
 
     kwargs.pop('signal', None)
 
-    if verb not in zip(*Activity.VERB_CHOICES)[0]:
+    if verb not in list(zip(*Activity.VERB_CHOICES))[0]:
         raise ValueError("Verb must belong to Activity verbs")
 
     activity = Activity()

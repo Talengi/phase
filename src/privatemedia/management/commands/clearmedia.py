@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 
-from __future__ import unicode_literals
+
 
 import os
 import logging
@@ -76,7 +76,7 @@ class Command(BaseCommand):
         def prepend_private_root(path):
             return os.path.join(settings.PRIVATE_ROOT, path)
 
-        all_files = map(prepend_private_root, all_files)
+        all_files = list(map(prepend_private_root, all_files))
         return set(all_files)
 
     def find_files_on_disk(self):

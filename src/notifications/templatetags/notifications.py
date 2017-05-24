@@ -1,6 +1,7 @@
-from __future__ import unicode_literals
+
 
 from django import template
+from django.utils.html import format_html
 
 
 register = template.Library()
@@ -16,4 +17,4 @@ def notification_icon(tag):
     }
     icon = icons.get(tag, '')
 
-    return '<span class="glyphicon glyphicon-{}"></span>'.format(icon)
+    return format_html('<span class="glyphicon glyphicon-{}"></span>', icon)

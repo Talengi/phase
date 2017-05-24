@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 import json
 
@@ -8,7 +8,7 @@ from django.conf import settings
 from django.http import (
     HttpResponse, Http404, HttpResponseForbidden, HttpResponseRedirect
 )
-from django.core.servers.basehttp import FileWrapper
+from wsgiref.util import FileWrapper
 from django.core.exceptions import PermissionDenied
 from django.views.generic import (
     ListView, DetailView, RedirectView, DeleteView)
@@ -598,14 +598,14 @@ class DocumentDownload(BaseDocumentList):
 
         # Generates the temporary zip file
         zip_filename = _class.compress_documents(data['document_ids'], **data)
+        file_size = zip_filename.tell()
         zip_filename.seek(0)
         wrapper = FileWrapper(zip_filename)
 
         # Returns the zip file for download
         response = HttpResponse(wrapper, content_type='application/zip')
         response['Content-Disposition'] = 'attachment; filename=download.zip'
-        response['Content-Length'] = zip_filename.tell()
-        zip_filename.seek(0)
+        response['Content-Length'] = file_size
         return response
 
 

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 import datetime
 
@@ -53,7 +53,7 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
                 'received_date': datetime.datetime.today()}}
         doc_kwargs.update(default_kwargs)
 
-        docs = [self.create_doc(**doc_kwargs) for _ in xrange(nb_docs)]
+        docs = [self.create_doc(**doc_kwargs) for _ in range(nb_docs)]
         revisions = []
         for doc in docs:
             revision = doc.get_metadata().latest_revision

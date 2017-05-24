@@ -8,7 +8,6 @@ from favorites.api.serializers import FavoriteSerializer
 class FavoriteViewSet(viewsets.ModelViewSet):
     model = Favorite
     serializer_class = FavoriteSerializer
-    paginate_by_param = 'page_limit'
     permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):

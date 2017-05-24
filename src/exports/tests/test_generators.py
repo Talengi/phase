@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from collections import OrderedDict
 
@@ -37,22 +37,22 @@ class ExportGeneratorTests(TestCase):
         generator = ExportGenerator(self.category, {}, {})
         generator.get_es_results = self.es_mock
         iterator = iter(generator)
-        chunk = iterator.next()  # header
+        chunk = next(iterator)  # header
 
-        chunk = iterator.next()
+        chunk = next(iterator)
         self.assertEqual(chunk.count(), 5)
 
-        chunk = iterator.next()
+        chunk = next(iterator)
         self.assertEqual(chunk.count(), 5)
 
-        chunk = iterator.next()
+        chunk = next(iterator)
         self.assertEqual(chunk.count(), 5)
 
-        chunk = iterator.next()
+        chunk = next(iterator)
         self.assertEqual(chunk.count(), 4)
 
         with self.assertRaises(StopIteration):
-            chunk = iterator.next()
+            chunk = next(iterator)
 
     def test_csv_generator_header(self):
         fields = OrderedDict((
@@ -61,5 +61,5 @@ class ExportGeneratorTests(TestCase):
         generator = CSVGenerator(self.category, {}, fields)
         generator.get_es_results = self.es_mock
         iterator = iter(generator)
-        chunk = iterator.next()
+        chunk = next(iterator)
         self.assertEqual(chunk, [['Title', 'Document number']])

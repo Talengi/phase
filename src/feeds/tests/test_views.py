@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 import base64
 
@@ -54,8 +54,8 @@ class FeedAuthenticationTests(TestCase):
         self.user.is_active = False
         self.user.save()
 
-        credentials = '{}:pass'.format(self.user.email)
-        b64_credentials = base64.b64encode(credentials)
+        credentials = '{}:pass'.format(self.user.email).encode()
+        b64_credentials = base64.b64encode(credentials).decode()
         full_credentials = 'Basic: {}'.format(b64_credentials)
 
         res = self.client.get(self.url, **{
@@ -65,8 +65,8 @@ class FeedAuthenticationTests(TestCase):
         self.assertEqual(res.status_code, 401)
 
     def test_login_with_wrong_password(self):
-        credentials = '{}:wrongpassword'.format(self.user.email)
-        b64_credentials = base64.b64encode(credentials)
+        credentials = '{}:wrongpassword'.format(self.user.email).encode()
+        b64_credentials = base64.b64encode(credentials).decode()
         full_credentials = 'Basic: {}'.format(b64_credentials)
 
         res = self.client.get(self.url, **{
@@ -76,8 +76,8 @@ class FeedAuthenticationTests(TestCase):
         self.assertEqual(res.status_code, 401)
 
     def test_sucessfull_login_user(self):
-        credentials = '{}:pass'.format(self.user.email)
-        b64_credentials = base64.b64encode(credentials)
+        credentials = '{}:pass'.format(self.user.email).encode()
+        b64_credentials = base64.b64encode(credentials).decode()
         full_credentials = 'Basic: {}'.format(b64_credentials)
 
         res = self.client.get(self.url, **{

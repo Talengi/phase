@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
 
 import os
 import logging
@@ -20,7 +19,7 @@ from django.core.files.base import ContentFile
 from django.utils import timezone
 
 from model_utils import Choices
-from elasticsearch_dsl import F
+from elasticsearch_dsl import Q
 
 from documents.utils import save_document_forms
 from documents.models import Document, Metadata, MetadataRevision, MetadataRevisionBase
@@ -136,7 +135,7 @@ class Transmittal(Metadata):
             ('Status', 'status'),
         )
 
-    def __unicode__(self):
+    def __str__(self):
         return self.document_key
 
     def save(self, *args, **kwargs):
@@ -322,9 +321,9 @@ class TrsRevision(models.Model):
         max_length=3,
         list_index='DOCUMENT_TYPES')
     sequential_number = models.CharField(
-        verbose_name=u"sequential Number",
+        verbose_name="sequential Number",
         help_text=_('Select a four digit number'),
-        default=u"0001",
+        default="0001",
         max_length=4,
         validators=[StringNumberValidator(4)],
         null=True, blank=True)
@@ -407,7 +406,7 @@ class TrsRevision(models.Model):
         verbose_name_plural = _('Trs Revisions')
         unique_together = ('transmittal', 'document_key', 'revision')
 
-    def __unicode__(self):
+    def __str__(self):
         return '{} ({:02d})'.format(self.document_key, self.revision)
 
     def get_absolute_url(self):
@@ -418,7 +417,7 @@ class TrsRevision(models.Model):
     def get_document_fields(self):
         """Return a dict of fields that will be passed to the document form."""
         columns = self.category.get_transmittal_columns()
-        fields = columns.values()
+        fields = list(columns.values())
         fields_dict = dict([(field, getattr(self, field)) for field in fields])
 
         # XXX
@@ -541,8 +540,8 @@ class OutgoingTransmittal(Metadata):
                 'label': _('Has errors?'),
                 'filters': {
                     '': None,
-                    'true': F('term', has_error=True),
-                    'false': F('term', has_error=False)
+                    'true': Q('term', has_error=True),
+                    'false': Q('term', has_error=False)
                 }
             }),)
         )
@@ -566,7 +565,7 @@ class OutgoingTransmittal(Metadata):
             ('Has error', 'has_error'),
         ))
 
-    def __unicode__(self):
+    def __str__(self):
         return self.document_key
 
     def get_revisions(self):
@@ -818,7 +817,7 @@ class ExportedRevision(models.Model):
     @property
     def name(self):
         """A revision identifier should be displayed with two digits"""
-        return u'%02d' % self.revision
+        return '%02d' % self.revision
 
 
 class TransmittableMixin(ReviewMixin):
@@ -834,12 +833,12 @@ class TransmittableMixin(ReviewMixin):
         ('FI', _('For information')))
 
     transmittal = models.ForeignKey(
-        'OutgoingTransmittal',
+        'transmittals.OutgoingTransmittal',
         verbose_name='transmittal',
         null=True, blank=True,
         on_delete=models.SET_NULL)
     transmittals = models.ManyToManyField(
-        'OutgoingTransmittal',
+        'transmittals.OutgoingTransmittal',
         verbose_name='transmittals',
         related_name="%(app_label)s_%(class)s_related"
     )

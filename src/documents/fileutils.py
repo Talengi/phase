@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
-
 def revision_file_path(revision, filename):
     """Rename document files on upload to match a custom filename
 

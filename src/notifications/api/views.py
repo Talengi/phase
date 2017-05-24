@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
+
 
 from django.conf import settings
 from rest_framework import viewsets
@@ -22,7 +22,6 @@ class NotificationViewSet(viewsets.ReadOnlyModelViewSet):
     model = Notification
     serializer_class = NotificationSerializer
     paginate_by = settings.API_PAGINATE_BY
-    paginate_by_param = 'page_limit'
     authentication_classes = (NoCSRFAuthentication,)
 
     def get_queryset(self):

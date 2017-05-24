@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
 from accounts.api.views import UserViewSet
 
@@ -15,9 +15,8 @@ user_detail = UserViewSet.as_view({
 })
 
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/$', user_list, name='user-list'),
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/(?P<pk>\d+)/$',
         user_detail, name='user-detail'),
-)
+]

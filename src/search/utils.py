@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 
-from __future__ import unicode_literals
+
 
 import logging
 
@@ -61,7 +61,7 @@ def index_document(document_id):
         .select_related() \
         .get(pk=document_id)
     revisions = document.get_all_revisions()
-    actions = map(build_index_data, revisions)
+    actions = list(map(build_index_data, revisions))
 
     bulk(
         elastic,
@@ -72,7 +72,7 @@ def index_document(document_id):
 
 def index_revisions(revisions):
     """Index a bunch of revisions."""
-    actions = map(build_index_data, revisions)
+    actions = list(map(build_index_data, revisions))
     bulk(
         elastic,
         actions,
@@ -105,12 +105,12 @@ def unindex_document(document_id):
         .select_related() \
         .get(pk=document_id)
     revisions = document.get_all_revisions()
-    actions = map(lambda revision: {
+    actions = [{
         '_op_type': 'delete',
         '_index': settings.ELASTIC_INDEX,
         '_type': document.document_type(),
         '_id': revision.unique_id,
-    }, revisions)
+    } for revision in revisions]
 
     bulk(
         elastic,
@@ -142,7 +142,6 @@ def put_category_mapping(category_id):
         index=settings.ELASTIC_INDEX,
         doc_type=doc_type,
         body=mapping,
-        ignore_conflicts=True
     )
 
 
@@ -161,7 +160,7 @@ def get_mapping(doc_class):
     revision_class = doc_class.get_revision_class()
     mapping = {
         '_all': {
-            'index_analyzer': 'nGram_analyzer',
+            'analyzer': 'nGram_analyzer',
             'search_analyzer': 'whitespace_analyzer',
             'index': 'not_analyzed',
         },
@@ -169,17 +168,18 @@ def get_mapping(doc_class):
     }
 
     config = doc_class.PhaseConfig
+    field_types = getattr(config, 'es_field_types', {})
     filter_fields = list(config.filter_fields)
-    column_fields = dict(config.column_fields).values()
+    column_fields = list(dict(config.column_fields).values())
     additional_fields = getattr(config, 'indexable_fields', [])
     fields = set(filter_fields + column_fields + additional_fields)
 
     for field_name in fields:
         try:
-            field = doc_class._meta.get_field_by_name(field_name)[0]
+            field = doc_class._meta.get_field(field_name)
         except FieldDoesNotExist:
             try:
-                field = revision_class._meta.get_field_by_name(field_name)[0]
+                field = revision_class._meta.get_field(field_name)
             except FieldDoesNotExist:
                 field = getattr(doc_class, field_name, None)
                 if field is None:
@@ -188,7 +188,7 @@ def get_mapping(doc_class):
                         warning = 'Field {} cannot be found and will not be indexed'.format(field_name)
                         logger.warning(warning)
 
-        es_type = get_mapping_type(field) if field else 'string'
+        es_type = get_mapping_type(field_name, field, field_types) if field else 'string'
 
         mapping['properties'].update({
             field_name: {
@@ -207,8 +207,11 @@ def get_mapping(doc_class):
     return mapping
 
 
-def get_mapping_type(field):
+def get_mapping_type(name, field, field_types):
     """Get the elasticsearch mapping type from a django field."""
+    if name in field_types:
+        return field_types[name]
+
     for typeinfo, typename in TYPE_MAPPING:
         if isinstance(field, typeinfo):
             return typename

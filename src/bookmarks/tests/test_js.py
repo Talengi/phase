@@ -14,6 +14,7 @@ from search.utils import create_index, delete_index, put_category_mapping
 
 @override_settings(PAGINATE_BY=5)
 class DocumentListTests(CasperTestCase):
+    no_colors = False
 
     def setUp(self):
         delete_index()
@@ -29,7 +30,7 @@ class DocumentListTests(CasperTestCase):
                            category=self.category)
 
         connect_signals()
-        for doc_id in xrange(20):
+        for doc_id in range(20):
             DocumentFactory(
                 document_key='hazop-report-%d' % doc_id,
                 category=self.category,

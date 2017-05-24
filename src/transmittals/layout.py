@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from django.template.loader import render_to_string
-from django.template import Context
 
 from crispy_forms.layout import LayoutObject
 
@@ -15,12 +14,10 @@ class RelatedRevisionsLayout(LayoutObject):
 
     def render(self, form, form_style, context, template_pack=None):
         revisions = form.instance.get_last_revisions()
-        return render_to_string(
-            self.template,
-            Context({
-                'revisions': revisions,
-                'form_style': form_style,
-            }))
+        return render_to_string(self.template, {
+            'revisions': revisions,
+            'form_style': form_style,
+        })
 
 
 class OutgoingTrsLayout(LayoutObject):
@@ -28,9 +25,7 @@ class OutgoingTrsLayout(LayoutObject):
 
     def render(self, form, form_style, context, template_pack=None):
         transmittals = form.instance.transmittals.all()
-        return render_to_string(
-            self.template,
-            Context({
-                'transmittals': transmittals,
-                'form_style': form_style,
-            }))
+        return render_to_string(self.template, {
+            'transmittals': transmittals,
+            'form_style': form_style,
+        })

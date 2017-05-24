@@ -1,0 +1,7 @@
+<div class="fileinput">
+{% if is_initial %}<a href="{{ file_url }}">{{ file_name }}</a><br />{% if not widget.required %}
+<input type="checkbox" name="{{ checkbox_name }}" id="{{ checkbox_id }}" />
+<label for="{{ checkbox_id }}">{{ clear_checkbox_label }}</label>{% endif %}<br />
+{{ input_text }}:{% endif %}
+<input type="{{ widget.type }}" name="{{ widget.name }}"{% include "django/forms/widgets/attrs.html" %} />
+</div>

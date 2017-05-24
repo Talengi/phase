@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
 from discussion.api.views import DiscussionViewSet
 
@@ -16,8 +16,7 @@ note_detail = DiscussionViewSet.as_view({
 })
 
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url(r'^(?P<document_key>[\w-]+)/(?P<revision>\d+)/$', note_list, name='note-list'),
     url(r'^(?P<document_key>[\w-]+)/(?P<revision>\d+)/(?P<pk>\d+)/$', note_detail, name='note-detail'),
-)
+]

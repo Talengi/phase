@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from django.conf import settings
 
@@ -62,9 +62,9 @@ class ExportGenerator(object):
         return pks, total
 
     def __next__(self):
-        return self.next()
+        return next(self)
 
-    def next(self):
+    def __next__(self):
         return self.next_data_chunk()
 
     def next_data_chunk(self):
@@ -100,7 +100,7 @@ class ExportGenerator(object):
 
 class CSVGenerator(ExportGenerator):
     def data_header(self):
-        return [self.fields.keys()]
+        return [list(self.fields.keys())]
 
 
 class XLSXGenerator(CSVGenerator):

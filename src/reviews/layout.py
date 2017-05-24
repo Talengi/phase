@@ -1,7 +1,6 @@
 import operator
 
 from django.template.loader import render_to_string
-from django.template import Context
 from crispy_forms.layout import LayoutObject
 
 
@@ -16,29 +15,25 @@ class ReviewsLayout(LayoutObject):
         # retains their original order). First we sort items according to their
         #  pk, then according to the role name in order to get Reviewers,
         # then the Leader and finally The Approver (R, L, A)
-        reviews.sort(key=operator.attrgetter('pk'))
+        reviews.sort(key=operator.attrgetter('created_on'))
         reviews.sort(key=operator.attrgetter('role'), reverse=True)
         nb_comments = form.nb_comments
         can_discuss = form.can_discuss
 
-        return render_to_string(
-            self.template,
-            Context({
-                'document': revision.document,
-                'revision': revision,
-                'reviews': reviews,
-                'nb_comments': nb_comments,
-                'form_style': form_style,
-                'can_discuss': can_discuss,
-            }))
+        return render_to_string(self.template, {
+            'document': revision.document,
+            'revision': revision,
+            'reviews': reviews,
+            'nb_comments': nb_comments,
+            'form_style': form_style,
+            'can_discuss': can_discuss,
+        })
 
 
 class QuickDistributionListWidgetLayout(LayoutObject):
     template = 'layout/distribution_list_widget.html'
 
     def render(self, form, *args, **kwargs):
-        return render_to_string(
-            self.template,
-            Context({
-                'category': form.category
-            }))
+        return render_to_string(self.template, {
+            'category': form.category
+        })

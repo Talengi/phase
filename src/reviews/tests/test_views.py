@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
 
 import datetime
 import json
@@ -68,7 +67,7 @@ class BatchReviewTests(TestCase):
             self.url,
             {'document_ids': [self.doc1.id, self.doc2.id]}
         )
-        json_content = json.loads(res.content)
+        json_content = json.loads(res.content.decode())
         self.assertTrue('poll_url' in json_content)
 
     def test_start_review_with_empty_remark(self):
@@ -827,9 +826,8 @@ class ReviewCommentsDownloadTests(TestCase):
         self.review = revision.get_review(self.user)
         self.url = self.review.get_comments_url()
 
-        sample_path = b'documents/tests/'
-        pdf_doc = b'sample_doc_pdf.pdf'
-        self.sample_pdf = SimpleUploadedFile(pdf_doc, sample_path + pdf_doc)
+        pdf_doc = 'sample_doc_pdf.pdf'
+        self.sample_pdf = SimpleUploadedFile(pdf_doc, b'content')
 
     def test_download_empty_file(self):
         res = self.client.get(self.url)

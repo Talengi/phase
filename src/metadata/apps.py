@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from django.apps import AppConfig
 from django.db.models.signals import post_migrate
-
-from metadata.handlers import save_db_state, populate_values_list_cache
 
 
 class MetadataConfig(AppConfig):
@@ -12,6 +10,7 @@ class MetadataConfig(AppConfig):
     db_is_ready = False
 
     def ready(self):
+        from metadata.handlers import save_db_state, populate_values_list_cache
         # Hooking to post_migrate is the only way I've found to
         # make sure the db is really available and can be queried
         # to populate the values list cache

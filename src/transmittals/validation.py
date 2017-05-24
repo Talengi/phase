@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
+
 
 import os
 import re
@@ -337,12 +337,12 @@ class RevisionsValidator(Validator):
 
         # Get latest revision for each document
         latest_revisions = Document.objects \
-            .filter(document_key__in=revisions.keys) \
+            .filter(document_key__in=revisions.keys()) \
             .values_list('document_key', 'current_revision')
         latest_revisions = dict(latest_revisions)
 
         # Check revisions for each document
-        for document_key in revisions.keys():
+        for document_key in list(revisions.keys()):
             revision_ids = revisions[document_key]
             latest_revision = latest_revisions.get(document_key, -1)
             revision_errors = self._validate_revision(revision_ids, latest_revision)

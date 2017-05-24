@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from django.test import TestCase, override_settings
 from django.http import Http404, HttpResponse
@@ -24,9 +24,8 @@ class PrivateMediaViewTests(TestCase):
         self.doc = DocumentFactory()
         self.rev = self.doc.get_latest_revision()
 
-        sample_path = b'documents/tests/'
-        pdf_doc = b'sample_doc_pdf.pdf'
-        self.sample_pdf = SimpleUploadedFile(pdf_doc, sample_path + pdf_doc)
+        pdf_doc = 'sample_doc_pdf.pdf'
+        self.sample_pdf = SimpleUploadedFile(pdf_doc, b'content')
 
     def test_serve_wrong_field(self):
         with self.assertRaises(Http404):

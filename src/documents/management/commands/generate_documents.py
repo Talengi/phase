@@ -22,5 +22,5 @@ class Command(BaseCommand):
         self.stdout.write(
             'Successfully generated {nb_of_docs} documents'.format(
                 nb_of_docs=nb_of_docs,
-            )
+            ).encode()
         )

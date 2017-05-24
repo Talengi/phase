@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -102,7 +102,7 @@ class DistributionListForm(DistributionListValidationMixin, forms.ModelForm):
         for reviewer in reviewers:
             try:
                 self.validate_user_categories(reviewer)
-            except ValidationError, e:
+            except ValidationError as e:
                 errors.append(e.message)
 
         if len(errors) > 0:
@@ -120,7 +120,7 @@ class DistributionListForm(DistributionListValidationMixin, forms.ModelForm):
 
         if not categories.issubset(user_categories):
             diff = categories - user_categories
-            formatted_diff = ', '.join(d.__unicode__() for d in diff)
+            formatted_diff = ', '.join(d.__str__() for d in diff)
             msg = _('The user "{}" must be a member of all the selected '
                     'categories. The following categories are missing: '
                     '{}'.format(user.name, formatted_diff))

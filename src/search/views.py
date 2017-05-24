@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
+
 
 from braces.views import JSONResponseMixin
 
@@ -76,6 +76,6 @@ class SearchDocuments(JSONResponseMixin, BaseDocumentList):
             buckets = bucket[1]['buckets']
             bucket_values = dict([(b['key'], b['doc_count']) for b in buckets])
             return (key, bucket_values)
-        buckets = aggregations.to_dict().items()
-        response = dict(map(flatten, buckets))
+        buckets = list(aggregations.to_dict().items())
+        response = dict(list(map(flatten, buckets)))
         return response

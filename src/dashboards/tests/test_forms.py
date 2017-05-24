@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from django.test import TestCase
 from django.core.exceptions import ValidationError
@@ -38,12 +38,12 @@ class DashboardFieldTests(TestCase):
 
     def test_form_field_values(self):
         form = DashboardForm()
-        choices = dict(form.fields['data_provider'].choices).keys()
+        choices = list(dict(form.fields['data_provider'].choices).keys())
         self.assertTrue(EmptyDashboard in choices)
 
     def test_form_widget_values(self):
         form = DashboardForm()
-        choices = dict(form.fields['data_provider'].widget.choices).keys()
+        choices = list(dict(form.fields['data_provider'].widget.choices).keys())
         self.assertTrue('dashboards.dashboards.EmptyDashboard' in choices)
 
     def test_correct_option_is_selected(self):
@@ -52,7 +52,7 @@ class DashboardFieldTests(TestCase):
             data_provider=EmptyDashboard)
         form = DashboardForm(instance=dashboard)
         widget = form['data_provider'].as_widget()
-        selected_option = 'option value="dashboards.dashboards.EmptyDashboard" selected="selected'
+        selected_option = 'option value="dashboards.dashboards.EmptyDashboard" selected'
         self.assertTrue(selected_option in widget)
 
     def test_settings_field_sets_data_on_instance(self):

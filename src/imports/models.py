@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
+
 
 import csv
 import datetime as dt
 import json
-from itertools import izip_longest
+from itertools import zip_longest
 
 from django.apps import apps
 from django.db import models
@@ -27,11 +27,11 @@ from documents.utils import save_document_forms
 
 
 class normal_dialect(csv.Dialect):
-    delimiter = b';'
-    quotechar = b'"'
+    delimiter = ';'
+    quotechar = '"'
     doublequote = False
     skipinitialspace = True
-    lineterminator = b'\r\n'
+    lineterminator = '\r\n'
     quoting = csv.QUOTE_NONE
     strict = True
 csv.register_dialect('normal', normal_dialect)
@@ -133,7 +133,7 @@ class ImportBatch(models.Model):
     def __iter__(self):
         """Loop over csv data."""
         if self.file.path.endswith('csv'):
-            with open(self.file.path, 'rb') as f:
+            with open(self.file.path, 'r') as f:
                 csvfile = csv.DictReader(f, dialect='normal')
                 for row in csvfile:
                     imp = Import(batch=self, data=row)
@@ -147,7 +147,7 @@ class ImportBatch(models.Model):
                     header_row = [c.value for c in list(row)]
                     continue
                 values = [xls_to_django(c.value) for c in list(row)]
-                row = dict(izip_longest(header_row, values))
+                row = dict(zip_longest(header_row, values))
                 imp = Import(batch=self, data=row)
                 yield imp
 
@@ -245,7 +245,7 @@ class Import(models.Model):
         import_fields = config.import_fields
 
         # Process each field_name/value to get the fk pk if any
-        for field_name, value in self.data.items():
+        for field_name, value in list(self.data.items()):
             val = self.get_denormalized_value(import_fields, field_name, value)
             # We fill the dict
             self.denormalized[field_name] = val
@@ -290,7 +290,7 @@ class Import(models.Model):
                 self.document = doc
                 self.status = self.STATUSES.success
             else:
-                errors = dict(form.errors.items() + revision_form.errors.items())
+                errors = dict(list(form.errors.items()) + list(revision_form.errors.items()))
                 self.errors = json.dumps(errors)
                 self.status = self.STATUSES.error
         except Exception as e:

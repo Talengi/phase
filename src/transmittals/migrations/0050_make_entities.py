@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from django.db import migrations
 
@@ -18,7 +18,7 @@ def make_entities(apps, schema):
             }
         )
         if created:
-            print 'New entity created: {}'.format(entity.name)
+            print(('New entity created: {}'.format(entity.name)))
 
         rev.originator_new = entity
         rev.save()

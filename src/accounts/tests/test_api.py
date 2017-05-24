@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import Permission
@@ -67,5 +67,5 @@ class UserApiAclTests(APITestCase):
         res = self.client.get(self.url)
         self.assertEqual(res.status_code, 200)
 
-        self.assertTrue('tata' in res.content)
-        self.assertTrue('toto' not in res.content)
+        self.assertTrue('tata' in res.content.decode())
+        self.assertTrue('toto' not in res.content.decode())

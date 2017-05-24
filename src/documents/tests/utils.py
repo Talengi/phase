@@ -25,14 +25,14 @@ def generate_random_documents(nb_of_docs, category):
             category=category,
         )
         metadata = document.get_metadata()
-        max_revision = choice(range(1, 5))
+        max_revision = choice(list(range(1, 5)))
         for revision_number in range(2, max_revision):
             MetadataRevisionFactory(
-                revision=u"{0:0>2}".format(revision_number),
+                revision=revision_number,
                 revision_date='{year}-{month:0>2}-{day:0>2}'.format(
                     year=2008 + revision_number,
-                    month=choice(range(1, 13)),
-                    day=choice(range(1, 29)),
+                    month=choice(list(range(1, 13))),
+                    day=choice(list(range(1, 29))),
                 ),
                 metadata=metadata
             )

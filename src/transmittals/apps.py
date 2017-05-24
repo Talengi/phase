@@ -1,14 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 from django.apps import AppConfig
-
-from documents.signals import document_revised, revision_edited
-from transmittals.signals import transmittal_created, transmittal_pdf_generated
-from transmittals.handlers import (
-    generate_transmittal_pdf, notify_transmittal_recipients,
-    notify_transmittal_on_errors, update_related_revisions)
-from transmittals.models import OutgoingTransmittal, OutgoingTransmittalRevision
 
 
 class TransmittalsConfig(AppConfig):
@@ -16,6 +9,15 @@ class TransmittalsConfig(AppConfig):
     verbose_name = 'Transmittals'
 
     def ready(self):
+        from documents.signals import document_revised, revision_edited
+        from transmittals.signals import (
+            transmittal_created, transmittal_pdf_generated)
+        from transmittals.handlers import (
+            generate_transmittal_pdf, notify_transmittal_recipients,
+            notify_transmittal_on_errors, update_related_revisions)
+        from transmittals.models import (
+            OutgoingTransmittal, OutgoingTransmittalRevision)
+
         # Update related revisions when outgoing trs is revised
         document_revised.connect(
             update_related_revisions,

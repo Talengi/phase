@@ -8,7 +8,7 @@ if __name__ == "__main__":
     # Let's check that the correct settings module is used
     settings_module = os.environ.get('DJANGO_SETTINGS_MODULE')
     if 'test' in sys.argv and not settings_module.endswith('test'):
-        confirm = raw_input("""
+        confirm = input("""
 Wow! Wow! WOW!
 
 It looks like you are running tests, but you didn't set the

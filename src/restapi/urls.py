@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, url, include
+from django.conf.urls import url, include
 from rest_framework import routers
 
 from notifications.api import views as notifications_views
@@ -22,8 +22,7 @@ router.register(
     base_name='bookmark')
 
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^discussion/', include('discussion.api.urls')),
     url(r'^accounts/', include('accounts.api.urls')),
@@ -34,4 +33,4 @@ urlpatterns = patterns(
     url(r'^poll/(?P<job_id>[\w-]+)/$',
         TaskPollView.as_view(),
         name='task_poll'),
-)
+]

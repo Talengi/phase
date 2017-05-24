@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 import logging
 
@@ -109,7 +109,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = 'Users'
         app_label = 'accounts'
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def get_full_name(self):
@@ -123,7 +123,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         if not site:
             site = Site.objects.get_current()
         ctx = {
-            'uidb64': urlsafe_base64_encode('%s' % self.id),
+            'uidb64': urlsafe_base64_encode('{}'.format(self.id).encode()),
             'token': token,
             'username': self.name,
             'site': site,
@@ -176,7 +176,7 @@ class Entity(models.Model):
         verbose_name = _('Entity')
         verbose_name_plural = _('Entities')
 
-    def __unicode__(self):
+    def __str__(self):
         return '{} - {}'.format(self.trigram, self.name)
 
     def save(self, force_insert=False, force_update=False, using=None,

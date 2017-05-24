@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 
 import datetime
 
@@ -82,7 +82,7 @@ class Review(models.Model):
         null=True, blank=True
     )
     docclass = models.IntegerField(
-        verbose_name=u"Class",
+        verbose_name="Class",
         default=1,
         choices=CLASSES)
     status = models.CharField(
@@ -232,7 +232,7 @@ class ReviewMixin(models.Model):
         related_name='%(app_label)s_%(class)s_related_approver',
         null=True, blank=True)
     docclass = models.IntegerField(
-        verbose_name=u"Class",
+        verbose_name="Class",
         default=1,
         choices=CLASSES)
     return_code = ConfigurableChoiceField(

@@ -1,6 +1,7 @@
-from __future__ import unicode_literals
+
 
 from django import template
+from django.utils.html import format_html
 
 register = template.Library()
 
@@ -15,9 +16,9 @@ def crumb(obj):
         else:
             url = '#'
         if url != '#':
-            ret = '<li><a href="{}">{}</a></li>&nbsp;'.format(url, obj)
+            ret = format_html('<li><a href="{}">{}</a></li>&nbsp;', url, obj)
         else:
-            ret = '<li><span>{}</span></li>&nbsp;'.format(obj)
+            ret = format_html('<li><span>{}</span></li>&nbsp;', obj)
     else:
         ret = ''
     return ret
