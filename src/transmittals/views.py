@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
-
 import logging
 
 from django.views.generic import ListView, DetailView

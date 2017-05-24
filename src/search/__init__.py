@@ -1,7 +1,3 @@
-# -*- coding: utf8 -*-
-
-
-
 from django.conf import settings
 
 from elasticsearch import Elasticsearch, RequestsHttpConnection

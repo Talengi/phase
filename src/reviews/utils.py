@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
-
 from itertools import groupby
 
 from django.core.cache import cache

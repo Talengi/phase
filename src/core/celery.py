@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
-
 try:
     import simplejson as json
 except ImportError:
@@ -9,6 +5,7 @@ except ImportError:
 from datetime import date, datetime
 from decimal import Decimal
 
+from kombu.serialization import register
 from celery import Celery
 
 from django.conf import settings
@@ -31,7 +28,6 @@ def my_dumps(obj):
     return json.dumps(obj, cls=JSONSerializer)
 
 
-from kombu.serialization import register
 register(
     'betterjson',
     my_dumps,

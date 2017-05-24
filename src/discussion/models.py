@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
-
 import re
 
 from django.db import models, transaction

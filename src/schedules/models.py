@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
-
 class ScheduleMixin(object):
     """Add behavior of a document with a "Schedule" section.
 

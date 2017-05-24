@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
-
 class DashboardProvider(object):
     es_date_format = '%Y-%m-%dT%H:%M:%S.%fZ'
 

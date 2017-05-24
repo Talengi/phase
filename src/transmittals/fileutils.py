@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
-
 def file_transmitted_file_path(revision, filename):
     return "transmittals/{key}_{revision}_file_transmitted.{extension}".format(
         key=revision.document.document_key,

@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
-
 from django.test import TestCase
 
 from mock import patch

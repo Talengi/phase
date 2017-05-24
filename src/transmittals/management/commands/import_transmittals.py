@@ -1,10 +1,5 @@
-# -*- coding: utf-8 -*-
-
-
-
 import os
 import logging
-from optparse import make_option
 import importlib
 
 from django.core.management.base import BaseCommand, CommandError
