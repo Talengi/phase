@@ -49,7 +49,9 @@ MEDIA_ROOT = '/tmp/phase_media/'
 PROTECTED_ROOT = '/tmp/phase_media/phase_test_protected/'
 PRIVATE_ROOT = '/tmp/phase_media/phase_test_private/'
 
-PIPELINE_ENABLED = False
+PIPELINE = {
+    'PIPELINE_ENABLED': False,
+}
 STATICFILES_STORAGE = 'pipeline.storage.NonPackagingPipelineStorage'
 
 ELASTIC_INDEX = 'test_documents'
