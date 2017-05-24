@@ -25,6 +25,11 @@ inject_cookies();
 
 casper.test.begin('Bookmarks are loaded upon page load', 0, function suite(test) {
     casper.start(document_list_url, function() {
+        casper.wait('300');
+    });
+
+    casper.then(function() {
+        this.capture('/tmp/phase_toto.png');
         casper.click('button#toggle-filters-button');
     });
 

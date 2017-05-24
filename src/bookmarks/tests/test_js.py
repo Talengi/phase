@@ -14,6 +14,7 @@ from search.utils import create_index, delete_index, put_category_mapping
 
 @override_settings(PAGINATE_BY=5)
 class DocumentListTests(CasperTestCase):
+    no_colors = False
 
     def setUp(self):
         delete_index()
