@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 
-
 import os
 import logging
 import shutil
@@ -20,7 +19,7 @@ from django.core.files.base import ContentFile
 from django.utils import timezone
 
 from model_utils import Choices
-from elasticsearch_dsl import F
+from elasticsearch_dsl import Q
 
 from documents.utils import save_document_forms
 from documents.models import Document, Metadata, MetadataRevision, MetadataRevisionBase
@@ -541,8 +540,8 @@ class OutgoingTransmittal(Metadata):
                 'label': _('Has errors?'),
                 'filters': {
                     '': None,
-                    'true': F('term', has_error=True),
-                    'false': F('term', has_error=False)
+                    'true': Q('term', has_error=True),
+                    'false': Q('term', has_error=False)
                 }
             }),)
         )

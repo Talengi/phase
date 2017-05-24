@@ -10,7 +10,7 @@ from django.template.defaultfilters import slugify
 from django.core.urlresolvers import reverse
 from django import forms
 
-from elasticsearch_dsl import F
+from elasticsearch_dsl import Q
 
 from metadata.fields import ConfigurableChoiceField
 from accounts.models import User
@@ -259,15 +259,15 @@ class ContractorDeliverable(ScheduleMixin, Metadata):
                 'label': _('Show CLD/SPD docs'),
                 'filters': {
                     True: None,
-                    False: F('term', is_existing=True),
-                    None: F('term', is_existing=True)
+                    False: Q('term', is_existing=True),
+                    None: Q('term', is_existing=True)
                 }
             }),
             ('outgoing_trs', {
                 'field': forms.BooleanField,
                 'label': _('Ready for outgoing TRS'),
                 'filters': {
-                    True: F('term', can_be_transmitted=True),
+                    True: Q('term', can_be_transmitted=True),
                     False: None,
                     None: None,
                 }
