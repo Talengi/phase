@@ -193,7 +193,6 @@ DJANGO_APPS = (
 )
 
 THIRD_PARTY_APPS = (
-    # Database migration helpers:
     'pipeline',
     'widget_tweaks',
     'crispy_forms',
@@ -324,6 +323,7 @@ WSGI_APPLICATION = 'wsgi.application'
 STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 
 PIPELINE = {
+    'PIPELINE_ENABLED': True,
     'JS_COMPRESSOR': 'pipeline.compressors.uglifyjs.UglifyJSCompressor',
     'CSS_COMPRESSOR': 'pipeline.compressors.cssmin.CSSMinCompressor',
     'DISABLE_WRAPPER': True,
