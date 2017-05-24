@@ -72,29 +72,27 @@
 },
 {
   "model": "categories.contract",
-  "pk": 1,
   "fields": {
     "number": "FAC09001",
     "name": "FAC09001",
     "categories": [
-      1,
-      2,
-      3,
-      4
+        ["acme", "contractor-deliverables"],
+        ["acme", "correspondences"],
+        ["acme", "minutes-of-meeting"],
+        ["acme", "transmittals"]
     ]
   }
 },
 {
   "model": "categories.contract",
-  "pk": 2,
   "fields": {
     "number": "FAC10005",
     "name": "FAC10005",
     "categories": [
-      1,
-      2,
-      3,
-      4
+        ["acme", "contractor-deliverables"],
+        ["acme", "correspondences"],
+        ["acme", "minutes-of-meeting"],
+        ["acme", "transmittals"]
     ]
   }
 }
