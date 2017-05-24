@@ -2,6 +2,7 @@ from unipath import Path  # Avoid pyflake complains
 
 from .base import *  # noqa
 from .base import LOGGING  # Avoid pyflakes complains
+from .base import PIPELINE
 
 DEBUG = False
 
@@ -49,10 +50,8 @@ MEDIA_ROOT = '/tmp/phase_media/'
 PROTECTED_ROOT = '/tmp/phase_media/phase_test_protected/'
 PRIVATE_ROOT = '/tmp/phase_media/phase_test_private/'
 
-PIPELINE = {
-    'PIPELINE_ENABLED': False,
-}
-STATICFILES_STORAGE = 'pipeline.storage.NonPackagingPipelineStorage'
+PIPELINE['PIPELINE_ENABLED'] = False
+STATICFILES_STORAGE = 'pipeline.storage.NonPackagingPipelineCachedStorage'
 
 ELASTIC_INDEX = 'test_documents'
 ELASTIC_AUTOINDEX = False

@@ -98,8 +98,9 @@ STATICFILES_DIRS = (
 
 # See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
 STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'pipeline.finders.FileSystemFinder',
+    'pipeline.finders.AppDirectoriesFinder',
+    'pipeline.finders.CachedFileFinder',
     'pipeline.finders.PipelineFinder',
 )
 # ######### END STATIC FILE CONFIGURATION
@@ -534,3 +535,5 @@ EXPORTS_TO_KEEP = 20
 IMPORT_ROOT = SITE_ROOT.child('import')
 
 # ######### END CUSTOM CONFIGURATION
+
+ALLOWED_HOSTS = ['phase']
