@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
-
 from django.core.files.storage import FileSystemStorage
 from django.utils.deconstruct import deconstructible
 from django.conf import settings

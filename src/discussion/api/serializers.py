@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
-
 from django.template import defaultfilters as filters
 from rest_framework import serializers
 

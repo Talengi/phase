@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
-
 import os
 import logging
 from optparse import make_option

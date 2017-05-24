@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
-
 from django.dispatch import Signal, receiver
 from django.db.models.signals import post_save, post_delete
 from django.core.cache import cache

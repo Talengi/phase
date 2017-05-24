@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
-
 from django.template import defaultfilters as filters
 from django.contrib.humanize.templatetags.humanize import naturaltime
 

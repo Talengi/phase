@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
-
 class TransmittalError(Exception):
     pass
 

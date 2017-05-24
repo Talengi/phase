@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
-
 from django import template
 from django.contrib.contenttypes.models import ContentType
 from django.utils.html import format_html

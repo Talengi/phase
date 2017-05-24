@@ -3,10 +3,6 @@
 See https://django-crispy-forms.readthedocs.org/en/d-0/layouts.html
 
 """
-# -*- coding: utf-8 -*-
-
-
-
 from django.template.loader import render_to_string
 from django.template import Template
 from django.utils.text import slugify
