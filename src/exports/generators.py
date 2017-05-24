@@ -62,9 +62,6 @@ class ExportGenerator(object):
         return pks, total
 
     def __next__(self):
-        return next(self)
-
-    def __next__(self):
         return self.next_data_chunk()
 
     def next_data_chunk(self):

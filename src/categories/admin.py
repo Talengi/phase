@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 from django import forms
 from django.forms.models import BaseInlineFormSet
 from django.contrib import admin
@@ -72,6 +69,7 @@ class ContractAdmin(admin.ModelAdmin):
         return ", ".join([c.name for c in categories])
 
     get_associated_categories.short_description = _('Categories')
+
 
 admin.site.register(Organisation, OrganisationAdmin)
 admin.site.register(CategoryTemplate, CategoryTemplateAdmin)

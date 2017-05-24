@@ -1,7 +1,3 @@
-# -*- coding: utf8 -*-
-
-
-
 import logging
 
 from django.db.models.fields import FieldDoesNotExist

@@ -19,6 +19,7 @@ def delete_review_count_cache(sender, instance, **kwargs):
     cache_key = 'review_step_count_%d_priorities' % instance.reviewer_id
     cache.delete(cache_key)
 
+
 post_save.connect(delete_review_count_cache, sender=Review, dispatch_uid='update_review_cache_count_on_save')
 post_delete.connect(delete_review_count_cache, sender=Review, dispatch_uid='update_review_cache_count_on_delete')
 

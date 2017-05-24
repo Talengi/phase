@@ -30,6 +30,8 @@ class normal_dialect(csv.Dialect):
     lineterminator = '\r\n'
     quoting = csv.QUOTE_NONE
     strict = True
+
+
 csv.register_dialect('normal', normal_dialect)
 
 
