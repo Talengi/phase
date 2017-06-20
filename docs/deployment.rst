@@ -11,23 +11,102 @@ Hosting Phase on a dedicated server
 -----------------------------------
 
 The recommanded settings is to install Phase in an LXC container on a debian
-stable (currently Jessie) host.
+stable (currently Stretch) host.
 
-Also use a jessie container::
+Also use a stretch container::
 
-    apt-get install lxc
-    lxc-create -n <name> -t debian -- -a amd64 -r jessie
+    apt-get install lxc debootstrap bridge-utils
+
+
+LXC configuration
+-----------------
+
+The easiest way to configure the containers network is to give them public ips
+(using failover ips and a bridge). For other methods, [refer to the
+documentation](https://wiki.debian.org/LXC).
+
+Configure the host network by editing `/etc/network/interfaces`::
+
+    # Choose ONE of the following options:
+
+    # With a DHCP config
+    auto br0
+    iface br0 inet dhcp
+        bridge_ports eth0
+        bridge_fd 0
+        bridge_maxwait 0
+
+    # With a static config
+    # Check your hosting provider doc to get the exact parameters to use
+    auto br0
+    iface br0 inet static
+        address xx.xx.xx.xx
+        netmask xx.xx.xx.xx
+        network xx.xx.xx.xx
+        broadcast xx.xx.xx.xx
+        gateway xx.xx.xx.xx
+        bridge_ports eth0
+        bridge_fd 0
+        bridg_maxwait 0
+
+Edit the file `/etc/lxc/default.conf` with the following content::
+
+    lxc.network.type = veth
+    lxc.network.link = br0
+    lxc.network.flags = up
+    lxc.network.hwaddr = 00:16:3e:xx:xx:xx
+
+Create the container::
+
+    lxc-create -n <name> -t debian -- -a amd64 -r stretch
+
+Edit the container network configuration in `/var/lib/lxc/<name>/config`::
+
+    lxc.network.type = veth
+    lxc.network.link = br0
+    lxc.network.flags = up
+    lxc.start.auto = 1
+
+    lxc.network.hwaddr = 00:16:3e:yy:yy:yy
+    lxc.network.ipv4 = yy:yy:yy:yy
+    lxc.network.ipv4.gateway = yy:yy:yy:yy
+
+
+Note the `hwaddr` parameter: it's your vm mac address. You need to get this
+parameter from your hosting provider's interface to bind your vm with a
+failover ip.
+
+The `ipv4` is the ip failover you want to use, and `ipv4.gateway` comes from
+you provider doc.
+
+Restart the host's network (check twice or you risk losing access to the server)::
+
+    service networking restart
+
+Start the container to check that everything is ok::
+
+    lxc-start -n <name> -d
+
+You can check that your vm is running::
+
+    lxc-ls --fancy
+
+Use this command to access a shell in the vm::
+
+    lxc-attach -n <name>
 
 Server installation
 -------------------
 
-If you created an OpenVZ container from the debian wheezy template, you need to
-install the following packages::
+Some package won't be used and must be uninstalled::
 
     apt-get purge apache2 apache2-doc apache2-mpm-prefork apache2-utils apache2.2-bin apache2.2-common
+
+Some package are needed and must be installed::
+
     apt-get update
     apt-get upgrade
-    apt-get install build-essential libpq-dev python-dev
+    apt-get install build-essential libpq-dev python3-dev wget curl zlib1g-dev
     apt-get install vim postgresql postgresql-contrib nginx git supervisor rabbitmq-server
 
 NodeJS installation
@@ -37,9 +116,10 @@ Some tools used in Phase require a node.js installation. Get the `latest
 version url on the Node.js site <http://nodejs.org/dist/v0.10.25/node-v0.10.25.tar.gz>`_.
 Let's install it::
 
-    apt-get install nodejs-legacy wget curl
-    wget https://www.npmjs.org/install.sh
-    bash install.sh
+    curl -sL https://deb.nodesource.com/setup_6.x | bash -
+    apt-get update
+    apt-get install nodejs
+    npm install -g npm@lts
 
 
 Memcache installation
@@ -50,7 +130,7 @@ backend, you need to install the libs first.
 
 ::
 
-    aptitude install memcached libmemcached-dev
+    apt-get install memcached libmemcached-dev
 
 
 Database creation
@@ -63,9 +143,6 @@ Database creation
 
         Enter password for new role: phase
         Enter it again: phase
-        Shall the new role be a superuser? (y/n) n
-        Shall the new role be allowed to create databases? (y/n) n
-        Shall the new role be allowed to create more new roles? (y/n) n
 
     createdb --owner phase phase
 
@@ -73,12 +150,10 @@ Database creation
 Python configuration
 --------------------
 
-Install pip and virtualenv::
+Install pip and virtualenv (as root)::
 
-    cd
-    wget https://raw.github.com/pypa/pip/master/contrib/get-pip.py
-    python get-pip.py
-    pip install virtualenv virtualenvwrapper
+    apt-get install python3-pip
+    pip3 install virtualenv virtualenvwrapper
 
 Create user::
 
@@ -87,6 +162,7 @@ Create user::
 
 Add those lines in the ``~/.profile`` file::
 
+    export VIRTUALENVWRAPPER_PYTHON=`which python3`
     export WORKON_HOME=~/.virtualenvs
     mkdir -p $WORKON_HOME
     source `which virtualenvwrapper.sh`
@@ -106,13 +182,15 @@ and provides search features.
 
 You need to install java for ES to work::
 
-    aptitude install openjdk-7-jre
+    apt-get install openjdk-8-jre
 
 You can install ES by downloading the apt package on the elastic site::
 
     wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | apt-key add -
-    wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.6.2.deb
-    dpkg -i elasticsearch-1.6.2.deb
+    echo "deb https://artifacts.elastic.co/packages/5.x/apt stable main" > /etc/apt/sources.list.d/elastic-5.x.list
+    apt-get install apt-transport-https
+    apt-get update
+    apt-get install elasticsearch
 
 The default Elasticsearch installation is enough, but remember that ES listens
 on 0.0.0.0 by default, which can be inconvenient.
@@ -141,9 +219,9 @@ As root::
 As phase user::
 
     cd
-    mkvirtualenv phase
     git clone https://github.com/Talengi/phase.git
     cd phase/src
+    add2virtualenv .
     pip install -r ../requirements/production.txt
     export DJANGO_SETTINGS_MODULE=core.settings.production
     python manage.py collectstatic
