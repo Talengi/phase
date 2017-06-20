@@ -187,7 +187,7 @@ You need to install java for ES to work::
 You can install ES by downloading the apt package on the elastic site::
 
     wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | apt-key add -
-    echo "deb https://artifacts.elastic.co/packages/5.x/apt stable main" > /etc/apt/sources.list.d/elastic-5.x.list
+    echo "deb http://packages.elastic.co/elasticsearch/2.x/debian stable main" > /etc/apt/sources.list.d/elastic-2.x.list
     apt-get install apt-transport-https
     apt-get update
     apt-get install elasticsearch
