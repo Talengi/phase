@@ -39,7 +39,7 @@ Create the ssl certificates for the TLS connection.
 
 ::
 
-    openssl req -x509 -newkey rsa:1024 \
+    openssl req -x509 -newkey rsa:2048 \
          -keyout /etc/ssl/private/proftpd.key -out /etc/ssl/certs/proftpd.crt \
          -nodes -days 365
     chmod 0600 /etc/ssl/private/proftpd.key
