@@ -15,7 +15,7 @@ django-annoying==0.10.3
 requests==2.14.2
 django-zipview==1.2.0
 elasticsearch>=2.0.0,<3.0.0
-elasticsearch-dsl==5.3.0
+elasticsearch-dsl>=2.0.0,<3.0.0
 pylibmc==1.5.2
 python-dateutil==2.6.0
 urllib3==1.21.1
