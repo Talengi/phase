@@ -107,7 +107,7 @@ Some package are needed and must be installed::
     apt-get update
     apt-get upgrade
     apt-get install build-essential libpq-dev python3-dev wget curl zlib1g-dev
-    apt-get install vim postgresql postgresql-contrib nginx git supervisor rabbitmq-server
+    apt-get install vim postgresql postgresql-contrib nginx nginx-extras git supervisor rabbitmq-server
 
 NodeJS installation
 -------------------
