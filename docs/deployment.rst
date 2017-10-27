@@ -7,6 +7,9 @@ DMS. Hence a Phase instance can be run on a single virtual machine.
 A single dedicated server can host several environments (pre-production,
 production).
 
+Warning: Phase is *not* compatible with python 3.5.3 [because of this
+issue](https://bugs.python.org/issue29519). Either upgrade or downgrade.
+
 Hosting Phase on a dedicated server
 -----------------------------------
 
