@@ -212,6 +212,11 @@ Also, make sure ES starts after boot::
 
     update-rc.d elasticsearch defaults
 
+Or, if your system uses systemd::
+
+    systemctl daemon-reload
+    systemctl enable elasticsearch.service
+
 Phase installation
 ------------------
 
