@@ -69,7 +69,7 @@ def do_create_transmittal(
                      <a href="{}">{}</a>'''.format(doc.get_absolute_url(), doc)
             notify(user_id, msg)
 
-            user = User.objects.get(pk=user_id.pk)
+            user = User.objects.get(pk=user_id)
             activity_log.send(verb=Activity.VERB_CREATED,
                               action_object=doc,
                               sender=None,
