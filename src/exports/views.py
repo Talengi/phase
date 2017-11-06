@@ -103,7 +103,7 @@ class DownloadView(LoginRequiredMixin, View):
             url = '{}{}'.format(settings.PRIVATE_X_ACCEL_PREFIX, url)
             response = HttpResponse(content_type='application/force-download')
             response['Content-Disposition'] = 'attachment; filename=%s' % filename
-            response['X-Accel-Redirect '] = url
+            response['X-Accel-Redirect'] = url
             return response
         else:
             return serve(request, url, settings.PRIVATE_ROOT)
