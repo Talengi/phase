@@ -595,7 +595,7 @@ class CommentsDownload(LoginRequiredMixin, DetailView):
             .filter(document__document_key=key) \
             .filter(revision=revision) \
             .filter(id=review_id) \
-            .filter(document__category=self.request.user.categories.all())
+            .filter(document__category__in=self.request.user.categories.all())
         review = get_object_or_404(qs)
         return review
 
