@@ -36,7 +36,7 @@ var Phase = Phase || {};
             if (data.done) {
                 clearInterval(this.pollId);
                 dispatcher.trigger('onPollableTaskEnded');
-                location.reload();
+                location.reload(true);
             }
         }
     });
