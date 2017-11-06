@@ -58,7 +58,7 @@ class TaskPollView(View):
 
         # in case of error
         if done and not success:
-            data['error_msg'] = result.get('exc_message')
+            data['error_msg'] = 'System error: {}'.format(result)
 
         return HttpResponse(json.dumps(data), content_type='application/json')
 
