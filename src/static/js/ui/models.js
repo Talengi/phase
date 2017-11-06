@@ -20,10 +20,12 @@ var Phase = Phase || {};
             _.bindAll(this, 'taskPoll', 'taskPollSuccess');
         },
         startPolling: function(data) {
-            this.set('pollUrl', data.pollUrl);
-            this.set('progress', 0);
-            this.pollId = setInterval(this.taskPoll, 1000);
-            this.trigger('onPollStarted');
+            if (this.pollId === undefined) {
+                this.set('pollUrl', data.pollUrl);
+                this.set('progress', 0);
+                this.pollId = setInterval(this.taskPoll, 1000);
+                this.trigger('onPollStarted');
+            }
         },
         url: function() {
             return this.get('pollUrl');
