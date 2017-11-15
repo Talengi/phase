@@ -132,15 +132,17 @@ def action_menu_button(context, metadata, revision, user, dropdirection):
 @register.simple_tag()
 def batch_action_menu(Metadata, category, user):
     actions = Metadata.get_batch_actions(category, user)
-    menu = format_html_join(
+    menu_content = format_html_join(
         '',
+        '{}',
+        ((action.to_html(),) for action in list(actions.values())))
+    menu = format_html(
         '''
         <ul class="action-menu dropdown-menu">
             {}
         </ul>
         ''',
-        ((action.to_html(),) for action in list(actions.values()))
-    )
+        menu_content)
     return menu
 
 
