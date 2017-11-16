@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.contrib.contenttypes.models import ContentType
 from django.utils.html import escape
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 from documents.factories import DocumentFactory
 from default_documents.tests.test import ContractorDeliverableTestCase
@@ -356,3 +357,57 @@ class TransmittalErrorNotificationTests(TestCase):
         self.form_data['error_msg'] = 'Another error'
         self.client.post(self.url, self.form_data)
         self.assertEqual(self.user.notification_set.count(), 2)
+
+
+class FileTransmittedDownloadTests(TestCase):
+    def setUp(self):
+        self.trs = create_transmittal()
+        self.rev = self.trs.latest_revision
+        self.category = self.trs.document.category
+        self.user = UserFactory(
+            email='testadmin@phase.fr',
+            password='pass',
+            is_superuser=True,
+            is_external=True,
+            category=self.category)
+        self.trs.recipient.users.add(self.user)
+        self.client.login(email=self.user.email, password='pass')
+        self.linked_rev = self.trs.get_revisions()[0]
+        self.url = reverse('file_transmitted_download', args=[
+            self.category.organisation.slug,
+            self.category.slug,
+            self.trs.document_number,
+            self.linked_rev.metadata.document_key,
+            self.linked_rev.revision,
+        ])
+        pdf_doc = 'sample_doc_pdf.pdf'
+        sample_pdf = SimpleUploadedFile(pdf_doc, b'content')
+        self.linked_rev.file_transmitted = sample_pdf
+        self.linked_rev.save()
+
+    def test_url_is_accessible_to_externals(self):
+        u"""This download url is for contractors only."""
+
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 200)
+
+        self.user.is_external = False
+        self.user.save()
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 404)
+
+    def test_that_revision_is_linked_to_transmittal(self):
+        u"""The file must have been transmitted."""
+
+        self.linked_rev.transmittals.clear()
+        self.linked_rev.save()
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 404)
+
+    def test_that_contractor_is_in_recipients(self):
+        u"""The contractor must be allowed to access the transmittal."""
+
+        self.trs.recipient.users.clear()
+        self.trs.recipient.save()
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 404)

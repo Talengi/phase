@@ -13,17 +13,10 @@ DEBUG = True
 # ######### END DEBUG CONFIGURATION
 
 # Third party templates are cached.
-# TEMPLATE_LOADERS = (
-#     ('django.template.loaders.cached.Loader', [
-#         'django.template.loaders.app_directories.Loader',
-#     ]),
-#     'django.template.loaders.filesystem.Loader',
-# )
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': ['templates'],
-        'APP_DIRS': True,
         'OPTIONS': {
             'debug': True,
             'context_processors': [
@@ -37,6 +30,12 @@ TEMPLATES = [
                 'notifications.context_processors.notifications',
                 'reviews.context_processors.reviews',
                 'dashboards.context_processors.dashboards',
+            ],
+            'loaders': [
+                ('django.template.loaders.cached.Loader', [
+                    'django.template.loaders.app_directories.Loader',
+                ]),
+                'django.template.loaders.filesystem.Loader',
             ],
         },
     },

@@ -22,7 +22,14 @@
                 <td>{{ rev.status }}</td>
                 <td>{{ rev.get_final_return_code }}</td>
                 <td>{{ rev.purpose_of_issue }}</td>
-                <td>{% short_download_link rev 'file_transmitted' %}</td>
+                <td>
+                    {% if user.is_external %}
+                        {% url 'file_transmitted_download' organisation.slug category.slug transmittal_number rev.document.document_number rev.revision as download_url %}
+                        <a href="{{ download_url }}">{% tooltip_filename rev.file_transmitted %}</a>
+                    {% else %}
+                        {% short_download_link rev 'file_transmitted' %}
+                    {% endif %}
+                </td>
             </tr>
 
             {% empty %}

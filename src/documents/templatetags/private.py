@@ -52,3 +52,18 @@ def download_link(revision, fieldname):
 @register.simple_tag
 def short_download_link(revision, fieldname):
     return get_download_link(revision, fieldname, make_short=True)
+
+
+@register.simple_tag
+def tooltip_filename(file_field):
+    if not file_field:
+        return 'ND'
+
+    relative_name = file_field.name
+    basename = os.path.basename(relative_name)
+    if len(basename) > 10:
+        tpl = '<span data-toggle="tooltip" data-placement="left" title="{0}">{0:.10}…</span>'
+    else:
+        tpl = '{0}'
+
+    return format_html(tpl, basename)
