@@ -25,7 +25,7 @@
                 <td>
                     {% if user.is_external %}
                         {% url 'file_transmitted_download' organisation.slug category.slug transmittal_number rev.document.document_number rev.revision as download_url %}
-                        <a href="{{ download_url }}">{{ _('File transmitted') }}</a>
+                        <a href="{{ download_url }}">{% tooltip_filename rev.file_transmitted %}</a>
                     {% else %}
                         {% short_download_link rev 'file_transmitted' %}
                     {% endif %}
