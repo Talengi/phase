@@ -3,7 +3,8 @@ from django.conf.urls import url
 from transmittals.views import (
     TransmittalList, TransmittalDiff, TransmittalRevisionDiff,
     TransmittalDownload, PrepareTransmittal, CreateTransmittal,
-    AckOfTransmittalReceipt, BatchAckOfTransmittalReceipt)
+    AckOfTransmittalReceipt, BatchAckOfTransmittalReceipt,
+    FileTransmittedDownload)
 
 urlpatterns = [
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/prepare/$',
@@ -18,6 +19,9 @@ urlpatterns = [
     url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/(?P<document_key>[\w-]+)/ack/$',
         AckOfTransmittalReceipt.as_view(),
         name="transmittal_ack_of_receipt"),
+    url(r'^(?P<organisation>[\w-]+)/(?P<category>[\w-]+)/(?P<document_key>[\w-]+)/file_transmitted/(?P<related_document_key>[\w-]+)/(?P<related_revision>\d+)/$',
+        FileTransmittedDownload.as_view(),
+        name='file_transmitted_download'),
 
     # Incoming transmittal urls
     url(r'^incoming/$',

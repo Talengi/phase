@@ -5,11 +5,13 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect, HttpResponseForbidden
 from django.utils import timezone
+from django.shortcuts import get_object_or_404
 
 from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 from zipview.views import BaseZipView
 from annoying.functions import get_object_or_None
 
+from categories.models import Category
 from notifications.models import notify
 from documents.views import BaseDocumentBatchActionView
 from transmittals.models import Transmittal, TrsRevision
@@ -17,6 +19,8 @@ from transmittals.utils import FieldWrapper
 from transmittals.tasks import do_create_transmittal
 from search.utils import index_revisions
 from documents.views import DocumentListMixin
+from accounts.models import get_entities
+from privatemedia.views import serve_model_file_field
 from django.conf import settings
 
 
@@ -353,3 +357,54 @@ class AckOfTransmittalReceipt(LoginRequiredMixin,
 
         transmittal.ack_receipt(self.request.user, save=True)
         return HttpResponseRedirect(transmittal.document.get_absolute_url())
+
+
+class FileTransmittedDownload(LoginRequiredMixin, DetailView):
+    """Allows a contractor to download a file_transmitted file."""
+
+    def get_object(self):
+        u"""Extract the correct revision."""
+
+        if not self.request.user.is_external:
+            raise Http404()
+
+        # First, get the initial transmittal category
+        organisation_slug = self.kwargs['organisation']
+        category_slug = self.kwargs['category']
+        category_qs = Category.objects \
+            .select_related() \
+            .filter(organisation__slug=organisation_slug) \
+            .filter(category_template__slug=category_slug)
+        category = get_object_or_404(category_qs)
+
+        # Next, get the transmittal document
+        document_key = self.kwargs['document_key']
+        entities = get_entities(self.request.user)
+        DocumentClass = category.document_class()
+        document_qs = DocumentClass.objects \
+            .select_related() \
+            .filter(document__category=category) \
+            .filter(document_key=document_key) \
+            .filter(recipient_id__in=entities)
+        document = get_object_or_404(document_qs)
+
+        # Next, the related document
+        related_key = self.kwargs['related_document_key']
+        revision_class = document.get_revisions_class()
+        revision_qs = revision_class.objects \
+            .select_related() \
+            .filter(metadata__document__document_key=related_key) \
+            .order_by('revision')
+        linked_revision = revision_qs.filter(transmittals=document).last()
+        if not linked_revision:
+            raise Http404()
+
+        last_revision = revision_qs.last()
+        return last_revision
+
+    def get(self, request, *args, **kwargs):
+        u"""Serve the file."""
+
+        rev = self.get_object()
+        field_name = 'file_transmitted'
+        return serve_model_file_field(rev, field_name)

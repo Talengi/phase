@@ -17,6 +17,10 @@ class RelatedRevisionsLayout(LayoutObject):
         return render_to_string(self.template, {
             'revisions': revisions,
             'form_style': form_style,
+            'category': form.instance.document.category,
+            'organisation': form.instance.document.category.organisation,
+            'transmittal_number': form.instance.document.document_key,
+            'user': context['user'],
         })
 
 
