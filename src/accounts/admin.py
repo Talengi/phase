@@ -41,7 +41,7 @@ class UserAdmin(django_UserAdmin):
             'send_closed_reviews_mails',
             'send_pending_reviews_mails',
             'send_trs_reminders_mails')}),
-        ('Permissions', {'fields': ('is_superuser', 'is_external')}),
+        ('Permissions', {'fields': ('is_active', 'is_superuser', 'is_external')}),
         ('Important dates', {'fields': ('date_joined', 'last_login',)}),
         ('Permissions', {'fields': ('groups', 'user_permissions',)}),
     )
