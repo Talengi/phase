@@ -155,7 +155,6 @@ FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
 MIDDLEWARE_CLASSES = (
     # Default Django middleware.
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',

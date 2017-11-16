@@ -207,7 +207,7 @@ class OutgoingTransmittalTests(TestCase):
         recipients_ids = [ctr1.pk, ctr2.pk]
         document_ids = [doc.pk for doc in self.docs]
         do_create_transmittal.delay(
-            self.user,
+            self.user.id,
             self.category.id,
             dest_cat.id,
             document_ids,

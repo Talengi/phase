@@ -158,7 +158,7 @@ class DocumentDownloadTest(TestCase):
             'format': 'both',
         })
         self.assertEqual(r.status_code, 200)
-        self.assertEqual(r._headers['vary'], ('Vary', 'Accept-Language, Cookie'))
+        self.assertEqual(r._headers['vary'], ('Vary', 'Cookie'))
         self.assertEqual(r._headers['content-type'], ('Content-Type', 'application/zip'))
         self.assertEqual(r._headers['content-disposition'], (
             'Content-Disposition',
@@ -180,9 +180,8 @@ class DocumentDownloadTest(TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertDictEqual(r._headers, {
             'content-length': ('Content-Length', '22'),
-            'content-language': ('Content-Language', 'en'),
             'content-type': ('Content-Type', 'application/zip'),
-            'vary': ('Vary', 'Accept-Language, Cookie'),
+            'vary': ('Vary', 'Cookie'),
             'x-frame-options': ('X-Frame-Options', 'SAMEORIGIN'),
             'content-disposition': (
                 'Content-Disposition',
