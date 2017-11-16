@@ -390,17 +390,15 @@ class FileTransmittedDownload(LoginRequiredMixin, DetailView):
 
         # Next, the related document
         related_key = self.kwargs['related_document_key']
+        related_revision = self.kwargs['related_revision']
         revision_class = document.get_revisions_class()
         revision_qs = revision_class.objects \
             .select_related() \
             .filter(metadata__document__document_key=related_key) \
-            .order_by('revision')
-        linked_revision = revision_qs.filter(transmittals=document).last()
-        if not linked_revision:
-            raise Http404()
-
-        last_revision = revision_qs.last()
-        return last_revision
+            .filter(transmittals=document) \
+            .filter(revision=related_revision)
+        linked_revision = get_object_or_404(revision_qs)
+        return linked_revision
 
     def get(self, request, *args, **kwargs):
         u"""Serve the file."""
