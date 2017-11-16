@@ -13,7 +13,7 @@ class RelatedRevisionsLayout(LayoutObject):
         self.field = field
 
     def render(self, form, form_style, context, template_pack=None):
-        revisions = form.instance.get_last_revisions()
+        revisions = form.instance.get_revisions()
         return render_to_string(self.template, {
             'revisions': revisions,
             'form_style': form_style,
