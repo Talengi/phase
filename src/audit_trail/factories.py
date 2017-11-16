@@ -13,4 +13,4 @@ class ActivityFactory(factory.DjangoModelFactory):
         model = Activity
 
     actor = factory.SubFactory(UserFactory)
-    verb = fuzzy.FuzzyChoice(zip(*Activity.VERB_CHOICES)[0])
+    verb = fuzzy.FuzzyChoice(Activity.VERB_CHOICES)
