@@ -397,6 +397,9 @@ form.disabled select[disabled] {
 form.disabled select[disabled]::-ms-expand {
     display: none;
 }
+form.disabled label {
+    pointer-events: none;
+}
 #document-detail .uneditable-input{
     background-color: #fff;
     cursor: default;
