@@ -728,7 +728,8 @@ class OutgoingTransmittal(Metadata):
     @classmethod
     def get_batch_actions_modals(cls):
         """Returns a list of templates used in batch actions."""
-        return ['transmittals/document_list_download_modal.html']
+        return ['transmittals/document_list_download_modal.html',
+                'documents/document_list_export_modal.html']
 
     def ack_receipt(self, user, save=True):
         """Acknowledge receipt of this transmittal."""
