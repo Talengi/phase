@@ -71,6 +71,7 @@ var Phase = Phase || {};
         el: 'table#documents tbody',
         initialize: function(options) {
             _.bindAll(this, 'addDocument');
+            this.views = new Array();
             this.favorites = options['favorites'];
             this.listenTo(this.collection, 'add', this.addDocument);
             this.listenTo(this.collection, 'reset', this.addAllDocuments);
@@ -81,9 +82,17 @@ var Phase = Phase || {};
                 isFavorite: this.isFavorite(document)
             });
             this.$el.append(view.render().el);
+            this.views.push(view);
         },
         addAllDocuments: function() {
             this.$el.empty();
+
+            // We need to unbind existing views, or they will keep reacting
+            // to events even though the document is no longer visible
+            this.views.forEach(function(view) {
+                view.remove();
+            });
+            this.views = new Array();
             this.collection.map(this.addDocument);
         },
         isFavorite: function(document) {
