@@ -34,11 +34,13 @@ class ExportGenerator(object):
         return self
 
     def get_entities(self):
-        if not self.owner:
-            return None
+        if self.owner and self.owner.is_external:
+            entities = list(Entity.objects.filter(users=self.owner).
+                            values_list('pk', flat=True))
+        else:
+            entities = None
 
-        return list(Entity.objects.filter(users=self.owner).
-                    values_list('pk', flat=True))
+        return entities
 
     def get_es_results(self):
         """Perform initial doc search using elasticsearch.

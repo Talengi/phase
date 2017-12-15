@@ -166,7 +166,8 @@ class Export(models.Model):
             self.category,
             self.get_filters(),
             self.get_fields(),
-            export_all_revisions=self.export_all_revisions
+            owner=self.owner,
+            export_all_revisions=self.export_all_revisions,
         )
         return generator
 
