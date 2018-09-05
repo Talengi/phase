@@ -33,15 +33,17 @@ class Command(BaseCommand):
     def rename_file(self, revision, field_name):
         self.stdout.write('Renaming {}'.format(field_name))
 
+        field = revision._meta.get_field(field_name)
         f = getattr(revision, field_name)
         initial_name = f.name
         initial_path = f.path
 
-        new_name = revision_file_path(revision, initial_name)
+        file_path_function = field.upload_to
+        new_name = file_path_function(revision, initial_name)
         new_path = f.storage.path(new_name)
 
         f.name = new_name
-        revision.save()
-        os.rename(initial_path, new_path)
+        # revision.save()
+        # os.rename(initial_path, new_path)
         self.stdout.write(self.style.SUCCESS(
             'Renamed\n    {} ->\n    {}'.format( initial_path, new_path)))
