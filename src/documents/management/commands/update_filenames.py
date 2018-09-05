@@ -43,7 +43,7 @@ class Command(BaseCommand):
         new_path = f.storage.path(new_name)
 
         f.name = new_name
-        # revision.save()
-        # os.rename(initial_path, new_path)
+        revision.save()
+        os.rename(initial_path, new_path)
         self.stdout.write(self.style.SUCCESS(
             'Renamed\n    {} ->\n    {}'.format( initial_path, new_path)))
