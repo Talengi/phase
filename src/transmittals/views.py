@@ -356,6 +356,11 @@ class AckOfTransmittalReceipt(LoginRequiredMixin,
                 'Receipt already acknowledged')
 
         transmittal.ack_receipt(self.request.user, save=True)
+
+        # Update ES index
+        revisions = transmittal.get_all_revisions()
+        index_revisions(revisions)
+
         return HttpResponseRedirect(transmittal.document.get_absolute_url())
 
 
