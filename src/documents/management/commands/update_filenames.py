@@ -4,7 +4,6 @@ from django.core.management.base import BaseCommand
 from django.db.models import FileField
 
 from documents.models import Document
-from documents.fileutils import revision_file_path
 
 
 class Command(BaseCommand):
@@ -46,4 +45,4 @@ class Command(BaseCommand):
         revision.save()
         os.rename(initial_path, new_path)
         self.stdout.write(self.style.SUCCESS(
-            'Renamed\n    {} ->\n    {}'.format( initial_path, new_path)))
+            'Renamed\n    {} ->\n    {}'.format(initial_path, new_path)))
