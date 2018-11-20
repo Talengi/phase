@@ -11,6 +11,7 @@ from categories.factories import CategoryFactory
 from accounts.factories import UserFactory
 from exports.factories import ExportFactory
 from exports.models import Export
+from search.utils import delete_index, create_index
 
 
 class ExportCreateTests(TestCase):
@@ -26,6 +27,8 @@ class ExportCreateTests(TestCase):
             self.category.organisation.slug, self.category.slug])
 
     def test_export_create_cleanup_old_exports(self):
+        delete_index()
+        create_index()
         now = timezone.now()
         for delta in range(0, 25):
             ExportFactory(
