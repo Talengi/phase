@@ -1,5 +1,7 @@
 doc_apps.py
 prod_private.py
+local_private.py
+test_private.py
 *.py[co]
 *.egg*
 *.swp

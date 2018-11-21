@@ -5,7 +5,6 @@ from .base import LOGGING  # Avoid pyflakes complains
 
 DEBUG = False
 
-
 # ######### IN-MEMORY TEST DATABASE
 SQLITE = {
     "default": {
@@ -89,3 +88,9 @@ TRS_IMPORTS_CONFIG = {
 }
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+
+try:
+    from .test_private import *  # noqa
+except ImportError:
+    pass
