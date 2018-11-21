@@ -23,7 +23,7 @@ Phase is intended to be used on projects where:
 Installation
 ------------
 
-Check the `deployment` doc to see how to properly intall Phase on a local
+Check the `deployment` doc to see how to properly install Phase on a local
 machine.
 
 Contributing
