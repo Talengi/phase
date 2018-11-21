@@ -116,10 +116,10 @@ class Export(models.Model):
             self.get_filedir(),
             self.get_filename())
 
-    def start_export(self, async=True, user_pk=None):
+    def start_export(self, asynchronous=True, user_pk=None):
         """Asynchronously starts the export"""
         logger.info('Starting export {}'.format(self.id))
-        if async:
+        if asynchronous:
             process_export.delay(str(self.pk), user_pk=user_pk)
         else:
             process_export(str(self.pk), user_pk=user_pk)

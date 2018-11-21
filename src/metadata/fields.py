@@ -29,7 +29,7 @@ def get_choices_from_list(list_index):
         # db is not ready. So we'll try again later.
         try:
             populate_values_list_cache()
-        except:
+        except:  # noqa
             pass
 
     values = cache.get(cache_key, [])

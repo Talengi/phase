@@ -42,7 +42,7 @@ class DashboardProviderChoiceField(models.Field):
         for app in settings.INSTALLED_APPS:
             try:
                 import_module('{}.dashboards'.format(app))
-            except:
+            except:  # noqa
                 pass
 
         providers = []
@@ -64,7 +64,7 @@ class DashboardProviderChoiceField(models.Field):
         if isinstance(value, string_types):
             try:
                 value = import_string(value)
-            except:
+            except:  # noqa
                 raise ValidationError('The class {} does not exist'.format(
                     value))
 

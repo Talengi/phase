@@ -145,7 +145,7 @@ class Command(BaseCommand):
             module = importlib.import_module(module_path)
             class_name = path[-1]
             TrsValidator = getattr(module, class_name)
-        except:
+        except:  # noqa
             error = 'The validator {} does not exist.'.format(validator_path)
             raise CommandError(error)
 

@@ -1,4 +1,4 @@
-django==1.11.10
+django==1.11.16
 psycopg2==2.7.3.2
 bpython==0.16
 django-braces==1.11.0
@@ -12,13 +12,12 @@ djangorestframework==3.6.3
 django-extensions==1.7.9
 celery==4.0.2
 django-annoying==0.10.3
-requests==2.14.2
+requests==2.20.1
 django-zipview==1.2.0
 elasticsearch>=2.0.0,<3.0.0
 elasticsearch-dsl>=2.0.0,<3.0.0
 pylibmc==1.5.2
 python-dateutil==2.6.0
-urllib3==1.21.1
 raven==6.0.0
 reportlab==3.4.0
 openpyxl==2.4.7

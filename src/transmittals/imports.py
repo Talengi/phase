@@ -137,7 +137,7 @@ class TrsImport(object):
             try:
                 line = self.csv_lines()[0]
                 self._csv_cols = list(line.keys())
-            except:
+            except:  # noqa
                 self._csv_cols = []
 
         return self._csv_cols
@@ -375,7 +375,7 @@ class TrsImportLine(object):
         try:
             originator = Entity.objects \
                 .get(trigram=value)
-        except:
+        except:  # noqa
             return None
 
         return originator.id

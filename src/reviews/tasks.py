@@ -77,7 +77,7 @@ def do_batch_import(user_id, category_id, contenttype_id, document_ids,
                 document_id=doc.id,
                 json=doc.latest_revision.to_json())
             ok.append(doc)
-        except:
+        except:  # noqa
             nok.append(doc)
 
         # Update the task progression bar
@@ -164,7 +164,7 @@ def batch_close_reviews(user_id, review_ids):
                                       sender=do_batch_import,
                                       actor=user)
             ok.append(review.document)
-        except:
+        except:  # noqa
             nok.append(review.document)
             pass
 
@@ -223,7 +223,7 @@ def batch_cancel_reviews(user_id, category_id, contenttype_id, document_ids):
                               sender=batch_cancel_reviews,
                               actor=user)
             ok.append(doc)
-        except:
+        except:  # noqa
             nok.append(doc)
 
         counter += 1

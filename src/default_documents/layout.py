@@ -63,7 +63,7 @@ class ScheduleStatusLayout(Field):
 
 
 class ScheduleLayout(LayoutObject):
-    """Rendel the whole schedule table."""
+    """Render the whole schedule table."""
     template = 'layout/schedule.html'
 
     def __init__(self, *fields, **kwargs):
@@ -125,12 +125,12 @@ class PropertyLayout(LayoutObject):
 
         try:
             form_field = form.fields[prop_name]
-        except:
+        except:  # noqa
             form_field = None
 
         try:
             model_field = form.instance._meta.get_field(prop_name)
-        except:
+        except:  # noqa
             model_field = None
 
         # Get the property label

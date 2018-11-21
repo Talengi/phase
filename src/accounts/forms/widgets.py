@@ -23,7 +23,7 @@ class UserAutocomplete(BaseUserAutocomplete):
             'data-mode': 'single',
         })
 
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         if value:
             obj = self.choices.queryset.get(pk=value)
             attrs.update({
@@ -35,7 +35,7 @@ class UserAutocomplete(BaseUserAutocomplete):
                 'data-initial-id': '',
                 'data-initial-label': '',
             })
-        return super(AutocompleteTextInput, self).render(name, value, attrs)
+        return super(AutocompleteTextInput, self).render(name, value, attrs, renderer)
 
 
 class MultipleUserAutocomplete(BaseUserAutocomplete):
@@ -45,7 +45,7 @@ class MultipleUserAutocomplete(BaseUserAutocomplete):
             'data-mode': 'multi',
         })
 
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         value = value or []
         objects = self.choices.queryset.filter(pk__in=value)\
             .values_list('id', 'name')
@@ -53,4 +53,4 @@ class MultipleUserAutocomplete(BaseUserAutocomplete):
             'data-initial-id': '[%s]' % ','.join(str(obj[0]) for obj in objects),
             'data-initial-label': '[%s]' % ','.join('"%s"' % obj[1] for obj in objects),
         })
-        return super(AutocompleteTextInput, self).render(name, value, attrs)
+        return super(AutocompleteTextInput, self).render(name, value, attrs, renderer)

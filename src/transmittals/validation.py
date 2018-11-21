@@ -62,7 +62,7 @@ class AndValidator(Validator):
 class DirnameValidator(Validator):
     """Checks the transmittals directory name."""
     error = 'The directory name is incorrect'
-    pattern = 'FAC(09001|10005)-\w{3}-\w{3}-TRS-\d{5}'
+    pattern = r'FAC(09001|10005)-\w{3}-\w{3}-TRS-\d{5}'
     error_key = 'invalid_dirname'
 
     def test(self, trs_import):
@@ -207,7 +207,7 @@ class MissingDataValidator(Validator):
 
 class RevisionFormatValidator(Validator):
     """Checks that the revision is a two number integer."""
-    pattern = '\d{2}'
+    pattern = r'\d{2}'
     error = 'The revision must be a two number integer'
     error_key = 'revision_format'
 

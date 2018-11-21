@@ -74,7 +74,7 @@ class TransmittalDiff(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         return qs.get()
 
     def get_queryset(self):
-        return self.object.trsrevision_set.all()
+        return self.object.trsrevision_set.all().order_by('created_on')
 
     def get_context_data(self, **kwargs):
         context = super(TransmittalDiff, self).get_context_data(**kwargs)

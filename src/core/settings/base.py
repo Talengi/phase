@@ -1,11 +1,9 @@
 """Common settings and globals."""
 
-
 from os.path import basename, join, normpath
 from sys import path
 from unipath import Path
 from logging.handlers import SysLogHandler
-
 
 # ######### PATH CONFIGURATION
 # Absolute filesystem path to the Django project directory:
@@ -231,8 +229,9 @@ LOCAL_APPS = (
 DOC_APPS = tuple()
 try:
     from . import doc_apps
+
     DOC_APPS = getattr(doc_apps, 'DOC_APPS')
-except:
+except:  # noqa
     pass
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS + DOC_APPS
@@ -466,7 +465,6 @@ PIPELINE = {
         },
     }
 }
-
 
 # ######### END PIPELINE CONFIGURATION
 

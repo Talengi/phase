@@ -163,7 +163,7 @@ class DocumentFactory(factory.DjangoModelFactory):
         try:
             cls.revision_factory_class._get_model_class()._meta.get_field('received_date')
             revision_kwargs['received_date'] = obj.current_revision_date
-        except:
+        except:  # noqa
             pass
         revision_kwargs.update(cls.revision_kwargs)
         revision = cls.revision_factory_class(**revision_kwargs)

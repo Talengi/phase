@@ -12,7 +12,7 @@ from django.utils.deconstruct import deconstructible
 class StringNumberValidator(object):
     """Validate numbers that should be typed in with a fixed length"""
 
-    base_regex = '\d{%d}'
+    base_regex = r'\d{%d}'
     message = _('The value is incorrect')
     code = 'invalid'
 
