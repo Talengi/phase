@@ -128,7 +128,7 @@ class DocumentFactory(factory.DjangoModelFactory):
     category = factory.SubFactory(CategoryFactory)
 
     @classmethod
-    def create(cls, **kwargs):
+    def _adjust_kwargs(cls, **kwargs):
         """Takes custom args to set metadata and revision fields."""
         cls.metadata_factory_class = kwargs.pop('metadata_factory_class',
                                                 MetadataFactory)
@@ -137,7 +137,8 @@ class DocumentFactory(factory.DjangoModelFactory):
         cls.revision_factory_class = kwargs.pop('revision_factory_class',
                                                 MetadataRevisionFactory)
         cls.revision_kwargs = kwargs.pop('revision', {})
-        return super(DocumentFactory, cls).create(**kwargs)
+
+        return super(DocumentFactory, cls)._adjust_kwargs(**kwargs)
 
     @classmethod
     def _after_postgeneration(cls, obj, create, results=None):
@@ -147,6 +148,7 @@ class DocumentFactory(factory.DjangoModelFactory):
             'document_number': obj.document_number,
             'latest_revision': None,
         }
+
         metadata_kwargs.update(cls.metadata_kwargs)
         metadata = cls.metadata_factory_class(**metadata_kwargs)
 
@@ -157,7 +159,7 @@ class DocumentFactory(factory.DjangoModelFactory):
             'created_on': obj.current_revision_date,
             'updated_on': obj.current_revision_date,
         }
-        # When instanciating factories for OutgoingTransmitalls, we must not
+        # When instanciating factories for OutgoingTransmitals, we must not
         # pass `received_date` which has been removed from the model.
         # It's why we check if we can safely pass it in kwargs.
         try:

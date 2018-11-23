@@ -27,13 +27,9 @@ class CategoryTemplateFactory(factory.DjangoModelFactory):
     slug = factory.Sequence(lambda n: 'category_{0}'.format(n))
     description = 'Test category'
 
-    @classmethod
-    def _prepare(cls, create, **kwargs):
-        if 'metadata_model' not in kwargs:
-            kwargs.update({
-                'metadata_model': ContentType.objects.get_for_model(DemoMetadata)
-            })
-        return super(CategoryTemplateFactory, cls)._prepare(create, **kwargs)
+    @factory.lazy_attribute
+    def metadata_model(self):
+        return ContentType.objects.get_for_model(DemoMetadata)
 
 
 class CategoryFactory(factory.DjangoModelFactory):
