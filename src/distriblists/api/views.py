@@ -16,7 +16,8 @@ class DistributionListList(CategoryAPIViewMixin, generics.ListAPIView):
         qs = DistributionList.objects \
             .filter(categories=self.get_category()) \
             .select_related('leader', 'approver') \
-            .prefetch_related('reviewers')
+            .prefetch_related('reviewers') \
+            .order_by('name')
 
         q = self.request.query_params.get('q', None)
         if q:

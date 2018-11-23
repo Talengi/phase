@@ -54,7 +54,7 @@ class Command(BaseCommand):
             export.write_file()
             export.status = Export.STATUSES.done
             export.save()
-        except:
+        except:  # noqa
             self.stderr.write('Error writing file, cleaning stalled export.')
             export.delete()
             raise

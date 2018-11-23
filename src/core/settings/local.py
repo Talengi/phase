@@ -120,3 +120,9 @@ TRS_IMPORTS_CONFIG = {
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 ALLOWED_HOSTS = ['phase', 'phasectr']
+
+
+try:
+    from .local_private import *  # noqa
+except ImportError:
+    pass

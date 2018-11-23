@@ -22,7 +22,7 @@ class PhaseClearableFileInput(ClearableFileInput):
         filename = basename(force_text(value))
         try:
             filesize = filesizeformat(value.size)
-        except:
+        except:  # noqa
             filesize = 'NA'
         file_name = '{} ({})'.format(filename, filesize)
 

@@ -328,7 +328,7 @@ class DocumentDeleteTests(TestCase):
 
         try:
             document = Document.objects.get(document_key=document.document_key)
-        except:
+        except:  # noqa
             self.fail('Document was deleted')
 
     def test_simple_user_cannot_delete_document(self):

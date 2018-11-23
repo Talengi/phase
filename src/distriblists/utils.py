@@ -58,7 +58,7 @@ def _import_review_members(row, emails, user_ids, category):
             .filter(document__category=category) \
             .select_related('latest_revision') \
             .get(document__document_key=key)
-    except:
+    except:  # noqa
         instance = None
         errors.append(_('Document {} does not exist').format(key))
 

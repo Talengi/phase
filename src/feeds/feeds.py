@@ -43,7 +43,7 @@ class AlertMixin(object):
             auth = request.META['HTTP_AUTHORIZATION'].split()
             decoded_auth = base64.b64decode(auth[1]).decode()
             username, password = decoded_auth.split(':')
-        except:
+        except:  # noqa
             # Invalid authorization header sent by client
             # Let's block everything.
             raise PermissionDenied()

@@ -10,7 +10,7 @@ from documents.models import Document
 from notifications.models import notify
 
 
-mentions_re = re.compile('@([\w\-_]+)', re.IGNORECASE)
+mentions_re = re.compile(r'@([\w\-_]+)', re.IGNORECASE)
 
 
 class Note(models.Model):

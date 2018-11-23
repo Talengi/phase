@@ -11,7 +11,7 @@ class DashboardProvider(object):
         python elastic search api.
 
         """
-        raise NotImplemented()
+        raise NotImplementedError()
 
     def fetch_data(self):
         """Sends a request to ES, and save the response in local variables."""
@@ -23,7 +23,7 @@ class DashboardProvider(object):
 
     def get_headers(self):
         """Must return a list of dates."""
-        raise NotImplemented()
+        raise NotImplementedError()
 
     def get_buckets(self):
         """Return an ordered dict of data.
@@ -32,7 +32,7 @@ class DashboardProvider(object):
         Each value is a list that contains as many values as there are headers.
 
         """
-        raise NotImplemented()
+        raise NotImplementedError()
 
 
 class EmptyDashboard(DashboardProvider):

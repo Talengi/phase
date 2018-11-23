@@ -79,7 +79,7 @@ class ReviewMembersImport(BaseListImport):
             context.update({
                 'results': results
             })
-        except:
+        except:  # noqa
             # Any error occurred, file must be inparsable
             error_msg = _("We could'nt parse your file. Is this a valid xlsx file?")
             context.update({
@@ -129,7 +129,7 @@ class DistributionListImport(BaseListImport):
             context.update({
                 'results': results
             })
-        except:
+        except:  # noqa
             # Any error occurred, file must be inparsable
             error_msg = _("We could'nt parse your file. Is this a valid xlsx file?")
             context.update({

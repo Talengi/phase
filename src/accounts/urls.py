@@ -1,18 +1,18 @@
 from django.conf.urls import url
 from django.contrib.auth import views as auth_views
+from django.contrib.auth.views import LoginView
 
 from .forms import EmailAuthenticationForm
 
 
 urlpatterns = [
     url('^login/$',
-        auth_views.login,
-        {'authentication_form': EmailAuthenticationForm},
+        LoginView.as_view(authentication_form=EmailAuthenticationForm),
         name='login'),
     url('^logout/$',
         auth_views.logout_then_login,
         name='logout'),
-    url('^password-reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>.+)/$',
+    url(r'^password-reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>.+)/$',
         auth_views.password_reset_confirm,
         name='password_reset_confirm'),
     url('^password-reset-complete/$',

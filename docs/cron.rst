@@ -43,9 +43,8 @@ task to clean old exported file.
 
 
 .. warning::
-
-This task is unnecesary, since old exports are now cleaned on a new export
-creation.
+    This task is unnecessary, since old exports are now cleaned on a new export
+    creation.
 
 
 Crontab
