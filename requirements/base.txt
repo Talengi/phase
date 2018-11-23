@@ -8,7 +8,7 @@ logutils==0.3.4.1
 django-widget-tweaks==1.4.1
 Unipath==1.1
 django-crispy-forms==1.6.1
-djangorestframework==3.6.3
+djangorestframework==3.9.0
 django-extensions==1.7.9
 celery==4.2.1
 django-annoying==0.10.4

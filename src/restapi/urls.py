@@ -11,15 +11,15 @@ router = routers.DefaultRouter()
 router.register(
     'notifications',
     notifications_views.NotificationViewSet,
-    base_name='notification')
+    basename='notification')
 router.register(
     'favorites',
     favorites_views.FavoriteViewSet,
-    base_name='favorite')
+    basename='favorite')
 router.register(
     'bookmarks',
     bookmarks_views.BookmarkViewSet,
-    base_name='bookmark')
+    basename='bookmark')
 
 
 urlpatterns = [
