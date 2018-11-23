@@ -1,6 +1,6 @@
 django==1.11.16
 psycopg2==2.7.3.2
-bpython==0.16
+bpython==0.17.1
 django-braces==1.11.0
 django-model-utils==3.0.0
 django-pipeline==1.6.12
@@ -11,12 +11,12 @@ django-crispy-forms==1.6.1
 djangorestframework==3.6.3
 django-extensions==1.7.9
 celery==4.0.2
-django-annoying==0.10.3
+django-annoying==0.10.4
 requests==2.20.1
 django-zipview==1.2.0
 elasticsearch>=2.0.0,<3.0.0
 elasticsearch-dsl>=2.0.0,<3.0.0
-pylibmc==1.5.2
+pylibmc==1.6.0
 python-dateutil==2.6.0
 raven==6.0.0
 reportlab==3.4.0
