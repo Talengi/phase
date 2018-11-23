@@ -1,5 +1,5 @@
 django==1.11.16
-psycopg2==2.7.3.2
+psycopg2-binary==2.7.6.1
 bpython==0.17.1
 django-braces==1.13.0
 django-model-utils==3.0.0
