@@ -13,8 +13,9 @@ class ImportTests(TestCase):
     def setUp(self):
         sample_path = 'imports/tests/'
         csv_file = 'demo_import_file.csv'
-        f = open(sample_path + csv_file, 'rb')
-        self.file = SimpleUploadedFile(csv_file, f.read())
+
+        with open(sample_path + csv_file, 'rb') as f:
+            self.file = SimpleUploadedFile(csv_file, f.read())
         self.category = CategoryFactory()
         self.user = UserFactory(
             email='testadmin@phase.fr',
@@ -187,8 +188,8 @@ class ExcelTests(TestCase):
     def setUp(self):
         sample_path = 'imports/tests/'
         csv_file = 'demo_import_file.xlsx'
-        f = open(sample_path + csv_file, 'rb')
-        self.file = SimpleUploadedFile(csv_file, f.read())
+        with open(sample_path + csv_file, 'rb') as f:
+            self.file = SimpleUploadedFile(csv_file, f.read())
         self.category = CategoryFactory()
         self.user = UserFactory(
             email='testadmin@phase.fr',
