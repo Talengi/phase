@@ -10,7 +10,7 @@ Unipath==1.1
 django-crispy-forms==1.6.1
 djangorestframework==3.6.3
 django-extensions==1.7.9
-celery==4.0.2
+celery==4.2.1
 django-annoying==0.10.4
 requests==2.20.1
 django-zipview==1.2.0
