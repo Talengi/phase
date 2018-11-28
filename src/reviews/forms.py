@@ -160,6 +160,18 @@ class ReviewFormMixin(DistributionListValidationMixin, forms.ModelForm):
             ])
             self.fields['file_transmitted'].widget.value_url = url
 
+    def prepare_field_client_comments(self):
+        self.fields['client_comments'].widget = PhaseClearableFileInput()
+        if self.instance.client_comments:
+            url = reverse('revision_file_download', args=[
+                self.category.organisation.slug,
+                self.category.slug,
+                self.instance.document.document_key,
+                self.instance.revision,
+                'client_comments',
+            ])
+            self.fields['client_comments'].widget.value_url = url
+
     def clean_reviewers(self):
         """Validate the reviewers
 

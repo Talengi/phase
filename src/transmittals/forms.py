@@ -109,7 +109,7 @@ class OutgoingTransmittalForm(GenericBaseDocumentForm):
         """Do not allow a non PDF file to be uploaded as an archived pdf.
         """
         archived_pdf = self.cleaned_data['archived_pdf']
-        if archived_pdf is not None:
+        if archived_pdf not in (None, False):
             if not archived_pdf.name.endswith('.pdf'):
                 raise forms.ValidationError(
                     'This field only accepts PDF files.'
@@ -164,6 +164,7 @@ class TransmittableFormMixin(ReviewFormMixin):
                     OutgoingTrsLayout(),
                     'purpose_of_issue',
                     Field('external_review_due_date', readonly='readonly'),
+                    Field('client_comments'),
                 ),)
         else:
             layout = (
@@ -172,5 +173,6 @@ class TransmittableFormMixin(ReviewFormMixin):
                     'internal_review',
                     'purpose_of_issue',
                     Field('external_review_due_date', readonly='readonly'),
+                    Field('client_comments'),
                 ),)
         return layout
