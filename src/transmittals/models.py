@@ -29,7 +29,7 @@ from search.utils import build_index_data, bulk_actions
 from metadata.fields import ConfigurableChoiceField
 from default_documents.validators import StringNumberValidator
 from privatemedia.fields import ProtectedFileField, PrivateFileField
-from transmittals.fields import TransmittalFileField, OgtFileField
+from transmittals.fields import TransmittalFileField, OgtFileField, ClientCommentsFileField
 from transmittals.fileutils import file_transmitted_file_path
 from transmittals.pdf import transmittal_to_pdf
 
@@ -875,6 +875,9 @@ class TransmittableMixin(ReviewMixin):
         default=PURPOSE_OF_ISSUE_CHOICES.FR)
     external_review_due_date = models.DateField(
         _('External due date'),
+        null=True, blank=True)
+    client_comments = ClientCommentsFileField(
+        verbose_name=_("Client Comments"),
         null=True, blank=True)
 
     class Meta:
