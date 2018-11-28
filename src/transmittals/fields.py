@@ -38,24 +38,18 @@ class ManyDocumentsField(ManyToManyField):
     pass
 
 
-def ogt_file_path(og_transmital, filename):
-    return "outgoing_trs_archive/{key}.{extension}".format(
-        key=og_transmital.document_key,
-        extension=filename.split('.')[-1],)
-
-
-class OgtFileField(PrivateFileField):
+class OgtBaseFileField(PrivateFileField):
     """Custom file field to store outgoing transmittals pdf files."""
 
     def __init__(self, *args, **kwargs):
         kwargs.update({
-            'upload_to': ogt_file_path,
+            'upload_to': self.get_upload_to(),
         })
-        super(OgtFileField, self).__init__(*args, **kwargs)
+        super(OgtBaseFileField, self).__init__(*args, **kwargs)
 
     def deconstruct(self):
-        name, path, args, kwargs = super(OgtFileField, self).deconstruct()
-        kwargs['upload_to'] = ogt_file_path
+        name, path, args, kwargs = super(OgtBaseFileField, self).deconstruct()
+        kwargs['upload_to'] = self.get_upload_to()
         return name, path, args, kwargs
 
     def formfield(self, **kwargs):
@@ -63,4 +57,31 @@ class OgtFileField(PrivateFileField):
             'form_class': PhaseClearableFileField,
         }
         defaults.update(kwargs)
-        return super(OgtFileField, self).formfield(**defaults)
+        return super(OgtBaseFileField, self).formfield(**defaults)
+
+
+def ogt_file_path(og_transmital, filename):
+    return "outgoing_trs_archive/{key}.{extension}".format(
+        key=og_transmital.document_key,
+        extension=filename.split('.')[-1], )
+
+
+class OgtFileField(OgtBaseFileField):
+    """Custom file field to store outgoing transmittals pdf files."""
+
+    def get_upload_to(self):
+        return ogt_file_path
+
+
+def client_comments_file_path(revision, filename):
+    """Build a path with this pattern: client_comments/<document number>_<revision name>_comments.{ext>"""
+    return "client_comments/{document_number}_{revision_name}_comments.{extension}".format(
+        document_number=revision.document,
+        revision_name=revision.name,
+        extension=filename.split('.')[-1], )
+
+
+class ClientCommentsFileField(OgtBaseFileField):
+    """Custom field to store client comments."""
+    def get_upload_to(self):
+        return client_comments_file_path
