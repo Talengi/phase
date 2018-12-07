@@ -67,12 +67,12 @@ DATABASES = {
 
 # ######### CACHE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#caches
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
-        'LOCATION': '127.0.0.1:11211',
-    }
-}
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
+#         'LOCATION': '127.0.0.1:11211',
+#     }
+# }
 # ######### END CACHE CONFIGURATION
 
 
@@ -119,7 +119,7 @@ TRS_IMPORTS_CONFIG = {
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-ALLOWED_HOSTS = ['phase', 'phasectr']
+ALLOWED_HOSTS = ['phase', 'phasectr', 'phase.local']
 
 
 try:
