@@ -42,3 +42,6 @@ node_modules
 .cache
 
 site.retry
+
+.vscode
+.pytest_cache
