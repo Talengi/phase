@@ -2,13 +2,20 @@ import operator
 from functools import reduce
 
 from django.core.management.base import BaseCommand
-from django.core.cache import cache
 from django.db.models import Q
 from django.utils import timezone
+from django.template.loader import render_to_string
+from django.core.mail import send_mail
+from django.conf import settings
 
 from metadata.fields import get_choices_from_list
 from schedules.models import ScheduleMixin
 from categories.models import Category
+from accounts.models import User
+
+
+ALERT_MAIL_BODY_TPL = 'schedules/behind_schedule_alert_body.txt'
+ALERT_MAIL_BODY_HTML_TPL = 'schedules/behind_schedule_alert_body.html'
 
 
 class Command(BaseCommand):
@@ -17,16 +24,41 @@ class Command(BaseCommand):
         # Filter categories, get the ones with Metadata inheriting "ScheduleMixin"
         # For each category, fetch documents behind schedule
 
+        recipients = self.fetch_alert_recipients()
         categories = self.fetch_categories_with_schedulable_content()
+        documents = []
         for category in categories:
-            documents = self.fetch_documents_behind_schedule(category)
-            print(list(documents))
+            category_documents = self.fetch_documents_behind_schedule(category)
+            if len(category_documents) > 0:
+                documents.append((category, category_documents))
+
+        for recipient in recipients:
+            email_subject = 'Documents behind schedule on {:%d/%m/%Y}'.format(
+                timezone.now()
+            )
+            email_body = render_to_string(ALERT_MAIL_BODY_TPL, {
+                'user': recipient,
+                'documents': documents,
+            })
+            html_body = render_to_string(ALERT_MAIL_BODY_HTML_TPL, {
+                'user': recipient,
+                'documents': documents,
+            })
+            send_mail(
+                email_subject,
+                email_body,
+                settings.DEFAULT_FROM_EMAIL,
+                [recipient.email],
+                html_message=html_body
+            )
 
     def fetch_categories_with_schedulable_content(self):
         """Fetch all categories where the document class has a Schedulable behavior."""
 
         categories = Category.objects \
-            .select_related('category_template__metadata_model')
+            .select_related(
+                'organisation',
+                'category_template__metadata_model')
 
         def has_schedulable_content(category):
             metadata_cls = category.document_class()
@@ -82,7 +114,8 @@ class Command(BaseCommand):
         coarse_filter = reduce(operator.or_, conditions)
         documents = Metadata.objects \
             .filter(document__category=category) \
-            .filter(coarse_filter)
+            .filter(coarse_filter) \
+            .select_related('document', 'latest_revision')
 
         def is_behind_schedule(document):
             """Tells if a single document is actually behind schedule.
@@ -115,4 +148,10 @@ class Command(BaseCommand):
 
         # Here, we filter the queryset to remove false positives.
         behind_schedule_documents = filter(is_behind_schedule, documents)
-        return behind_schedule_documents
+        return list(behind_schedule_documents)
+
+    def fetch_alert_recipients(self):
+        """Return users that must receive the alerts."""
+
+        users = User.objects.filter(send_behind_schedule_alert_mails=True)
+        return users

@@ -1,0 +1,12 @@
+Dear {{ user.username }},
+
+This is a text-based email. More details are available in the html version.
+
+Please note that the following documents are behind schedule:
+{% for category, docs in documents %}
+
+{{ category|safe }}
+{{ category.get_absolute_url }}
+{% for document in docs %}
+  * {{ document.document_key}} - {{ document.document.title }}{% endfor %}
+{% endfor %}
