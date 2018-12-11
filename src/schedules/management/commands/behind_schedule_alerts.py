@@ -6,6 +6,7 @@ from django.db.models import Q
 from django.utils import timezone
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
+from django.contrib.sites.models import Site
 from django.conf import settings
 
 from metadata.fields import get_choices_from_list
@@ -24,6 +25,7 @@ class Command(BaseCommand):
         # Filter categories, get the ones with Metadata inheriting "ScheduleMixin"
         # For each category, fetch documents behind schedule
 
+        site = Site.objects.get_current()
         recipients = self.fetch_alert_recipients()
         categories = self.fetch_categories_with_schedulable_content()
         documents = []
@@ -39,10 +41,14 @@ class Command(BaseCommand):
             email_body = render_to_string(ALERT_MAIL_BODY_TPL, {
                 'user': recipient,
                 'documents': documents,
+                'scheme': 'https',
+                'domain': site.domain,
             })
             html_body = render_to_string(ALERT_MAIL_BODY_HTML_TPL, {
                 'user': recipient,
                 'documents': documents,
+                'scheme': 'https',
+                'domain': site.domain,
             })
             send_mail(
                 email_subject,
