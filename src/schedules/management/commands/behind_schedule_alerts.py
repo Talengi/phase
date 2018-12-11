@@ -35,18 +35,24 @@ class Command(BaseCommand):
                 documents.append((category, category_documents))
 
         for recipient in recipients:
+            # Let's build a subset of the document list, depending on the
+            # categories the current recipient has access to.
+            recipient_categories = recipient.categories.all()
+            recipient_documents = [(cat, doc) for cat, doc in documents
+                                   if cat in recipient_categories]
+
             email_subject = 'Documents behind schedule on {:%d/%m/%Y}'.format(
                 timezone.now()
             )
             email_body = render_to_string(ALERT_MAIL_BODY_TPL, {
                 'user': recipient,
-                'documents': documents,
+                'documents': recipient_documents,
                 'scheme': 'https',
                 'domain': site.domain,
             })
             html_body = render_to_string(ALERT_MAIL_BODY_HTML_TPL, {
                 'user': recipient,
-                'documents': documents,
+                'documents': recipient_documents,
                 'scheme': 'https',
                 'domain': site.domain,
             })
@@ -142,7 +148,7 @@ class Command(BaseCommand):
                 forecast_field = 'status_{}_forecast_date'.format(status)
                 actual_field = 'status_{}_actual_date'.format(status)
 
-                if not hasattr(document, forecast_field):
+                if getattr(document, forecast_field) is None:
                     continue
 
                 forecast_date = getattr(document, forecast_field)
@@ -159,5 +165,7 @@ class Command(BaseCommand):
     def fetch_alert_recipients(self):
         """Return users that must receive the alerts."""
 
-        users = User.objects.filter(send_behind_schedule_alert_mails=True)
+        users = User.objects \
+            .filter(send_behind_schedule_alert_mails=True) \
+            .prefetch_related('categories')
         return users
