@@ -100,6 +100,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         _('Send reminders for outgoing transmittals with missing '
           'acknowledgement of receipt'),
         default=True)
+    send_behind_schedule_alert_mails = models.BooleanField(
+        _('Send alerts when documents are behind schedule'),
+        default=False,
+    )
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name', 'username']
