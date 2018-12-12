@@ -66,6 +66,8 @@ class Command(BaseCommand):
                 [recipient.email],
                 html_message=html_body
             )
+            self.stdout.write('Sending mail to {} ({})'.format(
+                recipient, recipient.email))
 
     def fetch_categories_with_schedulable_content(self):
         """Fetch all categories where the document class has a Schedulable behavior."""
