@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.contrib.sites.models import Site
+from django.core.exceptions import FieldDoesNotExist
 from django.conf import settings
 
 from metadata.fields import get_choices_from_list
@@ -120,10 +121,21 @@ class Command(BaseCommand):
         # would make the said query ridiculously complex.
         conditions = []
         for status in statuses:
-            forecast_field = 'status_{}_forecast_date__lt'.format(status)
-            actual_field = 'status_{}_actual_date__isnull'.format(status)
+            forecast_field = 'status_{}_forecast_date'.format(status)
+            actual_field = 'status_{}_actual_date'.format(status)
+
+            # Let's check that the actual schedule fields corresponding to
+            # this status exists
+            try:
+                Metadata._meta.get_field(forecast_field)
+                Metadata._meta.get_field(actual_field)
+            except FieldDoesNotExist:
+                continue
+
+            forecast_condition = '{}__lt'.format(forecast_field)
+            actual_condition = '{}__isnull'.format(actual_field)
             conditions.append(
-                Q(**{forecast_field: today}) & Q(**{actual_field: True}))
+                Q(**{forecast_condition: today}) & Q(**{actual_condition: True}))
 
         coarse_filter = reduce(operator.or_, conditions)
         documents = Metadata.objects \
@@ -150,7 +162,7 @@ class Command(BaseCommand):
                 forecast_field = 'status_{}_forecast_date'.format(status)
                 actual_field = 'status_{}_actual_date'.format(status)
 
-                if getattr(document, forecast_field) is None:
+                if getattr(document, forecast_field, None) is None:
                     continue
 
                 forecast_date = getattr(document, forecast_field)
