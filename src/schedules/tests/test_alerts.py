@@ -76,7 +76,6 @@ class ScheduleAlertTests(TestCase):
         call_command('behind_schedule_alerts')
         self.assertEqual(len(mail.outbox), 0)
 
-
     def test_one_document_is_behind_schedule(self):
         """Doc2 is late, both users must receive an alert."""
 
