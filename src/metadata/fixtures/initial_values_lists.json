@@ -5845,7 +5845,7 @@
   "fields": {
     "index": "IDC",
     "values_list": 13,
-    "order": 0,
+    "order": 1,
     "value": "Inter Discipline Check"
   }
 },
@@ -5854,7 +5854,7 @@
   "fields": {
     "index": "IFR",
     "values_list": 13,
-    "order": 0,
+    "order": 2,
     "value": "Issued For Review"
   }
 },
@@ -5863,7 +5863,7 @@
   "fields": {
     "index": "IFA",
     "values_list": 13,
-    "order": 0,
+    "order": 3,
     "value": "Issued For Approval"
   }
 },
@@ -5872,7 +5872,7 @@
   "fields": {
     "index": "IFD",
     "values_list": 13,
-    "order": 0,
+    "order": 4,
     "value": "Issued For Design"
   }
 },
@@ -5881,17 +5881,8 @@
   "fields": {
     "index": "IFC",
     "values_list": 13,
-    "order": 0,
+    "order": 5,
     "value": "Issued For Construction"
-  }
-},
-{
-  "model": "metadata.listentry",
-  "fields": {
-    "index": "FIN",
-    "values_list": 13,
-    "order": 0,
-    "value": "Final"
   }
 },
 {
@@ -5899,7 +5890,7 @@
   "fields": {
     "index": "IFI",
     "values_list": 13,
-    "order": 0,
+    "order": 6,
     "value": "Issued For Information"
   }
 },
@@ -5908,26 +5899,8 @@
   "fields": {
     "index": "ASB",
     "values_list": 13,
-    "order": 0,
+    "order": 7,
     "value": "As Built"
-  }
-},
-{
-  "model": "metadata.listentry",
-  "fields": {
-    "index": "CLD",
-    "values_list": 13,
-    "order": 0,
-    "value": "Cancelled"
-  }
-},
-{
-  "model": "metadata.listentry",
-  "fields": {
-    "index": "SPD",
-    "values_list": 13,
-    "order": 0,
-    "value": "Superseded"
   }
 },
 {

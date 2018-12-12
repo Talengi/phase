@@ -29,10 +29,11 @@ class ContractorDeliverableTestCase(TestCase):
         self.client.login(email=self.user.email, password='pass')
 
     def create_doc(self, **kwargs):
-        kwargs.update({
+        context = {
             'category': self.category,
             'metadata_factory_class': ContractorDeliverableFactory,
             'revision_factory_class': ContractorDeliverableRevisionFactory,
-        })
-        doc = DocumentFactory(**kwargs)
+        }
+        context.update(kwargs)
+        doc = DocumentFactory(**context)
         return doc

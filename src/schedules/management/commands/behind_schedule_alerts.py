@@ -40,6 +40,8 @@ class Command(BaseCommand):
             recipient_categories = recipient.categories.all()
             recipient_documents = [(cat, doc) for cat, doc in documents
                                    if cat in recipient_categories]
+            if not recipient_documents:
+                continue
 
             email_subject = 'Documents behind schedule on {:%d/%m/%Y}'.format(
                 timezone.now()
