@@ -1,14 +1,12 @@
-Dear {{ user.username }},
+Dear {{ user.username }},<br /><br />
 
-Please note that the following documents are behind schedule:
+Please note that the following documents are behind schedule:<br /><br />
 {% for category, docs in documents %}
+<a href="{{ scheme }}://{{ domain }}{{ category.get_absolute_url }}">{{ category }}</a>
+<br /><br />
+
 <table>
     <thead>
-        <tr>
-            <th colspan="4">
-                <a href="{{ scheme }}://{{ domain }}{{ category.get_absolute_url }}">{{ category }}</a>
-            </th>
-        </tr>
         <tr>
             <th>Document number</th>
             <th>Title</th>
@@ -27,4 +25,6 @@ Please note that the following documents are behind schedule:
     {% endfor %}
     </tbody>
 </table>
+<br /><br />
 {% endfor %}
+The Phase team.
