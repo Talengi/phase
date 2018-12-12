@@ -5,12 +5,10 @@
     app_path: "{{ django_root }}"
     virtualenv: "{{ venv_dir }}"
     settings: "{{ django_settings }}"
-  notify: Restart phase
 
 - name: Restart phase
   become: no
   supervisorctl: name=phase state=restarted
-  notify: Restart celery
 
 - name: Restart celery
   become: no

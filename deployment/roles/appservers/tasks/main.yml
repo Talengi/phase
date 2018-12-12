@@ -5,3 +5,4 @@
 - include: pip.yml
 - include: database.yml
 - include: cache.yml
+- include: restart.yml
