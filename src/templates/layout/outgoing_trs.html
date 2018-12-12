@@ -21,7 +21,7 @@
                             </a>
                         </td>
                         <td>{{ trs.document.created_on|date:'Y-m-d' }}</td>
-                        <td>{{ revision.external_review_due_date|date:'Y-m-d' }}</td>
+                        <td>{{ trs.external_review_due_date|date:'Y-m-d' }}</td>
                     </tr>
             {% endfor %}
                 </tbody>
