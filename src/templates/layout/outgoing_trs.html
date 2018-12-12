@@ -10,6 +10,7 @@
                 <thead>
                     <th>{{ _('Transmittal') }}</th>
                     <th>{{ _('Created date') }}</th>
+                    <th>{{ _('Purpose of issue') }}</th>
                     <th>{{ _('External due date') }}</th>
                 </thead>
                 <tbody>
@@ -21,6 +22,7 @@
                             </a>
                         </td>
                         <td>{{ trs.document.created_on|date:'Y-m-d' }}</td>
+                        <td>{{ trs.get_purpose_of_issue_display }}</td>
                         <td>{{ trs.external_review_due_date|date:'Y-m-d' }}</td>
                     </tr>
             {% endfor %}

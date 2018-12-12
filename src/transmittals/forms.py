@@ -164,8 +164,6 @@ class TransmittableFormMixin(ReviewFormMixin):
                     _('Outgoing Transmittal'),
                     'internal_review',
                     OutgoingTrsLayout(),
-                    'purpose_of_issue',
-                    Field('external_review_due_date', readonly='readonly'),
                     Field('client_comments'),
                 ),)
         else:
@@ -173,8 +171,6 @@ class TransmittableFormMixin(ReviewFormMixin):
                 DocumentFieldset(
                     _('Outgoing Transmittal'),
                     'internal_review',
-                    'purpose_of_issue',
-                    Field('external_review_due_date', readonly='readonly'),
                     Field('client_comments'),
                 ),)
         return layout
