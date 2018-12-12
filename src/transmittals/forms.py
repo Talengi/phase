@@ -87,6 +87,8 @@ class OutgoingTransmittalForm(GenericBaseDocumentForm):
                 PropertyLayout('originator'),
                 PropertyLayout('recipient'),
                 Field('sequential_number', type='hidden'),
+                PropertyLayout('purpose_of_issue'),
+                PropertyLayout('external_review_due_date'),
                 PropertyLayout('get_ack_of_receipt_display'),
                 PropertyLayout('ack_of_receipt_date'),
                 PropertyLayout('ack_of_receipt_author'),
