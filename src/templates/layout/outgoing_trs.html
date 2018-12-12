@@ -6,13 +6,26 @@
             {{ _('Outgoing transmittals') }}
         </label>
         {% if transmittals %}
-            {% for trs in transmittals %}
-                <div>
-                    <a href="{{ trs.get_absolute_url }}">
-                        {{ trs }}
-                    </a> ({{ trs.document.created_on|date:'Y-m-d' }})
-                </div>
+            <table class="table table-bordered">
+                <thead>
+                    <th>{{ _('Transmittal') }}</th>
+                    <th>{{ _('Created date') }}</th>
+                    <th>{{ _('External due date') }}</th>
+                </thead>
+                <tbody>
+                {% for trs in transmittals %}
+                    <tr>
+                        <td>
+                            <a href="{{ trs.get_absolute_url }}">
+                                {{ trs }}
+                            </a>
+                        </td>
+                        <td>{{ trs.document.created_on|date:'Y-m-d' }}</td>
+                        <td>{{ revision.external_review_due_date|date:'Y-m-d' }}</td>
+                    </tr>
             {% endfor %}
+                </tbody>
+            </table>
         {% else %}
             {{ _('There is no associated outgoing transmittal.') }}
         {% endif %}
