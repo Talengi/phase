@@ -477,6 +477,9 @@ class OutgoingTransmittal(Metadata):
 
     """
     EXTERNAL_REVIEW_DURATION = 13
+    PURPOSE_OF_ISSUE_CHOICES = Choices(
+        ('FR', _('For review')),
+        ('FI', _('For information')))
 
     latest_revision = models.ForeignKey(
         'OutgoingTransmittalRevision',
@@ -517,6 +520,15 @@ class OutgoingTransmittal(Metadata):
         on_delete=models.PROTECT)
     archived_pdf = OgtFileField(
         verbose_name=_("Archived PDF"),
+        null=True, blank=True)
+    purpose_of_issue = models.CharField(
+        _('Purpose of issue'),
+        max_length=2,
+        blank=True,
+        choices=PURPOSE_OF_ISSUE_CHOICES,
+        default=PURPOSE_OF_ISSUE_CHOICES.FR)
+    external_review_due_date = models.DateField(
+        _('External due date'),
         null=True, blank=True)
 
     class Meta:
