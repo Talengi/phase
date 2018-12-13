@@ -9,6 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('default_documents', '0064_auto_20181125_2143'),
+        ('transmittals', '0058_set_due_dates'),
     ]
 
     operations = [
