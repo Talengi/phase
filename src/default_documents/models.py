@@ -310,9 +310,8 @@ class ContractorDeliverable(ScheduleMixin, Metadata):
                 'metadata__document__category__organisation',
                 'leader',
                 'approver',
-                'approver',
-                'transmittal__document') \
-            .prefetch_related('reviewers')
+                'approver') \
+            .prefetch_related('reviewers', 'transmittals__document')
 
         return revisions
 
