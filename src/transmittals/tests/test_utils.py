@@ -49,7 +49,6 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
                 'reviewers': [self.user1],
                 'leader': self.user2,
                 'approver': self.user3,
-                'trs_return_code': '1',
                 'received_date': datetime.datetime.today()}}
         doc_kwargs.update(default_kwargs)
 
@@ -119,7 +118,7 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
     def test_create_transmittal(self):
         revisions = self.create_docs()
         revision = revisions[0]
-        self.assertIsNone(revision.transmittal)
+        self.assertEqual(revision.transmittals.all().count(), 0)
 
         doc, trs, trs_rev = create_transmittal(
             self.category, self.dst_category, revisions,
@@ -129,7 +128,7 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
         self.assertEqual(trs.revisions_category, self.category)
 
         revision.refresh_from_db()
-        self.assertIsNotNone(revision.transmittal)
+        self.assertEqual(revision.transmittals.all().count(), 1)
 
     def test_create_transmittal_for_information(self):
         doc_kwargs = {
@@ -137,19 +136,14 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
                 'reviewers': [self.user1],
                 'leader': self.user2,
                 'approver': self.user3,
-                'trs_return_code': '1',
-                'purpose_of_issue': 'FI',
                 'received_date': datetime.datetime.today()}}
         revisions = self.create_docs(default_kwargs=doc_kwargs)
-        revision = revisions[0]
-        self.assertIsNone(revision.external_review_due_date)
 
         doc, trs, trs_rev = create_transmittal(
             self.category, self.dst_category, revisions,
-            self.linked_contract.number, self.entity)
+            self.linked_contract.number, self.entity, purpose_of_issue='FI')
         self.assertIsNotNone(trs)
-        revision.refresh_from_db()
-        self.assertIsNone(revision.external_review_due_date)
+        self.assertIsNone(trs.external_review_due_date)
 
     def test_create_transmittal_for_review(self):
         doc_kwargs = {
@@ -157,19 +151,14 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
                 'reviewers': [self.user1],
                 'leader': self.user2,
                 'approver': self.user3,
-                'trs_return_code': '1',
-                'purpose_of_issue': 'FR',
                 'received_date': datetime.datetime.today()}}
         revisions = self.create_docs(default_kwargs=doc_kwargs)
-        revision = revisions[0]
-        self.assertIsNone(revision.external_review_due_date)
 
         doc, trs, trs_rev = create_transmittal(
             self.category, self.dst_category, revisions,
-            self.linked_contract.number, self.entity)
+            self.linked_contract.number, self.entity, purpose_of_issue='FR')
         self.assertIsNotNone(trs)
-        revision.refresh_from_db()
-        self.assertIsNotNone(revision.external_review_due_date)
+        self.assertIsNotNone(trs.external_review_due_date)
 
 
 class TransmittalSequentialNumberTests(TestCase):

@@ -56,7 +56,7 @@ class FieldWrapper(object):
 
 
 def create_transmittal(from_category, to_category, revisions, contract_nb,
-                       purpose_of_issue, recipient, **form_data):
+                       recipient, purpose_of_issue='FR', **form_data):
     """Create an outgoing transmittal with the given revisions."""
 
     # Do we have a list of revisions?

@@ -5888,9 +5888,18 @@
 {
   "model": "metadata.listentry",
   "fields": {
-    "index": "IFI",
+    "index": "FIN",
     "values_list": 13,
     "order": 6,
+    "value": "Final"
+  }
+},
+{
+  "model": "metadata.listentry",
+  "fields": {
+    "index": "IFI",
+    "values_list": 13,
+    "order": 7,
     "value": "Issued For Information"
   }
 },
@@ -5899,8 +5908,26 @@
   "fields": {
     "index": "ASB",
     "values_list": 13,
-    "order": 7,
+    "order": 8,
     "value": "As Built"
+  }
+},
+{
+  "model": "metadata.listentry",
+  "fields": {
+    "index": "CLD",
+    "values_list": 13,
+    "order": 9,
+    "value": "Cancelled"
+  }
+},
+{
+  "model": "metadata.listentry",
+  "fields": {
+    "index": "SPD",
+    "values_list": 13,
+    "order": 10,
+    "value": "Superseded"
   }
 },
 {
