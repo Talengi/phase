@@ -49,7 +49,6 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
                 'reviewers': [self.user1],
                 'leader': self.user2,
                 'approver': self.user3,
-                'trs_return_code': '1',
                 'received_date': datetime.datetime.today()}}
         doc_kwargs.update(default_kwargs)
 
@@ -137,7 +136,6 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
                 'reviewers': [self.user1],
                 'leader': self.user2,
                 'approver': self.user3,
-                'trs_return_code': '1',
                 'received_date': datetime.datetime.today()}}
         revisions = self.create_docs(default_kwargs=doc_kwargs)
 
@@ -153,7 +151,6 @@ class TransmittalCreationTests(ContractorDeliverableTestCase):
                 'reviewers': [self.user1],
                 'leader': self.user2,
                 'approver': self.user3,
-                'trs_return_code': '1',
                 'received_date': datetime.datetime.today()}}
         revisions = self.create_docs(default_kwargs=doc_kwargs)
 

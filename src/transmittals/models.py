@@ -7,12 +7,10 @@ import shutil
 import uuid
 import zipfile
 import tempfile
-import datetime
 from collections import OrderedDict
 
 from django import forms
 from django.db import models, transaction
-from django.db.models import Case, Value, When
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.core.files.base import ContentFile
@@ -845,14 +843,6 @@ class TransmittableMixin(ReviewMixin):
         verbose_name='transmittals',
         related_name="%(app_label)s_%(class)s_related"
     )
-    transmittal_sent_date = models.DateField(
-        _('Transmittal sent date'),
-        null=True, blank=True)
-    trs_return_code = ConfigurableChoiceField(
-        _('Final return code'),
-        max_length=3,
-        null=True, blank=True,
-        list_index='REVIEW_RETURN_CODES')
     file_transmitted = PrivateFileField(
         _('File Transmitted'),
         null=True, blank=True,
@@ -878,9 +868,7 @@ class TransmittableMixin(ReviewMixin):
 
     def get_final_return_code(self):
         """Returns the latest available return code."""
-        if self.trs_return_code:
-            rc = self.trs_return_code
-        elif hasattr(self, 'return_code'):
+        if hasattr(self, 'return_code'):
             rc = self.return_code
         else:
             rc = ''
@@ -926,7 +914,5 @@ class TransmittableMixin(ReviewMixin):
         """New revision initial data that must be empty."""
         empty_fields = super(TransmittableMixin, self).get_initial_empty()
         return empty_fields + (
-            'trs_return_code',
             'file_transmitted',
-            'external_review_due_date',
         )

@@ -256,7 +256,6 @@ class ReviewFormMixin(DistributionListValidationMixin, forms.ModelForm):
                     PropertyLayout('get_current_review_step_display'),
                     YesNoLayout('is_under_review'),
                     YesNoLayout('is_overdue'),
-                    'trs_return_code',
                     'file_transmitted'),
                 DocumentFieldset(
                     _('Distribution list'),
@@ -272,7 +271,6 @@ class ReviewFormMixin(DistributionListValidationMixin, forms.ModelForm):
                     PropertyLayout('get_current_review_step_display'),
                     YesNoLayout('is_under_review'),
                     YesNoLayout('is_overdue'),
-                    'trs_return_code',
                     'file_transmitted'),
                 DocumentFieldset(
                     _('Distribution list'),
