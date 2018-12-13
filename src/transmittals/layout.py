@@ -28,7 +28,8 @@ class OutgoingTrsLayout(LayoutObject):
     template = 'layout/outgoing_trs.html'
 
     def render(self, form, form_style, context, template_pack=None):
-        transmittals = form.instance.transmittals.all()
+        transmittals = form.instance.transmittals \
+            .select_related('document')
         return render_to_string(self.template, {
             'revision': form.instance,
             'transmittals': transmittals,

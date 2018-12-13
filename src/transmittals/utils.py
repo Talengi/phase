@@ -1,4 +1,5 @@
 import logging
+import datetime
 
 from django.db.models import Max
 from django.utils import timezone
@@ -55,7 +56,7 @@ class FieldWrapper(object):
 
 
 def create_transmittal(from_category, to_category, revisions, contract_nb,
-                       recipient, **form_data):
+                       purpose_of_issue, recipient, **form_data):
     """Create an outgoing transmittal with the given revisions."""
 
     # Do we have a list of revisions?
@@ -110,11 +111,19 @@ def create_transmittal(from_category, to_category, revisions, contract_nb,
 
     # Some fields are excluded from the form, so we have to
     # provide a base instance instead
+    today = timezone.now()
+    later = today + datetime.timedelta(days=OutgoingTransmittal.EXTERNAL_REVIEW_DURATION)
+    if purpose_of_issue == 'FR':
+        external_review_due_date = later
+    else:
+        external_review_due_date = None
     base_instance = OutgoingTransmittal(
         revisions_category=from_category,
         contract_number=contract_nb,
         originator=originator,
         recipient=recipient,
+        purpose_of_issue=purpose_of_issue,
+        external_review_due_date=external_review_due_date,
     )
 
     # Let's create the transmittal, then

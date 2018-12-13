@@ -87,6 +87,8 @@ class OutgoingTransmittalForm(GenericBaseDocumentForm):
                 PropertyLayout('originator'),
                 PropertyLayout('recipient'),
                 Field('sequential_number', type='hidden'),
+                PropertyLayout('purpose_of_issue_display'),
+                PropertyLayout('external_review_due_date_display'),
                 PropertyLayout('get_ack_of_receipt_display'),
                 PropertyLayout('ack_of_receipt_date'),
                 PropertyLayout('ack_of_receipt_author'),
@@ -121,7 +123,8 @@ class OutgoingTransmittalForm(GenericBaseDocumentForm):
         exclude = ('document', 'latest_revision', 'related_documents',
                    'document_number', 'contract_number', 'originator',
                    'recipient', 'ack_of_receipt_date', 'ack_of_receipt_author',
-                   'revisions_category')
+                   'revisions_category', 'purpose_of_issue',
+                   'external_review_due_date')
 
 
 class OutgoingTransmittalRevisionForm(GenericBaseDocumentForm):
@@ -162,8 +165,6 @@ class TransmittableFormMixin(ReviewFormMixin):
                     _('Outgoing Transmittal'),
                     'internal_review',
                     OutgoingTrsLayout(),
-                    'purpose_of_issue',
-                    Field('external_review_due_date', readonly='readonly'),
                     Field('client_comments'),
                 ),)
         else:
@@ -171,8 +172,6 @@ class TransmittableFormMixin(ReviewFormMixin):
                 DocumentFieldset(
                     _('Outgoing Transmittal'),
                     'internal_review',
-                    'purpose_of_issue',
-                    Field('external_review_due_date', readonly='readonly'),
                     Field('client_comments'),
                 ),)
         return layout

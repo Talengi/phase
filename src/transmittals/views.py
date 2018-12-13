@@ -327,6 +327,7 @@ class CreateTransmittal(PermissionRequiredMixin, BaseDocumentBatchActionView):
         to_category_id = self.request.POST.get('destination_category')
         recipients_ids = self.request.POST.getlist('recipients')
         contract_number = self.request.POST.get('contract_number')
+        purpose_of_issue = self.request.POST.get('purpose_of_issue')
 
         job = do_create_transmittal.delay(
             self.request.user.id,
@@ -334,6 +335,7 @@ class CreateTransmittal(PermissionRequiredMixin, BaseDocumentBatchActionView):
             to_category_id,
             document_ids,
             contract_number,
+            purpose_of_issue,
             recipients_ids)
         return job
 

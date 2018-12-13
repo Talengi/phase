@@ -40,7 +40,7 @@ def do_notify_transmittal_recipients(metadata_id, revision_id):
 @app.task
 def do_create_transmittal(
         user_id, from_category_id, to_category_id, document_ids,
-        contract_number, recipients_ids):
+        contract_number, purpose_of_issue, recipients_ids):
 
     # Display a small amount of progression
     # so the user won't get impatient
@@ -64,6 +64,7 @@ def do_create_transmittal(
                 to_category,
                 revisions,
                 contract_number,
+                purpose_of_issue,
                 recipient)
             msg = '''You successfully created transmittal
                      <a href="{}">{}</a>'''.format(doc.get_absolute_url(), doc)

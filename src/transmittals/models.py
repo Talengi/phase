@@ -477,6 +477,9 @@ class OutgoingTransmittal(Metadata):
 
     """
     EXTERNAL_REVIEW_DURATION = 13
+    PURPOSE_OF_ISSUE_CHOICES = Choices(
+        ('FR', _('For review')),
+        ('FI', _('For information')))
 
     latest_revision = models.ForeignKey(
         'OutgoingTransmittalRevision',
@@ -517,6 +520,15 @@ class OutgoingTransmittal(Metadata):
         on_delete=models.PROTECT)
     archived_pdf = OgtFileField(
         verbose_name=_("Archived PDF"),
+        null=True, blank=True)
+    purpose_of_issue = models.CharField(
+        _('Purpose of issue'),
+        max_length=2,
+        blank=True,
+        choices=PURPOSE_OF_ISSUE_CHOICES,
+        default=PURPOSE_OF_ISSUE_CHOICES.FR)
+    external_review_due_date = models.DateField(
+        _('External due date'),
         null=True, blank=True)
 
     class Meta:
@@ -588,6 +600,18 @@ class OutgoingTransmittal(Metadata):
     @property
     def ack_of_receipt(self):
         return bool(self.ack_of_receipt_date)
+
+    def purpose_of_issue_display(self):
+        return self.get_purpose_of_issue_display()
+    purpose_of_issue_display.short_description = _('Purpose of issue')
+
+    def external_review_due_date_display(self):
+        if self.external_review_due_date:
+            display = '{:%Y-%m-%d}'.format(self.external_review_due_date)
+        else:
+            display = ''
+        return display
+    external_review_due_date_display.short_description = _('External review due date')
 
     def get_ack_of_receipt_display(self):
         return 'Yes' if self.ack_of_receipt else 'No'
@@ -698,11 +722,7 @@ class OutgoingTransmittal(Metadata):
                 .filter(id__in=ids) \
                 .update(
                     transmittal=self,
-                    transmittal_sent_date=timezone.now(),
-                    external_review_due_date=Case(
-                        When(purpose_of_issue='FR', then=Value(later)),
-                        When(purpose_of_issue='FI', then=Value(None)),
-                    ))
+                    transmittal_sent_date=timezone.now())
             for rev in Revision.objects.filter(id__in=ids):
                 rev.transmittals.add(self)
             bulk_actions(index_data)
@@ -829,10 +849,7 @@ class TransmittableMixin(ReviewMixin):
 
     """
 
-    PURPOSE_OF_ISSUE_CHOICES = Choices(
-        ('FR', _('For review')),
-        ('FI', _('For information')))
-
+    # XXX Whether this field can be deleted is under investigation
     transmittal = models.ForeignKey(
         'transmittals.OutgoingTransmittal',
         verbose_name='transmittal',
@@ -867,15 +884,6 @@ class TransmittableMixin(ReviewMixin):
             (True, 'Yes')
         ),
         default=False)
-    purpose_of_issue = models.CharField(
-        _('Purpose of issue'),
-        max_length=2,
-        blank=True,
-        choices=PURPOSE_OF_ISSUE_CHOICES,
-        default=PURPOSE_OF_ISSUE_CHOICES.FR)
-    external_review_due_date = models.DateField(
-        _('External due date'),
-        null=True, blank=True)
     client_comments = ClientCommentsFileField(
         verbose_name=_("Client Comments"),
         null=True, blank=True)

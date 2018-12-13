@@ -91,11 +91,18 @@ MIDDLEWARE_CLASSES = ('debug_toolbar.middleware.DebugToolbarMiddleware',) + MIDD
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
 # Disable template panel because of this bug:
 # https://github.com/jazzband/django-debug-toolbar/issues/910
+
+
+def show_toolbar(request):
+    return True
+
+
 DEBUG_TOOLBAR_CONFIG = {
     'DISABLE_PANELS': {
         'debug_toolbar.panels.templates.TemplatesPanel',
         'debug_toolbar.panels.redirects.RedirectsPanel',
     },
+    'SHOW_TOOLBAR_CALLBACK': show_toolbar,
 }
 # ######### END TOOLBAR CONFIGURATION
 

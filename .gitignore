@@ -45,3 +45,4 @@ site.retry
 
 .vscode
 .pytest_cache
+/.env
