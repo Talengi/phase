@@ -601,6 +601,18 @@ class OutgoingTransmittal(Metadata):
     def ack_of_receipt(self):
         return bool(self.ack_of_receipt_date)
 
+    def purpose_of_issue_display(self):
+        return self.get_purpose_of_issue_display()
+    purpose_of_issue_display.short_description = _('Purpose of issue')
+
+    def external_review_due_date_display(self):
+        if self.external_review_due_date:
+            display = '{:%Y-%m-%d}'.format(self.external_review_due_date)
+        else:
+            display = ''
+        return display
+    external_review_due_date_display.short_description = _('External review due date')
+
     def get_ack_of_receipt_display(self):
         return 'Yes' if self.ack_of_receipt else 'No'
     get_ack_of_receipt_display.short_description = 'Acknowledgment of receipt'
