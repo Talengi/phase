@@ -64,8 +64,8 @@ def do_create_transmittal(
                 to_category,
                 revisions,
                 contract_number,
-                purpose_of_issue,
-                recipient)
+                recipient,
+                purpose_of_issue=purpose_of_issue)
             msg = '''You successfully created transmittal
                      <a href="{}">{}</a>'''.format(doc.get_absolute_url(), doc)
             notify(user_id, msg)

@@ -212,6 +212,7 @@ class OutgoingTransmittalTests(TestCase):
             dest_cat.id,
             document_ids,
             self.contract.number,
+            'FR',
             recipients_ids
         )
         # We have 2 docs and 2 recipients, so we expect 2 outgoing trs
