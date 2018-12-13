@@ -837,10 +837,6 @@ class TransmittableMixin(ReviewMixin):
 
     """
 
-    PURPOSE_OF_ISSUE_CHOICES = Choices(
-        ('FR', _('For review')),
-        ('FI', _('For information')))
-
     # XXX Whether this field can be deleted is under investigation
     transmittal = models.ForeignKey(
         'transmittals.OutgoingTransmittal',
@@ -876,15 +872,6 @@ class TransmittableMixin(ReviewMixin):
             (True, 'Yes')
         ),
         default=False)
-    purpose_of_issue = models.CharField(
-        _('Purpose of issue'),
-        max_length=2,
-        blank=True,
-        choices=PURPOSE_OF_ISSUE_CHOICES,
-        default=PURPOSE_OF_ISSUE_CHOICES.FR)
-    external_review_due_date = models.DateField(
-        _('External due date'),
-        null=True, blank=True)
     client_comments = ClientCommentsFileField(
         verbose_name=_("Client Comments"),
         null=True, blank=True)
