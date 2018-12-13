@@ -710,11 +710,7 @@ class OutgoingTransmittal(Metadata):
                 .filter(id__in=ids) \
                 .update(
                     transmittal=self,
-                    transmittal_sent_date=timezone.now(),
-                    external_review_due_date=Case(
-                        When(purpose_of_issue='FR', then=Value(later)),
-                        When(purpose_of_issue='FI', then=Value(None)),
-                    ))
+                    transmittal_sent_date=timezone.now())
             for rev in Revision.objects.filter(id__in=ids):
                 rev.transmittals.add(self)
             bulk_actions(index_data)
@@ -845,6 +841,7 @@ class TransmittableMixin(ReviewMixin):
         ('FR', _('For review')),
         ('FI', _('For information')))
 
+    # XXX Whether this field can be deleted is under investigation
     transmittal = models.ForeignKey(
         'transmittals.OutgoingTransmittal',
         verbose_name='transmittal',

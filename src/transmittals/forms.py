@@ -123,7 +123,8 @@ class OutgoingTransmittalForm(GenericBaseDocumentForm):
         exclude = ('document', 'latest_revision', 'related_documents',
                    'document_number', 'contract_number', 'originator',
                    'recipient', 'ack_of_receipt_date', 'ack_of_receipt_author',
-                   'revisions_category')
+                   'revisions_category', 'purpose_of_issue',
+                   'external_review_due_date')
 
 
 class OutgoingTransmittalRevisionForm(GenericBaseDocumentForm):
