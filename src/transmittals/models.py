@@ -862,6 +862,9 @@ class TransmittableMixin(ReviewMixin):
     client_comments = ClientCommentsFileField(
         verbose_name=_("Client Comments"),
         null=True, blank=True)
+    client_comments_detail = models.TextField(
+        verbose_name=_("Client comments detais"),
+        blank=True)
 
     class Meta:
         abstract = True

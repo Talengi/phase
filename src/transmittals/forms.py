@@ -166,6 +166,7 @@ class TransmittableFormMixin(ReviewFormMixin):
                     'internal_review',
                     OutgoingTrsLayout(),
                     Field('client_comments'),
+                    Field('client_comments_detail', rows=2),
                 ),)
         else:
             layout = (
@@ -173,5 +174,6 @@ class TransmittableFormMixin(ReviewFormMixin):
                     _('Outgoing Transmittal'),
                     'internal_review',
                     Field('client_comments'),
+                    Field('client_comments_detail', rows=2),
                 ),)
         return layout
