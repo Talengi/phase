@@ -339,15 +339,19 @@ class TrsImport(object):
             if native_file:
                 native_file = File(open(native_file, 'rb'))
 
-            data.update({
+            metadata = {
                 'transmittal': transmittal,
                 'document': document,
-                'is_new_revision': is_new_revision,
+                'document_key': data['document_key'],
                 'category': self.doc_category,
+                'title': data['title'],
+                'revision': int(data['revision']),
                 'pdf_file': pdf_file,
                 'native_file': native_file,
-            })
-            TrsRevision.objects.create(**data)
+                'is_new_revision': is_new_revision,
+                'document_data': data,
+            }
+            TrsRevision.objects.create(**metadata)
             nb_line += 1
 
             pdf_file.close()
