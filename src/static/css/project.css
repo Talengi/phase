@@ -44,9 +44,6 @@ body.fullwidth > .container,
     max-width: 100%;
     margin: 0 auto;
 }
-.main-content{
-    padding-top: 80px;
-}
 .last-button {
     margin-left: 15px;
 }
