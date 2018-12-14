@@ -66,8 +66,20 @@ class TrsImport(object):
             error_report.send()
             self.move_to_rejected()
         else:
-            self.save()
-            self.move_to_tobechecked()
+            try:
+                self.save()
+                self.move_to_tobechecked()
+            except Exception as e:
+                # Something went wrong despite all the validations we did
+                # C'est la vie ¯\_(ツ)_/¯
+                logger.error(e)
+                self._errors.update({
+                    'unhandled_error': 'Something unplanned happened. Please contact your Phase admin.'
+                })
+                error_report = ErrorReport(self)
+                error_report.send()
+                self.move_to_rejected()
+                raise(e)
 
     def move_to_rejected(self):
         """Move the imported transmittals directory to rejected."""
@@ -334,7 +346,6 @@ class TrsImport(object):
                 'category': self.doc_category,
                 'pdf_file': pdf_file,
                 'native_file': native_file,
-                'sequential_number': line.sequential_number,  # XXX Hack
             })
             TrsRevision.objects.create(**data)
             nb_line += 1
@@ -423,10 +434,6 @@ class TrsImportLine(object):
                 return natives[1]
             else:
                 return natives[0]
-
-    @property
-    def sequential_number(self):
-        return self.csv_data['document_key'].split('-')[5]
 
     def get_document(self):
         if self._document is None:
