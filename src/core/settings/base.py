@@ -183,6 +183,7 @@ DJANGO_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'django.forms',
+    'django.contrib.postgres',
 
     # Admin panel and documentation:
     'django.contrib.admin',
