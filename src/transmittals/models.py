@@ -15,6 +15,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.core.files.base import ContentFile
 from django.utils import timezone
+from django.contrib.postgres.fields import HStoreField
 
 from model_utils import Choices
 from elasticsearch_dsl import Q
@@ -288,6 +289,10 @@ class TrsRevision(models.Model):
     is_new_revision = models.BooleanField(
         _('Is new revision?'))
 
+    document_data = HStoreField(
+        _('Document data'),
+        null=True)
+
     # We'll keep it for a while.
     # Those are fields that will one day be configurable
     # but are static for now.
@@ -302,6 +307,7 @@ class TrsRevision(models.Model):
         max_length=50)
     originator = models.ForeignKey(
         'accounts.Entity',
+        null=True,
         verbose_name=_('Originator'))
     unit = ConfigurableChoiceField(
         verbose_name=_('Unit'),
