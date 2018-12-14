@@ -80,6 +80,34 @@ The two "slugs" corresponding to those categories are::
     /test/contractor-deliverables/
     /test/incoming-transmittals/
 
+Transmittal columns
+...................
+
+The columns that will be imported in the transmittal must be defined in an
+entry called `transmittal_columns` in the `PhaseConfig` class.
+
+This field must be a dictionary mapping human readable field names to the
+field django / database name.
+
+Example::
+
+    transmittal_columns = {
+        'Document Number': 'document_key',
+        'Title': 'title',
+        'Contract Number': 'contract_number',
+        'Originator': 'originator',
+        'Unit': 'unit',
+        'Discipline': 'discipline',
+        'Document Type': 'document_type',
+        'Sequential Number': 'sequential_number',
+        'Class': 'docclass',
+        'Revision': 'revision',
+        'Status': 'status',
+        'Received Date': 'received_date',
+        'Created': 'created_on',
+    }
+
+
 Usage
 -----
 
