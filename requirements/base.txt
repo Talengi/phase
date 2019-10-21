@@ -1,4 +1,4 @@
-django==1.11.16
+django==1.11.23
 psycopg2-binary==2.7.6.1
 bpython==0.17.1
 django-braces==1.13.0
