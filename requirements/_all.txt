@@ -16,7 +16,7 @@ coverage==4.4.1
 coveralls==1.1
 cryptography==2.4.1
 curtsies==0.3.0
-Django==1.11.16
+Django==1.11.28
 django-annoying==0.10.3
 django-braces==1.11.0
 django-casper==0.0.4
