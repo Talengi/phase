@@ -28,7 +28,7 @@ django-model-utils==3.0.0
 django-pipeline==1.6.12
 django-widget-tweaks==1.4.1
 django-zipview==1.2.0
-djangorestframework==3.6.3
+djangorestframework==3.11.2
 docopt==0.6.2
 docutils==0.14
 elasticsearch==2.4.1
