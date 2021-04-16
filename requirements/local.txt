@@ -3,6 +3,6 @@
 Fabric==1.13.2
 coverage==4.4.1
 django-discover-runner==1.0
-django-debug-toolbar==1.10.1
+django-debug-toolbar==1.11.1
 Sphinx==1.6.1
 ansible==2.3.0.0
