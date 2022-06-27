@@ -69,7 +69,7 @@ python-dateutil==2.6.0
 pytz==2018.7
 PyYAML==3.13
 raven==6.0.0
-reportlab==3.4.0
+reportlab==3.5.55
 requests==2.20.1
 selenium==3.4.2
 six==1.11.0

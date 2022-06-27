@@ -18,5 +18,5 @@ elasticsearch-dsl>=2.0.0,<3.0.0
 pylibmc==1.6.0
 python-dateutil==2.6.0 # pinned for elasticsearch-dsl
 raven==6.0.0
-reportlab==3.4.0
+reportlab==3.5.55
 openpyxl==2.4.7
